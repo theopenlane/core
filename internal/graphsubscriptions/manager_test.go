@@ -21,34 +21,37 @@ func TestSubscribeAndPublish(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-123"
 
-	// Create a channel
-	taskChan := make(chan *generated.Task, TaskChannelBufferSize)
+	// Create a channel with the interface type
+	notificationChan := make(chan Notification, TaskChannelBufferSize)
 
 	// Subscribe
-	manager.Subscribe(userID, taskChan)
+	manager.Subscribe(userID, notificationChan)
 
 	// Verify subscription was added
 	manager.mu.RLock()
 	assert.Len(t, manager.subscribers[userID], 1)
 	manager.mu.RUnlock()
 
-	// Create a mock task
-	task := &generated.Task{
-		ID:    "task-123",
-		Title: "Test Task",
+	// Create a mock notification
+	notification := &generated.Notification{
+		ID:    "notification-123",
+		Title: "Test Notification",
 	}
 
-	// Publish the task
-	err := manager.Publish(userID, task)
+	// Publish the notification
+	err := manager.Publish(userID, notification)
 	require.NoError(t, err)
 
-	// Verify the task was received
+	// Verify the notification was received
 	select {
-	case receivedTask := <-taskChan:
-		assert.Equal(t, task.ID, receivedTask.ID)
-		assert.Equal(t, task.Title, receivedTask.Title)
+	case receivedNotification := <-notificationChan:
+		// Cast back to concrete type for assertions
+		concreteNotif, ok := receivedNotification.(*generated.Notification)
+		require.True(t, ok, "Should be able to cast to *generated.Notification")
+		assert.Equal(t, notification.ID, concreteNotif.ID)
+		assert.Equal(t, notification.Title, concreteNotif.Title)
 	case <-time.After(1 * time.Second):
-		t.Fatal("Timeout waiting for task")
+		t.Fatal("Timeout waiting for notification")
 	}
 }
 
@@ -56,13 +59,13 @@ func TestPublishNoSubscribers(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-456"
 
-	task := &generated.Task{
-		ID:    "task-456",
-		Title: "Test Task",
+	notification := &generated.Notification{
+		ID:    "notification-456",
+		Title: "Test Notification",
 	}
 
 	// Publish to user with no subscribers should not error
-	err := manager.Publish(userID, task)
+	err := manager.Publish(userID, notification)
 	require.NoError(t, err)
 }
 
@@ -71,8 +74,8 @@ func TestUnsubscribe(t *testing.T) {
 	userID := "test-user-789"
 
 	// Create and subscribe a channel
-	taskChan := make(chan *generated.Task, TaskChannelBufferSize)
-	manager.Subscribe(userID, taskChan)
+	notificationChan := make(chan Notification, TaskChannelBufferSize)
+	manager.Subscribe(userID, notificationChan)
 
 	// Verify subscription exists
 	manager.mu.RLock()
@@ -80,7 +83,7 @@ func TestUnsubscribe(t *testing.T) {
 	manager.mu.RUnlock()
 
 	// Unsubscribe
-	manager.Unsubscribe(userID, taskChan)
+	manager.Unsubscribe(userID, notificationChan)
 
 	// Verify subscription was removed
 	manager.mu.RLock()
@@ -88,7 +91,7 @@ func TestUnsubscribe(t *testing.T) {
 	manager.mu.RUnlock()
 
 	// Verify channel is closed
-	_, ok := <-taskChan
+	_, ok := <-notificationChan
 	assert.False(t, ok, "Channel should be closed")
 }
 
@@ -97,9 +100,9 @@ func TestMultipleSubscribers(t *testing.T) {
 	userID := "test-user-multi"
 
 	// Create multiple channels
-	chan1 := make(chan *generated.Task, TaskChannelBufferSize)
-	chan2 := make(chan *generated.Task, TaskChannelBufferSize)
-	chan3 := make(chan *generated.Task, TaskChannelBufferSize)
+	chan1 := make(chan Notification, TaskChannelBufferSize)
+	chan2 := make(chan Notification, TaskChannelBufferSize)
+	chan3 := make(chan Notification, TaskChannelBufferSize)
 
 	// Subscribe all channels
 	manager.Subscribe(userID, chan1)
@@ -111,22 +114,24 @@ func TestMultipleSubscribers(t *testing.T) {
 	assert.Len(t, manager.subscribers[userID], 3)
 	manager.mu.RUnlock()
 
-	// Publish a task
-	task := &generated.Task{
-		ID:    "task-multi",
-		Title: "Multi Subscriber Task",
+	// Publish a notification
+	notification := &generated.Notification{
+		ID:    "notification-multi",
+		Title: "Multi Subscriber Notification",
 	}
 
-	err := manager.Publish(userID, task)
+	err := manager.Publish(userID, notification)
 	require.NoError(t, err)
 
-	// Verify all subscribers received the task
-	for i, ch := range []chan *generated.Task{chan1, chan2, chan3} {
+	// Verify all subscribers received the notification
+	for i, ch := range []chan Notification{chan1, chan2, chan3} {
 		select {
-		case receivedTask := <-ch:
-			assert.Equal(t, task.ID, receivedTask.ID, "Subscriber %d should receive task", i+1)
+		case receivedNotification := <-ch:
+			concreteNotif, ok := receivedNotification.(*generated.Notification)
+			require.True(t, ok, "Subscriber %d: should be able to cast to *generated.Notification", i+1)
+			assert.Equal(t, notification.ID, concreteNotif.ID, "Subscriber %d should receive notification", i+1)
 		case <-time.After(1 * time.Second):
-			t.Fatalf("Subscriber %d timeout waiting for task", i+1)
+			t.Fatalf("Subscriber %d timeout waiting for notification", i+1)
 		}
 	}
 }
@@ -135,11 +140,11 @@ func TestUnsubscribeNonExistent(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-nonexistent"
 
-	taskChan := make(chan *generated.Task, TaskChannelBufferSize)
+	notificationChan := make(chan Notification, TaskChannelBufferSize)
 
 	// Unsubscribe without subscribing should not panic
 	require.NotPanics(t, func() {
-		manager.Unsubscribe(userID, taskChan)
+		manager.Unsubscribe(userID, notificationChan)
 	})
 }
 
@@ -147,25 +152,25 @@ func TestConcurrentPublish(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-concurrent"
 
-	taskChan := make(chan *generated.Task, 100) // Larger buffer for concurrent test
-	manager.Subscribe(userID, taskChan)
+	notificationChan := make(chan Notification, 100) // Larger buffer for concurrent test
+	manager.Subscribe(userID, notificationChan)
 
 	numGoroutines := 10
-	numTasksPerGoroutine := 10
+	numNotificationsPerGoroutine := 10
 
 	var wg sync.WaitGroup
 	wg.Add(numGoroutines)
 
-	// Publish tasks concurrently
+	// Publish notifications concurrently
 	for i := 0; i < numGoroutines; i++ {
 		go func(goroutineID int) {
 			defer wg.Done()
-			for j := 0; j < numTasksPerGoroutine; j++ {
-				task := &generated.Task{
-					ID:    "task-" + string(rune(goroutineID)) + "-" + string(rune(j)),
-					Title: "Concurrent Task",
+			for j := 0; j < numNotificationsPerGoroutine; j++ {
+				notification := &generated.Notification{
+					ID:    "notification-" + string(rune(goroutineID)) + "-" + string(rune(j)),
+					Title: "Concurrent Notification",
 				}
-				err := manager.Publish(userID, task)
+				err := manager.Publish(userID, notification)
 				require.NoError(t, err)
 			}
 		}(i)
@@ -173,20 +178,20 @@ func TestConcurrentPublish(t *testing.T) {
 
 	wg.Wait()
 
-	// Verify we received all tasks
+	// Verify we received all notifications
 	receivedCount := 0
 	timeout := time.After(5 * time.Second)
 
-	for receivedCount < numGoroutines*numTasksPerGoroutine {
+	for receivedCount < numGoroutines*numNotificationsPerGoroutine {
 		select {
-		case <-taskChan:
+		case <-notificationChan:
 			receivedCount++
 		case <-timeout:
-			t.Fatalf("Timeout: only received %d/%d tasks", receivedCount, numGoroutines*numTasksPerGoroutine)
+			t.Fatalf("Timeout: only received %d/%d notifications", receivedCount, numGoroutines*numNotificationsPerGoroutine)
 		}
 	}
 
-	assert.Equal(t, numGoroutines*numTasksPerGoroutine, receivedCount)
+	assert.Equal(t, numGoroutines*numNotificationsPerGoroutine, receivedCount)
 }
 
 func TestPublishToFullChannel(t *testing.T) {
@@ -194,28 +199,28 @@ func TestPublishToFullChannel(t *testing.T) {
 	userID := "test-user-full"
 
 	// Create a small buffer channel
-	taskChan := make(chan *generated.Task, 2)
-	manager.Subscribe(userID, taskChan)
+	notificationChan := make(chan Notification, 2)
+	manager.Subscribe(userID, notificationChan)
 
 	// Fill the channel
 	for i := 0; i < 2; i++ {
-		task := &generated.Task{
-			ID:    "task-fill-" + string(rune(i)),
-			Title: "Fill Task",
+		notification := &generated.Notification{
+			ID:    "notification-fill-" + string(rune(i)),
+			Title: "Fill Notification",
 		}
-		err := manager.Publish(userID, task)
+		err := manager.Publish(userID, notification)
 		require.NoError(t, err)
 	}
 
 	// Try to publish to full channel - should not block or error
-	task := &generated.Task{
-		ID:    "task-overflow",
-		Title: "Overflow Task",
+	notification := &generated.Notification{
+		ID:    "notification-overflow",
+		Title: "Overflow Notification",
 	}
 
 	done := make(chan bool, 1)
 	go func() {
-		err := manager.Publish(userID, task)
+		err := manager.Publish(userID, notification)
 		require.NoError(t, err)
 		done <- true
 	}()

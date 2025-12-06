@@ -7,41 +7,54 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
-// TaskCreated is the resolver for the taskCreated field.
-func (r *subscriptionResolver) TaskCreated(ctx context.Context) (<-chan *generated.Task, error) {
+// NotificationCreated is the resolver for the notificationCreated field.
+func (r *subscriptionResolver) NotificationCreated(ctx context.Context) (<-chan *generated.Notification, error) {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject ID from context")
-		return nil, newPermissionDeniedError()
+		return nil, fmt.Errorf("failed to get user ID from context: %w", err)
 	}
 
-	// Check if subscription manager is available
-	if r.subscriptionManager == nil {
-		logx.FromContext(ctx).Info().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
-		return nil, ErrInternalServerError
-	}
+	// Create a channel with the interface type for the subscription manager
+	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.TaskChannelBufferSize)
+	r.Resolver.subscriptionManager.Subscribe(userID, internalChan)
 
-	// Create a buffered channel to send task events
-	taskChan := make(chan *generated.Task, graphsubscriptions.TaskChannelBufferSize)
+	// Create a channel with the concrete type for the GraphQL response
+	notifChan := make(chan *generated.Notification, graphsubscriptions.TaskChannelBufferSize)
 
-	// Subscribe to task creation events for this user
-	r.subscriptionManager.Subscribe(userID, taskChan)
-
-	// Clean up subscription when context is done
+	// Forward notifications from internal channel to GraphQL channel
 	go func() {
-		<-ctx.Done()
-		r.subscriptionManager.Unsubscribe(userID, taskChan)
+		defer close(notifChan)
+		for {
+			select {
+			case <-ctx.Done():
+				r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
+				return
+			case notif, ok := <-internalChan:
+				if !ok {
+					return
+				}
+				// Cast back to concrete type
+				if concreteNotif, ok := notif.(*generated.Notification); ok {
+					select {
+					case notifChan <- concreteNotif:
+					case <-ctx.Done():
+						r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
+						return
+					}
+				}
+			}
+		}
 	}()
 
-	return taskChan, nil
+	return notifChan, nil
 }
 
 // Subscription returns gqlgenerated.SubscriptionResolver implementation.
