@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/pkg/models"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -33,13 +33,13 @@ func TestBuildUploadOptionsInitialisesHints(t *testing.T) {
 	})
 
 	opts := BuildUploadOptions(ctx, file)
-	require.NotNil(t, opts)
-	require.Equal(t, file.OriginalName, opts.FileName)
-	require.Equal(t, file.FieldName, opts.FileMetadata.Key)
-	require.NotNil(t, opts.ProviderHints)
+	assert.NotNil(t, opts)
+	assert.Equal(t, file.OriginalName, opts.FileName)
+	assert.Equal(t, file.FieldName, opts.FileMetadata.Key)
+	assert.NotNil(t, opts.ProviderHints)
 	moduleValue, ok := opts.ProviderHints.Module.(models.OrgModule)
-	require.True(t, ok)
-	require.Equal(t, models.CatalogTrustCenterModule, moduleValue)
+	assert.True(t, ok)
+	assert.Equal(t, models.CatalogTrustCenterModule, moduleValue)
 }
 
 func TestBuildUploadOptionsDetectsContentType(t *testing.T) {
@@ -52,8 +52,8 @@ func TestBuildUploadOptionsDetectsContentType(t *testing.T) {
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
-	require.Equal(t, "text/plain; charset=utf-8", opts.ContentType)
-	require.Equal(t, "text/plain; charset=utf-8", file.ContentType)
+	assert.Equal(t, "text/plain; charset=utf-8", opts.ContentType)
+	assert.Equal(t, "text/plain; charset=utf-8", file.ContentType)
 }
 
 func TestBuildUploadOptionsBufferedDetection(t *testing.T) {
@@ -65,16 +65,16 @@ func TestBuildUploadOptionsBufferedDetection(t *testing.T) {
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
-	require.NotNil(t, opts)
-	require.Equal(t, file.OriginalName, opts.FileName)
-	require.NotNil(t, opts.ProviderHints)
+	assert.NotNil(t, opts)
+	assert.Equal(t, file.OriginalName, opts.FileName)
+	assert.NotNil(t, opts.ProviderHints)
 }
 
 func TestBuildUploadOptionsNilFile(t *testing.T) {
 	opts := BuildUploadOptions(context.Background(), nil)
-	require.NotNil(t, opts)
-	require.Empty(t, opts.FileName)
-	require.Empty(t, opts.ContentType)
+	assert.NotNil(t, opts)
+	assert.Empty(t, opts.FileName)
+	assert.Empty(t, opts.ContentType)
 }
 
 func TestBuildUploadOptionsPreservesExplicitContentType(t *testing.T) {
@@ -85,16 +85,16 @@ func TestBuildUploadOptionsPreservesExplicitContentType(t *testing.T) {
 	}
 
 	opts := BuildUploadOptions(context.Background(), file)
-	require.Equal(t, "image/jpeg", opts.ContentType)
-	require.Equal(t, "image/jpeg", file.ContentType)
+	assert.Equal(t, "image/jpeg", opts.ContentType)
+	assert.Equal(t, "image/jpeg", file.ContentType)
 }
 
 func TestHandleUploadsNoFiles(t *testing.T) {
 	ctx := context.Background()
 	newCtx, files, err := HandleUploads(ctx, nil, nil)
-	require.NoError(t, err)
-	require.Equal(t, ctx, newCtx)
-	require.Nil(t, files)
+	assert.NoError(t, err)
+	assert.Equal(t, ctx, newCtx)
+	assert.Nil(t, files)
 }
 
 func TestMergeUploadedFileMetadata(t *testing.T) {
@@ -114,10 +114,10 @@ func TestMergeUploadedFileMetadata(t *testing.T) {
 
 	mergeUploadedFileMetadata(dest, "file-id", src)
 
-	require.Equal(t, "file-id", dest.ID)
-	require.Equal(t, src.FieldName, dest.FieldName)
-	require.Equal(t, src.Parent, dest.Parent)
-	require.Equal(t, src.CorrelatedObjectID, dest.CorrelatedObjectID)
-	require.Equal(t, src.CorrelatedObjectType, dest.CorrelatedObjectType)
-	require.NotEmpty(t, dest.Metadata)
+	assert.Equal(t, "file-id", dest.ID)
+	assert.Equal(t, src.FieldName, dest.FieldName)
+	assert.Equal(t, src.Parent, dest.Parent)
+	assert.Equal(t, src.CorrelatedObjectID, dest.CorrelatedObjectID)
+	assert.Equal(t, src.CorrelatedObjectType, dest.CorrelatedObjectType)
+	assert.NotEmpty(t, dest.Metadata)
 }

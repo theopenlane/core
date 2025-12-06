@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 
 	"github.com/theopenlane/core/internal/objects"
@@ -60,16 +60,16 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 	)
 
 	option := resolver.Resolve(context.Background())
-	require.True(t, option.IsPresent(), "expected dev mode rule to resolve")
+	assert.True(t, option.IsPresent(), "expected dev mode rule to resolve")
 
 	result := option.MustGet()
-	require.Equal(t, diskBuilder, result.Builder, "expected disk builder for dev mode")
-	require.NotNil(t, result.Config)
-	require.Equal(t, objects.DefaultDevStorageBucket, result.Config.Bucket)
-	require.Equal(t, objects.DefaultDevStorageBucket, result.Config.BasePath)
+	assert.Equal(t, diskBuilder, result.Builder, "expected disk builder for dev mode")
+	assert.NotNil(t, result.Config)
+	assert.Equal(t, objects.DefaultDevStorageBucket, result.Config.Bucket)
+	assert.Equal(t, objects.DefaultDevStorageBucket, result.Config.BasePath)
 	extra, ok := result.Config.Extra("dev_mode")
-	require.True(t, ok)
-	require.Equal(t, true, extra)
+	assert.True(t, ok)
+	assert.Equal(t, true, extra)
 }
 
 func TestKnownProviderRule(t *testing.T) {
@@ -100,13 +100,13 @@ func TestKnownProviderRule(t *testing.T) {
 	)
 
 	option := resolver.Resolve(ctx)
-	require.True(t, option.IsPresent(), "expected known provider rule to resolve")
+	assert.True(t, option.IsPresent(), "expected known provider rule to resolve")
 
 	result := option.MustGet()
-	require.Equal(t, diskBuilder, result.Builder)
-	require.Equal(t, "/mnt/storage", result.Config.Bucket)
-	require.Equal(t, "/mnt/storage", result.Config.BasePath)
-	require.Equal(t, "http://local", result.Config.LocalURL)
+	assert.Equal(t, diskBuilder, result.Builder)
+	assert.Equal(t, "/mnt/storage", result.Config.Bucket)
+	assert.Equal(t, "/mnt/storage", result.Config.BasePath)
+	assert.Equal(t, "http://local", result.Config.LocalURL)
 }
 
 func TestModuleRules(t *testing.T) {
@@ -136,11 +136,11 @@ func TestModuleRules(t *testing.T) {
 	)
 
 	option := resolver.Resolve(ctx)
-	require.True(t, option.IsPresent(), "expected module rule to resolve")
+	assert.True(t, option.IsPresent(), "expected module rule to resolve")
 
 	result := option.MustGet()
-	require.Equal(t, r2Builder, result.Builder)
-	require.Equal(t, "tc-bucket", result.Config.Bucket)
+	assert.Equal(t, r2Builder, result.Builder)
+	assert.Equal(t, "tc-bucket", result.Config.Bucket)
 }
 
 func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
@@ -174,11 +174,11 @@ func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 	)
 
 	option := resolver.Resolve(context.Background())
-	require.True(t, option.IsPresent(), "expected default rule to resolve")
+	assert.True(t, option.IsPresent(), "expected default rule to resolve")
 
 	result := option.MustGet()
-	require.Equal(t, r2Builder, result.Builder, "expected first enabled provider to be used")
-	require.Equal(t, "r2-bucket", result.Config.Bucket)
+	assert.Equal(t, r2Builder, result.Builder, "expected first enabled provider to be used")
+	assert.Equal(t, "r2-bucket", result.Config.Bucket)
 }
 
 func TestDefaultRuleUsesS3WhenEnabled(t *testing.T) {
@@ -207,11 +207,11 @@ func TestDefaultRuleUsesS3WhenEnabled(t *testing.T) {
 	)
 
 	option := resolver.Resolve(context.Background())
-	require.True(t, option.IsPresent(), "expected default rule to resolve")
+	assert.True(t, option.IsPresent(), "expected default rule to resolve")
 
 	result := option.MustGet()
-	require.Equal(t, s3Builder, result.Builder)
-	require.Equal(t, "default-bucket", result.Config.Bucket)
+	assert.Equal(t, s3Builder, result.Builder)
+	assert.Equal(t, "default-bucket", result.Config.Bucket)
 }
 
 func TestProviderEnabledChecksConfig(t *testing.T) {
@@ -224,8 +224,8 @@ func TestProviderEnabledChecksConfig(t *testing.T) {
 		},
 	}
 
-	require.True(t, rc.providerEnabled(storage.S3Provider))
-	require.False(t, rc.providerEnabled(storage.DiskProvider))
+	assert.True(t, rc.providerEnabled(storage.S3Provider))
+	assert.False(t, rc.providerEnabled(storage.DiskProvider))
 }
 
 func TestResolveProviderWithUnsupportedBuilder(t *testing.T) {
@@ -237,8 +237,8 @@ func TestResolveProviderWithUnsupportedBuilder(t *testing.T) {
 	)
 
 	_, err := rc.resolveProviderWithBuilder(storage.ProviderType("unsupported"))
-	require.Error(t, err)
-	require.ErrorIs(t, err, errUnsupportedProvider)
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, errUnsupportedProvider)
 }
 
 func TestResolveProviderFromConfigCopiesOptions(t *testing.T) {
@@ -260,9 +260,9 @@ func TestResolveProviderFromConfigCopiesOptions(t *testing.T) {
 	)
 
 	resolved, err := rc.resolveProvider(storage.S3Provider)
-	require.NoError(t, err)
-	require.Equal(t, "bucket", resolved.Config.Bucket)
-	require.Equal(t, "us-east-1", resolved.Config.Region)
+	assert.NoError(t, err)
+	assert.Equal(t, "bucket", resolved.Config.Bucket)
+	assert.Equal(t, "us-east-1", resolved.Config.Region)
 }
 
 func TestProviderResolveFromConfigDisabled(t *testing.T) {
@@ -271,7 +271,7 @@ func TestProviderResolveFromConfigDisabled(t *testing.T) {
 			S3: storage.ProviderConfigs{Enabled: false},
 		},
 	}, serviceOptions{})
-	require.Error(t, err)
+	assert.Error(t, err)
 }
 
 func TestHandleDevModeOptionClone(t *testing.T) {
@@ -290,20 +290,20 @@ func TestHandleDevModeOptionClone(t *testing.T) {
 		}),
 	)
 
-	require.True(t, rc.handleDevMode())
+	assert.True(t, rc.handleDevMode())
 
 	option := resolver.Resolve(context.Background())
-	require.True(t, option.IsPresent())
+	assert.True(t, option.IsPresent())
 
 	result := option.MustGet()
-	require.NotNil(t, result.Config)
+	assert.NotNil(t, result.Config)
 	// ensure options cloned on each invocation
 	result.Config.Apply(storage.WithExtra("mutated", true))
 
 	option = resolver.Resolve(context.Background())
-	require.True(t, option.IsPresent())
+	assert.True(t, option.IsPresent())
 	_, ok := option.MustGet().Config.Extra("mutated")
-	require.False(t, ok)
+	assert.False(t, ok)
 }
 
 func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
@@ -325,8 +325,8 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 	rc.addDefaultProviderRule()
 
 	option := resolver.Resolve(context.Background())
-	require.True(t, option.IsPresent())
-	require.Equal(t, "r2", option.MustGet().Builder.ProviderType())
+	assert.True(t, option.IsPresent())
+	assert.Equal(t, "r2", option.MustGet().Builder.ProviderType())
 }
 
 type oldProvidersStructWithCloudflareR2 struct {
@@ -337,11 +337,11 @@ type oldProvidersStructWithCloudflareR2 struct {
 }
 
 type oldProviderConfigWithCloudflareR2 struct {
-	Enabled     bool                              `json:"enabled" koanf:"enabled"`
-	Keys        []string                          `json:"keys" koanf:"keys"`
-	MaxSizeMB   int64                             `json:"maxsizemb" koanf:"maxsizemb"`
-	MaxMemoryMB int64                             `json:"maxmemorymb" koanf:"maxmemorymb"`
-	DevMode     bool                              `json:"devmode" koanf:"devmode"`
+	Enabled     bool                               `json:"enabled" koanf:"enabled"`
+	Keys        []string                           `json:"keys" koanf:"keys"`
+	MaxSizeMB   int64                              `json:"maxsizemb" koanf:"maxsizemb"`
+	MaxMemoryMB int64                              `json:"maxmemorymb" koanf:"maxmemorymb"`
+	DevMode     bool                               `json:"devmode" koanf:"devmode"`
 	Providers   oldProvidersStructWithCloudflareR2 `json:"providers" koanf:"providers"`
 }
 
@@ -366,10 +366,10 @@ providers:
 
 	var oldStyleConfig oldProviderConfigWithCloudflareR2
 	err := yaml.Unmarshal([]byte(yamlConfig), &oldStyleConfig)
-	require.NoError(t, err)
+	assert.NoError(t, err)
 
-	require.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "CloudflareR2 config populated from YAML")
-	require.Equal(t, "ol-trust-center", oldStyleConfig.Providers.CloudflareR2.Bucket)
+	assert.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "CloudflareR2 config populated from YAML")
+	assert.Equal(t, "ol-trust-center", oldStyleConfig.Providers.CloudflareR2.Bucket)
 
 	actualConfig := storage.ProviderConfig{
 		Enabled: true,
@@ -397,14 +397,14 @@ providers:
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
 	rc.addDefaultProviderRule()
 
-	require.True(t, actualConfig.Providers.R2.Enabled, "R2 config is enabled from CloudflareR2 YAML")
-	require.Equal(t, "ol-trust-center", actualConfig.Providers.R2.Bucket, "R2 bucket populated from cloudflarer2 config")
+	assert.True(t, actualConfig.Providers.R2.Enabled, "R2 config is enabled from CloudflareR2 YAML")
+	assert.Equal(t, "ol-trust-center", actualConfig.Providers.R2.Bucket, "R2 bucket populated from cloudflarer2 config")
 
 	option := resolver.Resolve(ctx)
-	require.True(t, option.IsPresent())
+	assert.True(t, option.IsPresent())
 
 	result := option.MustGet()
-	require.Equal(t, cloudflareR2BuilderReportingCloudflareR2Type, result.Builder, "module rule with storage.R2Provider ('r2') matches config.Providers.R2, resolver builds provider successfully")
-	require.Equal(t, "ol-trust-center", result.Config.Bucket, "trust center documents go to R2 as expected")
-	require.Equal(t, "cloudflarer2", result.Builder.ProviderType(), "but provider reports 'cloudflarer2' type - validateProviderType would catch this mismatch")
+	assert.Equal(t, cloudflareR2BuilderReportingCloudflareR2Type, result.Builder, "module rule with storage.R2Provider ('r2') matches config.Providers.R2, resolver builds provider successfully")
+	assert.Equal(t, "ol-trust-center", result.Config.Bucket, "trust center documents go to R2 as expected")
+	assert.Equal(t, "cloudflarer2", result.Builder.ProviderType(), "but provider reports 'cloudflarer2' type - validateProviderType would catch this mismatch")
 }
