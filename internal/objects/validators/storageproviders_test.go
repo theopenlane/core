@@ -164,6 +164,22 @@ func (s *stubProvider) Close() error {
 // ensure stubProvider satisfies storagetypes.Provider at compile-time.
 var _ storagetypes.Provider = (*stubProvider)(nil)
 
+func TestValidateProviderType(t *testing.T) {
+	t.Run("matching provider type succeeds", func(t *testing.T) {
+		provider := &stubProvider{}
+		err := validateProviderType(storage.DiskProvider, provider)
+		require.NoError(t, err)
+	})
+
+	t.Run("mismatched provider type fails", func(t *testing.T) {
+		provider := &stubProvider{}
+		err := validateProviderType(storage.R2Provider, provider)
+		require.Error(t, err)
+		require.ErrorIs(t, err, ErrProviderTypeMismatch)
+		require.Contains(t, err.Error(), "expected r2 but provider reports disk")
+	})
+}
+
 func TestConfigKeyMismatchLeavesR2Unpopulated(t *testing.T) {
 	yamlWithCloudflareR2Key := `
 enabled: true

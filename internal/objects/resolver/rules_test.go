@@ -345,11 +345,10 @@ type oldProviderConfigWithCloudflareR2 struct {
 	Providers   oldProvidersStructWithCloudflareR2 `json:"providers" koanf:"providers"`
 }
 
-func TestModuleRuleWithCloudflareR2ConfigKeyButR2ProviderConstant(t *testing.T) {
+func TestModuleRuleR2ProviderConstantMatchesR2ConfigField(t *testing.T) {
 	ctx := contextx.With(context.Background(), objects.ModuleHint(models.CatalogTrustCenterModule))
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 
-	r2Builder := &stubBuilder{providerType: "r2"}
 	s3Builder := &stubBuilder{providerType: "s3"}
 
 	yamlConfig := `
@@ -376,18 +375,18 @@ providers:
 		Enabled: true,
 		Providers: storage.Providers{
 			S3: oldStyleConfig.Providers.S3,
-			R2: storage.ProviderConfigs{
-				Enabled: false,
-			},
+			R2: oldStyleConfig.Providers.CloudflareR2,
 		},
 	}
+
+	cloudflareR2BuilderReportingCloudflareR2Type := &stubBuilder{providerType: "cloudflarer2"}
 
 	rc := newRuleCoordinator(
 		resolver,
 		WithProviderConfig(actualConfig),
 		WithProviderBuilders(providerBuilders{
 			s3:   s3Builder,
-			r2:   r2Builder,
+			r2:   cloudflareR2BuilderReportingCloudflareR2Type,
 			disk: &stubBuilder{providerType: "disk"},
 			db:   &stubBuilder{providerType: "db"},
 		}),
@@ -398,13 +397,14 @@ providers:
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
 	rc.addDefaultProviderRule()
 
-	require.False(t, actualConfig.Providers.R2.Enabled, "R2 field not populated because YAML had cloudflarer2 key")
-	require.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "but CloudflareR2 was populated and would pass validation")
+	require.True(t, actualConfig.Providers.R2.Enabled, "R2 config is enabled from CloudflareR2 YAML")
+	require.Equal(t, "ol-trust-center", actualConfig.Providers.R2.Bucket, "R2 bucket populated from cloudflarer2 config")
 
 	option := resolver.Resolve(ctx)
 	require.True(t, option.IsPresent())
 
 	result := option.MustGet()
-	require.Equal(t, s3Builder, result.Builder, "module rule uses storage.R2Provider but config.Providers.R2 is not populated, falls back to S3")
-	require.Equal(t, "opln", result.Config.Bucket, "trust center documents go to S3 instead of R2")
+	require.Equal(t, cloudflareR2BuilderReportingCloudflareR2Type, result.Builder, "module rule with storage.R2Provider ('r2') matches config.Providers.R2, resolver builds provider successfully")
+	require.Equal(t, "ol-trust-center", result.Config.Bucket, "trust center documents go to R2 as expected")
+	require.Equal(t, "cloudflarer2", result.Builder.ProviderType(), "but provider reports 'cloudflarer2' type - validateProviderType would catch this mismatch")
 }
