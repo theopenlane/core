@@ -88,10 +88,10 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 							return unauthorized(c, ErrNoAuthorization, conf, validator)
 						}
 
-						return unauthorized(c,fmt.Errorf("%s %s",err.Error(),c.Request().Header.Get("Authorization")), conf, validator)
+						return unauthorized(c, err, conf, validator)
 					}
 				default:
-						return unauthorized(c,fmt.Errorf("%s %s",err.Error(),c.Request().Header.Get("Authorization")), conf, validator)
+					return unauthorized(c, err, conf, validator)
 
 				}
 			}
@@ -415,25 +415,25 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 	// verify the token format and extract the public ID and secret
 	publicID, secret, err := parseToken(token)
 
-	var	t *ent.APIToken 
+	var t *ent.APIToken
 
-	if err!=nil{
-		if errors.Is(err,rout.ErrInvalidCredentials) {
+	if err != nil {
+		if errors.Is(err, rout.ErrInvalidCredentials) {
 			var err error
-			t,err =	fetchAPITokenFunc(ctx, dbClient, token)
-			if err!=nil {
-				return nil ,"",err
+			t, err = fetchAPITokenFunc(ctx, dbClient, token)
+			if err != nil {
+				return nil, "", err
 			}
-		}else{
+		} else {
 
-		return nil,"",err
+			return nil, "", err
 		}
 	} else {
 
-	t, err = fetchAPITokenFunc(ctx, dbClient, publicID)
-	if err != nil {
-		return nil, "", err
-	}
+		t, err = fetchAPITokenFunc(ctx, dbClient, publicID)
+		if err != nil {
+			return nil, "", err
+		}
 	}
 
 	// verify the secret
