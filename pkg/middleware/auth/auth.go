@@ -78,26 +78,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			// Create a reauthenticator function to handle refresh tokens if they are provided.
 			reauthenticate := Reauthenticate(conf, validator)
 
-			var bearerToken string
-			authHeader := c.Request().Header.Get("Authorization")
-			if authHeader != "" {
-				parts := strings.Split(authHeader, " ")
-				if len(parts) == 2 && parts[0] == "Bearer" {
-					bearerToken = parts[1]
-					err = nil
-				} else {
-					err = ErrParseBearer
-				}
-			}
-			if bearerToken == "" || err != nil {
-				externalToken, externalErr := auth.GetBearerToken(c)
-				if externalErr == nil {
-					bearerToken = externalToken
-					err = nil
-				} else {
-					err = externalErr
-				}
-			}
+			bearerToken, err := auth.GetBearerToken(c)
 
 			if err != nil {
 				switch {
@@ -688,5 +669,5 @@ func parseToken(token string) (publicID, secret string, err error) {
 		return parts[1], parts[2], nil
 	}
 
-	return "", "", rout.ErrInvalidCredentials
+	return "", "", rout.ErrMissingField
 }
