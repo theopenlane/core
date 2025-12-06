@@ -12,6 +12,12 @@ type ExportFormat string
 var (
 	// ExportFormatCsv indicates the csv.
 	ExportFormatCsv ExportFormat = "CSV"
+	// ExportFormatMD indicates the markdown.
+	ExportFormatMD ExportFormat = "MD"
+	// ExportFormatDocx indicates the docx.
+	ExportFormatDocx ExportFormat = "DOCX"
+	// ExportFormatPDF indicates the pdf.
+	ExportFormatPDF ExportFormat = "PDF"
 	// ExportFormatInvalid is used when an unknown or unsupported value is provided.
 	ExportFormatInvalid ExportFormat = "EXPORTFORMAT_INVALID"
 )
@@ -20,6 +26,9 @@ var (
 func (ExportFormat) Values() []string {
 	return []string{
 		string(ExportFormatCsv),
+		string(ExportFormatMD),
+		string(ExportFormatDocx),
+		string(ExportFormatPDF),
 	}
 }
 
@@ -33,6 +42,12 @@ func ToExportFormat(r string) *ExportFormat {
 	switch strings.ToUpper(r) {
 	case ExportFormatCsv.String():
 		return &ExportFormatCsv
+	case ExportFormatMD.String():
+		return &ExportFormatMD
+	case ExportFormatDocx.String():
+		return &ExportFormatDocx
+	case ExportFormatPDF.String():
+		return &ExportFormatPDF
 	default:
 		return &ExportFormatInvalid
 	}

@@ -40,7 +40,7 @@ var (
 
 // WatermarkDocArgs for the worker to process watermarking of a document
 type WatermarkDocArgs struct {
-	// TrustCenterDocumentID is the ID of the trust center document to watermark
+	// ID of the trust center document
 	TrustCenterDocumentID string `json:"trust_center_document_id"`
 }
 
