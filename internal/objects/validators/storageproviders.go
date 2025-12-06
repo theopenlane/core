@@ -71,8 +71,8 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 		}
 	}
 
-	if cfg.Providers.CloudflareR2.Enabled && cfg.Providers.CloudflareR2.EnsureAvailable {
-		if err := validateR2Provider(ctx, cfg.Providers.CloudflareR2); err != nil {
+	if cfg.Providers.R2.Enabled && cfg.Providers.R2.EnsureAvailable {
+		if err := validateR2Provider(ctx, cfg.Providers.R2); err != nil {
 			errs = append(errs, err)
 		}
 	}

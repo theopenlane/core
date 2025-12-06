@@ -25,7 +25,7 @@ type Provider interface {
 	GetScheme() *string
 	// ListBuckets is used to list the buckets in the storage backend
 	ListBuckets() ([]string, error)
-	// ProviderType returns the type of the storage provider (e.g., S3, R2, GCS)
+	// ProviderType returns the type of the storage provider (e.g., S3, R2)
 	ProviderType() ProviderType
 	io.Closer
 }
@@ -38,8 +38,6 @@ const (
 	S3Provider ProviderType = "s3"
 	// R2Provider is the type for Cloudflare R2 storage
 	R2Provider ProviderType = "r2"
-	// GCSProvider is the type for Google Cloud Storage
-	GCSProvider ProviderType = "gcs"
 	// DiskProvider is the type for local disk storage
 	DiskProvider ProviderType = "disk"
 	// DatabaseProvider is the type for database storage

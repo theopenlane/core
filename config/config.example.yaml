@@ -215,20 +215,6 @@ objectstorage:
     maxmemorymb: 0
     maxsizemb: 0
     providers:
-        cloudflarer2:
-            baseurl: http://localhost:17608/v1/files
-            bucket: ""
-            credentials:
-                accesskeyid: ""
-                accountid: ""
-                apitoken: ""
-                projectid: ""
-                secretaccesskey: ""
-            enabled: false
-            endpoint: ""
-            ensureavailable: false
-            proxypresignenabled: false
-            region: ""
         database:
             baseurl: http://localhost:17608/v1/files
             bucket: ""
@@ -257,7 +243,7 @@ objectstorage:
             ensureavailable: false
             proxypresignenabled: false
             region: ""
-        gcs:
+        r2:
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:

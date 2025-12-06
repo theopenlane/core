@@ -1371,13 +1371,9 @@
           "$ref": "#/$defs/storage.ProviderConfigs",
           "description": "S3 provider configuration"
         },
-        "cloudflarer2": {
+        "r2": {
           "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "CloudflareR2 provider configuration"
-        },
-        "gcs": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "GCS provider configuration"
+          "description": "R2 provider configuration"
         },
         "disk": {
           "$ref": "#/$defs/storage.ProviderConfigs",

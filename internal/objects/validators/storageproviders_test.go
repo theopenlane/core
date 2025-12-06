@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v3"
 
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -162,3 +163,58 @@ func (s *stubProvider) Close() error {
 
 // ensure stubProvider satisfies storagetypes.Provider at compile-time.
 var _ storagetypes.Provider = (*stubProvider)(nil)
+
+func TestConfigKeyMismatchLeavesR2Unpopulated(t *testing.T) {
+	yamlWithCloudflareR2Key := `
+enabled: true
+providers:
+  s3:
+    enabled: true
+    bucket: "opln"
+    region: "us-east-2"
+  cloudflarer2:
+    enabled: true
+    bucket: "ol-trust-center"
+    region: "WNAM"
+`
+
+	yamlWithCorrectR2Key := `
+enabled: true
+providers:
+  s3:
+    enabled: true
+    bucket: "opln"
+    region: "us-east-2"
+  r2:
+    enabled: true
+    bucket: "ol-trust-center"
+    region: "WNAM"
+`
+
+	t.Run("cloudflarer2 YAML key does not populate R2 struct field with r2 koanf tag", func(t *testing.T) {
+		var cfg storage.ProviderConfig
+		err := yaml.Unmarshal([]byte(yamlWithCloudflareR2Key), &cfg)
+		require.NoError(t, err)
+
+		require.True(t, cfg.Providers.S3.Enabled, "S3 config should be populated")
+		require.Equal(t, "opln", cfg.Providers.S3.Bucket)
+		require.Equal(t, "us-east-2", cfg.Providers.S3.Region)
+
+		require.False(t, cfg.Providers.R2.Enabled, "R2.Enabled defaults to false when YAML uses cloudflarer2 key but struct expects r2")
+		require.Empty(t, cfg.Providers.R2.Bucket, "R2.Bucket empty when YAML key mismatch")
+		require.Empty(t, cfg.Providers.R2.Region, "R2.Region empty when YAML key mismatch")
+	})
+
+	t.Run("r2 YAML key correctly populates R2 struct field with r2 koanf tag", func(t *testing.T) {
+		var cfg storage.ProviderConfig
+		err := yaml.Unmarshal([]byte(yamlWithCorrectR2Key), &cfg)
+		require.NoError(t, err)
+
+		require.True(t, cfg.Providers.S3.Enabled)
+		require.Equal(t, "opln", cfg.Providers.S3.Bucket)
+
+		require.True(t, cfg.Providers.R2.Enabled, "R2.Enabled true when YAML r2 key matches struct r2 koanf tag")
+		require.Equal(t, "ol-trust-center", cfg.Providers.R2.Bucket, "R2.Bucket populated when keys match")
+		require.Equal(t, "WNAM", cfg.Providers.R2.Region, "R2.Region populated when keys match")
+	})
+}

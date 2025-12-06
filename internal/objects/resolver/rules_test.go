@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v3"
 
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/models"
@@ -115,7 +116,7 @@ func TestModuleRules(t *testing.T) {
 	r2Builder := &stubBuilder{providerType: "r2"}
 	config := storage.ProviderConfig{
 		Providers: storage.Providers{
-			CloudflareR2: storage.ProviderConfigs{
+			R2: storage.ProviderConfigs{
 				Enabled: true,
 				Bucket:  "tc-bucket",
 			},
@@ -153,7 +154,7 @@ func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 			S3: storage.ProviderConfigs{
 				Enabled: false,
 			},
-			CloudflareR2: storage.ProviderConfigs{
+			R2: storage.ProviderConfigs{
 				Enabled: true,
 				Bucket:  "r2-bucket",
 			},
@@ -311,8 +312,8 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 		resolver,
 		WithProviderConfig(storage.ProviderConfig{
 			Providers: storage.Providers{
-				S3:           storage.ProviderConfigs{Enabled: false},
-				CloudflareR2: storage.ProviderConfigs{Enabled: true},
+				S3: storage.ProviderConfigs{Enabled: false},
+				R2: storage.ProviderConfigs{Enabled: true},
 			},
 		}),
 		WithProviderBuilders(providerBuilders{
@@ -326,4 +327,84 @@ func TestDefaultRuleSkipsDisabledProviders(t *testing.T) {
 	option := resolver.Resolve(context.Background())
 	require.True(t, option.IsPresent())
 	require.Equal(t, "r2", option.MustGet().Builder.ProviderType())
+}
+
+type oldProvidersStructWithCloudflareR2 struct {
+	S3           storage.ProviderConfigs `json:"s3" koanf:"s3"`
+	CloudflareR2 storage.ProviderConfigs `json:"cloudflarer2" koanf:"cloudflarer2"`
+	Disk         storage.ProviderConfigs `json:"disk" koanf:"disk"`
+	Database     storage.ProviderConfigs `json:"database" koanf:"database"`
+}
+
+type oldProviderConfigWithCloudflareR2 struct {
+	Enabled     bool                              `json:"enabled" koanf:"enabled"`
+	Keys        []string                          `json:"keys" koanf:"keys"`
+	MaxSizeMB   int64                             `json:"maxsizemb" koanf:"maxsizemb"`
+	MaxMemoryMB int64                             `json:"maxmemorymb" koanf:"maxmemorymb"`
+	DevMode     bool                              `json:"devmode" koanf:"devmode"`
+	Providers   oldProvidersStructWithCloudflareR2 `json:"providers" koanf:"providers"`
+}
+
+func TestModuleRuleWithCloudflareR2ConfigKeyButR2ProviderConstant(t *testing.T) {
+	ctx := contextx.With(context.Background(), objects.ModuleHint(models.CatalogTrustCenterModule))
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+
+	r2Builder := &stubBuilder{providerType: "r2"}
+	s3Builder := &stubBuilder{providerType: "s3"}
+
+	yamlConfig := `
+enabled: true
+providers:
+  s3:
+    enabled: true
+    bucket: "opln"
+    region: "us-east-2"
+  cloudflarer2:
+    enabled: true
+    bucket: "ol-trust-center"
+    region: "WNAM"
+`
+
+	var oldStyleConfig oldProviderConfigWithCloudflareR2
+	err := yaml.Unmarshal([]byte(yamlConfig), &oldStyleConfig)
+	require.NoError(t, err)
+
+	require.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "CloudflareR2 config populated from YAML")
+	require.Equal(t, "ol-trust-center", oldStyleConfig.Providers.CloudflareR2.Bucket)
+
+	actualConfig := storage.ProviderConfig{
+		Enabled: true,
+		Providers: storage.Providers{
+			S3: oldStyleConfig.Providers.S3,
+			R2: storage.ProviderConfigs{
+				Enabled: false,
+			},
+		},
+	}
+
+	rc := newRuleCoordinator(
+		resolver,
+		WithProviderConfig(actualConfig),
+		WithProviderBuilders(providerBuilders{
+			s3:   s3Builder,
+			r2:   r2Builder,
+			disk: &stubBuilder{providerType: "disk"},
+			db:   &stubBuilder{providerType: "db"},
+		}),
+		WithRuntimeOptions(serviceOptions{}),
+	)
+
+	rc.addKnownProviderRule()
+	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
+	rc.addDefaultProviderRule()
+
+	require.False(t, actualConfig.Providers.R2.Enabled, "R2 field not populated because YAML had cloudflarer2 key")
+	require.True(t, oldStyleConfig.Providers.CloudflareR2.Enabled, "but CloudflareR2 was populated and would pass validation")
+
+	option := resolver.Resolve(ctx)
+	require.True(t, option.IsPresent())
+
+	result := option.MustGet()
+	require.Equal(t, s3Builder, result.Builder, "module rule uses storage.R2Provider but config.Providers.R2 is not populated, falls back to S3")
+	require.Equal(t, "opln", result.Config.Bucket, "trust center documents go to S3 instead of R2")
 }
