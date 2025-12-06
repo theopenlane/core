@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -24,8 +24,8 @@ func TestAddFilePermissionsMissingParent(t *testing.T) {
 	})
 
 	_, err := AddFilePermissions(ctx)
-	require.Error(t, err)
-	require.ErrorIs(t, err, ErrMissingParent)
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, ErrMissingParent)
 }
 
 func TestAddFilePermissionsAvatarMissingOrg(t *testing.T) {
@@ -45,8 +45,8 @@ func TestAddFilePermissionsAvatarMissingOrg(t *testing.T) {
 	})
 
 	_, err := AddFilePermissions(ctx)
-	require.Error(t, err)
-	require.ErrorIs(t, err, auth.ErrNoAuthUser)
+	assert.Error(t, err)
+	assert.ErrorIs(t, err, auth.ErrNoAuthUser)
 }
 
 func TestGetOrgOwnerIDWithUserType(t *testing.T) {
@@ -54,8 +54,8 @@ func TestGetOrgOwnerIDWithUserType(t *testing.T) {
 		CorrelatedObjectType: "user",
 	})
 
-	require.NoError(t, err)
-	require.Empty(t, orgID)
+	assert.NoError(t, err)
+	assert.Empty(t, orgID)
 }
 
 func TestGetOrgOwnerIDUsesAuthContext(t *testing.T) {
@@ -68,31 +68,31 @@ func TestGetOrgOwnerIDUsesAuthContext(t *testing.T) {
 		CorrelatedObjectType: "program",
 	})
 
-	require.NoError(t, err)
-	require.Equal(t, user.OrganizationID, orgID)
+	assert.NoError(t, err)
+	assert.Equal(t, user.OrganizationID, orgID)
 }
 
 func TestTxHelpersReturnClients(t *testing.T) {
 	client := &ent.Client{}
 	ctx := ent.NewContext(context.Background(), client)
 
-	require.Equal(t, client, txClientFromContext(ctx))
-	require.Nil(t, txFileClientFromContext(ctx))
+	assert.Equal(t, client, txClientFromContext(ctx))
+	assert.Nil(t, txFileClientFromContext(ctx))
 
 	fileClient := &ent.FileClient{}
 	client.File = fileClient
 
-	require.Equal(t, fileClient, txFileClientFromContext(ent.NewContext(context.Background(), client)))
+	assert.Equal(t, fileClient, txFileClientFromContext(ent.NewContext(context.Background(), client)))
 }
 
 func TestAddFilePermissionsNoFiles(t *testing.T) {
 	ctx := context.Background()
 	updated, err := AddFilePermissions(ctx)
-	require.NoError(t, err)
-	require.Equal(t, ctx, updated)
+	assert.NoError(t, err)
+	assert.Equal(t, ctx, updated)
 }
 
 func TestTxClientFromContextEmpty(t *testing.T) {
-	require.Nil(t, txClientFromContext(context.Background()))
-	require.Nil(t, txFileClientFromContext(context.Background()))
+	assert.Nil(t, txClientFromContext(context.Background()))
+	assert.Nil(t, txFileClientFromContext(context.Background()))
 }

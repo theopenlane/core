@@ -31,6 +31,8 @@ var (
 	ErrBucketNotFound = errors.New("bucket not found")
 	// ErrUnableToCreateBucket is returned when the local bucket could not be created and the directory does not exist
 	ErrUnableToCreateBucket = errors.New("unable to create bucket directory")
+	// ErrProviderTypeMismatch is returned when provider's reported type doesn't match expected type
+	ErrProviderTypeMismatch = errors.New("provider type mismatch")
 )
 
 // ValidateAvailabilityByProvider validates only providers that have EnsureAvailable enabled.
@@ -71,8 +73,8 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 		}
 	}
 
-	if cfg.Providers.CloudflareR2.Enabled && cfg.Providers.CloudflareR2.EnsureAvailable {
-		if err := validateR2Provider(ctx, cfg.Providers.CloudflareR2); err != nil {
+	if cfg.Providers.R2.Enabled && cfg.Providers.R2.EnsureAvailable {
+		if err := validateR2Provider(ctx, cfg.Providers.R2); err != nil {
 			errs = append(errs, err)
 		}
 	}
@@ -111,6 +113,10 @@ func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs) erro
 	}
 	defer provider.Close()
 
+	if err := validateProviderType(storage.DiskProvider, provider); err != nil {
+		return err
+	}
+
 	return validateBuckets("disk", provider, bucket)
 }
 
@@ -142,6 +148,10 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 
 	defer provider.Close()
 
+	if err := validateProviderType(storage.S3Provider, provider); err != nil {
+		return err
+	}
+
 	return validateBuckets("s3", provider, cfg.Bucket)
 }
 
@@ -167,6 +177,10 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 
 	defer provider.Close()
 
+	if err := validateProviderType(storage.R2Provider, provider); err != nil {
+		return err
+	}
+
 	return validateBuckets("r2", provider, cfg.Bucket)
 }
 
@@ -187,6 +201,15 @@ func validateDatabaseProvider(ctx context.Context, cfg storage.ProviderConfigs) 
 		return fmt.Errorf("database provider validation: %w", err)
 	}
 
+	return nil
+}
+
+// validateProviderType checks that the provider's reported type matches the expected provider constant
+func validateProviderType(expected storagetypes.ProviderType, provider storagetypes.Provider) error {
+	actual := provider.ProviderType()
+	if actual != expected {
+		return fmt.Errorf("%w: expected %s but provider reports %s", ErrProviderTypeMismatch, expected, actual)
+	}
 	return nil
 }
 
