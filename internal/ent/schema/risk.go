@@ -57,12 +57,12 @@ func (Risk) Fields() []ent.Field {
 			Comment("the name of the risk"),
 		field.Enum("status").
 			GoType(enums.RiskStatus("")).
-			Default(enums.RiskOpen.String()).
+			Default(enums.RiskIdentified.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			).
 			Optional().
-			Comment("status of the risk - open, mitigated, ongoing, in-progress, and archived."),
+			Comment("status of the risk - identified, mitigated, accepted, closed, transferred, and archived."),
 		field.String("risk_type").
 			Annotations(
 				entgql.OrderField("risk_type"),

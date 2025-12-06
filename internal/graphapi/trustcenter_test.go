@@ -291,9 +291,10 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.Assert(t, resp != nil)
 
 			if tc.request.CustomDomainID != nil {
+				assert.Assert(t, resp.CreateTrustCenter.TrustCenter.CustomDomainID != nil)
 				assert.Check(t, is.Equal(*tc.request.CustomDomainID, *resp.CreateTrustCenter.TrustCenter.CustomDomainID))
 			} else {
-				assert.Check(t, is.Equal(*resp.CreateTrustCenter.TrustCenter.CustomDomainID, ""))
+				assert.Check(t, resp.CreateTrustCenter.TrustCenter.CustomDomainID == nil)
 			}
 
 			// Verify slug is the lowercased, alphanumeric version of the org name

@@ -7988,7 +7988,7 @@ type CreateRiskInput struct {
 	RiskCategoryName *string `json:"riskCategoryName,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
-	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType *string `json:"riskType,omitempty"`
@@ -32713,7 +32713,7 @@ type Risk struct {
 	RiskCategoryID *string `json:"riskCategoryID,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
-	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType *string `json:"riskType,omitempty"`
@@ -32835,7 +32835,7 @@ type RiskHistory struct {
 	RiskCategoryID *string `json:"riskCategoryID,omitempty"`
 	// the name of the risk
 	Name string `json:"name"`
-	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status *enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType *string `json:"riskType,omitempty"`
@@ -45948,7 +45948,7 @@ type UpdateRiskInput struct {
 	ClearRiskCategoryName *bool   `json:"clearRiskCategoryName,omitempty"`
 	// the name of the risk
 	Name *string `json:"name,omitempty"`
-	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status      *enums.RiskStatus `json:"status,omitempty"`
 	ClearStatus *bool             `json:"clearStatus,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.

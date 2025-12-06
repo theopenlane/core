@@ -1768,7 +1768,8 @@ var ExampleGetQuestionnaireResponse = GetQuestionnaireResponse{
 
 // SubmitQuestionnaireRequest is the request to submit questionnaire response data
 type SubmitQuestionnaireRequest struct {
-	Data map[string]any `json:"data" binding:"required"`
+	AssessmentID string         `json:"assessment_id,omitempty"`
+	Data         map[string]any `json:"data" binding:"required"`
 }
 
 // ExampleSubmitQuestionnaireRequest is an example questionnaire submission request for OpenAPI documentation

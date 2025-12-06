@@ -45,7 +45,7 @@ type TrustCenterHistory struct {
 	// Slug for the trust center
 	Slug string `json:"slug,omitempty"`
 	// custom domain id for the trust center
-	CustomDomainID string `json:"custom_domain_id,omitempty"`
+	CustomDomainID *string `json:"custom_domain_id,omitempty"`
 	// preview domain id for the trust center
 	PreviewDomainID string `json:"preview_domain_id,omitempty"`
 	// Pirsch domain ID
@@ -169,7 +169,8 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field custom_domain_id", values[i])
 			} else if value.Valid {
-				_m.CustomDomainID = value.String
+				_m.CustomDomainID = new(string)
+				*_m.CustomDomainID = value.String
 			}
 		case trustcenterhistory.FieldPreviewDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -267,8 +268,10 @@ func (_m *TrustCenterHistory) String() string {
 	builder.WriteString("slug=")
 	builder.WriteString(_m.Slug)
 	builder.WriteString(", ")
-	builder.WriteString("custom_domain_id=")
-	builder.WriteString(_m.CustomDomainID)
+	if v := _m.CustomDomainID; v != nil {
+		builder.WriteString("custom_domain_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("preview_domain_id=")
 	builder.WriteString(_m.PreviewDomainID)

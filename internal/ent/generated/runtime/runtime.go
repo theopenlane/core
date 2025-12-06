@@ -5048,6 +5048,8 @@ func init() {
 	note.Hooks[6] = noteMixinHooks5[1]
 
 	note.Hooks[7] = noteHooks[0]
+
+	note.Hooks[8] = noteHooks[1]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters2 := noteMixin[2].Interceptors()
 	noteMixinInters5 := noteMixin[5].Interceptors()
@@ -7246,6 +7248,8 @@ func init() {
 	standard.Hooks[11] = standardHooks[3]
 
 	standard.Hooks[12] = standardHooks[4]
+
+	standard.Hooks[13] = standardHooks[5]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters2 := standardMixin[2].Interceptors()
 	standardMixinInters7 := standardMixin[7].Interceptors()
@@ -7572,6 +7576,8 @@ func init() {
 	subprocessor.Hooks[7] = subprocessorHooks[0]
 
 	subprocessor.Hooks[8] = subprocessorHooks[1]
+
+	subprocessor.Hooks[9] = subprocessorHooks[2]
 	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
 	subprocessorMixinInters2 := subprocessorMixin[2].Interceptors()
 	subprocessorMixinInters6 := subprocessorMixin[6].Interceptors()
@@ -8380,6 +8386,8 @@ func init() {
 	trustcenterdoc.Hooks[6] = trustcenterdocHooks[0]
 
 	trustcenterdoc.Hooks[7] = trustcenterdocHooks[1]
+
+	trustcenterdoc.Hooks[8] = trustcenterdocHooks[2]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
 	trustcenterdocMixinInters6 := trustcenterdocMixin[6].Interceptors()
@@ -8975,6 +8983,8 @@ func init() {
 	trustcenterentity.Hooks[5] = trustcenterentityHooks[0]
 
 	trustcenterentity.Hooks[6] = trustcenterentityHooks[1]
+
+	trustcenterentity.Hooks[7] = trustcenterentityHooks[2]
 	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
 	trustcenterentityMixinInters2 := trustcenterentityMixin[2].Interceptors()
 	trustcenterentityMixinInters5 := trustcenterentityMixin[5].Interceptors()

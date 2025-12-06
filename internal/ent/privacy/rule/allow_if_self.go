@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 
@@ -32,7 +33,7 @@ func AllowIfSelf() privacy.QueryMutationRule {
 		// if the user setting is being deleted, allow it
 		// there are no resolvers, this will always be deleted as part
 		// of a cascade delete
-		if _, ok := f.(UserIDFilter); ok && entx.CheckIsSoftDelete(ctx) {
+		if _, ok := f.(UserIDFilter); ok && entx.CheckIsSoftDeleteType(ctx, generated.TypeUserSetting) {
 			return privacy.Allow
 		}
 

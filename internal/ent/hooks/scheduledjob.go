@@ -31,7 +31,7 @@ func HookJobTemplate() ent.Hook {
 		return hook.JobTemplateFunc(func(ctx context.Context,
 			mutation *generated.JobTemplateMutation,
 		) (generated.Value, error) {
-			if entx.CheckIsSoftDelete(ctx) {
+			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
 				return next.Mutate(ctx, mutation)
 			}
 
@@ -320,7 +320,7 @@ func HookScheduledJobCreate() ent.Hook {
 		return hook.ScheduledJobFunc(func(ctx context.Context,
 			mutation *generated.ScheduledJobMutation,
 		) (generated.Value, error) {
-			if entx.CheckIsSoftDelete(ctx) {
+			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
 				return next.Mutate(ctx, mutation)
 			}
 
