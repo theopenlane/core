@@ -7,54 +7,14 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/iam/auth"
 )
 
 // NotificationCreated is the resolver for the notificationCreated field.
 func (r *subscriptionResolver) NotificationCreated(ctx context.Context) (<-chan *generated.Notification, error) {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get user ID from context: %w", err)
-	}
-
-	// Create a channel with the interface type for the subscription manager
-	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.TaskChannelBufferSize)
-	r.Resolver.subscriptionManager.Subscribe(userID, internalChan)
-
-	// Create a channel with the concrete type for the GraphQL response
-	notifChan := make(chan *generated.Notification, graphsubscriptions.TaskChannelBufferSize)
-
-	// Forward notifications from internal channel to GraphQL channel
-	go func() {
-		defer close(notifChan)
-		for {
-			select {
-			case <-ctx.Done():
-				r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
-				return
-			case notif, ok := <-internalChan:
-				if !ok {
-					return
-				}
-				// Cast back to concrete type
-				if concreteNotif, ok := notif.(*generated.Notification); ok {
-					select {
-					case notifChan <- concreteNotif:
-					case <-ctx.Done():
-						r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
-						return
-					}
-				}
-			}
-		}
-	}()
-
-	return notifChan, nil
+	return r.handleNotificationSubscription(ctx)
 }
 
 // Subscription returns gqlgenerated.SubscriptionResolver implementation.
