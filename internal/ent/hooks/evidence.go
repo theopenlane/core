@@ -52,9 +52,15 @@ func HookEvidenceFiles() ent.Hook {
 				hasURL := checkEvidenceHasURL(ctx, m)
 				hasFiles := checkEvidenceHasFiles(ctx, m)
 
+				// the default status is EvidenceStatusSubmitted but for the update operations, we
+				// need to be able to reset the status to Submitted status.
+				// usecase here: imagine the evidence was in missing_artifacts before but a url was added
+				// or file, we want to clear that missing_artifact status and go back to Submitted
+				status := enums.EvidenceStatusSubmitted
 				if !hasURL && !hasFiles {
-					m.SetStatus(enums.EvidenceStatusMissingArtifact)
+					status = enums.EvidenceStatusMissingArtifact
 				}
+				m.SetStatus(status)
 			}
 
 			return next.Mutate(ctx, m)
