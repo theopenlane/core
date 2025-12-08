@@ -70,7 +70,6 @@ func HookCreateAssessmentResponse() ent.Hook {
 						Exec(ctx)
 					if err != nil {
 						logx.FromContext(ctx).Err(err).Msg("could not create contact for assessment response")
-						return nil, ErrUnableToCreateContact
 					}
 				}
 
