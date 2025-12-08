@@ -361,7 +361,7 @@ func TestMutationUpdateContact(t *testing.T) {
 			}
 
 			if tc.request.FullName != nil {
-				assert.Equal(t, *tc.request.FullName, resp.UpdateContact.Contact.FullName)
+				assert.Equal(t, *tc.request.FullName, *resp.UpdateContact.Contact.FullName)
 			}
 
 			if tc.request.Title != nil {
@@ -560,7 +560,7 @@ func TestMutationUpdateBulkContact(t *testing.T) {
 			// verify all returned contacts have the expected values
 			for _, contact := range resp.UpdateBulkContact.Contacts {
 				if tc.input.FullName != nil {
-					assert.Check(t, is.Equal(*tc.input.FullName, contact.FullName))
+					assert.Check(t, is.Equal(*tc.input.FullName, *contact.FullName))
 				}
 
 				if tc.input.Email != nil {
