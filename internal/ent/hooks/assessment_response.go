@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -54,6 +55,24 @@ func HookCreateAssessmentResponse() ent.Hook {
 
 				// not found so this is a new user
 				m.ClearDocumentDataID()
+
+				// try to make email unique per org
+				count, err := m.Client().Contact.Query().Select(contact.FieldEmail).
+					Where(contact.EmailEqualFold(email)).
+					Count(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Err(err).Msg("could not fetch existing contacts")
+					return nil, ErrUnableToCreateContact
+				}
+
+				if count == 0 {
+					_, err = m.Client().Contact.Create().SetEmail(email).
+						Save(ctx)
+					if err != nil {
+						logx.FromContext(ctx).Err(err).Msg("could not create contact for assessment response")
+						return nil, ErrUnableToCreateContact
+					}
+				}
 
 				value, err := next.Mutate(ctx, m)
 				if err != nil {
