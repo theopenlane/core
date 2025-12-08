@@ -151,6 +151,13 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 
 			logx.FromContext(ctx).Debug().Msg("trust center doc hook")
 
+			// if the watermark status is true already, we do not want to be able to revert it under any circumstances
+			if _, ok := m.WatermarkingEnabled(); ok {
+				if oldWatermarkingEnabled, err := m.OldWatermarkingEnabled(ctx); err == nil && oldWatermarkingEnabled {
+					m.ResetWatermarkingEnabled()
+				}
+			}
+
 			// Process trust center doc file
 			docFiles, _ := objects.FilesFromContextWithKey(ctx, "trustCenterDocFile")
 			if len(docFiles) > 0 {
