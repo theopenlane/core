@@ -42,6 +42,15 @@ extend type Mutation{
         """
         id: ID!
     ): AssessmentDeletePayload!
+    """
+    Delete multiple assessments
+    """
+    deleteBulkAssessment(
+        """
+        IDs of the assessments to delete
+        """
+        ids: [ID!]!
+    ): AssessmentBulkDeletePayload!
 }
 
 """
@@ -72,5 +81,15 @@ type AssessmentDeletePayload {
     Deleted assessment ID
     """
     deletedID: ID!
+}
+
+"""
+Return response for deleteBulkAssessment mutation
+"""
+type AssessmentBulkDeletePayload {
+    """
+    Deleted assessment IDs
+    """
+    deletedIDs: [ID!]!
 }
 

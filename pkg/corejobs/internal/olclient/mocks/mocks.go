@@ -16540,6 +16540,89 @@ func (_c *MockOpenlaneGraphClient_DeleteAsset_Call) RunAndReturn(run func(ctx co
 	return _c
 }
 
+// DeleteBulkAssessment provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) DeleteBulkAssessment(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteBulkAssessment, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, ids, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, ids)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for DeleteBulkAssessment")
+	}
+
+	var r0 *openlaneclient.DeleteBulkAssessment
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []string, ...clientv2.RequestInterceptor) (*openlaneclient.DeleteBulkAssessment, error)); ok {
+		return returnFunc(ctx, ids, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, []string, ...clientv2.RequestInterceptor) *openlaneclient.DeleteBulkAssessment); ok {
+		r0 = returnFunc(ctx, ids, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.DeleteBulkAssessment)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, []string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, ids, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_DeleteBulkAssessment_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteBulkAssessment'
+type MockOpenlaneGraphClient_DeleteBulkAssessment_Call struct {
+	*mock.Call
+}
+
+// DeleteBulkAssessment is a helper method to define mock.On call
+//   - ctx context.Context
+//   - ids []string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) DeleteBulkAssessment(ctx interface{}, ids interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_DeleteBulkAssessment_Call {
+	return &MockOpenlaneGraphClient_DeleteBulkAssessment_Call{Call: _e.mock.On("DeleteBulkAssessment",
+		append([]interface{}{ctx, ids}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteBulkAssessment_Call) Run(run func(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_DeleteBulkAssessment_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 []string
+		if args[1] != nil {
+			arg1 = args[1].([]string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteBulkAssessment_Call) Return(deleteBulkAssessment *openlaneclient.DeleteBulkAssessment, err error) *MockOpenlaneGraphClient_DeleteBulkAssessment_Call {
+	_c.Call.Return(deleteBulkAssessment, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_DeleteBulkAssessment_Call) RunAndReturn(run func(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteBulkAssessment, error)) *MockOpenlaneGraphClient_DeleteBulkAssessment_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // DeleteBulkExport provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) DeleteBulkExport(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.DeleteBulkExport, error) {
 	var tmpRet mock.Arguments
