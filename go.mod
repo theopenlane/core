@@ -113,7 +113,7 @@ require (
 	golang.org/x/mod v0.30.0
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/sync v0.18.0
-	golang.org/x/term v0.37.0
+	golang.org/x/term v0.38.0
 	golang.org/x/text v0.31.0
 	golang.org/x/tools v0.39.0
 	google.golang.org/api v0.257.0
@@ -376,7 +376,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/exp v0.0.0-20251125195548-87e1e737ad39 // indirect
 	golang.org/x/net v0.47.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251124214823-79d6a2a48846 // indirect
