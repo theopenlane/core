@@ -58408,7 +58408,7 @@ type Contact implements Node {
   """
   the full name of the contact
   """
-  fullName: String!
+  fullName: String
   """
   the title of the contact
   """
@@ -58547,7 +58547,7 @@ type ContactHistory implements Node {
   """
   the full name of the contact
   """
-  fullName: String!
+  fullName: String
   """
   the title of the contact
   """
@@ -58798,6 +58798,8 @@ input ContactHistoryWhereInput {
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
   fullNameEqualFold: String
   fullNameContainsFold: String
   """
@@ -59048,6 +59050,8 @@ input ContactWhereInput {
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
   fullNameEqualFold: String
   fullNameContainsFold: String
   """
@@ -63906,7 +63910,7 @@ input CreateContactInput {
   """
   the full name of the contact
   """
-  fullName: String!
+  fullName: String
   """
   the title of the contact
   """
@@ -127385,6 +127389,7 @@ input UpdateContactInput {
   the full name of the contact
   """
   fullName: String
+  clearFullName: Boolean
   """
   the title of the contact
   """

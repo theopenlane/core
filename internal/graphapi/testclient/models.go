@@ -3128,7 +3128,7 @@ type Contact struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the full name of the contact
-	FullName string `json:"fullName"`
+	FullName *string `json:"fullName,omitempty"`
 	// the title of the contact
 	Title *string `json:"title,omitempty"`
 	// the company of the contact
@@ -3212,7 +3212,7 @@ type ContactHistory struct {
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the full name of the contact
-	FullName string `json:"fullName"`
+	FullName *string `json:"fullName,omitempty"`
 	// the title of the contact
 	Title *string `json:"title,omitempty"`
 	// the company of the contact
@@ -3384,6 +3384,8 @@ type ContactHistoryWhereInput struct {
 	FullNameContains     *string  `json:"fullNameContains,omitempty"`
 	FullNameHasPrefix    *string  `json:"fullNameHasPrefix,omitempty"`
 	FullNameHasSuffix    *string  `json:"fullNameHasSuffix,omitempty"`
+	FullNameIsNil        *bool    `json:"fullNameIsNil,omitempty"`
+	FullNameNotNil       *bool    `json:"fullNameNotNil,omitempty"`
 	FullNameEqualFold    *string  `json:"fullNameEqualFold,omitempty"`
 	FullNameContainsFold *string  `json:"fullNameContainsFold,omitempty"`
 	// title field predicates
@@ -3586,6 +3588,8 @@ type ContactWhereInput struct {
 	FullNameContains     *string  `json:"fullNameContains,omitempty"`
 	FullNameHasPrefix    *string  `json:"fullNameHasPrefix,omitempty"`
 	FullNameHasSuffix    *string  `json:"fullNameHasSuffix,omitempty"`
+	FullNameIsNil        *bool    `json:"fullNameIsNil,omitempty"`
+	FullNameNotNil       *bool    `json:"fullNameNotNil,omitempty"`
 	FullNameEqualFold    *string  `json:"fullNameEqualFold,omitempty"`
 	FullNameContainsFold *string  `json:"fullNameContainsFold,omitempty"`
 	// title field predicates
@@ -6407,7 +6411,7 @@ type CreateContactInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the full name of the contact
-	FullName string `json:"fullName"`
+	FullName *string `json:"fullName,omitempty"`
 	// the title of the contact
 	Title *string `json:"title,omitempty"`
 	// the company of the contact
@@ -43392,7 +43396,8 @@ type UpdateContactInput struct {
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the full name of the contact
-	FullName *string `json:"fullName,omitempty"`
+	FullName      *string `json:"fullName,omitempty"`
+	ClearFullName *bool   `json:"clearFullName,omitempty"`
 	// the title of the contact
 	Title      *string `json:"title,omitempty"`
 	ClearTitle *bool   `json:"clearTitle,omitempty"`

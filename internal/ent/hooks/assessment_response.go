@@ -8,18 +8,20 @@ import (
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/theopenlane/emailtemplates"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/riverboat/pkg/jobs"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 )
 
 // HookCreateAssessmentResponse sends the email to the user to fill in and input their data.
@@ -53,6 +55,23 @@ func HookCreateAssessmentResponse() ent.Hook {
 
 				// not found so this is a new user
 				m.ClearDocumentDataID()
+
+				// try to make email unique per org
+				count, err := m.Client().Contact.Query().Select(contact.FieldEmail).
+					Where(contact.EmailEqualFold(email)).
+					Count(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Err(err).Msg("could not fetch existing contacts")
+					return nil, ErrUnableToCreateContact
+				}
+
+				if count == 0 {
+					err = m.Client().Contact.Create().SetEmail(email).
+						Exec(ctx)
+					if err != nil {
+						logx.FromContext(ctx).Err(err).Msg("could not create contact for assessment response")
+					}
+				}
 
 				value, err := next.Mutate(ctx, m)
 				if err != nil {

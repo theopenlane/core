@@ -157,6 +157,12 @@ func (_u *ContactHistoryUpdate) SetNillableFullName(v *string) *ContactHistoryUp
 	return _u
 }
 
+// ClearFullName clears the value of the "full_name" field.
+func (_u *ContactHistoryUpdate) ClearFullName() *ContactHistoryUpdate {
+	_u.mutation.ClearFullName()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ContactHistoryUpdate) SetTitle(v string) *ContactHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -399,6 +405,9 @@ func (_u *ContactHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if value, ok := _u.mutation.FullName(); ok {
 		_spec.SetField(contacthistory.FieldFullName, field.TypeString, value)
 	}
+	if _u.mutation.FullNameCleared() {
+		_spec.ClearField(contacthistory.FieldFullName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(contacthistory.FieldTitle, field.TypeString, value)
 	}
@@ -577,6 +586,12 @@ func (_u *ContactHistoryUpdateOne) SetNillableFullName(v *string) *ContactHistor
 	if v != nil {
 		_u.SetFullName(*v)
 	}
+	return _u
+}
+
+// ClearFullName clears the value of the "full_name" field.
+func (_u *ContactHistoryUpdateOne) ClearFullName() *ContactHistoryUpdateOne {
+	_u.mutation.ClearFullName()
 	return _u
 }
 
@@ -851,6 +866,9 @@ func (_u *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ContactH
 	}
 	if value, ok := _u.mutation.FullName(); ok {
 		_spec.SetField(contacthistory.FieldFullName, field.TypeString, value)
+	}
+	if _u.mutation.FullNameCleared() {
+		_spec.ClearField(contacthistory.FieldFullName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(contacthistory.FieldTitle, field.TypeString, value)
