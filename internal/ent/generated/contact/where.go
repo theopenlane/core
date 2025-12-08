@@ -648,6 +648,16 @@ func FullNameHasSuffix(v string) predicate.Contact {
 	return predicate.Contact(sql.FieldHasSuffix(FieldFullName, v))
 }
 
+// FullNameIsNil applies the IsNil predicate on the "full_name" field.
+func FullNameIsNil() predicate.Contact {
+	return predicate.Contact(sql.FieldIsNull(FieldFullName))
+}
+
+// FullNameNotNil applies the NotNil predicate on the "full_name" field.
+func FullNameNotNil() predicate.Contact {
+	return predicate.Contact(sql.FieldNotNull(FieldFullName))
+}
+
 // FullNameEqualFold applies the EqualFold predicate on the "full_name" field.
 func FullNameEqualFold(v string) predicate.Contact {
 	return predicate.Contact(sql.FieldEqualFold(FieldFullName, v))

@@ -166,6 +166,14 @@ func (_c *ContactHistoryCreate) SetFullName(v string) *ContactHistoryCreate {
 	return _c
 }
 
+// SetNillableFullName sets the "full_name" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableFullName(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetFullName(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ContactHistoryCreate) SetTitle(v string) *ContactHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -352,9 +360,6 @@ func (_c *ContactHistoryCreate) check() error {
 		if err := contacthistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "ContactHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.FullName(); !ok {
-		return &ValidationError{Name: "full_name", err: errors.New(`generated: missing required field "ContactHistory.full_name"`)}
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		return &ValidationError{Name: "status", err: errors.New(`generated: missing required field "ContactHistory.status"`)}

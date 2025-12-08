@@ -1260,7 +1260,7 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
 	Tags        []string
-	FullName    string
+	FullName    *string
 	Title       *string
 	Company     *string
 	Email       *string
@@ -1277,7 +1277,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetFullName(i.FullName)
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
 	}
@@ -1318,6 +1320,7 @@ type UpdateContactInput struct {
 	ClearTags        bool
 	Tags             []string
 	AppendTags       []string
+	ClearFullName    bool
 	FullName         *string
 	ClearTitle       bool
 	Title            *string
@@ -1350,6 +1353,9 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearFullName {
+		m.ClearFullName()
 	}
 	if v := i.FullName; v != nil {
 		m.SetFullName(*v)

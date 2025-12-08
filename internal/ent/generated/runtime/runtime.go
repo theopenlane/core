@@ -895,21 +895,7 @@ func init() {
 	// contactDescFullName is the schema descriptor for full_name field.
 	contactDescFullName := contactFields[0].Descriptor()
 	// contact.FullNameValidator is a validator for the "full_name" field. It is called by the builders before save.
-	contact.FullNameValidator = func() func(string) error {
-		validators := contactDescFullName.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(full_name string) error {
-			for _, fn := range fns {
-				if err := fn(full_name); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
+	contact.FullNameValidator = contactDescFullName.Validators[0].(func(string) error)
 	// contactDescEmail is the schema descriptor for email field.
 	contactDescEmail := contactFields[3].Descriptor()
 	// contact.EmailValidator is a validator for the "email" field. It is called by the builders before save.

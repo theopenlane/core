@@ -8,6 +8,10 @@ import (
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/theopenlane/emailtemplates"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/riverboat/pkg/jobs"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -17,9 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
 )
 
 // HookCreateAssessmentResponse sends the email to the user to fill in and input their data.

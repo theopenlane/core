@@ -134,6 +134,14 @@ func (_c *ContactCreate) SetFullName(v string) *ContactCreate {
 	return _c
 }
 
+// SetNillableFullName sets the "full_name" field if the given value is not nil.
+func (_c *ContactCreate) SetNillableFullName(v *string) *ContactCreate {
+	if v != nil {
+		_c.SetFullName(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ContactCreate) SetTitle(v string) *ContactCreate {
 	_c.mutation.SetTitle(v)
@@ -342,9 +350,6 @@ func (_c *ContactCreate) check() error {
 		if err := contact.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Contact.owner_id": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.FullName(); !ok {
-		return &ValidationError{Name: "full_name", err: errors.New(`generated: missing required field "Contact.full_name"`)}
 	}
 	if v, ok := _c.mutation.FullName(); ok {
 		if err := contact.FullNameValidator(v); err != nil {
