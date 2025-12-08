@@ -76,6 +76,15 @@ func (r *mutationResolver) DeleteAssessment(ctx context.Context, id string) (*mo
 	}, nil
 }
 
+// DeleteBulkAssessment is the resolver for the deleteBulkAssessment field.
+func (r *mutationResolver) DeleteBulkAssessment(ctx context.Context, ids []string) (*model.AssessmentBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteAssessment(ctx, ids)
+}
+
 // Assessment is the resolver for the assessment field.
 func (r *queryResolver) Assessment(ctx context.Context, id string) (*generated.Assessment, error) {
 	query, err := withTransactionalMutation(ctx).Assessment.Query().Where(assessment.ID(id)).CollectFields(ctx)

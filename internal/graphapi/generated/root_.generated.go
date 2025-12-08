@@ -303,6 +303,10 @@ type ComplexityRoot struct {
 		Viewers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
+	AssessmentBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	AssessmentConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3626,6 +3630,7 @@ type ComplexityRoot struct {
 		DeleteAsset                           func(childComplexity int, id string) int
 		DeleteBulkAPIToken                    func(childComplexity int, ids []string) int
 		DeleteBulkActionPlan                  func(childComplexity int, ids []string) int
+		DeleteBulkAssessment                  func(childComplexity int, ids []string) int
 		DeleteBulkAsset                       func(childComplexity int, ids []string) int
 		DeleteBulkContact                     func(childComplexity int, ids []string) int
 		DeleteBulkControl                     func(childComplexity int, ids []string) int
@@ -9063,6 +9068,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "AssessmentBulkDeletePayload.deletedIDs":
+		if e.complexity.AssessmentBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.AssessmentBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "AssessmentConnection.edges":
 		if e.complexity.AssessmentConnection.Edges == nil {
@@ -26706,6 +26718,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteBulkActionPlan(childComplexity, args["ids"].([]string)), true
+
+	case "Mutation.deleteBulkAssessment":
+		if e.complexity.Mutation.DeleteBulkAssessment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAssessment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkAssessment(childComplexity, args["ids"].([]string)), true
 
 	case "Mutation.deleteBulkAsset":
 		if e.complexity.Mutation.DeleteBulkAsset == nil {
@@ -51823,6 +51847,15 @@ extend type Mutation{
         """
         id: ID!
     ): AssessmentDeletePayload!
+    """
+    Delete multiple assessments
+    """
+    deleteBulkAssessment(
+        """
+        IDs of the assessments to delete
+        """
+        ids: [ID!]!
+    ): AssessmentBulkDeletePayload!
 }
 
 """
@@ -51853,6 +51886,16 @@ type AssessmentDeletePayload {
     Deleted assessment ID
     """
     deletedID: ID!
+}
+
+"""
+Return response for deleteBulkAssessment mutation
+"""
+type AssessmentBulkDeletePayload {
+    """
+    Deleted assessment IDs
+    """
+    deletedIDs: [ID!]!
 }
 
 `, BuiltIn: false},

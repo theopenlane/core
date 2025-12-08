@@ -1486,6 +1486,12 @@ type Assessment struct {
 
 func (Assessment) IsNode() {}
 
+// Return response for deleteBulkAssessment mutation
+type AssessmentBulkDeletePayload struct {
+	// Deleted assessment IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
 // A connection to a list of items.
 type AssessmentConnection struct {
 	// A list of edges.
