@@ -66,8 +66,8 @@ func HookCreateAssessmentResponse() ent.Hook {
 				}
 
 				if count == 0 {
-					_, err = m.Client().Contact.Create().SetEmail(email).
-						Save(ctx)
+					err = m.Client().Contact.Create().SetEmail(email).
+						Exec(ctx)
 					if err != nil {
 						logx.FromContext(ctx).Err(err).Msg("could not create contact for assessment response")
 						return nil, ErrUnableToCreateContact
