@@ -5,6 +5,10 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -13,9 +17,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 )
 
 var (
@@ -63,7 +64,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			}
 
 			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
-			if !watermarkingEnabledSet {
+			if !watermarkingEnabled {
 				orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 				if orgID != "" {
