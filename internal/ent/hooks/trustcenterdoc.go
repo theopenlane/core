@@ -5,6 +5,10 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -13,9 +17,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
 )
 
 var (
@@ -63,7 +64,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			}
 
 			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
-			if !watermarkingEnabledSet {
+			if !watermarkingEnabled {
 				orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 				if orgID != "" {
@@ -149,6 +150,13 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 			}
 
 			logx.FromContext(ctx).Debug().Msg("trust center doc hook")
+
+			// if the watermark status is true already, we do not want to be able to revert it under any circumstances
+			if _, ok := m.WatermarkingEnabled(); ok {
+				if oldWatermarkingEnabled, err := m.OldWatermarkingEnabled(ctx); err == nil && oldWatermarkingEnabled {
+					m.ResetWatermarkingEnabled()
+				}
+			}
 
 			// Process trust center doc file
 			docFiles, _ := objects.FilesFromContextWithKey(ctx, "trustCenterDocFile")
