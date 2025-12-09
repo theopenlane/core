@@ -14471,6 +14471,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetExternalReferenceURL(externalReferenceURL)
 	}
 
+	if parentTaskID, exists := m.ParentTaskID(); exists {
+		create = create.SetNillableParentTaskID(&parentTaskID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -14634,6 +14638,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetExternalReferenceURL(task.ExternalReferenceURL)
 		}
 
+		if parentTaskID, exists := m.ParentTaskID(); exists {
+			create = create.SetNillableParentTaskID(&parentTaskID)
+		} else {
+			create = create.SetNillableParentTaskID(task.ParentTaskID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -14691,6 +14701,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSystemGenerated(task.SystemGenerated).
 			SetIdempotencyKey(task.IdempotencyKey).
 			SetExternalReferenceURL(task.ExternalReferenceURL).
+			SetNillableParentTaskID(task.ParentTaskID).
 			Save(ctx)
 		if err != nil {
 			return err

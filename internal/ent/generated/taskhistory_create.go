@@ -333,6 +333,20 @@ func (_c *TaskHistoryCreate) SetExternalReferenceURL(v []string) *TaskHistoryCre
 	return _c
 }
 
+// SetParentTaskID sets the "parent_task_id" field.
+func (_c *TaskHistoryCreate) SetParentTaskID(v string) *TaskHistoryCreate {
+	_c.mutation.SetParentTaskID(v)
+	return _c
+}
+
+// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableParentTaskID(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetParentTaskID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TaskHistoryCreate) SetID(v string) *TaskHistoryCreate {
 	_c.mutation.SetID(v)
@@ -592,6 +606,10 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ExternalReferenceURL(); ok {
 		_spec.SetField(taskhistory.FieldExternalReferenceURL, field.TypeJSON, value)
 		_node.ExternalReferenceURL = value
+	}
+	if value, ok := _c.mutation.ParentTaskID(); ok {
+		_spec.SetField(taskhistory.FieldParentTaskID, field.TypeString, value)
+		_node.ParentTaskID = &value
 	}
 	return _node, _spec
 }

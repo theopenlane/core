@@ -6713,6 +6713,7 @@ var (
 		{Name: "remediation_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "review_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "task_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "parent_task_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_tasks", Type: field.TypeString, Nullable: true},
@@ -6766,20 +6767,26 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_users_assigner_tasks",
+				Symbol:     "tasks_tasks_tasks",
 				Columns:    []*schema.Column{TasksColumns[26]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_users_assignee_tasks",
+				Symbol:     "tasks_users_assigner_tasks",
 				Columns:    []*schema.Column{TasksColumns[27]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_vulnerabilities_tasks",
+				Symbol:     "tasks_users_assignee_tasks",
 				Columns:    []*schema.Column{TasksColumns[28]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_vulnerabilities_tasks",
+				Columns:    []*schema.Column{TasksColumns[29]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6828,6 +6835,7 @@ var (
 		{Name: "system_generated", Type: field.TypeBool, Default: false},
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_url", Type: field.TypeJSON, Nullable: true},
+		{Name: "parent_task_id", Type: field.TypeString, Nullable: true},
 	}
 	// TaskHistoryTable holds the schema information for the "task_history" table.
 	TaskHistoryTable = &schema.Table{
@@ -12323,9 +12331,10 @@ func init() {
 	TasksTable.ForeignKeys[4].RefTable = RemediationsTable
 	TasksTable.ForeignKeys[5].RefTable = ReviewsTable
 	TasksTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[7].RefTable = UsersTable
+	TasksTable.ForeignKeys[7].RefTable = TasksTable
 	TasksTable.ForeignKeys[8].RefTable = UsersTable
-	TasksTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
+	TasksTable.ForeignKeys[9].RefTable = UsersTable
+	TasksTable.ForeignKeys[10].RefTable = VulnerabilitiesTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}

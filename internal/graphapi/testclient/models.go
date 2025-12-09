@@ -8304,6 +8304,8 @@ type CreateTaskInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
 	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
+	ParentID                 *string  `json:"parentID,omitempty"`
+	TaskIDs                  []string `json:"taskIDs,omitempty"`
 }
 
 // CreateTemplateInput is used for create Template object.
@@ -38100,7 +38102,9 @@ type Task struct {
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey *string `json:"idempotencyKey,omitempty"`
 	// an optional external reference URL for the task
-	ExternalReferenceURL   []string                         `json:"externalReferenceURL,omitempty"`
+	ExternalReferenceURL []string `json:"externalReferenceURL,omitempty"`
+	// the parent task this task belongs to
+	ParentTaskID           *string                          `json:"parentTaskID,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	TaskKind               *CustomTypeEnum                  `json:"taskKind,omitempty"`
 	Assigner               *User                            `json:"assigner,omitempty"`
@@ -38118,6 +38122,8 @@ type Task struct {
 	ActionPlans            *ActionPlanConnection            `json:"actionPlans"`
 	Evidence               *EvidenceConnection              `json:"evidence"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	Parent                 *Task                            `json:"parent,omitempty"`
+	Tasks                  []*Task                          `json:"tasks,omitempty"`
 }
 
 func (Task) IsNode() {}
@@ -38213,6 +38219,8 @@ type TaskHistory struct {
 	IdempotencyKey *string `json:"idempotencyKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL []string `json:"externalReferenceURL,omitempty"`
+	// the parent task this task belongs to
+	ParentTaskID *string `json:"parentTaskID,omitempty"`
 }
 
 func (TaskHistory) IsNode() {}
@@ -38530,6 +38538,22 @@ type TaskHistoryWhereInput struct {
 	IdempotencyKeyNotNil       *bool    `json:"idempotencyKeyNotNil,omitempty"`
 	IdempotencyKeyEqualFold    *string  `json:"idempotencyKeyEqualFold,omitempty"`
 	IdempotencyKeyContainsFold *string  `json:"idempotencyKeyContainsFold,omitempty"`
+	// parent_task_id field predicates
+	ParentTaskID             *string  `json:"parentTaskID,omitempty"`
+	ParentTaskIdneq          *string  `json:"parentTaskIDNEQ,omitempty"`
+	ParentTaskIDIn           []string `json:"parentTaskIDIn,omitempty"`
+	ParentTaskIDNotIn        []string `json:"parentTaskIDNotIn,omitempty"`
+	ParentTaskIdgt           *string  `json:"parentTaskIDGT,omitempty"`
+	ParentTaskIdgte          *string  `json:"parentTaskIDGTE,omitempty"`
+	ParentTaskIdlt           *string  `json:"parentTaskIDLT,omitempty"`
+	ParentTaskIdlte          *string  `json:"parentTaskIDLTE,omitempty"`
+	ParentTaskIDContains     *string  `json:"parentTaskIDContains,omitempty"`
+	ParentTaskIDHasPrefix    *string  `json:"parentTaskIDHasPrefix,omitempty"`
+	ParentTaskIDHasSuffix    *string  `json:"parentTaskIDHasSuffix,omitempty"`
+	ParentTaskIDIsNil        *bool    `json:"parentTaskIDIsNil,omitempty"`
+	ParentTaskIDNotNil       *bool    `json:"parentTaskIDNotNil,omitempty"`
+	ParentTaskIDEqualFold    *string  `json:"parentTaskIDEqualFold,omitempty"`
+	ParentTaskIDContainsFold *string  `json:"parentTaskIDContainsFold,omitempty"`
 }
 
 // Ordering options for Task connections
@@ -38803,6 +38827,22 @@ type TaskWhereInput struct {
 	IdempotencyKeyNotNil       *bool    `json:"idempotencyKeyNotNil,omitempty"`
 	IdempotencyKeyEqualFold    *string  `json:"idempotencyKeyEqualFold,omitempty"`
 	IdempotencyKeyContainsFold *string  `json:"idempotencyKeyContainsFold,omitempty"`
+	// parent_task_id field predicates
+	ParentTaskID             *string  `json:"parentTaskID,omitempty"`
+	ParentTaskIdneq          *string  `json:"parentTaskIDNEQ,omitempty"`
+	ParentTaskIDIn           []string `json:"parentTaskIDIn,omitempty"`
+	ParentTaskIDNotIn        []string `json:"parentTaskIDNotIn,omitempty"`
+	ParentTaskIdgt           *string  `json:"parentTaskIDGT,omitempty"`
+	ParentTaskIdgte          *string  `json:"parentTaskIDGTE,omitempty"`
+	ParentTaskIdlt           *string  `json:"parentTaskIDLT,omitempty"`
+	ParentTaskIdlte          *string  `json:"parentTaskIDLTE,omitempty"`
+	ParentTaskIDContains     *string  `json:"parentTaskIDContains,omitempty"`
+	ParentTaskIDHasPrefix    *string  `json:"parentTaskIDHasPrefix,omitempty"`
+	ParentTaskIDHasSuffix    *string  `json:"parentTaskIDHasSuffix,omitempty"`
+	ParentTaskIDIsNil        *bool    `json:"parentTaskIDIsNil,omitempty"`
+	ParentTaskIDNotNil       *bool    `json:"parentTaskIDNotNil,omitempty"`
+	ParentTaskIDEqualFold    *string  `json:"parentTaskIDEqualFold,omitempty"`
+	ParentTaskIDContainsFold *string  `json:"parentTaskIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -38854,6 +38894,12 @@ type TaskWhereInput struct {
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
+	// parent edge predicates
+	HasParent     *bool             `json:"hasParent,omitempty"`
+	HasParentWith []*TaskWhereInput `json:"hasParentWith,omitempty"`
+	// tasks edge predicates
+	HasTasks     *bool             `json:"hasTasks,omitempty"`
+	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
 }
 
 type Template struct {
@@ -46493,6 +46539,11 @@ type UpdateTaskInput struct {
 	AddWorkflowObjectRefIDs        []string         `json:"addWorkflowObjectRefIDs,omitempty"`
 	RemoveWorkflowObjectRefIDs     []string         `json:"removeWorkflowObjectRefIDs,omitempty"`
 	ClearWorkflowObjectRefs        *bool            `json:"clearWorkflowObjectRefs,omitempty"`
+	ParentID                       *string          `json:"parentID,omitempty"`
+	ClearParent                    *bool            `json:"clearParent,omitempty"`
+	AddTaskIDs                     []string         `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs                  []string         `json:"removeTaskIDs,omitempty"`
+	ClearTasks                     *bool            `json:"clearTasks,omitempty"`
 	AddComment                     *CreateNoteInput `json:"addComment,omitempty"`
 	DeleteComment                  *string          `json:"deleteComment,omitempty"`
 }

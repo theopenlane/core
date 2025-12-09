@@ -314,6 +314,20 @@ func (_c *TaskCreate) SetExternalReferenceURL(v []string) *TaskCreate {
 	return _c
 }
 
+// SetParentTaskID sets the "parent_task_id" field.
+func (_c *TaskCreate) SetParentTaskID(v string) *TaskCreate {
+	_c.mutation.SetParentTaskID(v)
+	return _c
+}
+
+// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableParentTaskID(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetParentTaskID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TaskCreate) SetID(v string) *TaskCreate {
 	_c.mutation.SetID(v)
@@ -541,6 +555,40 @@ func (_c *TaskCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *TaskCreate
 		ids[i] = v[i].ID
 	}
 	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
+// SetParentID sets the "parent" edge to the Task entity by ID.
+func (_c *TaskCreate) SetParentID(id string) *TaskCreate {
+	_c.mutation.SetParentID(id)
+	return _c
+}
+
+// SetNillableParentID sets the "parent" edge to the Task entity by ID if the given value is not nil.
+func (_c *TaskCreate) SetNillableParentID(id *string) *TaskCreate {
+	if id != nil {
+		_c = _c.SetParentID(*id)
+	}
+	return _c
+}
+
+// SetParent sets the "parent" edge to the Task entity.
+func (_c *TaskCreate) SetParent(v *Task) *TaskCreate {
+	return _c.SetParentID(v.ID)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_c *TaskCreate) AddTaskIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_c *TaskCreate) AddTasks(v ...*Task) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskIDs(ids...)
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -1051,6 +1099,41 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ParentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.ParentTable,
+			Columns: []string{task.ParentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ParentTaskID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

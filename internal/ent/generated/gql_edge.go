@@ -10062,6 +10062,26 @@ func (_m *Task) WorkflowObjectRefs(
 	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Task) Parent(ctx context.Context) (*Task, error) {
+	result, err := _m.Edges.ParentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryParent().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *Task) Tasks(ctx context.Context) (result []*Task, err error) {
+	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
+		result, err = _m.NamedTasks(graphql.GetFieldContext(ctx).Field.Alias)
+	} else {
+		result, err = _m.Edges.TasksOrErr()
+	}
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTasks().All(ctx)
+	}
+	return result, err
+}
+
 func (_m *Template) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

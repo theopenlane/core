@@ -13721,6 +13721,8 @@ input CreateTaskInput {
 	actionPlanIDs: [ID!]
 	evidenceIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	parentID: ID
+	taskIDs: [ID!]
 }
 """
 CreateTemplateInput is used for create Template object.
@@ -75405,6 +75407,10 @@ type Task implements Node {
 	an optional external reference URL for the task
 	"""
 	externalReferenceURL: [String!]
+	"""
+	the parent task this task belongs to
+	"""
+	parentTaskID: ID
 	owner: Organization
 	taskKind: CustomTypeEnum
 	assigner: User
@@ -75812,6 +75818,8 @@ type Task implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	parent: Task
+	tasks: [Task!]
 }
 """
 Return response for createBulkTask mutation
@@ -75965,6 +75973,10 @@ type TaskHistory implements Node {
 	an optional external reference URL for the task
 	"""
 	externalReferenceURL: [String!]
+	"""
+	the parent task this task belongs to
+	"""
+	parentTaskID: String
 }
 """
 A connection to a list of items.
@@ -76373,6 +76385,24 @@ input TaskHistoryWhereInput {
 	idempotencyKeyNotNil: Boolean
 	idempotencyKeyEqualFold: String
 	idempotencyKeyContainsFold: String
+	"""
+	parent_task_id field predicates
+	"""
+	parentTaskID: String
+	parentTaskIDNEQ: String
+	parentTaskIDIn: [String!]
+	parentTaskIDNotIn: [String!]
+	parentTaskIDGT: String
+	parentTaskIDGTE: String
+	parentTaskIDLT: String
+	parentTaskIDLTE: String
+	parentTaskIDContains: String
+	parentTaskIDHasPrefix: String
+	parentTaskIDHasSuffix: String
+	parentTaskIDIsNil: Boolean
+	parentTaskIDNotNil: Boolean
+	parentTaskIDEqualFold: String
+	parentTaskIDContainsFold: String
 }
 """
 Ordering options for Task connections
@@ -76716,6 +76746,24 @@ input TaskWhereInput {
 	idempotencyKeyEqualFold: String
 	idempotencyKeyContainsFold: String
 	"""
+	parent_task_id field predicates
+	"""
+	parentTaskID: ID
+	parentTaskIDNEQ: ID
+	parentTaskIDIn: [ID!]
+	parentTaskIDNotIn: [ID!]
+	parentTaskIDGT: ID
+	parentTaskIDGTE: ID
+	parentTaskIDLT: ID
+	parentTaskIDLTE: ID
+	parentTaskIDContains: ID
+	parentTaskIDHasPrefix: ID
+	parentTaskIDHasSuffix: ID
+	parentTaskIDIsNil: Boolean
+	parentTaskIDNotNil: Boolean
+	parentTaskIDEqualFold: ID
+	parentTaskIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -76800,6 +76848,16 @@ input TaskWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	parent edge predicates
+	"""
+	hasParent: Boolean
+	hasParentWith: [TaskWhereInput!]
+	"""
+	tasks edge predicates
+	"""
+	hasTasks: Boolean
+	hasTasksWith: [TaskWhereInput!]
 }
 type Template implements Node {
 	id: ID!
@@ -87364,6 +87422,11 @@ input UpdateTaskInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	parentID: ID
+	clearParent: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
 	addComment: CreateNoteInput
 	deleteComment: ID
 }

@@ -60366,6 +60366,34 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
 				*wq = *query
 			})
+
+		case "parent":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			_q.withParent = query
+			if _, ok := fieldSeen[task.FieldParentTaskID]; !ok {
+				selectedFields = append(selectedFields, task.FieldParentTaskID)
+				fieldSeen[task.FieldParentTaskID] = struct{}{}
+			}
+
+		case "tasks":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			_q.WithNamedTasks(alias, func(wq *TaskQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[task.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, task.FieldCreatedAt)
@@ -60465,6 +60493,11 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[task.FieldExternalReferenceURL]; !ok {
 				selectedFields = append(selectedFields, task.FieldExternalReferenceURL)
 				fieldSeen[task.FieldExternalReferenceURL] = struct{}{}
+			}
+		case "parentTaskID":
+			if _, ok := fieldSeen[task.FieldParentTaskID]; !ok {
+				selectedFields = append(selectedFields, task.FieldParentTaskID)
+				fieldSeen[task.FieldParentTaskID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -60670,6 +60703,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldExternalReferenceURL]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldExternalReferenceURL)
 				fieldSeen[taskhistory.FieldExternalReferenceURL] = struct{}{}
+			}
+		case "parentTaskID":
+			if _, ok := fieldSeen[taskhistory.FieldParentTaskID]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldParentTaskID)
+				fieldSeen[taskhistory.FieldParentTaskID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
