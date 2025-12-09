@@ -44,9 +44,25 @@ func HookEvidenceFiles() ent.Hook {
 					m.SetStatus(enums.EvidenceStatusMissingArtifact)
 				}
 
-				_, ok = m.Status()
-				if !ok {
-					m.SetStatus(enums.EvidenceStatusSubmitted)
+				// if being updated, and the old status is MISSING_ARTIFACT, but contains a file
+				// and url, we need to reset the state though if the status is not passed in the mutation
+				// Else we default to submitted
+				if m.Op().Is(ent.OpUpdateOne) {
+					oldStatus, err := m.OldStatus(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldStatus == enums.EvidenceStatusMissingArtifact && (hasURL || hasFiles) && !ok {
+						m.SetStatus(enums.EvidenceStatusSubmitted)
+					}
+				}
+
+				if m.Op().Is(ent.OpCreate) {
+					_, ok = m.Status()
+					if !ok {
+						m.SetStatus(enums.EvidenceStatusSubmitted)
+					}
 				}
 			}
 
