@@ -511,7 +511,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 			}
 
 			if tc.request.Status == nil {
-				// should be MISSING_ARTIFACT if the evidence has no url and file(s)
+				// we should always take the sent status; we just want to set missing artifact
+				// if its created or updated and has not file or url and status isn't sent explicitly
 				hasURL := tc.request.URL != nil && *tc.request.URL != ""
 				hasFiles := len(tc.files) > 0
 				if !hasURL && !hasFiles {
@@ -520,6 +521,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 					assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceStatusSubmitted))
 				}
 			} else {
+				// explicit status should always be respected
 				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, *tc.request.Status))
 			}
 
@@ -772,7 +774,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				Name: "Evidence without artifacts",
 			},
 			expectedStatus: enums.EvidenceStatusMissingArtifact,
-			description:    "Evidence created without files or URL should have MISSING_ARTIFACT status",
+			description:    "Evidence created without files or URL and without explicit status should have MISSING_ARTIFACT status",
 		},
 		{
 			name: "create evidence with files should not set MISSING_ARTIFACT",
@@ -826,7 +828,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				ClearURL: lo.ToPtr(true),
 			},
 			expectedStatus: enums.EvidenceStatusMissingArtifact,
-			description:    "Evidence updated to clear URL when no files should have MISSING_ARTIFACT status",
+			description:    "Evidence updated to clear URL when no files and without explicit status should have MISSING_ARTIFACT status",
 		},
 		{
 			name: "update evidence to add URL should clear MISSING_ARTIFACT",
@@ -838,6 +840,56 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			},
 			expectedStatus: enums.EvidenceStatusSubmitted,
 			description:    "Evidence updated to add URL should not have MISSING_ARTIFACT status",
+		},
+		{
+			name: "create evidence without files and without URL but with explicit status should respect explicit status",
+			createInput: testclient.CreateEvidenceInput{
+				Name:   "Evidence without artifacts but explicit status",
+				Status: lo.ToPtr(enums.EvidenceStatusSubmitted),
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Explicit status should always be respected, even when evidence has no files or URL",
+		},
+		{
+			name: "create evidence with files but explicit MISSING_ARTIFACT status should respect explicit status",
+			createInput: testclient.CreateEvidenceInput{
+				Name:   "Evidence with files but explicit MISSING_ARTIFACT",
+				Status: lo.ToPtr(enums.EvidenceStatusMissingArtifact),
+			},
+			createFiles: []*graphql.Upload{
+				{
+					File:        pngFile.RawFile,
+					Filename:    pngFile.OriginalName,
+					Size:        pngFile.Size,
+					ContentType: pngFile.ContentType,
+				},
+			},
+			expectedStatus: enums.EvidenceStatusMissingArtifact,
+			description:    "Explicit status should always be respected, even when evidence has files",
+		},
+		{
+			name: "update evidence without files and without URL but with explicit status should respect explicit status",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence without artifacts",
+			},
+			updateInput: &testclient.UpdateEvidenceInput{
+				Status: lo.ToPtr(enums.EvidenceStatusSubmitted),
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Explicit status should always be respected on update, even when evidence has no files or URL",
+		},
+		{
+			name: "update evidence to clear URL when no files but with explicit status should respect explicit status",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence with URL only",
+				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+			},
+			updateInput: &testclient.UpdateEvidenceInput{
+				ClearURL: lo.ToPtr(true),
+				Status:   lo.ToPtr(enums.EvidenceStatusSubmitted),
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Explicit status should always be respected on update, even when clearing URL and no files remain",
 		},
 	}
 

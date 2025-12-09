@@ -87,7 +87,6 @@ func (Evidence) Fields() []ent.Field {
 			Comment("the url of the evidence if not uploaded directly to the system"),
 		field.Enum("status").
 			GoType(enums.EvidenceStatus("")).
-			Default(enums.EvidenceStatusSubmitted.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			).

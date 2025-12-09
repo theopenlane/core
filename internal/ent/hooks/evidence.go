@@ -33,6 +33,37 @@ func HookEvidenceFiles() ent.Hook {
 				if ok && creationDate.After(time.Now()) {
 					return nil, ErrFutureTimeNotAllowed
 				}
+
+				hasURL := checkEvidenceHasURL(ctx, m)
+				hasFiles := checkEvidenceHasFiles(ctx, m)
+
+				// we should always take the sent status; we just want to set missing artifact
+				// if its created or updated and has not file or url and status isn't sent explicitly
+				_, ok = m.Status()
+				if !hasURL && !hasFiles && !ok {
+					m.SetStatus(enums.EvidenceStatusMissingArtifact)
+				}
+
+				// if being updated, and the old status is MISSING_ARTIFACT, but contains a file
+				// and url, we need to reset the state though if the status is not passed in the mutation
+				// Else we default to submitted
+				if m.Op().Is(ent.OpUpdateOne) {
+					oldStatus, err := m.OldStatus(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldStatus == enums.EvidenceStatusMissingArtifact && (hasURL || hasFiles) && !ok {
+						m.SetStatus(enums.EvidenceStatusSubmitted)
+					}
+				}
+
+				if m.Op().Is(ent.OpCreate) {
+					_, ok = m.Status()
+					if !ok {
+						m.SetStatus(enums.EvidenceStatusSubmitted)
+					}
+				}
 			}
 
 			// check for uploaded files (e.g. avatar image)
@@ -46,21 +77,6 @@ func HookEvidenceFiles() ent.Hook {
 				}
 
 				m.AddFileIDs(fileIDs...)
-			}
-
-			if !isDeleteOp(ctx, m) {
-				hasURL := checkEvidenceHasURL(ctx, m)
-				hasFiles := checkEvidenceHasFiles(ctx, m)
-
-				// the default status is EvidenceStatusSubmitted but for the update operations, we
-				// need to be able to reset the status to Submitted status.
-				// usecase here: imagine the evidence was in missing_artifacts before but a url was added
-				// or file, we want to clear that missing_artifact status and go back to Submitted
-				status := enums.EvidenceStatusSubmitted
-				if !hasURL && !hasFiles {
-					status = enums.EvidenceStatusMissingArtifact
-				}
-				m.SetStatus(status)
 			}
 
 			return next.Mutate(ctx, m)

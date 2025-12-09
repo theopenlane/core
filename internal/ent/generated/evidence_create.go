@@ -467,10 +467,6 @@ func (_c *EvidenceCreate) defaults() error {
 		v := evidence.DefaultIsAutomated
 		_c.mutation.SetIsAutomated(v)
 	}
-	if _, ok := _c.mutation.Status(); !ok {
-		v := evidence.DefaultStatus
-		_c.mutation.SetStatus(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if evidence.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized evidence.DefaultID (forgotten import generated/runtime?)")
