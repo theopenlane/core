@@ -33,6 +33,21 @@ func HookEvidenceFiles() ent.Hook {
 				if ok && creationDate.After(time.Now()) {
 					return nil, ErrFutureTimeNotAllowed
 				}
+
+				hasURL := checkEvidenceHasURL(ctx, m)
+				hasFiles := checkEvidenceHasFiles(ctx, m)
+
+				// we should always take the sent status; we just want to set missing artifact
+				// if its created or updated and has not file or url and status isn't sent explicitly
+				_, ok = m.Status()
+				if !hasURL && !hasFiles && !ok {
+					m.SetStatus(enums.EvidenceStatusMissingArtifact)
+				}
+
+				_, ok = m.Status()
+				if !ok {
+					m.SetStatus(enums.EvidenceStatusSubmitted)
+				}
 			}
 
 			// check for uploaded files (e.g. avatar image)
@@ -46,17 +61,6 @@ func HookEvidenceFiles() ent.Hook {
 				}
 
 				m.AddFileIDs(fileIDs...)
-			}
-
-			if !isDeleteOp(ctx, m) {
-				hasURL := checkEvidenceHasURL(ctx, m)
-				hasFiles := checkEvidenceHasFiles(ctx, m)
-
-				// we want to keep the existing status even if they update it from the ui
-				// but if it is missing artifacts, we want to set it to that
-				if !hasURL && !hasFiles {
-					m.SetStatus(enums.EvidenceStatusMissingArtifact)
-				}
 			}
 
 			return next.Mutate(ctx, m)
