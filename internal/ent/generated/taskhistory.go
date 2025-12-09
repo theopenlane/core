@@ -71,7 +71,9 @@ type TaskHistory struct {
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL []string `json:"external_reference_url,omitempty"`
-	selectValues         sql.SelectValues
+	// the parent task this task belongs to
+	ParentTaskID *string `json:"parent_task_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -87,7 +89,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case taskhistory.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -268,6 +270,13 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field external_reference_url: %w", err)
 				}
 			}
+		case taskhistory.FieldParentTaskID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field parent_task_id", values[i])
+			} else if value.Valid {
+				_m.ParentTaskID = new(string)
+				*_m.ParentTaskID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -382,6 +391,11 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_reference_url=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ExternalReferenceURL))
+	builder.WriteString(", ")
+	if v := _m.ParentTaskID; v != nil {
+		builder.WriteString("parent_task_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

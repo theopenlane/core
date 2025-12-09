@@ -1592,6 +1592,7 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(external_reference_url)::text LIKE $13", likeQuery)) // search by ExternalReferenceURL
 				},
+				task.ParentTaskIDContainsFold(query), // search by ParentTaskID
 			),
 		)
 

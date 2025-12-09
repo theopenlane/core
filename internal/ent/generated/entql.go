@@ -4037,6 +4037,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldSystemGenerated:      {Type: field.TypeBool, Column: task.FieldSystemGenerated},
 			task.FieldIdempotencyKey:       {Type: field.TypeString, Column: task.FieldIdempotencyKey},
 			task.FieldExternalReferenceURL: {Type: field.TypeJSON, Column: task.FieldExternalReferenceURL},
+			task.FieldParentTaskID:         {Type: field.TypeString, Column: task.FieldParentTaskID},
 		},
 	}
 	graph.Nodes[117] = &sqlgraph.Node{
@@ -4075,6 +4076,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldSystemGenerated:      {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
 			taskhistory.FieldIdempotencyKey:       {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
 			taskhistory.FieldExternalReferenceURL: {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
+			taskhistory.FieldParentTaskID:         {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
 		},
 	}
 	graph.Nodes[118] = &sqlgraph.Node{
@@ -12396,6 +12398,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Task",
 		"WorkflowObjectRef",
+	)
+	graph.MustAddE(
+		"parent",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.ParentTable,
+			Columns: []string{task.ParentColumn},
+			Bidi:    false,
+		},
+		"Task",
+		"Task",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+		},
+		"Task",
+		"Task",
 	)
 	graph.MustAddE(
 		"owner",
@@ -38287,6 +38313,11 @@ func (f *TaskFilter) WhereExternalReferenceURL(p entql.BytesP) {
 	f.Where(p.Field(task.FieldExternalReferenceURL))
 }
 
+// WhereParentTaskID applies the entql string predicate on the parent_task_id field.
+func (f *TaskFilter) WhereParentTaskID(p entql.StringP) {
+	f.Where(p.Field(task.FieldParentTaskID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *TaskFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -38525,6 +38556,34 @@ func (f *TaskFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowO
 	})))
 }
 
+// WhereHasParent applies a predicate to check if query has an edge parent.
+func (f *TaskFilter) WhereHasParent() {
+	f.Where(entql.HasEdge("parent"))
+}
+
+// WhereHasParentWith applies a predicate to check if query has an edge parent with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasParentWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("parent", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *TaskFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *TaskHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -38688,6 +38747,11 @@ func (f *TaskHistoryFilter) WhereIdempotencyKey(p entql.StringP) {
 // WhereExternalReferenceURL applies the entql json.RawMessage predicate on the external_reference_url field.
 func (f *TaskHistoryFilter) WhereExternalReferenceURL(p entql.BytesP) {
 	f.Where(p.Field(taskhistory.FieldExternalReferenceURL))
+}
+
+// WhereParentTaskID applies the entql string predicate on the parent_task_id field.
+func (f *TaskHistoryFilter) WhereParentTaskID(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldParentTaskID))
 }
 
 // addPredicate implements the predicateAdder interface.

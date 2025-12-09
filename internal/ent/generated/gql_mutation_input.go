@@ -16070,6 +16070,8 @@ type CreateTaskInput struct {
 	ActionPlanIDs            []string
 	EvidenceIDs              []string
 	WorkflowObjectRefIDs     []string
+	ParentID                 *string
+	TaskIDs                  []string
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -16153,6 +16155,12 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.ParentID; v != nil {
+		m.SetParentID(*v)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTaskInput on the TaskCreate builder.
@@ -16227,6 +16235,11 @@ type UpdateTaskInput struct {
 	ClearWorkflowObjectRefs        bool
 	AddWorkflowObjectRefIDs        []string
 	RemoveWorkflowObjectRefIDs     []string
+	ClearParent                    bool
+	ParentID                       *string
+	ClearTasks                     bool
+	AddTaskIDs                     []string
+	RemoveTaskIDs                  []string
 }
 
 // Mutate applies the UpdateTaskInput on the TaskMutation builder.
@@ -16422,6 +16435,21 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearParent {
+		m.ClearParent()
+	}
+	if v := i.ParentID; v != nil {
+		m.SetParentID(*v)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 }
 

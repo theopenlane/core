@@ -2481,6 +2481,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "parent": {
+	ObjectType:      "task",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "template": {"owner": {
 	ObjectType:      "owner",

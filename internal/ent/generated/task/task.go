@@ -62,6 +62,8 @@ const (
 	FieldIdempotencyKey = "idempotency_key"
 	// FieldExternalReferenceURL holds the string denoting the external_reference_url field in the database.
 	FieldExternalReferenceURL = "external_reference_url"
+	// FieldParentTaskID holds the string denoting the parent_task_id field in the database.
+	FieldParentTaskID = "parent_task_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeTaskKind holds the string denoting the task_kind edge name in mutations.
@@ -96,6 +98,10 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
+	// EdgeParent holds the string denoting the parent edge name in mutations.
+	EdgeParent = "parent"
+	// EdgeTasks holds the string denoting the tasks edge name in mutations.
+	EdgeTasks = "tasks"
 	// Table holds the table name of the task in the database.
 	Table = "tasks"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -195,6 +201,14 @@ const (
 	WorkflowObjectRefsInverseTable = "workflow_object_refs"
 	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
 	WorkflowObjectRefsColumn = "task_id"
+	// ParentTable is the table that holds the parent relation/edge.
+	ParentTable = "tasks"
+	// ParentColumn is the table column denoting the parent relation/edge.
+	ParentColumn = "parent_task_id"
+	// TasksTable is the table that holds the tasks relation/edge.
+	TasksTable = "tasks"
+	// TasksColumn is the table column denoting the tasks relation/edge.
+	TasksColumn = "parent_task_id"
 )
 
 // Columns holds all SQL columns for task fields.
@@ -222,6 +236,7 @@ var Columns = []string{
 	FieldSystemGenerated,
 	FieldIdempotencyKey,
 	FieldExternalReferenceURL,
+	FieldParentTaskID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "tasks"
@@ -437,6 +452,11 @@ func ByIdempotencyKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdempotencyKey, opts...).ToFunc()
 }
 
+// ByParentTaskID orders the results by the parent_task_id field.
+func ByParentTaskID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldParentTaskID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -646,6 +666,27 @@ func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByParentField orders the results by parent field.
+func ByParentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newParentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByTasksCount orders the results by tasks count.
+func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTasksStep(), opts...)
+	}
+}
+
+// ByTasks orders the results by tasks terms.
+func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -763,6 +804,20 @@ func newWorkflowObjectRefsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+	)
+}
+func newParentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ParentTable, ParentColumn),
+	)
+}
+func newTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
 	)
 }
 

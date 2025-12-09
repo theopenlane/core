@@ -4324,6 +4324,9 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	if !reflect.DeepEqual(_m.ExternalReferenceURL, new.ExternalReferenceURL) {
 		changes = append(changes, NewChange(taskhistory.FieldExternalReferenceURL, _m.ExternalReferenceURL, new.ExternalReferenceURL))
 	}
+	if !reflect.DeepEqual(_m.ParentTaskID, new.ParentTaskID) {
+		changes = append(changes, NewChange(taskhistory.FieldParentTaskID, _m.ParentTaskID, new.ParentTaskID))
+	}
 	return changes
 }
 

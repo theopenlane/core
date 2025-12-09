@@ -67,6 +67,8 @@ type Task struct {
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL []string `json:"external_reference_url,omitempty"`
+	// the parent task this task belongs to
+	ParentTaskID *string `json:"parent_task_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TaskQuery when eager-loading is set.
 	Edges                  TaskEdges `json:"edges"`
@@ -115,11 +117,15 @@ type TaskEdges struct {
 	Evidence []*Evidence `json:"evidence,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// Parent holds the value of the parent edge.
+	Parent *Task `json:"parent,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [19]map[string]int
 
 	namedComments               map[string][]*Note
 	namedGroups                 map[string][]*Group
@@ -134,6 +140,7 @@ type TaskEdges struct {
 	namedActionPlans            map[string][]*ActionPlan
 	namedEvidence               map[string][]*Evidence
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
+	namedTasks                  map[string][]*Task
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -297,6 +304,26 @@ func (e TaskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
 }
 
+// ParentOrErr returns the Parent value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TaskEdges) ParentOrErr() (*Task, error) {
+	if e.Parent != nil {
+		return e.Parent, nil
+	} else if e.loadedTypes[17] {
+		return nil, &NotFoundError{label: task.Label}
+	}
+	return nil, &NotLoadedError{edge: "parent"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[18] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Task) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -308,7 +335,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case task.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -483,6 +510,13 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field external_reference_url: %w", err)
 				}
 			}
+		case task.FieldParentTaskID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field parent_task_id", values[i])
+			} else if value.Valid {
+				_m.ParentTaskID = new(string)
+				*_m.ParentTaskID = value.String
+			}
 		case task.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field custom_type_enum_tasks", values[i])
@@ -623,6 +657,16 @@ func (_m *Task) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return NewTaskClient(_m.config).QueryWorkflowObjectRefs(_m)
 }
 
+// QueryParent queries the "parent" edge of the Task entity.
+func (_m *Task) QueryParent() *TaskQuery {
+	return NewTaskClient(_m.config).QueryParent(_m)
+}
+
+// QueryTasks queries the "tasks" edge of the Task entity.
+func (_m *Task) QueryTasks() *TaskQuery {
+	return NewTaskClient(_m.config).QueryTasks(_m)
+}
+
 // Update returns a builder for updating this Task.
 // Note that you need to call Task.Unwrap() before calling this method if this Task
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -715,6 +759,11 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("external_reference_url=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ExternalReferenceURL))
+	builder.WriteString(", ")
+	if v := _m.ParentTaskID; v != nil {
+		builder.WriteString("parent_task_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1028,6 +1077,30 @@ func (_m *Task) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObj
 		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
 	} else {
 		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTasks[name] = []*Task{}
+	} else {
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 

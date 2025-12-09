@@ -172,6 +172,11 @@ func IdempotencyKey(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldIdempotencyKey, v))
 }
 
+// ParentTaskID applies equality check predicate on the "parent_task_id" field. It's identical to ParentTaskIDEQ.
+func ParentTaskID(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldParentTaskID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1570,6 +1575,81 @@ func ExternalReferenceURLIsNil() predicate.TaskHistory {
 // ExternalReferenceURLNotNil applies the NotNil predicate on the "external_reference_url" field.
 func ExternalReferenceURLNotNil() predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldNotNull(FieldExternalReferenceURL))
+}
+
+// ParentTaskIDEQ applies the EQ predicate on the "parent_task_id" field.
+func ParentTaskIDEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEQ(FieldParentTaskID, v))
+}
+
+// ParentTaskIDNEQ applies the NEQ predicate on the "parent_task_id" field.
+func ParentTaskIDNEQ(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNEQ(FieldParentTaskID, v))
+}
+
+// ParentTaskIDIn applies the In predicate on the "parent_task_id" field.
+func ParentTaskIDIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIn(FieldParentTaskID, vs...))
+}
+
+// ParentTaskIDNotIn applies the NotIn predicate on the "parent_task_id" field.
+func ParentTaskIDNotIn(vs ...string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotIn(FieldParentTaskID, vs...))
+}
+
+// ParentTaskIDGT applies the GT predicate on the "parent_task_id" field.
+func ParentTaskIDGT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGT(FieldParentTaskID, v))
+}
+
+// ParentTaskIDGTE applies the GTE predicate on the "parent_task_id" field.
+func ParentTaskIDGTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldGTE(FieldParentTaskID, v))
+}
+
+// ParentTaskIDLT applies the LT predicate on the "parent_task_id" field.
+func ParentTaskIDLT(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLT(FieldParentTaskID, v))
+}
+
+// ParentTaskIDLTE applies the LTE predicate on the "parent_task_id" field.
+func ParentTaskIDLTE(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldLTE(FieldParentTaskID, v))
+}
+
+// ParentTaskIDContains applies the Contains predicate on the "parent_task_id" field.
+func ParentTaskIDContains(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContains(FieldParentTaskID, v))
+}
+
+// ParentTaskIDHasPrefix applies the HasPrefix predicate on the "parent_task_id" field.
+func ParentTaskIDHasPrefix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasPrefix(FieldParentTaskID, v))
+}
+
+// ParentTaskIDHasSuffix applies the HasSuffix predicate on the "parent_task_id" field.
+func ParentTaskIDHasSuffix(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldHasSuffix(FieldParentTaskID, v))
+}
+
+// ParentTaskIDIsNil applies the IsNil predicate on the "parent_task_id" field.
+func ParentTaskIDIsNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIsNull(FieldParentTaskID))
+}
+
+// ParentTaskIDNotNil applies the NotNil predicate on the "parent_task_id" field.
+func ParentTaskIDNotNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotNull(FieldParentTaskID))
+}
+
+// ParentTaskIDEqualFold applies the EqualFold predicate on the "parent_task_id" field.
+func ParentTaskIDEqualFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldEqualFold(FieldParentTaskID, v))
+}
+
+// ParentTaskIDContainsFold applies the ContainsFold predicate on the "parent_task_id" field.
+func ParentTaskIDContainsFold(v string) predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldContainsFold(FieldParentTaskID, v))
 }
 
 // And groups predicates with the AND operator between them.

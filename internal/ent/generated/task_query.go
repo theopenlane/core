@@ -59,6 +59,8 @@ type TaskQuery struct {
 	withActionPlans                 *ActionPlanQuery
 	withEvidence                    *EvidenceQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
+	withParent                      *TaskQuery
+	withTasks                       *TaskQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Task) error
 	modifiers                       []func(*sql.Selector)
@@ -75,6 +77,7 @@ type TaskQuery struct {
 	withNamedActionPlans            map[string]*ActionPlanQuery
 	withNamedEvidence               map[string]*EvidenceQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
+	withNamedTasks                  map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -536,6 +539,56 @@ func (_q *TaskQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return query
 }
 
+// QueryParent chains the current query on the "parent" edge.
+func (_q *TaskQuery) QueryParent() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, task.ParentTable, task.ParentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (_q *TaskQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, task.TasksTable, task.TasksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Task entity from the query.
 // Returns a *NotFoundError when no Task was found.
 func (_q *TaskQuery) First(ctx context.Context) (*Task, error) {
@@ -745,6 +798,8 @@ func (_q *TaskQuery) Clone() *TaskQuery {
 		withActionPlans:            _q.withActionPlans.Clone(),
 		withEvidence:               _q.withEvidence.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
+		withParent:                 _q.withParent.Clone(),
+		withTasks:                  _q.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -939,6 +994,28 @@ func (_q *TaskQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery
 	return _q
 }
 
+// WithParent tells the query-builder to eager-load the nodes that are connected to
+// the "parent" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithParent(opts ...func(*TaskQuery)) *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withParent = query
+	return _q
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithTasks(opts ...func(*TaskQuery)) *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTasks = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1024,7 +1101,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		nodes       = []*Task{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [19]bool{
 			_q.withOwner != nil,
 			_q.withTaskKind != nil,
 			_q.withAssigner != nil,
@@ -1042,6 +1119,8 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			_q.withActionPlans != nil,
 			_q.withEvidence != nil,
 			_q.withWorkflowObjectRefs != nil,
+			_q.withParent != nil,
+			_q.withTasks != nil,
 		}
 	)
 	if withFKs {
@@ -1189,6 +1268,19 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			return nil, err
 		}
 	}
+	if query := _q.withParent; query != nil {
+		if err := _q.loadParent(ctx, query, nodes, nil,
+			func(n *Task, e *Task) { n.Edges.Parent = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *Task) { n.Edges.Tasks = []*Task{} },
+			func(n *Task, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Task) { n.appendNamedComments(name) },
@@ -1277,6 +1369,13 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Task) { n.appendNamedWorkflowObjectRefs(name) },
 			func(n *Task, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *Task) { n.appendNamedTasks(name) },
+			func(n *Task, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2148,6 +2247,72 @@ func (_q *TaskQuery) loadWorkflowObjectRefs(ctx context.Context, query *Workflow
 	}
 	return nil
 }
+func (_q *TaskQuery) loadParent(ctx context.Context, query *TaskQuery, nodes []*Task, init func(*Task), assign func(*Task, *Task)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Task)
+	for i := range nodes {
+		if nodes[i].ParentTaskID == nil {
+			continue
+		}
+		fk := *nodes[i].ParentTaskID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(task.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "parent_task_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TaskQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*Task, init func(*Task), assign func(*Task, *Task)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Task)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(task.FieldParentTaskID)
+	}
+	query.Where(predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(task.TasksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ParentTaskID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "parent_task_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "parent_task_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *TaskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2190,6 +2355,9 @@ func (_q *TaskQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withAssignee != nil {
 			_spec.Node.AddColumnOnce(task.FieldAssigneeID)
+		}
+		if _q.withParent != nil {
+			_spec.Node.AddColumnOnce(task.FieldParentTaskID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -2438,6 +2606,20 @@ func (_q *TaskQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*Work
 		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
 	}
 	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TaskQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	_q.withNamedTasks[name] = query
 	return _q
 }
 
