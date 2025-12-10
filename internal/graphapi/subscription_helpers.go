@@ -16,7 +16,7 @@ import (
 // This is extracted into a helper to prevent code generation from overwriting the implementation.
 func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Context) (<-chan *generated.Notification, error) {
 	// Check if subscription manager is available
-	if r.Resolver.subscriptionManager == nil {
+	if r.subscriptionManager == nil {
 		logx.FromContext(ctx).Info().Msg("subscription manager is not initialized")
 		return nil, ErrInternalServerError
 	}
@@ -28,7 +28,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 
 	// Create a channel with the interface type for the subscription manager
 	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.TaskChannelBufferSize)
-	r.Resolver.subscriptionManager.Subscribe(userID, internalChan)
+	r.subscriptionManager.Subscribe(userID, internalChan)
 
 	// Create a channel with the concrete type for the GraphQL response
 	notifChan := make(chan *generated.Notification, graphsubscriptions.TaskChannelBufferSize)
@@ -51,7 +51,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 			select {
 			case notifChan <- existingNotif:
 			case <-ctx.Done():
-				r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
+				r.subscriptionManager.Unsubscribe(userID, internalChan)
 				return
 			}
 		}
@@ -60,7 +60,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 		for {
 			select {
 			case <-ctx.Done():
-				r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
+				r.subscriptionManager.Unsubscribe(userID, internalChan)
 				return
 			case notif, ok := <-internalChan:
 				if !ok {
@@ -71,7 +71,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 					select {
 					case notifChan <- concreteNotif:
 					case <-ctx.Done():
-						r.Resolver.subscriptionManager.Unsubscribe(userID, internalChan)
+						r.subscriptionManager.Unsubscribe(userID, internalChan)
 						return
 					}
 				}
