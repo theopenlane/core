@@ -164,6 +164,11 @@ func IdempotencyKey(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldIdempotencyKey, v))
 }
 
+// ParentTaskID applies equality check predicate on the "parent_task_id" field. It's identical to ParentTaskIDEQ.
+func ParentTaskID(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldParentTaskID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldCreatedAt, v))
@@ -1429,6 +1434,81 @@ func ExternalReferenceURLNotNil() predicate.Task {
 	return predicate.Task(sql.FieldNotNull(FieldExternalReferenceURL))
 }
 
+// ParentTaskIDEQ applies the EQ predicate on the "parent_task_id" field.
+func ParentTaskIDEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldEQ(FieldParentTaskID, v))
+}
+
+// ParentTaskIDNEQ applies the NEQ predicate on the "parent_task_id" field.
+func ParentTaskIDNEQ(v string) predicate.Task {
+	return predicate.Task(sql.FieldNEQ(FieldParentTaskID, v))
+}
+
+// ParentTaskIDIn applies the In predicate on the "parent_task_id" field.
+func ParentTaskIDIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldIn(FieldParentTaskID, vs...))
+}
+
+// ParentTaskIDNotIn applies the NotIn predicate on the "parent_task_id" field.
+func ParentTaskIDNotIn(vs ...string) predicate.Task {
+	return predicate.Task(sql.FieldNotIn(FieldParentTaskID, vs...))
+}
+
+// ParentTaskIDGT applies the GT predicate on the "parent_task_id" field.
+func ParentTaskIDGT(v string) predicate.Task {
+	return predicate.Task(sql.FieldGT(FieldParentTaskID, v))
+}
+
+// ParentTaskIDGTE applies the GTE predicate on the "parent_task_id" field.
+func ParentTaskIDGTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldGTE(FieldParentTaskID, v))
+}
+
+// ParentTaskIDLT applies the LT predicate on the "parent_task_id" field.
+func ParentTaskIDLT(v string) predicate.Task {
+	return predicate.Task(sql.FieldLT(FieldParentTaskID, v))
+}
+
+// ParentTaskIDLTE applies the LTE predicate on the "parent_task_id" field.
+func ParentTaskIDLTE(v string) predicate.Task {
+	return predicate.Task(sql.FieldLTE(FieldParentTaskID, v))
+}
+
+// ParentTaskIDContains applies the Contains predicate on the "parent_task_id" field.
+func ParentTaskIDContains(v string) predicate.Task {
+	return predicate.Task(sql.FieldContains(FieldParentTaskID, v))
+}
+
+// ParentTaskIDHasPrefix applies the HasPrefix predicate on the "parent_task_id" field.
+func ParentTaskIDHasPrefix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasPrefix(FieldParentTaskID, v))
+}
+
+// ParentTaskIDHasSuffix applies the HasSuffix predicate on the "parent_task_id" field.
+func ParentTaskIDHasSuffix(v string) predicate.Task {
+	return predicate.Task(sql.FieldHasSuffix(FieldParentTaskID, v))
+}
+
+// ParentTaskIDIsNil applies the IsNil predicate on the "parent_task_id" field.
+func ParentTaskIDIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldParentTaskID))
+}
+
+// ParentTaskIDNotNil applies the NotNil predicate on the "parent_task_id" field.
+func ParentTaskIDNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldParentTaskID))
+}
+
+// ParentTaskIDEqualFold applies the EqualFold predicate on the "parent_task_id" field.
+func ParentTaskIDEqualFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldEqualFold(FieldParentTaskID, v))
+}
+
+// ParentTaskIDContainsFold applies the ContainsFold predicate on the "parent_task_id" field.
+func ParentTaskIDContainsFold(v string) predicate.Task {
+	return predicate.Task(sql.FieldContainsFold(FieldParentTaskID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Task {
 	return predicate.Task(func(s *sql.Selector) {
@@ -1914,6 +1994,64 @@ func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.T
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.WorkflowObjectRef
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasParent applies the HasEdge predicate on the "parent" edge.
+func HasParent() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, ParentTable, ParentColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasParentWith applies the HasEdge predicate on the "parent" edge with a given conditions (other predicates).
+func HasParentWith(preds ...predicate.Task) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newParentStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTasks applies the HasEdge predicate on the "tasks" edge.
+func HasTasks() predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTasksWith applies the HasEdge predicate on the "tasks" edge with a given conditions (other predicates).
+func HasTasksWith(preds ...predicate.Task) predicate.Task {
+	return predicate.Task(func(s *sql.Selector) {
+		step := newTasksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

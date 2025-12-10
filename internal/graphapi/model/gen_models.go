@@ -88,6 +88,12 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Return response for deleteBulkAssessment mutation
+type AssessmentBulkDeletePayload struct {
+	// Deleted assessment IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
 // Return response for createAssessment mutation
 type AssessmentCreatePayload struct {
 	// Created assessment

@@ -102,6 +102,9 @@ var (
 	// ErrTrustCenterIDRequired is returned when the trustcenter id is not provided
 	// when creating a customer for the trust center
 	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
+	// ErrUnableToCreateContact is returned when a contact could not be created
+	// when adding a user to an assessment response or other schemas
+	ErrUnableToCreateContact = errors.New("unable to create a contact")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

@@ -75,19 +75,67 @@ func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ cont
 			case "objectType":
 				return ec.fieldContext_Notification_objectType(ctx, field)
 			case "title":
-				return ec.fieldContext_Notification_title(ctx, field)
-			case "body":
-				return ec.fieldContext_Notification_body(ctx, field)
-			case "data":
-				return ec.fieldContext_Notification_data(ctx, field)
-			case "readAt":
-				return ec.fieldContext_Notification_readAt(ctx, field)
-			case "channels":
-				return ec.fieldContext_Notification_channels(ctx, field)
-			case "topic":
-				return ec.fieldContext_Notification_topic(ctx, field)
+				return ec.fieldContext_Task_title(ctx, field)
+			case "details":
+				return ec.fieldContext_Task_details(ctx, field)
+			case "status":
+				return ec.fieldContext_Task_status(ctx, field)
+			case "category":
+				return ec.fieldContext_Task_category(ctx, field)
+			case "due":
+				return ec.fieldContext_Task_due(ctx, field)
+			case "completed":
+				return ec.fieldContext_Task_completed(ctx, field)
+			case "assigneeID":
+				return ec.fieldContext_Task_assigneeID(ctx, field)
+			case "assignerID":
+				return ec.fieldContext_Task_assignerID(ctx, field)
+			case "systemGenerated":
+				return ec.fieldContext_Task_systemGenerated(ctx, field)
+			case "idempotencyKey":
+				return ec.fieldContext_Task_idempotencyKey(ctx, field)
+			case "externalReferenceURL":
+				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
+			case "parentTaskID":
+				return ec.fieldContext_Task_parentTaskID(ctx, field)
 			case "owner":
-				return ec.fieldContext_Notification_owner(ctx, field)
+				return ec.fieldContext_Task_owner(ctx, field)
+			case "taskKind":
+				return ec.fieldContext_Task_taskKind(ctx, field)
+			case "assigner":
+				return ec.fieldContext_Task_assigner(ctx, field)
+			case "assignee":
+				return ec.fieldContext_Task_assignee(ctx, field)
+			case "comments":
+				return ec.fieldContext_Task_comments(ctx, field)
+			case "groups":
+				return ec.fieldContext_Task_groups(ctx, field)
+			case "internalPolicies":
+				return ec.fieldContext_Task_internalPolicies(ctx, field)
+			case "procedures":
+				return ec.fieldContext_Task_procedures(ctx, field)
+			case "controls":
+				return ec.fieldContext_Task_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Task_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Task_controlObjectives(ctx, field)
+			case "programs":
+				return ec.fieldContext_Task_programs(ctx, field)
+			case "risks":
+				return ec.fieldContext_Task_risks(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Task_controlImplementations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Task_actionPlans(ctx, field)
+			case "evidence":
+				return ec.fieldContext_Task_evidence(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "parent":
+				return ec.fieldContext_Task_parent(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Task_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},

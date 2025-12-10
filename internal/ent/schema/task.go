@@ -4,12 +4,15 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -18,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // Task holds the schema definition for the Task entity
@@ -113,6 +115,10 @@ func (Task) Fields() []ent.Field {
 			Comment("an optional external reference URL for the task").
 			Validate(validator.ValidateURLs()).
 			Optional(),
+		field.String("parent_task_id").
+			Optional().
+			Nillable().
+			Comment("the parent task this task belongs to"),
 	}
 }
 
@@ -122,7 +128,8 @@ func (t Task) Mixin() []ent.Mixin {
 		prefix: "TSK",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Task](t,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Risk{}, Asset{}, Scan{}, ActionPlan{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{},
+					Program{}, Risk{}, Asset{}, Scan{}, ActionPlan{}, Task{}),
 				withOrganizationOwner(true),
 			),
 			newCustomEnumMixin(t),
@@ -245,6 +252,15 @@ func (t Task) Edges() []ent.Edge {
 			name:       "workflow_object_refs",
 			ref:        "task",
 		}),
+
+		edge.From("parent", Task.Type).
+			Field("parent_task_id").
+			Ref("tasks").
+			Annotations(accessmap.EdgeViewCheck(Task{}.Name())).
+			Unique(),
+
+		edge.To("tasks", Task.Type).
+			Annotations(accessmap.EdgeViewCheck(Task{}.Name())),
 	}
 }
 

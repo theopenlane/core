@@ -2460,6 +2460,15 @@ enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/e
 	EXTERNAL
 }
 """
+Return response for deleteBulkAssessment mutation
+"""
+type AssessmentBulkDeletePayload {
+	"""
+	Deleted assessment IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
 A connection to a list of items.
 """
 type AssessmentConnection {
@@ -4930,7 +4939,7 @@ type Contact implements Node {
 	"""
 	the full name of the contact
 	"""
-	fullName: String!
+	fullName: String
 	"""
 	the title of the contact
 	"""
@@ -5118,7 +5127,7 @@ type ContactHistory implements Node {
 	"""
 	the full name of the contact
 	"""
-	fullName: String!
+	fullName: String
 	"""
 	the title of the contact
 	"""
@@ -5369,6 +5378,8 @@ input ContactHistoryWhereInput {
 	fullNameContains: String
 	fullNameHasPrefix: String
 	fullNameHasSuffix: String
+	fullNameIsNil: Boolean
+	fullNameNotNil: Boolean
 	fullNameEqualFold: String
 	fullNameContainsFold: String
 	"""
@@ -5628,6 +5639,8 @@ input ContactWhereInput {
 	fullNameContains: String
 	fullNameHasPrefix: String
 	fullNameHasSuffix: String
+	fullNameIsNil: Boolean
+	fullNameNotNil: Boolean
 	fullNameEqualFold: String
 	fullNameContainsFold: String
 	"""
@@ -10695,7 +10708,7 @@ input CreateContactInput {
 	"""
 	the full name of the contact
 	"""
-	fullName: String!
+	fullName: String
 	"""
 	the title of the contact
 	"""
@@ -13217,7 +13230,7 @@ input CreateRiskInput {
 	"""
 	name: String!
 	"""
-	status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	"""
 	status: RiskRiskStatus
 	"""
@@ -13708,6 +13721,8 @@ input CreateTaskInput {
 	actionPlanIDs: [ID!]
 	evidenceIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+	parentID: ID
+	taskIDs: [ID!]
 }
 """
 CreateTemplateInput is used for create Template object.
@@ -40693,6 +40708,15 @@ type Mutation {
 		id: ID!
 	): AssessmentDeletePayload!
 	"""
+	Delete multiple assessments
+	"""
+	deleteBulkAssessment(
+		"""
+		IDs of the assessments to delete
+		"""
+		ids: [ID!]!
+	): AssessmentBulkDeletePayload!
+	"""
 	Create a new assessmentResponse
 	"""
 	createAssessmentResponse(
@@ -66950,7 +66974,7 @@ type Risk implements Node {
 	"""
 	name: String!
 	"""
-	status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	"""
 	status: RiskRiskStatus
 	"""
@@ -67560,7 +67584,7 @@ type RiskHistory implements Node {
 	"""
 	name: String!
 	"""
-	status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	"""
 	status: RiskHistoryRiskStatus
 	"""
@@ -67695,7 +67719,11 @@ enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enum
 	OPEN
 	IN_PROGRESS
 	ONGOING
+	IDENTIFIED
 	MITIGATED
+	ACCEPTED
+	CLOSED
+	TRANSFERRED
 	ARCHIVED
 }
 """
@@ -68158,7 +68186,11 @@ enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskS
 	OPEN
 	IN_PROGRESS
 	ONGOING
+	IDENTIFIED
 	MITIGATED
+	ACCEPTED
+	CLOSED
+	TRANSFERRED
 	ARCHIVED
 }
 """
@@ -75375,6 +75407,10 @@ type Task implements Node {
 	an optional external reference URL for the task
 	"""
 	externalReferenceURL: [String!]
+	"""
+	the parent task this task belongs to
+	"""
+	parentTaskID: ID
 	owner: Organization
 	taskKind: CustomTypeEnum
 	assigner: User
@@ -75782,6 +75818,8 @@ type Task implements Node {
 		"""
 		where: WorkflowObjectRefWhereInput
 	): WorkflowObjectRefConnection!
+	parent: Task
+	tasks: [Task!]
 }
 """
 Return response for createBulkTask mutation
@@ -75935,6 +75973,10 @@ type TaskHistory implements Node {
 	an optional external reference URL for the task
 	"""
 	externalReferenceURL: [String!]
+	"""
+	the parent task this task belongs to
+	"""
+	parentTaskID: String
 }
 """
 A connection to a list of items.
@@ -76343,6 +76385,24 @@ input TaskHistoryWhereInput {
 	idempotencyKeyNotNil: Boolean
 	idempotencyKeyEqualFold: String
 	idempotencyKeyContainsFold: String
+	"""
+	parent_task_id field predicates
+	"""
+	parentTaskID: String
+	parentTaskIDNEQ: String
+	parentTaskIDIn: [String!]
+	parentTaskIDNotIn: [String!]
+	parentTaskIDGT: String
+	parentTaskIDGTE: String
+	parentTaskIDLT: String
+	parentTaskIDLTE: String
+	parentTaskIDContains: String
+	parentTaskIDHasPrefix: String
+	parentTaskIDHasSuffix: String
+	parentTaskIDIsNil: Boolean
+	parentTaskIDNotNil: Boolean
+	parentTaskIDEqualFold: String
+	parentTaskIDContainsFold: String
 }
 """
 Ordering options for Task connections
@@ -76686,6 +76746,24 @@ input TaskWhereInput {
 	idempotencyKeyEqualFold: String
 	idempotencyKeyContainsFold: String
 	"""
+	parent_task_id field predicates
+	"""
+	parentTaskID: ID
+	parentTaskIDNEQ: ID
+	parentTaskIDIn: [ID!]
+	parentTaskIDNotIn: [ID!]
+	parentTaskIDGT: ID
+	parentTaskIDGTE: ID
+	parentTaskIDLT: ID
+	parentTaskIDLTE: ID
+	parentTaskIDContains: ID
+	parentTaskIDHasPrefix: ID
+	parentTaskIDHasSuffix: ID
+	parentTaskIDIsNil: Boolean
+	parentTaskIDNotNil: Boolean
+	parentTaskIDEqualFold: ID
+	parentTaskIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -76770,6 +76848,16 @@ input TaskWhereInput {
 	"""
 	hasWorkflowObjectRefs: Boolean
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
+	parent edge predicates
+	"""
+	hasParent: Boolean
+	hasParentWith: [TaskWhereInput!]
+	"""
+	tasks edge predicates
+	"""
+	hasTasks: Boolean
+	hasTasksWith: [TaskWhereInput!]
 }
 type Template implements Node {
 	id: ID!
@@ -83214,6 +83302,7 @@ input UpdateContactInput {
 	the full name of the contact
 	"""
 	fullName: String
+	clearFullName: Boolean
 	"""
 	the title of the contact
 	"""
@@ -86636,7 +86725,7 @@ input UpdateRiskInput {
 	"""
 	name: String
 	"""
-	status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	"""
 	status: RiskRiskStatus
 	clearStatus: Boolean
@@ -87333,6 +87422,11 @@ input UpdateTaskInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	parentID: ID
+	clearParent: Boolean
+	addTaskIDs: [ID!]
+	removeTaskIDs: [ID!]
+	clearTasks: Boolean
 	addComment: CreateNoteInput
 	deleteComment: ID
 }

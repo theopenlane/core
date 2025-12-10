@@ -355,7 +355,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			if tc.request.Status != nil {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateRisk.Risk.Status))
 			} else {
-				assert.Check(t, is.Equal(enums.RiskOpen, *resp.CreateRisk.Risk.Status))
+				assert.Check(t, is.Equal(enums.RiskIdentified, *resp.CreateRisk.Risk.Status))
 			}
 
 			if tc.request.RiskType != nil {
@@ -714,7 +714,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			name: "mixed success and failure - some risks not authorized",
 			ids:  []string{risk1.ID, riskAnotherUser.ID}, // second risk should fail authorization
 			input: testclient.UpdateRiskInput{
-				Status: &enums.RiskOpen,
+				Status: &enums.RiskIdentified,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,

@@ -303,6 +303,10 @@ type ComplexityRoot struct {
 		Viewers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
+	AssessmentBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
 	AssessmentConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -3626,6 +3630,7 @@ type ComplexityRoot struct {
 		DeleteAsset                           func(childComplexity int, id string) int
 		DeleteBulkAPIToken                    func(childComplexity int, ids []string) int
 		DeleteBulkActionPlan                  func(childComplexity int, ids []string) int
+		DeleteBulkAssessment                  func(childComplexity int, ids []string) int
 		DeleteBulkAsset                       func(childComplexity int, ids []string) int
 		DeleteBulkContact                     func(childComplexity int, ids []string) int
 		DeleteBulkControl                     func(childComplexity int, ids []string) int
@@ -6202,6 +6207,8 @@ type ComplexityRoot struct {
 		InternalPolicies       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
+		Parent                 func(childComplexity int) int
+		ParentTaskID           func(childComplexity int) int
 		Procedures             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Risks                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -6212,6 +6219,7 @@ type ComplexityRoot struct {
 		TaskKind               func(childComplexity int) int
 		TaskKindID             func(childComplexity int) int
 		TaskKindName           func(childComplexity int) int
+		Tasks                  func(childComplexity int) int
 		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
@@ -6266,6 +6274,7 @@ type ComplexityRoot struct {
 		IdempotencyKey       func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		ParentTaskID         func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		Status               func(childComplexity int) int
 		SystemGenerated      func(childComplexity int) int
@@ -9063,6 +9072,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "AssessmentBulkDeletePayload.deletedIDs":
+		if e.complexity.AssessmentBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.AssessmentBulkDeletePayload.DeletedIDs(childComplexity), true
 
 	case "AssessmentConnection.edges":
 		if e.complexity.AssessmentConnection.Edges == nil {
@@ -26707,6 +26723,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkActionPlan(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkAssessment":
+		if e.complexity.Mutation.DeleteBulkAssessment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAssessment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkAssessment(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkAsset":
 		if e.complexity.Mutation.DeleteBulkAsset == nil {
 			break
@@ -43411,6 +43439,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.OwnerID(childComplexity), true
 
+	case "Task.parent":
+		if e.complexity.Task.Parent == nil {
+			break
+		}
+
+		return e.complexity.Task.Parent(childComplexity), true
+
+	case "Task.parentTaskID":
+		if e.complexity.Task.ParentTaskID == nil {
+			break
+		}
+
+		return e.complexity.Task.ParentTaskID(childComplexity), true
+
 	case "Task.procedures":
 		if e.complexity.Task.Procedures == nil {
 			break
@@ -43500,6 +43542,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.TaskKindName(childComplexity), true
+
+	case "Task.tasks":
+		if e.complexity.Task.Tasks == nil {
+			break
+		}
+
+		return e.complexity.Task.Tasks(childComplexity), true
 
 	case "Task.title":
 		if e.complexity.Task.Title == nil {
@@ -43715,6 +43764,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.OwnerID(childComplexity), true
+
+	case "TaskHistory.parentTaskID":
+		if e.complexity.TaskHistory.ParentTaskID == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.ParentTaskID(childComplexity), true
 
 	case "TaskHistory.ref":
 		if e.complexity.TaskHistory.Ref == nil {
@@ -51823,6 +51879,15 @@ extend type Mutation{
         """
         id: ID!
     ): AssessmentDeletePayload!
+    """
+    Delete multiple assessments
+    """
+    deleteBulkAssessment(
+        """
+        IDs of the assessments to delete
+        """
+        ids: [ID!]!
+    ): AssessmentBulkDeletePayload!
 }
 
 """
@@ -51853,6 +51918,16 @@ type AssessmentDeletePayload {
     Deleted assessment ID
     """
     deletedID: ID!
+}
+
+"""
+Return response for deleteBulkAssessment mutation
+"""
+type AssessmentBulkDeletePayload {
+    """
+    Deleted assessment IDs
+    """
+    deletedIDs: [ID!]!
 }
 
 `, BuiltIn: false},
@@ -58365,7 +58440,7 @@ type Contact implements Node {
   """
   the full name of the contact
   """
-  fullName: String!
+  fullName: String
   """
   the title of the contact
   """
@@ -58504,7 +58579,7 @@ type ContactHistory implements Node {
   """
   the full name of the contact
   """
-  fullName: String!
+  fullName: String
   """
   the title of the contact
   """
@@ -58755,6 +58830,8 @@ input ContactHistoryWhereInput {
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
   fullNameEqualFold: String
   fullNameContainsFold: String
   """
@@ -59005,6 +59082,8 @@ input ContactWhereInput {
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
   fullNameEqualFold: String
   fullNameContainsFold: String
   """
@@ -63863,7 +63942,7 @@ input CreateContactInput {
   """
   the full name of the contact
   """
-  fullName: String!
+  fullName: String
   """
   the title of the contact
   """
@@ -66323,7 +66402,7 @@ input CreateRiskInput {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   """
@@ -66814,6 +66893,8 @@ input CreateTaskInput {
   actionPlanIDs: [ID!]
   evidenceIDs: [ID!]
   workflowObjectRefIDs: [ID!]
+  parentID: ID
+  taskIDs: [ID!]
 }
 """
 CreateTemplateInput is used for create Template object.
@@ -112019,7 +112100,7 @@ type Risk implements Node {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   """
@@ -112580,7 +112661,7 @@ type RiskHistory implements Node {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskHistoryRiskStatus
   """
@@ -112715,7 +112796,11 @@ enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enum
   OPEN
   IN_PROGRESS
   ONGOING
+  IDENTIFIED
   MITIGATED
+  ACCEPTED
+  CLOSED
+  TRANSFERRED
   ARCHIVED
 }
 """
@@ -113178,7 +113263,11 @@ enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskS
   OPEN
   IN_PROGRESS
   ONGOING
+  IDENTIFIED
   MITIGATED
+  ACCEPTED
+  CLOSED
+  TRANSFERRED
   ARCHIVED
 }
 """
@@ -119907,6 +119996,10 @@ type Task implements Node {
   an optional external reference URL for the task
   """
   externalReferenceURL: [String!]
+  """
+  the parent task this task belongs to
+  """
+  parentTaskID: ID
   owner: Organization
   taskKind: CustomTypeEnum
   assigner: User
@@ -120314,6 +120407,8 @@ type Task implements Node {
     """
     where: WorkflowObjectRefWhereInput
   ): WorkflowObjectRefConnection!
+  parent: Task
+  tasks: [Task!]
 }
 """
 A connection to a list of items.
@@ -120418,6 +120513,10 @@ type TaskHistory implements Node {
   an optional external reference URL for the task
   """
   externalReferenceURL: [String!]
+  """
+  the parent task this task belongs to
+  """
+  parentTaskID: String
 }
 """
 A connection to a list of items.
@@ -120826,6 +120925,24 @@ input TaskHistoryWhereInput {
   idempotencyKeyNotNil: Boolean
   idempotencyKeyEqualFold: String
   idempotencyKeyContainsFold: String
+  """
+  parent_task_id field predicates
+  """
+  parentTaskID: String
+  parentTaskIDNEQ: String
+  parentTaskIDIn: [String!]
+  parentTaskIDNotIn: [String!]
+  parentTaskIDGT: String
+  parentTaskIDGTE: String
+  parentTaskIDLT: String
+  parentTaskIDLTE: String
+  parentTaskIDContains: String
+  parentTaskIDHasPrefix: String
+  parentTaskIDHasSuffix: String
+  parentTaskIDIsNil: Boolean
+  parentTaskIDNotNil: Boolean
+  parentTaskIDEqualFold: String
+  parentTaskIDContainsFold: String
 }
 """
 Ordering options for Task connections
@@ -121160,6 +121277,24 @@ input TaskWhereInput {
   idempotencyKeyEqualFold: String
   idempotencyKeyContainsFold: String
   """
+  parent_task_id field predicates
+  """
+  parentTaskID: ID
+  parentTaskIDNEQ: ID
+  parentTaskIDIn: [ID!]
+  parentTaskIDNotIn: [ID!]
+  parentTaskIDGT: ID
+  parentTaskIDGTE: ID
+  parentTaskIDLT: ID
+  parentTaskIDLTE: ID
+  parentTaskIDContains: ID
+  parentTaskIDHasPrefix: ID
+  parentTaskIDHasSuffix: ID
+  parentTaskIDIsNil: Boolean
+  parentTaskIDNotNil: Boolean
+  parentTaskIDEqualFold: ID
+  parentTaskIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -121244,6 +121379,16 @@ input TaskWhereInput {
   """
   hasWorkflowObjectRefs: Boolean
   hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  parent edge predicates
+  """
+  hasParent: Boolean
+  hasParentWith: [TaskWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
 }
 type Template implements Node {
   id: ID!
@@ -127334,6 +127479,7 @@ input UpdateContactInput {
   the full name of the contact
   """
   fullName: String
+  clearFullName: Boolean
   """
   the title of the contact
   """
@@ -130731,7 +130877,7 @@ input UpdateRiskInput {
   """
   name: String
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   clearStatus: Boolean
@@ -131419,6 +131565,11 @@ input UpdateTaskInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
+  parentID: ID
+  clearParent: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
 }
 """
 UpdateTemplateInput is used for update Template object.

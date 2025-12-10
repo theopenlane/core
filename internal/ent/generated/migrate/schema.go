@@ -587,7 +587,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "full_name", Type: field.TypeString, Size: 64},
+		{Name: "full_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "company", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString, Nullable: true},
@@ -634,7 +634,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "full_name", Type: field.TypeString, Size: 64},
+		{Name: "full_name", Type: field.TypeString, Nullable: true, Size: 64},
 		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "company", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString, Nullable: true},
@@ -5678,7 +5678,7 @@ var (
 		{Name: "risk_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "risk_category_name", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED"}, Default: "OPEN"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
@@ -5815,7 +5815,7 @@ var (
 		{Name: "risk_category_name", Type: field.TypeString, Nullable: true},
 		{Name: "risk_category_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED"}, Default: "OPEN"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED"}, Default: "IDENTIFIED"},
 		{Name: "risk_type", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
 		{Name: "impact", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MODERATE", "HIGH", "CRITICAL"}, Default: "MODERATE"},
@@ -6713,6 +6713,7 @@ var (
 		{Name: "remediation_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "review_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "task_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "parent_task_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_tasks", Type: field.TypeString, Nullable: true},
@@ -6766,20 +6767,26 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_users_assigner_tasks",
+				Symbol:     "tasks_tasks_tasks",
 				Columns:    []*schema.Column{TasksColumns[26]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_users_assignee_tasks",
+				Symbol:     "tasks_users_assigner_tasks",
 				Columns:    []*schema.Column{TasksColumns[27]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_vulnerabilities_tasks",
+				Symbol:     "tasks_users_assignee_tasks",
 				Columns:    []*schema.Column{TasksColumns[28]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_vulnerabilities_tasks",
+				Columns:    []*schema.Column{TasksColumns[29]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6828,6 +6835,7 @@ var (
 		{Name: "system_generated", Type: field.TypeBool, Default: false},
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_url", Type: field.TypeJSON, Nullable: true},
+		{Name: "parent_task_id", Type: field.TypeString, Nullable: true},
 	}
 	// TaskHistoryTable holds the schema information for the "task_history" table.
 	TaskHistoryTable = &schema.Table{
@@ -12323,9 +12331,10 @@ func init() {
 	TasksTable.ForeignKeys[4].RefTable = RemediationsTable
 	TasksTable.ForeignKeys[5].RefTable = ReviewsTable
 	TasksTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[7].RefTable = UsersTable
+	TasksTable.ForeignKeys[7].RefTable = TasksTable
 	TasksTable.ForeignKeys[8].RefTable = UsersTable
-	TasksTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
+	TasksTable.ForeignKeys[9].RefTable = UsersTable
+	TasksTable.ForeignKeys[10].RefTable = VulnerabilitiesTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
