@@ -6229,6 +6229,12 @@ type ControlWhereInput struct {
 	// scheduled_jobs edge predicates
 	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	// mapped_to_controls edge predicates
+	HasMappedToControls     *bool                      `json:"hasMappedToControls,omitempty"`
+	HasMappedToControlsWith []*MappedControlWhereInput `json:"hasMappedToControlsWith,omitempty"`
+	// mapped_from_controls edge predicates
+	HasMappedFromControls     *bool                      `json:"hasMappedFromControls,omitempty"`
+	HasMappedFromControlsWith []*MappedControlWhereInput `json:"hasMappedFromControlsWith,omitempty"`
 	// workflow_object_refs edge predicates
 	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
 	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
@@ -36824,6 +36830,12 @@ type SubcontrolWhereInput struct {
 	// scheduled_jobs edge predicates
 	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	// mapped_to_subcontrols edge predicates
+	HasMappedToSubcontrols     *bool                      `json:"hasMappedToSubcontrols,omitempty"`
+	HasMappedToSubcontrolsWith []*MappedControlWhereInput `json:"hasMappedToSubcontrolsWith,omitempty"`
+	// mapped_from_subcontrols edge predicates
+	HasMappedFromSubcontrols     *bool                      `json:"hasMappedFromSubcontrols,omitempty"`
+	HasMappedFromSubcontrolsWith []*MappedControlWhereInput `json:"hasMappedFromSubcontrolsWith,omitempty"`
 }
 
 type SubmitTrustCenterNDAResponseInput struct {

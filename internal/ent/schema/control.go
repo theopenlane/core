@@ -112,7 +112,7 @@ func (c Control) Edges() []ent.Edge {
 			name:       "mapped_to_controls",
 			t:          MappedControl.Type,
 			annotations: []schema.Annotation{
-				entgql.Skip(entgql.SkipAll),
+				entgql.Skip(^entgql.SkipWhereInput),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
@@ -121,7 +121,7 @@ func (c Control) Edges() []ent.Edge {
 			name:       "mapped_from_controls",
 			t:          MappedControl.Type,
 			annotations: []schema.Annotation{
-				entgql.Skip(entgql.SkipAll),
+				entgql.Skip(^entgql.SkipWhereInput),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{

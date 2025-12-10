@@ -63639,6 +63639,16 @@ input ControlWhereInput {
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
+  mapped_to_controls edge predicates
+  """
+  hasMappedToControls: Boolean
+  hasMappedToControlsWith: [MappedControlWhereInput!]
+  """
+  mapped_from_controls edge predicates
+  """
+  hasMappedFromControls: Boolean
+  hasMappedFromControlsWith: [MappedControlWhereInput!]
+  """
   workflow_object_refs edge predicates
   """
   hasWorkflowObjectRefs: Boolean
@@ -118424,6 +118434,16 @@ input SubcontrolWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  mapped_to_subcontrols edge predicates
+  """
+  hasMappedToSubcontrols: Boolean
+  hasMappedToSubcontrolsWith: [MappedControlWhereInput!]
+  """
+  mapped_from_subcontrols edge predicates
+  """
+  hasMappedFromSubcontrols: Boolean
+  hasMappedFromSubcontrolsWith: [MappedControlWhereInput!]
 }
 type Subprocessor implements Node {
   id: ID!
