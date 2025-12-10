@@ -4280,6 +4280,196 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.DiscussionHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if isResolved, exists := m.IsResolved(); exists {
+		create = create.SetIsResolved(isResolved)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		discussion, err := client.Discussion.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DiscussionHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(discussion.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(discussion.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(discussion.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(discussion.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(discussion.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(discussion.DeletedBy)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(discussion.OwnerID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(discussion.ExternalID)
+		}
+
+		if isResolved, exists := m.IsResolved(); exists {
+			create = create.SetIsResolved(isResolved)
+		} else {
+			create = create.SetIsResolved(discussion.IsResolved)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		discussion, err := client.Discussion.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DiscussionHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(discussion.CreatedAt).
+			SetUpdatedAt(discussion.UpdatedAt).
+			SetCreatedBy(discussion.CreatedBy).
+			SetUpdatedBy(discussion.UpdatedBy).
+			SetDeletedAt(discussion.DeletedAt).
+			SetDeletedBy(discussion.DeletedBy).
+			SetOwnerID(discussion.OwnerID).
+			SetExternalID(discussion.ExternalID).
+			SetIsResolved(discussion.IsResolved).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -9289,6 +9479,18 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetText(text)
 	}
 
+	if noteRef, exists := m.NoteRef(); exists {
+		create = create.SetNoteRef(noteRef)
+	}
+
+	if discussionID, exists := m.DiscussionID(); exists {
+		create = create.SetDiscussionID(discussionID)
+	}
+
+	if isEdited, exists := m.IsEdited(); exists {
+		create = create.SetIsEdited(isEdited)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -9374,6 +9576,24 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetText(note.Text)
 		}
 
+		if noteRef, exists := m.NoteRef(); exists {
+			create = create.SetNoteRef(noteRef)
+		} else {
+			create = create.SetNoteRef(note.NoteRef)
+		}
+
+		if discussionID, exists := m.DiscussionID(); exists {
+			create = create.SetDiscussionID(discussionID)
+		} else {
+			create = create.SetDiscussionID(note.DiscussionID)
+		}
+
+		if isEdited, exists := m.IsEdited(); exists {
+			create = create.SetIsEdited(isEdited)
+		} else {
+			create = create.SetIsEdited(note.IsEdited)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -9418,6 +9638,9 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(note.DisplayID).
 			SetOwnerID(note.OwnerID).
 			SetText(note.Text).
+			SetNoteRef(note.NoteRef).
+			SetDiscussionID(note.DiscussionID).
+			SetIsEdited(note.IsEdited).
 			Save(ctx)
 		if err != nil {
 			return err

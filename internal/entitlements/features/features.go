@@ -15,6 +15,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"ControlObjective":           {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon},
 	"CustomDomain":               {models.CatalogTrustCenterModule},
 	"CustomTypeEnum":             {models.CatalogBaseModule},
+	"Discussion":                 {models.CatalogBaseModule},
 	"DNSVerification":            {models.CatalogTrustCenterModule},
 	"DocumentData":               {models.CatalogComplianceModule},
 	"EmailVerificationToken":     {models.CatalogBaseModule},

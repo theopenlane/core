@@ -1805,6 +1805,107 @@ var (
 			},
 		},
 	}
+	// DiscussionsColumns holds the columns for the "discussions" table.
+	DiscussionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Unique: true},
+		{Name: "is_resolved", Type: field.TypeBool, Default: false},
+		{Name: "control_discussions", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_discussions", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_discussions", Type: field.TypeString, Nullable: true},
+		{Name: "risk_discussions", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_discussions", Type: field.TypeString, Nullable: true},
+	}
+	// DiscussionsTable holds the schema information for the "discussions" table.
+	DiscussionsTable = &schema.Table{
+		Name:       "discussions",
+		Columns:    DiscussionsColumns,
+		PrimaryKey: []*schema.Column{DiscussionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "discussions_controls_discussions",
+				Columns:    []*schema.Column{DiscussionsColumns[9]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "discussions_internal_policies_discussions",
+				Columns:    []*schema.Column{DiscussionsColumns[10]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "discussions_organizations_discussions",
+				Columns:    []*schema.Column{DiscussionsColumns[11]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "discussions_procedures_discussions",
+				Columns:    []*schema.Column{DiscussionsColumns[12]},
+				RefColumns: []*schema.Column{ProceduresColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "discussions_risks_discussions",
+				Columns:    []*schema.Column{DiscussionsColumns[13]},
+				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "discussions_subcontrols_discussions",
+				Columns:    []*schema.Column{DiscussionsColumns[14]},
+				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "discussion_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{DiscussionsColumns[11]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// DiscussionHistoryColumns holds the columns for the "discussion_history" table.
+	DiscussionHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "is_resolved", Type: field.TypeBool, Default: false},
+	}
+	// DiscussionHistoryTable holds the schema information for the "discussion_history" table.
+	DiscussionHistoryTable = &schema.Table{
+		Name:       "discussion_history",
+		Columns:    DiscussionHistoryColumns,
+		PrimaryKey: []*schema.Column{DiscussionHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "discussionhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{DiscussionHistoryColumns[1]},
+			},
+		},
+	}
 	// DocumentDataColumns holds the columns for the "document_data" table.
 	DocumentDataColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2197,7 +2298,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}, Default: "SUBMITTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
@@ -2252,7 +2353,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}, Default: "SUBMITTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -4195,7 +4296,11 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
+		{Name: "note_ref", Type: field.TypeString, Nullable: true},
+		{Name: "discussion_id", Type: field.TypeString, Nullable: true},
+		{Name: "is_edited", Type: field.TypeBool, Default: false},
 		{Name: "control_comments", Type: field.TypeString, Nullable: true},
+		{Name: "discussion_comments", Type: field.TypeString, Nullable: true},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
 		{Name: "evidence_comments", Type: field.TypeString, Nullable: true},
 		{Name: "finding_comments", Type: field.TypeString, Nullable: true},
@@ -4219,91 +4324,97 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notes_controls_comments",
-				Columns:    []*schema.Column{NotesColumns[9]},
+				Columns:    []*schema.Column{NotesColumns[12]},
 				RefColumns: []*schema.Column{ControlsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "notes_discussions_comments",
+				Columns:    []*schema.Column{NotesColumns[13]},
+				RefColumns: []*schema.Column{DiscussionsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "notes_entities_notes",
-				Columns:    []*schema.Column{NotesColumns[10]},
+				Columns:    []*schema.Column{NotesColumns[14]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_evidences_comments",
-				Columns:    []*schema.Column{NotesColumns[11]},
+				Columns:    []*schema.Column{NotesColumns[15]},
 				RefColumns: []*schema.Column{EvidencesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_findings_comments",
-				Columns:    []*schema.Column{NotesColumns[12]},
+				Columns:    []*schema.Column{NotesColumns[16]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_internal_policies_comments",
-				Columns:    []*schema.Column{NotesColumns[13]},
+				Columns:    []*schema.Column{NotesColumns[17]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_organizations_notes",
-				Columns:    []*schema.Column{NotesColumns[14]},
+				Columns:    []*schema.Column{NotesColumns[18]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_procedures_comments",
-				Columns:    []*schema.Column{NotesColumns[15]},
+				Columns:    []*schema.Column{NotesColumns[19]},
 				RefColumns: []*schema.Column{ProceduresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_programs_notes",
-				Columns:    []*schema.Column{NotesColumns[16]},
+				Columns:    []*schema.Column{NotesColumns[20]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_remediations_comments",
-				Columns:    []*schema.Column{NotesColumns[17]},
+				Columns:    []*schema.Column{NotesColumns[21]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_reviews_comments",
-				Columns:    []*schema.Column{NotesColumns[18]},
+				Columns:    []*schema.Column{NotesColumns[22]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_risks_comments",
-				Columns:    []*schema.Column{NotesColumns[19]},
+				Columns:    []*schema.Column{NotesColumns[23]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_subcontrols_comments",
-				Columns:    []*schema.Column{NotesColumns[20]},
+				Columns:    []*schema.Column{NotesColumns[24]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_tasks_comments",
-				Columns:    []*schema.Column{NotesColumns[21]},
+				Columns:    []*schema.Column{NotesColumns[25]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_trust_centers_posts",
-				Columns:    []*schema.Column{NotesColumns[22]},
+				Columns:    []*schema.Column{NotesColumns[26]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_vulnerabilities_comments",
-				Columns:    []*schema.Column{NotesColumns[23]},
+				Columns:    []*schema.Column{NotesColumns[27]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4312,12 +4423,12 @@ var (
 			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[7], NotesColumns[14]},
+				Columns: []*schema.Column{NotesColumns[7], NotesColumns[18]},
 			},
 			{
 				Name:    "note_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[14]},
+				Columns: []*schema.Column{NotesColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4339,6 +4450,9 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
+		{Name: "note_ref", Type: field.TypeString, Nullable: true},
+		{Name: "discussion_id", Type: field.TypeString, Nullable: true},
+		{Name: "is_edited", Type: field.TypeBool, Default: false},
 	}
 	// NoteHistoryTable holds the schema information for the "note_history" table.
 	NoteHistoryTable = &schema.Table{
@@ -11672,6 +11786,8 @@ var (
 		DirectoryMembershipsTable,
 		DirectoryMembershipHistoryTable,
 		DirectorySyncRunsTable,
+		DiscussionsTable,
+		DiscussionHistoryTable,
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
@@ -12020,6 +12136,15 @@ func init() {
 	DirectorySyncRunsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	DirectorySyncRunsTable.ForeignKeys[1].RefTable = IntegrationsTable
 	DirectorySyncRunsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	DiscussionsTable.ForeignKeys[0].RefTable = ControlsTable
+	DiscussionsTable.ForeignKeys[1].RefTable = InternalPoliciesTable
+	DiscussionsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	DiscussionsTable.ForeignKeys[3].RefTable = ProceduresTable
+	DiscussionsTable.ForeignKeys[4].RefTable = RisksTable
+	DiscussionsTable.ForeignKeys[5].RefTable = SubcontrolsTable
+	DiscussionHistoryTable.Annotation = &entsql.Annotation{
+		Table: "discussion_history",
+	}
 	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
@@ -12171,20 +12296,21 @@ func init() {
 		Table: "narrative_history",
 	}
 	NotesTable.ForeignKeys[0].RefTable = ControlsTable
-	NotesTable.ForeignKeys[1].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[2].RefTable = EvidencesTable
-	NotesTable.ForeignKeys[3].RefTable = FindingsTable
-	NotesTable.ForeignKeys[4].RefTable = InternalPoliciesTable
-	NotesTable.ForeignKeys[5].RefTable = OrganizationsTable
-	NotesTable.ForeignKeys[6].RefTable = ProceduresTable
-	NotesTable.ForeignKeys[7].RefTable = ProgramsTable
-	NotesTable.ForeignKeys[8].RefTable = RemediationsTable
-	NotesTable.ForeignKeys[9].RefTable = ReviewsTable
-	NotesTable.ForeignKeys[10].RefTable = RisksTable
-	NotesTable.ForeignKeys[11].RefTable = SubcontrolsTable
-	NotesTable.ForeignKeys[12].RefTable = TasksTable
-	NotesTable.ForeignKeys[13].RefTable = TrustCentersTable
-	NotesTable.ForeignKeys[14].RefTable = VulnerabilitiesTable
+	NotesTable.ForeignKeys[1].RefTable = DiscussionsTable
+	NotesTable.ForeignKeys[2].RefTable = EntitiesTable
+	NotesTable.ForeignKeys[3].RefTable = EvidencesTable
+	NotesTable.ForeignKeys[4].RefTable = FindingsTable
+	NotesTable.ForeignKeys[5].RefTable = InternalPoliciesTable
+	NotesTable.ForeignKeys[6].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[7].RefTable = ProceduresTable
+	NotesTable.ForeignKeys[8].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[9].RefTable = RemediationsTable
+	NotesTable.ForeignKeys[10].RefTable = ReviewsTable
+	NotesTable.ForeignKeys[11].RefTable = RisksTable
+	NotesTable.ForeignKeys[12].RefTable = SubcontrolsTable
+	NotesTable.ForeignKeys[13].RefTable = TasksTable
+	NotesTable.ForeignKeys[14].RefTable = TrustCentersTable
+	NotesTable.ForeignKeys[15].RefTable = VulnerabilitiesTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}

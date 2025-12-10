@@ -57,6 +57,8 @@ type SchemaConfig struct {
 	DirectoryMembership                string // DirectoryMembership table.
 	DirectoryMembershipHistory         string // DirectoryMembershipHistory table.
 	DirectorySyncRun                   string // DirectorySyncRun table.
+	Discussion                         string // Discussion table.
+	DiscussionHistory                  string // DiscussionHistory table.
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
 	DocumentDataHistory                string // DocumentDataHistory table.

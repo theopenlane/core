@@ -46,6 +46,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -255,6 +257,10 @@ type Client struct {
 	DirectoryMembershipHistory *DirectoryMembershipHistoryClient
 	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
 	DirectorySyncRun *DirectorySyncRunClient
+	// Discussion is the client for interacting with the Discussion builders.
+	Discussion *DiscussionClient
+	// DiscussionHistory is the client for interacting with the DiscussionHistory builders.
+	DiscussionHistory *DiscussionHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -552,6 +558,8 @@ func (c *Client) init() {
 	c.DirectoryMembership = NewDirectoryMembershipClient(c.config)
 	c.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(c.config)
 	c.DirectorySyncRun = NewDirectorySyncRunClient(c.config)
+	c.Discussion = NewDiscussionClient(c.config)
+	c.DiscussionHistory = NewDiscussionHistoryClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
 	c.DocumentDataHistory = NewDocumentDataHistoryClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
@@ -906,6 +914,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		DirectoryMembership:               NewDirectoryMembershipClient(cfg),
 		DirectoryMembershipHistory:        NewDirectoryMembershipHistoryClient(cfg),
 		DirectorySyncRun:                  NewDirectorySyncRunClient(cfg),
+		Discussion:                        NewDiscussionClient(cfg),
+		DiscussionHistory:                 NewDiscussionHistoryClient(cfg),
 		DocumentData:                      NewDocumentDataClient(cfg),
 		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
@@ -1078,6 +1088,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		DirectoryMembership:               NewDirectoryMembershipClient(cfg),
 		DirectoryMembershipHistory:        NewDirectoryMembershipHistoryClient(cfg),
 		DirectorySyncRun:                  NewDirectorySyncRunClient(cfg),
+		Discussion:                        NewDiscussionClient(cfg),
+		DiscussionHistory:                 NewDiscussionHistoryClient(cfg),
 		DocumentData:                      NewDocumentDataClient(cfg),
 		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
@@ -1239,12 +1251,13 @@ func (c *Client) Use(hooks ...Hook) {
 		c.CustomDomainHistory, c.CustomTypeEnum, c.DNSVerification,
 		c.DNSVerificationHistory, c.DirectoryAccount, c.DirectoryAccountHistory,
 		c.DirectoryGroup, c.DirectoryGroupHistory, c.DirectoryMembership,
-		c.DirectoryMembershipHistory, c.DirectorySyncRun, c.DocumentData,
-		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
-		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
-		c.Export, c.File, c.FileDownloadToken, c.FileHistory, c.Finding,
-		c.FindingControl, c.FindingControlHistory, c.FindingHistory, c.Group,
-		c.GroupHistory, c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.DirectoryMembershipHistory, c.DirectorySyncRun, c.Discussion,
+		c.DiscussionHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
+		c.FileDownloadToken, c.FileHistory, c.Finding, c.FindingControl,
+		c.FindingControlHistory, c.FindingHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
 		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
 		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
@@ -1290,12 +1303,13 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.CustomDomainHistory, c.CustomTypeEnum, c.DNSVerification,
 		c.DNSVerificationHistory, c.DirectoryAccount, c.DirectoryAccountHistory,
 		c.DirectoryGroup, c.DirectoryGroupHistory, c.DirectoryMembership,
-		c.DirectoryMembershipHistory, c.DirectorySyncRun, c.DocumentData,
-		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
-		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
-		c.Export, c.File, c.FileDownloadToken, c.FileHistory, c.Finding,
-		c.FindingControl, c.FindingControlHistory, c.FindingHistory, c.Group,
-		c.GroupHistory, c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.DirectoryMembershipHistory, c.DirectorySyncRun, c.Discussion,
+		c.DiscussionHistory, c.DocumentData, c.DocumentDataHistory,
+		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
+		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
+		c.FileDownloadToken, c.FileHistory, c.Finding, c.FindingControl,
+		c.FindingControlHistory, c.FindingHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
 		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
 		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
@@ -1462,6 +1476,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.DirectoryMembershipHistory.mutate(ctx, m)
 	case *DirectorySyncRunMutation:
 		return c.DirectorySyncRun.mutate(ctx, m)
+	case *DiscussionMutation:
+		return c.Discussion.mutate(ctx, m)
+	case *DiscussionHistoryMutation:
+		return c.DiscussionHistory.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
 	case *DocumentDataHistoryMutation:
@@ -4119,6 +4137,25 @@ func (c *ControlClient) QueryComments(_m *Control) *NoteQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDiscussions queries the discussions edge of a Control.
+func (c *ControlClient) QueryDiscussions(_m *Control) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, control.DiscussionsTable, control.DiscussionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7926,6 +7963,409 @@ func (c *DirectorySyncRunClient) mutate(ctx context.Context, m *DirectorySyncRun
 		return (&DirectorySyncRunDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown DirectorySyncRun mutation op: %q", m.Op())
+	}
+}
+
+// DiscussionClient is a client for the Discussion schema.
+type DiscussionClient struct {
+	config
+}
+
+// NewDiscussionClient returns a client for the Discussion from the given config.
+func NewDiscussionClient(c config) *DiscussionClient {
+	return &DiscussionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `discussion.Hooks(f(g(h())))`.
+func (c *DiscussionClient) Use(hooks ...Hook) {
+	c.hooks.Discussion = append(c.hooks.Discussion, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `discussion.Intercept(f(g(h())))`.
+func (c *DiscussionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Discussion = append(c.inters.Discussion, interceptors...)
+}
+
+// Create returns a builder for creating a Discussion entity.
+func (c *DiscussionClient) Create() *DiscussionCreate {
+	mutation := newDiscussionMutation(c.config, OpCreate)
+	return &DiscussionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Discussion entities.
+func (c *DiscussionClient) CreateBulk(builders ...*DiscussionCreate) *DiscussionCreateBulk {
+	return &DiscussionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DiscussionClient) MapCreateBulk(slice any, setFunc func(*DiscussionCreate, int)) *DiscussionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DiscussionCreateBulk{err: fmt.Errorf("calling to DiscussionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DiscussionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DiscussionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Discussion.
+func (c *DiscussionClient) Update() *DiscussionUpdate {
+	mutation := newDiscussionMutation(c.config, OpUpdate)
+	return &DiscussionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DiscussionClient) UpdateOne(_m *Discussion) *DiscussionUpdateOne {
+	mutation := newDiscussionMutation(c.config, OpUpdateOne, withDiscussion(_m))
+	return &DiscussionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DiscussionClient) UpdateOneID(id string) *DiscussionUpdateOne {
+	mutation := newDiscussionMutation(c.config, OpUpdateOne, withDiscussionID(id))
+	return &DiscussionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Discussion.
+func (c *DiscussionClient) Delete() *DiscussionDelete {
+	mutation := newDiscussionMutation(c.config, OpDelete)
+	return &DiscussionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DiscussionClient) DeleteOne(_m *Discussion) *DiscussionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DiscussionClient) DeleteOneID(id string) *DiscussionDeleteOne {
+	builder := c.Delete().Where(discussion.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DiscussionDeleteOne{builder}
+}
+
+// Query returns a query builder for Discussion.
+func (c *DiscussionClient) Query() *DiscussionQuery {
+	return &DiscussionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDiscussion},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Discussion entity by its id.
+func (c *DiscussionClient) Get(ctx context.Context, id string) (*Discussion, error) {
+	return c.Query().Where(discussion.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DiscussionClient) GetX(ctx context.Context, id string) *Discussion {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Discussion.
+func (c *DiscussionClient) QueryOwner(_m *Discussion) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, discussion.OwnerTable, discussion.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Discussion.
+func (c *DiscussionClient) QueryComments(_m *Discussion) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, discussion.CommentsTable, discussion.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControl queries the control edge of a Discussion.
+func (c *DiscussionClient) QueryControl(_m *Discussion) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, discussion.ControlTable, discussion.ControlColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrol queries the subcontrol edge of a Discussion.
+func (c *DiscussionClient) QuerySubcontrol(_m *Discussion) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, discussion.SubcontrolTable, discussion.SubcontrolColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedure queries the procedure edge of a Discussion.
+func (c *DiscussionClient) QueryProcedure(_m *Discussion) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, discussion.ProcedureTable, discussion.ProcedureColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisk queries the risk edge of a Discussion.
+func (c *DiscussionClient) QueryRisk(_m *Discussion) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, discussion.RiskTable, discussion.RiskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a Discussion.
+func (c *DiscussionClient) QueryInternalPolicy(_m *Discussion) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(discussion.Table, discussion.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, discussion.InternalPolicyTable, discussion.InternalPolicyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DiscussionClient) Hooks() []Hook {
+	hooks := c.hooks.Discussion
+	return append(hooks[:len(hooks):len(hooks)], discussion.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DiscussionClient) Interceptors() []Interceptor {
+	inters := c.inters.Discussion
+	return append(inters[:len(inters):len(inters)], discussion.Interceptors[:]...)
+}
+
+func (c *DiscussionClient) mutate(ctx context.Context, m *DiscussionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DiscussionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DiscussionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DiscussionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DiscussionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Discussion mutation op: %q", m.Op())
+	}
+}
+
+// DiscussionHistoryClient is a client for the DiscussionHistory schema.
+type DiscussionHistoryClient struct {
+	config
+}
+
+// NewDiscussionHistoryClient returns a client for the DiscussionHistory from the given config.
+func NewDiscussionHistoryClient(c config) *DiscussionHistoryClient {
+	return &DiscussionHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `discussionhistory.Hooks(f(g(h())))`.
+func (c *DiscussionHistoryClient) Use(hooks ...Hook) {
+	c.hooks.DiscussionHistory = append(c.hooks.DiscussionHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `discussionhistory.Intercept(f(g(h())))`.
+func (c *DiscussionHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DiscussionHistory = append(c.inters.DiscussionHistory, interceptors...)
+}
+
+// Create returns a builder for creating a DiscussionHistory entity.
+func (c *DiscussionHistoryClient) Create() *DiscussionHistoryCreate {
+	mutation := newDiscussionHistoryMutation(c.config, OpCreate)
+	return &DiscussionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DiscussionHistory entities.
+func (c *DiscussionHistoryClient) CreateBulk(builders ...*DiscussionHistoryCreate) *DiscussionHistoryCreateBulk {
+	return &DiscussionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DiscussionHistoryClient) MapCreateBulk(slice any, setFunc func(*DiscussionHistoryCreate, int)) *DiscussionHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DiscussionHistoryCreateBulk{err: fmt.Errorf("calling to DiscussionHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DiscussionHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DiscussionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DiscussionHistory.
+func (c *DiscussionHistoryClient) Update() *DiscussionHistoryUpdate {
+	mutation := newDiscussionHistoryMutation(c.config, OpUpdate)
+	return &DiscussionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DiscussionHistoryClient) UpdateOne(_m *DiscussionHistory) *DiscussionHistoryUpdateOne {
+	mutation := newDiscussionHistoryMutation(c.config, OpUpdateOne, withDiscussionHistory(_m))
+	return &DiscussionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DiscussionHistoryClient) UpdateOneID(id string) *DiscussionHistoryUpdateOne {
+	mutation := newDiscussionHistoryMutation(c.config, OpUpdateOne, withDiscussionHistoryID(id))
+	return &DiscussionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DiscussionHistory.
+func (c *DiscussionHistoryClient) Delete() *DiscussionHistoryDelete {
+	mutation := newDiscussionHistoryMutation(c.config, OpDelete)
+	return &DiscussionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DiscussionHistoryClient) DeleteOne(_m *DiscussionHistory) *DiscussionHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DiscussionHistoryClient) DeleteOneID(id string) *DiscussionHistoryDeleteOne {
+	builder := c.Delete().Where(discussionhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DiscussionHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for DiscussionHistory.
+func (c *DiscussionHistoryClient) Query() *DiscussionHistoryQuery {
+	return &DiscussionHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDiscussionHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DiscussionHistory entity by its id.
+func (c *DiscussionHistoryClient) Get(ctx context.Context, id string) (*DiscussionHistory, error) {
+	return c.Query().Where(discussionhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DiscussionHistoryClient) GetX(ctx context.Context, id string) *DiscussionHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DiscussionHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.DiscussionHistory
+	return append(hooks[:len(hooks):len(hooks)], discussionhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DiscussionHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.DiscussionHistory
+	return append(inters[:len(inters):len(inters)], discussionhistory.Interceptors[:]...)
+}
+
+func (c *DiscussionHistoryClient) mutate(ctx context.Context, m *DiscussionHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DiscussionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DiscussionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DiscussionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DiscussionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DiscussionHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -15029,6 +15469,25 @@ func (c *InternalPolicyClient) QueryComments(_m *InternalPolicy) *NoteQuery {
 	return query
 }
 
+// QueryDiscussions queries the discussions edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryDiscussions(_m *InternalPolicy) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.DiscussionsTable, internalpolicy.DiscussionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryWorkflowObjectRefs queries the workflow_object_refs edge of a InternalPolicy.
 func (c *InternalPolicyClient) QueryWorkflowObjectRefs(_m *InternalPolicy) *WorkflowObjectRefQuery {
 	query := (&WorkflowObjectRefClient{config: c.config}).Query()
@@ -21463,6 +21922,25 @@ func (c *OrganizationClient) QueryDirectorySyncRuns(_m *Organization) *Directory
 	return query
 }
 
+// QueryDiscussions queries the discussions edge of a Organization.
+func (c *OrganizationClient) QueryDiscussions(_m *Organization) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DiscussionsTable, organization.DiscussionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryMembers queries the members edge of a Organization.
 func (c *OrganizationClient) QueryMembers(_m *Organization) *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: c.config}).Query()
@@ -22666,6 +23144,25 @@ func (c *ProcedureClient) QueryComments(_m *Procedure) *NoteQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDiscussions queries the discussions edge of a Procedure.
+func (c *ProcedureClient) QueryDiscussions(_m *Procedure) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, procedure.DiscussionsTable, procedure.DiscussionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -25542,6 +26039,25 @@ func (c *RiskClient) QueryComments(_m *Risk) *NoteQuery {
 	return query
 }
 
+// QueryDiscussions queries the discussions edge of a Risk.
+func (c *RiskClient) QueryDiscussions(_m *Risk) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, risk.DiscussionsTable, risk.DiscussionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *RiskClient) Hooks() []Hook {
 	hooks := c.hooks.Risk
@@ -27283,6 +27799,25 @@ func (c *SubcontrolClient) QueryComments(_m *Subcontrol) *NoteQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDiscussions queries the discussions edge of a Subcontrol.
+func (c *SubcontrolClient) QueryDiscussions(_m *Subcontrol) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.DiscussionsTable, subcontrol.DiscussionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -35848,36 +36383,37 @@ type (
 		CustomDomain, CustomDomainHistory, CustomTypeEnum, DNSVerification,
 		DNSVerificationHistory, DirectoryAccount, DirectoryAccountHistory,
 		DirectoryGroup, DirectoryGroupHistory, DirectoryMembership,
-		DirectoryMembershipHistory, DirectorySyncRun, DocumentData,
-		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, File,
-		FileDownloadToken, FileHistory, Finding, FindingControl, FindingControlHistory,
-		FindingHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
-		GroupSetting, GroupSettingHistory, Hush, HushHistory, ImpersonationEvent,
-		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
-		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
-		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
-		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Notification, Onboarding, OrgMembership, OrgMembershipHistory, OrgModule,
-		OrgPrice, OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Remediation,
-		RemediationHistory, Review, ReviewHistory, Risk, RiskHistory, Scan,
-		ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
-		SubprocessorHistory, Subscriber, TFASetting, TagDefinition, Task, TaskHistory,
-		Template, TemplateHistory, TrustCenter, TrustCenterCompliance,
-		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
-		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory,
-		TrustcenterEntity, TrustcenterEntityHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Vulnerability, VulnerabilityHistory, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentHistory, WorkflowAssignmentTarget,
-		WorkflowAssignmentTargetHistory, WorkflowDefinition, WorkflowDefinitionHistory,
-		WorkflowEvent, WorkflowEventHistory, WorkflowInstance, WorkflowInstanceHistory,
-		WorkflowObjectRef, WorkflowObjectRefHistory []ent.Hook
+		DirectoryMembershipHistory, DirectorySyncRun, Discussion, DiscussionHistory,
+		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
+		EntityHistory, EntityType, EntityTypeHistory, Event, Evidence, EvidenceHistory,
+		Export, File, FileDownloadToken, FileHistory, Finding, FindingControl,
+		FindingControlHistory, FindingHistory, Group, GroupHistory, GroupMembership,
+		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
+		ImpersonationEvent, Integration, IntegrationHistory, InternalPolicy,
+		InternalPolicyHistory, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, JobTemplateHistory,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Notification, Onboarding,
+		OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct,
+		OrgSubscription, OrgSubscriptionHistory, Organization, OrganizationHistory,
+		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
+		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
+		ProgramMembership, ProgramMembershipHistory, Remediation, RemediationHistory,
+		Review, ReviewHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
+		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
+		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
+		TagDefinition, Task, TaskHistory, Template, TemplateHistory, TrustCenter,
+		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
+		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
+		TrustCenterSettingHistory, TrustCenterSubprocessor,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfig,
+		TrustCenterWatermarkConfigHistory, TrustcenterEntity, TrustcenterEntityHistory,
+		User, UserHistory, UserSetting, UserSettingHistory, Vulnerability,
+		VulnerabilityHistory, Webauthn, WorkflowAssignment, WorkflowAssignmentHistory,
+		WorkflowAssignmentTarget, WorkflowAssignmentTargetHistory, WorkflowDefinition,
+		WorkflowDefinitionHistory, WorkflowEvent, WorkflowEventHistory,
+		WorkflowInstance, WorkflowInstanceHistory, WorkflowObjectRef,
+		WorkflowObjectRefHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Assessment, AssessmentHistory,
@@ -35887,36 +36423,37 @@ type (
 		CustomDomain, CustomDomainHistory, CustomTypeEnum, DNSVerification,
 		DNSVerificationHistory, DirectoryAccount, DirectoryAccountHistory,
 		DirectoryGroup, DirectoryGroupHistory, DirectoryMembership,
-		DirectoryMembershipHistory, DirectorySyncRun, DocumentData,
-		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
-		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, File,
-		FileDownloadToken, FileHistory, Finding, FindingControl, FindingControlHistory,
-		FindingHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
-		GroupSetting, GroupSettingHistory, Hush, HushHistory, ImpersonationEvent,
-		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
-		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
-		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
-		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Notification, Onboarding, OrgMembership, OrgMembershipHistory, OrgModule,
-		OrgPrice, OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
-		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
-		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Remediation,
-		RemediationHistory, Review, ReviewHistory, Risk, RiskHistory, Scan,
-		ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard,
-		StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
-		SubprocessorHistory, Subscriber, TFASetting, TagDefinition, Task, TaskHistory,
-		Template, TemplateHistory, TrustCenter, TrustCenterCompliance,
-		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
-		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
-		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory,
-		TrustcenterEntity, TrustcenterEntityHistory, User, UserHistory, UserSetting,
-		UserSettingHistory, Vulnerability, VulnerabilityHistory, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentHistory, WorkflowAssignmentTarget,
-		WorkflowAssignmentTargetHistory, WorkflowDefinition, WorkflowDefinitionHistory,
-		WorkflowEvent, WorkflowEventHistory, WorkflowInstance, WorkflowInstanceHistory,
-		WorkflowObjectRef, WorkflowObjectRefHistory []ent.Interceptor
+		DirectoryMembershipHistory, DirectorySyncRun, Discussion, DiscussionHistory,
+		DocumentData, DocumentDataHistory, EmailVerificationToken, Entity,
+		EntityHistory, EntityType, EntityTypeHistory, Event, Evidence, EvidenceHistory,
+		Export, File, FileDownloadToken, FileHistory, Finding, FindingControl,
+		FindingControlHistory, FindingHistory, Group, GroupHistory, GroupMembership,
+		GroupMembershipHistory, GroupSetting, GroupSettingHistory, Hush, HushHistory,
+		ImpersonationEvent, Integration, IntegrationHistory, InternalPolicy,
+		InternalPolicyHistory, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, JobTemplateHistory,
+		MappableDomain, MappableDomainHistory, MappedControl, MappedControlHistory,
+		Narrative, NarrativeHistory, Note, NoteHistory, Notification, Onboarding,
+		OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice, OrgProduct,
+		OrgSubscription, OrgSubscriptionHistory, Organization, OrganizationHistory,
+		OrganizationSetting, OrganizationSettingHistory, PasswordResetToken,
+		PersonalAccessToken, Procedure, ProcedureHistory, Program, ProgramHistory,
+		ProgramMembership, ProgramMembershipHistory, Remediation, RemediationHistory,
+		Review, ReviewHistory, Risk, RiskHistory, Scan, ScanHistory, ScheduledJob,
+		ScheduledJobHistory, ScheduledJobRun, Standard, StandardHistory, Subcontrol,
+		SubcontrolHistory, Subprocessor, SubprocessorHistory, Subscriber, TFASetting,
+		TagDefinition, Task, TaskHistory, Template, TemplateHistory, TrustCenter,
+		TrustCenterCompliance, TrustCenterComplianceHistory, TrustCenterDoc,
+		TrustCenterDocHistory, TrustCenterHistory, TrustCenterSetting,
+		TrustCenterSettingHistory, TrustCenterSubprocessor,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfig,
+		TrustCenterWatermarkConfigHistory, TrustcenterEntity, TrustcenterEntityHistory,
+		User, UserHistory, UserSetting, UserSettingHistory, Vulnerability,
+		VulnerabilityHistory, Webauthn, WorkflowAssignment, WorkflowAssignmentHistory,
+		WorkflowAssignmentTarget, WorkflowAssignmentTargetHistory, WorkflowDefinition,
+		WorkflowDefinitionHistory, WorkflowEvent, WorkflowEventHistory,
+		WorkflowInstance, WorkflowInstanceHistory, WorkflowObjectRef,
+		WorkflowObjectRefHistory []ent.Interceptor
 	}
 )
 

@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
@@ -669,6 +670,52 @@ func (dmhq *DirectoryMembershipHistoryQuery) AsOf(ctx context.Context, time time
 	return dmhq.
 		Where(directorymembershiphistory.HistoryTimeLTE(time)).
 		Order(directorymembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *Discussion) History() *DiscussionHistoryQuery {
+	historyClient := NewDiscussionHistoryClient(_m.config)
+	return historyClient.Query().Where(discussionhistory.Ref(_m.ID))
+}
+
+func (_m *DiscussionHistory) Next(ctx context.Context) (*DiscussionHistory, error) {
+	client := NewDiscussionHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			discussionhistory.Ref(_m.Ref),
+			discussionhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(discussionhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *DiscussionHistory) Prev(ctx context.Context) (*DiscussionHistory, error) {
+	client := NewDiscussionHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			discussionhistory.Ref(_m.Ref),
+			discussionhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(discussionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dhq *DiscussionHistoryQuery) Earliest(ctx context.Context) (*DiscussionHistory, error) {
+	return dhq.
+		Order(discussionhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (dhq *DiscussionHistoryQuery) Latest(ctx context.Context) (*DiscussionHistory, error) {
+	return dhq.
+		Order(discussionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dhq *DiscussionHistoryQuery) AsOf(ctx context.Context, time time.Time) (*DiscussionHistory, error) {
+	return dhq.
+		Where(discussionhistory.HistoryTimeLTE(time)).
+		Order(discussionhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

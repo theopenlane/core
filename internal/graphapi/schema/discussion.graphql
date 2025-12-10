@@ -1,0 +1,112 @@
+extend type Query {
+    """
+    Look up discussion by ID
+    """
+     discussion(
+        """
+        ID of the discussion
+        """
+        id: ID!
+    ):  Discussion!
+}
+
+extend input CreateDiscussionInput{
+    addComment: CreateNoteInput
+}
+
+extend input UpdateDiscussionInput{
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend type Mutation{
+    """
+    Create a new discussion
+    """
+    createDiscussion(
+        """
+        values of the discussion
+        """
+        input: CreateDiscussionInput!
+    ): DiscussionCreatePayload!
+    """
+    Create multiple new discussions
+    """
+    createBulkDiscussion(
+        """
+        values of the discussion
+        """
+        input: [CreateDiscussionInput!]
+    ): DiscussionBulkCreatePayload!
+    """
+    Create multiple new discussions via file upload
+    """
+    createBulkCSVDiscussion(
+        """
+        csv file containing values of the discussion
+        """
+        input: Upload!
+    ): DiscussionBulkCreatePayload!
+    """
+    Update an existing discussion
+    """
+    updateDiscussion(
+        """
+        ID of the discussion
+        """
+        id: ID!
+        """
+        New values for the discussion
+        """
+        input: UpdateDiscussionInput!
+    ): DiscussionUpdatePayload!
+    """
+    Delete an existing discussion
+    """
+    deleteDiscussion(
+        """
+        ID of the discussion
+        """
+        id: ID!
+    ): DiscussionDeletePayload!
+}
+
+"""
+Return response for createDiscussion mutation
+"""
+type DiscussionCreatePayload {
+    """
+    Created discussion
+    """
+    discussion: Discussion!
+}
+
+"""
+Return response for updateDiscussion mutation
+"""
+type DiscussionUpdatePayload {
+    """
+    Updated discussion
+    """
+    discussion: Discussion!
+}
+
+"""
+Return response for deleteDiscussion mutation
+"""
+type DiscussionDeletePayload {
+    """
+    Deleted discussion ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDiscussion mutation
+"""
+type DiscussionBulkCreatePayload {
+    """
+    Created discussions
+    """
+    discussions: [Discussion!]
+}

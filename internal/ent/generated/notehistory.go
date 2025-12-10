@@ -41,7 +41,13 @@ type NoteHistory struct {
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
-	Text         string `json:"text,omitempty"`
+	Text string `json:"text,omitempty"`
+	// ref location of the note
+	NoteRef string `json:"note_ref,omitempty"`
+	// the external discussion id this note is associated with
+	DiscussionID string `json:"discussion_id,omitempty"`
+	// whether the note has been edited
+	IsEdited     bool `json:"is_edited,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -52,7 +58,9 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case notehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldText:
+		case notehistory.FieldIsEdited:
+			values[i] = new(sql.NullBool)
+		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldText, notehistory.FieldNoteRef, notehistory.FieldDiscussionID:
 			values[i] = new(sql.NullString)
 		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -149,6 +157,24 @@ func (_m *NoteHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Text = value.String
 			}
+		case notehistory.FieldNoteRef:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note_ref", values[i])
+			} else if value.Valid {
+				_m.NoteRef = value.String
+			}
+		case notehistory.FieldDiscussionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field discussion_id", values[i])
+			} else if value.Valid {
+				_m.DiscussionID = value.String
+			}
+		case notehistory.FieldIsEdited:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_edited", values[i])
+			} else if value.Valid {
+				_m.IsEdited = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -220,6 +246,15 @@ func (_m *NoteHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("text=")
 	builder.WriteString(_m.Text)
+	builder.WriteString(", ")
+	builder.WriteString("note_ref=")
+	builder.WriteString(_m.NoteRef)
+	builder.WriteString(", ")
+	builder.WriteString("discussion_id=")
+	builder.WriteString(_m.DiscussionID)
+	builder.WriteString(", ")
+	builder.WriteString("is_edited=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsEdited))
 	builder.WriteByte(')')
 	return builder.String()
 }

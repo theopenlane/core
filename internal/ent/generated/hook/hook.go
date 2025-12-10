@@ -357,6 +357,30 @@ func (f DirectorySyncRunFunc) Mutate(ctx context.Context, m generated.Mutation) 
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectorySyncRunMutation", m)
 }
 
+// The DiscussionFunc type is an adapter to allow the use of ordinary
+// function as Discussion mutator.
+type DiscussionFunc func(context.Context, *generated.DiscussionMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DiscussionFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DiscussionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DiscussionMutation", m)
+}
+
+// The DiscussionHistoryFunc type is an adapter to allow the use of ordinary
+// function as DiscussionHistory mutator.
+type DiscussionHistoryFunc func(context.Context, *generated.DiscussionHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DiscussionHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DiscussionHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DiscussionHistoryMutation", m)
+}
+
 // The DocumentDataFunc type is an adapter to allow the use of ordinary
 // function as DocumentData mutator.
 type DocumentDataFunc func(context.Context, *generated.DocumentDataMutation) (generated.Value, error)

@@ -42,6 +42,7 @@ type ResolverRoot interface {
 	Notification() NotificationResolver
 	Query() QueryResolver
 	Subscription() SubscriptionResolver
+	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
@@ -51,6 +52,7 @@ type ResolverRoot interface {
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
+	UpdateDiscussionInput() UpdateDiscussionInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateEvidenceInput() UpdateEvidenceInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
@@ -657,6 +659,7 @@ type ComplexityRoot struct {
 		Delegate                   func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -1578,6 +1581,76 @@ type ComplexityRoot struct {
 
 	DirectorySyncRunUpdatePayload struct {
 		DirectorySyncRun func(childComplexity int) int
+	}
+
+	Discussion struct {
+		Comments       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Control        func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		CreatedBy      func(childComplexity int) int
+		ExternalID     func(childComplexity int) int
+		ID             func(childComplexity int) int
+		InternalPolicy func(childComplexity int) int
+		IsResolved     func(childComplexity int) int
+		Owner          func(childComplexity int) int
+		OwnerID        func(childComplexity int) int
+		Procedure      func(childComplexity int) int
+		Risk           func(childComplexity int) int
+		Subcontrol     func(childComplexity int) int
+		UpdatedAt      func(childComplexity int) int
+		UpdatedBy      func(childComplexity int) int
+	}
+
+	DiscussionBulkCreatePayload struct {
+		Discussions func(childComplexity int) int
+	}
+
+	DiscussionConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DiscussionCreatePayload struct {
+		Discussion func(childComplexity int) int
+	}
+
+	DiscussionDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	DiscussionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DiscussionHistory struct {
+		CreatedAt   func(childComplexity int) int
+		CreatedBy   func(childComplexity int) int
+		ExternalID  func(childComplexity int) int
+		HistoryTime func(childComplexity int) int
+		ID          func(childComplexity int) int
+		IsResolved  func(childComplexity int) int
+		Operation   func(childComplexity int) int
+		OwnerID     func(childComplexity int) int
+		Ref         func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UpdatedBy   func(childComplexity int) int
+	}
+
+	DiscussionHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DiscussionHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DiscussionUpdatePayload struct {
+		Discussion func(childComplexity int) int
 	}
 
 	DocumentData struct {
@@ -2836,6 +2909,7 @@ type ComplexityRoot struct {
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -3442,6 +3516,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVDirectoryGroup           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectoryMembership      func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDirectorySyncRun         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDiscussion               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVDocumentData             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntity                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntityType               func(childComplexity int, input graphql.Upload) int
@@ -3497,6 +3572,7 @@ type ComplexityRoot struct {
 		CreateBulkDirectoryGroup              func(childComplexity int, input []*generated.CreateDirectoryGroupInput) int
 		CreateBulkDirectoryMembership         func(childComplexity int, input []*generated.CreateDirectoryMembershipInput) int
 		CreateBulkDirectorySyncRun            func(childComplexity int, input []*generated.CreateDirectorySyncRunInput) int
+		CreateBulkDiscussion                  func(childComplexity int, input []*generated.CreateDiscussionInput) int
 		CreateBulkDocumentData                func(childComplexity int, input []*generated.CreateDocumentDataInput) int
 		CreateBulkEntity                      func(childComplexity int, input []*generated.CreateEntityInput) int
 		CreateBulkEntityType                  func(childComplexity int, input []*generated.CreateEntityTypeInput) int
@@ -3554,6 +3630,7 @@ type ComplexityRoot struct {
 		CreateDirectoryGroup                  func(childComplexity int, input generated.CreateDirectoryGroupInput) int
 		CreateDirectoryMembership             func(childComplexity int, input generated.CreateDirectoryMembershipInput) int
 		CreateDirectorySyncRun                func(childComplexity int, input generated.CreateDirectorySyncRunInput) int
+		CreateDiscussion                      func(childComplexity int, input generated.CreateDiscussionInput) int
 		CreateDocumentData                    func(childComplexity int, input generated.CreateDocumentDataInput) int
 		CreateEntity                          func(childComplexity int, input generated.CreateEntityInput) int
 		CreateEntityType                      func(childComplexity int, input generated.CreateEntityTypeInput) int
@@ -3680,6 +3757,7 @@ type ComplexityRoot struct {
 		DeleteDirectoryGroup                  func(childComplexity int, id string) int
 		DeleteDirectoryMembership             func(childComplexity int, id string) int
 		DeleteDirectorySyncRun                func(childComplexity int, id string) int
+		DeleteDiscussion                      func(childComplexity int, id string) int
 		DeleteDocumentData                    func(childComplexity int, id string) int
 		DeleteEntity                          func(childComplexity int, id string) int
 		DeleteEntityType                      func(childComplexity int, id string) int
@@ -3773,6 +3851,7 @@ type ComplexityRoot struct {
 		UpdateDirectoryGroup                  func(childComplexity int, id string, input generated.UpdateDirectoryGroupInput) int
 		UpdateDirectoryMembership             func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
 		UpdateDirectorySyncRun                func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
+		UpdateDiscussion                      func(childComplexity int, id string, input generated.UpdateDiscussionInput) int
 		UpdateDocumentData                    func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
 		UpdateEntity                          func(childComplexity int, id string, input generated.UpdateEntityInput) int
 		UpdateEntityType                      func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
@@ -3932,11 +4011,14 @@ type ComplexityRoot struct {
 		Control        func(childComplexity int) int
 		CreatedAt      func(childComplexity int) int
 		CreatedBy      func(childComplexity int) int
+		DiscussionID   func(childComplexity int) int
 		DisplayID      func(childComplexity int) int
 		Evidence       func(childComplexity int) int
 		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID             func(childComplexity int) int
 		InternalPolicy func(childComplexity int) int
+		IsEdited       func(childComplexity int) int
+		NoteRef        func(childComplexity int) int
 		Owner          func(childComplexity int) int
 		OwnerID        func(childComplexity int) int
 		Procedure      func(childComplexity int) int
@@ -3965,17 +4047,20 @@ type ComplexityRoot struct {
 	}
 
 	NoteHistory struct {
-		CreatedAt   func(childComplexity int) int
-		CreatedBy   func(childComplexity int) int
-		DisplayID   func(childComplexity int) int
-		HistoryTime func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Operation   func(childComplexity int) int
-		OwnerID     func(childComplexity int) int
-		Ref         func(childComplexity int) int
-		Text        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UpdatedBy   func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		CreatedBy    func(childComplexity int) int
+		DiscussionID func(childComplexity int) int
+		DisplayID    func(childComplexity int) int
+		HistoryTime  func(childComplexity int) int
+		ID           func(childComplexity int) int
+		IsEdited     func(childComplexity int) int
+		NoteRef      func(childComplexity int) int
+		Operation    func(childComplexity int) int
+		OwnerID      func(childComplexity int) int
+		Ref          func(childComplexity int) int
+		Text         func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+		UpdatedBy    func(childComplexity int) int
 	}
 
 	NoteHistoryConnection struct {
@@ -4183,6 +4268,7 @@ type ComplexityRoot struct {
 		DirectoryGroups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
 		DirectoryMemberships            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
 		DirectorySyncRuns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayName                     func(childComplexity int) int
 		Documents                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
 		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
@@ -4507,6 +4593,7 @@ type ComplexityRoot struct {
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -4877,6 +4964,9 @@ type ComplexityRoot struct {
 		DirectoryMemberships                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
 		DirectorySyncRun                    func(childComplexity int, id string) int
 		DirectorySyncRuns                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		Discussion                          func(childComplexity int, id string) int
+		DiscussionHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DiscussionHistoryOrder, where *generated.DiscussionHistoryWhereInput) int
+		Discussions                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DocumentData                        func(childComplexity int, id string) int
 		DocumentDataHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
 		DocumentDataSlice                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
@@ -5346,6 +5436,7 @@ type ComplexityRoot struct {
 		Delegate         func(childComplexity int) int
 		DelegateID       func(childComplexity int) int
 		Details          func(childComplexity int) int
+		Discussions      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID        func(childComplexity int) int
 		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
@@ -5839,6 +5930,7 @@ type ComplexityRoot struct {
 		Delegate                   func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		ExampleEvidence            func(childComplexity int) int
@@ -10716,6 +10808,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.Description(childComplexity), true
 
+	case "Control.discussions":
+		if e.complexity.Control.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_Control_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
+
 	case "Control.displayID":
 		if e.complexity.Control.DisplayID == nil {
 			break
@@ -15217,6 +15321,291 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DirectorySyncRunUpdatePayload.DirectorySyncRun(childComplexity), true
+
+	case "Discussion.comments":
+		if e.complexity.Discussion.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Discussion_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Discussion.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Discussion.control":
+		if e.complexity.Discussion.Control == nil {
+			break
+		}
+
+		return e.complexity.Discussion.Control(childComplexity), true
+
+	case "Discussion.createdAt":
+		if e.complexity.Discussion.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Discussion.CreatedAt(childComplexity), true
+
+	case "Discussion.createdBy":
+		if e.complexity.Discussion.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Discussion.CreatedBy(childComplexity), true
+
+	case "Discussion.externalID":
+		if e.complexity.Discussion.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.Discussion.ExternalID(childComplexity), true
+
+	case "Discussion.id":
+		if e.complexity.Discussion.ID == nil {
+			break
+		}
+
+		return e.complexity.Discussion.ID(childComplexity), true
+
+	case "Discussion.internalPolicy":
+		if e.complexity.Discussion.InternalPolicy == nil {
+			break
+		}
+
+		return e.complexity.Discussion.InternalPolicy(childComplexity), true
+
+	case "Discussion.isResolved":
+		if e.complexity.Discussion.IsResolved == nil {
+			break
+		}
+
+		return e.complexity.Discussion.IsResolved(childComplexity), true
+
+	case "Discussion.owner":
+		if e.complexity.Discussion.Owner == nil {
+			break
+		}
+
+		return e.complexity.Discussion.Owner(childComplexity), true
+
+	case "Discussion.ownerID":
+		if e.complexity.Discussion.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Discussion.OwnerID(childComplexity), true
+
+	case "Discussion.procedure":
+		if e.complexity.Discussion.Procedure == nil {
+			break
+		}
+
+		return e.complexity.Discussion.Procedure(childComplexity), true
+
+	case "Discussion.risk":
+		if e.complexity.Discussion.Risk == nil {
+			break
+		}
+
+		return e.complexity.Discussion.Risk(childComplexity), true
+
+	case "Discussion.subcontrol":
+		if e.complexity.Discussion.Subcontrol == nil {
+			break
+		}
+
+		return e.complexity.Discussion.Subcontrol(childComplexity), true
+
+	case "Discussion.updatedAt":
+		if e.complexity.Discussion.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Discussion.UpdatedAt(childComplexity), true
+
+	case "Discussion.updatedBy":
+		if e.complexity.Discussion.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Discussion.UpdatedBy(childComplexity), true
+
+	case "DiscussionBulkCreatePayload.discussions":
+		if e.complexity.DiscussionBulkCreatePayload.Discussions == nil {
+			break
+		}
+
+		return e.complexity.DiscussionBulkCreatePayload.Discussions(childComplexity), true
+
+	case "DiscussionConnection.edges":
+		if e.complexity.DiscussionConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DiscussionConnection.Edges(childComplexity), true
+
+	case "DiscussionConnection.pageInfo":
+		if e.complexity.DiscussionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DiscussionConnection.PageInfo(childComplexity), true
+
+	case "DiscussionConnection.totalCount":
+		if e.complexity.DiscussionConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DiscussionConnection.TotalCount(childComplexity), true
+
+	case "DiscussionCreatePayload.discussion":
+		if e.complexity.DiscussionCreatePayload.Discussion == nil {
+			break
+		}
+
+		return e.complexity.DiscussionCreatePayload.Discussion(childComplexity), true
+
+	case "DiscussionDeletePayload.deletedID":
+		if e.complexity.DiscussionDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.DiscussionDeletePayload.DeletedID(childComplexity), true
+
+	case "DiscussionEdge.cursor":
+		if e.complexity.DiscussionEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DiscussionEdge.Cursor(childComplexity), true
+
+	case "DiscussionEdge.node":
+		if e.complexity.DiscussionEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DiscussionEdge.Node(childComplexity), true
+
+	case "DiscussionHistory.createdAt":
+		if e.complexity.DiscussionHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.CreatedAt(childComplexity), true
+
+	case "DiscussionHistory.createdBy":
+		if e.complexity.DiscussionHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.CreatedBy(childComplexity), true
+
+	case "DiscussionHistory.externalID":
+		if e.complexity.DiscussionHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.ExternalID(childComplexity), true
+
+	case "DiscussionHistory.historyTime":
+		if e.complexity.DiscussionHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.HistoryTime(childComplexity), true
+
+	case "DiscussionHistory.id":
+		if e.complexity.DiscussionHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.ID(childComplexity), true
+
+	case "DiscussionHistory.isResolved":
+		if e.complexity.DiscussionHistory.IsResolved == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.IsResolved(childComplexity), true
+
+	case "DiscussionHistory.operation":
+		if e.complexity.DiscussionHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.Operation(childComplexity), true
+
+	case "DiscussionHistory.ownerID":
+		if e.complexity.DiscussionHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.OwnerID(childComplexity), true
+
+	case "DiscussionHistory.ref":
+		if e.complexity.DiscussionHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.Ref(childComplexity), true
+
+	case "DiscussionHistory.updatedAt":
+		if e.complexity.DiscussionHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.UpdatedAt(childComplexity), true
+
+	case "DiscussionHistory.updatedBy":
+		if e.complexity.DiscussionHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistory.UpdatedBy(childComplexity), true
+
+	case "DiscussionHistoryConnection.edges":
+		if e.complexity.DiscussionHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistoryConnection.Edges(childComplexity), true
+
+	case "DiscussionHistoryConnection.pageInfo":
+		if e.complexity.DiscussionHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistoryConnection.PageInfo(childComplexity), true
+
+	case "DiscussionHistoryConnection.totalCount":
+		if e.complexity.DiscussionHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistoryConnection.TotalCount(childComplexity), true
+
+	case "DiscussionHistoryEdge.cursor":
+		if e.complexity.DiscussionHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistoryEdge.Cursor(childComplexity), true
+
+	case "DiscussionHistoryEdge.node":
+		if e.complexity.DiscussionHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DiscussionHistoryEdge.Node(childComplexity), true
+
+	case "DiscussionUpdatePayload.discussion":
+		if e.complexity.DiscussionUpdatePayload.Discussion == nil {
+			break
+		}
+
+		return e.complexity.DiscussionUpdatePayload.Discussion(childComplexity), true
 
 	case "DocumentData.createdAt":
 		if e.complexity.DocumentData.CreatedAt == nil {
@@ -21627,6 +22016,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Details(childComplexity), true
 
+	case "InternalPolicy.discussions":
+		if e.complexity.InternalPolicy.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
+
 	case "InternalPolicy.dismissedControlSuggestions":
 		if e.complexity.InternalPolicy.DismissedControlSuggestions == nil {
 			break
@@ -24467,6 +24868,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVDirectorySyncRun(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVDiscussion":
+		if e.complexity.Mutation.CreateBulkCSVDiscussion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVDiscussion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVDiscussion(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVDocumentData":
 		if e.complexity.Mutation.CreateBulkCSVDocumentData == nil {
 			break
@@ -25126,6 +25539,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkDirectorySyncRun(childComplexity, args["input"].([]*generated.CreateDirectorySyncRunInput)), true
+
+	case "Mutation.createBulkDiscussion":
+		if e.complexity.Mutation.CreateBulkDiscussion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkDiscussion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkDiscussion(childComplexity, args["input"].([]*generated.CreateDiscussionInput)), true
 
 	case "Mutation.createBulkDocumentData":
 		if e.complexity.Mutation.CreateBulkDocumentData == nil {
@@ -25810,6 +26235,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateDirectorySyncRun(childComplexity, args["input"].(generated.CreateDirectorySyncRunInput)), true
+
+	case "Mutation.createDiscussion":
+		if e.complexity.Mutation.CreateDiscussion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDiscussion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDiscussion(childComplexity, args["input"].(generated.CreateDiscussionInput)), true
 
 	case "Mutation.createDocumentData":
 		if e.complexity.Mutation.CreateDocumentData == nil {
@@ -27323,6 +27760,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteDirectorySyncRun(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteDiscussion":
+		if e.complexity.Mutation.DeleteDiscussion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDiscussion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDiscussion(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteDocumentData":
 		if e.complexity.Mutation.DeleteDocumentData == nil {
 			break
@@ -28433,6 +28882,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateDirectorySyncRun(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectorySyncRunInput)), true
+
+	case "Mutation.updateDiscussion":
+		if e.complexity.Mutation.UpdateDiscussion == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDiscussion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDiscussion(childComplexity, args["id"].(string), args["input"].(generated.UpdateDiscussionInput)), true
 
 	case "Mutation.updateDocumentData":
 		if e.complexity.Mutation.UpdateDocumentData == nil {
@@ -29660,6 +30121,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.CreatedBy(childComplexity), true
 
+	case "Note.discussionID":
+		if e.complexity.Note.DiscussionID == nil {
+			break
+		}
+
+		return e.complexity.Note.DiscussionID(childComplexity), true
+
 	case "Note.displayID":
 		if e.complexity.Note.DisplayID == nil {
 			break
@@ -29699,6 +30167,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.InternalPolicy(childComplexity), true
+
+	case "Note.isEdited":
+		if e.complexity.Note.IsEdited == nil {
+			break
+		}
+
+		return e.complexity.Note.IsEdited(childComplexity), true
+
+	case "Note.noteRef":
+		if e.complexity.Note.NoteRef == nil {
+			break
+		}
+
+		return e.complexity.Note.NoteRef(childComplexity), true
 
 	case "Note.owner":
 		if e.complexity.Note.Owner == nil {
@@ -29826,6 +30308,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NoteHistory.CreatedBy(childComplexity), true
 
+	case "NoteHistory.discussionID":
+		if e.complexity.NoteHistory.DiscussionID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.DiscussionID(childComplexity), true
+
 	case "NoteHistory.displayID":
 		if e.complexity.NoteHistory.DisplayID == nil {
 			break
@@ -29846,6 +30335,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteHistory.ID(childComplexity), true
+
+	case "NoteHistory.isEdited":
+		if e.complexity.NoteHistory.IsEdited == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.IsEdited(childComplexity), true
+
+	case "NoteHistory.noteRef":
+		if e.complexity.NoteHistory.NoteRef == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.NoteRef(childComplexity), true
 
 	case "NoteHistory.operation":
 		if e.complexity.NoteHistory.Operation == nil {
@@ -30964,6 +31467,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
+
+	case "Organization.discussions":
+		if e.complexity.Organization.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
 
 	case "Organization.displayName":
 		if e.complexity.Organization.DisplayName == nil {
@@ -32942,6 +33457,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.Details(childComplexity), true
+
+	case "Procedure.discussions":
+		if e.complexity.Procedure.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
 
 	case "Procedure.dismissedControlSuggestions":
 		if e.complexity.Procedure.DismissedControlSuggestions == nil {
@@ -35223,6 +35750,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
+
+	case "Query.discussion":
+		if e.complexity.Query.Discussion == nil {
+			break
+		}
+
+		args, err := ec.field_Query_discussion_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Discussion(childComplexity, args["id"].(string)), true
+
+	case "Query.discussionHistories":
+		if e.complexity.Query.DiscussionHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_discussionHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DiscussionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DiscussionHistoryOrder), args["where"].(*generated.DiscussionHistoryWhereInput)), true
+
+	case "Query.discussions":
+		if e.complexity.Query.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
 
 	case "Query.documentData":
 		if e.complexity.Query.DocumentData == nil {
@@ -39291,6 +39854,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.Details(childComplexity), true
 
+	case "Risk.discussions":
+		if e.complexity.Risk.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_Risk_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Risk.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
+
 	case "Risk.displayID":
 		if e.complexity.Risk.DisplayID == nil {
 			break
@@ -41701,6 +42276,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.Description(childComplexity), true
+
+	case "Subcontrol.discussions":
+		if e.complexity.Subcontrol.Discussions == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_discussions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.Discussions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DiscussionOrder), args["where"].(*generated.DiscussionWhereInput)), true
 
 	case "Subcontrol.displayID":
 		if e.complexity.Subcontrol.DisplayID == nil {
@@ -51040,6 +51627,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateDirectoryGroupInput,
 		ec.unmarshalInputCreateDirectoryMembershipInput,
 		ec.unmarshalInputCreateDirectorySyncRunInput,
+		ec.unmarshalInputCreateDiscussionInput,
 		ec.unmarshalInputCreateDocumentDataInput,
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
@@ -51132,6 +51720,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDirectoryMembershipWhereInput,
 		ec.unmarshalInputDirectorySyncRunOrder,
 		ec.unmarshalInputDirectorySyncRunWhereInput,
+		ec.unmarshalInputDiscussionHistoryOrder,
+		ec.unmarshalInputDiscussionHistoryWhereInput,
+		ec.unmarshalInputDiscussionOrder,
+		ec.unmarshalInputDiscussionWhereInput,
 		ec.unmarshalInputDocumentDataHistoryOrder,
 		ec.unmarshalInputDocumentDataHistoryWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
@@ -51346,6 +51938,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDirectoryGroupInput,
 		ec.unmarshalInputUpdateDirectoryMembershipInput,
 		ec.unmarshalInputUpdateDirectorySyncRunInput,
+		ec.unmarshalInputUpdateDiscussionInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
@@ -53688,6 +54281,118 @@ type DirectorySyncRunBulkCreatePayload {
     Created directorySyncRuns
     """
     directorySyncRuns: [DirectorySyncRun!]
+}`, BuiltIn: false},
+	{Name: "../schema/discussion.graphql", Input: `extend type Query {
+    """
+    Look up discussion by ID
+    """
+     discussion(
+        """
+        ID of the discussion
+        """
+        id: ID!
+    ):  Discussion!
+}
+
+extend input CreateDiscussionInput{
+    addComment: CreateNoteInput
+}
+
+extend input UpdateDiscussionInput{
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend type Mutation{
+    """
+    Create a new discussion
+    """
+    createDiscussion(
+        """
+        values of the discussion
+        """
+        input: CreateDiscussionInput!
+    ): DiscussionCreatePayload!
+    """
+    Create multiple new discussions
+    """
+    createBulkDiscussion(
+        """
+        values of the discussion
+        """
+        input: [CreateDiscussionInput!]
+    ): DiscussionBulkCreatePayload!
+    """
+    Create multiple new discussions via file upload
+    """
+    createBulkCSVDiscussion(
+        """
+        csv file containing values of the discussion
+        """
+        input: Upload!
+    ): DiscussionBulkCreatePayload!
+    """
+    Update an existing discussion
+    """
+    updateDiscussion(
+        """
+        ID of the discussion
+        """
+        id: ID!
+        """
+        New values for the discussion
+        """
+        input: UpdateDiscussionInput!
+    ): DiscussionUpdatePayload!
+    """
+    Delete an existing discussion
+    """
+    deleteDiscussion(
+        """
+        ID of the discussion
+        """
+        id: ID!
+    ): DiscussionDeletePayload!
+}
+
+"""
+Return response for createDiscussion mutation
+"""
+type DiscussionCreatePayload {
+    """
+    Created discussion
+    """
+    discussion: Discussion!
+}
+
+"""
+Return response for updateDiscussion mutation
+"""
+type DiscussionUpdatePayload {
+    """
+    Updated discussion
+    """
+    discussion: Discussion!
+}
+
+"""
+Return response for deleteDiscussion mutation
+"""
+type DiscussionDeletePayload {
+    """
+    Deleted discussion ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDiscussion mutation
+"""
+type DiscussionBulkCreatePayload {
+    """
+    Created discussions
+    """
+    discussions: [Discussion!]
 }`, BuiltIn: false},
 	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {
     """
@@ -59616,6 +60321,37 @@ type Control implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -63564,6 +64300,11 @@ input ControlWhereInput {
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
   """
+  discussions edge predicates
+  """
+  hasDiscussions: Boolean
+  hasDiscussionsWith: [DiscussionWhereInput!]
+  """
   control_owner edge predicates
   """
   hasControlOwner: Boolean
@@ -64130,6 +64871,7 @@ input CreateControlInput {
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
   commentIDs: [ID!]
+  discussionIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
   responsiblePartyID: ID
@@ -64562,6 +65304,27 @@ input CreateDirectorySyncRunInput {
   integrationID: ID!
   directoryAccountIDs: [ID!]
   directoryGroupIDs: [ID!]
+}
+"""
+CreateDiscussionInput is used for create Discussion object.
+Input was generated by ent.
+"""
+input CreateDiscussionInput {
+  """
+  the unique discussion identifier from external system, e.g. plate discussion id
+  """
+  externalID: String!
+  """
+  whether the discussion is resolved
+  """
+  isResolved: Boolean
+  ownerID: ID
+  commentIDs: [ID!]
+  controlID: ID
+  subcontrolID: ID
+  procedureID: ID
+  riskID: ID
+  internalPolicyID: ID
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -65330,6 +66093,7 @@ input CreateInternalPolicyInput {
   programIDs: [ID!]
   fileID: ID
   commentIDs: [ID!]
+  discussionIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -65631,6 +66395,18 @@ input CreateNoteInput {
   the text of the note
   """
   text: String!
+  """
+  ref location of the note
+  """
+  noteRef: String
+  """
+  the external discussion id this note is associated with
+  """
+  discussionID: String
+  """
+  whether the note has been edited
+  """
+  isEdited: Boolean
   ownerID: ID
   taskID: ID
   controlID: ID
@@ -65842,6 +66618,7 @@ input CreateOrganizationInput {
   directoryAccountIDs: [ID!]
   directoryGroupIDs: [ID!]
   directorySyncRunIDs: [ID!]
+  discussionIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -66068,6 +66845,7 @@ input CreateProcedureInput {
   riskIDs: [ID!]
   taskIDs: [ID!]
   commentIDs: [ID!]
+  discussionIDs: [ID!]
   fileID: ID
 }
 """
@@ -66456,6 +67234,7 @@ input CreateRiskInput {
   stakeholderID: ID
   delegateID: ID
   commentIDs: [ID!]
+  discussionIDs: [ID!]
 }
 """
 CreateScanInput is used for create Scan object.
@@ -66728,6 +67507,7 @@ input CreateSubcontrolInput {
   procedureIDs: [ID!]
   internalPolicyIDs: [ID!]
   commentIDs: [ID!]
+  discussionIDs: [ID!]
   controlOwnerID: ID
   delegateID: ID
   responsiblePartyID: ID
@@ -73503,6 +74283,510 @@ input DirectorySyncRunWhereInput {
   """
   hasDirectoryMemberships: Boolean
   hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
+}
+type Discussion implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the unique discussion identifier from external system, e.g. plate discussion id
+  """
+  externalID: String!
+  """
+  whether the discussion is resolved
+  """
+  isResolved: Boolean!
+  owner: Organization
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
+  control: Control
+  subcontrol: Subcontrol
+  procedure: Procedure
+  risk: Risk
+  internalPolicy: InternalPolicy
+}
+"""
+A connection to a list of items.
+"""
+type DiscussionConnection {
+  """
+  A list of edges.
+  """
+  edges: [DiscussionEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type DiscussionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Discussion
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type DiscussionHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: DiscussionHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the unique discussion identifier from external system, e.g. plate discussion id
+  """
+  externalID: String!
+  """
+  whether the discussion is resolved
+  """
+  isResolved: Boolean!
+}
+"""
+A connection to a list of items.
+"""
+type DiscussionHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [DiscussionHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type DiscussionHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DiscussionHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+DiscussionHistoryOpType is enum for the field operation
+"""
+enum DiscussionHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for DiscussionHistory connections
+"""
+input DiscussionHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DiscussionHistories.
+  """
+  field: DiscussionHistoryOrderField!
+}
+"""
+Properties by which DiscussionHistory connections can be ordered.
+"""
+enum DiscussionHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+DiscussionHistoryWhereInput is used for filtering DiscussionHistory objects.
+Input was generated by ent.
+"""
+input DiscussionHistoryWhereInput {
+  not: DiscussionHistoryWhereInput
+  and: [DiscussionHistoryWhereInput!]
+  or: [DiscussionHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: DiscussionHistoryOpType
+  operationNEQ: DiscussionHistoryOpType
+  operationIn: [DiscussionHistoryOpType!]
+  operationNotIn: [DiscussionHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  is_resolved field predicates
+  """
+  isResolved: Boolean
+  isResolvedNEQ: Boolean
+}
+"""
+Ordering options for Discussion connections
+"""
+input DiscussionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Discussions.
+  """
+  field: DiscussionOrderField!
+}
+"""
+Properties by which Discussion connections can be ordered.
+"""
+enum DiscussionOrderField {
+  created_at
+  updated_at
+}
+"""
+DiscussionWhereInput is used for filtering Discussion objects.
+Input was generated by ent.
+"""
+input DiscussionWhereInput {
+  not: DiscussionWhereInput
+  and: [DiscussionWhereInput!]
+  or: [DiscussionWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  is_resolved field predicates
+  """
+  isResolved: Boolean
+  isResolvedNEQ: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
+  """
+  risk edge predicates
+  """
+  hasRisk: Boolean
+  hasRiskWith: [RiskWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
 }
 type DocumentData implements Node {
   id: ID!
@@ -87471,6 +88755,37 @@ type InternalPolicy implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -88649,6 +89964,11 @@ input InternalPolicyWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  discussions edge predicates
+  """
+  hasDiscussions: Boolean
+  hasDiscussionsWith: [DiscussionWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -93285,6 +94605,18 @@ type Note implements Node {
   the text of the note
   """
   text: String!
+  """
+  ref location of the note
+  """
+  noteRef: String
+  """
+  the external discussion id this note is associated with
+  """
+  discussionID: String
+  """
+  whether the note has been edited
+  """
+  isEdited: Boolean!
   owner: Organization
   task: Task
   control: Control
@@ -93377,6 +94709,18 @@ type NoteHistory implements Node {
   the text of the note
   """
   text: String!
+  """
+  ref location of the note
+  """
+  noteRef: String
+  """
+  the external discussion id this note is associated with
+  """
+  discussionID: String
+  """
+  whether the note has been edited
+  """
+  isEdited: Boolean!
 }
 """
 A connection to a list of items.
@@ -93606,6 +94950,47 @@ input NoteHistoryWhereInput {
   textHasSuffix: String
   textEqualFold: String
   textContainsFold: String
+  """
+  note_ref field predicates
+  """
+  noteRef: String
+  noteRefNEQ: String
+  noteRefIn: [String!]
+  noteRefNotIn: [String!]
+  noteRefGT: String
+  noteRefGTE: String
+  noteRefLT: String
+  noteRefLTE: String
+  noteRefContains: String
+  noteRefHasPrefix: String
+  noteRefHasSuffix: String
+  noteRefIsNil: Boolean
+  noteRefNotNil: Boolean
+  noteRefEqualFold: String
+  noteRefContainsFold: String
+  """
+  discussion_id field predicates
+  """
+  discussionID: String
+  discussionIDNEQ: String
+  discussionIDIn: [String!]
+  discussionIDNotIn: [String!]
+  discussionIDGT: String
+  discussionIDGTE: String
+  discussionIDLT: String
+  discussionIDLTE: String
+  discussionIDContains: String
+  discussionIDHasPrefix: String
+  discussionIDHasSuffix: String
+  discussionIDIsNil: Boolean
+  discussionIDNotNil: Boolean
+  discussionIDEqualFold: String
+  discussionIDContainsFold: String
+  """
+  is_edited field predicates
+  """
+  isEdited: Boolean
+  isEditedNEQ: Boolean
 }
 """
 Ordering options for Note connections
@@ -93760,6 +95145,47 @@ input NoteWhereInput {
   textHasSuffix: String
   textEqualFold: String
   textContainsFold: String
+  """
+  note_ref field predicates
+  """
+  noteRef: String
+  noteRefNEQ: String
+  noteRefIn: [String!]
+  noteRefNotIn: [String!]
+  noteRefGT: String
+  noteRefGTE: String
+  noteRefLT: String
+  noteRefLTE: String
+  noteRefContains: String
+  noteRefHasPrefix: String
+  noteRefHasSuffix: String
+  noteRefIsNil: Boolean
+  noteRefNotNil: Boolean
+  noteRefEqualFold: String
+  noteRefContainsFold: String
+  """
+  discussion_id field predicates
+  """
+  discussionID: String
+  discussionIDNEQ: String
+  discussionIDIn: [String!]
+  discussionIDNotIn: [String!]
+  discussionIDGT: String
+  discussionIDGTE: String
+  discussionIDLT: String
+  discussionIDLTE: String
+  discussionIDContains: String
+  discussionIDHasPrefix: String
+  discussionIDHasSuffix: String
+  discussionIDIsNil: Boolean
+  discussionIDNotNil: Boolean
+  discussionIDEqualFold: String
+  discussionIDContainsFold: String
+  """
+  is_edited field predicates
+  """
+  isEdited: Boolean
+  isEditedNEQ: Boolean
   """
   owner edge predicates
   """
@@ -97615,6 +99041,37 @@ type Organization implements Node {
     """
     where: DirectorySyncRunWhereInput
   ): DirectorySyncRunConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -99839,6 +101296,11 @@ input OrganizationWhereInput {
   hasDirectorySyncRuns: Boolean
   hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
   """
+  discussions edge predicates
+  """
+  hasDiscussions: Boolean
+  hasDiscussionsWith: [DiscussionWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -100657,6 +102119,37 @@ type Procedure implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
   file: File
 }
 """
@@ -101790,6 +103283,11 @@ input ProcedureWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  discussions edge predicates
+  """
+  hasDiscussions: Boolean
+  hasDiscussionsWith: [DiscussionWhereInput!]
   """
   file edge predicates
   """
@@ -104776,6 +106274,68 @@ type Query {
     """
     where: DirectorySyncRunWhereInput
   ): DirectorySyncRunConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
+  discussionHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DiscussionHistories returned from the connection.
+    """
+    orderBy: DiscussionHistoryOrder
+
+    """
+    Filtering options for DiscussionHistories returned from the connection.
+    """
+    where: DiscussionHistoryWhereInput
+  ): DiscussionHistoryConnection!
   documentDataSlice(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -112588,6 +114148,37 @@ type Risk implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
 }
 """
 A connection to a list of items.
@@ -113736,6 +115327,11 @@ input RiskWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  discussions edge predicates
+  """
+  hasDiscussions: Boolean
+  hasDiscussionsWith: [DiscussionWhereInput!]
 }
 type Scan implements Node {
   id: ID!
@@ -116952,6 +118548,37 @@ type Subcontrol implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  discussions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Discussions returned from the connection.
+    """
+    orderBy: [DiscussionOrder!]
+
+    """
+    Filtering options for Discussions returned from the connection.
+    """
+    where: DiscussionWhereInput
+  ): DiscussionConnection!
   """
   the group of users who are responsible for the control, will be assigned tasks, approval, etc.
   """
@@ -118384,6 +120011,11 @@ input SubcontrolWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  discussions edge predicates
+  """
+  hasDiscussions: Boolean
+  hasDiscussionsWith: [DiscussionWhereInput!]
   """
   control_owner edge predicates
   """
@@ -127743,6 +129375,9 @@ input UpdateControlInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addDiscussionIDs: [ID!]
+  removeDiscussionIDs: [ID!]
+  clearDiscussions: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
@@ -128279,6 +129914,35 @@ input UpdateDirectorySyncRunInput {
   addDirectoryGroupIDs: [ID!]
   removeDirectoryGroupIDs: [ID!]
   clearDirectoryGroups: Boolean
+}
+"""
+UpdateDiscussionInput is used for update Discussion object.
+Input was generated by ent.
+"""
+input UpdateDiscussionInput {
+  """
+  the unique discussion identifier from external system, e.g. plate discussion id
+  """
+  externalID: String
+  """
+  whether the discussion is resolved
+  """
+  isResolved: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
+  controlID: ID
+  clearControl: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
+  procedureID: ID
+  clearProcedure: Boolean
+  riskID: ID
+  clearRisk: Boolean
+  internalPolicyID: ID
+  clearInternalPolicy: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -129408,6 +131072,9 @@ input UpdateInternalPolicyInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addDiscussionIDs: [ID!]
+  removeDiscussionIDs: [ID!]
+  clearDiscussions: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -129765,6 +131432,20 @@ input UpdateNoteInput {
   the text of the note
   """
   text: String
+  """
+  ref location of the note
+  """
+  noteRef: String
+  clearNoteRef: Boolean
+  """
+  the external discussion id this note is associated with
+  """
+  discussionID: String
+  clearDiscussionID: Boolean
+  """
+  whether the note has been edited
+  """
+  isEdited: Boolean
   taskID: ID
   clearTask: Boolean
   controlID: ID
@@ -130073,6 +131754,9 @@ input UpdateOrganizationInput {
   addDirectorySyncRunIDs: [ID!]
   removeDirectorySyncRunIDs: [ID!]
   clearDirectorySyncRuns: Boolean
+  addDiscussionIDs: [ID!]
+  removeDiscussionIDs: [ID!]
+  clearDiscussions: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -130387,6 +132071,9 @@ input UpdateProcedureInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addDiscussionIDs: [ID!]
+  removeDiscussionIDs: [ID!]
+  clearDiscussions: Boolean
   fileID: ID
   clearFile: Boolean
 }
@@ -130971,6 +132658,9 @@ input UpdateRiskInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addDiscussionIDs: [ID!]
+  removeDiscussionIDs: [ID!]
+  clearDiscussions: Boolean
 }
 """
 UpdateScanInput is used for update Scan object.
@@ -131328,6 +133018,9 @@ input UpdateSubcontrolInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addDiscussionIDs: [ID!]
+  removeDiscussionIDs: [ID!]
+  clearDiscussions: Boolean
   controlOwnerID: ID
   clearControlOwner: Boolean
   delegateID: ID
@@ -144283,26 +145976,36 @@ extend input UpdateTaskInput {
 }
 
 extend input UpdateControlInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateSubcontrolInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateRiskInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateInternalPolicyInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateProcedureInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }

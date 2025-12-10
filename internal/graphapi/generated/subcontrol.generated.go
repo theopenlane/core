@@ -146,6 +146,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
 			case "comments":
 				return ec.fieldContext_Subcontrol_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Subcontrol_discussions(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
@@ -316,6 +318,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
 			case "comments":
 				return ec.fieldContext_Subcontrol_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Subcontrol_discussions(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":
@@ -486,6 +490,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_internalPolicies(ctx, field)
 			case "comments":
 				return ec.fieldContext_Subcontrol_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Subcontrol_discussions(ctx, field)
 			case "controlOwner":
 				return ec.fieldContext_Subcontrol_controlOwner(ctx, field)
 			case "delegate":

@@ -255,6 +255,44 @@ func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, e
 	return res, nil
 }
 
+// AddDiscussion is the resolver for the addDiscussion field.
+func (r *updateControlInputResolver) AddDiscussion(ctx context.Context, obj *generated.UpdateControlInput, data *generated.CreateDiscussionInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.ControlID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.ControlID == nil {
+		return newNotFoundError("control")
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	return nil
+}
+
+// DeleteDiscussion is the resolver for the deleteDiscussion field.
+func (r *updateControlInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateControlInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "discussion"})
+	}
+
+	return nil
+}
+
 // AddComment is the resolver for the addComment field.
 func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *generated.UpdateControlInput, data *generated.CreateNoteInput) error {
 	if data == nil {
@@ -273,9 +311,12 @@ func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *genera
 		return newNotFoundError("control")
 	}
 
-	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -331,6 +372,44 @@ func (r *updateEvidenceInputResolver) DeleteComment(ctx context.Context, obj *ge
 	return nil
 }
 
+// AddDiscussion is the resolver for the addDiscussion field.
+func (r *updateInternalPolicyInputResolver) AddDiscussion(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *generated.CreateDiscussionInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.InternalPolicyID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.InternalPolicyID == nil {
+		return newNotFoundError("internalpolicy")
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	return nil
+}
+
+// DeleteDiscussion is the resolver for the deleteDiscussion field.
+func (r *updateInternalPolicyInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "discussion"})
+	}
+
+	return nil
+}
+
 // AddComment is the resolver for the addComment field.
 func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *generated.CreateNoteInput) error {
 	if data == nil {
@@ -349,9 +428,12 @@ func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj 
 		return newNotFoundError("internalpolicy")
 	}
 
-	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -364,6 +446,44 @@ func (r *updateInternalPolicyInputResolver) DeleteComment(ctx context.Context, o
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddDiscussion is the resolver for the addDiscussion field.
+func (r *updateProcedureInputResolver) AddDiscussion(ctx context.Context, obj *generated.UpdateProcedureInput, data *generated.CreateDiscussionInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.ProcedureID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.ProcedureID == nil {
+		return newNotFoundError("procedure")
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	return nil
+}
+
+// DeleteDiscussion is the resolver for the deleteDiscussion field.
+func (r *updateProcedureInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateProcedureInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "discussion"})
 	}
 
 	return nil
@@ -387,9 +507,12 @@ func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *gene
 		return newNotFoundError("procedure")
 	}
 
-	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -402,6 +525,44 @@ func (r *updateProcedureInputResolver) DeleteComment(ctx context.Context, obj *g
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddDiscussion is the resolver for the addDiscussion field.
+func (r *updateRiskInputResolver) AddDiscussion(ctx context.Context, obj *generated.UpdateRiskInput, data *generated.CreateDiscussionInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.RiskID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.RiskID == nil {
+		return newNotFoundError("risk")
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	return nil
+}
+
+// DeleteDiscussion is the resolver for the deleteDiscussion field.
+func (r *updateRiskInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateRiskInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "discussion"})
 	}
 
 	return nil
@@ -425,9 +586,12 @@ func (r *updateRiskInputResolver) AddComment(ctx context.Context, obj *generated
 		return newNotFoundError("risk")
 	}
 
-	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -440,6 +604,44 @@ func (r *updateRiskInputResolver) DeleteComment(ctx context.Context, obj *genera
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddDiscussion is the resolver for the addDiscussion field.
+func (r *updateSubcontrolInputResolver) AddDiscussion(ctx context.Context, obj *generated.UpdateSubcontrolInput, data *generated.CreateDiscussionInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.SubcontrolID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.SubcontrolID == nil {
+		return newNotFoundError("subcontrol")
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	return nil
+}
+
+// DeleteDiscussion is the resolver for the deleteDiscussion field.
+func (r *updateSubcontrolInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateSubcontrolInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Discussion.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "discussion"})
 	}
 
 	return nil
@@ -463,9 +665,12 @@ func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *gen
 		return newNotFoundError("subcontrol")
 	}
 
-	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
