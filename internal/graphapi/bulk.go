@@ -814,6 +814,25 @@ func (r *mutationResolver) bulkCreateDirectorySyncRun(ctx context.Context, input
 	}, nil
 }
 
+// bulkCreateDiscussion uses the CreateBulk function to create multiple Discussion entities
+func (r *mutationResolver) bulkCreateDiscussion(ctx context.Context, input []*generated.CreateDiscussionInput) (*model.DiscussionBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DiscussionCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Discussion.Create().SetInput(*data)
+	}
+
+	res, err := c.Discussion.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	// return response
+	return &model.DiscussionBulkCreatePayload{
+		Discussions: res,
+	}, nil
+}
+
 // bulkCreateDNSVerification uses the CreateBulk function to create multiple DNSVerification entities
 func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

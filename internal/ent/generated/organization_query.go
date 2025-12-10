@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -187,6 +188,7 @@ type OrganizationQuery struct {
 	withDirectoryGroups                      *DirectoryGroupQuery
 	withDirectoryMemberships                 *DirectoryMembershipQuery
 	withDirectorySyncRuns                    *DirectorySyncRunQuery
+	withDiscussions                          *DiscussionQuery
 	withMembers                              *OrgMembershipQuery
 	loadTotal                                []func(context.Context, []*Organization) error
 	modifiers                                []func(*sql.Selector)
@@ -277,6 +279,7 @@ type OrganizationQuery struct {
 	withNamedDirectoryGroups                 map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships            map[string]*DirectoryMembershipQuery
 	withNamedDirectorySyncRuns               map[string]*DirectorySyncRunQuery
+	withNamedDiscussions                     map[string]*DiscussionQuery
 	withNamedMembers                         map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -2564,6 +2567,31 @@ func (_q *OrganizationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return query
 }
 
+// QueryDiscussions chains the current query on the "discussions" edge.
+func (_q *OrganizationQuery) QueryDiscussions() *DiscussionQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DiscussionsTable, organization.DiscussionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2871,6 +2899,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withDirectoryGroups:                 _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:            _q.withDirectoryMemberships.Clone(),
 		withDirectorySyncRuns:               _q.withDirectorySyncRuns.Clone(),
+		withDiscussions:                     _q.withDiscussions.Clone(),
 		withMembers:                         _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -3869,6 +3898,17 @@ func (_q *OrganizationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRu
 	return _q
 }
 
+// WithDiscussions tells the query-builder to eager-load the nodes that are connected to
+// the "discussions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithDiscussions(opts ...func(*DiscussionQuery)) *OrganizationQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDiscussions = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3964,7 +4004,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [91]bool{
+		loadedTypes = [92]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4055,6 +4095,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
 			_q.withDirectorySyncRuns != nil,
+			_q.withDiscussions != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -4762,6 +4803,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withDiscussions; query != nil {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Discussions = []*Discussion{} },
+			func(n *Organization, e *Discussion) { n.Edges.Discussions = append(n.Edges.Discussions, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -5379,6 +5427,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedDirectorySyncRuns(name) },
 			func(n *Organization, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDiscussions {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedDiscussions(name) },
+			func(n *Organization, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8273,6 +8328,37 @@ func (_q *OrganizationQuery) loadDirectorySyncRuns(ctx context.Context, query *D
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadDiscussions(ctx context.Context, query *DiscussionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Discussion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(discussion.FieldOwnerID)
+	}
+	query.Where(predicate.Discussion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.DiscussionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *OrgMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -9623,6 +9709,20 @@ func (_q *OrganizationQuery) WithNamedDirectorySyncRuns(name string, opts ...fun
 		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
 	}
 	_q.withNamedDirectorySyncRuns[name] = query
+	return _q
+}
+
+// WithNamedDiscussions tells the query-builder to eager-load the nodes that are connected to the "discussions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedDiscussions(name string, opts ...func(*DiscussionQuery)) *OrganizationQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDiscussions == nil {
+		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
+	}
+	_q.withNamedDiscussions[name] = query
 	return _q
 }
 

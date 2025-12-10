@@ -612,6 +612,30 @@ type DirectorySyncRunUpdatePayload struct {
 	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
 }
 
+// Return response for createBulkDiscussion mutation
+type DiscussionBulkCreatePayload struct {
+	// Created discussions
+	Discussions []*generated.Discussion `json:"discussions,omitempty"`
+}
+
+// Return response for createDiscussion mutation
+type DiscussionCreatePayload struct {
+	// Created discussion
+	Discussion *generated.Discussion `json:"discussion"`
+}
+
+// Return response for deleteDiscussion mutation
+type DiscussionDeletePayload struct {
+	// Deleted discussion ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDiscussion mutation
+type DiscussionUpdatePayload struct {
+	// Updated discussion
+	Discussion *generated.Discussion `json:"discussion"`
+}
+
 // Return response for createBulkDocumentData mutation
 type DocumentDataBulkCreatePayload struct {
 	// Created documentData

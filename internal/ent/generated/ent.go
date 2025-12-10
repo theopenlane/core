@@ -39,6 +39,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -254,6 +256,8 @@ func checkColumn(t, c string) error {
 			directorymembership.Table:               directorymembership.ValidColumn,
 			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
 			directorysyncrun.Table:                  directorysyncrun.ValidColumn,
+			discussion.Table:                        discussion.ValidColumn,
+			discussionhistory.Table:                 discussionhistory.ValidColumn,
 			documentdata.Table:                      documentdata.ValidColumn,
 			documentdatahistory.Table:               documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:            emailverificationtoken.ValidColumn,

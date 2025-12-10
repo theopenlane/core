@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -840,6 +841,21 @@ func (_u *ControlUpdate) AddComments(v ...*Note) *ControlUpdate {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *ControlUpdate) AddDiscussionIDs(ids ...string) *ControlUpdate {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *ControlUpdate) AddDiscussions(v ...*Discussion) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (_u *ControlUpdate) SetControlOwner(v *Group) *ControlUpdate {
 	return _u.SetControlOwnerID(v.ID)
@@ -1252,6 +1268,27 @@ func (_u *ControlUpdate) RemoveComments(v ...*Note) *ControlUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *ControlUpdate) ClearDiscussions() *ControlUpdate {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *ControlUpdate) RemoveDiscussionIDs(ids ...string) *ControlUpdate {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *ControlUpdate) RemoveDiscussions(v ...*Discussion) *ControlUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearControlOwner clears the "control_owner" edge to the Group entity.
@@ -2294,6 +2331,54 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3906,6 +3991,21 @@ func (_u *ControlUpdateOne) AddComments(v ...*Note) *ControlUpdateOne {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *ControlUpdateOne) AddDiscussionIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *ControlUpdateOne) AddDiscussions(v ...*Discussion) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // SetControlOwner sets the "control_owner" edge to the Group entity.
 func (_u *ControlUpdateOne) SetControlOwner(v *Group) *ControlUpdateOne {
 	return _u.SetControlOwnerID(v.ID)
@@ -4318,6 +4418,27 @@ func (_u *ControlUpdateOne) RemoveComments(v ...*Note) *ControlUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *ControlUpdateOne) ClearDiscussions() *ControlUpdateOne {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *ControlUpdateOne) RemoveDiscussionIDs(ids ...string) *ControlUpdateOne {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *ControlUpdateOne) RemoveDiscussions(v ...*Discussion) *ControlUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearControlOwner clears the "control_owner" edge to the Group entity.
@@ -5390,6 +5511,54 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

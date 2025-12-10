@@ -229,6 +229,8 @@ const (
 	EdgeDirectoryMemberships = "directory_memberships"
 	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
 	EdgeDirectorySyncRuns = "directory_sync_runs"
+	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
+	EdgeDiscussions = "discussions"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -849,6 +851,13 @@ const (
 	DirectorySyncRunsInverseTable = "directory_sync_runs"
 	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
 	DirectorySyncRunsColumn = "owner_id"
+	// DiscussionsTable is the table that holds the discussions relation/edge.
+	DiscussionsTable = "discussions"
+	// DiscussionsInverseTable is the table name for the Discussion entity.
+	// It exists in this package in order to avoid circular dependency with the "discussion" package.
+	DiscussionsInverseTable = "discussions"
+	// DiscussionsColumn is the table column denoting the discussions relation/edge.
+	DiscussionsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -2269,6 +2278,20 @@ func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption
 	}
 }
 
+// ByDiscussionsCount orders the results by discussions count.
+func ByDiscussionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDiscussionsStep(), opts...)
+	}
+}
+
+// ByDiscussions orders the results by discussions terms.
+func ByDiscussions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDiscussionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2910,6 +2933,13 @@ func newDirectorySyncRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+	)
+}
+func newDiscussionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DiscussionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

@@ -70,6 +70,10 @@ type Tx struct {
 	DirectoryMembershipHistory *DirectoryMembershipHistoryClient
 	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
 	DirectorySyncRun *DirectorySyncRunClient
+	// Discussion is the client for interacting with the Discussion builders.
+	Discussion *DiscussionClient
+	// DiscussionHistory is the client for interacting with the DiscussionHistory builders.
+	DiscussionHistory *DiscussionHistoryClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -478,6 +482,8 @@ func (tx *Tx) init() {
 	tx.DirectoryMembership = NewDirectoryMembershipClient(tx.config)
 	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
 	tx.DirectorySyncRun = NewDirectorySyncRunClient(tx.config)
+	tx.Discussion = NewDiscussionClient(tx.config)
+	tx.DiscussionHistory = NewDiscussionHistoryClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)

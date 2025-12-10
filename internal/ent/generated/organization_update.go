@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -1668,6 +1669,21 @@ func (_u *OrganizationUpdate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *Orga
 		ids[i] = v[i].ID
 	}
 	return _u.AddDirectorySyncRunIDs(ids...)
+}
+
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *OrganizationUpdate) AddDiscussionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *OrganizationUpdate) AddDiscussions(v ...*Discussion) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -3527,6 +3543,27 @@ func (_u *OrganizationUpdate) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *O
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectorySyncRunIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *OrganizationUpdate) ClearDiscussions() *OrganizationUpdate {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *OrganizationUpdate) RemoveDiscussionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *OrganizationUpdate) RemoveDiscussions(v ...*Discussion) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -7973,6 +8010,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionsTable,
+			Columns: []string{organization.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionsTable,
+			Columns: []string{organization.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionsTable,
+			Columns: []string{organization.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -9610,6 +9695,21 @@ func (_u *OrganizationUpdateOne) AddDirectorySyncRuns(v ...*DirectorySyncRun) *O
 		ids[i] = v[i].ID
 	}
 	return _u.AddDirectorySyncRunIDs(ids...)
+}
+
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *OrganizationUpdateOne) AddDiscussionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *OrganizationUpdateOne) AddDiscussions(v ...*Discussion) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -11469,6 +11569,27 @@ func (_u *OrganizationUpdateOne) RemoveDirectorySyncRuns(v ...*DirectorySyncRun)
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDirectorySyncRunIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *OrganizationUpdateOne) ClearDiscussions() *OrganizationUpdateOne {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveDiscussionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *OrganizationUpdateOne) RemoveDiscussions(v ...*Discussion) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -15940,6 +16061,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionsTable,
+			Columns: []string{organization.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionsTable,
+			Columns: []string{organization.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DiscussionsTable,
+			Columns: []string{organization.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

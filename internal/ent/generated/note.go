@@ -44,10 +44,17 @@ type Note struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
 	Text string `json:"text,omitempty"`
+	// ref location of the note
+	NoteRef string `json:"note_ref,omitempty"`
+	// the external discussion id this note is associated with
+	DiscussionID string `json:"discussion_id,omitempty"`
+	// whether the note has been edited
+	IsEdited bool `json:"is_edited,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
 	Edges                    NoteEdges `json:"edges"`
 	control_comments         *string
+	discussion_comments      *string
 	entity_notes             *string
 	evidence_comments        *string
 	finding_comments         *string
@@ -208,37 +215,41 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldText:
+		case note.FieldIsEdited:
+			values[i] = new(sql.NullBool)
+		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case note.ForeignKeys[0]: // control_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[1]: // entity_notes
+		case note.ForeignKeys[1]: // discussion_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[2]: // evidence_comments
+		case note.ForeignKeys[2]: // entity_notes
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[3]: // finding_comments
+		case note.ForeignKeys[3]: // evidence_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[4]: // internal_policy_comments
+		case note.ForeignKeys[4]: // finding_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[5]: // procedure_comments
+		case note.ForeignKeys[5]: // internal_policy_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[6]: // program_notes
+		case note.ForeignKeys[6]: // procedure_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[7]: // remediation_comments
+		case note.ForeignKeys[7]: // program_notes
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[8]: // review_comments
+		case note.ForeignKeys[8]: // remediation_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[9]: // risk_comments
+		case note.ForeignKeys[9]: // review_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[10]: // subcontrol_comments
+		case note.ForeignKeys[10]: // risk_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[11]: // task_comments
+		case note.ForeignKeys[11]: // subcontrol_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[12]: // trust_center_posts
+		case note.ForeignKeys[12]: // task_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[13]: // vulnerability_comments
+		case note.ForeignKeys[13]: // trust_center_posts
+			values[i] = new(sql.NullString)
+		case note.ForeignKeys[14]: // vulnerability_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -315,6 +326,24 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Text = value.String
 			}
+		case note.FieldNoteRef:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field note_ref", values[i])
+			} else if value.Valid {
+				_m.NoteRef = value.String
+			}
+		case note.FieldDiscussionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field discussion_id", values[i])
+			} else if value.Valid {
+				_m.DiscussionID = value.String
+			}
+		case note.FieldIsEdited:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_edited", values[i])
+			} else if value.Valid {
+				_m.IsEdited = value.Bool
+			}
 		case note.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_comments", values[i])
@@ -324,89 +353,96 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			}
 		case note.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field discussion_comments", values[i])
+			} else if value.Valid {
+				_m.discussion_comments = new(string)
+				*_m.discussion_comments = value.String
+			}
+		case note.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field entity_notes", values[i])
 			} else if value.Valid {
 				_m.entity_notes = new(string)
 				*_m.entity_notes = value.String
 			}
-		case note.ForeignKeys[2]:
+		case note.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field evidence_comments", values[i])
 			} else if value.Valid {
 				_m.evidence_comments = new(string)
 				*_m.evidence_comments = value.String
 			}
-		case note.ForeignKeys[3]:
+		case note.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field finding_comments", values[i])
 			} else if value.Valid {
 				_m.finding_comments = new(string)
 				*_m.finding_comments = value.String
 			}
-		case note.ForeignKeys[4]:
+		case note.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field internal_policy_comments", values[i])
 			} else if value.Valid {
 				_m.internal_policy_comments = new(string)
 				*_m.internal_policy_comments = value.String
 			}
-		case note.ForeignKeys[5]:
+		case note.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field procedure_comments", values[i])
 			} else if value.Valid {
 				_m.procedure_comments = new(string)
 				*_m.procedure_comments = value.String
 			}
-		case note.ForeignKeys[6]:
+		case note.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_notes", values[i])
 			} else if value.Valid {
 				_m.program_notes = new(string)
 				*_m.program_notes = value.String
 			}
-		case note.ForeignKeys[7]:
+		case note.ForeignKeys[8]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_comments", values[i])
 			} else if value.Valid {
 				_m.remediation_comments = new(string)
 				*_m.remediation_comments = value.String
 			}
-		case note.ForeignKeys[8]:
+		case note.ForeignKeys[9]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_comments", values[i])
 			} else if value.Valid {
 				_m.review_comments = new(string)
 				*_m.review_comments = value.String
 			}
-		case note.ForeignKeys[9]:
+		case note.ForeignKeys[10]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_comments", values[i])
 			} else if value.Valid {
 				_m.risk_comments = new(string)
 				*_m.risk_comments = value.String
 			}
-		case note.ForeignKeys[10]:
+		case note.ForeignKeys[11]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field subcontrol_comments", values[i])
 			} else if value.Valid {
 				_m.subcontrol_comments = new(string)
 				*_m.subcontrol_comments = value.String
 			}
-		case note.ForeignKeys[11]:
+		case note.ForeignKeys[12]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field task_comments", values[i])
 			} else if value.Valid {
 				_m.task_comments = new(string)
 				*_m.task_comments = value.String
 			}
-		case note.ForeignKeys[12]:
+		case note.ForeignKeys[13]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_posts", values[i])
 			} else if value.Valid {
 				_m.trust_center_posts = new(string)
 				*_m.trust_center_posts = value.String
 			}
-		case note.ForeignKeys[13]:
+		case note.ForeignKeys[14]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_comments", values[i])
 			} else if value.Valid {
@@ -525,6 +561,15 @@ func (_m *Note) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("text=")
 	builder.WriteString(_m.Text)
+	builder.WriteString(", ")
+	builder.WriteString("note_ref=")
+	builder.WriteString(_m.NoteRef)
+	builder.WriteString(", ")
+	builder.WriteString("discussion_id=")
+	builder.WriteString(_m.DiscussionID)
+	builder.WriteString(", ")
+	builder.WriteString("is_edited=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsEdited))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -252,6 +252,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_directoryMemberships(ctx, field)
 			case "directorySyncRuns":
 				return ec.fieldContext_Organization_directorySyncRuns(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Organization_discussions(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

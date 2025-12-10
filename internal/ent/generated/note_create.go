@@ -140,6 +140,48 @@ func (_c *NoteCreate) SetText(v string) *NoteCreate {
 	return _c
 }
 
+// SetNoteRef sets the "note_ref" field.
+func (_c *NoteCreate) SetNoteRef(v string) *NoteCreate {
+	_c.mutation.SetNoteRef(v)
+	return _c
+}
+
+// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
+func (_c *NoteCreate) SetNillableNoteRef(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetNoteRef(*v)
+	}
+	return _c
+}
+
+// SetDiscussionID sets the "discussion_id" field.
+func (_c *NoteCreate) SetDiscussionID(v string) *NoteCreate {
+	_c.mutation.SetDiscussionID(v)
+	return _c
+}
+
+// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
+func (_c *NoteCreate) SetNillableDiscussionID(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetDiscussionID(*v)
+	}
+	return _c
+}
+
+// SetIsEdited sets the "is_edited" field.
+func (_c *NoteCreate) SetIsEdited(v bool) *NoteCreate {
+	_c.mutation.SetIsEdited(v)
+	return _c
+}
+
+// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
+func (_c *NoteCreate) SetNillableIsEdited(v *bool) *NoteCreate {
+	if v != nil {
+		_c.SetIsEdited(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NoteCreate) SetID(v string) *NoteCreate {
 	_c.mutation.SetID(v)
@@ -377,6 +419,10 @@ func (_c *NoteCreate) defaults() error {
 		v := note.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.IsEdited(); !ok {
+		v := note.DefaultIsEdited
+		_c.mutation.SetIsEdited(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if note.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized note.DefaultID (forgotten import generated/runtime?)")
@@ -409,6 +455,9 @@ func (_c *NoteCreate) check() error {
 		if err := note.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "Note.text": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.IsEdited(); !ok {
+		return &ValidationError{Name: "is_edited", err: errors.New(`generated: missing required field "Note.is_edited"`)}
 	}
 	return nil
 }
@@ -477,6 +526,18 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 		_node.Text = value
+	}
+	if value, ok := _c.mutation.NoteRef(); ok {
+		_spec.SetField(note.FieldNoteRef, field.TypeString, value)
+		_node.NoteRef = value
+	}
+	if value, ok := _c.mutation.DiscussionID(); ok {
+		_spec.SetField(note.FieldDiscussionID, field.TypeString, value)
+		_node.DiscussionID = value
+	}
+	if value, ok := _c.mutation.IsEdited(); ok {
+		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
+		_node.IsEdited = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
