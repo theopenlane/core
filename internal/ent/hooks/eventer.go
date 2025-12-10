@@ -4,8 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/ent"
-
+	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/notifications"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -48,26 +47,17 @@ func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
 }
 
 // MutationHandler is the signature listener implementations expose for mutation events
-type MutationHandler func(*soiree.EventContext, *MutationPayload) error
+type MutationHandler func(*soiree.EventContext, *events.MutationPayload) error
 
-// MutationPayload carries the raw ent mutation, the resolved operation, the entity ID and the ent
-// client so listeners can act without additional lookups
-type MutationPayload struct {
-	Mutation  ent.Mutation
-	Operation string
-	EntityID  string
-	Client    *entgen.Client
-}
-
-func mutationTopic(entity string) soiree.TypedTopic[*MutationPayload] {
+func mutationTopic(entity string) soiree.TypedTopic[*events.MutationPayload] {
 	// mutationTopic builds a typed topic for the supplied entity so listeners receive strongly typed payloads
 	// Ensure every entity shares the same wrapping/unwrapping logic so listeners can rely on a
 	// strongly typed payload instead of re-parsing the soiree.Event in every handler
 	return soiree.NewTypedTopic(
 		entity,
-		func(payload *MutationPayload) soiree.Event { return soiree.NewBaseEvent(entity, payload) },
-		func(event soiree.Event) (*MutationPayload, error) {
-			payload, ok := event.Payload().(*MutationPayload)
+		func(payload *events.MutationPayload) soiree.Event { return soiree.NewBaseEvent(entity, payload) },
+		func(event soiree.Event) (*events.MutationPayload, error) {
+			payload, ok := event.Payload().(*events.MutationPayload)
 			if !ok {
 				return nil, fmt.Errorf("%w: %s", errMutationPayloadUnavailable, entity)
 			}
@@ -92,7 +82,7 @@ func (e *Eventer) AddMutationListener(entity string, handler MutationHandler, op
 
 	bound := soiree.BindListener(
 		mutationTopic(entity),
-		func(ctx *soiree.EventContext, payload *MutationPayload) error {
+		func(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 			return handler(ctx, payload)
 		},
 		opts...,
@@ -132,10 +122,8 @@ func registerDefaultMutationListeners(e *Eventer) {
 	e.AddMutationListener(entgen.TypeUser, handleUserMutation)
 
 	// Register notification listeners from notifications package
-	notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext, any) error) {
-		// Wrap the soiree-based handler to match the MutationHandler signature expected by AddMutationListener
-		e.AddMutationListener(entityType, func(ctx *soiree.EventContext, payload *MutationPayload) error {
-			return handler(ctx, payload)
-		})
+	notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext, *events.MutationPayload) error) {
+		// Wrap the handler to match the MutationHandler signature expected by AddMutationListener
+		e.AddMutationListener(entityType, handler)
 	})
 }
