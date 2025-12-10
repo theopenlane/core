@@ -3787,6 +3787,7 @@ type Control struct {
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
+	MappedFromControls     *MappedControlConnection         `json:"mappedFromControls"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
 	ControlMappings        *FindingControlConnection        `json:"controlMappings"`
 }

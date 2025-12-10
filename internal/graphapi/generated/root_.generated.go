@@ -667,6 +667,7 @@ type ComplexityRoot struct {
 		InternalNotes              func(childComplexity int) int
 		InternalPolicies           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		MappedCategories           func(childComplexity int) int
+		MappedFromControls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Narratives                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                      func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
@@ -10805,6 +10806,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.MappedCategories(childComplexity), true
+
+	case "Control.mappedFromControls":
+		if e.complexity.Control.MappedFromControls == nil {
+			break
+		}
+
+		args, err := ec.field_Control_mappedFromControls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.MappedFromControls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.MappedControlOrder), args["where"].(*generated.MappedControlWhereInput)), true
 
 	case "Control.narratives":
 		if e.complexity.Control.Narratives == nil {
@@ -59910,6 +59923,37 @@ type Control implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
+  mappedFromControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for MappedControls returned from the connection.
+    """
+    orderBy: [MappedControlOrder!]
+
+    """
+    Filtering options for MappedControls returned from the connection.
+    """
+    where: MappedControlWhereInput
+  ): MappedControlConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.

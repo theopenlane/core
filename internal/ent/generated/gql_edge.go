@@ -979,6 +979,27 @@ func (_m *Control) ScheduledJobs(
 	return _m.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Control) MappedFromControls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*MappedControlOrder, where *MappedControlWhereInput,
+) (*MappedControlConnection, error) {
+	opts := []MappedControlPaginateOption{
+		WithMappedControlOrder(orderBy),
+		WithMappedControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[24][alias]
+	if nodes, err := _m.NamedMappedFromControls(alias); err == nil || hasTotalCount {
+		pager, err := newMappedControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &MappedControlConnection{Edges: []*MappedControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryMappedFromControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Control) WorkflowObjectRefs(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
 ) (*WorkflowObjectRefConnection, error) {
@@ -987,7 +1008,7 @@ func (_m *Control) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[24][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
 	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
@@ -1008,7 +1029,7 @@ func (_m *Control) ControlMappings(
 		WithFindingControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
 	if nodes, err := _m.NamedControlMappings(alias); err == nil || hasTotalCount {
 		pager, err := newFindingControlPager(opts, last != nil)
 		if err != nil {
