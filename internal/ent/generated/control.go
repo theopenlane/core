@@ -175,7 +175,7 @@ type ControlEdges struct {
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
