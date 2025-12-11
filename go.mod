@@ -17,7 +17,7 @@ require (
 	cloud.google.com/go/secretmanager v1.16.0
 	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.6-0.20251120142408-49be309024df
+	entgo.io/ent v0.14.6-0.20251211203232-397ebe9f39af
 	github.com/99designs/gqlgen v0.17.84
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
