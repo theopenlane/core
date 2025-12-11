@@ -90,6 +90,27 @@ query GetAllTrustCenters {
           backgroundColor
           accentColor
         }
+        previewSetting {
+          id
+          overview
+          title
+          primaryColor
+          logoRemoteURL
+          logoLocalFileID
+          logoFile {
+            presignedURL
+          }
+          faviconRemoteURL
+          faviconLocalFileID
+          faviconFile {
+            presignedURL
+          }
+          themeMode
+          font
+          foregroundColor
+          backgroundColor
+          accentColor
+        }
       }
     }
   }
@@ -146,6 +167,27 @@ query GetTrustCenterByID($trustCenterId: ID!) {
       backgroundColor
       accentColor
     }
+    previewSetting {
+      id
+      overview
+      title
+      primaryColor
+      logoRemoteURL
+      logoLocalFileID
+      logoFile {
+        presignedURL
+      }
+      faviconRemoteURL
+      faviconLocalFileID
+      faviconFile {
+        presignedURL
+      }
+      themeMode
+      font
+      foregroundColor
+      backgroundColor
+      accentColor
+    }
   }
 }
 
@@ -174,6 +216,27 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
           dnsVerificationID
         }
         setting {
+          id
+          overview
+          title
+          primaryColor
+          logoRemoteURL
+          logoLocalFileID
+          logoFile {
+            presignedURL
+          }
+          faviconRemoteURL
+          faviconLocalFileID
+          faviconFile {
+            presignedURL
+          }
+          themeMode
+          font
+          foregroundColor
+          backgroundColor
+          accentColor
+        }
+        previewSetting {
           id
           overview
           title

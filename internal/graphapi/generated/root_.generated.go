@@ -3685,6 +3685,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterDoc                  func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain               func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterNda                  func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
+		CreateTrustCenterPreviewSetting       func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSetting              func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor         func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateTrustCenterWatermarkConfig      func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
@@ -6729,6 +6730,10 @@ type ComplexityRoot struct {
 
 	TrustCenterNDAUpdatePayload struct {
 		Template func(childComplexity int) int
+	}
+
+	TrustCenterPreviewSettingCreatePayload struct {
+		TrustCenterSetting func(childComplexity int) int
 	}
 
 	TrustCenterSetting struct {
@@ -26896,6 +26901,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateTrustCenterNda(childComplexity, args["input"].(model.CreateTrustCenterNDAInput), args["templateFiles"].([]*graphql.Upload)), true
 
+	case "Mutation.createTrustCenterPreviewSetting":
+		if e.complexity.Mutation.CreateTrustCenterPreviewSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterPreviewSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterPreviewSetting(childComplexity, args["input"].(model.CreateTrustCenterPreviewSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
+
 	case "Mutation.createTrustCenterSetting":
 		if e.complexity.Mutation.CreateTrustCenterSetting == nil {
 			break
@@ -45930,6 +45947,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDAUpdatePayload.Template(childComplexity), true
 
+	case "TrustCenterPreviewSettingCreatePayload.trustCenterSetting":
+		if e.complexity.TrustCenterPreviewSettingCreatePayload.TrustCenterSetting == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterPreviewSettingCreatePayload.TrustCenterSetting(childComplexity), true
+
 	case "TrustCenterSetting.accentColor":
 		if e.complexity.TrustCenterSetting.AccentColor == nil {
 			break
@@ -51683,6 +51707,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTrustCenterDomainInput,
 		ec.unmarshalInputCreateTrustCenterInput,
 		ec.unmarshalInputCreateTrustCenterNDAInput,
+		ec.unmarshalInputCreateTrustCenterPreviewSettingInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
 		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
 		ec.unmarshalInputCreateTrustCenterWatermarkConfigInput,
@@ -150492,6 +150517,88 @@ input SubmitTrustCenterNDAResponseInput {
 
 type SubmitTrustCenterNDAResponsePayload {
     documentData: DocumentData!
+}
+`, BuiltIn: false},
+	{Name: "../schema/trustcenterpreviewsetting.graphql", Input: `extend type Mutation {
+  """
+  Create or replace preview environment trust center settings
+  """
+  createTrustCenterPreviewSetting(
+    """
+    values of the preview trust center setting
+    """
+    input: CreateTrustCenterPreviewSettingInput!
+    logoFile: Upload
+    faviconFile: Upload
+  ): TrustCenterPreviewSettingCreatePayload!
+}
+
+"""
+Return response for createTrustCenterPreviewSetting mutation
+"""
+type TrustCenterPreviewSettingCreatePayload {
+  """
+  Created preview trust center setting
+  """
+  trustCenterSetting: TrustCenterSetting!
+}
+
+"""
+Input for createTrustCenterPreviewSetting mutation
+"""
+input CreateTrustCenterPreviewSettingInput {
+  """
+  trust center ID
+  """
+  trustCenterID: ID!
+  """
+  title of the trust center
+  """
+  title: String
+  """
+  overview of the trust center
+  """
+  overview: String
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  logo remote URL
+  """
+  logoRemoteURL: String
+  """
+  logo local file ID
+  """
+  logoFileID: ID
+  """
+  favicon remote URL
+  """
+  faviconRemoteURL: String
+  """
+  favicon local file ID
+  """
+  faviconFileID: ID
+  """
+  theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent color for the trust center
+  """
+  accentColor: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcentersetting.graphql", Input: `extend type Query {
