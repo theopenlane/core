@@ -41,6 +41,7 @@ func TestApplyProviderHints(t *testing.T) {
 		KnownProvider:     storagetypes.ProviderType("disk"),
 		Metadata: map[string]string{
 			"size_bytes": "2048",
+			"key":        "avatarFile",
 		},
 	}
 
@@ -64,4 +65,8 @@ func TestApplyProviderHints(t *testing.T) {
 	size, ok := contextx.From[SizeBytesHint](ctx)
 	require.True(t, ok)
 	assert.Equal(t, int64(size), int64(2048))
+
+	fieldName, ok := contextx.From[FieldNameHint](ctx)
+	require.True(t, ok)
+	assert.Equal(t, FieldNameHint("avatarFile"), fieldName)
 }

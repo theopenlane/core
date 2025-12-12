@@ -3,12 +3,13 @@ package resolver
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"
 	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // providerBuilder is a type alias for readability
@@ -24,6 +25,13 @@ type providerBuilders struct {
 
 // RuleOption configures aspects of ruleCoordinator
 type RuleOption func(*ruleCoordinator)
+
+// databaseProviderFileKeys lists files that should be routed to the database provider
+var databaseProviderFileKeys = []string{
+	"avatarFile",
+	"logoFile",
+	"faviconFile",
+}
 
 // configureProviderRules adds the resolver rules that determine which provider to use for a request
 func configureProviderRules(resolver *providerResolver, opts ...RuleOption) {
@@ -61,6 +69,9 @@ func (rc *ruleCoordinator) configure() {
 	}
 
 	rc.addKnownProviderRule()
+	for _, key := range databaseProviderFileKeys {
+		rc.addFieldNameRule(key, storage.DatabaseProvider)
+	}
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
 	rc.addModuleRule(models.CatalogComplianceModule, storage.S3Provider)
 	rc.addDefaultProviderRule()
@@ -171,6 +182,24 @@ func (rc *ruleCoordinator) addModuleRule(module models.OrgModule, provider stora
 		},
 		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
 			return rc.resolveProviderWithBuilder(moduleProvider)
+		},
+	}
+
+	rc.resolver.AddRule(rule)
+}
+
+func (rc *ruleCoordinator) addFieldNameRule(fieldName string, provider storage.ProviderType) {
+	if !rc.providerEnabled(provider) {
+		return
+	}
+
+	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		Predicate: func(ctx context.Context) bool {
+			hint, ok := contextx.From[objects.FieldNameHint](ctx)
+			return ok && string(hint) == fieldName
+		},
+		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+			return rc.resolveProviderWithBuilder(provider)
 		},
 	}
 

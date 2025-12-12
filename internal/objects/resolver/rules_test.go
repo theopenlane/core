@@ -143,6 +143,51 @@ func TestModuleRules(t *testing.T) {
 	assert.Equal(t, "tc-bucket", result.Config.Bucket)
 }
 
+func TestFieldNameRules(t *testing.T) {
+	testCases := []struct {
+		name      string
+		fieldName string
+	}{
+		{"avatarFile routes to database provider", "avatarFile"},
+		{"logoFile routes to database provider", "logoFile"},
+		{"faviconFile routes to database provider", "faviconFile"},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := contextx.With(context.Background(), objects.FieldNameHint(tc.fieldName))
+			resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+
+			dbBuilder := &stubBuilder{providerType: "db"}
+			config := storage.ProviderConfig{
+				Providers: storage.Providers{
+					Database: storage.ProviderConfigs{
+						Enabled: true,
+					},
+				},
+			}
+
+			configureProviderRules(
+				resolver,
+				WithProviderConfig(config),
+				WithProviderBuilders(providerBuilders{
+					s3:   &stubBuilder{providerType: "s3"},
+					r2:   &stubBuilder{providerType: "r2"},
+					disk: &stubBuilder{providerType: "disk"},
+					db:   dbBuilder,
+				}),
+				WithRuntimeOptions(serviceOptions{}),
+			)
+
+			option := resolver.Resolve(ctx)
+			assert.True(t, option.IsPresent(), "expected field name rule to resolve")
+
+			result := option.MustGet()
+			assert.Equal(t, dbBuilder, result.Builder)
+		})
+	}
+}
+
 func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
 	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
 

@@ -6,12 +6,13 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/utils/contextx"
+
 	"github.com/theopenlane/core/internal/entitlements/features"
 	"github.com/theopenlane/core/pkg/models"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
-	"github.com/theopenlane/utils/contextx"
 )
 
 // Typed context hint strings
@@ -19,6 +20,7 @@ type ModuleHint models.OrgModule
 type PreferredProviderHint storagetypes.ProviderType
 type KnownProviderHint storagetypes.ProviderType
 type SizeBytesHint int64
+type FieldNameHint string
 
 // PopulateProviderHints ensures standard metadata is present on the file's provider hints
 func PopulateProviderHints(file *pkgobjects.File, orgID string) {
@@ -96,6 +98,10 @@ func ApplyProviderHints(ctx context.Context, hints *storagetypes.ProviderHints) 
 		if size, err := strconv.ParseInt(sizeStr, 10, 64); err == nil {
 			ctx = contextx.With(ctx, SizeBytesHint(size))
 		}
+	}
+
+	if key, ok := hints.Metadata["key"]; ok && key != "" {
+		ctx = contextx.With(ctx, FieldNameHint(key))
 	}
 
 	return ctx
