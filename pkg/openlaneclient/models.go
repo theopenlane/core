@@ -298,6 +298,8 @@ type ActionPlan struct {
 	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
+	// structured details of the action_plan in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the action_plan
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
@@ -450,6 +452,8 @@ type ActionPlanHistory struct {
 	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
+	// structured details of the action_plan in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the action_plan
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
@@ -3702,6 +3706,8 @@ type Control struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []any `json:"descriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -3904,6 +3910,8 @@ type ControlHistory struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []any `json:"descriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -4462,7 +4470,9 @@ type ControlImplementation struct {
 	// date the control implementation was verified
 	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
-	Details       *string               `json:"details,omitempty"`
+	Details *string `json:"details,omitempty"`
+	// structured details of the control implementation in JSON format
+	DetailsJSON   []any                 `json:"detailsJSON,omitempty"`
 	Owner         *Organization         `json:"owner,omitempty"`
 	BlockedGroups *GroupConnection      `json:"blockedGroups"`
 	Editors       *GroupConnection      `json:"editors"`
@@ -4545,6 +4555,8 @@ type ControlImplementationHistory struct {
 	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
 	Details *string `json:"details,omitempty"`
+	// structured details of the control implementation in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 }
 
 func (ControlImplementationHistory) IsNode() {}
@@ -5016,6 +5028,8 @@ type ControlObjective struct {
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
 	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
+	// structured details of the control objective in JSON format
+	DesiredOutcomeJSON []any `json:"desiredOutcomeJSON,omitempty"`
 	// status of the control objective
 	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -5112,6 +5126,8 @@ type ControlObjectiveHistory struct {
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
 	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
+	// structured details of the control objective in JSON format
+	DesiredOutcomeJSON []any `json:"desiredOutcomeJSON,omitempty"`
 	// status of the control objective
 	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -6280,6 +6296,8 @@ type CreateActionPlanInput struct {
 	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
+	// structured details of the action_plan in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the action_plan
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
@@ -6451,7 +6469,9 @@ type CreateControlImplementationInput struct {
 	// date the control implementation was verified
 	VerificationDate *time.Time `json:"verificationDate,omitempty"`
 	// details of the control implementation
-	Details         *string  `json:"details,omitempty"`
+	Details *string `json:"details,omitempty"`
+	// structured details of the control implementation in JSON format
+	DetailsJSON     []any    `json:"detailsJSON,omitempty"`
 	OwnerID         *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs       []string `json:"editorIDs,omitempty"`
@@ -6470,6 +6490,8 @@ type CreateControlInput struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []any `json:"descriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -6557,6 +6579,8 @@ type CreateControlObjectiveInput struct {
 	Name string `json:"name"`
 	// the desired outcome or target of the control objective
 	DesiredOutcome *string `json:"desiredOutcome,omitempty"`
+	// structured details of the control objective in JSON format
+	DesiredOutcomeJSON []any `json:"desiredOutcomeJSON,omitempty"`
 	// status of the control objective
 	Status *enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -7267,6 +7291,8 @@ type CreateInternalPolicyInput struct {
 	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
+	// structured details of the policy in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the policy
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
@@ -7507,6 +7533,8 @@ type CreateNarrativeInput struct {
 type CreateNoteInput struct {
 	// the text of the note
 	Text string `json:"text"`
+	// structured details of the note in JSON format
+	TextJSON []any `json:"textJSON,omitempty"`
 	// ref location of the note
 	NoteRef *string `json:"noteRef,omitempty"`
 	// the external discussion id this note is associated with
@@ -7767,6 +7795,8 @@ type CreateProcedureInput struct {
 	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
+	// structured details of the procedure in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the procedure
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
@@ -8043,10 +8073,16 @@ type CreateRiskInput struct {
 	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
+	// structured details of the mitigation in JSON format
+	MitigationJSON []any `json:"mitigationJSON,omitempty"`
 	// details of the risk
 	Details *string `json:"details,omitempty"`
+	// structured details of the risk in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// business costs associated with the risk
-	BusinessCosts     *string  `json:"businessCosts,omitempty"`
+	BusinessCosts *string `json:"businessCosts,omitempty"`
+	// structured details of the business costs in JSON format
+	BusinessCostsJSON []any    `json:"businessCostsJSON,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs         []string `json:"editorIDs,omitempty"`
@@ -8175,6 +8211,8 @@ type CreateSubcontrolInput struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []any `json:"descriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -8308,6 +8346,8 @@ type CreateTaskInput struct {
 	Title string `json:"title"`
 	// the details of the task
 	Details *string `json:"details,omitempty"`
+	// structured details of the task in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
@@ -21371,6 +21411,8 @@ type InternalPolicy struct {
 	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
+	// structured details of the policy in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the policy
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
@@ -21508,6 +21550,8 @@ type InternalPolicyHistory struct {
 	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
+	// structured details of the policy in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the policy
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
@@ -25561,6 +25605,8 @@ type Note struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text string `json:"text"`
+	// structured details of the note in JSON format
+	TextJSON []any `json:"textJSON,omitempty"`
 	// ref location of the note
 	NoteRef *string `json:"noteRef,omitempty"`
 	// the external discussion id this note is associated with
@@ -25620,6 +25666,8 @@ type NoteHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the text of the note
 	Text string `json:"text"`
+	// structured details of the note in JSON format
+	TextJSON []any `json:"textJSON,omitempty"`
 	// ref location of the note
 	NoteRef *string `json:"noteRef,omitempty"`
 	// the external discussion id this note is associated with
@@ -28964,6 +29012,8 @@ type Procedure struct {
 	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
+	// structured details of the procedure in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the procedure
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
@@ -29098,6 +29148,8 @@ type ProcedureHistory struct {
 	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
+	// structured details of the procedure in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// whether approval is required for edits to the procedure
 	ApprovalRequired *bool `json:"approvalRequired,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
@@ -33277,10 +33329,16 @@ type Risk struct {
 	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
+	// structured details of the mitigation in JSON format
+	MitigationJSON []any `json:"mitigationJSON,omitempty"`
 	// details of the risk
 	Details *string `json:"details,omitempty"`
+	// structured details of the risk in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts *string `json:"businessCosts,omitempty"`
+	// structured details of the business costs in JSON format
+	BusinessCostsJSON []any `json:"businessCostsJSON,omitempty"`
 	// the id of the group responsible for risk oversight
 	StakeholderID *string `json:"stakeholderID,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
@@ -33400,10 +33458,16 @@ type RiskHistory struct {
 	Score *int64 `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation *string `json:"mitigation,omitempty"`
+	// structured details of the mitigation in JSON format
+	MitigationJSON []any `json:"mitigationJSON,omitempty"`
 	// details of the risk
 	Details *string `json:"details,omitempty"`
+	// structured details of the risk in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts *string `json:"businessCosts,omitempty"`
+	// structured details of the business costs in JSON format
+	BusinessCostsJSON []any `json:"businessCostsJSON,omitempty"`
 	// the id of the group responsible for risk oversight
 	StakeholderID *string `json:"stakeholderID,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
@@ -36218,6 +36282,8 @@ type Subcontrol struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []any `json:"descriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -36360,6 +36426,8 @@ type SubcontrolHistory struct {
 	Title *string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description *string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []any `json:"descriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -38611,6 +38679,8 @@ type Task struct {
 	Title string `json:"title"`
 	// the details of the task
 	Details *string `json:"details,omitempty"`
+	// structured details of the task in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
@@ -38727,6 +38797,8 @@ type TaskHistory struct {
 	Title string `json:"title"`
 	// the details of the task
 	Details *string `json:"details,omitempty"`
+	// structured details of the task in JSON format
+	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
@@ -43761,6 +43833,10 @@ type UpdateActionPlanInput struct {
 	// details of the action_plan
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// structured details of the action_plan in JSON format
+	DetailsJSON       []any `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
 	// whether approval is required for edits to the action_plan
 	ApprovalRequired      *bool `json:"approvalRequired,omitempty"`
 	ClearApprovalRequired *bool `json:"clearApprovalRequired,omitempty"`
@@ -44029,8 +44105,12 @@ type UpdateControlImplementationInput struct {
 	VerificationDate      *time.Time `json:"verificationDate,omitempty"`
 	ClearVerificationDate *bool      `json:"clearVerificationDate,omitempty"`
 	// details of the control implementation
-	Details               *string  `json:"details,omitempty"`
-	ClearDetails          *bool    `json:"clearDetails,omitempty"`
+	Details      *string `json:"details,omitempty"`
+	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// structured details of the control implementation in JSON format
+	DetailsJSON           []any    `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON     []any    `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON      *bool    `json:"clearDetailsJSON,omitempty"`
 	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
@@ -44064,6 +44144,10 @@ type UpdateControlInput struct {
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON       []any `json:"descriptionJSON,omitempty"`
+	AppendDescriptionJSON []any `json:"appendDescriptionJSON,omitempty"`
+	ClearDescriptionJSON  *bool `json:"clearDescriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases       []string `json:"aliases,omitempty"`
 	AppendAliases []string `json:"appendAliases,omitempty"`
@@ -44231,6 +44315,10 @@ type UpdateControlObjectiveInput struct {
 	// the desired outcome or target of the control objective
 	DesiredOutcome      *string `json:"desiredOutcome,omitempty"`
 	ClearDesiredOutcome *bool   `json:"clearDesiredOutcome,omitempty"`
+	// structured details of the control objective in JSON format
+	DesiredOutcomeJSON       []any `json:"desiredOutcomeJSON,omitempty"`
+	AppendDesiredOutcomeJSON []any `json:"appendDesiredOutcomeJSON,omitempty"`
+	ClearDesiredOutcomeJSON  *bool `json:"clearDesiredOutcomeJSON,omitempty"`
 	// status of the control objective
 	Status      *enums.ObjectiveStatus `json:"status,omitempty"`
 	ClearStatus *bool                  `json:"clearStatus,omitempty"`
@@ -45358,6 +45446,10 @@ type UpdateInternalPolicyInput struct {
 	// details of the policy
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// structured details of the policy in JSON format
+	DetailsJSON       []any `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
 	// whether approval is required for edits to the policy
 	ApprovalRequired      *bool `json:"approvalRequired,omitempty"`
 	ClearApprovalRequired *bool `json:"clearApprovalRequired,omitempty"`
@@ -45712,6 +45804,10 @@ type UpdateNarrativeInput struct {
 type UpdateNoteInput struct {
 	// the text of the note
 	Text *string `json:"text,omitempty"`
+	// structured details of the note in JSON format
+	TextJSON       []any `json:"textJSON,omitempty"`
+	AppendTextJSON []any `json:"appendTextJSON,omitempty"`
+	ClearTextJSON  *bool `json:"clearTextJSON,omitempty"`
 	// ref location of the note
 	NoteRef      *string `json:"noteRef,omitempty"`
 	ClearNoteRef *bool   `json:"clearNoteRef,omitempty"`
@@ -46154,6 +46250,10 @@ type UpdateProcedureInput struct {
 	// details of the procedure
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// structured details of the procedure in JSON format
+	DetailsJSON       []any `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
 	// whether approval is required for edits to the procedure
 	ApprovalRequired      *bool `json:"approvalRequired,omitempty"`
 	ClearApprovalRequired *bool `json:"clearApprovalRequired,omitempty"`
@@ -46630,12 +46730,24 @@ type UpdateRiskInput struct {
 	// mitigation for the risk
 	Mitigation      *string `json:"mitigation,omitempty"`
 	ClearMitigation *bool   `json:"clearMitigation,omitempty"`
+	// structured details of the mitigation in JSON format
+	MitigationJSON       []any `json:"mitigationJSON,omitempty"`
+	AppendMitigationJSON []any `json:"appendMitigationJSON,omitempty"`
+	ClearMitigationJSON  *bool `json:"clearMitigationJSON,omitempty"`
 	// details of the risk
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// structured details of the risk in JSON format
+	DetailsJSON       []any `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
 	// business costs associated with the risk
-	BusinessCosts           *string                `json:"businessCosts,omitempty"`
-	ClearBusinessCosts      *bool                  `json:"clearBusinessCosts,omitempty"`
+	BusinessCosts      *string `json:"businessCosts,omitempty"`
+	ClearBusinessCosts *bool   `json:"clearBusinessCosts,omitempty"`
+	// structured details of the business costs in JSON format
+	BusinessCostsJSON       []any                  `json:"businessCostsJSON,omitempty"`
+	AppendBusinessCostsJSON []any                  `json:"appendBusinessCostsJSON,omitempty"`
+	ClearBusinessCostsJSON  *bool                  `json:"clearBusinessCostsJSON,omitempty"`
 	AddBlockedGroupIDs      []string               `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs   []string               `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups      *bool                  `json:"clearBlockedGroups,omitempty"`
@@ -46849,6 +46961,10 @@ type UpdateSubcontrolInput struct {
 	// description of what the control is supposed to accomplish
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON       []any `json:"descriptionJSON,omitempty"`
+	AppendDescriptionJSON []any `json:"appendDescriptionJSON,omitempty"`
+	ClearDescriptionJSON  *bool `json:"clearDescriptionJSON,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases       []string `json:"aliases,omitempty"`
 	AppendAliases []string `json:"appendAliases,omitempty"`
@@ -47071,6 +47187,10 @@ type UpdateTaskInput struct {
 	// the details of the task
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
+	// structured details of the task in JSON format
+	DetailsJSON       []any `json:"detailsJSON,omitempty"`
+	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
+	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.

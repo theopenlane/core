@@ -57,6 +57,8 @@ type InternalPolicy struct {
 	PolicyType string `json:"policy_type,omitempty"`
 	// details of the policy
 	Details string `json:"details,omitempty"`
+	// structured details of the policy in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// whether approval is required for edits to the policy
 	ApprovalRequired bool `json:"approval_required,omitempty"`
 	// the date the policy should be reviewed, calculated based on the review_frequency if not directly set
@@ -344,7 +346,7 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicy.FieldTags, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions:
+		case internalpolicy.FieldTags, internalpolicy.FieldDetailsJSON, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
 		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
@@ -480,6 +482,14 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case internalpolicy.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case internalpolicy.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -783,6 +793,9 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
+	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))

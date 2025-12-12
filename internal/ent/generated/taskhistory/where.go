@@ -1127,6 +1127,16 @@ func DetailsContainsFold(v string) predicate.TaskHistory {
 	return predicate.TaskHistory(sql.FieldContainsFold(FieldDetails, v))
 }
 
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.TaskHistory {
+	return predicate.TaskHistory(sql.FieldNotNull(FieldDetailsJSON))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v enums.TaskStatus) predicate.TaskHistory {
 	vc := v

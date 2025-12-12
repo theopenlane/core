@@ -50,6 +50,8 @@ type ActionPlanHistory struct {
 	ActionPlanType string `json:"action_plan_type,omitempty"`
 	// details of the action_plan
 	Details string `json:"details,omitempty"`
+	// structured details of the action_plan in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// whether approval is required for edits to the action_plan
 	ApprovalRequired bool `json:"approval_required,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
@@ -120,7 +122,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplanhistory.FieldTags, actionplanhistory.FieldTagSuggestions, actionplanhistory.FieldDismissedTagSuggestions, actionplanhistory.FieldControlSuggestions, actionplanhistory.FieldDismissedControlSuggestions, actionplanhistory.FieldImprovementSuggestions, actionplanhistory.FieldDismissedImprovementSuggestions, actionplanhistory.FieldMetadata, actionplanhistory.FieldRawPayload:
+		case actionplanhistory.FieldTags, actionplanhistory.FieldDetailsJSON, actionplanhistory.FieldTagSuggestions, actionplanhistory.FieldDismissedTagSuggestions, actionplanhistory.FieldControlSuggestions, actionplanhistory.FieldDismissedControlSuggestions, actionplanhistory.FieldImprovementSuggestions, actionplanhistory.FieldDismissedImprovementSuggestions, actionplanhistory.FieldMetadata, actionplanhistory.FieldRawPayload:
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -242,6 +244,14 @@ func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case actionplanhistory.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case actionplanhistory.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -530,6 +540,9 @@ func (_m *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
+	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))

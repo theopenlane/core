@@ -242,6 +242,12 @@ func (_c *ControlObjectiveHistoryCreate) SetNillableDesiredOutcome(v *string) *C
 	return _c
 }
 
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_c *ControlObjectiveHistoryCreate) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveHistoryCreate {
+	_c.mutation.SetDesiredOutcomeJSON(v)
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *ControlObjectiveHistoryCreate) SetStatus(v enums.ObjectiveStatus) *ControlObjectiveHistoryCreate {
 	_c.mutation.SetStatus(v)
@@ -550,6 +556,10 @@ func (_c *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistory,
 	if value, ok := _c.mutation.DesiredOutcome(); ok {
 		_spec.SetField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString, value)
 		_node.DesiredOutcome = value
+	}
+	if value, ok := _c.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+		_node.DesiredOutcomeJSON = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeEnum, value)

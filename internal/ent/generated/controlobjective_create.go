@@ -218,6 +218,12 @@ func (_c *ControlObjectiveCreate) SetNillableDesiredOutcome(v *string) *ControlO
 	return _c
 }
 
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_c *ControlObjectiveCreate) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveCreate {
+	_c.mutation.SetDesiredOutcomeJSON(v)
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *ControlObjectiveCreate) SetStatus(v enums.ObjectiveStatus) *ControlObjectiveCreate {
 	_c.mutation.SetStatus(v)
@@ -697,6 +703,10 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 	if value, ok := _c.mutation.DesiredOutcome(); ok {
 		_spec.SetField(controlobjective.FieldDesiredOutcome, field.TypeString, value)
 		_node.DesiredOutcome = value
+	}
+	if value, ok := _c.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjective.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+		_node.DesiredOutcomeJSON = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)

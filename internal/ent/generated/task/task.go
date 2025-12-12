@@ -44,6 +44,8 @@ const (
 	FieldTitle = "title"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldCategory holds the string denoting the category field in the database.
@@ -227,6 +229,7 @@ var Columns = []string{
 	FieldTaskKindID,
 	FieldTitle,
 	FieldDetails,
+	FieldDetailsJSON,
 	FieldStatus,
 	FieldCategory,
 	FieldDue,

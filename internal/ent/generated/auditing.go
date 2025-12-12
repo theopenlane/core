@@ -284,6 +284,9 @@ func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(_m.Details, new.Details) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDetails, _m.Details, new.Details))
 	}
+	if !reflect.DeepEqual(_m.DetailsJSON, new.DetailsJSON) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDetailsJSON, _m.DetailsJSON, new.DetailsJSON))
+	}
 	if !reflect.DeepEqual(_m.ApprovalRequired, new.ApprovalRequired) {
 		changes = append(changes, NewChange(actionplanhistory.FieldApprovalRequired, _m.ApprovalRequired, new.ApprovalRequired))
 	}
@@ -731,6 +734,9 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(controlhistory.FieldDescription, _m.Description, new.Description))
 	}
+	if !reflect.DeepEqual(_m.DescriptionJSON, new.DescriptionJSON) {
+		changes = append(changes, NewChange(controlhistory.FieldDescriptionJSON, _m.DescriptionJSON, new.DescriptionJSON))
+	}
 	if !reflect.DeepEqual(_m.Aliases, new.Aliases) {
 		changes = append(changes, NewChange(controlhistory.FieldAliases, _m.Aliases, new.Aliases))
 	}
@@ -893,6 +899,9 @@ func (_m *ControlImplementationHistory) changes(new *ControlImplementationHistor
 	if !reflect.DeepEqual(_m.Details, new.Details) {
 		changes = append(changes, NewChange(controlimplementationhistory.FieldDetails, _m.Details, new.Details))
 	}
+	if !reflect.DeepEqual(_m.DetailsJSON, new.DetailsJSON) {
+		changes = append(changes, NewChange(controlimplementationhistory.FieldDetailsJSON, _m.DetailsJSON, new.DetailsJSON))
+	}
 	return changes
 }
 
@@ -964,6 +973,9 @@ func (_m *ControlObjectiveHistory) changes(new *ControlObjectiveHistory) []Chang
 	}
 	if !reflect.DeepEqual(_m.DesiredOutcome, new.DesiredOutcome) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldDesiredOutcome, _m.DesiredOutcome, new.DesiredOutcome))
+	}
+	if !reflect.DeepEqual(_m.DesiredOutcomeJSON, new.DesiredOutcomeJSON) {
+		changes = append(changes, NewChange(controlobjectivehistory.FieldDesiredOutcomeJSON, _m.DesiredOutcomeJSON, new.DesiredOutcomeJSON))
 	}
 	if !reflect.DeepEqual(_m.Status, new.Status) {
 		changes = append(changes, NewChange(controlobjectivehistory.FieldStatus, _m.Status, new.Status))
@@ -2522,6 +2534,9 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	if !reflect.DeepEqual(_m.Details, new.Details) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldDetails, _m.Details, new.Details))
 	}
+	if !reflect.DeepEqual(_m.DetailsJSON, new.DetailsJSON) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldDetailsJSON, _m.DetailsJSON, new.DetailsJSON))
+	}
 	if !reflect.DeepEqual(_m.ApprovalRequired, new.ApprovalRequired) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldApprovalRequired, _m.ApprovalRequired, new.ApprovalRequired))
 	}
@@ -2905,6 +2920,9 @@ func (_m *NoteHistory) changes(new *NoteHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Text, new.Text) {
 		changes = append(changes, NewChange(notehistory.FieldText, _m.Text, new.Text))
+	}
+	if !reflect.DeepEqual(_m.TextJSON, new.TextJSON) {
+		changes = append(changes, NewChange(notehistory.FieldTextJSON, _m.TextJSON, new.TextJSON))
 	}
 	if !reflect.DeepEqual(_m.NoteRef, new.NoteRef) {
 		changes = append(changes, NewChange(notehistory.FieldNoteRef, _m.NoteRef, new.NoteRef))
@@ -3301,6 +3319,9 @@ func (_m *ProcedureHistory) changes(new *ProcedureHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Details, new.Details) {
 		changes = append(changes, NewChange(procedurehistory.FieldDetails, _m.Details, new.Details))
+	}
+	if !reflect.DeepEqual(_m.DetailsJSON, new.DetailsJSON) {
+		changes = append(changes, NewChange(procedurehistory.FieldDetailsJSON, _m.DetailsJSON, new.DetailsJSON))
 	}
 	if !reflect.DeepEqual(_m.ApprovalRequired, new.ApprovalRequired) {
 		changes = append(changes, NewChange(procedurehistory.FieldApprovalRequired, _m.ApprovalRequired, new.ApprovalRequired))
@@ -3833,11 +3854,20 @@ func (_m *RiskHistory) changes(new *RiskHistory) []Change {
 	if !reflect.DeepEqual(_m.Mitigation, new.Mitigation) {
 		changes = append(changes, NewChange(riskhistory.FieldMitigation, _m.Mitigation, new.Mitigation))
 	}
+	if !reflect.DeepEqual(_m.MitigationJSON, new.MitigationJSON) {
+		changes = append(changes, NewChange(riskhistory.FieldMitigationJSON, _m.MitigationJSON, new.MitigationJSON))
+	}
 	if !reflect.DeepEqual(_m.Details, new.Details) {
 		changes = append(changes, NewChange(riskhistory.FieldDetails, _m.Details, new.Details))
 	}
+	if !reflect.DeepEqual(_m.DetailsJSON, new.DetailsJSON) {
+		changes = append(changes, NewChange(riskhistory.FieldDetailsJSON, _m.DetailsJSON, new.DetailsJSON))
+	}
 	if !reflect.DeepEqual(_m.BusinessCosts, new.BusinessCosts) {
 		changes = append(changes, NewChange(riskhistory.FieldBusinessCosts, _m.BusinessCosts, new.BusinessCosts))
+	}
+	if !reflect.DeepEqual(_m.BusinessCostsJSON, new.BusinessCostsJSON) {
+		changes = append(changes, NewChange(riskhistory.FieldBusinessCostsJSON, _m.BusinessCostsJSON, new.BusinessCostsJSON))
 	}
 	if !reflect.DeepEqual(_m.StakeholderID, new.StakeholderID) {
 		changes = append(changes, NewChange(riskhistory.FieldStakeholderID, _m.StakeholderID, new.StakeholderID))
@@ -4136,6 +4166,9 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(_m.Description, new.Description) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldDescription, _m.Description, new.Description))
 	}
+	if !reflect.DeepEqual(_m.DescriptionJSON, new.DescriptionJSON) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldDescriptionJSON, _m.DescriptionJSON, new.DescriptionJSON))
+	}
 	if !reflect.DeepEqual(_m.Aliases, new.Aliases) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldAliases, _m.Aliases, new.Aliases))
 	}
@@ -4360,6 +4393,9 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Details, new.Details) {
 		changes = append(changes, NewChange(taskhistory.FieldDetails, _m.Details, new.Details))
+	}
+	if !reflect.DeepEqual(_m.DetailsJSON, new.DetailsJSON) {
+		changes = append(changes, NewChange(taskhistory.FieldDetailsJSON, _m.DetailsJSON, new.DetailsJSON))
 	}
 	if !reflect.DeepEqual(_m.Status, new.Status) {
 		changes = append(changes, NewChange(taskhistory.FieldStatus, _m.Status, new.Status))

@@ -92,6 +92,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDetails(details)
 	}
 
+	if detailsJSON, exists := m.DetailsJSON(); exists {
+		create = create.SetDetailsJSON(detailsJSON)
+	}
+
 	if approvalRequired, exists := m.ApprovalRequired(); exists {
 		create = create.SetApprovalRequired(approvalRequired)
 	}
@@ -317,6 +321,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDetails(details)
 		} else {
 			create = create.SetDetails(actionplan.Details)
+		}
+
+		if detailsJSON, exists := m.DetailsJSON(); exists {
+			create = create.SetDetailsJSON(detailsJSON)
+		} else {
+			create = create.SetDetailsJSON(actionplan.DetailsJSON)
 		}
 
 		if approvalRequired, exists := m.ApprovalRequired(); exists {
@@ -552,6 +562,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetStatus(actionplan.Status).
 			SetActionPlanType(actionplan.ActionPlanType).
 			SetDetails(actionplan.Details).
+			SetDetailsJSON(actionplan.DetailsJSON).
 			SetApprovalRequired(actionplan.ApprovalRequired).
 			SetReviewDue(actionplan.ReviewDue).
 			SetReviewFrequency(actionplan.ReviewFrequency).
@@ -1705,6 +1716,10 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDescription(description)
 	}
 
+	if descriptionJSON, exists := m.DescriptionJSON(); exists {
+		create = create.SetDescriptionJSON(descriptionJSON)
+	}
+
 	if aliases, exists := m.Aliases(); exists {
 		create = create.SetAliases(aliases)
 	}
@@ -1910,6 +1925,12 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDescription(description)
 		} else {
 			create = create.SetDescription(control.Description)
+		}
+
+		if descriptionJSON, exists := m.DescriptionJSON(); exists {
+			create = create.SetDescriptionJSON(descriptionJSON)
+		} else {
+			create = create.SetDescriptionJSON(control.DescriptionJSON)
 		}
 
 		if aliases, exists := m.Aliases(); exists {
@@ -2131,6 +2152,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTags(control.Tags).
 			SetTitle(control.Title).
 			SetDescription(control.Description).
+			SetDescriptionJSON(control.DescriptionJSON).
 			SetAliases(control.Aliases).
 			SetReferenceID(control.ReferenceID).
 			SetAuditorReferenceID(control.AuditorReferenceID).
@@ -2247,6 +2269,10 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
+	}
+
+	if detailsJSON, exists := m.DetailsJSON(); exists {
+		create = create.SetDetailsJSON(detailsJSON)
 	}
 
 	_, err := create.Save(ctx)
@@ -2376,6 +2402,12 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			create = create.SetDetails(controlimplementation.Details)
 		}
 
+		if detailsJSON, exists := m.DetailsJSON(); exists {
+			create = create.SetDetailsJSON(detailsJSON)
+		} else {
+			create = create.SetDetailsJSON(controlimplementation.DetailsJSON)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -2427,6 +2459,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			SetVerified(controlimplementation.Verified).
 			SetVerificationDate(controlimplementation.VerificationDate).
 			SetDetails(controlimplementation.Details).
+			SetDetailsJSON(controlimplementation.DetailsJSON).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -2510,6 +2543,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if desiredOutcome, exists := m.DesiredOutcome(); exists {
 		create = create.SetDesiredOutcome(desiredOutcome)
+	}
+
+	if desiredOutcomeJSON, exists := m.DesiredOutcomeJSON(); exists {
+		create = create.SetDesiredOutcomeJSON(desiredOutcomeJSON)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -2653,6 +2690,12 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDesiredOutcome(controlobjective.DesiredOutcome)
 		}
 
+		if desiredOutcomeJSON, exists := m.DesiredOutcomeJSON(); exists {
+			create = create.SetDesiredOutcomeJSON(desiredOutcomeJSON)
+		} else {
+			create = create.SetDesiredOutcomeJSON(controlobjective.DesiredOutcomeJSON)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -2733,6 +2776,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetNillableSystemInternalID(controlobjective.SystemInternalID).
 			SetName(controlobjective.Name).
 			SetDesiredOutcome(controlobjective.DesiredOutcome).
+			SetDesiredOutcomeJSON(controlobjective.DesiredOutcomeJSON).
 			SetStatus(controlobjective.Status).
 			SetSource(controlobjective.Source).
 			SetControlObjectiveType(controlobjective.ControlObjectiveType).
@@ -8055,6 +8099,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetDetails(details)
 	}
 
+	if detailsJSON, exists := m.DetailsJSON(); exists {
+		create = create.SetDetailsJSON(detailsJSON)
+	}
+
 	if approvalRequired, exists := m.ApprovalRequired(); exists {
 		create = create.SetApprovalRequired(approvalRequired)
 	}
@@ -8252,6 +8300,12 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetDetails(internalpolicy.Details)
 		}
 
+		if detailsJSON, exists := m.DetailsJSON(); exists {
+			create = create.SetDetailsJSON(detailsJSON)
+		} else {
+			create = create.SetDetailsJSON(internalpolicy.DetailsJSON)
+		}
+
 		if approvalRequired, exists := m.ApprovalRequired(); exists {
 			create = create.SetApprovalRequired(approvalRequired)
 		} else {
@@ -8400,6 +8454,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetStatus(internalpolicy.Status).
 			SetPolicyType(internalpolicy.PolicyType).
 			SetDetails(internalpolicy.Details).
+			SetDetailsJSON(internalpolicy.DetailsJSON).
 			SetApprovalRequired(internalpolicy.ApprovalRequired).
 			SetReviewDue(internalpolicy.ReviewDue).
 			SetReviewFrequency(internalpolicy.ReviewFrequency).
@@ -9479,6 +9534,10 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetText(text)
 	}
 
+	if textJSON, exists := m.TextJSON(); exists {
+		create = create.SetTextJSON(textJSON)
+	}
+
 	if noteRef, exists := m.NoteRef(); exists {
 		create = create.SetNoteRef(noteRef)
 	}
@@ -9576,6 +9635,12 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetText(note.Text)
 		}
 
+		if textJSON, exists := m.TextJSON(); exists {
+			create = create.SetTextJSON(textJSON)
+		} else {
+			create = create.SetTextJSON(note.TextJSON)
+		}
+
 		if noteRef, exists := m.NoteRef(); exists {
 			create = create.SetNoteRef(noteRef)
 		} else {
@@ -9638,6 +9703,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(note.DisplayID).
 			SetOwnerID(note.OwnerID).
 			SetText(note.Text).
+			SetTextJSON(note.TextJSON).
 			SetNoteRef(note.NoteRef).
 			SetDiscussionID(note.DiscussionID).
 			SetIsEdited(note.IsEdited).
@@ -10856,6 +10922,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDetails(details)
 	}
 
+	if detailsJSON, exists := m.DetailsJSON(); exists {
+		create = create.SetDetailsJSON(detailsJSON)
+	}
+
 	if approvalRequired, exists := m.ApprovalRequired(); exists {
 		create = create.SetApprovalRequired(approvalRequired)
 	}
@@ -11047,6 +11117,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetails(procedure.Details)
 		}
 
+		if detailsJSON, exists := m.DetailsJSON(); exists {
+			create = create.SetDetailsJSON(detailsJSON)
+		} else {
+			create = create.SetDetailsJSON(procedure.DetailsJSON)
+		}
+
 		if approvalRequired, exists := m.ApprovalRequired(); exists {
 			create = create.SetApprovalRequired(approvalRequired)
 		} else {
@@ -11210,6 +11286,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStatus(procedure.Status).
 			SetProcedureType(procedure.ProcedureType).
 			SetDetails(procedure.Details).
+			SetDetailsJSON(procedure.DetailsJSON).
 			SetApprovalRequired(procedure.ApprovalRequired).
 			SetReviewDue(procedure.ReviewDue).
 			SetReviewFrequency(procedure.ReviewFrequency).
@@ -12714,12 +12791,24 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetMitigation(mitigation)
 	}
 
+	if mitigationJSON, exists := m.MitigationJSON(); exists {
+		create = create.SetMitigationJSON(mitigationJSON)
+	}
+
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
 
+	if detailsJSON, exists := m.DetailsJSON(); exists {
+		create = create.SetDetailsJSON(detailsJSON)
+	}
+
 	if businessCosts, exists := m.BusinessCosts(); exists {
 		create = create.SetBusinessCosts(businessCosts)
+	}
+
+	if businessCostsJSON, exists := m.BusinessCostsJSON(); exists {
+		create = create.SetBusinessCostsJSON(businessCostsJSON)
 	}
 
 	if stakeholderID, exists := m.StakeholderID(); exists {
@@ -12887,16 +12976,34 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetMitigation(risk.Mitigation)
 		}
 
+		if mitigationJSON, exists := m.MitigationJSON(); exists {
+			create = create.SetMitigationJSON(mitigationJSON)
+		} else {
+			create = create.SetMitigationJSON(risk.MitigationJSON)
+		}
+
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
 			create = create.SetDetails(risk.Details)
 		}
 
+		if detailsJSON, exists := m.DetailsJSON(); exists {
+			create = create.SetDetailsJSON(detailsJSON)
+		} else {
+			create = create.SetDetailsJSON(risk.DetailsJSON)
+		}
+
 		if businessCosts, exists := m.BusinessCosts(); exists {
 			create = create.SetBusinessCosts(businessCosts)
 		} else {
 			create = create.SetBusinessCosts(risk.BusinessCosts)
+		}
+
+		if businessCostsJSON, exists := m.BusinessCostsJSON(); exists {
+			create = create.SetBusinessCostsJSON(businessCostsJSON)
+		} else {
+			create = create.SetBusinessCostsJSON(risk.BusinessCostsJSON)
 		}
 
 		if stakeholderID, exists := m.StakeholderID(); exists {
@@ -12967,8 +13074,11 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetLikelihood(risk.Likelihood).
 			SetScore(risk.Score).
 			SetMitigation(risk.Mitigation).
+			SetMitigationJSON(risk.MitigationJSON).
 			SetDetails(risk.Details).
+			SetDetailsJSON(risk.DetailsJSON).
 			SetBusinessCosts(risk.BusinessCosts).
+			SetBusinessCostsJSON(risk.BusinessCostsJSON).
 			SetStakeholderID(risk.StakeholderID).
 			SetDelegateID(risk.DelegateID).
 			Save(ctx)
@@ -13870,6 +13980,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetDescription(description)
 	}
 
+	if descriptionJSON, exists := m.DescriptionJSON(); exists {
+		create = create.SetDescriptionJSON(descriptionJSON)
+	}
+
 	if aliases, exists := m.Aliases(); exists {
 		create = create.SetAliases(aliases)
 	}
@@ -14075,6 +14189,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetDescription(description)
 		} else {
 			create = create.SetDescription(subcontrol.Description)
+		}
+
+		if descriptionJSON, exists := m.DescriptionJSON(); exists {
+			create = create.SetDescriptionJSON(descriptionJSON)
+		} else {
+			create = create.SetDescriptionJSON(subcontrol.DescriptionJSON)
 		}
 
 		if aliases, exists := m.Aliases(); exists {
@@ -14296,6 +14416,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetTags(subcontrol.Tags).
 			SetTitle(subcontrol.Title).
 			SetDescription(subcontrol.Description).
+			SetDescriptionJSON(subcontrol.DescriptionJSON).
 			SetAliases(subcontrol.Aliases).
 			SetReferenceID(subcontrol.ReferenceID).
 			SetAuditorReferenceID(subcontrol.AuditorReferenceID).
@@ -14658,6 +14779,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDetails(details)
 	}
 
+	if detailsJSON, exists := m.DetailsJSON(); exists {
+		create = create.SetDetailsJSON(detailsJSON)
+	}
+
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -14807,6 +14932,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetails(task.Details)
 		}
 
+		if detailsJSON, exists := m.DetailsJSON(); exists {
+			create = create.SetDetailsJSON(detailsJSON)
+		} else {
+			create = create.SetDetailsJSON(task.DetailsJSON)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -14915,6 +15046,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTaskKindID(task.TaskKindID).
 			SetTitle(task.Title).
 			SetDetails(task.Details).
+			SetDetailsJSON(task.DetailsJSON).
 			SetStatus(task.Status).
 			SetCategory(task.Category).
 			SetNillableDue(task.Due).

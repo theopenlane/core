@@ -92,10 +92,16 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
+			case "mitigationJSON":
+				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Risk_detailsJSON(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "businessCostsJSON":
+				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
 			case "stakeholderID":
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
@@ -240,10 +246,16 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
+			case "mitigationJSON":
+				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Risk_detailsJSON(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "businessCostsJSON":
+				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
 			case "stakeholderID":
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
@@ -388,10 +400,16 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
+			case "mitigationJSON":
+				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Risk_detailsJSON(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "businessCostsJSON":
+				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
 			case "stakeholderID":
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":
@@ -536,10 +554,16 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_score(ctx, field)
 			case "mitigation":
 				return ec.fieldContext_Risk_mitigation(ctx, field)
+			case "mitigationJSON":
+				return ec.fieldContext_Risk_mitigationJSON(ctx, field)
 			case "details":
 				return ec.fieldContext_Risk_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Risk_detailsJSON(ctx, field)
 			case "businessCosts":
 				return ec.fieldContext_Risk_businessCosts(ctx, field)
+			case "businessCostsJSON":
+				return ec.fieldContext_Risk_businessCostsJSON(ctx, field)
 			case "stakeholderID":
 				return ec.fieldContext_Risk_stakeholderID(ctx, field)
 			case "delegateID":

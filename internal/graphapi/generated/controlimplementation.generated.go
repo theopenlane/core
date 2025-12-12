@@ -82,6 +82,8 @@ func (ec *executionContext) fieldContext_ControlImplementationBulkCreatePayload_
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ControlImplementation_detailsJSON(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlImplementation_owner(ctx, field)
 			case "blockedGroups":
@@ -186,6 +188,8 @@ func (ec *executionContext) fieldContext_ControlImplementationCreatePayload_cont
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ControlImplementation_detailsJSON(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlImplementation_owner(ctx, field)
 			case "blockedGroups":
@@ -290,6 +294,8 @@ func (ec *executionContext) fieldContext_ControlImplementationUpdatePayload_cont
 				return ec.fieldContext_ControlImplementation_verificationDate(ctx, field)
 			case "details":
 				return ec.fieldContext_ControlImplementation_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ControlImplementation_detailsJSON(ctx, field)
 			case "owner":
 				return ec.fieldContext_ControlImplementation_owner(ctx, field)
 			case "blockedGroups":

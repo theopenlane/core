@@ -148,6 +148,7 @@ type ComplexityRoot struct {
 		DelegateID                      func(childComplexity int) int
 		Description                     func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -235,6 +236,7 @@ type ComplexityRoot struct {
 		DelegateID                      func(childComplexity int) int
 		Description                     func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -659,6 +661,7 @@ type ComplexityRoot struct {
 		Delegate                   func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -778,6 +781,7 @@ type ComplexityRoot struct {
 		CreatedBy                  func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
@@ -823,6 +827,7 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
+		DetailsJSON        func(childComplexity int) int
 		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
@@ -873,6 +878,7 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
+		DetailsJSON        func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
@@ -913,6 +919,7 @@ type ComplexityRoot struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
+		DesiredOutcomeJSON   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -973,6 +980,7 @@ type ComplexityRoot struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
+		DesiredOutcomeJSON   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -2909,6 +2917,7 @@ type ComplexityRoot struct {
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
@@ -2988,6 +2997,7 @@ type ComplexityRoot struct {
 		CreatedBy                       func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -4027,6 +4037,7 @@ type ComplexityRoot struct {
 		Subcontrol     func(childComplexity int) int
 		Task           func(childComplexity int) int
 		Text           func(childComplexity int) int
+		TextJSON       func(childComplexity int) int
 		TrustCenter    func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 		UpdatedBy      func(childComplexity int) int
@@ -4060,6 +4071,7 @@ type ComplexityRoot struct {
 		OwnerID      func(childComplexity int) int
 		Ref          func(childComplexity int) int
 		Text         func(childComplexity int) int
+		TextJSON     func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -4594,6 +4606,7 @@ type ComplexityRoot struct {
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
@@ -4672,6 +4685,7 @@ type ComplexityRoot struct {
 		CreatedBy                       func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -5425,50 +5439,53 @@ type ComplexityRoot struct {
 	}
 
 	Risk struct {
-		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		BusinessCosts    func(childComplexity int) int
-		Category         func(childComplexity int) int
-		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Delegate         func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		Discussions      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
-		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		Likelihood       func(childComplexity int) int
-		Mitigation       func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskCategory     func(childComplexity int) int
-		RiskCategoryID   func(childComplexity int) int
-		RiskCategoryName func(childComplexity int) int
-		RiskKind         func(childComplexity int) int
-		RiskKindID       func(childComplexity int) int
-		RiskKindName     func(childComplexity int) int
-		RiskType         func(childComplexity int) int
-		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Score            func(childComplexity int) int
-		Stakeholder      func(childComplexity int) int
-		StakeholderID    func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ActionPlans       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BusinessCosts     func(childComplexity int) int
+		BusinessCostsJSON func(childComplexity int) int
+		Category          func(childComplexity int) int
+		Comments          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Delegate          func(childComplexity int) int
+		DelegateID        func(childComplexity int) int
+		Details           func(childComplexity int) int
+		DetailsJSON       func(childComplexity int) int
+		Discussions       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
+		DisplayID         func(childComplexity int) int
+		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID                func(childComplexity int) int
+		Impact            func(childComplexity int) int
+		InternalPolicies  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Likelihood        func(childComplexity int) int
+		Mitigation        func(childComplexity int) int
+		MitigationJSON    func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskCategory      func(childComplexity int) int
+		RiskCategoryID    func(childComplexity int) int
+		RiskCategoryName  func(childComplexity int) int
+		RiskKind          func(childComplexity int) int
+		RiskKindID        func(childComplexity int) int
+		RiskKindName      func(childComplexity int) int
+		RiskType          func(childComplexity int) int
+		Scans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Score             func(childComplexity int) int
+		Stakeholder       func(childComplexity int) int
+		StakeholderID     func(childComplexity int) int
+		Status            func(childComplexity int) int
+		Subcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags              func(childComplexity int) int
+		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
+		Viewers           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	RiskBulkCreatePayload struct {
@@ -5504,33 +5521,36 @@ type ComplexityRoot struct {
 	}
 
 	RiskHistory struct {
-		BusinessCosts    func(childComplexity int) int
-		Category         func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		Likelihood       func(childComplexity int) int
-		Mitigation       func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		RiskCategoryID   func(childComplexity int) int
-		RiskCategoryName func(childComplexity int) int
-		RiskKindID       func(childComplexity int) int
-		RiskKindName     func(childComplexity int) int
-		RiskType         func(childComplexity int) int
-		Score            func(childComplexity int) int
-		StakeholderID    func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		BusinessCosts     func(childComplexity int) int
+		BusinessCostsJSON func(childComplexity int) int
+		Category          func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DelegateID        func(childComplexity int) int
+		Details           func(childComplexity int) int
+		DetailsJSON       func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		Impact            func(childComplexity int) int
+		Likelihood        func(childComplexity int) int
+		Mitigation        func(childComplexity int) int
+		MitigationJSON    func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		RiskCategoryID    func(childComplexity int) int
+		RiskCategoryName  func(childComplexity int) int
+		RiskKindID        func(childComplexity int) int
+		RiskKindName      func(childComplexity int) int
+		RiskType          func(childComplexity int) int
+		Score             func(childComplexity int) int
+		StakeholderID     func(childComplexity int) int
+		Status            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	RiskHistoryConnection struct {
@@ -5931,6 +5951,7 @@ type ComplexityRoot struct {
 		Delegate                   func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -6010,6 +6031,7 @@ type ComplexityRoot struct {
 		CreatedBy                  func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
@@ -6290,6 +6312,7 @@ type ComplexityRoot struct {
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Details                func(childComplexity int) int
+		DetailsJSON            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Due                    func(childComplexity int) int
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -6359,6 +6382,7 @@ type ComplexityRoot struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		Details              func(childComplexity int) int
+		DetailsJSON          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Due                  func(childComplexity int) int
 		ExternalReferenceURL func(childComplexity int) int
@@ -8277,6 +8301,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Details(childComplexity), true
 
+	case "ActionPlan.detailsJSON":
+		if e.complexity.ActionPlan.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.DetailsJSON(childComplexity), true
+
 	case "ActionPlan.dismissedControlSuggestions":
 		if e.complexity.ActionPlan.DismissedControlSuggestions == nil {
 			break
@@ -8757,6 +8788,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Details(childComplexity), true
+
+	case "ActionPlanHistory.detailsJSON":
+		if e.complexity.ActionPlanHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.DetailsJSON(childComplexity), true
 
 	case "ActionPlanHistory.dismissedControlSuggestions":
 		if e.complexity.ActionPlanHistory.DismissedControlSuggestions == nil {
@@ -10813,6 +10851,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.Description(childComplexity), true
 
+	case "Control.descriptionJSON":
+		if e.complexity.Control.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.Control.DescriptionJSON(childComplexity), true
+
 	case "Control.discussions":
 		if e.complexity.Control.Discussions == nil {
 			break
@@ -11422,6 +11467,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.Description(childComplexity), true
 
+	case "ControlHistory.descriptionJSON":
+		if e.complexity.ControlHistory.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.DescriptionJSON(childComplexity), true
+
 	case "ControlHistory.displayID":
 		if e.complexity.ControlHistory.DisplayID == nil {
 			break
@@ -11684,6 +11736,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementation.Details(childComplexity), true
 
+	case "ControlImplementation.detailsJSON":
+		if e.complexity.ControlImplementation.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.DetailsJSON(childComplexity), true
+
 	case "ControlImplementation.editors":
 		if e.complexity.ControlImplementation.Editors == nil {
 			break
@@ -11907,6 +11966,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlImplementationHistory.Details(childComplexity), true
 
+	case "ControlImplementationHistory.detailsJSON":
+		if e.complexity.ControlImplementationHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.DetailsJSON(childComplexity), true
+
 	case "ControlImplementationHistory.historyTime":
 		if e.complexity.ControlImplementationHistory.HistoryTime == nil {
 			break
@@ -12112,6 +12178,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjective.DesiredOutcome(childComplexity), true
+
+	case "ControlObjective.desiredOutcomeJSON":
+		if e.complexity.ControlObjective.DesiredOutcomeJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.DesiredOutcomeJSON(childComplexity), true
 
 	case "ControlObjective.displayID":
 		if e.complexity.ControlObjective.DisplayID == nil {
@@ -12435,6 +12508,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjectiveHistory.DesiredOutcome(childComplexity), true
+
+	case "ControlObjectiveHistory.desiredOutcomeJSON":
+		if e.complexity.ControlObjectiveHistory.DesiredOutcomeJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.DesiredOutcomeJSON(childComplexity), true
 
 	case "ControlObjectiveHistory.displayID":
 		if e.complexity.ControlObjectiveHistory.DisplayID == nil {
@@ -22021,6 +22101,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Details(childComplexity), true
 
+	case "InternalPolicy.detailsJSON":
+		if e.complexity.InternalPolicy.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DetailsJSON(childComplexity), true
+
 	case "InternalPolicy.discussions":
 		if e.complexity.InternalPolicy.Discussions == nil {
 			break
@@ -22450,6 +22537,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.Details(childComplexity), true
+
+	case "InternalPolicyHistory.detailsJSON":
+		if e.complexity.InternalPolicyHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DetailsJSON(childComplexity), true
 
 	case "InternalPolicyHistory.dismissedControlSuggestions":
 		if e.complexity.InternalPolicyHistory.DismissedControlSuggestions == nil {
@@ -30248,6 +30342,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.Text(childComplexity), true
 
+	case "Note.textJSON":
+		if e.complexity.Note.TextJSON == nil {
+			break
+		}
+
+		return e.complexity.Note.TextJSON(childComplexity), true
+
 	case "Note.trustCenter":
 		if e.complexity.Note.TrustCenter == nil {
 			break
@@ -30394,6 +30495,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteHistory.Text(childComplexity), true
+
+	case "NoteHistory.textJSON":
+		if e.complexity.NoteHistory.TextJSON == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.TextJSON(childComplexity), true
 
 	case "NoteHistory.updatedAt":
 		if e.complexity.NoteHistory.UpdatedAt == nil {
@@ -33475,6 +33583,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Details(childComplexity), true
 
+	case "Procedure.detailsJSON":
+		if e.complexity.Procedure.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DetailsJSON(childComplexity), true
+
 	case "Procedure.discussions":
 		if e.complexity.Procedure.Discussions == nil {
 			break
@@ -33892,6 +34007,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.Details(childComplexity), true
+
+	case "ProcedureHistory.detailsJSON":
+		if e.complexity.ProcedureHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DetailsJSON(childComplexity), true
 
 	case "ProcedureHistory.dismissedControlSuggestions":
 		if e.complexity.ProcedureHistory.DismissedControlSuggestions == nil {
@@ -39805,6 +39927,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.BusinessCosts(childComplexity), true
 
+	case "Risk.businessCostsJSON":
+		if e.complexity.Risk.BusinessCostsJSON == nil {
+			break
+		}
+
+		return e.complexity.Risk.BusinessCostsJSON(childComplexity), true
+
 	case "Risk.category":
 		if e.complexity.Risk.Category == nil {
 			break
@@ -39870,6 +39999,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Details(childComplexity), true
+
+	case "Risk.detailsJSON":
+		if e.complexity.Risk.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.Risk.DetailsJSON(childComplexity), true
 
 	case "Risk.discussions":
 		if e.complexity.Risk.Discussions == nil {
@@ -39953,6 +40089,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Mitigation(childComplexity), true
+
+	case "Risk.mitigationJSON":
+		if e.complexity.Risk.MitigationJSON == nil {
+			break
+		}
+
+		return e.complexity.Risk.MitigationJSON(childComplexity), true
 
 	case "Risk.name":
 		if e.complexity.Risk.Name == nil {
@@ -40229,6 +40372,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskHistory.BusinessCosts(childComplexity), true
 
+	case "RiskHistory.businessCostsJSON":
+		if e.complexity.RiskHistory.BusinessCostsJSON == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.BusinessCostsJSON(childComplexity), true
+
 	case "RiskHistory.category":
 		if e.complexity.RiskHistory.Category == nil {
 			break
@@ -40263,6 +40413,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskHistory.Details(childComplexity), true
+
+	case "RiskHistory.detailsJSON":
+		if e.complexity.RiskHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.DetailsJSON(childComplexity), true
 
 	case "RiskHistory.displayID":
 		if e.complexity.RiskHistory.DisplayID == nil {
@@ -40305,6 +40462,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskHistory.Mitigation(childComplexity), true
+
+	case "RiskHistory.mitigationJSON":
+		if e.complexity.RiskHistory.MitigationJSON == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.MitigationJSON(childComplexity), true
 
 	case "RiskHistory.name":
 		if e.complexity.RiskHistory.Name == nil {
@@ -42294,6 +42458,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.Description(childComplexity), true
 
+	case "Subcontrol.descriptionJSON":
+		if e.complexity.Subcontrol.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.DescriptionJSON(childComplexity), true
+
 	case "Subcontrol.discussions":
 		if e.complexity.Subcontrol.Discussions == nil {
 			break
@@ -42739,6 +42910,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.Description(childComplexity), true
+
+	case "SubcontrolHistory.descriptionJSON":
+		if e.complexity.SubcontrolHistory.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.DescriptionJSON(childComplexity), true
 
 	case "SubcontrolHistory.displayID":
 		if e.complexity.SubcontrolHistory.DisplayID == nil {
@@ -43958,6 +44136,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Task.Details(childComplexity), true
 
+	case "Task.detailsJSON":
+		if e.complexity.Task.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.Task.DetailsJSON(childComplexity), true
+
 	case "Task.displayID":
 		if e.complexity.Task.DisplayID == nil {
 			break
@@ -44312,6 +44497,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.Details(childComplexity), true
+
+	case "TaskHistory.detailsJSON":
+		if e.complexity.TaskHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.DetailsJSON(childComplexity), true
 
 	case "TaskHistory.displayID":
 		if e.complexity.TaskHistory.DisplayID == nil {
@@ -55006,6 +55198,10 @@ type ActionPlan implements Node {
   """
   details: String
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -55499,6 +55695,10 @@ type ActionPlanHistory implements Node {
   details of the action_plan
   """
   details: String
+  """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
   """
   whether approval is required for edits to the action_plan
   """
@@ -59952,6 +60152,10 @@ type Control implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -60820,6 +61024,10 @@ type ControlHistory implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -61589,6 +61797,10 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
   owner: Organization
   blockedGroups(
     """
@@ -61866,6 +62078,10 @@ type ControlImplementationHistory implements Node {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
 }
 """
 A connection to a list of items.
@@ -62488,6 +62704,10 @@ type ControlObjective implements Node {
   """
   desiredOutcome: String
   """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
+  """
   status of the control objective
   """
   status: ControlObjectiveObjectiveStatus
@@ -62965,6 +63185,10 @@ type ControlObjectiveHistory implements Node {
   the desired outcome or target of the control objective
   """
   desiredOutcome: String
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
   """
   status of the control objective
   """
@@ -64486,6 +64710,10 @@ input CreateActionPlanInput {
   """
   details: String
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -64774,6 +65002,10 @@ input CreateControlImplementationInput {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -64799,6 +65031,10 @@ input CreateControlInput {
   description of what the control is supposed to accomplish
   """
   description: String @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
   """
   additional names (ref_codes) for the control
   """
@@ -64943,6 +65179,10 @@ input CreateControlObjectiveInput {
   the desired outcome or target of the control objective
   """
   desiredOutcome: String
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
   """
   status of the control objective
   """
@@ -66058,6 +66298,10 @@ input CreateInternalPolicyInput {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -66420,6 +66664,10 @@ input CreateNoteInput {
   the text of the note
   """
   text: String!
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
   """
   ref location of the note
   """
@@ -66804,6 +67052,10 @@ input CreateProcedureInput {
   details of the procedure
   """
   details: String
+  """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
   """
   whether approval is required for edits to the procedure
   """
@@ -67233,13 +67485,25 @@ input CreateRiskInput {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -67435,6 +67699,10 @@ input CreateSubcontrolInput {
   description of what the control is supposed to accomplish
   """
   description: String @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
   """
   additional names (ref_codes) for the control
   """
@@ -67657,6 +67925,10 @@ input CreateTaskInput {
   the details of the task
   """
   details: String
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
   """
   the status of the task
   """
@@ -88337,6 +88609,10 @@ type InternalPolicy implements Node {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -88945,6 +89221,10 @@ type InternalPolicyHistory implements Node {
   details of the policy
   """
   details: String
+  """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
   """
   whether approval is required for edits to the policy
   """
@@ -94631,6 +94911,10 @@ type Note implements Node {
   """
   text: String!
   """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  """
   ref location of the note
   """
   noteRef: String
@@ -94734,6 +95018,10 @@ type NoteHistory implements Node {
   the text of the note
   """
   text: String!
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
   """
   ref location of the note
   """
@@ -101752,6 +102040,10 @@ type Procedure implements Node {
   """
   details: String
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -102267,6 +102559,10 @@ type ProcedureHistory implements Node {
   details of the procedure
   """
   details: String
+  """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
   """
   whether approval is required for edits to the procedure
   """
@@ -113713,13 +114009,25 @@ type Risk implements Node {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   """
   the id of the group responsible for risk oversight
   """
@@ -114305,13 +114613,25 @@ type RiskHistory implements Node {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   """
   the id of the group responsible for risk oversight
   """
@@ -118179,6 +118499,10 @@ type Subcontrol implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -118767,6 +119091,10 @@ type SubcontrolHistory implements Node {
   description of what the control is supposed to accomplish
   """
   description: String @externalSource(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
   """
   additional names (ref_codes) for the control
   """
@@ -121618,6 +121946,10 @@ type Task implements Node {
   """
   details: String
   """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   the status of the task
   """
   status: TaskTaskStatus!
@@ -122134,6 +122466,10 @@ type TaskHistory implements Node {
   the details of the task
   """
   details: String
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
   """
   the status of the task
   """
@@ -128841,6 +129177,12 @@ input UpdateActionPlanInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -129221,6 +129563,12 @@ input UpdateControlImplementationInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -129261,6 +129609,12 @@ input UpdateControlInput {
   """
   description: String @externalReadOnly(source: FRAMEWORK)
   clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  appendDescriptionJSON: [Any!]
+  clearDescriptionJSON: Boolean
   """
   additional names (ref_codes) for the control
   """
@@ -129479,6 +129833,12 @@ input UpdateControlObjectiveInput {
   """
   desiredOutcome: String
   clearDesiredOutcome: Boolean
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
+  appendDesiredOutcomeJSON: [Any!]
+  clearDesiredOutcomeJSON: Boolean
   """
   status of the control objective
   """
@@ -130991,6 +131351,12 @@ input UpdateInternalPolicyInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -131457,6 +131823,12 @@ input UpdateNoteInput {
   the text of the note
   """
   text: String
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  appendTextJSON: [Any!]
+  clearTextJSON: Boolean
   """
   ref location of the note
   """
@@ -131987,6 +132359,12 @@ input UpdateProcedureInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   """
   whether approval is required for edits to the procedure
   """
@@ -132624,15 +133002,33 @@ input UpdateRiskInput {
   mitigation: String
   clearMitigation: Boolean
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  appendMitigationJSON: [Any!]
+  clearMitigationJSON: Boolean
+  """
   details of the risk
   """
   details: String
   clearDetails: Boolean
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   business costs associated with the risk
   """
   businessCosts: String
   clearBusinessCosts: Boolean
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
+  appendBusinessCostsJSON: [Any!]
+  clearBusinessCostsJSON: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -132904,6 +133300,12 @@ input UpdateSubcontrolInput {
   """
   description: String @externalReadOnly(source: FRAMEWORK)
   clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  appendDescriptionJSON: [Any!]
+  clearDescriptionJSON: Boolean
   """
   additional names (ref_codes) for the control
   """
@@ -133209,6 +133611,12 @@ input UpdateTaskInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   """
   the status of the task
   """
@@ -147704,7 +148112,8 @@ scalar WorkflowEventPayload
 """
 Channel notifications will be sent to including in-app, slack, etc
 """
-scalar Channel`, BuiltIn: false},
+scalar Channel
+scalar Any`, BuiltIn: false},
 	{Name: "../schema/scan.graphql", Input: `extend type Query {
     """
     Look up scan by ID

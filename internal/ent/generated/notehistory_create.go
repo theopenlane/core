@@ -165,6 +165,12 @@ func (_c *NoteHistoryCreate) SetText(v string) *NoteHistoryCreate {
 	return _c
 }
 
+// SetTextJSON sets the "text_json" field.
+func (_c *NoteHistoryCreate) SetTextJSON(v []interface{}) *NoteHistoryCreate {
+	_c.mutation.SetTextJSON(v)
+	return _c
+}
+
 // SetNoteRef sets the "note_ref" field.
 func (_c *NoteHistoryCreate) SetNoteRef(v string) *NoteHistoryCreate {
 	_c.mutation.SetNoteRef(v)
@@ -398,6 +404,10 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
 		_node.Text = value
+	}
+	if value, ok := _c.mutation.TextJSON(); ok {
+		_spec.SetField(notehistory.FieldTextJSON, field.TypeJSON, value)
+		_node.TextJSON = value
 	}
 	if value, ok := _c.mutation.NoteRef(); ok {
 		_spec.SetField(notehistory.FieldNoteRef, field.TypeString, value)

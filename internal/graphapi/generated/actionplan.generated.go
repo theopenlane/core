@@ -5894,6 +5894,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ActionPlan_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -6066,6 +6068,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ActionPlan_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -6238,6 +6242,8 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ActionPlan_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -6410,6 +6416,8 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_ActionPlan_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_ActionPlan_approvalRequired(ctx, field)
 			case "reviewDue":

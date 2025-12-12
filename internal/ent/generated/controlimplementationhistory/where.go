@@ -1146,6 +1146,16 @@ func DetailsContainsFold(v string) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.FieldContainsFold(FieldDetails, v))
 }
 
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.ControlImplementationHistory {
+	return predicate.ControlImplementationHistory(sql.FieldNotNull(FieldDetailsJSON))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.ControlImplementationHistory) predicate.ControlImplementationHistory {
 	return predicate.ControlImplementationHistory(sql.AndPredicates(predicates...))

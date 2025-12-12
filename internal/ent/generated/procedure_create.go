@@ -206,6 +206,12 @@ func (_c *ProcedureCreate) SetNillableDetails(v *string) *ProcedureCreate {
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *ProcedureCreate) SetDetailsJSON(v []interface{}) *ProcedureCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_c *ProcedureCreate) SetApprovalRequired(v bool) *ProcedureCreate {
 	_c.mutation.SetApprovalRequired(v)
@@ -861,6 +867,10 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(procedure.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(procedure.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)

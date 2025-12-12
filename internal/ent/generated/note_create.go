@@ -140,6 +140,12 @@ func (_c *NoteCreate) SetText(v string) *NoteCreate {
 	return _c
 }
 
+// SetTextJSON sets the "text_json" field.
+func (_c *NoteCreate) SetTextJSON(v []interface{}) *NoteCreate {
+	_c.mutation.SetTextJSON(v)
+	return _c
+}
+
 // SetNoteRef sets the "note_ref" field.
 func (_c *NoteCreate) SetNoteRef(v string) *NoteCreate {
 	_c.mutation.SetNoteRef(v)
@@ -526,6 +532,10 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 		_node.Text = value
+	}
+	if value, ok := _c.mutation.TextJSON(); ok {
+		_spec.SetField(note.FieldTextJSON, field.TypeJSON, value)
+		_node.TextJSON = value
 	}
 	if value, ok := _c.mutation.NoteRef(); ok {
 		_spec.SetField(note.FieldNoteRef, field.TypeString, value)

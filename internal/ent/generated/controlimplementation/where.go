@@ -1003,6 +1003,16 @@ func DetailsContainsFold(v string) predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldContainsFold(FieldDetails, v))
 }
 
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.ControlImplementation {
+	return predicate.ControlImplementation(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.ControlImplementation {
+	return predicate.ControlImplementation(sql.FieldNotNull(FieldDetailsJSON))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.ControlImplementation {
 	return predicate.ControlImplementation(func(s *sql.Selector) {

@@ -185,6 +185,7 @@ type CreateActionPlanInput struct {
 	Status                          *enums.DocumentStatus
 	ActionPlanType                  *string
 	Details                         *string
+	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
 	ReviewDue                       *time.Time
 	ReviewFrequency                 *enums.Frequency
@@ -242,6 +243,9 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
 	}
 	if v := i.ApprovalRequired; v != nil {
 		m.SetApprovalRequired(*v)
@@ -377,6 +381,9 @@ type UpdateActionPlanInput struct {
 	ActionPlanType                        *string
 	ClearDetails                          bool
 	Details                               *string
+	ClearDetailsJSON                      bool
+	DetailsJSON                           []interface{}
+	AppendDetailsJSON                     []interface{}
 	ClearApprovalRequired                 bool
 	ApprovalRequired                      *bool
 	ClearReviewDue                        bool
@@ -504,6 +511,15 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearDetailsJSON {
+		m.ClearDetailsJSON()
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
+	if i.AppendDetailsJSON != nil {
+		m.AppendDetailsJSON(i.DetailsJSON)
 	}
 	if i.ClearApprovalRequired {
 		m.ClearApprovalRequired()
@@ -1436,6 +1452,7 @@ type CreateControlInput struct {
 	Tags                       []string
 	Title                      *string
 	Description                *string
+	DescriptionJSON            []interface{}
 	Aliases                    []string
 	ReferenceID                *string
 	AuditorReferenceID         *string
@@ -1496,6 +1513,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.DescriptionJSON; v != nil {
+		m.SetDescriptionJSON(v)
 	}
 	if v := i.Aliases; v != nil {
 		m.SetAliases(v)
@@ -1656,6 +1676,9 @@ type UpdateControlInput struct {
 	Title                           *string
 	ClearDescription                bool
 	Description                     *string
+	ClearDescriptionJSON            bool
+	DescriptionJSON                 []interface{}
+	AppendDescriptionJSON           []interface{}
 	ClearAliases                    bool
 	Aliases                         []string
 	AppendAliases                   []string
@@ -1799,6 +1822,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearDescriptionJSON {
+		m.ClearDescriptionJSON()
+	}
+	if v := i.DescriptionJSON; v != nil {
+		m.SetDescriptionJSON(v)
+	}
+	if i.AppendDescriptionJSON != nil {
+		m.AppendDescriptionJSON(i.DescriptionJSON)
 	}
 	if i.ClearAliases {
 		m.ClearAliases()
@@ -2181,6 +2213,7 @@ type CreateControlImplementationInput struct {
 	Verified           *bool
 	VerificationDate   *time.Time
 	Details            *string
+	DetailsJSON        []interface{}
 	OwnerID            *string
 	BlockedGroupIDs    []string
 	EditorIDs          []string
@@ -2215,6 +2248,9 @@ func (i *CreateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2264,6 +2300,9 @@ type UpdateControlImplementationInput struct {
 	VerificationDate        *time.Time
 	ClearDetails            bool
 	Details                 *string
+	ClearDetailsJSON        bool
+	DetailsJSON             []interface{}
+	AppendDetailsJSON       []interface{}
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -2336,6 +2375,15 @@ func (i *UpdateControlImplementationInput) Mutate(m *ControlImplementationMutati
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearDetailsJSON {
+		m.ClearDetailsJSON()
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
+	if i.AppendDetailsJSON != nil {
+		m.AppendDetailsJSON(i.DetailsJSON)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -2413,6 +2461,7 @@ type CreateControlObjectiveInput struct {
 	SystemInternalID     *string
 	Name                 string
 	DesiredOutcome       *string
+	DesiredOutcomeJSON   []interface{}
 	Status               *enums.ObjectiveStatus
 	Source               *enums.ControlSource
 	ControlObjectiveType *string
@@ -2450,6 +2499,9 @@ func (i *CreateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	m.SetName(i.Name)
 	if v := i.DesiredOutcome; v != nil {
 		m.SetDesiredOutcome(*v)
+	}
+	if v := i.DesiredOutcomeJSON; v != nil {
+		m.SetDesiredOutcomeJSON(v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -2527,6 +2579,9 @@ type UpdateControlObjectiveInput struct {
 	Name                      *string
 	ClearDesiredOutcome       bool
 	DesiredOutcome            *string
+	ClearDesiredOutcomeJSON   bool
+	DesiredOutcomeJSON        []interface{}
+	AppendDesiredOutcomeJSON  []interface{}
 	ClearStatus               bool
 	Status                    *enums.ObjectiveStatus
 	ClearSource               bool
@@ -2612,6 +2667,15 @@ func (i *UpdateControlObjectiveInput) Mutate(m *ControlObjectiveMutation) {
 	}
 	if v := i.DesiredOutcome; v != nil {
 		m.SetDesiredOutcome(*v)
+	}
+	if i.ClearDesiredOutcomeJSON {
+		m.ClearDesiredOutcomeJSON()
+	}
+	if v := i.DesiredOutcomeJSON; v != nil {
+		m.SetDesiredOutcomeJSON(v)
+	}
+	if i.AppendDesiredOutcomeJSON != nil {
+		m.AppendDesiredOutcomeJSON(i.DesiredOutcomeJSON)
 	}
 	if i.ClearStatus {
 		m.ClearStatus()
@@ -7873,6 +7937,7 @@ type CreateInternalPolicyInput struct {
 	Status                          *enums.DocumentStatus
 	PolicyType                      *string
 	Details                         *string
+	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
 	ReviewDue                       *time.Time
 	ReviewFrequency                 *enums.Frequency
@@ -7928,6 +7993,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
 	}
 	if v := i.ApprovalRequired; v != nil {
 		m.SetApprovalRequired(*v)
@@ -8045,6 +8113,9 @@ type UpdateInternalPolicyInput struct {
 	PolicyType                            *string
 	ClearDetails                          bool
 	Details                               *string
+	ClearDetailsJSON                      bool
+	DetailsJSON                           []interface{}
+	AppendDetailsJSON                     []interface{}
 	ClearApprovalRequired                 bool
 	ApprovalRequired                      *bool
 	ClearReviewDue                        bool
@@ -8176,6 +8247,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearDetailsJSON {
+		m.ClearDetailsJSON()
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
+	if i.AppendDetailsJSON != nil {
+		m.AppendDetailsJSON(i.DetailsJSON)
 	}
 	if i.ClearApprovalRequired {
 		m.ClearApprovalRequired()
@@ -9704,6 +9784,7 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
 	Text             string
+	TextJSON         []interface{}
 	NoteRef          *string
 	DiscussionID     *string
 	IsEdited         *bool
@@ -9722,6 +9803,9 @@ type CreateNoteInput struct {
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
 func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	m.SetText(i.Text)
+	if v := i.TextJSON; v != nil {
+		m.SetTextJSON(v)
+	}
 	if v := i.NoteRef; v != nil {
 		m.SetNoteRef(*v)
 	}
@@ -9772,6 +9856,9 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
 	Text                *string
+	ClearTextJSON       bool
+	TextJSON            []interface{}
+	AppendTextJSON      []interface{}
 	ClearNoteRef        bool
 	NoteRef             *string
 	ClearDiscussionID   bool
@@ -9802,6 +9889,15 @@ type UpdateNoteInput struct {
 func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.Text; v != nil {
 		m.SetText(*v)
+	}
+	if i.ClearTextJSON {
+		m.ClearTextJSON()
+	}
+	if v := i.TextJSON; v != nil {
+		m.SetTextJSON(v)
+	}
+	if i.AppendTextJSON != nil {
+		m.AppendTextJSON(i.TextJSON)
 	}
 	if i.ClearNoteRef {
 		m.ClearNoteRef()
@@ -11967,6 +12063,7 @@ type CreateProcedureInput struct {
 	Status                          *enums.DocumentStatus
 	ProcedureType                   *string
 	Details                         *string
+	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
 	ReviewDue                       *time.Time
 	ReviewFrequency                 *enums.Frequency
@@ -12015,6 +12112,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
 	}
 	if v := i.ApprovalRequired; v != nil {
 		m.SetApprovalRequired(*v)
@@ -12125,6 +12225,9 @@ type UpdateProcedureInput struct {
 	ProcedureType                         *string
 	ClearDetails                          bool
 	Details                               *string
+	ClearDetailsJSON                      bool
+	DetailsJSON                           []interface{}
+	AppendDetailsJSON                     []interface{}
 	ClearApprovalRequired                 bool
 	ApprovalRequired                      *bool
 	ClearReviewDue                        bool
@@ -12239,6 +12342,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearDetailsJSON {
+		m.ClearDetailsJSON()
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
+	if i.AppendDetailsJSON != nil {
+		m.AppendDetailsJSON(i.DetailsJSON)
 	}
 	if i.ClearApprovalRequired {
 		m.ClearApprovalRequired()
@@ -14144,8 +14256,11 @@ type CreateRiskInput struct {
 	Likelihood        *enums.RiskLikelihood
 	Score             *int
 	Mitigation        *string
+	MitigationJSON    []interface{}
 	Details           *string
+	DetailsJSON       []interface{}
 	BusinessCosts     *string
+	BusinessCostsJSON []interface{}
 	OwnerID           *string
 	BlockedGroupIDs   []string
 	EditorIDs         []string
@@ -14201,11 +14316,20 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Mitigation; v != nil {
 		m.SetMitigation(*v)
 	}
+	if v := i.MitigationJSON; v != nil {
+		m.SetMitigationJSON(v)
+	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
 	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
 	if v := i.BusinessCosts; v != nil {
 		m.SetBusinessCosts(*v)
+	}
+	if v := i.BusinessCostsJSON; v != nil {
+		m.SetBusinessCostsJSON(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -14299,10 +14423,19 @@ type UpdateRiskInput struct {
 	Score                   *int
 	ClearMitigation         bool
 	Mitigation              *string
+	ClearMitigationJSON     bool
+	MitigationJSON          []interface{}
+	AppendMitigationJSON    []interface{}
 	ClearDetails            bool
 	Details                 *string
+	ClearDetailsJSON        bool
+	DetailsJSON             []interface{}
+	AppendDetailsJSON       []interface{}
 	ClearBusinessCosts      bool
 	BusinessCosts           *string
+	ClearBusinessCostsJSON  bool
+	BusinessCostsJSON       []interface{}
+	AppendBusinessCostsJSON []interface{}
 	ClearBlockedGroups      bool
 	AddBlockedGroupIDs      []string
 	RemoveBlockedGroupIDs   []string
@@ -14426,17 +14559,44 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.Mitigation; v != nil {
 		m.SetMitigation(*v)
 	}
+	if i.ClearMitigationJSON {
+		m.ClearMitigationJSON()
+	}
+	if v := i.MitigationJSON; v != nil {
+		m.SetMitigationJSON(v)
+	}
+	if i.AppendMitigationJSON != nil {
+		m.AppendMitigationJSON(i.MitigationJSON)
+	}
 	if i.ClearDetails {
 		m.ClearDetails()
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
 	}
+	if i.ClearDetailsJSON {
+		m.ClearDetailsJSON()
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
+	if i.AppendDetailsJSON != nil {
+		m.AppendDetailsJSON(i.DetailsJSON)
+	}
 	if i.ClearBusinessCosts {
 		m.ClearBusinessCosts()
 	}
 	if v := i.BusinessCosts; v != nil {
 		m.SetBusinessCosts(*v)
+	}
+	if i.ClearBusinessCostsJSON {
+		m.ClearBusinessCostsJSON()
+	}
+	if v := i.BusinessCostsJSON; v != nil {
+		m.SetBusinessCostsJSON(v)
+	}
+	if i.AppendBusinessCostsJSON != nil {
+		m.AppendBusinessCostsJSON(i.BusinessCostsJSON)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -15298,6 +15458,7 @@ type CreateSubcontrolInput struct {
 	Tags                       []string
 	Title                      *string
 	Description                *string
+	DescriptionJSON            []interface{}
 	Aliases                    []string
 	ReferenceID                *string
 	AuditorReferenceID         *string
@@ -15350,6 +15511,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if v := i.DescriptionJSON; v != nil {
+		m.SetDescriptionJSON(v)
 	}
 	if v := i.Aliases; v != nil {
 		m.SetAliases(v)
@@ -15484,6 +15648,9 @@ type UpdateSubcontrolInput struct {
 	Title                           *string
 	ClearDescription                bool
 	Description                     *string
+	ClearDescriptionJSON            bool
+	DescriptionJSON                 []interface{}
+	AppendDescriptionJSON           []interface{}
 	ClearAliases                    bool
 	Aliases                         []string
 	AppendAliases                   []string
@@ -15602,6 +15769,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
+	}
+	if i.ClearDescriptionJSON {
+		m.ClearDescriptionJSON()
+	}
+	if v := i.DescriptionJSON; v != nil {
+		m.SetDescriptionJSON(v)
+	}
+	if i.AppendDescriptionJSON != nil {
+		m.AppendDescriptionJSON(i.DescriptionJSON)
 	}
 	if i.ClearAliases {
 		m.ClearAliases()
@@ -16311,6 +16487,7 @@ type CreateTaskInput struct {
 	TaskKindName             *string
 	Title                    string
 	Details                  *string
+	DetailsJSON              []interface{}
 	Status                   *enums.TaskStatus
 	Category                 *string
 	Due                      *models.DateTime
@@ -16349,6 +16526,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	m.SetTitle(i.Title)
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
@@ -16443,6 +16623,9 @@ type UpdateTaskInput struct {
 	Title                          *string
 	ClearDetails                   bool
 	Details                        *string
+	ClearDetailsJSON               bool
+	DetailsJSON                    []interface{}
+	AppendDetailsJSON              []interface{}
 	Status                         *enums.TaskStatus
 	ClearCategory                  bool
 	Category                       *string
@@ -16531,6 +16714,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
+	}
+	if i.ClearDetailsJSON {
+		m.ClearDetailsJSON()
+	}
+	if v := i.DetailsJSON; v != nil {
+		m.SetDetailsJSON(v)
+	}
+	if i.AppendDetailsJSON != nil {
+		m.AppendDetailsJSON(i.DetailsJSON)
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)

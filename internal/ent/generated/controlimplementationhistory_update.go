@@ -263,6 +263,24 @@ func (_u *ControlImplementationHistoryUpdate) ClearDetails() *ControlImplementat
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ControlImplementationHistoryUpdate) SetDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ControlImplementationHistoryUpdate) AppendDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ControlImplementationHistoryUpdate) ClearDetailsJSON() *ControlImplementationHistoryUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // Mutation returns the ControlImplementationHistoryMutation object of the builder.
 func (_u *ControlImplementationHistoryUpdate) Mutation() *ControlImplementationHistoryMutation {
 	return _u.mutation
@@ -429,6 +447,17 @@ func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlimplementationhistory.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ControlImplementationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -684,6 +713,24 @@ func (_u *ControlImplementationHistoryUpdateOne) ClearDetails() *ControlImplemen
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ControlImplementationHistoryUpdateOne) SetDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ControlImplementationHistoryUpdateOne) AppendDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ControlImplementationHistoryUpdateOne) ClearDetailsJSON() *ControlImplementationHistoryUpdateOne {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // Mutation returns the ControlImplementationHistoryMutation object of the builder.
 func (_u *ControlImplementationHistoryUpdateOne) Mutation() *ControlImplementationHistoryMutation {
 	return _u.mutation
@@ -880,6 +927,17 @@ func (_u *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlimplementationhistory.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ControlImplementationHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
