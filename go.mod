@@ -101,7 +101,7 @@ require (
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.6.3
 	github.com/theopenlane/utils v0.6.1
-	github.com/tink-crypto/tink-go/v2 v2.5.0
+	github.com/tink-crypto/tink-go/v2 v2.6.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.1
 	github.com/vektah/gqlparser/v2 v2.5.31
