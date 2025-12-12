@@ -2092,6 +2092,7 @@ type ComplexityRoot struct {
 	}
 
 	File struct {
+		Base64Content         func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -2151,6 +2152,7 @@ type ComplexityRoot struct {
 	}
 
 	FileHistory struct {
+		Base64Content         func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -17604,6 +17606,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ExportUpdatePayload.Export(childComplexity), true
 
+	case "File.base64Content":
+		if e.complexity.File.Base64Content == nil {
+			break
+		}
+
+		return e.complexity.File.Base64Content(childComplexity), true
+
 	case "File.categoryType":
 		if e.complexity.File.CategoryType == nil {
 			break
@@ -17957,6 +17966,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.FileEdge.Node(childComplexity), true
+
+	case "FileHistory.base64Content":
+		if e.complexity.FileHistory.Base64Content == nil {
+			break
+		}
+
+		return e.complexity.FileHistory.Base64Content(childComplexity), true
 
 	case "FileHistory.categoryType":
 		if e.complexity.FileHistory.CategoryType == nil {
@@ -79081,6 +79097,10 @@ type File implements Node {
   """
   storageProvider: String
   lastAccessedAt: Time
+  """
+  this is currently only used for images when using the database provider only. non image files will not be converted to base64
+  """
+  base64Content: String
   organization: [Organization!]
   groups(
     """
@@ -79363,6 +79383,10 @@ type FileHistory implements Node {
   """
   storageProvider: String
   lastAccessedAt: Time
+  """
+  this is currently only used for images when using the database provider only. non image files will not be converted to base64
+  """
+  base64Content: String
 }
 """
 A connection to a list of items.
@@ -79853,6 +79877,24 @@ input FileHistoryWhereInput {
   lastAccessedAtLTE: Time
   lastAccessedAtIsNil: Boolean
   lastAccessedAtNotNil: Boolean
+  """
+  base64_content field predicates
+  """
+  base64Content: String
+  base64ContentNEQ: String
+  base64ContentIn: [String!]
+  base64ContentNotIn: [String!]
+  base64ContentGT: String
+  base64ContentGTE: String
+  base64ContentLT: String
+  base64ContentLTE: String
+  base64ContentContains: String
+  base64ContentHasPrefix: String
+  base64ContentHasSuffix: String
+  base64ContentIsNil: Boolean
+  base64ContentNotNil: Boolean
+  base64ContentEqualFold: String
+  base64ContentContainsFold: String
 }
 """
 Ordering options for File connections
@@ -80268,6 +80310,24 @@ input FileWhereInput {
   lastAccessedAtLTE: Time
   lastAccessedAtIsNil: Boolean
   lastAccessedAtNotNil: Boolean
+  """
+  base64_content field predicates
+  """
+  base64Content: String
+  base64ContentNEQ: String
+  base64ContentIn: [String!]
+  base64ContentNotIn: [String!]
+  base64ContentGT: String
+  base64ContentGTE: String
+  base64ContentLT: String
+  base64ContentLTE: String
+  base64ContentContains: String
+  base64ContentHasPrefix: String
+  base64ContentHasSuffix: String
+  base64ContentIsNil: Boolean
+  base64ContentNotNil: Boolean
+  base64ContentEqualFold: String
+  base64ContentContainsFold: String
   """
   organization edge predicates
   """

@@ -2441,6 +2441,7 @@ var (
 		{Name: "storage_region", Type: field.TypeString, Nullable: true},
 		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
 		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "base64_content", Type: field.TypeString, Nullable: true},
 		{Name: "export_files", Type: field.TypeString, Nullable: true},
 		{Name: "finding_files", Type: field.TypeString, Nullable: true},
 		{Name: "integration_files", Type: field.TypeString, Nullable: true},
@@ -2457,43 +2458,43 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "files_exports_files",
-				Columns:    []*schema.Column{FilesColumns[29]},
+				Columns:    []*schema.Column{FilesColumns[30]},
 				RefColumns: []*schema.Column{ExportsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_findings_files",
-				Columns:    []*schema.Column{FilesColumns[30]},
+				Columns:    []*schema.Column{FilesColumns[31]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_integrations_files",
-				Columns:    []*schema.Column{FilesColumns[31]},
+				Columns:    []*schema.Column{FilesColumns[32]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_notes_files",
-				Columns:    []*schema.Column{FilesColumns[32]},
+				Columns:    []*schema.Column{FilesColumns[33]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_remediations_files",
-				Columns:    []*schema.Column{FilesColumns[33]},
+				Columns:    []*schema.Column{FilesColumns[34]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_reviews_files",
-				Columns:    []*schema.Column{FilesColumns[34]},
+				Columns:    []*schema.Column{FilesColumns[35]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_vulnerabilities_files",
-				Columns:    []*schema.Column{FilesColumns[35]},
+				Columns:    []*schema.Column{FilesColumns[36]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2574,6 +2575,7 @@ var (
 		{Name: "storage_region", Type: field.TypeString, Nullable: true},
 		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
 		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "base64_content", Type: field.TypeString, Nullable: true},
 	}
 	// FileHistoryTable holds the schema information for the "file_history" table.
 	FileHistoryTable = &schema.Table{

@@ -15806,8 +15806,10 @@ type File struct {
 	// the region the file is stored in, if applicable
 	StorageRegion *string `json:"storageRegion,omitempty"`
 	// the storage provider the file is stored in, if applicable
-	StorageProvider     *string                      `json:"storageProvider,omitempty"`
-	LastAccessedAt      *time.Time                   `json:"lastAccessedAt,omitempty"`
+	StorageProvider *string    `json:"storageProvider,omitempty"`
+	LastAccessedAt  *time.Time `json:"lastAccessedAt,omitempty"`
+	// this is currently only used for images when using the database provider only. non image files will not be converted to base64
+	Base64Content       *string                      `json:"base64Content,omitempty"`
 	Organization        []*Organization              `json:"organization,omitempty"`
 	Groups              *GroupConnection             `json:"groups"`
 	Contact             []*Contact                   `json:"contact,omitempty"`
@@ -15900,6 +15902,8 @@ type FileHistory struct {
 	// the storage provider the file is stored in, if applicable
 	StorageProvider *string    `json:"storageProvider,omitempty"`
 	LastAccessedAt  *time.Time `json:"lastAccessedAt,omitempty"`
+	// this is currently only used for images when using the database provider only. non image files will not be converted to base64
+	Base64Content *string `json:"base64Content,omitempty"`
 }
 
 func (FileHistory) IsNode() {}
@@ -16303,6 +16307,22 @@ type FileHistoryWhereInput struct {
 	LastAccessedAtLte    *time.Time   `json:"lastAccessedAtLTE,omitempty"`
 	LastAccessedAtIsNil  *bool        `json:"lastAccessedAtIsNil,omitempty"`
 	LastAccessedAtNotNil *bool        `json:"lastAccessedAtNotNil,omitempty"`
+	// base64_content field predicates
+	Base64Content             *string  `json:"base64Content,omitempty"`
+	Base64ContentNeq          *string  `json:"base64ContentNEQ,omitempty"`
+	Base64ContentIn           []string `json:"base64ContentIn,omitempty"`
+	Base64ContentNotIn        []string `json:"base64ContentNotIn,omitempty"`
+	Base64ContentGt           *string  `json:"base64ContentGT,omitempty"`
+	Base64ContentGte          *string  `json:"base64ContentGTE,omitempty"`
+	Base64ContentLt           *string  `json:"base64ContentLT,omitempty"`
+	Base64ContentLte          *string  `json:"base64ContentLTE,omitempty"`
+	Base64ContentContains     *string  `json:"base64ContentContains,omitempty"`
+	Base64ContentHasPrefix    *string  `json:"base64ContentHasPrefix,omitempty"`
+	Base64ContentHasSuffix    *string  `json:"base64ContentHasSuffix,omitempty"`
+	Base64ContentIsNil        *bool    `json:"base64ContentIsNil,omitempty"`
+	Base64ContentNotNil       *bool    `json:"base64ContentNotNil,omitempty"`
+	Base64ContentEqualFold    *string  `json:"base64ContentEqualFold,omitempty"`
+	Base64ContentContainsFold *string  `json:"base64ContentContainsFold,omitempty"`
 }
 
 // Ordering options for File connections
@@ -16656,6 +16676,22 @@ type FileWhereInput struct {
 	LastAccessedAtLte    *time.Time   `json:"lastAccessedAtLTE,omitempty"`
 	LastAccessedAtIsNil  *bool        `json:"lastAccessedAtIsNil,omitempty"`
 	LastAccessedAtNotNil *bool        `json:"lastAccessedAtNotNil,omitempty"`
+	// base64_content field predicates
+	Base64Content             *string  `json:"base64Content,omitempty"`
+	Base64ContentNeq          *string  `json:"base64ContentNEQ,omitempty"`
+	Base64ContentIn           []string `json:"base64ContentIn,omitempty"`
+	Base64ContentNotIn        []string `json:"base64ContentNotIn,omitempty"`
+	Base64ContentGt           *string  `json:"base64ContentGT,omitempty"`
+	Base64ContentGte          *string  `json:"base64ContentGTE,omitempty"`
+	Base64ContentLt           *string  `json:"base64ContentLT,omitempty"`
+	Base64ContentLte          *string  `json:"base64ContentLTE,omitempty"`
+	Base64ContentContains     *string  `json:"base64ContentContains,omitempty"`
+	Base64ContentHasPrefix    *string  `json:"base64ContentHasPrefix,omitempty"`
+	Base64ContentHasSuffix    *string  `json:"base64ContentHasSuffix,omitempty"`
+	Base64ContentIsNil        *bool    `json:"base64ContentIsNil,omitempty"`
+	Base64ContentNotNil       *bool    `json:"base64ContentNotNil,omitempty"`
+	Base64ContentEqualFold    *string  `json:"base64ContentEqualFold,omitempty"`
+	Base64ContentContainsFold *string  `json:"base64ContentContainsFold,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`

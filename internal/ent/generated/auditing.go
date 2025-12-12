@@ -1853,6 +1853,9 @@ func (_m *FileHistory) changes(new *FileHistory) []Change {
 	if !reflect.DeepEqual(_m.LastAccessedAt, new.LastAccessedAt) {
 		changes = append(changes, NewChange(filehistory.FieldLastAccessedAt, _m.LastAccessedAt, new.LastAccessedAt))
 	}
+	if !reflect.DeepEqual(_m.Base64Content, new.Base64Content) {
+		changes = append(changes, NewChange(filehistory.FieldBase64Content, _m.Base64Content, new.Base64Content))
+	}
 	return changes
 }
 
