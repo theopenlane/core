@@ -15,7 +15,7 @@ import (
 // region    ************************** generated!.gotpl **************************
 
 type SubscriptionResolver interface {
-	TaskCreated(ctx context.Context) (<-chan *generated.Task, error)
+	NotificationCreated(ctx context.Context) (<-chan *generated.Notification, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -30,23 +30,23 @@ type SubscriptionResolver interface {
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Subscription_taskCreated(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
+func (ec *executionContext) _Subscription_notificationCreated(ctx context.Context, field graphql.CollectedField) (ret func(ctx context.Context) graphql.Marshaler) {
 	return graphql.ResolveFieldStream(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Subscription_taskCreated,
+		ec.fieldContext_Subscription_notificationCreated,
 		func(ctx context.Context) (any, error) {
-			return ec.resolvers.Subscription().TaskCreated(ctx)
+			return ec.resolvers.Subscription().NotificationCreated(ctx)
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_Subscription_taskCreated(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Subscription",
 		Field:      field,
@@ -55,25 +55,25 @@ func (ec *executionContext) fieldContext_Subscription_taskCreated(_ context.Cont
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_Task_id(ctx, field)
+				return ec.fieldContext_Notification_id(ctx, field)
 			case "createdAt":
-				return ec.fieldContext_Task_createdAt(ctx, field)
+				return ec.fieldContext_Notification_createdAt(ctx, field)
 			case "updatedAt":
-				return ec.fieldContext_Task_updatedAt(ctx, field)
+				return ec.fieldContext_Notification_updatedAt(ctx, field)
 			case "createdBy":
-				return ec.fieldContext_Task_createdBy(ctx, field)
+				return ec.fieldContext_Notification_createdBy(ctx, field)
 			case "updatedBy":
-				return ec.fieldContext_Task_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_Task_displayID(ctx, field)
+				return ec.fieldContext_Notification_updatedBy(ctx, field)
 			case "tags":
-				return ec.fieldContext_Task_tags(ctx, field)
+				return ec.fieldContext_Notification_tags(ctx, field)
 			case "ownerID":
-				return ec.fieldContext_Task_ownerID(ctx, field)
-			case "taskKindName":
-				return ec.fieldContext_Task_taskKindName(ctx, field)
-			case "taskKindID":
-				return ec.fieldContext_Task_taskKindID(ctx, field)
+				return ec.fieldContext_Notification_ownerID(ctx, field)
+			case "userID":
+				return ec.fieldContext_Notification_userID(ctx, field)
+			case "notificationType":
+				return ec.fieldContext_Notification_notificationType(ctx, field)
+			case "objectType":
+				return ec.fieldContext_Notification_objectType(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -137,7 +137,7 @@ func (ec *executionContext) fieldContext_Subscription_taskCreated(_ context.Cont
 			case "tasks":
 				return ec.fieldContext_Task_tasks(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Notification", field.Name)
 		},
 	}
 	return fc, nil
@@ -168,8 +168,8 @@ func (ec *executionContext) _Subscription(ctx context.Context, sel ast.Selection
 	}
 
 	switch fields[0].Name {
-	case "taskCreated":
-		return ec._Subscription_taskCreated(ctx, fields[0])
+	case "notificationCreated":
+		return ec._Subscription_notificationCreated(ctx, fields[0])
 	default:
 		panic("unknown field " + strconv.Quote(fields[0].Name))
 	}
