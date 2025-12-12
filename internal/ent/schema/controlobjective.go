@@ -54,6 +54,12 @@ func (ControlObjective) Fields() []ent.Field {
 		field.Text("desired_outcome").
 			Optional().
 			Comment("the desired outcome or target of the control objective"),
+		field.JSON("desired_outcome_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the control objective in JSON format"),
 		field.Enum("status").
 			GoType(enums.ObjectiveStatus("")).
 			Optional().

@@ -1458,6 +1458,16 @@ func MitigationContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldMitigation, v))
 }
 
+// MitigationJSONIsNil applies the IsNil predicate on the "mitigation_json" field.
+func MitigationJSONIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldMitigationJSON))
+}
+
+// MitigationJSONNotNil applies the NotNil predicate on the "mitigation_json" field.
+func MitigationJSONNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldMitigationJSON))
+}
+
 // DetailsEQ applies the EQ predicate on the "details" field.
 func DetailsEQ(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldDetails, v))
@@ -1533,6 +1543,16 @@ func DetailsContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldDetails, v))
 }
 
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldDetailsJSON))
+}
+
 // BusinessCostsEQ applies the EQ predicate on the "business_costs" field.
 func BusinessCostsEQ(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldBusinessCosts, v))
@@ -1606,6 +1626,16 @@ func BusinessCostsEqualFold(v string) predicate.Risk {
 // BusinessCostsContainsFold applies the ContainsFold predicate on the "business_costs" field.
 func BusinessCostsContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldBusinessCosts, v))
+}
+
+// BusinessCostsJSONIsNil applies the IsNil predicate on the "business_costs_json" field.
+func BusinessCostsJSONIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldBusinessCostsJSON))
+}
+
+// BusinessCostsJSONNotNil applies the NotNil predicate on the "business_costs_json" field.
+func BusinessCostsJSONNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldBusinessCostsJSON))
 }
 
 // StakeholderIDEQ applies the EQ predicate on the "stakeholder_id" field.

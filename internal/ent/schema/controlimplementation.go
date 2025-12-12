@@ -74,6 +74,12 @@ func (ControlImplementation) Fields() []ent.Field {
 		field.Text("details").
 			Optional().
 			Comment("details of the control implementation"),
+		field.JSON("details_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the control implementation in JSON format"),
 	}
 }
 

@@ -250,6 +250,24 @@ func (_u *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ProcedureUpdate) SetDetailsJSON(v []interface{}) *ProcedureUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ProcedureUpdate) AppendDetailsJSON(v []interface{}) *ProcedureUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ProcedureUpdate) ClearDetailsJSON() *ProcedureUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_u *ProcedureUpdate) SetApprovalRequired(v bool) *ProcedureUpdate {
 	_u.mutation.SetApprovalRequired(v)
@@ -1206,6 +1224,17 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedure.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(procedure.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(procedure.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)
@@ -2235,6 +2264,24 @@ func (_u *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ProcedureUpdateOne) SetDetailsJSON(v []interface{}) *ProcedureUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ProcedureUpdateOne) AppendDetailsJSON(v []interface{}) *ProcedureUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ProcedureUpdateOne) ClearDetailsJSON() *ProcedureUpdateOne {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_u *ProcedureUpdateOne) SetApprovalRequired(v bool) *ProcedureUpdateOne {
 	_u.mutation.SetApprovalRequired(v)
@@ -3221,6 +3268,17 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedure.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(procedure.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(procedure.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)

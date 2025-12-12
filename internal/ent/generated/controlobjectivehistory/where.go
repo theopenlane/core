@@ -1206,6 +1206,16 @@ func DesiredOutcomeContainsFold(v string) predicate.ControlObjectiveHistory {
 	return predicate.ControlObjectiveHistory(sql.FieldContainsFold(FieldDesiredOutcome, v))
 }
 
+// DesiredOutcomeJSONIsNil applies the IsNil predicate on the "desired_outcome_json" field.
+func DesiredOutcomeJSONIsNil() predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldIsNull(FieldDesiredOutcomeJSON))
+}
+
+// DesiredOutcomeJSONNotNil applies the NotNil predicate on the "desired_outcome_json" field.
+func DesiredOutcomeJSONNotNil() predicate.ControlObjectiveHistory {
+	return predicate.ControlObjectiveHistory(sql.FieldNotNull(FieldDesiredOutcomeJSON))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v enums.ObjectiveStatus) predicate.ControlObjectiveHistory {
 	vc := v

@@ -49,6 +49,8 @@ type Task struct {
 	Title string `json:"title,omitempty"`
 	// the details of the task
 	Details string `json:"details,omitempty"`
+	// structured details of the task in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
 	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
@@ -331,7 +333,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldDue, task.FieldCompleted:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case task.FieldTags, task.FieldExternalReferenceURL:
+		case task.FieldTags, task.FieldDetailsJSON, task.FieldExternalReferenceURL:
 			values[i] = new([]byte)
 		case task.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
@@ -451,6 +453,14 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case task.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case task.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -728,6 +738,9 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
+	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

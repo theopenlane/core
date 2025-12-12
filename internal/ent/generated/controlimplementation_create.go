@@ -241,6 +241,12 @@ func (_c *ControlImplementationCreate) SetNillableDetails(v *string) *ControlImp
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *ControlImplementationCreate) SetDetailsJSON(v []interface{}) *ControlImplementationCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ControlImplementationCreate) SetID(v string) *ControlImplementationCreate {
 	_c.mutation.SetID(v)
@@ -530,6 +536,10 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(controlimplementation.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(controlimplementation.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

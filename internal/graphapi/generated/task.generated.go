@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Task_detailsJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
 			case "category":
@@ -218,6 +220,8 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Task_detailsJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
 			case "category":
@@ -360,6 +364,8 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Task_detailsJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
 			case "category":
@@ -502,6 +508,8 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Task_detailsJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
 			case "category":

@@ -217,6 +217,24 @@ func (_u *ControlObjectiveHistoryUpdate) ClearDesiredOutcome() *ControlObjective
 	return _u
 }
 
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_u *ControlObjectiveHistoryUpdate) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveHistoryUpdate {
+	_u.mutation.SetDesiredOutcomeJSON(v)
+	return _u
+}
+
+// AppendDesiredOutcomeJSON appends value to the "desired_outcome_json" field.
+func (_u *ControlObjectiveHistoryUpdate) AppendDesiredOutcomeJSON(v []interface{}) *ControlObjectiveHistoryUpdate {
+	_u.mutation.AppendDesiredOutcomeJSON(v)
+	return _u
+}
+
+// ClearDesiredOutcomeJSON clears the value of the "desired_outcome_json" field.
+func (_u *ControlObjectiveHistoryUpdate) ClearDesiredOutcomeJSON() *ControlObjectiveHistoryUpdate {
+	_u.mutation.ClearDesiredOutcomeJSON()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *ControlObjectiveHistoryUpdate) SetStatus(v enums.ObjectiveStatus) *ControlObjectiveHistoryUpdate {
 	_u.mutation.SetStatus(v)
@@ -474,6 +492,17 @@ func (_u *ControlObjectiveHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.DesiredOutcomeCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString)
 	}
+	if value, ok := _u.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDesiredOutcomeJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlobjectivehistory.FieldDesiredOutcomeJSON, value)
+		})
+	}
+	if _u.mutation.DesiredOutcomeJSONCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcomeJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeEnum, value)
 	}
@@ -709,6 +738,24 @@ func (_u *ControlObjectiveHistoryUpdateOne) SetNillableDesiredOutcome(v *string)
 // ClearDesiredOutcome clears the value of the "desired_outcome" field.
 func (_u *ControlObjectiveHistoryUpdateOne) ClearDesiredOutcome() *ControlObjectiveHistoryUpdateOne {
 	_u.mutation.ClearDesiredOutcome()
+	return _u
+}
+
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_u *ControlObjectiveHistoryUpdateOne) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.SetDesiredOutcomeJSON(v)
+	return _u
+}
+
+// AppendDesiredOutcomeJSON appends value to the "desired_outcome_json" field.
+func (_u *ControlObjectiveHistoryUpdateOne) AppendDesiredOutcomeJSON(v []interface{}) *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.AppendDesiredOutcomeJSON(v)
+	return _u
+}
+
+// ClearDesiredOutcomeJSON clears the value of the "desired_outcome_json" field.
+func (_u *ControlObjectiveHistoryUpdateOne) ClearDesiredOutcomeJSON() *ControlObjectiveHistoryUpdateOne {
+	_u.mutation.ClearDesiredOutcomeJSON()
 	return _u
 }
 
@@ -998,6 +1045,17 @@ func (_u *ControlObjectiveHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.DesiredOutcomeCleared() {
 		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcome, field.TypeString)
+	}
+	if value, ok := _u.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjectivehistory.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDesiredOutcomeJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlobjectivehistory.FieldDesiredOutcomeJSON, value)
+		})
+	}
+	if _u.mutation.DesiredOutcomeJSONCleared() {
+		_spec.ClearField(controlobjectivehistory.FieldDesiredOutcomeJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlobjectivehistory.FieldStatus, field.TypeEnum, value)

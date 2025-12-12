@@ -196,6 +196,12 @@ func (_c *TaskCreate) SetNillableDetails(v *string) *TaskCreate {
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *TaskCreate) SetDetailsJSON(v []interface{}) *TaskCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *TaskCreate) SetStatus(v enums.TaskStatus) *TaskCreate {
 	_c.mutation.SetStatus(v)
@@ -782,6 +788,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(task.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(task.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)

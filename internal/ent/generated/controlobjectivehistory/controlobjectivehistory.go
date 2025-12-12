@@ -54,6 +54,8 @@ const (
 	FieldName = "name"
 	// FieldDesiredOutcome holds the string denoting the desired_outcome field in the database.
 	FieldDesiredOutcome = "desired_outcome"
+	// FieldDesiredOutcomeJSON holds the string denoting the desired_outcome_json field in the database.
+	FieldDesiredOutcomeJSON = "desired_outcome_json"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -89,6 +91,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldName,
 	FieldDesiredOutcome,
+	FieldDesiredOutcomeJSON,
 	FieldStatus,
 	FieldSource,
 	FieldControlObjectiveType,
