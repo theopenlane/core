@@ -13,6 +13,8 @@ import (
 type CreateAPITokenInput struct {
 	Tags          []string
 	Name          string
+	TokenPublicID *string
+	TokenSecret   *string
 	ExpiresAt     *time.Time
 	Description   *string
 	Scopes        []string
@@ -30,6 +32,12 @@ func (i *CreateAPITokenInput) Mutate(m *APITokenMutation) {
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
+	if v := i.TokenPublicID; v != nil {
+		m.SetTokenPublicID(*v)
+	}
+	if v := i.TokenSecret; v != nil {
+		m.SetTokenSecret(*v)
+	}
 	if v := i.ExpiresAt; v != nil {
 		m.SetExpiresAt(*v)
 	}
@@ -71,6 +79,10 @@ type UpdateAPITokenInput struct {
 	Tags               []string
 	AppendTags         []string
 	Name               *string
+	ClearTokenPublicID bool
+	TokenPublicID      *string
+	ClearTokenSecret   bool
+	TokenSecret        *string
 	ClearExpiresAt     bool
 	ExpiresAt          *time.Time
 	ClearDescription   bool
@@ -105,6 +117,18 @@ func (i *UpdateAPITokenInput) Mutate(m *APITokenMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearTokenPublicID {
+		m.ClearTokenPublicID()
+	}
+	if v := i.TokenPublicID; v != nil {
+		m.SetTokenPublicID(*v)
+	}
+	if i.ClearTokenSecret {
+		m.ClearTokenSecret()
+	}
+	if v := i.TokenSecret; v != nil {
+		m.SetTokenSecret(*v)
 	}
 	if i.ClearExpiresAt {
 		m.ClearExpiresAt()
@@ -11811,6 +11835,8 @@ func (c *OrganizationSettingUpdateOne) SetInput(i UpdateOrganizationSettingInput
 type CreatePersonalAccessTokenInput struct {
 	Tags            []string
 	Name            string
+	TokenPublicID   *string
+	TokenSecret     *string
 	ExpiresAt       *time.Time
 	Description     *string
 	Scopes          []string
@@ -11826,6 +11852,12 @@ func (i *CreatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 		m.SetTags(v)
 	}
 	m.SetName(i.Name)
+	if v := i.TokenPublicID; v != nil {
+		m.SetTokenPublicID(*v)
+	}
+	if v := i.TokenSecret; v != nil {
+		m.SetTokenSecret(*v)
+	}
 	if v := i.ExpiresAt; v != nil {
 		m.SetExpiresAt(*v)
 	}
@@ -11861,6 +11893,10 @@ type UpdatePersonalAccessTokenInput struct {
 	Tags                  []string
 	AppendTags            []string
 	Name                  *string
+	ClearTokenPublicID    bool
+	TokenPublicID         *string
+	ClearTokenSecret      bool
+	TokenSecret           *string
 	ClearExpiresAt        bool
 	ExpiresAt             *time.Time
 	ClearDescription      bool
@@ -11893,6 +11929,18 @@ func (i *UpdatePersonalAccessTokenInput) Mutate(m *PersonalAccessTokenMutation) 
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearTokenPublicID {
+		m.ClearTokenPublicID()
+	}
+	if v := i.TokenPublicID; v != nil {
+		m.SetTokenPublicID(*v)
+	}
+	if i.ClearTokenSecret {
+		m.ClearTokenSecret()
+	}
+	if v := i.TokenSecret; v != nil {
+		m.SetTokenSecret(*v)
 	}
 	if i.ClearExpiresAt {
 		m.ClearExpiresAt()

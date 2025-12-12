@@ -331,17 +331,20 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 	}
 
 	errResp, ok := err.(*clientv2.ErrorResponse)
-	assert.Check(t, ok)
+	if !ok || errResp == nil {
+		assert.Assert(t, ok, "expected *clientv2.ErrorResponse, got %T", err)
+		return nil
+	}
 	assert.Check(t, errResp.HasErrors())
 
 	gqlErrors := []*gqlerror.Error{}
 
-	errors := errResp.GqlErrors.Unwrap()
+	if errResp.GqlErrors == nil {
+		return nil
+	}
 
-	for _, e := range errors {
-		customErr, ok := e.(*gqlerror.Error)
-		assert.Check(t, ok)
-		gqlErrors = append(gqlErrors, customErr)
+	for _, e := range *errResp.GqlErrors {
+		gqlErrors = append(gqlErrors, e)
 	}
 
 	return gqlErrors
