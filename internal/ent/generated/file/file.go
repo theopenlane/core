@@ -71,6 +71,8 @@ const (
 	FieldStorageProvider = "storage_provider"
 	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
 	FieldLastAccessedAt = "last_accessed_at"
+	// FieldBase64Content holds the string denoting the base64_content field in the database.
+	FieldBase64Content = "base64_content"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
@@ -208,6 +210,7 @@ var Columns = []string{
 	FieldStorageRegion,
 	FieldStorageProvider,
 	FieldLastAccessedAt,
+	FieldBase64Content,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "files"
@@ -434,6 +437,11 @@ func ByStorageProvider(opts ...sql.OrderTermOption) OrderOption {
 // ByLastAccessedAt orders the results by the last_accessed_at field.
 func ByLastAccessedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastAccessedAt, opts...).ToFunc()
+}
+
+// ByBase64Content orders the results by the base64_content field.
+func ByBase64Content(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBase64Content, opts...).ToFunc()
 }
 
 // ByOrganizationCount orders the results by organization count.

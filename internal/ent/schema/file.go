@@ -99,6 +99,12 @@ func (File) Fields() []ent.Field {
 				entgql.OrderField("last_accessed_at"),
 			).
 			Nillable(),
+		field.String("base64_content").
+			Comment("this is currently only used for images when using the database provider only. non image files will not be converted to base64").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
+			Optional(),
 	}
 }
 

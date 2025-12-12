@@ -74,6 +74,8 @@ type File struct {
 	StorageProvider string `json:"storage_provider,omitempty"`
 	// LastAccessedAt holds the value of the "last_accessed_at" field.
 	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
+	// this is currently only used for images when using the database provider only. non image files will not be converted to base64
+	Base64Content string `json:"base64_content,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FileQuery when eager-loading is set.
 	Edges               FileEdges `json:"edges"`
@@ -279,7 +281,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider, file.FieldBase64Content:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -492,6 +494,12 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.LastAccessedAt = new(time.Time)
 				*_m.LastAccessedAt = value.Time
+			}
+		case file.FieldBase64Content:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field base64_content", values[i])
+			} else if value.Valid {
+				_m.Base64Content = value.String
 			}
 		case file.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -737,6 +745,9 @@ func (_m *File) String() string {
 		builder.WriteString("last_accessed_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("base64_content=")
+	builder.WriteString(_m.Base64Content)
 	builder.WriteByte(')')
 	return builder.String()
 }

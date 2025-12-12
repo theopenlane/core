@@ -378,6 +378,20 @@ func (_c *FileCreate) SetNillableLastAccessedAt(v *time.Time) *FileCreate {
 	return _c
 }
 
+// SetBase64Content sets the "base64_content" field.
+func (_c *FileCreate) SetBase64Content(v string) *FileCreate {
+	_c.mutation.SetBase64Content(v)
+	return _c
+}
+
+// SetNillableBase64Content sets the "base64_content" field if the given value is not nil.
+func (_c *FileCreate) SetNillableBase64Content(v *string) *FileCreate {
+	if v != nil {
+		_c.SetBase64Content(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *FileCreate) SetID(v string) *FileCreate {
 	_c.mutation.SetID(v)
@@ -839,6 +853,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LastAccessedAt(); ok {
 		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
 		_node.LastAccessedAt = &value
+	}
+	if value, ok := _c.mutation.Base64Content(); ok {
+		_spec.SetField(file.FieldBase64Content, field.TypeString, value)
+		_node.Base64Content = value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

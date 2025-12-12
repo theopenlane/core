@@ -81,7 +81,9 @@ type FileHistory struct {
 	StorageProvider string `json:"storage_provider,omitempty"`
 	// LastAccessedAt holds the value of the "last_accessed_at" field.
 	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
-	selectValues   sql.SelectValues
+	// this is currently only used for images when using the database provider only. non image files will not be converted to base64
+	Base64Content string `json:"base64_content,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -97,7 +99,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case filehistory.FieldProvidedFileSize, filehistory.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider:
+		case filehistory.FieldID, filehistory.FieldRef, filehistory.FieldCreatedBy, filehistory.FieldUpdatedBy, filehistory.FieldDeletedBy, filehistory.FieldInternalNotes, filehistory.FieldSystemInternalID, filehistory.FieldProvidedFileName, filehistory.FieldProvidedFileExtension, filehistory.FieldDetectedMimeType, filehistory.FieldMd5Hash, filehistory.FieldDetectedContentType, filehistory.FieldStoreKey, filehistory.FieldCategoryType, filehistory.FieldURI, filehistory.FieldStorageScheme, filehistory.FieldStorageVolume, filehistory.FieldStoragePath, filehistory.FieldStorageRegion, filehistory.FieldStorageProvider, filehistory.FieldBase64Content:
 			values[i] = new(sql.NullString)
 		case filehistory.FieldHistoryTime, filehistory.FieldCreatedAt, filehistory.FieldUpdatedAt, filehistory.FieldDeletedAt, filehistory.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -315,6 +317,12 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 				_m.LastAccessedAt = new(time.Time)
 				*_m.LastAccessedAt = value.Time
 			}
+		case filehistory.FieldBase64Content:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field base64_content", values[i])
+			} else if value.Valid {
+				_m.Base64Content = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -449,6 +457,9 @@ func (_m *FileHistory) String() string {
 		builder.WriteString("last_accessed_at=")
 		builder.WriteString(v.Format(time.ANSIC))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("base64_content=")
+	builder.WriteString(_m.Base64Content)
 	builder.WriteByte(')')
 	return builder.String()
 }

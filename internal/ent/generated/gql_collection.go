@@ -19598,6 +19598,11 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, file.FieldLastAccessedAt)
 				fieldSeen[file.FieldLastAccessedAt] = struct{}{}
 			}
+		case "base64Content":
+			if _, ok := fieldSeen[file.FieldBase64Content]; !ok {
+				selectedFields = append(selectedFields, file.FieldBase64Content)
+				fieldSeen[file.FieldBase64Content] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -19827,6 +19832,11 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[filehistory.FieldLastAccessedAt]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldLastAccessedAt)
 				fieldSeen[filehistory.FieldLastAccessedAt] = struct{}{}
+			}
+		case "base64Content":
+			if _, ok := fieldSeen[filehistory.FieldBase64Content]; !ok {
+				selectedFields = append(selectedFields, filehistory.FieldBase64Content)
+				fieldSeen[filehistory.FieldBase64Content] = struct{}{}
 			}
 		case "id":
 		case "__typename":

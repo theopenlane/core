@@ -2,8 +2,11 @@ package database
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"io"
+	"net/http"
+	"slices"
 	"time"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -17,6 +20,10 @@ import (
 
 const (
 	defaultDatabaseBucket = "default"
+)
+
+var (
+	imageMimeTypes = []string{"image/jpeg", "image/png", "image/svg+xml", "image/x-icon"}
 )
 
 // Provider persists file bytes directly into the database.
@@ -42,10 +49,17 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 		return nil, err
 	}
 
+	mimeType := http.DetectContentType(data)
+
+	fileMutation := client.File.UpdateOneID(fileID).
+		SetFileContents(data)
+
+	if slices.Contains(imageMimeTypes, mimeType) {
+		fileMutation = fileMutation.SetBase64Content(base64.StdEncoding.EncodeToString(data))
+	}
+
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	if err := client.File.UpdateOneID(fileID).
-		SetFileContents(data).
-		Exec(allowCtx); err != nil {
+	if err := fileMutation.Exec(allowCtx); err != nil {
 		return nil, err
 	}
 

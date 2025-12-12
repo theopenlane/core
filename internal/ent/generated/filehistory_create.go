@@ -399,6 +399,20 @@ func (_c *FileHistoryCreate) SetNillableLastAccessedAt(v *time.Time) *FileHistor
 	return _c
 }
 
+// SetBase64Content sets the "base64_content" field.
+func (_c *FileHistoryCreate) SetBase64Content(v string) *FileHistoryCreate {
+	_c.mutation.SetBase64Content(v)
+	return _c
+}
+
+// SetNillableBase64Content sets the "base64_content" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableBase64Content(v *string) *FileHistoryCreate {
+	if v != nil {
+		_c.SetBase64Content(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *FileHistoryCreate) SetID(v string) *FileHistoryCreate {
 	_c.mutation.SetID(v)
@@ -670,6 +684,10 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.LastAccessedAt(); ok {
 		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)
 		_node.LastAccessedAt = &value
+	}
+	if value, ok := _c.mutation.Base64Content(); ok {
+		_spec.SetField(filehistory.FieldBase64Content, field.TypeString, value)
+		_node.Base64Content = value
 	}
 	return _node, _spec
 }

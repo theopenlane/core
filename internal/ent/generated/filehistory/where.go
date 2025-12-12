@@ -205,6 +205,11 @@ func LastAccessedAt(v time.Time) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldLastAccessedAt, v))
 }
 
+// Base64Content applies equality check predicate on the "base64_content" field. It's identical to Base64ContentEQ.
+func Base64Content(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldBase64Content, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2048,6 +2053,81 @@ func LastAccessedAtIsNil() predicate.FileHistory {
 // LastAccessedAtNotNil applies the NotNil predicate on the "last_accessed_at" field.
 func LastAccessedAtNotNil() predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldNotNull(FieldLastAccessedAt))
+}
+
+// Base64ContentEQ applies the EQ predicate on the "base64_content" field.
+func Base64ContentEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEQ(FieldBase64Content, v))
+}
+
+// Base64ContentNEQ applies the NEQ predicate on the "base64_content" field.
+func Base64ContentNEQ(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNEQ(FieldBase64Content, v))
+}
+
+// Base64ContentIn applies the In predicate on the "base64_content" field.
+func Base64ContentIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIn(FieldBase64Content, vs...))
+}
+
+// Base64ContentNotIn applies the NotIn predicate on the "base64_content" field.
+func Base64ContentNotIn(vs ...string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotIn(FieldBase64Content, vs...))
+}
+
+// Base64ContentGT applies the GT predicate on the "base64_content" field.
+func Base64ContentGT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGT(FieldBase64Content, v))
+}
+
+// Base64ContentGTE applies the GTE predicate on the "base64_content" field.
+func Base64ContentGTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldGTE(FieldBase64Content, v))
+}
+
+// Base64ContentLT applies the LT predicate on the "base64_content" field.
+func Base64ContentLT(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLT(FieldBase64Content, v))
+}
+
+// Base64ContentLTE applies the LTE predicate on the "base64_content" field.
+func Base64ContentLTE(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldLTE(FieldBase64Content, v))
+}
+
+// Base64ContentContains applies the Contains predicate on the "base64_content" field.
+func Base64ContentContains(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContains(FieldBase64Content, v))
+}
+
+// Base64ContentHasPrefix applies the HasPrefix predicate on the "base64_content" field.
+func Base64ContentHasPrefix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasPrefix(FieldBase64Content, v))
+}
+
+// Base64ContentHasSuffix applies the HasSuffix predicate on the "base64_content" field.
+func Base64ContentHasSuffix(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldHasSuffix(FieldBase64Content, v))
+}
+
+// Base64ContentIsNil applies the IsNil predicate on the "base64_content" field.
+func Base64ContentIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldBase64Content))
+}
+
+// Base64ContentNotNil applies the NotNil predicate on the "base64_content" field.
+func Base64ContentNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldBase64Content))
+}
+
+// Base64ContentEqualFold applies the EqualFold predicate on the "base64_content" field.
+func Base64ContentEqualFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldEqualFold(FieldBase64Content, v))
+}
+
+// Base64ContentContainsFold applies the ContainsFold predicate on the "base64_content" field.
+func Base64ContentContainsFold(v string) predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldContainsFold(FieldBase64Content, v))
 }
 
 // And groups predicates with the AND operator between them.

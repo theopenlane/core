@@ -197,6 +197,11 @@ func LastAccessedAt(v time.Time) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldLastAccessedAt, v))
 }
 
+// Base64Content applies equality check predicate on the "base64_content" field. It's identical to Base64ContentEQ.
+func Base64Content(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldBase64Content, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldCreatedAt, v))
@@ -1905,6 +1910,81 @@ func LastAccessedAtIsNil() predicate.File {
 // LastAccessedAtNotNil applies the NotNil predicate on the "last_accessed_at" field.
 func LastAccessedAtNotNil() predicate.File {
 	return predicate.File(sql.FieldNotNull(FieldLastAccessedAt))
+}
+
+// Base64ContentEQ applies the EQ predicate on the "base64_content" field.
+func Base64ContentEQ(v string) predicate.File {
+	return predicate.File(sql.FieldEQ(FieldBase64Content, v))
+}
+
+// Base64ContentNEQ applies the NEQ predicate on the "base64_content" field.
+func Base64ContentNEQ(v string) predicate.File {
+	return predicate.File(sql.FieldNEQ(FieldBase64Content, v))
+}
+
+// Base64ContentIn applies the In predicate on the "base64_content" field.
+func Base64ContentIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldIn(FieldBase64Content, vs...))
+}
+
+// Base64ContentNotIn applies the NotIn predicate on the "base64_content" field.
+func Base64ContentNotIn(vs ...string) predicate.File {
+	return predicate.File(sql.FieldNotIn(FieldBase64Content, vs...))
+}
+
+// Base64ContentGT applies the GT predicate on the "base64_content" field.
+func Base64ContentGT(v string) predicate.File {
+	return predicate.File(sql.FieldGT(FieldBase64Content, v))
+}
+
+// Base64ContentGTE applies the GTE predicate on the "base64_content" field.
+func Base64ContentGTE(v string) predicate.File {
+	return predicate.File(sql.FieldGTE(FieldBase64Content, v))
+}
+
+// Base64ContentLT applies the LT predicate on the "base64_content" field.
+func Base64ContentLT(v string) predicate.File {
+	return predicate.File(sql.FieldLT(FieldBase64Content, v))
+}
+
+// Base64ContentLTE applies the LTE predicate on the "base64_content" field.
+func Base64ContentLTE(v string) predicate.File {
+	return predicate.File(sql.FieldLTE(FieldBase64Content, v))
+}
+
+// Base64ContentContains applies the Contains predicate on the "base64_content" field.
+func Base64ContentContains(v string) predicate.File {
+	return predicate.File(sql.FieldContains(FieldBase64Content, v))
+}
+
+// Base64ContentHasPrefix applies the HasPrefix predicate on the "base64_content" field.
+func Base64ContentHasPrefix(v string) predicate.File {
+	return predicate.File(sql.FieldHasPrefix(FieldBase64Content, v))
+}
+
+// Base64ContentHasSuffix applies the HasSuffix predicate on the "base64_content" field.
+func Base64ContentHasSuffix(v string) predicate.File {
+	return predicate.File(sql.FieldHasSuffix(FieldBase64Content, v))
+}
+
+// Base64ContentIsNil applies the IsNil predicate on the "base64_content" field.
+func Base64ContentIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldBase64Content))
+}
+
+// Base64ContentNotNil applies the NotNil predicate on the "base64_content" field.
+func Base64ContentNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldBase64Content))
+}
+
+// Base64ContentEqualFold applies the EqualFold predicate on the "base64_content" field.
+func Base64ContentEqualFold(v string) predicate.File {
+	return predicate.File(sql.FieldEqualFold(FieldBase64Content, v))
+}
+
+// Base64ContentContainsFold applies the ContainsFold predicate on the "base64_content" field.
+func Base64ContentContainsFold(v string) predicate.File {
+	return predicate.File(sql.FieldContainsFold(FieldBase64Content, v))
 }
 
 // HasOrganization applies the HasEdge predicate on the "organization" edge.

@@ -1583,6 +1583,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			file.FieldStorageRegion:         {Type: field.TypeString, Column: file.FieldStorageRegion},
 			file.FieldStorageProvider:       {Type: field.TypeString, Column: file.FieldStorageProvider},
 			file.FieldLastAccessedAt:        {Type: field.TypeTime, Column: file.FieldLastAccessedAt},
+			file.FieldBase64Content:         {Type: field.TypeString, Column: file.FieldBase64Content},
 		},
 	}
 	graph.Nodes[43] = &sqlgraph.Node{
@@ -1653,6 +1654,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldStorageRegion:         {Type: field.TypeString, Column: filehistory.FieldStorageRegion},
 			filehistory.FieldStorageProvider:       {Type: field.TypeString, Column: filehistory.FieldStorageProvider},
 			filehistory.FieldLastAccessedAt:        {Type: field.TypeTime, Column: filehistory.FieldLastAccessedAt},
+			filehistory.FieldBase64Content:         {Type: field.TypeString, Column: filehistory.FieldBase64Content},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -22326,6 +22328,11 @@ func (f *FileFilter) WhereLastAccessedAt(p entql.TimeP) {
 	f.Where(p.Field(file.FieldLastAccessedAt))
 }
 
+// WhereBase64Content applies the entql string predicate on the base64_content field.
+func (f *FileFilter) WhereBase64Content(p entql.StringP) {
+	f.Where(p.Field(file.FieldBase64Content))
+}
+
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *FileFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -22834,6 +22841,11 @@ func (f *FileHistoryFilter) WhereStorageProvider(p entql.StringP) {
 // WhereLastAccessedAt applies the entql time.Time predicate on the last_accessed_at field.
 func (f *FileHistoryFilter) WhereLastAccessedAt(p entql.TimeP) {
 	f.Where(p.Field(filehistory.FieldLastAccessedAt))
+}
+
+// WhereBase64Content applies the entql string predicate on the base64_content field.
+func (f *FileHistoryFilter) WhereBase64Content(p entql.StringP) {
+	f.Where(p.Field(filehistory.FieldBase64Content))
 }
 
 // addPredicate implements the predicateAdder interface.

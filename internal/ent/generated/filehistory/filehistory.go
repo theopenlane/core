@@ -79,6 +79,8 @@ const (
 	FieldStorageProvider = "storage_provider"
 	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
 	FieldLastAccessedAt = "last_accessed_at"
+	// FieldBase64Content holds the string denoting the base64_content field in the database.
+	FieldBase64Content = "base64_content"
 	// Table holds the table name of the filehistory in the database.
 	Table = "file_history"
 )
@@ -117,6 +119,7 @@ var Columns = []string{
 	FieldStorageRegion,
 	FieldStorageProvider,
 	FieldLastAccessedAt,
+	FieldBase64Content,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -310,6 +313,11 @@ func ByStorageProvider(opts ...sql.OrderTermOption) OrderOption {
 // ByLastAccessedAt orders the results by the last_accessed_at field.
 func ByLastAccessedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastAccessedAt, opts...).ToFunc()
+}
+
+// ByBase64Content orders the results by the base64_content field.
+func ByBase64Content(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBase64Content, opts...).ToFunc()
 }
 
 var (

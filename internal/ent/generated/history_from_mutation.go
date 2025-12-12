@@ -5589,6 +5589,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableLastAccessedAt(&lastAccessedAt)
 	}
 
+	if base64Content, exists := m.Base64Content(); exists {
+		create = create.SetBase64Content(base64Content)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -5788,6 +5792,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableLastAccessedAt(file.LastAccessedAt)
 		}
 
+		if base64Content, exists := m.Base64Content(); exists {
+			create = create.SetBase64Content(base64Content)
+		} else {
+			create = create.SetBase64Content(file.Base64Content)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -5851,6 +5861,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetStorageRegion(file.StorageRegion).
 			SetStorageProvider(file.StorageProvider).
 			SetNillableLastAccessedAt(file.LastAccessedAt).
+			SetBase64Content(file.Base64Content).
 			Save(ctx)
 		if err != nil {
 			return err

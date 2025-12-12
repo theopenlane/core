@@ -502,6 +502,26 @@ func (_u *FileHistoryUpdate) ClearLastAccessedAt() *FileHistoryUpdate {
 	return _u
 }
 
+// SetBase64Content sets the "base64_content" field.
+func (_u *FileHistoryUpdate) SetBase64Content(v string) *FileHistoryUpdate {
+	_u.mutation.SetBase64Content(v)
+	return _u
+}
+
+// SetNillableBase64Content sets the "base64_content" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableBase64Content(v *string) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetBase64Content(*v)
+	}
+	return _u
+}
+
+// ClearBase64Content clears the value of the "base64_content" field.
+func (_u *FileHistoryUpdate) ClearBase64Content() *FileHistoryUpdate {
+	_u.mutation.ClearBase64Content()
+	return _u
+}
+
 // Mutation returns the FileHistoryMutation object of the builder.
 func (_u *FileHistoryUpdate) Mutation() *FileHistoryMutation {
 	return _u.mutation
@@ -727,6 +747,12 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(filehistory.FieldLastAccessedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Base64Content(); ok {
+		_spec.SetField(filehistory.FieldBase64Content, field.TypeString, value)
+	}
+	if _u.mutation.Base64ContentCleared() {
+		_spec.ClearField(filehistory.FieldBase64Content, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1222,6 +1248,26 @@ func (_u *FileHistoryUpdateOne) ClearLastAccessedAt() *FileHistoryUpdateOne {
 	return _u
 }
 
+// SetBase64Content sets the "base64_content" field.
+func (_u *FileHistoryUpdateOne) SetBase64Content(v string) *FileHistoryUpdateOne {
+	_u.mutation.SetBase64Content(v)
+	return _u
+}
+
+// SetNillableBase64Content sets the "base64_content" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableBase64Content(v *string) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetBase64Content(*v)
+	}
+	return _u
+}
+
+// ClearBase64Content clears the value of the "base64_content" field.
+func (_u *FileHistoryUpdateOne) ClearBase64Content() *FileHistoryUpdateOne {
+	_u.mutation.ClearBase64Content()
+	return _u
+}
+
 // Mutation returns the FileHistoryMutation object of the builder.
 func (_u *FileHistoryUpdateOne) Mutation() *FileHistoryMutation {
 	return _u.mutation
@@ -1477,6 +1523,12 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(filehistory.FieldLastAccessedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Base64Content(); ok {
+		_spec.SetField(filehistory.FieldBase64Content, field.TypeString, value)
+	}
+	if _u.mutation.Base64ContentCleared() {
+		_spec.ClearField(filehistory.FieldBase64Content, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.FileHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

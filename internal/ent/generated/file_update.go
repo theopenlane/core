@@ -516,6 +516,26 @@ func (_u *FileUpdate) ClearLastAccessedAt() *FileUpdate {
 	return _u
 }
 
+// SetBase64Content sets the "base64_content" field.
+func (_u *FileUpdate) SetBase64Content(v string) *FileUpdate {
+	_u.mutation.SetBase64Content(v)
+	return _u
+}
+
+// SetNillableBase64Content sets the "base64_content" field if the given value is not nil.
+func (_u *FileUpdate) SetNillableBase64Content(v *string) *FileUpdate {
+	if v != nil {
+		_u.SetBase64Content(*v)
+	}
+	return _u
+}
+
+// ClearBase64Content clears the value of the "base64_content" field.
+func (_u *FileUpdate) ClearBase64Content() *FileUpdate {
+	_u.mutation.ClearBase64Content()
+	return _u
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdate) AddOrganizationIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -1260,6 +1280,12 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Base64Content(); ok {
+		_spec.SetField(file.FieldBase64Content, field.TypeString, value)
+	}
+	if _u.mutation.Base64ContentCleared() {
+		_spec.ClearField(file.FieldBase64Content, field.TypeString)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2427,6 +2453,26 @@ func (_u *FileUpdateOne) ClearLastAccessedAt() *FileUpdateOne {
 	return _u
 }
 
+// SetBase64Content sets the "base64_content" field.
+func (_u *FileUpdateOne) SetBase64Content(v string) *FileUpdateOne {
+	_u.mutation.SetBase64Content(v)
+	return _u
+}
+
+// SetNillableBase64Content sets the "base64_content" field if the given value is not nil.
+func (_u *FileUpdateOne) SetNillableBase64Content(v *string) *FileUpdateOne {
+	if v != nil {
+		_u.SetBase64Content(*v)
+	}
+	return _u
+}
+
+// ClearBase64Content clears the value of the "base64_content" field.
+func (_u *FileUpdateOne) ClearBase64Content() *FileUpdateOne {
+	_u.mutation.ClearBase64Content()
+	return _u
+}
+
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdateOne) AddOrganizationIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -3201,6 +3247,12 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.Base64Content(); ok {
+		_spec.SetField(file.FieldBase64Content, field.TypeString, value)
+	}
+	if _u.mutation.Base64ContentCleared() {
+		_spec.ClearField(file.FieldBase64Content, field.TypeString)
 	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
