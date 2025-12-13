@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/riverqueue/river"
@@ -83,6 +84,8 @@ func TestExportContentWorker(t *testing.T) {
 					ID:         exportID,
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &ownerID,
+					Format:     enums.ExportFormatCsv,
+					CreatedAt:  &time.Time{},
 					Fields:     []string{"id", "name", "description"},
 				},
 			},
@@ -143,6 +146,8 @@ func TestExportContentWorker(t *testing.T) {
 					ID:         exportID,
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &ownerID,
+					Format:     enums.ExportFormatCsv,
+					CreatedAt:  &time.Time{},
 					Fields:     []string{"id", "name"},
 				},
 			},
@@ -169,6 +174,8 @@ func TestExportContentWorker(t *testing.T) {
 					ID:         exportID,
 					ExportType: enums.ExportTypeControl,
 					OwnerID:    &ownerID,
+					Format:     enums.ExportFormatCsv,
+					CreatedAt:  &time.Time{},
 					Fields:     []string{"id", "name"},
 				},
 			},
@@ -205,6 +212,8 @@ func TestExportContentWorker(t *testing.T) {
 					ID:         exportID,
 					ExportType: enums.ExportTypeEvidence,
 					OwnerID:    &ownerID,
+					Format:     enums.ExportFormatCsv,
+					CreatedAt:  &time.Time{},
 					Fields:     []string{"id", "name", "type"},
 				},
 			},
@@ -338,6 +347,8 @@ func TestExportContentWorker_GraphQLErrorResponse(t *testing.T) {
 			ID:         exportID,
 			ExportType: enums.ExportTypeControl,
 			OwnerID:    &ownerID,
+			Format:     enums.ExportFormatCsv,
+			CreatedAt:  &time.Time{},
 			Fields:     []string{"id", "name"},
 		},
 	}, nil)

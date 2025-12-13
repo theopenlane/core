@@ -94,7 +94,7 @@ func (w *ExportContentWorker) WithRequester(requester *httpsling.Requester) *Exp
 }
 
 // Work satisfies the river.Worker interface for the export content worker
-// it creates a csv, uploads it and associates it with the export
+// it creates a csv,docx,md,pdf, uploads it and associates it with the export
 func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportContentArgs]) error {
 	if job.Args.ExportID == "" {
 		return newMissingRequiredArg("export_id", ExportContentArgs{}.Kind())
@@ -190,21 +190,39 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 		log.Info().Msg("no data found for export")
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusNodata, nil)
 	}
-
-	csvData, err := w.marshalToCSV(allNodes)
+	// Get the appropriate marshaler for the export format
+	marshaler, contentType, err := GetFormatMarshaler(export.Export.Format)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to marshal to CSV")
+		log.Error().Err(err).Msg("failed to get format marshaler")
 		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, err)
 	}
 
-	filename := fmt.Sprintf("%s_export_%s_%s.csv", rootQuery, job.Args.ExportID, time.Now().Format("20060102_150405"))
-	reader := bytes.NewReader(csvData)
+	// Create metadata for the export
+	metadata := &ExportMetadata{
+		ExportType: export.Export.ExportType,
+		CreatedAt:  export.Export.CreatedAt.String(),
+	}
+	if export.Export.CreatedBy != nil {
+		metadata.CreatedBy = *export.Export.CreatedBy
+	}
+
+	// Marshal the data to the requested format
+	exportData, err := marshaler(allNodes, metadata)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to marshal to format")
+		return w.updateExportStatus(ctx, job.Args.ExportID, enums.ExportStatusFailed, err)
+	}
+
+	// Create filename with appropriate extension
+	extension := GetFileExtension(export.Export.Format)
+	filename := fmt.Sprintf("%s_export_%s_%s.%s", rootQuery, job.Args.ExportID, time.Now().Format("20060102_150405"), extension)
+	reader := bytes.NewReader(exportData)
 
 	upload := &graphql.Upload{
 		File:        reader,
 		Filename:    filename,
-		Size:        int64(len(csvData)),
-		ContentType: "text/csv",
+		Size:        int64(len(exportData)),
+		ContentType: contentType,
 	}
 
 	updateInput := openlaneclient.UpdateExportInput{
