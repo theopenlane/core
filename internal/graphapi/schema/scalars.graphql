@@ -34,6 +34,14 @@ The `ImplementationGuidance` scalar type that represents steps to take to implem
 """
 scalar ImplementationGuidance
 """
+The TestingProcedures scalar type that represents steps to take to test a control; they can come directly from the control source or pulled from external sources
+"""
+scalar TestingProcedures
+"""
+The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control
+"""
+scalar EvidenceRequests
+"""
 VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
 """
 scalar VersionBump

@@ -552,6 +552,42 @@ func (_u *ControlUpdate) ClearReferences() *ControlUpdate {
 	return _u
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_u *ControlUpdate) SetTestingProcedures(v []models.TestingProcedures) *ControlUpdate {
+	_u.mutation.SetTestingProcedures(v)
+	return _u
+}
+
+// AppendTestingProcedures appends value to the "testing_procedures" field.
+func (_u *ControlUpdate) AppendTestingProcedures(v []models.TestingProcedures) *ControlUpdate {
+	_u.mutation.AppendTestingProcedures(v)
+	return _u
+}
+
+// ClearTestingProcedures clears the value of the "testing_procedures" field.
+func (_u *ControlUpdate) ClearTestingProcedures() *ControlUpdate {
+	_u.mutation.ClearTestingProcedures()
+	return _u
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_u *ControlUpdate) SetEvidenceRequests(v []models.EvidenceRequests) *ControlUpdate {
+	_u.mutation.SetEvidenceRequests(v)
+	return _u
+}
+
+// AppendEvidenceRequests appends value to the "evidence_requests" field.
+func (_u *ControlUpdate) AppendEvidenceRequests(v []models.EvidenceRequests) *ControlUpdate {
+	_u.mutation.AppendEvidenceRequests(v)
+	return _u
+}
+
+// ClearEvidenceRequests clears the value of the "evidence_requests" field.
+func (_u *ControlUpdate) ClearEvidenceRequests() *ControlUpdate {
+	_u.mutation.ClearEvidenceRequests()
+	return _u
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_u *ControlUpdate) SetControlOwnerID(v string) *ControlUpdate {
 	_u.mutation.SetControlOwnerID(v)
@@ -669,6 +705,58 @@ func (_u *ControlUpdate) SetNillableControlKindID(v *string) *ControlUpdate {
 // ClearControlKindID clears the value of the "control_kind_id" field.
 func (_u *ControlUpdate) ClearControlKindID() *ControlUpdate {
 	_u.mutation.ClearControlKindID()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *ControlUpdate) SetProposedChanges(v map[string]interface{}) *ControlUpdate {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *ControlUpdate) ClearProposedChanges() *ControlUpdate {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *ControlUpdate) SetProposedByUserID(v string) *ControlUpdate {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableProposedByUserID(v *string) *ControlUpdate {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *ControlUpdate) ClearProposedByUserID() *ControlUpdate {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *ControlUpdate) SetProposedAt(v time.Time) *ControlUpdate {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableProposedAt(v *time.Time) *ControlUpdate {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *ControlUpdate) ClearProposedAt() *ControlUpdate {
+	_u.mutation.ClearProposedAt()
 	return _u
 }
 
@@ -1880,6 +1968,28 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(control.FieldReferences, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TestingProcedures(); ok {
+		_spec.SetField(control.FieldTestingProcedures, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTestingProcedures(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldTestingProcedures, value)
+		})
+	}
+	if _u.mutation.TestingProceduresCleared() {
+		_spec.ClearField(control.FieldTestingProcedures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EvidenceRequests(); ok {
+		_spec.SetField(control.FieldEvidenceRequests, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEvidenceRequests(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldEvidenceRequests, value)
+		})
+	}
+	if _u.mutation.EvidenceRequestsCleared() {
+		_spec.ClearField(control.FieldEvidenceRequests, field.TypeJSON)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(control.FieldSystemOwned, field.TypeBool)
 	}
@@ -1900,6 +2010,24 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ControlKindNameCleared() {
 		_spec.ClearField(control.FieldControlKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(control.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(control.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(control.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(control.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(control.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(control.FieldProposedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
@@ -3702,6 +3830,42 @@ func (_u *ControlUpdateOne) ClearReferences() *ControlUpdateOne {
 	return _u
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_u *ControlUpdateOne) SetTestingProcedures(v []models.TestingProcedures) *ControlUpdateOne {
+	_u.mutation.SetTestingProcedures(v)
+	return _u
+}
+
+// AppendTestingProcedures appends value to the "testing_procedures" field.
+func (_u *ControlUpdateOne) AppendTestingProcedures(v []models.TestingProcedures) *ControlUpdateOne {
+	_u.mutation.AppendTestingProcedures(v)
+	return _u
+}
+
+// ClearTestingProcedures clears the value of the "testing_procedures" field.
+func (_u *ControlUpdateOne) ClearTestingProcedures() *ControlUpdateOne {
+	_u.mutation.ClearTestingProcedures()
+	return _u
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_u *ControlUpdateOne) SetEvidenceRequests(v []models.EvidenceRequests) *ControlUpdateOne {
+	_u.mutation.SetEvidenceRequests(v)
+	return _u
+}
+
+// AppendEvidenceRequests appends value to the "evidence_requests" field.
+func (_u *ControlUpdateOne) AppendEvidenceRequests(v []models.EvidenceRequests) *ControlUpdateOne {
+	_u.mutation.AppendEvidenceRequests(v)
+	return _u
+}
+
+// ClearEvidenceRequests clears the value of the "evidence_requests" field.
+func (_u *ControlUpdateOne) ClearEvidenceRequests() *ControlUpdateOne {
+	_u.mutation.ClearEvidenceRequests()
+	return _u
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_u *ControlUpdateOne) SetControlOwnerID(v string) *ControlUpdateOne {
 	_u.mutation.SetControlOwnerID(v)
@@ -3819,6 +3983,58 @@ func (_u *ControlUpdateOne) SetNillableControlKindID(v *string) *ControlUpdateOn
 // ClearControlKindID clears the value of the "control_kind_id" field.
 func (_u *ControlUpdateOne) ClearControlKindID() *ControlUpdateOne {
 	_u.mutation.ClearControlKindID()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *ControlUpdateOne) SetProposedChanges(v map[string]interface{}) *ControlUpdateOne {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *ControlUpdateOne) ClearProposedChanges() *ControlUpdateOne {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *ControlUpdateOne) SetProposedByUserID(v string) *ControlUpdateOne {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableProposedByUserID(v *string) *ControlUpdateOne {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *ControlUpdateOne) ClearProposedByUserID() *ControlUpdateOne {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *ControlUpdateOne) SetProposedAt(v time.Time) *ControlUpdateOne {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableProposedAt(v *time.Time) *ControlUpdateOne {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *ControlUpdateOne) ClearProposedAt() *ControlUpdateOne {
+	_u.mutation.ClearProposedAt()
 	return _u
 }
 
@@ -5060,6 +5276,28 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(control.FieldReferences, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TestingProcedures(); ok {
+		_spec.SetField(control.FieldTestingProcedures, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTestingProcedures(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldTestingProcedures, value)
+		})
+	}
+	if _u.mutation.TestingProceduresCleared() {
+		_spec.ClearField(control.FieldTestingProcedures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EvidenceRequests(); ok {
+		_spec.SetField(control.FieldEvidenceRequests, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEvidenceRequests(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldEvidenceRequests, value)
+		})
+	}
+	if _u.mutation.EvidenceRequestsCleared() {
+		_spec.ClearField(control.FieldEvidenceRequests, field.TypeJSON)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(control.FieldSystemOwned, field.TypeBool)
 	}
@@ -5080,6 +5318,24 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.ControlKindNameCleared() {
 		_spec.ClearField(control.FieldControlKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(control.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(control.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(control.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(control.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(control.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(control.FieldProposedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)

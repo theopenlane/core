@@ -108,6 +108,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Control_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Control_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Control_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Control_controlOwnerID(ctx, field)
 			case "delegateID":
@@ -124,6 +128,12 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "proposedChanges":
+				return ec.fieldContext_Control_proposedChanges(ctx, field)
+			case "proposedByUserID":
+				return ec.fieldContext_Control_proposedByUserID(ctx, field)
+			case "proposedAt":
+				return ec.fieldContext_Control_proposedAt(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -298,6 +308,10 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Control_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Control_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Control_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Control_controlOwnerID(ctx, field)
 			case "delegateID":
@@ -314,6 +328,12 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "proposedChanges":
+				return ec.fieldContext_Control_proposedChanges(ctx, field)
+			case "proposedByUserID":
+				return ec.fieldContext_Control_proposedByUserID(ctx, field)
+			case "proposedAt":
+				return ec.fieldContext_Control_proposedAt(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -488,6 +508,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Control_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Control_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Control_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Control_controlOwnerID(ctx, field)
 			case "delegateID":
@@ -504,6 +528,12 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "proposedChanges":
+				return ec.fieldContext_Control_proposedChanges(ctx, field)
+			case "proposedByUserID":
+				return ec.fieldContext_Control_proposedByUserID(ctx, field)
+			case "proposedAt":
+				return ec.fieldContext_Control_proposedAt(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -678,6 +708,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Control_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Control_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Control_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Control_controlOwnerID(ctx, field)
 			case "delegateID":
@@ -694,6 +728,12 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
+			case "proposedChanges":
+				return ec.fieldContext_Control_proposedChanges(ctx, field)
+			case "proposedByUserID":
+				return ec.fieldContext_Control_proposedByUserID(ctx, field)
+			case "proposedAt":
+				return ec.fieldContext_Control_proposedAt(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":

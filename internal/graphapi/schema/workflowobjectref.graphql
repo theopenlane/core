@@ -39,19 +39,6 @@ extend type Mutation{
         input: Upload!
     ): WorkflowObjectRefBulkCreatePayload!
     """
-    Update an existing workflowObjectRef
-    """
-    updateWorkflowObjectRef(
-        """
-        ID of the workflowObjectRef
-        """
-        id: ID!
-        """
-        New values for the workflowObjectRef
-        """
-        input: UpdateWorkflowObjectRefInput!
-    ): WorkflowObjectRefUpdatePayload!
-    """
     Delete an existing workflowObjectRef
     """
     deleteWorkflowObjectRef(
@@ -68,16 +55,6 @@ Return response for createWorkflowObjectRef mutation
 type WorkflowObjectRefCreatePayload {
     """
     Created workflowObjectRef
-    """
-    workflowObjectRef: WorkflowObjectRef!
-}
-
-"""
-Return response for updateWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefUpdatePayload {
-    """
-    Updated workflowObjectRef
     """
     workflowObjectRef: WorkflowObjectRef!
 }

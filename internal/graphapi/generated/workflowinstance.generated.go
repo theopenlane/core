@@ -78,10 +78,22 @@ func (ec *executionContext) fieldContext_WorkflowInstanceBulkCreatePayload_workf
 				return ec.fieldContext_WorkflowInstance_lastEvaluatedAt(ctx, field)
 			case "definitionSnapshot":
 				return ec.fieldContext_WorkflowInstance_definitionSnapshot(ctx, field)
+			case "controlID":
+				return ec.fieldContext_WorkflowInstance_controlID(ctx, field)
+			case "internalPolicyID":
+				return ec.fieldContext_WorkflowInstance_internalPolicyID(ctx, field)
+			case "evidenceID":
+				return ec.fieldContext_WorkflowInstance_evidenceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowInstance_owner(ctx, field)
 			case "workflowDefinition":
 				return ec.fieldContext_WorkflowInstance_workflowDefinition(ctx, field)
+			case "control":
+				return ec.fieldContext_WorkflowInstance_control(ctx, field)
+			case "internalPolicy":
+				return ec.fieldContext_WorkflowInstance_internalPolicy(ctx, field)
+			case "evidence":
+				return ec.fieldContext_WorkflowInstance_evidence(ctx, field)
 			case "workflowAssignments":
 				return ec.fieldContext_WorkflowInstance_workflowAssignments(ctx, field)
 			case "workflowEvents":
@@ -145,10 +157,22 @@ func (ec *executionContext) fieldContext_WorkflowInstanceCreatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_lastEvaluatedAt(ctx, field)
 			case "definitionSnapshot":
 				return ec.fieldContext_WorkflowInstance_definitionSnapshot(ctx, field)
+			case "controlID":
+				return ec.fieldContext_WorkflowInstance_controlID(ctx, field)
+			case "internalPolicyID":
+				return ec.fieldContext_WorkflowInstance_internalPolicyID(ctx, field)
+			case "evidenceID":
+				return ec.fieldContext_WorkflowInstance_evidenceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowInstance_owner(ctx, field)
 			case "workflowDefinition":
 				return ec.fieldContext_WorkflowInstance_workflowDefinition(ctx, field)
+			case "control":
+				return ec.fieldContext_WorkflowInstance_control(ctx, field)
+			case "internalPolicy":
+				return ec.fieldContext_WorkflowInstance_internalPolicy(ctx, field)
+			case "evidence":
+				return ec.fieldContext_WorkflowInstance_evidence(ctx, field)
 			case "workflowAssignments":
 				return ec.fieldContext_WorkflowInstance_workflowAssignments(ctx, field)
 			case "workflowEvents":
@@ -241,10 +265,22 @@ func (ec *executionContext) fieldContext_WorkflowInstanceUpdatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_lastEvaluatedAt(ctx, field)
 			case "definitionSnapshot":
 				return ec.fieldContext_WorkflowInstance_definitionSnapshot(ctx, field)
+			case "controlID":
+				return ec.fieldContext_WorkflowInstance_controlID(ctx, field)
+			case "internalPolicyID":
+				return ec.fieldContext_WorkflowInstance_internalPolicyID(ctx, field)
+			case "evidenceID":
+				return ec.fieldContext_WorkflowInstance_evidenceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowInstance_owner(ctx, field)
 			case "workflowDefinition":
 				return ec.fieldContext_WorkflowInstance_workflowDefinition(ctx, field)
+			case "control":
+				return ec.fieldContext_WorkflowInstance_control(ctx, field)
+			case "internalPolicy":
+				return ec.fieldContext_WorkflowInstance_internalPolicy(ctx, field)
+			case "evidence":
+				return ec.fieldContext_WorkflowInstance_evidence(ctx, field)
 			case "workflowAssignments":
 				return ec.fieldContext_WorkflowInstance_workflowAssignments(ctx, field)
 			case "workflowEvents":

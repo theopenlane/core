@@ -481,6 +481,11 @@ func (_c *WorkflowDefinitionCreate) check() error {
 			return &ValidationError{Name: "display_id", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.display_id": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := workflowdefinition.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "WorkflowDefinition.name"`)}
 	}

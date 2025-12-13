@@ -51,6 +51,8 @@ const (
 	FieldDirectoryGroupID = "directory_group_id"
 	// FieldDirectoryMembershipID holds the string denoting the directory_membership_id field in the database.
 	FieldDirectoryMembershipID = "directory_membership_id"
+	// FieldEvidenceID holds the string denoting the evidence_id field in the database.
+	FieldEvidenceID = "evidence_id"
 	// Table holds the table name of the workflowobjectrefhistory in the database.
 	Table = "workflow_object_ref_history"
 )
@@ -75,6 +77,7 @@ var Columns = []string{
 	FieldDirectoryAccountID,
 	FieldDirectoryGroupID,
 	FieldDirectoryMembershipID,
+	FieldEvidenceID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -209,6 +212,11 @@ func ByDirectoryGroupID(opts ...sql.OrderTermOption) OrderOption {
 // ByDirectoryMembershipID orders the results by the directory_membership_id field.
 func ByDirectoryMembershipID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectoryMembershipID, opts...).ToFunc()
+}
+
+// ByEvidenceID orders the results by the evidence_id field.
+func ByEvidenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEvidenceID, opts...).ToFunc()
 }
 
 var (

@@ -13,6 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -33,6 +36,9 @@ type WorkflowInstanceQuery struct {
 	predicates                   []predicate.WorkflowInstance
 	withOwner                    *OrganizationQuery
 	withWorkflowDefinition       *WorkflowDefinitionQuery
+	withControl                  *ControlQuery
+	withInternalPolicy           *InternalPolicyQuery
+	withEvidence                 *EvidenceQuery
 	withWorkflowAssignments      *WorkflowAssignmentQuery
 	withWorkflowEvents           *WorkflowEventQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
@@ -120,6 +126,81 @@ func (_q *WorkflowInstanceQuery) QueryWorkflowDefinition() *WorkflowDefinitionQu
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControl chains the current query on the "control" edge.
+func (_q *WorkflowInstanceQuery) QueryControl() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.ControlTable, workflowinstance.ControlColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy chains the current query on the "internal_policy" edge.
+func (_q *WorkflowInstanceQuery) QueryInternalPolicy() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.InternalPolicyTable, workflowinstance.InternalPolicyColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (_q *WorkflowInstanceQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.EvidenceTable, workflowinstance.EvidenceColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.WorkflowInstance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -396,6 +477,9 @@ func (_q *WorkflowInstanceQuery) Clone() *WorkflowInstanceQuery {
 		predicates:              append([]predicate.WorkflowInstance{}, _q.predicates...),
 		withOwner:               _q.withOwner.Clone(),
 		withWorkflowDefinition:  _q.withWorkflowDefinition.Clone(),
+		withControl:             _q.withControl.Clone(),
+		withInternalPolicy:      _q.withInternalPolicy.Clone(),
+		withEvidence:            _q.withEvidence.Clone(),
 		withWorkflowAssignments: _q.withWorkflowAssignments.Clone(),
 		withWorkflowEvents:      _q.withWorkflowEvents.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
@@ -425,6 +509,39 @@ func (_q *WorkflowInstanceQuery) WithWorkflowDefinition(opts ...func(*WorkflowDe
 		opt(query)
 	}
 	_q.withWorkflowDefinition = query
+	return _q
+}
+
+// WithControl tells the query-builder to eager-load the nodes that are connected to
+// the "control" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithControl(opts ...func(*ControlQuery)) *WorkflowInstanceQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControl = query
+	return _q
+}
+
+// WithInternalPolicy tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policy" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithInternalPolicy(opts ...func(*InternalPolicyQuery)) *WorkflowInstanceQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicy = query
+	return _q
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithEvidence(opts ...func(*EvidenceQuery)) *WorkflowInstanceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvidence = query
 	return _q
 }
 
@@ -545,9 +662,12 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*WorkflowInstance{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [8]bool{
 			_q.withOwner != nil,
 			_q.withWorkflowDefinition != nil,
+			_q.withControl != nil,
+			_q.withInternalPolicy != nil,
+			_q.withEvidence != nil,
 			_q.withWorkflowAssignments != nil,
 			_q.withWorkflowEvents != nil,
 			_q.withWorkflowObjectRefs != nil,
@@ -585,6 +705,24 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if query := _q.withWorkflowDefinition; query != nil {
 		if err := _q.loadWorkflowDefinition(ctx, query, nodes, nil,
 			func(n *WorkflowInstance, e *WorkflowDefinition) { n.Edges.WorkflowDefinition = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControl; query != nil {
+		if err := _q.loadControl(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Control) { n.Edges.Control = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicy; query != nil {
+		if err := _q.loadInternalPolicy(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *InternalPolicy) { n.Edges.InternalPolicy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Evidence) { n.Edges.Evidence = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -695,6 +833,93 @@ func (_q *WorkflowInstanceQuery) loadWorkflowDefinition(ctx context.Context, que
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "workflow_definition_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadControl(ctx context.Context, query *ControlQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Control)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].ControlID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(control.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "control_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadInternalPolicy(ctx context.Context, query *InternalPolicyQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *InternalPolicy)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].InternalPolicyID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(internalpolicy.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_policy_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Evidence)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].EvidenceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(evidence.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "evidence_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -831,6 +1056,15 @@ func (_q *WorkflowInstanceQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withWorkflowDefinition != nil {
 			_spec.Node.AddColumnOnce(workflowinstance.FieldWorkflowDefinitionID)
+		}
+		if _q.withControl != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldControlID)
+		}
+		if _q.withInternalPolicy != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldInternalPolicyID)
+		}
+		if _q.withEvidence != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldEvidenceID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

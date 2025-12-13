@@ -1,5 +1,3 @@
-
-
 query GetAllControlImplementationHistories {
   controlImplementationHistories {
     edges {

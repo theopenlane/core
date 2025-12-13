@@ -83,6 +83,10 @@ type Control struct {
 	ExampleEvidence []models.ExampleEvidence `json:"example_evidence,omitempty"`
 	// references for the control
 	References []models.Reference `json:"references,omitempty"`
+	// reference steps to take to test the control
+	TestingProcedures []models.TestingProcedures `json:"testing_procedures,omitempty"`
+	// list of common evidence requests for the control
+	EvidenceRequests []models.EvidenceRequests `json:"evidence_requests,omitempty"`
 	// the id of the group that owns the control
 	ControlOwnerID *string `json:"control_owner_id,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
@@ -99,6 +103,12 @@ type Control struct {
 	ControlKindName string `json:"control_kind_name,omitempty"`
 	// the kind of the control
 	ControlKindID string `json:"control_kind_id,omitempty"`
+	// pending changes awaiting workflow approval
+	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
+	// user who proposed the changes
+	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
+	// when changes were proposed
+	ProposedAt *time.Time `json:"proposed_at,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the standard that the control belongs to, if applicable
@@ -482,13 +492,13 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case control.FieldTags, control.FieldAliases, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences:
+		case control.FieldTags, control.FieldAliases, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences, control.FieldTestingProcedures, control.FieldEvidenceRequests, control.FieldProposedChanges:
 			values[i] = new([]byte)
 		case control.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldProposedByUserID, control.FieldRefCode, control.FieldStandardID:
 			values[i] = new(sql.NullString)
-		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
+		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt, control.FieldProposedAt:
 			values[i] = new(sql.NullTime)
 		case control.ForeignKeys[0]: // custom_type_enum_controls
 			values[i] = new(sql.NullString)
@@ -713,6 +723,22 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field references: %w", err)
 				}
 			}
+		case control.FieldTestingProcedures:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field testing_procedures", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TestingProcedures); err != nil {
+					return fmt.Errorf("unmarshal field testing_procedures: %w", err)
+				}
+			}
+		case control.FieldEvidenceRequests:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_requests", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EvidenceRequests); err != nil {
+					return fmt.Errorf("unmarshal field evidence_requests: %w", err)
+				}
+			}
 		case control.FieldControlOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_owner_id", values[i])
@@ -763,6 +789,27 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field control_kind_id", values[i])
 			} else if value.Valid {
 				_m.ControlKindID = value.String
+			}
+		case control.FieldProposedChanges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
+					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
+				}
+			}
+		case control.FieldProposedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ProposedByUserID = value.String
+			}
+		case control.FieldProposedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
+			} else if value.Valid {
+				_m.ProposedAt = new(time.Time)
+				*_m.ProposedAt = value.Time
 			}
 		case control.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1076,6 +1123,12 @@ func (_m *Control) String() string {
 	builder.WriteString("references=")
 	builder.WriteString(fmt.Sprintf("%v", _m.References))
 	builder.WriteString(", ")
+	builder.WriteString("testing_procedures=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TestingProcedures))
+	builder.WriteString(", ")
+	builder.WriteString("evidence_requests=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EvidenceRequests))
+	builder.WriteString(", ")
 	if v := _m.ControlOwnerID; v != nil {
 		builder.WriteString("control_owner_id=")
 		builder.WriteString(*v)
@@ -1105,6 +1158,17 @@ func (_m *Control) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("control_kind_id=")
 	builder.WriteString(_m.ControlKindID)
+	builder.WriteString(", ")
+	builder.WriteString("proposed_changes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
+	builder.WriteString(", ")
+	builder.WriteString("proposed_by_user_id=")
+	builder.WriteString(_m.ProposedByUserID)
+	builder.WriteString(", ")
+	if v := _m.ProposedAt; v != nil {
+		builder.WriteString("proposed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
 	builder.WriteString(_m.RefCode)

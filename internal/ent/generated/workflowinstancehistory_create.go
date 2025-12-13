@@ -229,6 +229,48 @@ func (_c *WorkflowInstanceHistoryCreate) SetNillableDefinitionSnapshot(v *models
 	return _c
 }
 
+// SetControlID sets the "control_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetControlID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetControlID(v)
+	return _c
+}
+
+// SetNillableControlID sets the "control_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillableControlID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetControlID(*v)
+	}
+	return _c
+}
+
+// SetInternalPolicyID sets the "internal_policy_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetInternalPolicyID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetInternalPolicyID(v)
+	return _c
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillableInternalPolicyID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetInternalPolicyID(*v)
+	}
+	return _c
+}
+
+// SetEvidenceID sets the "evidence_id" field.
+func (_c *WorkflowInstanceHistoryCreate) SetEvidenceID(v string) *WorkflowInstanceHistoryCreate {
+	_c.mutation.SetEvidenceID(v)
+	return _c
+}
+
+// SetNillableEvidenceID sets the "evidence_id" field if the given value is not nil.
+func (_c *WorkflowInstanceHistoryCreate) SetNillableEvidenceID(v *string) *WorkflowInstanceHistoryCreate {
+	if v != nil {
+		_c.SetEvidenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowInstanceHistoryCreate) SetID(v string) *WorkflowInstanceHistoryCreate {
 	_c.mutation.SetID(v)
@@ -449,6 +491,18 @@ func (_c *WorkflowInstanceHistoryCreate) createSpec() (*WorkflowInstanceHistory,
 	if value, ok := _c.mutation.DefinitionSnapshot(); ok {
 		_spec.SetField(workflowinstancehistory.FieldDefinitionSnapshot, field.TypeJSON, value)
 		_node.DefinitionSnapshot = value
+	}
+	if value, ok := _c.mutation.ControlID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldControlID, field.TypeString, value)
+		_node.ControlID = value
+	}
+	if value, ok := _c.mutation.InternalPolicyID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldInternalPolicyID, field.TypeString, value)
+		_node.InternalPolicyID = value
+	}
+	if value, ok := _c.mutation.EvidenceID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldEvidenceID, field.TypeString, value)
+		_node.EvidenceID = value
 	}
 	return _node, _spec
 }

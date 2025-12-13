@@ -137,6 +137,11 @@ func DirectoryMembershipID(v string) predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldDirectoryMembershipID, v))
 }
 
+// EvidenceID applies equality check predicate on the "evidence_id" field. It's identical to EvidenceIDEQ.
+func EvidenceID(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldEvidenceID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldCreatedAt, v))
@@ -1117,6 +1122,81 @@ func DirectoryMembershipIDContainsFold(v string) predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldDirectoryMembershipID, v))
 }
 
+// EvidenceIDEQ applies the EQ predicate on the "evidence_id" field.
+func EvidenceIDEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEQ(FieldEvidenceID, v))
+}
+
+// EvidenceIDNEQ applies the NEQ predicate on the "evidence_id" field.
+func EvidenceIDNEQ(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNEQ(FieldEvidenceID, v))
+}
+
+// EvidenceIDIn applies the In predicate on the "evidence_id" field.
+func EvidenceIDIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIn(FieldEvidenceID, vs...))
+}
+
+// EvidenceIDNotIn applies the NotIn predicate on the "evidence_id" field.
+func EvidenceIDNotIn(vs ...string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotIn(FieldEvidenceID, vs...))
+}
+
+// EvidenceIDGT applies the GT predicate on the "evidence_id" field.
+func EvidenceIDGT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGT(FieldEvidenceID, v))
+}
+
+// EvidenceIDGTE applies the GTE predicate on the "evidence_id" field.
+func EvidenceIDGTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldGTE(FieldEvidenceID, v))
+}
+
+// EvidenceIDLT applies the LT predicate on the "evidence_id" field.
+func EvidenceIDLT(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLT(FieldEvidenceID, v))
+}
+
+// EvidenceIDLTE applies the LTE predicate on the "evidence_id" field.
+func EvidenceIDLTE(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldLTE(FieldEvidenceID, v))
+}
+
+// EvidenceIDContains applies the Contains predicate on the "evidence_id" field.
+func EvidenceIDContains(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContains(FieldEvidenceID, v))
+}
+
+// EvidenceIDHasPrefix applies the HasPrefix predicate on the "evidence_id" field.
+func EvidenceIDHasPrefix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasPrefix(FieldEvidenceID, v))
+}
+
+// EvidenceIDHasSuffix applies the HasSuffix predicate on the "evidence_id" field.
+func EvidenceIDHasSuffix(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldHasSuffix(FieldEvidenceID, v))
+}
+
+// EvidenceIDIsNil applies the IsNil predicate on the "evidence_id" field.
+func EvidenceIDIsNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldIsNull(FieldEvidenceID))
+}
+
+// EvidenceIDNotNil applies the NotNil predicate on the "evidence_id" field.
+func EvidenceIDNotNil() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldNotNull(FieldEvidenceID))
+}
+
+// EvidenceIDEqualFold applies the EqualFold predicate on the "evidence_id" field.
+func EvidenceIDEqualFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldEqualFold(FieldEvidenceID, v))
+}
+
+// EvidenceIDContainsFold applies the ContainsFold predicate on the "evidence_id" field.
+func EvidenceIDContainsFold(v string) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(sql.FieldContainsFold(FieldEvidenceID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.WorkflowObjectRef {
 	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
@@ -1369,6 +1449,35 @@ func HasDirectoryMembershipWith(preds ...predicate.DirectoryMembership) predicat
 		step := newDirectoryMembershipStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, EvidenceTable, EvidenceColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.WorkflowObjectRef {
+	return predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

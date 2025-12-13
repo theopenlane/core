@@ -124,26 +124,6 @@ func (_u *WorkflowInstanceHistoryUpdate) ClearTags() *WorkflowInstanceHistoryUpd
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowInstanceHistoryUpdate) SetOwnerID(v string) *WorkflowInstanceHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowInstanceHistoryUpdate) SetNillableOwnerID(v *string) *WorkflowInstanceHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowInstanceHistoryUpdate) ClearOwnerID() *WorkflowInstanceHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetWorkflowDefinitionID sets the "workflow_definition_id" field.
 func (_u *WorkflowInstanceHistoryUpdate) SetWorkflowDefinitionID(v string) *WorkflowInstanceHistoryUpdate {
 	_u.mutation.SetWorkflowDefinitionID(v)
@@ -229,6 +209,66 @@ func (_u *WorkflowInstanceHistoryUpdate) SetNillableDefinitionSnapshot(v *models
 // ClearDefinitionSnapshot clears the value of the "definition_snapshot" field.
 func (_u *WorkflowInstanceHistoryUpdate) ClearDefinitionSnapshot() *WorkflowInstanceHistoryUpdate {
 	_u.mutation.ClearDefinitionSnapshot()
+	return _u
+}
+
+// SetControlID sets the "control_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetControlID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetControlID(v)
+	return _u
+}
+
+// SetNillableControlID sets the "control_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableControlID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetControlID(*v)
+	}
+	return _u
+}
+
+// ClearControlID clears the value of the "control_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearControlID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearControlID()
+	return _u
+}
+
+// SetInternalPolicyID sets the "internal_policy_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetInternalPolicyID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetInternalPolicyID(v)
+	return _u
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableInternalPolicyID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetInternalPolicyID(*v)
+	}
+	return _u
+}
+
+// ClearInternalPolicyID clears the value of the "internal_policy_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearInternalPolicyID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearInternalPolicyID()
+	return _u
+}
+
+// SetEvidenceID sets the "evidence_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) SetEvidenceID(v string) *WorkflowInstanceHistoryUpdate {
+	_u.mutation.SetEvidenceID(v)
+	return _u
+}
+
+// SetNillableEvidenceID sets the "evidence_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdate) SetNillableEvidenceID(v *string) *WorkflowInstanceHistoryUpdate {
+	if v != nil {
+		_u.SetEvidenceID(*v)
+	}
+	return _u
+}
+
+// ClearEvidenceID clears the value of the "evidence_id" field.
+func (_u *WorkflowInstanceHistoryUpdate) ClearEvidenceID() *WorkflowInstanceHistoryUpdate {
+	_u.mutation.ClearEvidenceID()
 	return _u
 }
 
@@ -351,9 +391,6 @@ func (_u *WorkflowInstanceHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowinstancehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldOwnerID, field.TypeString)
 	}
@@ -380,6 +417,24 @@ func (_u *WorkflowInstanceHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	}
 	if _u.mutation.DefinitionSnapshotCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldDefinitionSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ControlID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldControlID, field.TypeString, value)
+	}
+	if _u.mutation.ControlIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldControlID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalPolicyID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldInternalPolicyID, field.TypeString, value)
+	}
+	if _u.mutation.InternalPolicyIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldInternalPolicyID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EvidenceID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldEvidenceID, field.TypeString, value)
+	}
+	if _u.mutation.EvidenceIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldEvidenceID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowInstanceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -495,26 +550,6 @@ func (_u *WorkflowInstanceHistoryUpdateOne) ClearTags() *WorkflowInstanceHistory
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowInstanceHistoryUpdateOne) SetOwnerID(v string) *WorkflowInstanceHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableOwnerID(v *string) *WorkflowInstanceHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowInstanceHistoryUpdateOne) ClearOwnerID() *WorkflowInstanceHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetWorkflowDefinitionID sets the "workflow_definition_id" field.
 func (_u *WorkflowInstanceHistoryUpdateOne) SetWorkflowDefinitionID(v string) *WorkflowInstanceHistoryUpdateOne {
 	_u.mutation.SetWorkflowDefinitionID(v)
@@ -600,6 +635,66 @@ func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableDefinitionSnapshot(v *mod
 // ClearDefinitionSnapshot clears the value of the "definition_snapshot" field.
 func (_u *WorkflowInstanceHistoryUpdateOne) ClearDefinitionSnapshot() *WorkflowInstanceHistoryUpdateOne {
 	_u.mutation.ClearDefinitionSnapshot()
+	return _u
+}
+
+// SetControlID sets the "control_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetControlID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetControlID(v)
+	return _u
+}
+
+// SetNillableControlID sets the "control_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableControlID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetControlID(*v)
+	}
+	return _u
+}
+
+// ClearControlID clears the value of the "control_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearControlID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearControlID()
+	return _u
+}
+
+// SetInternalPolicyID sets the "internal_policy_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetInternalPolicyID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetInternalPolicyID(v)
+	return _u
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableInternalPolicyID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalPolicyID(*v)
+	}
+	return _u
+}
+
+// ClearInternalPolicyID clears the value of the "internal_policy_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearInternalPolicyID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearInternalPolicyID()
+	return _u
+}
+
+// SetEvidenceID sets the "evidence_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetEvidenceID(v string) *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.SetEvidenceID(v)
+	return _u
+}
+
+// SetNillableEvidenceID sets the "evidence_id" field if the given value is not nil.
+func (_u *WorkflowInstanceHistoryUpdateOne) SetNillableEvidenceID(v *string) *WorkflowInstanceHistoryUpdateOne {
+	if v != nil {
+		_u.SetEvidenceID(*v)
+	}
+	return _u
+}
+
+// ClearEvidenceID clears the value of the "evidence_id" field.
+func (_u *WorkflowInstanceHistoryUpdateOne) ClearEvidenceID() *WorkflowInstanceHistoryUpdateOne {
+	_u.mutation.ClearEvidenceID()
 	return _u
 }
 
@@ -752,9 +847,6 @@ func (_u *WorkflowInstanceHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowinstancehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldOwnerID, field.TypeString)
 	}
@@ -781,6 +873,24 @@ func (_u *WorkflowInstanceHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.DefinitionSnapshotCleared() {
 		_spec.ClearField(workflowinstancehistory.FieldDefinitionSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ControlID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldControlID, field.TypeString, value)
+	}
+	if _u.mutation.ControlIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldControlID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalPolicyID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldInternalPolicyID, field.TypeString, value)
+	}
+	if _u.mutation.InternalPolicyIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldInternalPolicyID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EvidenceID(); ok {
+		_spec.SetField(workflowinstancehistory.FieldEvidenceID, field.TypeString, value)
+	}
+	if _u.mutation.EvidenceIDCleared() {
+		_spec.ClearField(workflowinstancehistory.FieldEvidenceID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowInstanceHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

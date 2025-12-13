@@ -442,7 +442,6 @@ type MutationResolver interface {
 	CreateWorkflowObjectRef(ctx context.Context, input generated.CreateWorkflowObjectRefInput) (*model.WorkflowObjectRefCreatePayload, error)
 	CreateBulkWorkflowObjectRef(ctx context.Context, input []*generated.CreateWorkflowObjectRefInput) (*model.WorkflowObjectRefBulkCreatePayload, error)
 	CreateBulkCSVWorkflowObjectRef(ctx context.Context, input graphql.Upload) (*model.WorkflowObjectRefBulkCreatePayload, error)
-	UpdateWorkflowObjectRef(ctx context.Context, id string, input generated.UpdateWorkflowObjectRefInput) (*model.WorkflowObjectRefUpdatePayload, error)
 	DeleteWorkflowObjectRef(ctx context.Context, id string) (*model.WorkflowObjectRefDeletePayload, error)
 }
 
@@ -5817,22 +5816,6 @@ func (ec *executionContext) field_Mutation_updateWorkflowInstance_args(ctx conte
 	}
 	args["id"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowInstanceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowInstanceInput)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateWorkflowObjectRef_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowObjectRefInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowObjectRefInput)
 	if err != nil {
 		return nil, err
 	}
@@ -25611,51 +25594,6 @@ func (ec *executionContext) fieldContext_Mutation_createBulkCSVWorkflowObjectRef
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateWorkflowObjectRef(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_Mutation_updateWorkflowObjectRef,
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateWorkflowObjectRef(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateWorkflowObjectRefInput))
-		},
-		nil,
-		ec.marshalNWorkflowObjectRefUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectRefUpdatePayload,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updateWorkflowObjectRef(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "workflowObjectRef":
-				return ec.fieldContext_WorkflowObjectRefUpdatePayload_workflowObjectRef(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRefUpdatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateWorkflowObjectRef_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_deleteWorkflowObjectRef(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28926,13 +28864,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createBulkCSVWorkflowObjectRef":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createBulkCSVWorkflowObjectRef(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateWorkflowObjectRef":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateWorkflowObjectRef(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

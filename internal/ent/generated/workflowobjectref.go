@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -36,7 +37,7 @@ type WorkflowObjectRef struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// Workflow instance this object is associated with
 	WorkflowInstanceID string `json:"workflow_instance_id,omitempty"`
@@ -54,6 +55,8 @@ type WorkflowObjectRef struct {
 	DirectoryGroupID string `json:"directory_group_id,omitempty"`
 	// Directory membership referenced by this workflow instance
 	DirectoryMembershipID string `json:"directory_membership_id,omitempty"`
+	// Evidence referenced by this workflow instance
+	EvidenceID string `json:"evidence_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowObjectRefQuery when eager-loading is set.
 	Edges                                  WorkflowObjectRefEdges `json:"edges"`
@@ -81,11 +84,13 @@ type WorkflowObjectRefEdges struct {
 	DirectoryGroup *DirectoryGroup `json:"directory_group,omitempty"`
 	// Directory membership referenced by this workflow instance
 	DirectoryMembership *DirectoryMembership `json:"directory_membership,omitempty"`
+	// Evidence referenced by this workflow instance
+	Evidence *Evidence `json:"evidence,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -187,12 +192,23 @@ func (e WorkflowObjectRefEdges) DirectoryMembershipOrErr() (*DirectoryMembership
 	return nil, &NotLoadedError{edge: "directory_membership"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) EvidenceOrErr() (*Evidence, error) {
+	if e.Evidence != nil {
+		return e.Evidence, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: evidence.Label}
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*WorkflowObjectRef) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID:
+		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID:
 			values[i] = new(sql.NullString)
 		case workflowobjectref.FieldCreatedAt, workflowobjectref.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -303,6 +319,12 @@ func (_m *WorkflowObjectRef) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.DirectoryMembershipID = value.String
 			}
+		case workflowobjectref.FieldEvidenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_id", values[i])
+			} else if value.Valid {
+				_m.EvidenceID = value.String
+			}
 		case workflowobjectref.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_instance_workflow_object_refs", values[i])
@@ -366,6 +388,11 @@ func (_m *WorkflowObjectRef) QueryDirectoryGroup() *DirectoryGroupQuery {
 // QueryDirectoryMembership queries the "directory_membership" edge of the WorkflowObjectRef entity.
 func (_m *WorkflowObjectRef) QueryDirectoryMembership() *DirectoryMembershipQuery {
 	return NewWorkflowObjectRefClient(_m.config).QueryDirectoryMembership(_m)
+}
+
+// QueryEvidence queries the "evidence" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryEvidence() *EvidenceQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryEvidence(_m)
 }
 
 // Update returns a builder for updating this WorkflowObjectRef.
@@ -432,6 +459,9 @@ func (_m *WorkflowObjectRef) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("directory_membership_id=")
 	builder.WriteString(_m.DirectoryMembershipID)
+	builder.WriteString(", ")
+	builder.WriteString("evidence_id=")
+	builder.WriteString(_m.EvidenceID)
 	builder.WriteByte(')')
 	return builder.String()
 }

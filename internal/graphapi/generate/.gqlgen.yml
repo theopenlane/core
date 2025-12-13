@@ -105,6 +105,12 @@ models:
   ExampleEvidence:
     model:
       - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  TestingProcedures:
+    model:
+      - github.com/theopenlane/core/pkg/models.TestingProcedures
+  EvidenceRequests:
+    model:
+      - github.com/theopenlane/core/pkg/models.EvidenceRequests
   VersionBump:
     model:
       - github.com/theopenlane/core/pkg/models.VersionBump

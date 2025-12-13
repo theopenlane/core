@@ -585,6 +585,58 @@ func (_u *InternalPolicyHistoryUpdate) ClearInternalPolicyKindID() *InternalPoli
 	return _u
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *InternalPolicyHistoryUpdate) SetProposedChanges(v map[string]interface{}) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *InternalPolicyHistoryUpdate) ClearProposedChanges() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *InternalPolicyHistoryUpdate) SetProposedByUserID(v string) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableProposedByUserID(v *string) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *InternalPolicyHistoryUpdate) ClearProposedByUserID() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *InternalPolicyHistoryUpdate) SetProposedAt(v time.Time) *InternalPolicyHistoryUpdate {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdate) SetNillableProposedAt(v *time.Time) *InternalPolicyHistoryUpdate {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *InternalPolicyHistoryUpdate) ClearProposedAt() *InternalPolicyHistoryUpdate {
+	_u.mutation.ClearProposedAt()
+	return _u
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (_u *InternalPolicyHistoryUpdate) Mutation() *InternalPolicyHistoryMutation {
 	return _u.mutation
@@ -882,6 +934,24 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.InternalPolicyKindIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldProposedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1459,6 +1529,58 @@ func (_u *InternalPolicyHistoryUpdateOne) ClearInternalPolicyKindID() *InternalP
 	return _u
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetProposedChanges(v map[string]interface{}) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearProposedChanges() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetProposedByUserID(v string) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableProposedByUserID(v *string) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearProposedByUserID() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *InternalPolicyHistoryUpdateOne) SetProposedAt(v time.Time) *InternalPolicyHistoryUpdateOne {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *InternalPolicyHistoryUpdateOne) SetNillableProposedAt(v *time.Time) *InternalPolicyHistoryUpdateOne {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *InternalPolicyHistoryUpdateOne) ClearProposedAt() *InternalPolicyHistoryUpdateOne {
+	_u.mutation.ClearProposedAt()
+	return _u
+}
+
 // Mutation returns the InternalPolicyHistoryMutation object of the builder.
 func (_u *InternalPolicyHistoryUpdateOne) Mutation() *InternalPolicyHistoryMutation {
 	return _u.mutation
@@ -1786,6 +1908,24 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.InternalPolicyKindIDCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(internalpolicyhistory.FieldProposedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.InternalPolicyHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

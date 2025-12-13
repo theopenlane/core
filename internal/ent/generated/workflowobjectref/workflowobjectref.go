@@ -43,6 +43,8 @@ const (
 	FieldDirectoryGroupID = "directory_group_id"
 	// FieldDirectoryMembershipID holds the string denoting the directory_membership_id field in the database.
 	FieldDirectoryMembershipID = "directory_membership_id"
+	// FieldEvidenceID holds the string denoting the evidence_id field in the database.
+	FieldEvidenceID = "evidence_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeWorkflowInstance holds the string denoting the workflow_instance edge name in mutations.
@@ -61,6 +63,8 @@ const (
 	EdgeDirectoryGroup = "directory_group"
 	// EdgeDirectoryMembership holds the string denoting the directory_membership edge name in mutations.
 	EdgeDirectoryMembership = "directory_membership"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// Table holds the table name of the workflowobjectref in the database.
 	Table = "workflow_object_refs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -126,6 +130,13 @@ const (
 	DirectoryMembershipInverseTable = "directory_memberships"
 	// DirectoryMembershipColumn is the table column denoting the directory_membership relation/edge.
 	DirectoryMembershipColumn = "directory_membership_id"
+	// EvidenceTable is the table that holds the evidence relation/edge.
+	EvidenceTable = "workflow_object_refs"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
+	// EvidenceColumn is the table column denoting the evidence relation/edge.
+	EvidenceColumn = "evidence_id"
 )
 
 // Columns holds all SQL columns for workflowobjectref fields.
@@ -145,6 +156,7 @@ var Columns = []string{
 	FieldDirectoryAccountID,
 	FieldDirectoryGroupID,
 	FieldDirectoryMembershipID,
+	FieldEvidenceID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "workflow_object_refs"
@@ -174,8 +186,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [6]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -271,6 +283,11 @@ func ByDirectoryMembershipID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDirectoryMembershipID, opts...).ToFunc()
 }
 
+// ByEvidenceID orders the results by the evidence_id field.
+func ByEvidenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEvidenceID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -331,6 +348,13 @@ func ByDirectoryGroupField(field string, opts ...sql.OrderTermOption) OrderOptio
 func ByDirectoryMembershipField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEvidenceField orders the results by evidence field.
+func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -394,5 +418,12 @@ func newDirectoryMembershipStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DirectoryMembershipInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DirectoryMembershipTable, DirectoryMembershipColumn),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EvidenceTable, EvidenceColumn),
 	)
 }

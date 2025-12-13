@@ -43,7 +43,7 @@ type WorkflowInstanceHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the workflow definition this instance is based on
 	WorkflowDefinitionID string `json:"workflow_definition_id,omitempty"`
@@ -55,7 +55,13 @@ type WorkflowInstanceHistory struct {
 	LastEvaluatedAt *time.Time `json:"last_evaluated_at,omitempty"`
 	// Copy of definition JSON used for this instance
 	DefinitionSnapshot models.WorkflowDefinitionDocument `json:"definition_snapshot,omitempty"`
-	selectValues       sql.SelectValues
+	// ID of the control this workflow instance is associated with
+	ControlID string `json:"control_id,omitempty"`
+	// ID of the internal policy this workflow instance is associated with
+	InternalPolicyID string `json:"internal_policy_id,omitempty"`
+	// ID of the evidence this workflow instance is associated with
+	EvidenceID   string `json:"evidence_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -67,7 +73,7 @@ func (*WorkflowInstanceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case workflowinstancehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case workflowinstancehistory.FieldID, workflowinstancehistory.FieldRef, workflowinstancehistory.FieldCreatedBy, workflowinstancehistory.FieldUpdatedBy, workflowinstancehistory.FieldDeletedBy, workflowinstancehistory.FieldDisplayID, workflowinstancehistory.FieldOwnerID, workflowinstancehistory.FieldWorkflowDefinitionID, workflowinstancehistory.FieldState:
+		case workflowinstancehistory.FieldID, workflowinstancehistory.FieldRef, workflowinstancehistory.FieldCreatedBy, workflowinstancehistory.FieldUpdatedBy, workflowinstancehistory.FieldDeletedBy, workflowinstancehistory.FieldDisplayID, workflowinstancehistory.FieldOwnerID, workflowinstancehistory.FieldWorkflowDefinitionID, workflowinstancehistory.FieldState, workflowinstancehistory.FieldControlID, workflowinstancehistory.FieldInternalPolicyID, workflowinstancehistory.FieldEvidenceID:
 			values[i] = new(sql.NullString)
 		case workflowinstancehistory.FieldHistoryTime, workflowinstancehistory.FieldCreatedAt, workflowinstancehistory.FieldUpdatedAt, workflowinstancehistory.FieldDeletedAt, workflowinstancehistory.FieldLastEvaluatedAt:
 			values[i] = new(sql.NullTime)
@@ -201,6 +207,24 @@ func (_m *WorkflowInstanceHistory) assignValues(columns []string, values []any) 
 					return fmt.Errorf("unmarshal field definition_snapshot: %w", err)
 				}
 			}
+		case workflowinstancehistory.FieldControlID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_id", values[i])
+			} else if value.Valid {
+				_m.ControlID = value.String
+			}
+		case workflowinstancehistory.FieldInternalPolicyID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_id", values[i])
+			} else if value.Valid {
+				_m.InternalPolicyID = value.String
+			}
+		case workflowinstancehistory.FieldEvidenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_id", values[i])
+			} else if value.Valid {
+				_m.EvidenceID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -289,6 +313,15 @@ func (_m *WorkflowInstanceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("definition_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DefinitionSnapshot))
+	builder.WriteString(", ")
+	builder.WriteString("control_id=")
+	builder.WriteString(_m.ControlID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_policy_id=")
+	builder.WriteString(_m.InternalPolicyID)
+	builder.WriteString(", ")
+	builder.WriteString("evidence_id=")
+	builder.WriteString(_m.EvidenceID)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -42,6 +42,12 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
+	FieldProposedChanges = "proposed_changes"
+	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
+	FieldProposedByUserID = "proposed_by_user_id"
+	// FieldProposedAt holds the string denoting the proposed_at field in the database.
+	FieldProposedAt = "proposed_at"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -79,6 +85,9 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldProposedChanges,
+	FieldProposedByUserID,
+	FieldProposedAt,
 	FieldName,
 	FieldDescription,
 	FieldCollectionProcedure,
@@ -210,6 +219,16 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByProposedByUserID orders the results by the proposed_by_user_id field.
+func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
+}
+
+// ByProposedAt orders the results by the proposed_at field.
+func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

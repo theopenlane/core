@@ -84,6 +84,12 @@ const (
 	FieldInternalPolicyKindName = "internal_policy_kind_name"
 	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
 	FieldInternalPolicyKindID = "internal_policy_kind_id"
+	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
+	FieldProposedChanges = "proposed_changes"
+	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
+	FieldProposedByUserID = "proposed_by_user_id"
+	// FieldProposedAt holds the string denoting the proposed_at field in the database.
+	FieldProposedAt = "proposed_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -275,6 +281,9 @@ var Columns = []string{
 	FieldFileID,
 	FieldInternalPolicyKindName,
 	FieldInternalPolicyKindID,
+	FieldProposedChanges,
+	FieldProposedByUserID,
+	FieldProposedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
@@ -538,6 +547,16 @@ func ByInternalPolicyKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByInternalPolicyKindID orders the results by the internal_policy_kind_id field.
 func ByInternalPolicyKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalPolicyKindID, opts...).ToFunc()
+}
+
+// ByProposedByUserID orders the results by the proposed_by_user_id field.
+func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
+}
+
+// ByProposedAt orders the results by the proposed_at field.
+func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

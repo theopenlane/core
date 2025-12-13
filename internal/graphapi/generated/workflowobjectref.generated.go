@@ -82,6 +82,8 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefBulkCreatePayload_work
 				return ec.fieldContext_WorkflowObjectRef_directoryGroupID(ctx, field)
 			case "directoryMembershipID":
 				return ec.fieldContext_WorkflowObjectRef_directoryMembershipID(ctx, field)
+			case "evidenceID":
+				return ec.fieldContext_WorkflowObjectRef_evidenceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
 			case "workflowInstance":
@@ -100,6 +102,8 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefBulkCreatePayload_work
 				return ec.fieldContext_WorkflowObjectRef_directoryGroup(ctx, field)
 			case "directoryMembership":
 				return ec.fieldContext_WorkflowObjectRef_directoryMembership(ctx, field)
+			case "evidence":
+				return ec.fieldContext_WorkflowObjectRef_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},
@@ -161,6 +165,8 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefCreatePayload_workflow
 				return ec.fieldContext_WorkflowObjectRef_directoryGroupID(ctx, field)
 			case "directoryMembershipID":
 				return ec.fieldContext_WorkflowObjectRef_directoryMembershipID(ctx, field)
+			case "evidenceID":
+				return ec.fieldContext_WorkflowObjectRef_evidenceID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
 			case "workflowInstance":
@@ -179,6 +185,8 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefCreatePayload_workflow
 				return ec.fieldContext_WorkflowObjectRef_directoryGroup(ctx, field)
 			case "directoryMembership":
 				return ec.fieldContext_WorkflowObjectRef_directoryMembership(ctx, field)
+			case "evidence":
+				return ec.fieldContext_WorkflowObjectRef_evidence(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},
@@ -210,85 +218,6 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefDeletePayload_deletedI
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _WorkflowObjectRefUpdatePayload_workflowObjectRef(ctx context.Context, field graphql.CollectedField, obj *model.WorkflowObjectRefUpdatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_WorkflowObjectRefUpdatePayload_workflowObjectRef,
-		func(ctx context.Context) (any, error) {
-			return obj.WorkflowObjectRef, nil
-		},
-		nil,
-		ec.marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_WorkflowObjectRefUpdatePayload_workflowObjectRef(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "WorkflowObjectRefUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_WorkflowObjectRef_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_WorkflowObjectRef_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_WorkflowObjectRef_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_WorkflowObjectRef_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_WorkflowObjectRef_updatedBy(ctx, field)
-			case "displayID":
-				return ec.fieldContext_WorkflowObjectRef_displayID(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_WorkflowObjectRef_ownerID(ctx, field)
-			case "workflowInstanceID":
-				return ec.fieldContext_WorkflowObjectRef_workflowInstanceID(ctx, field)
-			case "controlID":
-				return ec.fieldContext_WorkflowObjectRef_controlID(ctx, field)
-			case "taskID":
-				return ec.fieldContext_WorkflowObjectRef_taskID(ctx, field)
-			case "internalPolicyID":
-				return ec.fieldContext_WorkflowObjectRef_internalPolicyID(ctx, field)
-			case "findingID":
-				return ec.fieldContext_WorkflowObjectRef_findingID(ctx, field)
-			case "directoryAccountID":
-				return ec.fieldContext_WorkflowObjectRef_directoryAccountID(ctx, field)
-			case "directoryGroupID":
-				return ec.fieldContext_WorkflowObjectRef_directoryGroupID(ctx, field)
-			case "directoryMembershipID":
-				return ec.fieldContext_WorkflowObjectRef_directoryMembershipID(ctx, field)
-			case "owner":
-				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
-			case "workflowInstance":
-				return ec.fieldContext_WorkflowObjectRef_workflowInstance(ctx, field)
-			case "control":
-				return ec.fieldContext_WorkflowObjectRef_control(ctx, field)
-			case "task":
-				return ec.fieldContext_WorkflowObjectRef_task(ctx, field)
-			case "internalPolicy":
-				return ec.fieldContext_WorkflowObjectRef_internalPolicy(ctx, field)
-			case "finding":
-				return ec.fieldContext_WorkflowObjectRef_finding(ctx, field)
-			case "directoryAccount":
-				return ec.fieldContext_WorkflowObjectRef_directoryAccount(ctx, field)
-			case "directoryGroup":
-				return ec.fieldContext_WorkflowObjectRef_directoryGroup(ctx, field)
-			case "directoryMembership":
-				return ec.fieldContext_WorkflowObjectRef_directoryMembership(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},
 	}
 	return fc, nil
@@ -420,45 +349,6 @@ func (ec *executionContext) _WorkflowObjectRefDeletePayload(ctx context.Context,
 	return out
 }
 
-var workflowObjectRefUpdatePayloadImplementors = []string{"WorkflowObjectRefUpdatePayload"}
-
-func (ec *executionContext) _WorkflowObjectRefUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.WorkflowObjectRefUpdatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, workflowObjectRefUpdatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("WorkflowObjectRefUpdatePayload")
-		case "workflowObjectRef":
-			out.Values[i] = ec._WorkflowObjectRefUpdatePayload_workflowObjectRef(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
@@ -503,20 +393,6 @@ func (ec *executionContext) marshalNWorkflowObjectRefDeletePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._WorkflowObjectRefDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowObjectRefUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectRefUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowObjectRefUpdatePayload) graphql.Marshaler {
-	return ec._WorkflowObjectRefUpdatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNWorkflowObjectRefUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectRefUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowObjectRefUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._WorkflowObjectRefUpdatePayload(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************

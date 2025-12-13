@@ -6,9 +6,11 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -112,14 +114,16 @@ func (WorkflowDefinition) Edges() []ent.Edge {
 }
 
 // Mixin of the WorkflowDefinition.
-func (WorkflowDefinition) Mixin() []ent.Mixin {
+func (w WorkflowDefinition) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "WFD",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(WorkflowDefinition{}),
+			newObjectOwnedMixin[generated.WorkflowDefinition](w,
+				withOrganizationOwner(true),
+			),
 			mixin.NewSystemOwnedMixin(),
 		},
-	}.getMixins(WorkflowDefinition{})
+	}.getMixins(w)
 }
 
 // Modules this schema has access to.
@@ -127,11 +131,20 @@ func (WorkflowDefinition) Modules() []models.OrgModule {
 	return []models.OrgModule{models.CatalogBaseModule}
 }
 
+// Annotations of the WorkflowDefinition
+func (WorkflowDefinition) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
 // Policy of the WorkflowDefinition.
 func (WorkflowDefinition) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),
 		),
 	)
 }

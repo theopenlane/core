@@ -39,7 +39,7 @@ type WorkflowAssignment struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the workflow instance this assignment belongs to
 	WorkflowInstanceID string `json:"workflow_instance_id,omitempty"`

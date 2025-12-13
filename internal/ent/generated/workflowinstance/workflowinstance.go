@@ -46,10 +46,22 @@ const (
 	FieldLastEvaluatedAt = "last_evaluated_at"
 	// FieldDefinitionSnapshot holds the string denoting the definition_snapshot field in the database.
 	FieldDefinitionSnapshot = "definition_snapshot"
+	// FieldControlID holds the string denoting the control_id field in the database.
+	FieldControlID = "control_id"
+	// FieldInternalPolicyID holds the string denoting the internal_policy_id field in the database.
+	FieldInternalPolicyID = "internal_policy_id"
+	// FieldEvidenceID holds the string denoting the evidence_id field in the database.
+	FieldEvidenceID = "evidence_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeWorkflowDefinition holds the string denoting the workflow_definition edge name in mutations.
 	EdgeWorkflowDefinition = "workflow_definition"
+	// EdgeControl holds the string denoting the control edge name in mutations.
+	EdgeControl = "control"
+	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
+	EdgeInternalPolicy = "internal_policy"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// EdgeWorkflowAssignments holds the string denoting the workflow_assignments edge name in mutations.
 	EdgeWorkflowAssignments = "workflow_assignments"
 	// EdgeWorkflowEvents holds the string denoting the workflow_events edge name in mutations.
@@ -72,6 +84,27 @@ const (
 	WorkflowDefinitionInverseTable = "workflow_definitions"
 	// WorkflowDefinitionColumn is the table column denoting the workflow_definition relation/edge.
 	WorkflowDefinitionColumn = "workflow_definition_id"
+	// ControlTable is the table that holds the control relation/edge.
+	ControlTable = "workflow_instances"
+	// ControlInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlInverseTable = "controls"
+	// ControlColumn is the table column denoting the control relation/edge.
+	ControlColumn = "control_id"
+	// InternalPolicyTable is the table that holds the internal_policy relation/edge.
+	InternalPolicyTable = "workflow_instances"
+	// InternalPolicyInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPolicyInverseTable = "internal_policies"
+	// InternalPolicyColumn is the table column denoting the internal_policy relation/edge.
+	InternalPolicyColumn = "internal_policy_id"
+	// EvidenceTable is the table that holds the evidence relation/edge.
+	EvidenceTable = "workflow_instances"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
+	// EvidenceColumn is the table column denoting the evidence relation/edge.
+	EvidenceColumn = "evidence_id"
 	// WorkflowAssignmentsTable is the table that holds the workflow_assignments relation/edge.
 	WorkflowAssignmentsTable = "workflow_assignments"
 	// WorkflowAssignmentsInverseTable is the table name for the WorkflowAssignment entity.
@@ -112,6 +145,9 @@ var Columns = []string{
 	FieldContext,
 	FieldLastEvaluatedAt,
 	FieldDefinitionSnapshot,
+	FieldControlID,
+	FieldInternalPolicyID,
+	FieldEvidenceID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -130,8 +166,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [8]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -226,6 +262,21 @@ func ByLastEvaluatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastEvaluatedAt, opts...).ToFunc()
 }
 
+// ByControlID orders the results by the control_id field.
+func ByControlID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlID, opts...).ToFunc()
+}
+
+// ByInternalPolicyID orders the results by the internal_policy_id field.
+func ByInternalPolicyID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalPolicyID, opts...).ToFunc()
+}
+
+// ByEvidenceID orders the results by the evidence_id field.
+func ByEvidenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEvidenceID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -237,6 +288,27 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByWorkflowDefinitionField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowDefinitionStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByControlField orders the results by control field.
+func ByControlField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalPolicyField orders the results by internal_policy field.
+func ByInternalPolicyField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPolicyStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEvidenceField orders the results by evidence field.
+func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -293,6 +365,27 @@ func newWorkflowDefinitionStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowDefinitionInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, WorkflowDefinitionTable, WorkflowDefinitionColumn),
+	)
+}
+func newControlStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ControlTable, ControlColumn),
+	)
+}
+func newInternalPolicyStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPolicyInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalPolicyTable, InternalPolicyColumn),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EvidenceTable, EvidenceColumn),
 	)
 }
 func newWorkflowAssignmentsStep() *sqlgraph.Step {

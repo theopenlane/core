@@ -83,6 +83,10 @@ type Subcontrol struct {
 	ExampleEvidence []models.ExampleEvidence `json:"example_evidence,omitempty"`
 	// references for the control
 	References []models.Reference `json:"references,omitempty"`
+	// reference steps to take to test the control
+	TestingProcedures []models.TestingProcedures `json:"testing_procedures,omitempty"`
+	// list of common evidence requests for the control
+	EvidenceRequests []models.EvidenceRequests `json:"evidence_requests,omitempty"`
 	// the id of the group that owns the control
 	ControlOwnerID *string `json:"control_owner_id,omitempty"`
 	// the id of the group that is temporarily delegated to own the control
@@ -377,7 +381,7 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case subcontrol.FieldTags, subcontrol.FieldAliases, subcontrol.FieldMappedCategories, subcontrol.FieldAssessmentObjectives, subcontrol.FieldAssessmentMethods, subcontrol.FieldControlQuestions, subcontrol.FieldImplementationGuidance, subcontrol.FieldExampleEvidence, subcontrol.FieldReferences:
+		case subcontrol.FieldTags, subcontrol.FieldAliases, subcontrol.FieldMappedCategories, subcontrol.FieldAssessmentObjectives, subcontrol.FieldAssessmentMethods, subcontrol.FieldControlQuestions, subcontrol.FieldImplementationGuidance, subcontrol.FieldExampleEvidence, subcontrol.FieldReferences, subcontrol.FieldTestingProcedures, subcontrol.FieldEvidenceRequests:
 			values[i] = new([]byte)
 		case subcontrol.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -612,6 +616,22 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.References); err != nil {
 					return fmt.Errorf("unmarshal field references: %w", err)
+				}
+			}
+		case subcontrol.FieldTestingProcedures:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field testing_procedures", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TestingProcedures); err != nil {
+					return fmt.Errorf("unmarshal field testing_procedures: %w", err)
+				}
+			}
+		case subcontrol.FieldEvidenceRequests:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_requests", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EvidenceRequests); err != nil {
+					return fmt.Errorf("unmarshal field evidence_requests: %w", err)
 				}
 			}
 		case subcontrol.FieldControlOwnerID:
@@ -952,6 +972,12 @@ func (_m *Subcontrol) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("references=")
 	builder.WriteString(fmt.Sprintf("%v", _m.References))
+	builder.WriteString(", ")
+	builder.WriteString("testing_procedures=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TestingProcedures))
+	builder.WriteString(", ")
+	builder.WriteString("evidence_requests=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EvidenceRequests))
 	builder.WriteString(", ")
 	if v := _m.ControlOwnerID; v != nil {
 		builder.WriteString("control_owner_id=")

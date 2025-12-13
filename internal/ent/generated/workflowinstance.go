@@ -10,6 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
@@ -38,7 +41,7 @@ type WorkflowInstance struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the workflow definition this instance is based on
 	WorkflowDefinitionID string `json:"workflow_definition_id,omitempty"`
@@ -50,6 +53,12 @@ type WorkflowInstance struct {
 	LastEvaluatedAt *time.Time `json:"last_evaluated_at,omitempty"`
 	// Copy of definition JSON used for this instance
 	DefinitionSnapshot models.WorkflowDefinitionDocument `json:"definition_snapshot,omitempty"`
+	// ID of the control this workflow instance is associated with
+	ControlID string `json:"control_id,omitempty"`
+	// ID of the internal policy this workflow instance is associated with
+	InternalPolicyID string `json:"internal_policy_id,omitempty"`
+	// ID of the evidence this workflow instance is associated with
+	EvidenceID string `json:"evidence_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowInstanceQuery when eager-loading is set.
 	Edges        WorkflowInstanceEdges `json:"edges"`
@@ -62,6 +71,12 @@ type WorkflowInstanceEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Definition driving this instance
 	WorkflowDefinition *WorkflowDefinition `json:"workflow_definition,omitempty"`
+	// Control this workflow instance is associated with
+	Control *Control `json:"control,omitempty"`
+	// Internal policy this workflow instance is associated with
+	InternalPolicy *InternalPolicy `json:"internal_policy,omitempty"`
+	// Evidence this workflow instance is associated with
+	Evidence *Evidence `json:"evidence,omitempty"`
 	// Assignments associated with this workflow instance
 	WorkflowAssignments []*WorkflowAssignment `json:"workflow_assignments,omitempty"`
 	// Events recorded for this instance
@@ -70,9 +85,9 @@ type WorkflowInstanceEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [5]bool
+	loadedTypes [8]bool
 	// totalCount holds the count of the edges above.
-	totalCount [5]map[string]int
+	totalCount [8]map[string]int
 
 	namedWorkflowAssignments map[string][]*WorkflowAssignment
 	namedWorkflowEvents      map[string][]*WorkflowEvent
@@ -101,10 +116,43 @@ func (e WorkflowInstanceEdges) WorkflowDefinitionOrErr() (*WorkflowDefinition, e
 	return nil, &NotLoadedError{edge: "workflow_definition"}
 }
 
+// ControlOrErr returns the Control value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) ControlOrErr() (*Control, error) {
+	if e.Control != nil {
+		return e.Control, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: control.Label}
+	}
+	return nil, &NotLoadedError{edge: "control"}
+}
+
+// InternalPolicyOrErr returns the InternalPolicy value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) InternalPolicyOrErr() (*InternalPolicy, error) {
+	if e.InternalPolicy != nil {
+		return e.InternalPolicy, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: internalpolicy.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_policy"}
+}
+
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) EvidenceOrErr() (*Evidence, error) {
+	if e.Evidence != nil {
+		return e.Evidence, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: evidence.Label}
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // WorkflowAssignmentsOrErr returns the WorkflowAssignments value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[5] {
 		return e.WorkflowAssignments, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_assignments"}
@@ -113,7 +161,7 @@ func (e WorkflowInstanceEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment
 // WorkflowEventsOrErr returns the WorkflowEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[6] {
 		return e.WorkflowEvents, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_events"}
@@ -122,7 +170,7 @@ func (e WorkflowInstanceEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[7] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -135,7 +183,7 @@ func (*WorkflowInstance) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case workflowinstance.FieldTags, workflowinstance.FieldContext, workflowinstance.FieldDefinitionSnapshot:
 			values[i] = new([]byte)
-		case workflowinstance.FieldID, workflowinstance.FieldCreatedBy, workflowinstance.FieldUpdatedBy, workflowinstance.FieldDeletedBy, workflowinstance.FieldDisplayID, workflowinstance.FieldOwnerID, workflowinstance.FieldWorkflowDefinitionID, workflowinstance.FieldState:
+		case workflowinstance.FieldID, workflowinstance.FieldCreatedBy, workflowinstance.FieldUpdatedBy, workflowinstance.FieldDeletedBy, workflowinstance.FieldDisplayID, workflowinstance.FieldOwnerID, workflowinstance.FieldWorkflowDefinitionID, workflowinstance.FieldState, workflowinstance.FieldControlID, workflowinstance.FieldInternalPolicyID, workflowinstance.FieldEvidenceID:
 			values[i] = new(sql.NullString)
 		case workflowinstance.FieldCreatedAt, workflowinstance.FieldUpdatedAt, workflowinstance.FieldDeletedAt, workflowinstance.FieldLastEvaluatedAt:
 			values[i] = new(sql.NullTime)
@@ -251,6 +299,24 @@ func (_m *WorkflowInstance) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field definition_snapshot: %w", err)
 				}
 			}
+		case workflowinstance.FieldControlID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field control_id", values[i])
+			} else if value.Valid {
+				_m.ControlID = value.String
+			}
+		case workflowinstance.FieldInternalPolicyID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_policy_id", values[i])
+			} else if value.Valid {
+				_m.InternalPolicyID = value.String
+			}
+		case workflowinstance.FieldEvidenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_id", values[i])
+			} else if value.Valid {
+				_m.EvidenceID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -272,6 +338,21 @@ func (_m *WorkflowInstance) QueryOwner() *OrganizationQuery {
 // QueryWorkflowDefinition queries the "workflow_definition" edge of the WorkflowInstance entity.
 func (_m *WorkflowInstance) QueryWorkflowDefinition() *WorkflowDefinitionQuery {
 	return NewWorkflowInstanceClient(_m.config).QueryWorkflowDefinition(_m)
+}
+
+// QueryControl queries the "control" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryControl() *ControlQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryControl(_m)
+}
+
+// QueryInternalPolicy queries the "internal_policy" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryInternalPolicy() *InternalPolicyQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryInternalPolicy(_m)
+}
+
+// QueryEvidence queries the "evidence" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryEvidence() *EvidenceQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryWorkflowAssignments queries the "workflow_assignments" edge of the WorkflowInstance entity.
@@ -355,6 +436,15 @@ func (_m *WorkflowInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("definition_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DefinitionSnapshot))
+	builder.WriteString(", ")
+	builder.WriteString("control_id=")
+	builder.WriteString(_m.ControlID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_policy_id=")
+	builder.WriteString(_m.InternalPolicyID)
+	builder.WriteString(", ")
+	builder.WriteString("evidence_id=")
+	builder.WriteString(_m.EvidenceID)
 	builder.WriteByte(')')
 	return builder.String()
 }

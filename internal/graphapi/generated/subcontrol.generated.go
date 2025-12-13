@@ -108,6 +108,10 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Subcontrol_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Subcontrol_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
 			case "delegateID":
@@ -280,6 +284,10 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Subcontrol_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Subcontrol_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
 			case "delegateID":
@@ -452,6 +460,10 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_exampleEvidence(ctx, field)
 			case "references":
 				return ec.fieldContext_Subcontrol_references(ctx, field)
+			case "testingProcedures":
+				return ec.fieldContext_Subcontrol_testingProcedures(ctx, field)
+			case "evidenceRequests":
+				return ec.fieldContext_Subcontrol_evidenceRequests(ctx, field)
 			case "controlOwnerID":
 				return ec.fieldContext_Subcontrol_controlOwnerID(ctx, field)
 			case "delegateID":

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // WorkflowAssignmentHistory holds the schema definition for the WorkflowAssignmentHistory entity.
@@ -35,6 +36,11 @@ func (WorkflowAssignmentHistory) Annotations() []schema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "workflow_assignment",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -107,6 +113,6 @@ func (WorkflowAssignmentHistory) Policy() ent.Policy {
 // Interceptors of the WorkflowAssignmentHistory
 func (WorkflowAssignmentHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

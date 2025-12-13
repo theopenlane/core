@@ -446,6 +446,40 @@ func (_c *InternalPolicyHistoryCreate) SetNillableInternalPolicyKindID(v *string
 	return _c
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_c *InternalPolicyHistoryCreate) SetProposedChanges(v map[string]interface{}) *InternalPolicyHistoryCreate {
+	_c.mutation.SetProposedChanges(v)
+	return _c
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_c *InternalPolicyHistoryCreate) SetProposedByUserID(v string) *InternalPolicyHistoryCreate {
+	_c.mutation.SetProposedByUserID(v)
+	return _c
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableProposedByUserID(v *string) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetProposedByUserID(*v)
+	}
+	return _c
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_c *InternalPolicyHistoryCreate) SetProposedAt(v time.Time) *InternalPolicyHistoryCreate {
+	_c.mutation.SetProposedAt(v)
+	return _c
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableProposedAt(v *time.Time) *InternalPolicyHistoryCreate {
+	if v != nil {
+		_c.SetProposedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyHistoryCreate) SetID(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetID(v)
@@ -788,6 +822,18 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.InternalPolicyKindID(); ok {
 		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString, value)
 		_node.InternalPolicyKindID = value
+	}
+	if value, ok := _c.mutation.ProposedChanges(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedChanges, field.TypeJSON, value)
+		_node.ProposedChanges = value
+	}
+	if value, ok := _c.mutation.ProposedByUserID(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedByUserID, field.TypeString, value)
+		_node.ProposedByUserID = value
+	}
+	if value, ok := _c.mutation.ProposedAt(); ok {
+		_spec.SetField(internalpolicyhistory.FieldProposedAt, field.TypeTime, value)
+		_node.ProposedAt = &value
 	}
 	return _node, _spec
 }

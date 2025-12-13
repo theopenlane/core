@@ -38,6 +38,12 @@ type Evidence struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// pending changes awaiting workflow approval
+	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
+	// user who proposed the changes
+	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
+	// when changes were proposed
+	ProposedAt *time.Time `json:"proposed_at,omitempty"`
 	// the name of the evidence
 	Name string `json:"name,omitempty"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -186,13 +192,13 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case evidence.FieldTags:
+		case evidence.FieldTags, evidence.FieldProposedChanges:
 			values[i] = new([]byte)
 		case evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldProposedByUserID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
-		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
+		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldProposedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -270,6 +276,27 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case evidence.FieldProposedChanges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
+					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
+				}
+			}
+		case evidence.FieldProposedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ProposedByUserID = value.String
+			}
+		case evidence.FieldProposedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
+			} else if value.Valid {
+				_m.ProposedAt = new(time.Time)
+				*_m.ProposedAt = value.Time
 			}
 		case evidence.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -432,6 +459,17 @@ func (_m *Evidence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("proposed_changes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
+	builder.WriteString(", ")
+	builder.WriteString("proposed_by_user_id=")
+	builder.WriteString(_m.ProposedByUserID)
+	builder.WriteString(", ")
+	if v := _m.ProposedAt; v != nil {
+		builder.WriteString("proposed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)

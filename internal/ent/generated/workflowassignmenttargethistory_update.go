@@ -123,26 +123,6 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearTags() *WorkflowAssignment
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetOwnerID(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableOwnerID(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearOwnerID() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetWorkflowAssignmentID sets the "workflow_assignment_id" field.
 func (_u *WorkflowAssignmentTargetHistoryUpdate) SetWorkflowAssignmentID(v string) *WorkflowAssignmentTargetHistoryUpdate {
 	_u.mutation.SetWorkflowAssignmentID(v)
@@ -350,9 +330,6 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) sqlSave(ctx context.Context) (_
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldOwnerID, field.TypeString)
 	}
@@ -491,26 +468,6 @@ func (_u *WorkflowAssignmentTargetHistoryUpdateOne) AppendTags(v []string) *Work
 // ClearTags clears the value of the "tags" field.
 func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearTags() *WorkflowAssignmentTargetHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetOwnerID(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableOwnerID(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearOwnerID() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -750,9 +707,6 @@ func (_u *WorkflowAssignmentTargetHistoryUpdateOne) sqlSave(ctx context.Context)
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldOwnerID, field.TypeString)

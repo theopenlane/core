@@ -10,6 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
@@ -199,6 +202,48 @@ func (_c *WorkflowInstanceCreate) SetNillableDefinitionSnapshot(v *models.Workfl
 	return _c
 }
 
+// SetControlID sets the "control_id" field.
+func (_c *WorkflowInstanceCreate) SetControlID(v string) *WorkflowInstanceCreate {
+	_c.mutation.SetControlID(v)
+	return _c
+}
+
+// SetNillableControlID sets the "control_id" field if the given value is not nil.
+func (_c *WorkflowInstanceCreate) SetNillableControlID(v *string) *WorkflowInstanceCreate {
+	if v != nil {
+		_c.SetControlID(*v)
+	}
+	return _c
+}
+
+// SetInternalPolicyID sets the "internal_policy_id" field.
+func (_c *WorkflowInstanceCreate) SetInternalPolicyID(v string) *WorkflowInstanceCreate {
+	_c.mutation.SetInternalPolicyID(v)
+	return _c
+}
+
+// SetNillableInternalPolicyID sets the "internal_policy_id" field if the given value is not nil.
+func (_c *WorkflowInstanceCreate) SetNillableInternalPolicyID(v *string) *WorkflowInstanceCreate {
+	if v != nil {
+		_c.SetInternalPolicyID(*v)
+	}
+	return _c
+}
+
+// SetEvidenceID sets the "evidence_id" field.
+func (_c *WorkflowInstanceCreate) SetEvidenceID(v string) *WorkflowInstanceCreate {
+	_c.mutation.SetEvidenceID(v)
+	return _c
+}
+
+// SetNillableEvidenceID sets the "evidence_id" field if the given value is not nil.
+func (_c *WorkflowInstanceCreate) SetNillableEvidenceID(v *string) *WorkflowInstanceCreate {
+	if v != nil {
+		_c.SetEvidenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowInstanceCreate) SetID(v string) *WorkflowInstanceCreate {
 	_c.mutation.SetID(v)
@@ -221,6 +266,21 @@ func (_c *WorkflowInstanceCreate) SetOwner(v *Organization) *WorkflowInstanceCre
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_c *WorkflowInstanceCreate) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceCreate {
 	return _c.SetWorkflowDefinitionID(v.ID)
+}
+
+// SetControl sets the "control" edge to the Control entity.
+func (_c *WorkflowInstanceCreate) SetControl(v *Control) *WorkflowInstanceCreate {
+	return _c.SetControlID(v.ID)
+}
+
+// SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
+func (_c *WorkflowInstanceCreate) SetInternalPolicy(v *InternalPolicy) *WorkflowInstanceCreate {
+	return _c.SetInternalPolicyID(v.ID)
+}
+
+// SetEvidence sets the "evidence" edge to the Evidence entity.
+func (_c *WorkflowInstanceCreate) SetEvidence(v *Evidence) *WorkflowInstanceCreate {
+	return _c.SetEvidenceID(v.ID)
 }
 
 // AddWorkflowAssignmentIDs adds the "workflow_assignments" edge to the WorkflowAssignment entity by IDs.
@@ -489,6 +549,60 @@ func (_c *WorkflowInstanceCreate) createSpec() (*WorkflowInstance, *sqlgraph.Cre
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.WorkflowDefinitionID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ControlTable,
+			Columns: []string{workflowinstance.ControlColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ControlID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPolicyIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.InternalPolicyTable,
+			Columns: []string{workflowinstance.InternalPolicyColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalPolicyID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.EvidenceTable,
+			Columns: []string{workflowinstance.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EvidenceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.WorkflowAssignmentsIDs(); len(nodes) > 0 {

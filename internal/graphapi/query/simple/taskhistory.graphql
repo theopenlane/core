@@ -1,5 +1,3 @@
-
-
 query GetAllTaskHistories {
   taskHistories {
     totalCount

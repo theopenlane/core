@@ -35713,6 +35713,63 @@ func (c *WorkflowInstanceClient) QueryWorkflowDefinition(_m *WorkflowInstance) *
 	return query
 }
 
+// QueryControl queries the control edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryControl(_m *WorkflowInstance) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.ControlTable, workflowinstance.ControlColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryInternalPolicy(_m *WorkflowInstance) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.InternalPolicyTable, workflowinstance.InternalPolicyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryEvidence(_m *WorkflowInstance) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.EvidenceTable, workflowinstance.EvidenceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryWorkflowAssignments queries the workflow_assignments edge of a WorkflowInstance.
 func (c *WorkflowInstanceClient) QueryWorkflowAssignments(_m *WorkflowInstance) *WorkflowAssignmentQuery {
 	query := (&WorkflowAssignmentClient{config: c.config}).Query()
@@ -36204,6 +36261,25 @@ func (c *WorkflowObjectRefClient) QueryDirectoryMembership(_m *WorkflowObjectRef
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryEvidence(_m *WorkflowObjectRef) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.EvidenceTable, workflowobjectref.EvidenceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

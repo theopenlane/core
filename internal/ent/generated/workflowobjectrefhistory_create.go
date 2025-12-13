@@ -235,6 +235,20 @@ func (_c *WorkflowObjectRefHistoryCreate) SetNillableDirectoryMembershipID(v *st
 	return _c
 }
 
+// SetEvidenceID sets the "evidence_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetEvidenceID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetEvidenceID(v)
+	return _c
+}
+
+// SetNillableEvidenceID sets the "evidence_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableEvidenceID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetEvidenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefHistoryCreate) SetID(v string) *WorkflowObjectRefHistoryCreate {
 	_c.mutation.SetID(v)
@@ -439,6 +453,10 @@ func (_c *WorkflowObjectRefHistoryCreate) createSpec() (*WorkflowObjectRefHistor
 	if value, ok := _c.mutation.DirectoryMembershipID(); ok {
 		_spec.SetField(workflowobjectrefhistory.FieldDirectoryMembershipID, field.TypeString, value)
 		_node.DirectoryMembershipID = value
+	}
+	if value, ok := _c.mutation.EvidenceID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldEvidenceID, field.TypeString, value)
+		_node.EvidenceID = value
 	}
 	return _node, _spec
 }

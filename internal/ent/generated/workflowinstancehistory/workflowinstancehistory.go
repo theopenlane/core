@@ -52,6 +52,12 @@ const (
 	FieldLastEvaluatedAt = "last_evaluated_at"
 	// FieldDefinitionSnapshot holds the string denoting the definition_snapshot field in the database.
 	FieldDefinitionSnapshot = "definition_snapshot"
+	// FieldControlID holds the string denoting the control_id field in the database.
+	FieldControlID = "control_id"
+	// FieldInternalPolicyID holds the string denoting the internal_policy_id field in the database.
+	FieldInternalPolicyID = "internal_policy_id"
+	// FieldEvidenceID holds the string denoting the evidence_id field in the database.
+	FieldEvidenceID = "evidence_id"
 	// Table holds the table name of the workflowinstancehistory in the database.
 	Table = "workflow_instance_history"
 )
@@ -76,6 +82,9 @@ var Columns = []string{
 	FieldContext,
 	FieldLastEvaluatedAt,
 	FieldDefinitionSnapshot,
+	FieldControlID,
+	FieldInternalPolicyID,
+	FieldEvidenceID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -209,6 +218,21 @@ func ByState(opts ...sql.OrderTermOption) OrderOption {
 // ByLastEvaluatedAt orders the results by the last_evaluated_at field.
 func ByLastEvaluatedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastEvaluatedAt, opts...).ToFunc()
+}
+
+// ByControlID orders the results by the control_id field.
+func ByControlID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldControlID, opts...).ToFunc()
+}
+
+// ByInternalPolicyID orders the results by the internal_policy_id field.
+func ByInternalPolicyID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalPolicyID, opts...).ToFunc()
+}
+
+// ByEvidenceID orders the results by the evidence_id field.
+func ByEvidenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEvidenceID, opts...).ToFunc()
 }
 
 var (

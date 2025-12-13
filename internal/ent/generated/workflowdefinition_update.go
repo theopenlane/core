@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
@@ -124,26 +123,6 @@ func (_u *WorkflowDefinitionUpdate) AppendTags(v []string) *WorkflowDefinitionUp
 // ClearTags clears the value of the "tags" field.
 func (_u *WorkflowDefinitionUpdate) ClearTags() *WorkflowDefinitionUpdate {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowDefinitionUpdate) SetOwnerID(v string) *WorkflowDefinitionUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowDefinitionUpdate) SetNillableOwnerID(v *string) *WorkflowDefinitionUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowDefinitionUpdate) ClearOwnerID() *WorkflowDefinitionUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -427,11 +406,6 @@ func (_u *WorkflowDefinitionUpdate) ClearTrackedFields() *WorkflowDefinitionUpda
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *WorkflowDefinitionUpdate) SetOwner(v *Organization) *WorkflowDefinitionUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddTagDefinitionIDs adds the "tag_definitions" edge to the TagDefinition entity by IDs.
 func (_u *WorkflowDefinitionUpdate) AddTagDefinitionIDs(ids ...string) *WorkflowDefinitionUpdate {
 	_u.mutation.AddTagDefinitionIDs(ids...)
@@ -465,12 +439,6 @@ func (_u *WorkflowDefinitionUpdate) AddGroups(v ...*Group) *WorkflowDefinitionUp
 // Mutation returns the WorkflowDefinitionMutation object of the builder.
 func (_u *WorkflowDefinitionUpdate) Mutation() *WorkflowDefinitionMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *WorkflowDefinitionUpdate) ClearOwner() *WorkflowDefinitionUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearTagDefinitions clears all "tag_definitions" edges to the TagDefinition entity.
@@ -732,37 +700,6 @@ func (_u *WorkflowDefinitionUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.TrackedFieldsCleared() {
 		_spec.ClearField(workflowdefinition.FieldTrackedFields, field.TypeJSON)
 	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowdefinition.OwnerTable,
-			Columns: []string{workflowdefinition.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowdefinition.OwnerTable,
-			Columns: []string{workflowdefinition.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.TagDefinitionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -970,26 +907,6 @@ func (_u *WorkflowDefinitionUpdateOne) AppendTags(v []string) *WorkflowDefinitio
 // ClearTags clears the value of the "tags" field.
 func (_u *WorkflowDefinitionUpdateOne) ClearTags() *WorkflowDefinitionUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowDefinitionUpdateOne) SetOwnerID(v string) *WorkflowDefinitionUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowDefinitionUpdateOne) SetNillableOwnerID(v *string) *WorkflowDefinitionUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowDefinitionUpdateOne) ClearOwnerID() *WorkflowDefinitionUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -1273,11 +1190,6 @@ func (_u *WorkflowDefinitionUpdateOne) ClearTrackedFields() *WorkflowDefinitionU
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *WorkflowDefinitionUpdateOne) SetOwner(v *Organization) *WorkflowDefinitionUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddTagDefinitionIDs adds the "tag_definitions" edge to the TagDefinition entity by IDs.
 func (_u *WorkflowDefinitionUpdateOne) AddTagDefinitionIDs(ids ...string) *WorkflowDefinitionUpdateOne {
 	_u.mutation.AddTagDefinitionIDs(ids...)
@@ -1311,12 +1223,6 @@ func (_u *WorkflowDefinitionUpdateOne) AddGroups(v ...*Group) *WorkflowDefinitio
 // Mutation returns the WorkflowDefinitionMutation object of the builder.
 func (_u *WorkflowDefinitionUpdateOne) Mutation() *WorkflowDefinitionMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *WorkflowDefinitionUpdateOne) ClearOwner() *WorkflowDefinitionUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearTagDefinitions clears all "tag_definitions" edges to the TagDefinition entity.
@@ -1607,37 +1513,6 @@ func (_u *WorkflowDefinitionUpdateOne) sqlSave(ctx context.Context) (_node *Work
 	}
 	if _u.mutation.TrackedFieldsCleared() {
 		_spec.ClearField(workflowdefinition.FieldTrackedFields, field.TypeJSON)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowdefinition.OwnerTable,
-			Columns: []string{workflowdefinition.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowdefinition.OwnerTable,
-			Columns: []string{workflowdefinition.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TagDefinitionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

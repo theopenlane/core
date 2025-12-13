@@ -82,6 +82,10 @@ const (
 	FieldExampleEvidence = "example_evidence"
 	// FieldReferences holds the string denoting the references field in the database.
 	FieldReferences = "references"
+	// FieldTestingProcedures holds the string denoting the testing_procedures field in the database.
+	FieldTestingProcedures = "testing_procedures"
+	// FieldEvidenceRequests holds the string denoting the evidence_requests field in the database.
+	FieldEvidenceRequests = "evidence_requests"
 	// FieldControlOwnerID holds the string denoting the control_owner_id field in the database.
 	FieldControlOwnerID = "control_owner_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
@@ -141,6 +145,8 @@ var Columns = []string{
 	FieldImplementationGuidance,
 	FieldExampleEvidence,
 	FieldReferences,
+	FieldTestingProcedures,
+	FieldEvidenceRequests,
 	FieldControlOwnerID,
 	FieldDelegateID,
 	FieldOwnerID,

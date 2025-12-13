@@ -528,6 +528,42 @@ func (_u *ControlHistoryUpdate) ClearReferences() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_u *ControlHistoryUpdate) SetTestingProcedures(v []models.TestingProcedures) *ControlHistoryUpdate {
+	_u.mutation.SetTestingProcedures(v)
+	return _u
+}
+
+// AppendTestingProcedures appends value to the "testing_procedures" field.
+func (_u *ControlHistoryUpdate) AppendTestingProcedures(v []models.TestingProcedures) *ControlHistoryUpdate {
+	_u.mutation.AppendTestingProcedures(v)
+	return _u
+}
+
+// ClearTestingProcedures clears the value of the "testing_procedures" field.
+func (_u *ControlHistoryUpdate) ClearTestingProcedures() *ControlHistoryUpdate {
+	_u.mutation.ClearTestingProcedures()
+	return _u
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_u *ControlHistoryUpdate) SetEvidenceRequests(v []models.EvidenceRequests) *ControlHistoryUpdate {
+	_u.mutation.SetEvidenceRequests(v)
+	return _u
+}
+
+// AppendEvidenceRequests appends value to the "evidence_requests" field.
+func (_u *ControlHistoryUpdate) AppendEvidenceRequests(v []models.EvidenceRequests) *ControlHistoryUpdate {
+	_u.mutation.AppendEvidenceRequests(v)
+	return _u
+}
+
+// ClearEvidenceRequests clears the value of the "evidence_requests" field.
+func (_u *ControlHistoryUpdate) ClearEvidenceRequests() *ControlHistoryUpdate {
+	_u.mutation.ClearEvidenceRequests()
+	return _u
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_u *ControlHistoryUpdate) SetControlOwnerID(v string) *ControlHistoryUpdate {
 	_u.mutation.SetControlOwnerID(v)
@@ -645,6 +681,58 @@ func (_u *ControlHistoryUpdate) SetNillableControlKindID(v *string) *ControlHist
 // ClearControlKindID clears the value of the "control_kind_id" field.
 func (_u *ControlHistoryUpdate) ClearControlKindID() *ControlHistoryUpdate {
 	_u.mutation.ClearControlKindID()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *ControlHistoryUpdate) SetProposedChanges(v map[string]interface{}) *ControlHistoryUpdate {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *ControlHistoryUpdate) ClearProposedChanges() *ControlHistoryUpdate {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *ControlHistoryUpdate) SetProposedByUserID(v string) *ControlHistoryUpdate {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableProposedByUserID(v *string) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *ControlHistoryUpdate) ClearProposedByUserID() *ControlHistoryUpdate {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *ControlHistoryUpdate) SetProposedAt(v time.Time) *ControlHistoryUpdate {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableProposedAt(v *time.Time) *ControlHistoryUpdate {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *ControlHistoryUpdate) ClearProposedAt() *ControlHistoryUpdate {
+	_u.mutation.ClearProposedAt()
 	return _u
 }
 
@@ -977,6 +1065,28 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(controlhistory.FieldReferences, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TestingProcedures(); ok {
+		_spec.SetField(controlhistory.FieldTestingProcedures, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTestingProcedures(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlhistory.FieldTestingProcedures, value)
+		})
+	}
+	if _u.mutation.TestingProceduresCleared() {
+		_spec.ClearField(controlhistory.FieldTestingProcedures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EvidenceRequests(); ok {
+		_spec.SetField(controlhistory.FieldEvidenceRequests, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEvidenceRequests(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlhistory.FieldEvidenceRequests, value)
+		})
+	}
+	if _u.mutation.EvidenceRequestsCleared() {
+		_spec.ClearField(controlhistory.FieldEvidenceRequests, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ControlOwnerID(); ok {
 		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
 	}
@@ -1018,6 +1128,24 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(controlhistory.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(controlhistory.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(controlhistory.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(controlhistory.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(controlhistory.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(controlhistory.FieldProposedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
@@ -1546,6 +1674,42 @@ func (_u *ControlHistoryUpdateOne) ClearReferences() *ControlHistoryUpdateOne {
 	return _u
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_u *ControlHistoryUpdateOne) SetTestingProcedures(v []models.TestingProcedures) *ControlHistoryUpdateOne {
+	_u.mutation.SetTestingProcedures(v)
+	return _u
+}
+
+// AppendTestingProcedures appends value to the "testing_procedures" field.
+func (_u *ControlHistoryUpdateOne) AppendTestingProcedures(v []models.TestingProcedures) *ControlHistoryUpdateOne {
+	_u.mutation.AppendTestingProcedures(v)
+	return _u
+}
+
+// ClearTestingProcedures clears the value of the "testing_procedures" field.
+func (_u *ControlHistoryUpdateOne) ClearTestingProcedures() *ControlHistoryUpdateOne {
+	_u.mutation.ClearTestingProcedures()
+	return _u
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_u *ControlHistoryUpdateOne) SetEvidenceRequests(v []models.EvidenceRequests) *ControlHistoryUpdateOne {
+	_u.mutation.SetEvidenceRequests(v)
+	return _u
+}
+
+// AppendEvidenceRequests appends value to the "evidence_requests" field.
+func (_u *ControlHistoryUpdateOne) AppendEvidenceRequests(v []models.EvidenceRequests) *ControlHistoryUpdateOne {
+	_u.mutation.AppendEvidenceRequests(v)
+	return _u
+}
+
+// ClearEvidenceRequests clears the value of the "evidence_requests" field.
+func (_u *ControlHistoryUpdateOne) ClearEvidenceRequests() *ControlHistoryUpdateOne {
+	_u.mutation.ClearEvidenceRequests()
+	return _u
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_u *ControlHistoryUpdateOne) SetControlOwnerID(v string) *ControlHistoryUpdateOne {
 	_u.mutation.SetControlOwnerID(v)
@@ -1663,6 +1827,58 @@ func (_u *ControlHistoryUpdateOne) SetNillableControlKindID(v *string) *ControlH
 // ClearControlKindID clears the value of the "control_kind_id" field.
 func (_u *ControlHistoryUpdateOne) ClearControlKindID() *ControlHistoryUpdateOne {
 	_u.mutation.ClearControlKindID()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *ControlHistoryUpdateOne) SetProposedChanges(v map[string]interface{}) *ControlHistoryUpdateOne {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *ControlHistoryUpdateOne) ClearProposedChanges() *ControlHistoryUpdateOne {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *ControlHistoryUpdateOne) SetProposedByUserID(v string) *ControlHistoryUpdateOne {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableProposedByUserID(v *string) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *ControlHistoryUpdateOne) ClearProposedByUserID() *ControlHistoryUpdateOne {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *ControlHistoryUpdateOne) SetProposedAt(v time.Time) *ControlHistoryUpdateOne {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableProposedAt(v *time.Time) *ControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *ControlHistoryUpdateOne) ClearProposedAt() *ControlHistoryUpdateOne {
+	_u.mutation.ClearProposedAt()
 	return _u
 }
 
@@ -2025,6 +2241,28 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(controlhistory.FieldReferences, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TestingProcedures(); ok {
+		_spec.SetField(controlhistory.FieldTestingProcedures, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTestingProcedures(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlhistory.FieldTestingProcedures, value)
+		})
+	}
+	if _u.mutation.TestingProceduresCleared() {
+		_spec.ClearField(controlhistory.FieldTestingProcedures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EvidenceRequests(); ok {
+		_spec.SetField(controlhistory.FieldEvidenceRequests, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEvidenceRequests(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlhistory.FieldEvidenceRequests, value)
+		})
+	}
+	if _u.mutation.EvidenceRequestsCleared() {
+		_spec.ClearField(controlhistory.FieldEvidenceRequests, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ControlOwnerID(); ok {
 		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
 	}
@@ -2066,6 +2304,24 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(controlhistory.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(controlhistory.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(controlhistory.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(controlhistory.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(controlhistory.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(controlhistory.FieldProposedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

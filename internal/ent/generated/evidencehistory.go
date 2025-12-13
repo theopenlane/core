@@ -44,6 +44,12 @@ type EvidenceHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// pending changes awaiting workflow approval
+	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
+	// user who proposed the changes
+	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
+	// when changes were proposed
+	ProposedAt *time.Time `json:"proposed_at,omitempty"`
 	// the name of the evidence
 	Name string `json:"name,omitempty"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -70,15 +76,15 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case evidencehistory.FieldTags:
+		case evidencehistory.FieldTags, evidencehistory.FieldProposedChanges:
 			values[i] = new([]byte)
 		case evidencehistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case evidencehistory.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus:
+		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldProposedByUserID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus:
 			values[i] = new(sql.NullString)
-		case evidencehistory.FieldHistoryTime, evidencehistory.FieldCreatedAt, evidencehistory.FieldUpdatedAt, evidencehistory.FieldDeletedAt, evidencehistory.FieldCreationDate, evidencehistory.FieldRenewalDate:
+		case evidencehistory.FieldHistoryTime, evidencehistory.FieldCreatedAt, evidencehistory.FieldUpdatedAt, evidencehistory.FieldDeletedAt, evidencehistory.FieldProposedAt, evidencehistory.FieldCreationDate, evidencehistory.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -174,6 +180,27 @@ func (_m *EvidenceHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case evidencehistory.FieldProposedChanges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
+					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
+				}
+			}
+		case evidencehistory.FieldProposedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ProposedByUserID = value.String
+			}
+		case evidencehistory.FieldProposedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
+			} else if value.Valid {
+				_m.ProposedAt = new(time.Time)
+				*_m.ProposedAt = value.Time
 			}
 		case evidencehistory.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -300,6 +327,17 @@ func (_m *EvidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("proposed_changes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
+	builder.WriteString(", ")
+	builder.WriteString("proposed_by_user_id=")
+	builder.WriteString(_m.ProposedByUserID)
+	builder.WriteString(", ")
+	if v := _m.ProposedAt; v != nil {
+		builder.WriteString("proposed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
