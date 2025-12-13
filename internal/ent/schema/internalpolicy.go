@@ -111,6 +111,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 			// policies are documents
 			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
 			newCustomEnumMixin(i),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(i)
 }

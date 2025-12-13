@@ -3,11 +3,16 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx/accessmap"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -55,6 +60,15 @@ func (WorkflowInstance) Fields() []ent.Field {
 		field.JSON("definition_snapshot", models.WorkflowDefinitionDocument{}).
 			Comment("Copy of definition JSON used for this instance").
 			Optional(),
+		field.String("control_id").
+			Comment("ID of the control this workflow instance is associated with").
+			Optional(),
+		field.String("internal_policy_id").
+			Comment("ID of the internal policy this workflow instance is associated with").
+			Optional(),
+		field.String("evidence_id").
+			Comment("ID of the evidence this workflow instance is associated with").
+			Optional(),
 	}
 }
 
@@ -67,6 +81,36 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			field:      "workflow_definition_id",
 			comment:    "Definition driving this instance",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(WorkflowDefinition{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Control{},
+			field:      "control_id",
+			comment:    "Control this workflow instance is associated with",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: InternalPolicy{},
+			field:      "internal_policy_id",
+			comment:    "Internal policy this workflow instance is associated with",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Evidence{},
+			field:      "evidence_id",
+			comment:    "Evidence this workflow instance is associated with",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: w,
@@ -102,7 +146,10 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "WFI",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(WorkflowInstance{}),
+			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
+				withParents(Control{}, InternalPolicy{}, Evidence{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(WorkflowInstance{})
 }
@@ -112,11 +159,20 @@ func (WorkflowInstance) Modules() []models.OrgModule {
 	return []models.OrgModule{models.CatalogBaseModule}
 }
 
+// Annotations of the WorkflowInstance
+func (WorkflowInstance) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
 // Policy of the WorkflowInstance
 func (WorkflowInstance) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			//			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
 		),
 	)
 }

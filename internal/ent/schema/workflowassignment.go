@@ -2,11 +2,16 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx/accessmap"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -85,12 +90,18 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			field:      "workflow_instance_id",
 			comment:    "Instance this assignment belongs to",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(WorkflowInstance{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: w,
 			edgeSchema: WorkflowAssignmentTarget{},
 			name:       "targets",
 			comment:    "Targets for this assignment (user/group/resolver)",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -98,6 +109,9 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			name:       "actor_user",
 			field:      "actor_user_id",
 			comment:    "User who acted on this assignment",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -105,6 +119,9 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			name:       "actor_group",
 			field:      "actor_group_id",
 			comment:    "Group that acted on this assignment",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 	}
 }
@@ -122,7 +139,10 @@ func (WorkflowAssignment) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "WFA",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(WorkflowAssignment{}),
+			newObjectOwnedMixin[generated.WorkflowAssignment](WorkflowAssignment{},
+				withParents(WorkflowInstance{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(WorkflowAssignment{})
 }
@@ -132,11 +152,20 @@ func (WorkflowAssignment) Modules() []models.OrgModule {
 	return []models.OrgModule{models.CatalogBaseModule}
 }
 
+// Annotations of the WorkflowAssignment
+func (WorkflowAssignment) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
 // Policy of the WorkflowAssignment
 func (WorkflowAssignment) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			//			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
 		),
 	)
 }

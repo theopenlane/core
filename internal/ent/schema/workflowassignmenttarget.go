@@ -3,11 +3,15 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx/accessmap"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -66,6 +70,9 @@ func (w WorkflowAssignmentTarget) Edges() []ent.Edge {
 			field:      "workflow_assignment_id",
 			comment:    "Assignment this target belongs to",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -73,6 +80,9 @@ func (w WorkflowAssignmentTarget) Edges() []ent.Edge {
 			name:       "user_target",
 			field:      "target_user_id",
 			comment:    "User target when target_type is USER",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -80,6 +90,9 @@ func (w WorkflowAssignmentTarget) Edges() []ent.Edge {
 			name:       "group_target",
 			field:      "target_group_id",
 			comment:    "Group target when target_type is GROUP",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 	}
 }
@@ -100,7 +113,10 @@ func (WorkflowAssignmentTarget) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "WFT",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(WorkflowAssignmentTarget{}),
+			newObjectOwnedMixin[generated.WorkflowAssignmentTarget](WorkflowAssignmentTarget{},
+				withParents(WorkflowAssignment{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(WorkflowAssignmentTarget{})
 }
@@ -113,6 +129,9 @@ func (WorkflowAssignmentTarget) Modules() []models.OrgModule {
 // Policy of the WorkflowAssignmentTarget
 func (WorkflowAssignmentTarget) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

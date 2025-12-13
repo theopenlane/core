@@ -18,6 +18,8 @@ var (
 	_ Sortable = (*ExampleEvidence)(nil)
 	_ Sortable = (*AssessmentObjective)(nil)
 	_ Sortable = (*Reference)(nil)
+	_ Sortable = (*TestingProcedures)(nil)
+	_ Sortable = (*EvidenceRequests)(nil)
 )
 
 // AssessmentObjective are objectives that are validated during the audit to ensure the control is implemented
@@ -59,12 +61,52 @@ type ImplementationGuidance struct {
 	Guidance []string `json:"guidance,omitempty"`
 }
 
+// TestingProcedures are the steps to take to test the control implementation and are typically a part of enriched data sources
+type TestingProcedures struct {
+	// ReferenceID is the unique identifier for where the procedures were sourced from
+	ReferenceID string `json:"referenceId,omitempty"`
+	// Procedures are the steps to take to test the control
+	Procedures []string `json:"procedures,omitempty"`
+}
+
+// EvidenceRequests are common evidence requests typically collected to demonstrate control implementation
+type EvidenceRequests struct {
+	// EvidenceRequestID is the unique identifier for where the evidence requests were sourced from
+	EvidenceRequestID string `json:"evidenceRequestID,omitempty"`
+	// DocumentationArtifact is a description of the documentation you'd produce as evidence
+	DocumentationArtifact string `json:"documentationArtifact,omitempty"`
+	// ArtifactDescription is a description of the evidence artifact
+	ArtifactDescription string `json:"artifactDescription,omitempty"`
+	// AreaOfFocus is the area of focus for the evidence request
+	AreaOfFocus string `json:"areaOfFocus,omitempty"`
+}
+
 // Reference are links to external sources that can be used to gain more information about the control
 type Reference struct {
 	// Name is the name of the reference
 	Name string `json:"name,omitempty"`
 	// URL is the link to the reference
 	URL string `json:"url,omitempty"`
+}
+
+// MarshalGQL implements the Marshaler interface for gqlgen
+func (t TestingProcedures) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, t)
+}
+
+// UnmarshalGQL implements the Unmarshaler interface for gqlgen
+func (t *TestingProcedures) UnmarshalGQL(v any) error {
+	return unmarshalGQLJSON(v, t)
+}
+
+// MarshalGQL implements the Marshaler interface for gqlgen
+func (e EvidenceRequests) MarshalGQL(w io.Writer) {
+	marshalGQLJSON(w, e)
+}
+
+// UnmarshalGQL implements the Unmarshaler interface for gqlgen
+func (e *EvidenceRequests) UnmarshalGQL(v any) error {
+	return unmarshalGQLJSON(v, e)
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen
@@ -115,6 +157,16 @@ func (r Reference) MarshalGQL(w io.Writer) {
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen
 func (r *Reference) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, r)
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (t TestingProcedures) GetSortField() string {
+	return t.ReferenceID
+}
+
+// GetSortField returns the field to sort on for the Sortable interface
+func (e EvidenceRequests) GetSortField() string {
+	return e.EvidenceRequestID
 }
 
 // GetSortField returns the field to sort on for the Sortable interface

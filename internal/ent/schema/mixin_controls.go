@@ -146,6 +146,7 @@ var controlFields = []ent.Field{
 			entx.FieldSearchable(),
 			entgql.OrderField("title"),
 			directives.ExternalSourceDirectiveAnnotation,
+			entx.FieldWorkflowEligible(),
 		).
 		Comment("human readable title of the control for quick identification"),
 	field.Text("description").
@@ -161,12 +162,15 @@ var controlFields = []ent.Field{
 		).
 		Comment("additional names (ref_codes) for the control"),
 	field.String("reference_id").
+		Annotations(entx.FieldWorkflowEligible()).
 		Optional().
 		Comment("internal reference id of the control, can be used for internal tracking"),
 	field.String("auditor_reference_id").
+		Annotations(entx.FieldWorkflowEligible()).
 		Optional().
 		Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	field.String("responsible_party_id").
+		Annotations(entx.FieldWorkflowEligible()).
 		Optional().
 		Comment("the id of the party responsible for the control, usually used when the control is implemented by a third party"),
 	field.Enum("status").
@@ -175,6 +179,7 @@ var controlFields = []ent.Field{
 		Default(enums.ControlStatusNotImplemented.String()).
 		Annotations(
 			entgql.OrderField("STATUS"),
+			entx.FieldWorkflowEligible(),
 		).
 		Comment("status of the control"),
 	field.Enum("source").
@@ -193,6 +198,7 @@ var controlFields = []ent.Field{
 			entgql.Skip(entgql.SkipMutationUpdateInput),
 			entgql.OrderField("REFERENCE_FRAMEWORK"),
 			directives.ExternalSourceDirectiveAnnotation,
+			entx.FieldWorkflowEligible(),
 		).
 		Optional(),
 	field.String("reference_framework_revision").
@@ -200,12 +206,14 @@ var controlFields = []ent.Field{
 		Nillable().
 		Annotations(
 			directives.ExternalSourceDirectiveAnnotation,
+			entx.FieldWorkflowEligible(),
 		).
 		Optional(),
 	field.Enum("control_type").
 		GoType(enums.ControlType("")).
 		Default(enums.ControlTypePreventative.String()).
 		Annotations(
+			entx.FieldWorkflowEligible(),
 			entgql.OrderField("CONTROL_TYPE"),
 			entgql.Directives(
 				entgql.Deprecated("Use `control_kind_name` instead."),
@@ -218,6 +226,7 @@ var controlFields = []ent.Field{
 		Annotations(
 			entx.FieldSearchable(),
 			entgql.OrderField("category"),
+			entx.FieldWorkflowEligible(),
 			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("category of the control"),
@@ -225,6 +234,7 @@ var controlFields = []ent.Field{
 		Optional().
 		Annotations(
 			directives.ExternalSourceDirectiveAnnotation,
+			entx.FieldWorkflowEligible(),
 		).
 		Comment("category id of the control"),
 	field.String("subcategory").
@@ -233,6 +243,7 @@ var controlFields = []ent.Field{
 			entx.FieldSearchable(),
 			entgql.OrderField("subcategory"),
 			directives.ExternalSourceDirectiveAnnotation,
+			entx.FieldWorkflowEligible(),
 		).
 		Comment("subcategory of the control"),
 	field.Strings("mapped_categories").
@@ -259,10 +270,19 @@ var controlFields = []ent.Field{
 	field.JSON("references", []models.Reference{}).
 		Optional().
 		Comment("references for the control"),
+	field.JSON("testing_procedures", []models.TestingProcedures{}).
+		Optional().
+		Comment("reference steps to take to test the control"),
+	field.JSON("evidence_requests", []models.EvidenceRequests{}).
+		Optional().
+		Comment("list of common evidence requests for the control"),
 	field.String("control_owner_id").
 		Optional().
 		Nillable().
 		Unique().
+		Annotations(
+			entx.FieldWorkflowEligible(),
+		).
 		Comment("the id of the group that owns the control"),
 	field.String("delegate_id").
 		Optional().

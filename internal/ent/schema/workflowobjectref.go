@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -9,7 +10,9 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -71,6 +74,10 @@ func (WorkflowObjectRef) Fields() []ent.Field {
 		field.String("directory_membership_id").
 			Immutable().
 			Comment("Directory membership referenced by this workflow instance").
+			Optional(),
+		field.String("evidence_id").
+			Immutable().
+			Comment("Evidence referenced by this workflow instance").
 			Optional(),
 	}
 }
@@ -159,6 +166,16 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Evidence{},
+			field:      "evidence_id",
+			comment:    "Evidence referenced by this workflow instance",
+			immutable:  true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
 	}
 }
 
@@ -179,6 +196,8 @@ func (WorkflowObjectRef) Indexes() []ent.Index {
 			Unique(),
 		index.Fields("workflow_instance_id", "directory_membership_id").
 			Unique(),
+		index.Fields("workflow_instance_id", "evidence_id").
+			Unique(),
 	}
 }
 
@@ -189,7 +208,10 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 		excludeTags:       true,
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(w),
+			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
+				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(w)
 }
@@ -203,14 +225,19 @@ func (WorkflowObjectRef) Modules() []models.OrgModule {
 func (WorkflowObjectRef) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
+		entfga.SelfAccessChecks(),
+		entgql.Skip(entgql.SkipMutationUpdateInput),
 	}
 }
 
 // Policy of the WorkflowObjectRef
 func (WorkflowObjectRef) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			// entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),
+			// entfga.CheckDeleteAccess[*generated.WorkflowObjectRefMutation](),
 		),
 	)
 }
