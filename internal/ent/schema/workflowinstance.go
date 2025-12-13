@@ -172,7 +172,7 @@ func (WorkflowInstance) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			//			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
+			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),
 		),
 	)
 }

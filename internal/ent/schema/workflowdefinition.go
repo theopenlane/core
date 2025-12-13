@@ -144,7 +144,7 @@ func (WorkflowDefinition) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			//			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),
+			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),
 		),
 	)
 }

@@ -236,8 +236,8 @@ func (WorkflowObjectRef) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			// entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),
-			// entfga.CheckDeleteAccess[*generated.WorkflowObjectRefMutation](),
+			entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),
+			entfga.CheckDeleteAccess[*generated.WorkflowObjectRefMutation](),
 		),
 	)
 }

@@ -165,7 +165,7 @@ func (WorkflowAssignment) Policy() ent.Policy {
 		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			//			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
+			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),
 		),
 	)
 }
