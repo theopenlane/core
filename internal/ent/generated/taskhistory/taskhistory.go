@@ -68,6 +68,8 @@ const (
 	FieldIdempotencyKey = "idempotency_key"
 	// FieldExternalReferenceURL holds the string denoting the external_reference_url field in the database.
 	FieldExternalReferenceURL = "external_reference_url"
+	// FieldParentTaskID holds the string denoting the parent_task_id field in the database.
+	FieldParentTaskID = "parent_task_id"
 	// Table holds the table name of the taskhistory in the database.
 	Table = "task_history"
 )
@@ -100,6 +102,7 @@ var Columns = []string{
 	FieldSystemGenerated,
 	FieldIdempotencyKey,
 	FieldExternalReferenceURL,
+	FieldParentTaskID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -280,6 +283,11 @@ func BySystemGenerated(opts ...sql.OrderTermOption) OrderOption {
 // ByIdempotencyKey orders the results by the idempotency_key field.
 func ByIdempotencyKey(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIdempotencyKey, opts...).ToFunc()
+}
+
+// ByParentTaskID orders the results by the parent_task_id field.
+func ByParentTaskID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldParentTaskID, opts...).ToFunc()
 }
 
 var (

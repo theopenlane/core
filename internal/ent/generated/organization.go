@@ -242,13 +242,15 @@ type OrganizationEdges struct {
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
 	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
+	// Discussions holds the value of the discussions edge.
+	Discussions []*Discussion `json:"discussions,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [91]bool
+	loadedTypes [92]bool
 	// totalCount holds the count of the edges above.
-	totalCount [86]map[string]int
+	totalCount [87]map[string]int
 
 	namedControlCreators                 map[string][]*Group
 	namedControlImplementationCreators   map[string][]*Group
@@ -337,6 +339,7 @@ type OrganizationEdges struct {
 	namedDirectoryGroups                 map[string][]*DirectoryGroup
 	namedDirectoryMemberships            map[string][]*DirectoryMembership
 	namedDirectorySyncRuns               map[string][]*DirectorySyncRun
+	namedDiscussions                     map[string][]*Discussion
 	namedMembers                         map[string][]*OrgMembership
 }
 
@@ -1156,10 +1159,19 @@ func (e OrganizationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error)
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
 }
 
+// DiscussionsOrErr returns the Discussions value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) DiscussionsOrErr() ([]*Discussion, error) {
+	if e.loadedTypes[90] {
+		return e.Discussions, nil
+	}
+	return nil, &NotLoadedError{edge: "discussions"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[90] {
+	if e.loadedTypes[91] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1768,6 +1780,11 @@ func (_m *Organization) QueryDirectoryMemberships() *DirectoryMembershipQuery {
 // QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Organization entity.
 func (_m *Organization) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return NewOrganizationClient(_m.config).QueryDirectorySyncRuns(_m)
+}
+
+// QueryDiscussions queries the "discussions" edge of the Organization entity.
+func (_m *Organization) QueryDiscussions() *DiscussionQuery {
+	return NewOrganizationClient(_m.config).QueryDiscussions(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3945,6 +3962,30 @@ func (_m *Organization) appendNamedDirectorySyncRuns(name string, edges ...*Dire
 		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
 	} else {
 		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
+	}
+}
+
+// NamedDiscussions returns the Discussions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedDiscussions(name string) ([]*Discussion, error) {
+	if _m.Edges.namedDiscussions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDiscussions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedDiscussions(name string, edges ...*Discussion) {
+	if _m.Edges.namedDiscussions == nil {
+		_m.Edges.namedDiscussions = make(map[string][]*Discussion)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDiscussions[name] = []*Discussion{}
+	} else {
+		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
 	}
 }
 

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -285,6 +286,18 @@ func DirectoryMembershipHistoryEdgeCleanup(ctx context.Context, id string) error
 
 func DirectorySyncRunEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorysyncrun edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DiscussionEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussion edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DiscussionHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussionhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1122,6 +1135,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).DirectorySyncRun.Query().Where((directorysyncrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directorysyncrunCount, err := FromContext(ctx).DirectorySyncRun.Delete().Where(directorysyncrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directorysyncrunCount).Msg("error deleting directorysyncrun")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Discussion.Query().Where((discussion.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if discussionCount, err := FromContext(ctx).Discussion.Delete().Where(discussion.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", discussionCount).Msg("error deleting discussion")
 			return err
 		}
 	}

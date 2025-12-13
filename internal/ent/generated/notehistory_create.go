@@ -165,6 +165,48 @@ func (_c *NoteHistoryCreate) SetText(v string) *NoteHistoryCreate {
 	return _c
 }
 
+// SetNoteRef sets the "note_ref" field.
+func (_c *NoteHistoryCreate) SetNoteRef(v string) *NoteHistoryCreate {
+	_c.mutation.SetNoteRef(v)
+	return _c
+}
+
+// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableNoteRef(v *string) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetNoteRef(*v)
+	}
+	return _c
+}
+
+// SetDiscussionID sets the "discussion_id" field.
+func (_c *NoteHistoryCreate) SetDiscussionID(v string) *NoteHistoryCreate {
+	_c.mutation.SetDiscussionID(v)
+	return _c
+}
+
+// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableDiscussionID(v *string) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetDiscussionID(*v)
+	}
+	return _c
+}
+
+// SetIsEdited sets the "is_edited" field.
+func (_c *NoteHistoryCreate) SetIsEdited(v bool) *NoteHistoryCreate {
+	_c.mutation.SetIsEdited(v)
+	return _c
+}
+
+// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableIsEdited(v *bool) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetIsEdited(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NoteHistoryCreate) SetID(v string) *NoteHistoryCreate {
 	_c.mutation.SetID(v)
@@ -237,6 +279,10 @@ func (_c *NoteHistoryCreate) defaults() error {
 		v := notehistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.IsEdited(); !ok {
+		v := notehistory.DefaultIsEdited
+		_c.mutation.SetIsEdited(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if notehistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized notehistory.DefaultID (forgotten import generated/runtime?)")
@@ -265,6 +311,9 @@ func (_c *NoteHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Text(); !ok {
 		return &ValidationError{Name: "text", err: errors.New(`generated: missing required field "NoteHistory.text"`)}
+	}
+	if _, ok := _c.mutation.IsEdited(); !ok {
+		return &ValidationError{Name: "is_edited", err: errors.New(`generated: missing required field "NoteHistory.is_edited"`)}
 	}
 	return nil
 }
@@ -349,6 +398,18 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
 		_node.Text = value
+	}
+	if value, ok := _c.mutation.NoteRef(); ok {
+		_spec.SetField(notehistory.FieldNoteRef, field.TypeString, value)
+		_node.NoteRef = value
+	}
+	if value, ok := _c.mutation.DiscussionID(); ok {
+		_spec.SetField(notehistory.FieldDiscussionID, field.TypeString, value)
+		_node.DiscussionID = value
+	}
+	if value, ok := _c.mutation.IsEdited(); ok {
+		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
+		_node.IsEdited = value
 	}
 	return _node, _spec
 }

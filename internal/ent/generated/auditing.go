@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
@@ -1428,6 +1429,60 @@ func (_m *DirectoryMembershipHistory) Diff(history *DirectoryMembershipHistory) 
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[DirectoryMembershipHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *DiscussionHistory) changes(new *DiscussionHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(discussionhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(discussionhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(discussionhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(discussionhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(discussionhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(discussionhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(discussionhistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.IsResolved, new.IsResolved) {
+		changes = append(changes, NewChange(discussionhistory.FieldIsResolved, _m.IsResolved, new.IsResolved))
+	}
+	return changes
+}
+
+func (_m *DiscussionHistory) Diff(history *DiscussionHistory) (*HistoryDiff[DiscussionHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[DiscussionHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[DiscussionHistory]{
 			Old:     history,
 			New:     _m,
 			Changes: history.changes(_m),
@@ -2850,6 +2905,15 @@ func (_m *NoteHistory) changes(new *NoteHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Text, new.Text) {
 		changes = append(changes, NewChange(notehistory.FieldText, _m.Text, new.Text))
+	}
+	if !reflect.DeepEqual(_m.NoteRef, new.NoteRef) {
+		changes = append(changes, NewChange(notehistory.FieldNoteRef, _m.NoteRef, new.NoteRef))
+	}
+	if !reflect.DeepEqual(_m.DiscussionID, new.DiscussionID) {
+		changes = append(changes, NewChange(notehistory.FieldDiscussionID, _m.DiscussionID, new.DiscussionID))
+	}
+	if !reflect.DeepEqual(_m.IsEdited, new.IsEdited) {
+		changes = append(changes, NewChange(notehistory.FieldIsEdited, _m.IsEdited, new.IsEdited))
 	}
 	return changes
 }
@@ -4323,6 +4387,9 @@ func (_m *TaskHistory) changes(new *TaskHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.ExternalReferenceURL, new.ExternalReferenceURL) {
 		changes = append(changes, NewChange(taskhistory.FieldExternalReferenceURL, _m.ExternalReferenceURL, new.ExternalReferenceURL))
+	}
+	if !reflect.DeepEqual(_m.ParentTaskID, new.ParentTaskID) {
+		changes = append(changes, NewChange(taskhistory.FieldParentTaskID, _m.ParentTaskID, new.ParentTaskID))
 	}
 	return changes
 }
@@ -5818,6 +5885,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditDiscussionHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditDocumentDataHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -6655,6 +6728,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditDirectoryMembershipHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("DiscussionHistory", "History") {
+		// map AuditLogWhereInput to DiscussionHistoryWhereInput
+		whereInput := &DiscussionHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to DiscussionHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &DiscussionHistoryOrder{
+			Field:     DiscussionHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditDiscussionHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -9705,6 +9819,79 @@ func auditDirectoryMembershipHistory(ctx context.Context, config config, after *
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &DirectoryMembershipHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type discussionhistoryref struct {
+	Ref string
+}
+
+func auditDiscussionHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *DiscussionHistoryOrder, where *DiscussionHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []DiscussionHistoryPaginateOption{
+		WithDiscussionHistoryOrder(orderBy),
+		WithDiscussionHistoryFilter(where.Filter),
+	}
+
+	client := NewDiscussionHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "DiscussionHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&DiscussionHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&DiscussionHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					discussionhistory.Ref(curr.Node.Ref),
+					discussionhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(discussionhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &DiscussionHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

@@ -57,12 +57,12 @@ func (Risk) Fields() []ent.Field {
 			Comment("the name of the risk"),
 		field.Enum("status").
 			GoType(enums.RiskStatus("")).
-			Default(enums.RiskOpen.String()).
+			Default(enums.RiskIdentified.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			).
 			Optional().
-			Comment("status of the risk - open, mitigated, ongoing, in-progress, and archived."),
+			Comment("status of the risk - identified, mitigated, accepted, closed, transferred, and archived."),
 		field.String("risk_type").
 			Annotations(
 				entgql.OrderField("risk_type"),
@@ -166,6 +166,14 @@ func (r Risk) Edges() []ent.Edge {
 			name:       "comments",
 			t:          Note.Type,
 			comment:    "conversations related to the risk",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Discussion{},
+			comment:    "discussions related to the risk",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},

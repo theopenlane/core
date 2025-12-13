@@ -187,6 +187,54 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 	}, nil
 }
 
+// bulkDeleteAssessment deletes multiple Assessment entities by their IDs
+func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []string) (*model.AssessmentBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each assessment individually to ensure proper cleanup
+			if err := r.db.Assessment.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("assessment_id", id).Msg("failed to delete assessment in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.AssessmentEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("assessment_id", id).Msg("failed to cleanup assessment edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some assessment deletions failed")
+	}
+
+	return &model.AssessmentBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkCreateAsset uses the CreateBulk function to create multiple Asset entities
 func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -763,6 +811,25 @@ func (r *mutationResolver) bulkCreateDirectorySyncRun(ctx context.Context, input
 	// return response
 	return &model.DirectorySyncRunBulkCreatePayload{
 		DirectorySyncRuns: res,
+	}, nil
+}
+
+// bulkCreateDiscussion uses the CreateBulk function to create multiple Discussion entities
+func (r *mutationResolver) bulkCreateDiscussion(ctx context.Context, input []*generated.CreateDiscussionInput) (*model.DiscussionBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DiscussionCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Discussion.Create().SetInput(*data)
+	}
+
+	res, err := c.Discussion.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+	}
+
+	// return response
+	return &model.DiscussionBulkCreatePayload{
+		Discussions: res,
 	}, nil
 }
 

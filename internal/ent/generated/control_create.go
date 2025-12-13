@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
@@ -651,6 +652,21 @@ func (_c *ControlCreate) AddComments(v ...*Note) *ControlCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddCommentIDs(ids...)
+}
+
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_c *ControlCreate) AddDiscussionIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddDiscussionIDs(ids...)
+	return _c
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_c *ControlCreate) AddDiscussions(v ...*Discussion) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDiscussionIDs(ids...)
 }
 
 // SetControlOwner sets the "control_owner" edge to the Group entity.
@@ -1313,6 +1329,23 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   control.DiscussionsTable,
+			Columns: []string{control.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

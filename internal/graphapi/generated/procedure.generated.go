@@ -144,6 +144,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Procedure_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
@@ -298,6 +300,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Procedure_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
@@ -452,6 +456,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Procedure_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}
@@ -606,6 +612,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Procedure_comments(ctx, field)
+			case "discussions":
+				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
 			}

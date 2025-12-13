@@ -154,12 +154,12 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultStatus enums.RiskStatus = "OPEN"
+const DefaultStatus enums.RiskStatus = "IDENTIFIED"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.RiskStatus) error {
 	switch s.String() {
-	case "OPEN", "IN_PROGRESS", "ONGOING", "MITIGATED", "ARCHIVED":
+	case "OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED":
 		return nil
 	default:
 		return fmt.Errorf("riskhistory: invalid enum value for status field: %q", s)

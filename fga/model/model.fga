@@ -440,7 +440,7 @@ type task
     define assignee: [user]
     define assigner: [user]
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, risk]
+    define parent: [user, service, program, control, procedure, internal_policy, subcontrol, control_objective, risk,task]
     define viewer: can_view from parent
     define editor: [organization#owner] or can_edit from parent
 # notes are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.

@@ -28,6 +28,35 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _AssessmentBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_AssessmentBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_AssessmentBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AssessmentCreatePayload_assessment(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -207,6 +236,45 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 
 // region    **************************** object.gotpl ****************************
 
+var assessmentBulkDeletePayloadImplementors = []string{"AssessmentBulkDeletePayload"}
+
+func (ec *executionContext) _AssessmentBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssessmentBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._AssessmentBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var assessmentCreatePayloadImplementors = []string{"AssessmentCreatePayload"}
 
 func (ec *executionContext) _AssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssessmentCreatePayload) graphql.Marshaler {
@@ -327,6 +395,20 @@ func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel as
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) marshalNAssessmentBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentBulkDeletePayload) graphql.Marshaler {
+	return ec._AssessmentBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAssessmentBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AssessmentBulkDeletePayload(ctx, sel, v)
+}
 
 func (ec *executionContext) marshalNAssessmentCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentCreatePayload) graphql.Marshaler {
 	return ec._AssessmentCreatePayload(ctx, sel, &v)

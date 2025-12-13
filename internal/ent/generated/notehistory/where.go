@@ -120,6 +120,21 @@ func Text(v string) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldEQ(FieldText, v))
 }
 
+// NoteRef applies equality check predicate on the "note_ref" field. It's identical to NoteRefEQ.
+func NoteRef(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldNoteRef, v))
+}
+
+// DiscussionID applies equality check predicate on the "discussion_id" field. It's identical to DiscussionIDEQ.
+func DiscussionID(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldDiscussionID, v))
+}
+
+// IsEdited applies equality check predicate on the "is_edited" field. It's identical to IsEditedEQ.
+func IsEdited(v bool) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldIsEdited, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -833,6 +848,166 @@ func TextEqualFold(v string) predicate.NoteHistory {
 // TextContainsFold applies the ContainsFold predicate on the "text" field.
 func TextContainsFold(v string) predicate.NoteHistory {
 	return predicate.NoteHistory(sql.FieldContainsFold(FieldText, v))
+}
+
+// NoteRefEQ applies the EQ predicate on the "note_ref" field.
+func NoteRefEQ(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldNoteRef, v))
+}
+
+// NoteRefNEQ applies the NEQ predicate on the "note_ref" field.
+func NoteRefNEQ(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNEQ(FieldNoteRef, v))
+}
+
+// NoteRefIn applies the In predicate on the "note_ref" field.
+func NoteRefIn(vs ...string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIn(FieldNoteRef, vs...))
+}
+
+// NoteRefNotIn applies the NotIn predicate on the "note_ref" field.
+func NoteRefNotIn(vs ...string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotIn(FieldNoteRef, vs...))
+}
+
+// NoteRefGT applies the GT predicate on the "note_ref" field.
+func NoteRefGT(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldGT(FieldNoteRef, v))
+}
+
+// NoteRefGTE applies the GTE predicate on the "note_ref" field.
+func NoteRefGTE(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldGTE(FieldNoteRef, v))
+}
+
+// NoteRefLT applies the LT predicate on the "note_ref" field.
+func NoteRefLT(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldLT(FieldNoteRef, v))
+}
+
+// NoteRefLTE applies the LTE predicate on the "note_ref" field.
+func NoteRefLTE(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldLTE(FieldNoteRef, v))
+}
+
+// NoteRefContains applies the Contains predicate on the "note_ref" field.
+func NoteRefContains(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldContains(FieldNoteRef, v))
+}
+
+// NoteRefHasPrefix applies the HasPrefix predicate on the "note_ref" field.
+func NoteRefHasPrefix(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldHasPrefix(FieldNoteRef, v))
+}
+
+// NoteRefHasSuffix applies the HasSuffix predicate on the "note_ref" field.
+func NoteRefHasSuffix(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldHasSuffix(FieldNoteRef, v))
+}
+
+// NoteRefIsNil applies the IsNil predicate on the "note_ref" field.
+func NoteRefIsNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIsNull(FieldNoteRef))
+}
+
+// NoteRefNotNil applies the NotNil predicate on the "note_ref" field.
+func NoteRefNotNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotNull(FieldNoteRef))
+}
+
+// NoteRefEqualFold applies the EqualFold predicate on the "note_ref" field.
+func NoteRefEqualFold(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEqualFold(FieldNoteRef, v))
+}
+
+// NoteRefContainsFold applies the ContainsFold predicate on the "note_ref" field.
+func NoteRefContainsFold(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldContainsFold(FieldNoteRef, v))
+}
+
+// DiscussionIDEQ applies the EQ predicate on the "discussion_id" field.
+func DiscussionIDEQ(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldDiscussionID, v))
+}
+
+// DiscussionIDNEQ applies the NEQ predicate on the "discussion_id" field.
+func DiscussionIDNEQ(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNEQ(FieldDiscussionID, v))
+}
+
+// DiscussionIDIn applies the In predicate on the "discussion_id" field.
+func DiscussionIDIn(vs ...string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIn(FieldDiscussionID, vs...))
+}
+
+// DiscussionIDNotIn applies the NotIn predicate on the "discussion_id" field.
+func DiscussionIDNotIn(vs ...string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotIn(FieldDiscussionID, vs...))
+}
+
+// DiscussionIDGT applies the GT predicate on the "discussion_id" field.
+func DiscussionIDGT(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldGT(FieldDiscussionID, v))
+}
+
+// DiscussionIDGTE applies the GTE predicate on the "discussion_id" field.
+func DiscussionIDGTE(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldGTE(FieldDiscussionID, v))
+}
+
+// DiscussionIDLT applies the LT predicate on the "discussion_id" field.
+func DiscussionIDLT(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldLT(FieldDiscussionID, v))
+}
+
+// DiscussionIDLTE applies the LTE predicate on the "discussion_id" field.
+func DiscussionIDLTE(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldLTE(FieldDiscussionID, v))
+}
+
+// DiscussionIDContains applies the Contains predicate on the "discussion_id" field.
+func DiscussionIDContains(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldContains(FieldDiscussionID, v))
+}
+
+// DiscussionIDHasPrefix applies the HasPrefix predicate on the "discussion_id" field.
+func DiscussionIDHasPrefix(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldHasPrefix(FieldDiscussionID, v))
+}
+
+// DiscussionIDHasSuffix applies the HasSuffix predicate on the "discussion_id" field.
+func DiscussionIDHasSuffix(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldHasSuffix(FieldDiscussionID, v))
+}
+
+// DiscussionIDIsNil applies the IsNil predicate on the "discussion_id" field.
+func DiscussionIDIsNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldIsNull(FieldDiscussionID))
+}
+
+// DiscussionIDNotNil applies the NotNil predicate on the "discussion_id" field.
+func DiscussionIDNotNil() predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNotNull(FieldDiscussionID))
+}
+
+// DiscussionIDEqualFold applies the EqualFold predicate on the "discussion_id" field.
+func DiscussionIDEqualFold(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEqualFold(FieldDiscussionID, v))
+}
+
+// DiscussionIDContainsFold applies the ContainsFold predicate on the "discussion_id" field.
+func DiscussionIDContainsFold(v string) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldContainsFold(FieldDiscussionID, v))
+}
+
+// IsEditedEQ applies the EQ predicate on the "is_edited" field.
+func IsEditedEQ(v bool) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldEQ(FieldIsEdited, v))
+}
+
+// IsEditedNEQ applies the NEQ predicate on the "is_edited" field.
+func IsEditedNEQ(v bool) predicate.NoteHistory {
+	return predicate.NoteHistory(sql.FieldNEQ(FieldIsEdited, v))
 }
 
 // And groups predicates with the AND operator between them.

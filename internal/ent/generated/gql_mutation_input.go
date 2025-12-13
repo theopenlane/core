@@ -1260,7 +1260,7 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 // CreateContactInput represents a mutation input for creating contacts.
 type CreateContactInput struct {
 	Tags        []string
-	FullName    string
+	FullName    *string
 	Title       *string
 	Company     *string
 	Email       *string
@@ -1277,7 +1277,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	m.SetFullName(i.FullName)
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
 	}
@@ -1318,6 +1320,7 @@ type UpdateContactInput struct {
 	ClearTags        bool
 	Tags             []string
 	AppendTags       []string
+	ClearFullName    bool
 	FullName         *string
 	ClearTitle       bool
 	Title            *string
@@ -1350,6 +1353,9 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearFullName {
+		m.ClearFullName()
 	}
 	if v := i.FullName; v != nil {
 		m.SetFullName(*v)
@@ -1461,6 +1467,7 @@ type CreateControlInput struct {
 	ProcedureIDs               []string
 	InternalPolicyIDs          []string
 	CommentIDs                 []string
+	DiscussionIDs              []string
 	ControlOwnerID             *string
 	DelegateID                 *string
 	ResponsiblePartyID         *string
@@ -1580,6 +1587,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
+	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
 	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
@@ -1722,6 +1732,9 @@ type UpdateControlInput struct {
 	ClearComments                   bool
 	AddCommentIDs                   []string
 	RemoveCommentIDs                []string
+	ClearDiscussions                bool
+	AddDiscussionIDs                []string
+	RemoveDiscussionIDs             []string
 	ClearControlOwner               bool
 	ControlOwnerID                  *string
 	ClearDelegate                   bool
@@ -2014,6 +2027,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
@@ -4065,6 +4087,142 @@ func (c *DirectorySyncRunUpdate) SetInput(i UpdateDirectorySyncRunInput) *Direct
 
 // SetInput applies the change-set in the UpdateDirectorySyncRunInput on the DirectorySyncRunUpdateOne builder.
 func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *DirectorySyncRunUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDiscussionInput represents a mutation input for creating discussions.
+type CreateDiscussionInput struct {
+	ExternalID       string
+	IsResolved       *bool
+	OwnerID          *string
+	CommentIDs       []string
+	ControlID        *string
+	SubcontrolID     *string
+	ProcedureID      *string
+	RiskID           *string
+	InternalPolicyID *string
+}
+
+// Mutate applies the CreateDiscussionInput on the DiscussionMutation builder.
+func (i *CreateDiscussionInput) Mutate(m *DiscussionMutation) {
+	m.SetExternalID(i.ExternalID)
+	if v := i.IsResolved; v != nil {
+		m.SetIsResolved(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
+	}
+	if v := i.ProcedureID; v != nil {
+		m.SetProcedureID(*v)
+	}
+	if v := i.RiskID; v != nil {
+		m.SetRiskID(*v)
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateDiscussionInput on the DiscussionCreate builder.
+func (c *DiscussionCreate) SetInput(i CreateDiscussionInput) *DiscussionCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDiscussionInput represents a mutation input for updating discussions.
+type UpdateDiscussionInput struct {
+	ExternalID          *string
+	IsResolved          *bool
+	ClearOwner          bool
+	OwnerID             *string
+	ClearComments       bool
+	AddCommentIDs       []string
+	RemoveCommentIDs    []string
+	ClearControl        bool
+	ControlID           *string
+	ClearSubcontrol     bool
+	SubcontrolID        *string
+	ClearProcedure      bool
+	ProcedureID         *string
+	ClearRisk           bool
+	RiskID              *string
+	ClearInternalPolicy bool
+	InternalPolicyID    *string
+}
+
+// Mutate applies the UpdateDiscussionInput on the DiscussionMutation builder.
+func (i *UpdateDiscussionInput) Mutate(m *DiscussionMutation) {
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IsResolved; v != nil {
+		m.SetIsResolved(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearSubcontrol {
+		m.ClearSubcontrol()
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
+	}
+	if i.ClearProcedure {
+		m.ClearProcedure()
+	}
+	if v := i.ProcedureID; v != nil {
+		m.SetProcedureID(*v)
+	}
+	if i.ClearRisk {
+		m.ClearRisk()
+	}
+	if v := i.RiskID; v != nil {
+		m.SetRiskID(*v)
+	}
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDiscussionInput on the DiscussionUpdate builder.
+func (c *DiscussionUpdate) SetInput(i UpdateDiscussionInput) *DiscussionUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDiscussionInput on the DiscussionUpdateOne builder.
+func (c *DiscussionUpdateOne) SetInput(i UpdateDiscussionInput) *DiscussionUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -7743,6 +7901,7 @@ type CreateInternalPolicyInput struct {
 	ProgramIDs                      []string
 	FileID                          *string
 	CommentIDs                      []string
+	DiscussionIDs                   []string
 	WorkflowObjectRefIDs            []string
 }
 
@@ -7854,6 +8013,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -7957,6 +8119,9 @@ type UpdateInternalPolicyInput struct {
 	ClearComments                         bool
 	AddCommentIDs                         []string
 	RemoveCommentIDs                      []string
+	ClearDiscussions                      bool
+	AddDiscussionIDs                      []string
+	RemoveDiscussionIDs                   []string
 	ClearWorkflowObjectRefs               bool
 	AddWorkflowObjectRefIDs               []string
 	RemoveWorkflowObjectRefIDs            []string
@@ -8233,6 +8398,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -9530,6 +9704,9 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
 	Text             string
+	NoteRef          *string
+	DiscussionID     *string
+	IsEdited         *bool
 	OwnerID          *string
 	TaskID           *string
 	ControlID        *string
@@ -9545,6 +9722,15 @@ type CreateNoteInput struct {
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
 func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	m.SetText(i.Text)
+	if v := i.NoteRef; v != nil {
+		m.SetNoteRef(*v)
+	}
+	if v := i.DiscussionID; v != nil {
+		m.SetDiscussionID(*v)
+	}
+	if v := i.IsEdited; v != nil {
+		m.SetIsEdited(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -9586,6 +9772,11 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
 	Text                *string
+	ClearNoteRef        bool
+	NoteRef             *string
+	ClearDiscussionID   bool
+	DiscussionID        *string
+	IsEdited            *bool
 	ClearTask           bool
 	TaskID              *string
 	ClearControl        bool
@@ -9611,6 +9802,21 @@ type UpdateNoteInput struct {
 func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.Text; v != nil {
 		m.SetText(*v)
+	}
+	if i.ClearNoteRef {
+		m.ClearNoteRef()
+	}
+	if v := i.NoteRef; v != nil {
+		m.SetNoteRef(*v)
+	}
+	if i.ClearDiscussionID {
+		m.ClearDiscussionID()
+	}
+	if v := i.DiscussionID; v != nil {
+		m.SetDiscussionID(*v)
+	}
+	if v := i.IsEdited; v != nil {
+		m.SetIsEdited(*v)
 	}
 	if i.ClearTask {
 		m.ClearTask()
@@ -9920,6 +10126,7 @@ type CreateOrganizationInput struct {
 	DirectoryAccountIDs               []string
 	DirectoryGroupIDs                 []string
 	DirectorySyncRunIDs               []string
+	DiscussionIDs                     []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -10195,6 +10402,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.DirectorySyncRunIDs; len(v) > 0 {
 		m.AddDirectorySyncRunIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -10460,6 +10670,9 @@ type UpdateOrganizationInput struct {
 	ClearDirectorySyncRuns                  bool
 	AddDirectorySyncRunIDs                  []string
 	RemoveDirectorySyncRunIDs               []string
+	ClearDiscussions                        bool
+	AddDiscussionIDs                        []string
+	RemoveDiscussionIDs                     []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -11229,6 +11442,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveDirectorySyncRunIDs; len(v) > 0 {
 		m.RemoveDirectorySyncRunIDs(v...)
 	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -11772,6 +11994,7 @@ type CreateProcedureInput struct {
 	RiskIDs                         []string
 	TaskIDs                         []string
 	CommentIDs                      []string
+	DiscussionIDs                   []string
 	FileID                          *string
 }
 
@@ -11874,6 +12097,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
 	}
@@ -11969,6 +12195,9 @@ type UpdateProcedureInput struct {
 	ClearComments                         bool
 	AddCommentIDs                         []string
 	RemoveCommentIDs                      []string
+	ClearDiscussions                      bool
+	AddDiscussionIDs                      []string
+	RemoveDiscussionIDs                   []string
 	ClearFile                             bool
 	FileID                                *string
 }
@@ -12220,6 +12449,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearFile {
 		m.ClearFile()
@@ -13927,6 +14165,7 @@ type CreateRiskInput struct {
 	StakeholderID     *string
 	DelegateID        *string
 	CommentIDs        []string
+	DiscussionIDs     []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -14025,6 +14264,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -14111,6 +14353,9 @@ type UpdateRiskInput struct {
 	ClearComments           bool
 	AddCommentIDs           []string
 	RemoveCommentIDs        []string
+	ClearDiscussions        bool
+	AddDiscussionIDs        []string
+	RemoveDiscussionIDs     []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -14342,6 +14587,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 }
 
@@ -15075,6 +15329,7 @@ type CreateSubcontrolInput struct {
 	ProcedureIDs               []string
 	InternalPolicyIDs          []string
 	CommentIDs                 []string
+	DiscussionIDs              []string
 	ControlOwnerID             *string
 	DelegateID                 *string
 	ResponsiblePartyID         *string
@@ -15186,6 +15441,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
+	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
 	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
@@ -15302,6 +15560,9 @@ type UpdateSubcontrolInput struct {
 	ClearComments                   bool
 	AddCommentIDs                   []string
 	RemoveCommentIDs                []string
+	ClearDiscussions                bool
+	AddDiscussionIDs                []string
+	RemoveDiscussionIDs             []string
 	ClearControlOwner               bool
 	ControlOwnerID                  *string
 	ClearDelegate                   bool
@@ -15569,6 +15830,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
@@ -16064,6 +16334,8 @@ type CreateTaskInput struct {
 	ActionPlanIDs            []string
 	EvidenceIDs              []string
 	WorkflowObjectRefIDs     []string
+	ParentID                 *string
+	TaskIDs                  []string
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -16147,6 +16419,12 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
+	if v := i.ParentID; v != nil {
+		m.SetParentID(*v)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTaskInput on the TaskCreate builder.
@@ -16221,6 +16499,11 @@ type UpdateTaskInput struct {
 	ClearWorkflowObjectRefs        bool
 	AddWorkflowObjectRefIDs        []string
 	RemoveWorkflowObjectRefIDs     []string
+	ClearParent                    bool
+	ParentID                       *string
+	ClearTasks                     bool
+	AddTaskIDs                     []string
+	RemoveTaskIDs                  []string
 }
 
 // Mutate applies the UpdateTaskInput on the TaskMutation builder.
@@ -16416,6 +16699,21 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
 		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearParent {
+		m.ClearParent()
+	}
+	if v := i.ParentID; v != nil {
+		m.SetParentID(*v)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 }
 

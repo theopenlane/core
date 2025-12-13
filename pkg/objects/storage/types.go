@@ -29,7 +29,6 @@ type (
 const (
 	S3Provider       = storagetypes.S3Provider
 	R2Provider       = storagetypes.R2Provider
-	GCSProvider      = storagetypes.GCSProvider
 	DiskProvider     = storagetypes.DiskProvider
 	DatabaseProvider = storagetypes.DatabaseProvider
 	// Presign mode constants
@@ -102,10 +101,8 @@ type ProviderConfig struct {
 type Providers struct {
 	// S3 provider configuration
 	S3 ProviderConfigs `json:"s3" koanf:"s3"`
-	// CloudflareR2 provider configuration
-	CloudflareR2 ProviderConfigs `json:"cloudflarer2" koanf:"cloudflarer2"`
-	// GCS provider configuration
-	GCS ProviderConfigs `json:"gcs" koanf:"gcs"`
+	// R2 provider configuration
+	R2 ProviderConfigs `json:"r2" koanf:"r2"`
 	// Disk provider configuration
 	Disk ProviderConfigs `json:"disk" koanf:"disk"`
 	// Database provider configuration

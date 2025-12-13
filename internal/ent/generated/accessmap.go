@@ -189,6 +189,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "discussions": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "control_owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
@@ -510,6 +514,35 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "directory_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+},
+}, "discussion": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "comment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "control": {
+	ObjectType:      "control",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "subcontrol": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "procedure": {
+	ObjectType:      "procedure",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "risk": {
+	ObjectType:      "risk",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_policy": {
+	ObjectType:      "internal_policy",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "document_data": {"owner": {
 	ObjectType:      "owner",
@@ -1176,6 +1209,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "discussions": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "workflow_object_refs": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
@@ -1810,6 +1847,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "discussions": {
+	ObjectType:      "discussion",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "members": {
 	ObjectType:      "member",
 	SkipEditCheck:   true,
@@ -1895,6 +1936,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "discussions": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -2223,6 +2268,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "discussions": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "scan": {"owner": {
 	ObjectType:      "owner",
@@ -2337,6 +2386,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "discussions": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -2481,6 +2534,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "parent": {
+	ObjectType:      "task",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "template": {"owner": {
 	ObjectType:      "owner",

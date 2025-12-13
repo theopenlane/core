@@ -5,6 +5,7 @@ mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
       backgroundColor
       createdAt
       createdBy
+      environment
       faviconLocalFileID
       faviconRemoteURL
       font
@@ -69,6 +70,7 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     backgroundColor
     createdAt
     createdBy
+    environment
     faviconLocalFileID
     faviconRemoteURL
     font
@@ -86,7 +88,11 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
   }
 }
 
-query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSettingWhereInput) {
+query GetTrustCenterSettings(
+  $first: Int
+  $last: Int
+  $where: TrustCenterSettingWhereInput
+) {
   trustCenterSettings(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
@@ -101,6 +107,7 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         backgroundColor
         createdAt
         createdBy
+        environment
         faviconLocalFileID
         faviconRemoteURL
         font
@@ -120,7 +127,12 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
   }
 }
 
-mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
+mutation UpdateTrustCenterSetting(
+  $updateTrustCenterSettingId: ID!
+  $input: UpdateTrustCenterSettingInput!
+  $logoFile: Upload
+  $faviconFile: Upload
+) {
   updateTrustCenterSetting(
     id: $updateTrustCenterSettingId
     input: $input
@@ -132,6 +144,7 @@ mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: Upda
       backgroundColor
       createdAt
       createdBy
+      environment
       faviconLocalFileID
       faviconRemoteURL
       font

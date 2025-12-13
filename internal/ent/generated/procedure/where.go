@@ -2314,6 +2314,35 @@ func HasCommentsWith(preds ...predicate.Note) predicate.Procedure {
 	})
 }
 
+// HasDiscussions applies the HasEdge predicate on the "discussions" edge.
+func HasDiscussions() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDiscussionsWith applies the HasEdge predicate on the "discussions" edge with a given conditions (other predicates).
+func HasDiscussionsWith(preds ...predicate.Discussion) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newDiscussionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFile applies the HasEdge predicate on the "file" edge.
 func HasFile() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {

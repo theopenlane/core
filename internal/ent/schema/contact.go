@@ -9,9 +9,10 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -49,12 +50,12 @@ func (Contact) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("full_name").
 			Comment("the full name of the contact").
+			Optional().
 			MaxLen(nameMaxLen).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("full_name"),
-			).
-			NotEmpty(),
+			),
 		field.String("title").
 			Comment("the title of the contact").
 			Annotations(

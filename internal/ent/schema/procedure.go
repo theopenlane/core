@@ -69,6 +69,14 @@ func (p Procedure) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Discussion{},
+			comment:    "discussions related to the procedure",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: p,

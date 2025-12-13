@@ -35,6 +35,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -1001,6 +1003,60 @@ func (f TraverseDirectorySyncRun) Traverse(ctx context.Context, q generated.Quer
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.DirectorySyncRunQuery", q)
+}
+
+// The DiscussionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DiscussionFunc func(context.Context, *generated.DiscussionQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DiscussionFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DiscussionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DiscussionQuery", q)
+}
+
+// The TraverseDiscussion type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDiscussion func(context.Context, *generated.DiscussionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDiscussion) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDiscussion) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DiscussionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DiscussionQuery", q)
+}
+
+// The DiscussionHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DiscussionHistoryFunc func(context.Context, *generated.DiscussionHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DiscussionHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DiscussionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DiscussionHistoryQuery", q)
+}
+
+// The TraverseDiscussionHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDiscussionHistory func(context.Context, *generated.DiscussionHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDiscussionHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDiscussionHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DiscussionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DiscussionHistoryQuery", q)
 }
 
 // The DocumentDataFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -4412,6 +4468,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.DirectoryMembershipHistoryQuery, predicate.DirectoryMembershipHistory, directorymembershiphistory.OrderOption]{typ: generated.TypeDirectoryMembershipHistory, tq: q}, nil
 	case *generated.DirectorySyncRunQuery:
 		return &query[*generated.DirectorySyncRunQuery, predicate.DirectorySyncRun, directorysyncrun.OrderOption]{typ: generated.TypeDirectorySyncRun, tq: q}, nil
+	case *generated.DiscussionQuery:
+		return &query[*generated.DiscussionQuery, predicate.Discussion, discussion.OrderOption]{typ: generated.TypeDiscussion, tq: q}, nil
+	case *generated.DiscussionHistoryQuery:
+		return &query[*generated.DiscussionHistoryQuery, predicate.DiscussionHistory, discussionhistory.OrderOption]{typ: generated.TypeDiscussionHistory, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
 	case *generated.DocumentDataHistoryQuery:

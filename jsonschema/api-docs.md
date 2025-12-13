@@ -117,10 +117,7 @@ Config contains the configuration for the core server
             "s3": {
                 "credentials": {}
             },
-            "cloudflarer2": {
-                "credentials": {}
-            },
-            "gcs": {
+            "r2": {
                 "credentials": {}
             },
             "disk": {
@@ -1393,10 +1390,7 @@ ProviderConfig contains configuration for object storage providers
         "s3": {
             "credentials": {}
         },
-        "cloudflarer2": {
-            "credentials": {}
-        },
-        "gcs": {
+        "r2": {
             "credentials": {}
         },
         "disk": {
@@ -1423,8 +1417,7 @@ ProviderConfig contains configuration for object storage providers
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**cloudflarer2**](#objectstorageproviderscloudflarer2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**gcs**](#objectstorageprovidersgcs)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**r2**](#objectstorageprovidersr2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 |[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 |[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 
@@ -1436,10 +1429,7 @@ ProviderConfig contains configuration for object storage providers
     "s3": {
         "credentials": {}
     },
-    "cloudflarer2": {
-        "credentials": {}
-    },
-    "gcs": {
+    "r2": {
         "credentials": {}
     },
     "disk": {
@@ -1496,8 +1486,8 @@ ProviderCredentials contains credentials for a storage provider
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
 **Additional Properties:** not allowed  
-<a name="objectstorageproviderscloudflarer2"></a>
-#### objectstorage\.providers\.cloudflarer2: object
+<a name="objectstorageprovidersr2"></a>
+#### objectstorage\.providers\.r2: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1513,7 +1503,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageproviderscloudflarer2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageprovidersr2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1524,53 +1514,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectstorageproviderscloudflarer2credentials"></a>
-##### objectstorage\.providers\.cloudflarer2\.credentials: object
-
-ProviderCredentials contains credentials for a storage provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
-
-**Additional Properties:** not allowed  
-<a name="objectstorageprovidersgcs"></a>
-#### objectstorage\.providers\.gcs: object
-
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersgcscredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "credentials": {}
-}
-```
-
-<a name="objectstorageprovidersgcscredentials"></a>
-##### objectstorage\.providers\.gcs\.credentials: object
+<a name="objectstorageprovidersr2credentials"></a>
+##### objectstorage\.providers\.r2\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 

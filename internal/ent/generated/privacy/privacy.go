@@ -807,6 +807,54 @@ func (f DirectorySyncRunMutationRuleFunc) EvalMutation(ctx context.Context, m ge
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DirectorySyncRunMutation", m)
 }
 
+// The DiscussionQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DiscussionQueryRuleFunc func(context.Context, *generated.DiscussionQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DiscussionQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DiscussionQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.DiscussionQuery", q)
+}
+
+// The DiscussionMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DiscussionMutationRuleFunc func(context.Context, *generated.DiscussionMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DiscussionMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.DiscussionMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DiscussionMutation", m)
+}
+
+// The DiscussionHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type DiscussionHistoryQueryRuleFunc func(context.Context, *generated.DiscussionHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f DiscussionHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DiscussionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.DiscussionHistoryQuery", q)
+}
+
+// The DiscussionHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type DiscussionHistoryMutationRuleFunc func(context.Context, *generated.DiscussionHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f DiscussionHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.DiscussionHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.DiscussionHistoryMutation", m)
+}
+
 // The DocumentDataQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type DocumentDataQueryRuleFunc func(context.Context, *generated.DocumentDataQuery) error
@@ -3876,6 +3924,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.DirectorySyncRunQuery:
 		return q.Filter(), nil
+	case *generated.DiscussionQuery:
+		return q.Filter(), nil
+	case *generated.DiscussionHistoryQuery:
+		return q.Filter(), nil
 	case *generated.DocumentDataQuery:
 		return q.Filter(), nil
 	case *generated.DocumentDataHistoryQuery:
@@ -4188,6 +4240,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.DirectoryMembershipHistoryMutation:
 		return m.Filter(), nil
 	case *generated.DirectorySyncRunMutation:
+		return m.Filter(), nil
+	case *generated.DiscussionMutation:
+		return m.Filter(), nil
+	case *generated.DiscussionHistoryMutation:
 		return m.Filter(), nil
 	case *generated.DocumentDataMutation:
 		return m.Filter(), nil

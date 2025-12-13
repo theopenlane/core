@@ -33,6 +33,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -895,21 +897,7 @@ func init() {
 	// contactDescFullName is the schema descriptor for full_name field.
 	contactDescFullName := contactFields[0].Descriptor()
 	// contact.FullNameValidator is a validator for the "full_name" field. It is called by the builders before save.
-	contact.FullNameValidator = func() func(string) error {
-		validators := contactDescFullName.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(full_name string) error {
-			for _, fn := range fns {
-				if err := fn(full_name); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
+	contact.FullNameValidator = contactDescFullName.Validators[0].(func(string) error)
 	// contactDescEmail is the schema descriptor for email field.
 	contactDescEmail := contactFields[3].Descriptor()
 	// contact.EmailValidator is a validator for the "email" field. It is called by the builders before save.
@@ -2205,6 +2193,99 @@ func init() {
 	directorysyncrunDescID := directorysyncrunMixinFields2[0].Descriptor()
 	// directorysyncrun.DefaultID holds the default value on creation for the id field.
 	directorysyncrun.DefaultID = directorysyncrunDescID.Default.(func() string)
+	discussionMixin := schema.Discussion{}.Mixin()
+	discussion.Policy = privacy.NewPolicies(schema.Discussion{})
+	discussion.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := discussion.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	discussionMixinHooks0 := discussionMixin[0].Hooks()
+	discussionMixinHooks1 := discussionMixin[1].Hooks()
+	discussionMixinHooks2 := discussionMixin[2].Hooks()
+	discussionMixinHooks5 := discussionMixin[5].Hooks()
+
+	discussion.Hooks[1] = discussionMixinHooks0[0]
+
+	discussion.Hooks[2] = discussionMixinHooks1[0]
+
+	discussion.Hooks[3] = discussionMixinHooks2[0]
+
+	discussion.Hooks[4] = discussionMixinHooks5[0]
+	discussionMixinInters1 := discussionMixin[1].Interceptors()
+	discussionMixinInters2 := discussionMixin[2].Interceptors()
+	discussionMixinInters5 := discussionMixin[5].Interceptors()
+	discussion.Interceptors[0] = discussionMixinInters1[0]
+	discussion.Interceptors[1] = discussionMixinInters2[0]
+	discussion.Interceptors[2] = discussionMixinInters5[0]
+	discussionMixinFields0 := discussionMixin[0].Fields()
+	_ = discussionMixinFields0
+	discussionMixinFields3 := discussionMixin[3].Fields()
+	_ = discussionMixinFields3
+	discussionMixinFields5 := discussionMixin[5].Fields()
+	_ = discussionMixinFields5
+	discussionFields := schema.Discussion{}.Fields()
+	_ = discussionFields
+	// discussionDescCreatedAt is the schema descriptor for created_at field.
+	discussionDescCreatedAt := discussionMixinFields0[0].Descriptor()
+	// discussion.DefaultCreatedAt holds the default value on creation for the created_at field.
+	discussion.DefaultCreatedAt = discussionDescCreatedAt.Default.(func() time.Time)
+	// discussionDescUpdatedAt is the schema descriptor for updated_at field.
+	discussionDescUpdatedAt := discussionMixinFields0[1].Descriptor()
+	// discussion.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	discussion.DefaultUpdatedAt = discussionDescUpdatedAt.Default.(func() time.Time)
+	// discussion.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	discussion.UpdateDefaultUpdatedAt = discussionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// discussionDescOwnerID is the schema descriptor for owner_id field.
+	discussionDescOwnerID := discussionMixinFields5[0].Descriptor()
+	// discussion.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	discussion.OwnerIDValidator = discussionDescOwnerID.Validators[0].(func(string) error)
+	// discussionDescIsResolved is the schema descriptor for is_resolved field.
+	discussionDescIsResolved := discussionFields[1].Descriptor()
+	// discussion.DefaultIsResolved holds the default value on creation for the is_resolved field.
+	discussion.DefaultIsResolved = discussionDescIsResolved.Default.(bool)
+	// discussionDescID is the schema descriptor for id field.
+	discussionDescID := discussionMixinFields3[0].Descriptor()
+	// discussion.DefaultID holds the default value on creation for the id field.
+	discussion.DefaultID = discussionDescID.Default.(func() string)
+	discussionhistory.Policy = privacy.NewPolicies(schema.DiscussionHistory{})
+	discussionhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := discussionhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	discussionhistoryInters := schema.DiscussionHistory{}.Interceptors()
+	discussionhistory.Interceptors[0] = discussionhistoryInters[0]
+	discussionhistoryFields := schema.DiscussionHistory{}.Fields()
+	_ = discussionhistoryFields
+	// discussionhistoryDescHistoryTime is the schema descriptor for history_time field.
+	discussionhistoryDescHistoryTime := discussionhistoryFields[0].Descriptor()
+	// discussionhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	discussionhistory.DefaultHistoryTime = discussionhistoryDescHistoryTime.Default.(func() time.Time)
+	// discussionhistoryDescCreatedAt is the schema descriptor for created_at field.
+	discussionhistoryDescCreatedAt := discussionhistoryFields[3].Descriptor()
+	// discussionhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	discussionhistory.DefaultCreatedAt = discussionhistoryDescCreatedAt.Default.(func() time.Time)
+	// discussionhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	discussionhistoryDescUpdatedAt := discussionhistoryFields[4].Descriptor()
+	// discussionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	discussionhistory.DefaultUpdatedAt = discussionhistoryDescUpdatedAt.Default.(func() time.Time)
+	// discussionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	discussionhistory.UpdateDefaultUpdatedAt = discussionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// discussionhistoryDescIsResolved is the schema descriptor for is_resolved field.
+	discussionhistoryDescIsResolved := discussionhistoryFields[12].Descriptor()
+	// discussionhistory.DefaultIsResolved holds the default value on creation for the is_resolved field.
+	discussionhistory.DefaultIsResolved = discussionhistoryDescIsResolved.Default.(bool)
+	// discussionhistoryDescID is the schema descriptor for id field.
+	discussionhistoryDescID := discussionhistoryFields[9].Descriptor()
+	// discussionhistory.DefaultID holds the default value on creation for the id field.
+	discussionhistory.DefaultID = discussionhistoryDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -5040,6 +5121,8 @@ func init() {
 	note.Hooks[6] = noteMixinHooks5[1]
 
 	note.Hooks[7] = noteHooks[0]
+
+	note.Hooks[8] = noteHooks[1]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters2 := noteMixin[2].Interceptors()
 	noteMixinInters5 := noteMixin[5].Interceptors()
@@ -5077,6 +5160,10 @@ func init() {
 	noteDescText := noteFields[0].Descriptor()
 	// note.TextValidator is a validator for the "text" field. It is called by the builders before save.
 	note.TextValidator = noteDescText.Validators[0].(func(string) error)
+	// noteDescIsEdited is the schema descriptor for is_edited field.
+	noteDescIsEdited := noteFields[3].Descriptor()
+	// note.DefaultIsEdited holds the default value on creation for the is_edited field.
+	note.DefaultIsEdited = noteDescIsEdited.Default.(bool)
 	// noteDescID is the schema descriptor for id field.
 	noteDescID := noteMixinFields3[0].Descriptor()
 	// note.DefaultID holds the default value on creation for the id field.
@@ -5108,6 +5195,10 @@ func init() {
 	notehistory.DefaultUpdatedAt = notehistoryDescUpdatedAt.Default.(func() time.Time)
 	// notehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	notehistory.UpdateDefaultUpdatedAt = notehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notehistoryDescIsEdited is the schema descriptor for is_edited field.
+	notehistoryDescIsEdited := notehistoryFields[15].Descriptor()
+	// notehistory.DefaultIsEdited holds the default value on creation for the is_edited field.
+	notehistory.DefaultIsEdited = notehistoryDescIsEdited.Default.(bool)
 	// notehistoryDescID is the schema descriptor for id field.
 	notehistoryDescID := notehistoryFields[9].Descriptor()
 	// notehistory.DefaultID holds the default value on creation for the id field.
@@ -7230,6 +7321,8 @@ func init() {
 	standard.Hooks[11] = standardHooks[3]
 
 	standard.Hooks[12] = standardHooks[4]
+
+	standard.Hooks[13] = standardHooks[5]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters2 := standardMixin[2].Interceptors()
 	standardMixinInters7 := standardMixin[7].Interceptors()
@@ -7556,6 +7649,8 @@ func init() {
 	subprocessor.Hooks[7] = subprocessorHooks[0]
 
 	subprocessor.Hooks[8] = subprocessorHooks[1]
+
+	subprocessor.Hooks[9] = subprocessorHooks[2]
 	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
 	subprocessorMixinInters2 := subprocessorMixin[2].Interceptors()
 	subprocessorMixinInters6 := subprocessorMixin[6].Interceptors()
@@ -8364,6 +8459,8 @@ func init() {
 	trustcenterdoc.Hooks[6] = trustcenterdocHooks[0]
 
 	trustcenterdoc.Hooks[7] = trustcenterdocHooks[1]
+
+	trustcenterdoc.Hooks[8] = trustcenterdocHooks[2]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters2 := trustcenterdocMixin[2].Interceptors()
 	trustcenterdocMixinInters6 := trustcenterdocMixin[6].Interceptors()
@@ -8959,6 +9056,8 @@ func init() {
 	trustcenterentity.Hooks[5] = trustcenterentityHooks[0]
 
 	trustcenterentity.Hooks[6] = trustcenterentityHooks[1]
+
+	trustcenterentity.Hooks[7] = trustcenterentityHooks[2]
 	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
 	trustcenterentityMixinInters2 := trustcenterentityMixin[2].Interceptors()
 	trustcenterentityMixinInters5 := trustcenterentityMixin[5].Interceptors()

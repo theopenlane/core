@@ -33,6 +33,12 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldText holds the string denoting the text field in the database.
 	FieldText = "text"
+	// FieldNoteRef holds the string denoting the note_ref field in the database.
+	FieldNoteRef = "note_ref"
+	// FieldDiscussionID holds the string denoting the discussion_id field in the database.
+	FieldDiscussionID = "discussion_id"
+	// FieldIsEdited holds the string denoting the is_edited field in the database.
+	FieldIsEdited = "is_edited"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeTask holds the string denoting the task edge name in mutations.
@@ -139,12 +145,16 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldOwnerID,
 	FieldText,
+	FieldNoteRef,
+	FieldDiscussionID,
+	FieldIsEdited,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "notes"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"control_comments",
+	"discussion_comments",
 	"entity_notes",
 	"evidence_comments",
 	"finding_comments",
@@ -181,7 +191,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -196,6 +206,8 @@ var (
 	OwnerIDValidator func(string) error
 	// TextValidator is a validator for the "text" field. It is called by the builders before save.
 	TextValidator func(string) error
+	// DefaultIsEdited holds the default value on creation for the "is_edited" field.
+	DefaultIsEdited bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -251,6 +263,21 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByText orders the results by the text field.
 func ByText(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldText, opts...).ToFunc()
+}
+
+// ByNoteRef orders the results by the note_ref field.
+func ByNoteRef(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNoteRef, opts...).ToFunc()
+}
+
+// ByDiscussionID orders the results by the discussion_id field.
+func ByDiscussionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDiscussionID, opts...).ToFunc()
+}
+
+// ByIsEdited orders the results by the is_edited field.
+func ByIsEdited(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsEdited, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

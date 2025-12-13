@@ -364,6 +364,26 @@ func (_u *TaskHistoryUpdate) ClearExternalReferenceURL() *TaskHistoryUpdate {
 	return _u
 }
 
+// SetParentTaskID sets the "parent_task_id" field.
+func (_u *TaskHistoryUpdate) SetParentTaskID(v string) *TaskHistoryUpdate {
+	_u.mutation.SetParentTaskID(v)
+	return _u
+}
+
+// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
+func (_u *TaskHistoryUpdate) SetNillableParentTaskID(v *string) *TaskHistoryUpdate {
+	if v != nil {
+		_u.SetParentTaskID(*v)
+	}
+	return _u
+}
+
+// ClearParentTaskID clears the value of the "parent_task_id" field.
+func (_u *TaskHistoryUpdate) ClearParentTaskID() *TaskHistoryUpdate {
+	_u.mutation.ClearParentTaskID()
+	return _u
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (_u *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 	return _u.mutation
@@ -559,6 +579,12 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.ExternalReferenceURLCleared() {
 		_spec.ClearField(taskhistory.FieldExternalReferenceURL, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ParentTaskID(); ok {
+		_spec.SetField(taskhistory.FieldParentTaskID, field.TypeString, value)
+	}
+	if _u.mutation.ParentTaskIDCleared() {
+		_spec.ClearField(taskhistory.FieldParentTaskID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -914,6 +940,26 @@ func (_u *TaskHistoryUpdateOne) ClearExternalReferenceURL() *TaskHistoryUpdateOn
 	return _u
 }
 
+// SetParentTaskID sets the "parent_task_id" field.
+func (_u *TaskHistoryUpdateOne) SetParentTaskID(v string) *TaskHistoryUpdateOne {
+	_u.mutation.SetParentTaskID(v)
+	return _u
+}
+
+// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
+func (_u *TaskHistoryUpdateOne) SetNillableParentTaskID(v *string) *TaskHistoryUpdateOne {
+	if v != nil {
+		_u.SetParentTaskID(*v)
+	}
+	return _u
+}
+
+// ClearParentTaskID clears the value of the "parent_task_id" field.
+func (_u *TaskHistoryUpdateOne) ClearParentTaskID() *TaskHistoryUpdateOne {
+	_u.mutation.ClearParentTaskID()
+	return _u
+}
+
 // Mutation returns the TaskHistoryMutation object of the builder.
 func (_u *TaskHistoryUpdateOne) Mutation() *TaskHistoryMutation {
 	return _u.mutation
@@ -1139,6 +1185,12 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if _u.mutation.ExternalReferenceURLCleared() {
 		_spec.ClearField(taskhistory.FieldExternalReferenceURL, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ParentTaskID(); ok {
+		_spec.SetField(taskhistory.FieldParentTaskID, field.TypeString, value)
+	}
+	if _u.mutation.ParentTaskIDCleared() {
+		_spec.ClearField(taskhistory.FieldParentTaskID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TaskHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

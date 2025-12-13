@@ -47,6 +47,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*DirectoryMembershipMutation]() {
 		c.DirectoryMembership.Use(hook)
 	}
+	for _, hook := range history.Hooks[*DiscussionMutation]() {
+		c.Discussion.Use(hook)
+	}
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}

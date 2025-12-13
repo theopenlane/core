@@ -994,52 +994,28 @@ data:
           baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.baseurl | quote }}
           {{- end }}
         {{- end }}
-        {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2 }}
-        cloudflarer2:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.enabled }}
-          enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.enabled }}
+        {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2 }}
+        r2:
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.enabled }}
+          enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.enabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.ensureavailable }}
-          ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.ensureavailable }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.ensureavailable }}
+          ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.ensureavailable }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.region }}
-          region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.region | quote }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.region }}
+          region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.region | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.bucket }}
-          bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.bucket | quote }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.bucket }}
+          bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.bucket | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.endpoint }}
-          endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.endpoint | quote }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.endpoint }}
+          endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.endpoint | quote }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.proxypresignenabled }}
-          proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.proxypresignenabled }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.proxypresignenabled }}
+          proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.proxypresignenabled }}
           {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.baseurl }}
-          baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.cloudflarer2.baseurl | quote }}
-          {{- end }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs }}
-        gcs:
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled }}
-          enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.enabled }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable }}
-          ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.ensureavailable }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.region }}
-          region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.region | quote }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.bucket }}
-          bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.bucket | quote }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.endpoint }}
-          endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.endpoint | quote }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled }}
-          proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.proxypresignenabled }}
-          {{- end }}
-          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.gcs.baseurl }}
-          baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.gcs.baseurl | quote }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.baseurl }}
+          baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.baseurl | quote }}
           {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk }}

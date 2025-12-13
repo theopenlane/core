@@ -7,8 +7,11 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -29,6 +32,37 @@ func HookEvidenceFiles() ent.Hook {
 
 				if ok && creationDate.After(time.Now()) {
 					return nil, ErrFutureTimeNotAllowed
+				}
+
+				hasURL := checkEvidenceHasURL(ctx, m)
+				hasFiles := checkEvidenceHasFiles(ctx, m)
+
+				// we should always take the sent status; we just want to set missing artifact
+				// if its created or updated and has not file or url and status isn't sent explicitly
+				_, ok = m.Status()
+				if !hasURL && !hasFiles && !ok {
+					m.SetStatus(enums.EvidenceStatusMissingArtifact)
+				}
+
+				// if being updated, and the old status is MISSING_ARTIFACT, but contains a file
+				// and url, we need to reset the state though if the status is not passed in the mutation
+				// Else we default to submitted
+				if m.Op().Is(ent.OpUpdateOne) {
+					oldStatus, err := m.OldStatus(ctx)
+					if err != nil {
+						return nil, err
+					}
+
+					if oldStatus == enums.EvidenceStatusMissingArtifact && (hasURL || hasFiles) && !ok {
+						m.SetStatus(enums.EvidenceStatusSubmitted)
+					}
+				}
+
+				if m.Op().Is(ent.OpCreate) {
+					_, ok = m.Status()
+					if !ok {
+						m.SetStatus(enums.EvidenceStatusSubmitted)
+					}
 				}
 			}
 
@@ -62,4 +96,66 @@ func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (cont
 
 	// Use the generic helper to process files
 	return objects.ProcessFilesForMutation(ctx, adapter, key)
+}
+
+// checkEvidenceHasFiles checks if evidence has any attached files
+func checkEvidenceHasFiles(ctx context.Context, m *generated.EvidenceMutation) bool {
+	if len(objects.GetFileIDsFromContext(ctx)) > 0 {
+		return true
+	}
+
+	if len(m.FilesIDs()) > 0 {
+		return true
+	}
+
+	if m.Op().Is(ent.OpCreate) {
+		return false
+	}
+
+	id, ok := m.ID()
+	if !ok || id == "" {
+		return false
+	}
+
+	currentFileCount, err := m.Client().Evidence.Query().
+		Where(evidence.ID(id)).
+		QueryFiles().
+		Select(file.FieldID).
+		Count(ctx)
+	if err != nil {
+		return false
+	}
+
+	fileIDs := m.RemovedFilesIDs()
+	return len(fileIDs) < currentFileCount
+}
+
+func checkEvidenceHasURL(ctx context.Context, m *generated.EvidenceMutation) bool {
+	if m.FieldCleared(evidence.FieldURL) {
+		return false
+	}
+
+	url, ok := m.URL()
+	if ok {
+		return url != ""
+	}
+
+	if m.Op().Is(ent.OpCreate) {
+		return false
+	}
+
+	id, ok := m.ID()
+	if !ok || id == "" {
+		return false
+	}
+
+	evidence, err := m.Client().Evidence.Query().
+		Where(evidence.ID(id)).
+		Select(evidence.FieldURL).
+		Only(ctx)
+	if err != nil {
+		return false
+	}
+
+	return evidence.URL != ""
 }

@@ -50,7 +50,7 @@ type Risk struct {
 	RiskCategoryID string `json:"risk_category_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
-	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType string `json:"risk_type,omitempty"`
@@ -125,11 +125,13 @@ type RiskEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// conversations related to the risk
 	Comments []*Note `json:"comments,omitempty"`
+	// discussions related to the risk
+	Discussions []*Discussion `json:"discussions,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [19]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [19]map[string]int
+	totalCount [20]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -145,6 +147,7 @@ type RiskEdges struct {
 	namedEntities         map[string][]*Entity
 	namedScans            map[string][]*Scan
 	namedComments         map[string][]*Note
+	namedDiscussions      map[string][]*Discussion
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -326,6 +329,15 @@ func (e RiskEdges) CommentsOrErr() ([]*Note, error) {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
+}
+
+// DiscussionsOrErr returns the Discussions value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) DiscussionsOrErr() ([]*Discussion, error) {
+	if e.loadedTypes[19] {
+		return e.Discussions, nil
+	}
+	return nil, &NotLoadedError{edge: "discussions"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -683,6 +695,11 @@ func (_m *Risk) QueryDelegate() *GroupQuery {
 // QueryComments queries the "comments" edge of the Risk entity.
 func (_m *Risk) QueryComments() *NoteQuery {
 	return NewRiskClient(_m.config).QueryComments(_m)
+}
+
+// QueryDiscussions queries the "discussions" edge of the Risk entity.
+func (_m *Risk) QueryDiscussions() *DiscussionQuery {
+	return NewRiskClient(_m.config).QueryDiscussions(_m)
 }
 
 // Update returns a builder for updating this Risk.
@@ -1119,6 +1136,30 @@ func (_m *Risk) appendNamedComments(name string, edges ...*Note) {
 		_m.Edges.namedComments[name] = []*Note{}
 	} else {
 		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
+	}
+}
+
+// NamedDiscussions returns the Discussions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedDiscussions(name string) ([]*Discussion, error) {
+	if _m.Edges.namedDiscussions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDiscussions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedDiscussions(name string, edges ...*Discussion) {
+	if _m.Edges.namedDiscussions == nil {
+		_m.Edges.namedDiscussions = make(map[string][]*Discussion)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDiscussions[name] = []*Discussion{}
+	} else {
+		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
 	}
 }
 

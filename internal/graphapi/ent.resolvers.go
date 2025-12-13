@@ -989,6 +989,72 @@ func (r *queryResolver) DirectorySyncRuns(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// Discussions is the resolver for the discussions field.
+func (r *queryResolver) Discussions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) (*generated.DiscussionConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DiscussionOrder{
+			{
+				Field:     generated.DiscussionOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Discussion.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussion"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDiscussionOrder(orderBy),
+		generated.WithDiscussionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussion"})
+	}
+
+	return res, err
+}
+
+// DiscussionHistories is the resolver for the discussionHistories field.
+func (r *queryResolver) DiscussionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DiscussionHistoryOrder, where *generated.DiscussionHistoryWhereInput) (*generated.DiscussionHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.DiscussionHistoryOrder{
+			Field:     generated.DiscussionHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DiscussionHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussionhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDiscussionHistoryOrder(orderBy),
+		generated.WithDiscussionHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussionhistory"})
+	}
+
+	return res, err
+}
+
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// set page limit if nothing was set
@@ -4824,6 +4890,11 @@ func (r *Resolver) Notification() gqlgenerated.NotificationResolver { return &no
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
+// CreateDiscussionInput returns gqlgenerated.CreateDiscussionInputResolver implementation.
+func (r *Resolver) CreateDiscussionInput() gqlgenerated.CreateDiscussionInputResolver {
+	return &createDiscussionInputResolver{r}
+}
+
 // CreateEntityInput returns gqlgenerated.CreateEntityInputResolver implementation.
 func (r *Resolver) CreateEntityInput() gqlgenerated.CreateEntityInputResolver {
 	return &createEntityInputResolver{r}
@@ -4867,6 +4938,11 @@ func (r *Resolver) UpdateControlInput() gqlgenerated.UpdateControlInputResolver 
 // UpdateControlObjectiveInput returns gqlgenerated.UpdateControlObjectiveInputResolver implementation.
 func (r *Resolver) UpdateControlObjectiveInput() gqlgenerated.UpdateControlObjectiveInputResolver {
 	return &updateControlObjectiveInputResolver{r}
+}
+
+// UpdateDiscussionInput returns gqlgenerated.UpdateDiscussionInputResolver implementation.
+func (r *Resolver) UpdateDiscussionInput() gqlgenerated.UpdateDiscussionInputResolver {
+	return &updateDiscussionInputResolver{r}
 }
 
 // UpdateEntityInput returns gqlgenerated.UpdateEntityInputResolver implementation.
@@ -4937,6 +5013,7 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 type groupResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
@@ -4946,6 +5023,7 @@ type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
+type updateDiscussionInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateEvidenceInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
