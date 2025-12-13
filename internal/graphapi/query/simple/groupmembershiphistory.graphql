@@ -1,5 +1,3 @@
-
-
 query GetAllGroupMembershipHistories {
   groupMembershipHistories {
     totalCount
