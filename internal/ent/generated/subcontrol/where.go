@@ -1603,6 +1603,26 @@ func ReferencesNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldReferences))
 }
 
+// TestingProceduresIsNil applies the IsNil predicate on the "testing_procedures" field.
+func TestingProceduresIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldTestingProcedures))
+}
+
+// TestingProceduresNotNil applies the NotNil predicate on the "testing_procedures" field.
+func TestingProceduresNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldTestingProcedures))
+}
+
+// EvidenceRequestsIsNil applies the IsNil predicate on the "evidence_requests" field.
+func EvidenceRequestsIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldEvidenceRequests))
+}
+
+// EvidenceRequestsNotNil applies the NotNil predicate on the "evidence_requests" field.
+func EvidenceRequestsNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldEvidenceRequests))
+}
+
 // ControlOwnerIDEQ applies the EQ predicate on the "control_owner_id" field.
 func ControlOwnerIDEQ(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldControlOwnerID, v))

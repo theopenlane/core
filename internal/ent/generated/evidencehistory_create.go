@@ -166,6 +166,40 @@ func (_c *EvidenceHistoryCreate) SetNillableOwnerID(v *string) *EvidenceHistoryC
 	return _c
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_c *EvidenceHistoryCreate) SetProposedChanges(v map[string]interface{}) *EvidenceHistoryCreate {
+	_c.mutation.SetProposedChanges(v)
+	return _c
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_c *EvidenceHistoryCreate) SetProposedByUserID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetProposedByUserID(v)
+	return _c
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableProposedByUserID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetProposedByUserID(*v)
+	}
+	return _c
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_c *EvidenceHistoryCreate) SetProposedAt(v time.Time) *EvidenceHistoryCreate {
+	_c.mutation.SetProposedAt(v)
+	return _c
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableProposedAt(v *time.Time) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetProposedAt(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *EvidenceHistoryCreate) SetName(v string) *EvidenceHistoryCreate {
 	_c.mutation.SetName(v)
@@ -495,6 +529,18 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.ProposedChanges(); ok {
+		_spec.SetField(evidencehistory.FieldProposedChanges, field.TypeJSON, value)
+		_node.ProposedChanges = value
+	}
+	if value, ok := _c.mutation.ProposedByUserID(); ok {
+		_spec.SetField(evidencehistory.FieldProposedByUserID, field.TypeString, value)
+		_node.ProposedByUserID = value
+	}
+	if value, ok := _c.mutation.ProposedAt(); ok {
+		_spec.SetField(evidencehistory.FieldProposedAt, field.TypeTime, value)
+		_node.ProposedAt = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)

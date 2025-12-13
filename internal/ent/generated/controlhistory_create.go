@@ -383,6 +383,18 @@ func (_c *ControlHistoryCreate) SetReferences(v []models.Reference) *ControlHist
 	return _c
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_c *ControlHistoryCreate) SetTestingProcedures(v []models.TestingProcedures) *ControlHistoryCreate {
+	_c.mutation.SetTestingProcedures(v)
+	return _c
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_c *ControlHistoryCreate) SetEvidenceRequests(v []models.EvidenceRequests) *ControlHistoryCreate {
+	_c.mutation.SetEvidenceRequests(v)
+	return _c
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_c *ControlHistoryCreate) SetControlOwnerID(v string) *ControlHistoryCreate {
 	_c.mutation.SetControlOwnerID(v)
@@ -491,6 +503,40 @@ func (_c *ControlHistoryCreate) SetControlKindID(v string) *ControlHistoryCreate
 func (_c *ControlHistoryCreate) SetNillableControlKindID(v *string) *ControlHistoryCreate {
 	if v != nil {
 		_c.SetControlKindID(*v)
+	}
+	return _c
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_c *ControlHistoryCreate) SetProposedChanges(v map[string]interface{}) *ControlHistoryCreate {
+	_c.mutation.SetProposedChanges(v)
+	return _c
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_c *ControlHistoryCreate) SetProposedByUserID(v string) *ControlHistoryCreate {
+	_c.mutation.SetProposedByUserID(v)
+	return _c
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableProposedByUserID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetProposedByUserID(*v)
+	}
+	return _c
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_c *ControlHistoryCreate) SetProposedAt(v time.Time) *ControlHistoryCreate {
+	_c.mutation.SetProposedAt(v)
+	return _c
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableProposedAt(v *time.Time) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetProposedAt(*v)
 	}
 	return _c
 }
@@ -815,6 +861,14 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldReferences, field.TypeJSON, value)
 		_node.References = value
 	}
+	if value, ok := _c.mutation.TestingProcedures(); ok {
+		_spec.SetField(controlhistory.FieldTestingProcedures, field.TypeJSON, value)
+		_node.TestingProcedures = value
+	}
+	if value, ok := _c.mutation.EvidenceRequests(); ok {
+		_spec.SetField(controlhistory.FieldEvidenceRequests, field.TypeJSON, value)
+		_node.EvidenceRequests = value
+	}
 	if value, ok := _c.mutation.ControlOwnerID(); ok {
 		_spec.SetField(controlhistory.FieldControlOwnerID, field.TypeString, value)
 		_node.ControlOwnerID = &value
@@ -846,6 +900,18 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ControlKindID(); ok {
 		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
 		_node.ControlKindID = value
+	}
+	if value, ok := _c.mutation.ProposedChanges(); ok {
+		_spec.SetField(controlhistory.FieldProposedChanges, field.TypeJSON, value)
+		_node.ProposedChanges = value
+	}
+	if value, ok := _c.mutation.ProposedByUserID(); ok {
+		_spec.SetField(controlhistory.FieldProposedByUserID, field.TypeString, value)
+		_node.ProposedByUserID = value
+	}
+	if value, ok := _c.mutation.ProposedAt(); ok {
+		_spec.SetField(controlhistory.FieldProposedAt, field.TypeTime, value)
+		_node.ProposedAt = &value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

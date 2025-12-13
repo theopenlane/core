@@ -1085,7 +1085,7 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[36].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[38].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -2921,15 +2921,15 @@ func init() {
 	// evidencehistory.DefaultTags holds the default value on creation for the tags field.
 	evidencehistory.DefaultTags = evidencehistoryDescTags.Default.([]string)
 	// evidencehistoryDescCreationDate is the schema descriptor for creation_date field.
-	evidencehistoryDescCreationDate := evidencehistoryFields[16].Descriptor()
+	evidencehistoryDescCreationDate := evidencehistoryFields[19].Descriptor()
 	// evidencehistory.DefaultCreationDate holds the default value on creation for the creation_date field.
 	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() time.Time)
 	// evidencehistoryDescRenewalDate is the schema descriptor for renewal_date field.
-	evidencehistoryDescRenewalDate := evidencehistoryFields[17].Descriptor()
+	evidencehistoryDescRenewalDate := evidencehistoryFields[20].Descriptor()
 	// evidencehistory.DefaultRenewalDate holds the default value on creation for the renewal_date field.
 	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(time.Time)
 	// evidencehistoryDescIsAutomated is the schema descriptor for is_automated field.
-	evidencehistoryDescIsAutomated := evidencehistoryFields[19].Descriptor()
+	evidencehistoryDescIsAutomated := evidencehistoryFields[22].Descriptor()
 	// evidencehistory.DefaultIsAutomated holds the default value on creation for the is_automated field.
 	evidencehistory.DefaultIsAutomated = evidencehistoryDescIsAutomated.Default.(bool)
 	// evidencehistoryDescID is the schema descriptor for id field.
@@ -7609,7 +7609,7 @@ func init() {
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[36].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[38].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.
@@ -9695,12 +9695,15 @@ func init() {
 	workflowassignment.Hooks[5] = workflowassignmentMixinHooks4[0]
 
 	workflowassignment.Hooks[6] = workflowassignmentMixinHooks6[0]
+
+	workflowassignment.Hooks[7] = workflowassignmentMixinHooks6[1]
 	workflowassignmentMixinInters1 := workflowassignmentMixin[1].Interceptors()
 	workflowassignmentMixinInters2 := workflowassignmentMixin[2].Interceptors()
 	workflowassignmentMixinInters6 := workflowassignmentMixin[6].Interceptors()
 	workflowassignment.Interceptors[0] = workflowassignmentMixinInters1[0]
 	workflowassignment.Interceptors[1] = workflowassignmentMixinInters2[0]
 	workflowassignment.Interceptors[2] = workflowassignmentMixinInters6[0]
+	workflowassignment.Interceptors[3] = workflowassignmentMixinInters6[1]
 	workflowassignmentMixinFields0 := workflowassignmentMixin[0].Fields()
 	_ = workflowassignmentMixinFields0
 	workflowassignmentMixinFields3 := workflowassignmentMixin[3].Fields()
@@ -9824,12 +9827,15 @@ func init() {
 	workflowassignmenttarget.Hooks[5] = workflowassignmenttargetMixinHooks4[0]
 
 	workflowassignmenttarget.Hooks[6] = workflowassignmenttargetMixinHooks6[0]
+
+	workflowassignmenttarget.Hooks[7] = workflowassignmenttargetMixinHooks6[1]
 	workflowassignmenttargetMixinInters1 := workflowassignmenttargetMixin[1].Interceptors()
 	workflowassignmenttargetMixinInters2 := workflowassignmenttargetMixin[2].Interceptors()
 	workflowassignmenttargetMixinInters6 := workflowassignmenttargetMixin[6].Interceptors()
 	workflowassignmenttarget.Interceptors[0] = workflowassignmenttargetMixinInters1[0]
 	workflowassignmenttarget.Interceptors[1] = workflowassignmenttargetMixinInters2[0]
 	workflowassignmenttarget.Interceptors[2] = workflowassignmenttargetMixinInters6[0]
+	workflowassignmenttarget.Interceptors[3] = workflowassignmenttargetMixinInters6[1]
 	workflowassignmenttargetMixinFields0 := workflowassignmenttargetMixin[0].Fields()
 	_ = workflowassignmenttargetMixinFields0
 	workflowassignmenttargetMixinFields3 := workflowassignmenttargetMixin[3].Fields()
@@ -9935,19 +9941,24 @@ func init() {
 
 	workflowdefinition.Hooks[6] = workflowdefinitionMixinHooks6[0]
 
-	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks7[0]
+	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks6[1]
+
+	workflowdefinition.Hooks[8] = workflowdefinitionMixinHooks7[0]
 	workflowdefinitionMixinInters1 := workflowdefinitionMixin[1].Interceptors()
 	workflowdefinitionMixinInters2 := workflowdefinitionMixin[2].Interceptors()
 	workflowdefinitionMixinInters6 := workflowdefinitionMixin[6].Interceptors()
 	workflowdefinition.Interceptors[0] = workflowdefinitionMixinInters1[0]
 	workflowdefinition.Interceptors[1] = workflowdefinitionMixinInters2[0]
 	workflowdefinition.Interceptors[2] = workflowdefinitionMixinInters6[0]
+	workflowdefinition.Interceptors[3] = workflowdefinitionMixinInters6[1]
 	workflowdefinitionMixinFields0 := workflowdefinitionMixin[0].Fields()
 	_ = workflowdefinitionMixinFields0
 	workflowdefinitionMixinFields3 := workflowdefinitionMixin[3].Fields()
 	_ = workflowdefinitionMixinFields3
 	workflowdefinitionMixinFields4 := workflowdefinitionMixin[4].Fields()
 	_ = workflowdefinitionMixinFields4
+	workflowdefinitionMixinFields6 := workflowdefinitionMixin[6].Fields()
+	_ = workflowdefinitionMixinFields6
 	workflowdefinitionMixinFields7 := workflowdefinitionMixin[7].Fields()
 	_ = workflowdefinitionMixinFields7
 	workflowdefinitionFields := schema.WorkflowDefinition{}.Fields()
@@ -9970,6 +9981,10 @@ func init() {
 	workflowdefinitionDescTags := workflowdefinitionMixinFields4[0].Descriptor()
 	// workflowdefinition.DefaultTags holds the default value on creation for the tags field.
 	workflowdefinition.DefaultTags = workflowdefinitionDescTags.Default.([]string)
+	// workflowdefinitionDescOwnerID is the schema descriptor for owner_id field.
+	workflowdefinitionDescOwnerID := workflowdefinitionMixinFields6[0].Descriptor()
+	// workflowdefinition.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowdefinition.OwnerIDValidator = workflowdefinitionDescOwnerID.Validators[0].(func(string) error)
 	// workflowdefinitionDescSystemOwned is the schema descriptor for system_owned field.
 	workflowdefinitionDescSystemOwned := workflowdefinitionMixinFields7[0].Descriptor()
 	// workflowdefinition.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -10109,12 +10124,15 @@ func init() {
 	workflowevent.Hooks[5] = workfloweventMixinHooks4[0]
 
 	workflowevent.Hooks[6] = workfloweventMixinHooks6[0]
+
+	workflowevent.Hooks[7] = workfloweventMixinHooks6[1]
 	workfloweventMixinInters1 := workfloweventMixin[1].Interceptors()
 	workfloweventMixinInters2 := workfloweventMixin[2].Interceptors()
 	workfloweventMixinInters6 := workfloweventMixin[6].Interceptors()
 	workflowevent.Interceptors[0] = workfloweventMixinInters1[0]
 	workflowevent.Interceptors[1] = workfloweventMixinInters2[0]
 	workflowevent.Interceptors[2] = workfloweventMixinInters6[0]
+	workflowevent.Interceptors[3] = workfloweventMixinInters6[1]
 	workfloweventMixinFields0 := workfloweventMixin[0].Fields()
 	_ = workfloweventMixinFields0
 	workfloweventMixinFields3 := workfloweventMixin[3].Fields()
@@ -10218,12 +10236,15 @@ func init() {
 	workflowinstance.Hooks[5] = workflowinstanceMixinHooks4[0]
 
 	workflowinstance.Hooks[6] = workflowinstanceMixinHooks6[0]
+
+	workflowinstance.Hooks[7] = workflowinstanceMixinHooks6[1]
 	workflowinstanceMixinInters1 := workflowinstanceMixin[1].Interceptors()
 	workflowinstanceMixinInters2 := workflowinstanceMixin[2].Interceptors()
 	workflowinstanceMixinInters6 := workflowinstanceMixin[6].Interceptors()
 	workflowinstance.Interceptors[0] = workflowinstanceMixinInters1[0]
 	workflowinstance.Interceptors[1] = workflowinstanceMixinInters2[0]
 	workflowinstance.Interceptors[2] = workflowinstanceMixinInters6[0]
+	workflowinstance.Interceptors[3] = workflowinstanceMixinInters6[1]
 	workflowinstanceMixinFields0 := workflowinstanceMixin[0].Fields()
 	_ = workflowinstanceMixinFields0
 	workflowinstanceMixinFields3 := workflowinstanceMixin[3].Fields()
@@ -10321,10 +10342,13 @@ func init() {
 	workflowobjectref.Hooks[3] = workflowobjectrefMixinHooks2[0]
 
 	workflowobjectref.Hooks[4] = workflowobjectrefMixinHooks4[0]
+
+	workflowobjectref.Hooks[5] = workflowobjectrefMixinHooks4[1]
 	workflowobjectrefMixinInters1 := workflowobjectrefMixin[1].Interceptors()
 	workflowobjectrefMixinInters4 := workflowobjectrefMixin[4].Interceptors()
 	workflowobjectref.Interceptors[0] = workflowobjectrefMixinInters1[0]
 	workflowobjectref.Interceptors[1] = workflowobjectrefMixinInters4[0]
+	workflowobjectref.Interceptors[2] = workflowobjectrefMixinInters4[1]
 	workflowobjectrefMixinFields0 := workflowobjectrefMixin[0].Fields()
 	_ = workflowobjectrefMixinFields0
 	workflowobjectrefMixinFields2 := workflowobjectrefMixin[2].Fields()
@@ -10393,6 +10417,6 @@ func init() {
 }
 
 const (
-	Version = "v0.14.6-0.20251120142408-49be309024df"           // Version of ent codegen.
-	Sum     = "h1:lcEWIPrAb7jm/Y5YWLZUgBaYxE5TkWPABLdHDlBLAd0=" // Sum of ent codegen.
+	Version = "v0.14.6-0.20251211203232-397ebe9f39af"           // Version of ent codegen.
+	Sum     = "h1:bTFOfVixGo0QXY69RnBIvUIYAJUrnkjqfV5UhU91hTU=" // Sum of ent codegen.
 )

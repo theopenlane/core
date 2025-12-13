@@ -126,6 +126,21 @@ func LastEvaluatedAt(v time.Time) predicate.WorkflowInstanceHistory {
 	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldLastEvaluatedAt, v))
 }
 
+// ControlID applies equality check predicate on the "control_id" field. It's identical to ControlIDEQ.
+func ControlID(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldControlID, v))
+}
+
+// InternalPolicyID applies equality check predicate on the "internal_policy_id" field. It's identical to InternalPolicyIDEQ.
+func InternalPolicyID(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldInternalPolicyID, v))
+}
+
+// EvidenceID applies equality check predicate on the "evidence_id" field. It's identical to EvidenceIDEQ.
+func EvidenceID(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldEvidenceID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.WorkflowInstanceHistory {
 	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -949,6 +964,231 @@ func DefinitionSnapshotIsNil() predicate.WorkflowInstanceHistory {
 // DefinitionSnapshotNotNil applies the NotNil predicate on the "definition_snapshot" field.
 func DefinitionSnapshotNotNil() predicate.WorkflowInstanceHistory {
 	return predicate.WorkflowInstanceHistory(sql.FieldNotNull(FieldDefinitionSnapshot))
+}
+
+// ControlIDEQ applies the EQ predicate on the "control_id" field.
+func ControlIDEQ(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldControlID, v))
+}
+
+// ControlIDNEQ applies the NEQ predicate on the "control_id" field.
+func ControlIDNEQ(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNEQ(FieldControlID, v))
+}
+
+// ControlIDIn applies the In predicate on the "control_id" field.
+func ControlIDIn(vs ...string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldIn(FieldControlID, vs...))
+}
+
+// ControlIDNotIn applies the NotIn predicate on the "control_id" field.
+func ControlIDNotIn(vs ...string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNotIn(FieldControlID, vs...))
+}
+
+// ControlIDGT applies the GT predicate on the "control_id" field.
+func ControlIDGT(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldGT(FieldControlID, v))
+}
+
+// ControlIDGTE applies the GTE predicate on the "control_id" field.
+func ControlIDGTE(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldGTE(FieldControlID, v))
+}
+
+// ControlIDLT applies the LT predicate on the "control_id" field.
+func ControlIDLT(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldLT(FieldControlID, v))
+}
+
+// ControlIDLTE applies the LTE predicate on the "control_id" field.
+func ControlIDLTE(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldLTE(FieldControlID, v))
+}
+
+// ControlIDContains applies the Contains predicate on the "control_id" field.
+func ControlIDContains(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldContains(FieldControlID, v))
+}
+
+// ControlIDHasPrefix applies the HasPrefix predicate on the "control_id" field.
+func ControlIDHasPrefix(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldHasPrefix(FieldControlID, v))
+}
+
+// ControlIDHasSuffix applies the HasSuffix predicate on the "control_id" field.
+func ControlIDHasSuffix(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldHasSuffix(FieldControlID, v))
+}
+
+// ControlIDIsNil applies the IsNil predicate on the "control_id" field.
+func ControlIDIsNil() predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldIsNull(FieldControlID))
+}
+
+// ControlIDNotNil applies the NotNil predicate on the "control_id" field.
+func ControlIDNotNil() predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNotNull(FieldControlID))
+}
+
+// ControlIDEqualFold applies the EqualFold predicate on the "control_id" field.
+func ControlIDEqualFold(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEqualFold(FieldControlID, v))
+}
+
+// ControlIDContainsFold applies the ContainsFold predicate on the "control_id" field.
+func ControlIDContainsFold(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldContainsFold(FieldControlID, v))
+}
+
+// InternalPolicyIDEQ applies the EQ predicate on the "internal_policy_id" field.
+func InternalPolicyIDEQ(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDNEQ applies the NEQ predicate on the "internal_policy_id" field.
+func InternalPolicyIDNEQ(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNEQ(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDIn applies the In predicate on the "internal_policy_id" field.
+func InternalPolicyIDIn(vs ...string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldIn(FieldInternalPolicyID, vs...))
+}
+
+// InternalPolicyIDNotIn applies the NotIn predicate on the "internal_policy_id" field.
+func InternalPolicyIDNotIn(vs ...string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNotIn(FieldInternalPolicyID, vs...))
+}
+
+// InternalPolicyIDGT applies the GT predicate on the "internal_policy_id" field.
+func InternalPolicyIDGT(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldGT(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDGTE applies the GTE predicate on the "internal_policy_id" field.
+func InternalPolicyIDGTE(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldGTE(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDLT applies the LT predicate on the "internal_policy_id" field.
+func InternalPolicyIDLT(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldLT(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDLTE applies the LTE predicate on the "internal_policy_id" field.
+func InternalPolicyIDLTE(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldLTE(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDContains applies the Contains predicate on the "internal_policy_id" field.
+func InternalPolicyIDContains(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldContains(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDHasPrefix applies the HasPrefix predicate on the "internal_policy_id" field.
+func InternalPolicyIDHasPrefix(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldHasPrefix(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDHasSuffix applies the HasSuffix predicate on the "internal_policy_id" field.
+func InternalPolicyIDHasSuffix(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldHasSuffix(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDIsNil applies the IsNil predicate on the "internal_policy_id" field.
+func InternalPolicyIDIsNil() predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldIsNull(FieldInternalPolicyID))
+}
+
+// InternalPolicyIDNotNil applies the NotNil predicate on the "internal_policy_id" field.
+func InternalPolicyIDNotNil() predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNotNull(FieldInternalPolicyID))
+}
+
+// InternalPolicyIDEqualFold applies the EqualFold predicate on the "internal_policy_id" field.
+func InternalPolicyIDEqualFold(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEqualFold(FieldInternalPolicyID, v))
+}
+
+// InternalPolicyIDContainsFold applies the ContainsFold predicate on the "internal_policy_id" field.
+func InternalPolicyIDContainsFold(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldContainsFold(FieldInternalPolicyID, v))
+}
+
+// EvidenceIDEQ applies the EQ predicate on the "evidence_id" field.
+func EvidenceIDEQ(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEQ(FieldEvidenceID, v))
+}
+
+// EvidenceIDNEQ applies the NEQ predicate on the "evidence_id" field.
+func EvidenceIDNEQ(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNEQ(FieldEvidenceID, v))
+}
+
+// EvidenceIDIn applies the In predicate on the "evidence_id" field.
+func EvidenceIDIn(vs ...string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldIn(FieldEvidenceID, vs...))
+}
+
+// EvidenceIDNotIn applies the NotIn predicate on the "evidence_id" field.
+func EvidenceIDNotIn(vs ...string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNotIn(FieldEvidenceID, vs...))
+}
+
+// EvidenceIDGT applies the GT predicate on the "evidence_id" field.
+func EvidenceIDGT(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldGT(FieldEvidenceID, v))
+}
+
+// EvidenceIDGTE applies the GTE predicate on the "evidence_id" field.
+func EvidenceIDGTE(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldGTE(FieldEvidenceID, v))
+}
+
+// EvidenceIDLT applies the LT predicate on the "evidence_id" field.
+func EvidenceIDLT(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldLT(FieldEvidenceID, v))
+}
+
+// EvidenceIDLTE applies the LTE predicate on the "evidence_id" field.
+func EvidenceIDLTE(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldLTE(FieldEvidenceID, v))
+}
+
+// EvidenceIDContains applies the Contains predicate on the "evidence_id" field.
+func EvidenceIDContains(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldContains(FieldEvidenceID, v))
+}
+
+// EvidenceIDHasPrefix applies the HasPrefix predicate on the "evidence_id" field.
+func EvidenceIDHasPrefix(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldHasPrefix(FieldEvidenceID, v))
+}
+
+// EvidenceIDHasSuffix applies the HasSuffix predicate on the "evidence_id" field.
+func EvidenceIDHasSuffix(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldHasSuffix(FieldEvidenceID, v))
+}
+
+// EvidenceIDIsNil applies the IsNil predicate on the "evidence_id" field.
+func EvidenceIDIsNil() predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldIsNull(FieldEvidenceID))
+}
+
+// EvidenceIDNotNil applies the NotNil predicate on the "evidence_id" field.
+func EvidenceIDNotNil() predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldNotNull(FieldEvidenceID))
+}
+
+// EvidenceIDEqualFold applies the EqualFold predicate on the "evidence_id" field.
+func EvidenceIDEqualFold(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldEqualFold(FieldEvidenceID, v))
+}
+
+// EvidenceIDContainsFold applies the ContainsFold predicate on the "evidence_id" field.
+func EvidenceIDContainsFold(v string) predicate.WorkflowInstanceHistory {
+	return predicate.WorkflowInstanceHistory(sql.FieldContainsFold(FieldEvidenceID, v))
 }
 
 // And groups predicates with the AND operator between them.

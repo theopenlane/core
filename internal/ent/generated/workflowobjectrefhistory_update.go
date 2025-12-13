@@ -63,26 +63,6 @@ func (_u *WorkflowObjectRefHistoryUpdate) ClearUpdatedBy() *WorkflowObjectRefHis
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowObjectRefHistoryUpdate) SetOwnerID(v string) *WorkflowObjectRefHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowObjectRefHistoryUpdate) SetNillableOwnerID(v *string) *WorkflowObjectRefHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowObjectRefHistoryUpdate) ClearOwnerID() *WorkflowObjectRefHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // Mutation returns the WorkflowObjectRefHistoryMutation object of the builder.
 func (_u *WorkflowObjectRefHistoryUpdate) Mutation() *WorkflowObjectRefHistoryMutation {
 	return _u.mutation
@@ -166,9 +146,6 @@ func (_u *WorkflowObjectRefHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowobjectrefhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldOwnerID, field.TypeString)
 	}
@@ -192,6 +169,9 @@ func (_u *WorkflowObjectRefHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	}
 	if _u.mutation.DirectoryMembershipIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldDirectoryMembershipID, field.TypeString)
+	}
+	if _u.mutation.EvidenceIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldEvidenceID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRefHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -246,26 +226,6 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Wo
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *WorkflowObjectRefHistoryUpdateOne) ClearUpdatedBy() *WorkflowObjectRefHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowObjectRefHistoryUpdateOne) SetOwnerID(v string) *WorkflowObjectRefHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowObjectRefHistoryUpdateOne) SetNillableOwnerID(v *string) *WorkflowObjectRefHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowObjectRefHistoryUpdateOne) ClearOwnerID() *WorkflowObjectRefHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -382,9 +342,6 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowobjectrefhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldOwnerID, field.TypeString)
 	}
@@ -408,6 +365,9 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if _u.mutation.DirectoryMembershipIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldDirectoryMembershipID, field.TypeString)
+	}
+	if _u.mutation.EvidenceIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldEvidenceID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRefHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
