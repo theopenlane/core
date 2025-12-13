@@ -37,7 +37,7 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0
 	github.com/fsnotify/fsnotify v1.9.0
-	github.com/gabriel-vasile/mimetype v1.4.11
+	github.com/gabriel-vasile/mimetype v1.4.12
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-jose/go-jose/v4 v4.1.3
@@ -100,7 +100,7 @@ require (
 	github.com/theopenlane/iam v0.23.0
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.6.3
-	github.com/theopenlane/utils v0.6.1
+	github.com/theopenlane/utils v0.6.2
 	github.com/tink-crypto/tink-go/v2 v2.6.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.1
