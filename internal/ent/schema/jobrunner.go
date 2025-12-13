@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/validator"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -62,7 +63,8 @@ func (JobRunner) Fields() []ent.Field {
 			Comment("the status of this runner"),
 		field.String("ip_address").
 			Comment("the IP address of this runner").
-			Optional(),
+			Optional().
+			Validate(validator.ValidateIPAddress()),
 		field.Time("last_seen").
 			Comment("the last time this runner was seen").
 			Optional(),

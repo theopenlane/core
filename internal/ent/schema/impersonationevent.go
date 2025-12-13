@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/internal/ent/validator"
 
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -51,7 +52,8 @@ func (ImpersonationEvent) Fields() []ent.Field {
 			Comment("Reason for impersonation"),
 		field.String("ip_address").
 			Optional().
-			Comment("IP address of the impersonator"),
+			Comment("IP address of the impersonator").
+			Validate(validator.ValidateIPAddress()),
 		field.String("user_agent").
 			Optional().
 			Comment("User-Agent of the impersonator"),

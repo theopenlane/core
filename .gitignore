@@ -52,6 +52,7 @@ file_uploads/*
 
 # Editor files
 .vscode
+.idea
 
 # OS Generated Files
 .DS_Store*
