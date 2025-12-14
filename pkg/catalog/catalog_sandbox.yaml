@@ -7,18 +7,18 @@ modules:
     description: Core System Access
     billing:
       prices:
-      - interval: month
-        unit_amount: 0
-        nickname: base_module_monthly
-        lookup_key: base_module_monthly
-        price_id: price_1RnPMmQsIOtQgZAIywN4pEcD
-      - interval: year
-        unit_amount: 0
-        nickname: base_module_free
-        lookup_key: base_module_free
-        price_id: price_1RnPMnQsIOtQgZAIQuMmMN2Q
+        - interval: month
+          unit_amount: 0
+          nickname: base_module_monthly
+          lookup_key: base_module_monthly
+          price_id: price_1S3qXEJIzM4Pa2Zc3bZXrIC8
+        - interval: year
+          unit_amount: 0
+          nickname: base_module_free
+          lookup_key: base_module_free
+          price_id: price_1S3qXEJIzM4Pa2ZcYaKVbHkk
     audience: public
-    product_id: prod_Sir4DHmlTwNTLu
+    product_id: prod_Szq52Y33Hzvxc6
     personal_org: true
     include_with_trial: true
   compliance_module:
@@ -28,20 +28,20 @@ modules:
     marketing_description: Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows
     billing:
       prices:
-      - interval: month
-        unit_amount: 45000
-        nickname: price_compliance_monthly
-        lookup_key: price_compliance_monthly
-        price_id: price_1RnPMrQsIOtQgZAIdAF1TY4c
-      - interval: year
-        unit_amount: 500000
-        nickname: price_compliance_annually
-        lookup_key: price_compliance_annually
-        price_id: price_1RnPMsQsIOtQgZAILrkvLDq7
+        - interval: month
+          unit_amount: 45000
+          nickname: price_compliance_monthly
+          lookup_key: price_compliance_monthly
+          price_id: price_1S3qX6JIzM4Pa2ZcRtuinRdG
+        - interval: year
+          unit_amount: 500000
+          nickname: price_compliance_annually
+          lookup_key: price_compliance_annually
+          price_id: price_1S3qX7JIzM4Pa2ZchMVxiS1l
     audience: public
     usage:
       evidence_storage_gb: 25000
-    product_id: prod_Sir43Od2PyTiua
+    product_id: prod_SzqDyAvxP2D7fA
     include_with_trial: true
   entity_management_module:
     display_name: Vendor Risk Management
@@ -50,18 +50,18 @@ modules:
     marketing_description: Confidently assess vendor risk and enforce security standards across your third-party ecosystem
     billing:
       prices:
-      - interval: month
-        unit_amount: 20000
-        nickname: price_entity_monthly
-        lookup_key: price_entity_monthly
-        price_id: price_1RnPMwQsIOtQgZAIDWYFRS6y
-      - interval: year
-        unit_amount: 200000
-        nickname: price_vendor_annually
-        lookup_key: price_vendor_annually
-        price_id: price_1RnPMxQsIOtQgZAIFfvIL8sY
+        - interval: month
+          unit_amount: 20000
+          nickname: price_entity_monthly
+          lookup_key: price_entity_monthly
+          price_id: price_1S3qX8JIzM4Pa2ZcQNF64Nta
+        - interval: year
+          unit_amount: 200000
+          nickname: price_vendor_annually
+          lookup_key: price_vendor_annually
+          price_id: price_1S3qX9JIzM4Pa2ZcNFO9ciiV
     audience: private
-    product_id: prod_Sir5QyuCjNUQpt
+    product_id: prod_SzqDiFERRVzRmP
   trust_center_module:
     display_name: Trust Center
     lookup_key: trust_center_module
@@ -69,18 +69,18 @@ modules:
     marketing_description: Build customer trust with a professional security portal. Share compliance documentation securely with stakeholders
     billing:
       prices:
-      - interval: month
-        unit_amount: 30000
-        nickname: price_trustcenter_monthly
-        lookup_key: price_trustcenter_monthly
-        price_id: price_1RnPN1QsIOtQgZAI2Cw2Xu1D
-      - interval: year
-        unit_amount: 300000
-        nickname: price_trustcenter_annually
-        lookup_key: price_trustcenter_annually
-        price_id: price_1RnPN3QsIOtQgZAIFosQfSx3
+        - interval: month
+          unit_amount: 30000
+          nickname: price_trustcenter_monthly
+          lookup_key: price_trustcenter_monthly
+          price_id: price_1S3qXAJIzM4Pa2Zc61jfLMe9
+        - interval: year
+          unit_amount: 300000
+          nickname: price_trustcenter_annually
+          lookup_key: price_trustcenter_annually
+          price_id: price_1S3qXBJIzM4Pa2Zcq3Y0vzDa
     audience: beta
-    product_id: prod_Sir5icUIPdUDFp
+    product_id: prod_SzqDywr83XkXk5
   vulnerability_management_module:
     display_name: Vulnerability Tracking and Management
     lookup_key: vulnerability_management_module
@@ -88,18 +88,18 @@ modules:
     marketing_description: Identify and track security vulnerabilities across your systems. Stay ahead of potential threats with continuous monitoring
     billing:
       prices:
-      - interval: month
-        unit_amount: 10000
-        nickname: price_vulnerability_mgmt_monthly
-        lookup_key: price_vulnerability_mgmt_monthly
-        price_id: price_1RnPN6QsIOtQgZAIOWKE8EaG
-      - interval: year
-        unit_amount: 100000
-        nickname: price_vulnerability_mgmt_annually
-        lookup_key: price_vulnerability_mgmt_annually
-        price_id: price_1RnPN8QsIOtQgZAIWSe48kGN
+        - interval: month
+          unit_amount: 10000
+          nickname: price_vulnerability_mgmt_monthly
+          lookup_key: price_vulnerability_mgmt_monthly
+          price_id: price_1S3qXCJIzM4Pa2ZcYODHbvop
+        - interval: year
+          unit_amount: 100000
+          nickname: price_vulnerability_mgmt_annually
+          lookup_key: price_vulnerability_mgmt_annually
+          price_id: price_1S3qXCJIzM4Pa2ZcViTlqrmK
     audience: private
-    product_id: prod_Sir5ZkrfKbKZ7h
+    product_id: prod_SzpzB3d9rAjrb3
 addons:
   domain_scanning_addon:
     display_name: Domain and Vulnerability Scanning
@@ -108,18 +108,18 @@ addons:
     marketing_description: Proactive security scanning for domains and infrastructure. Detect vulnerabilities before they become threats.
     billing:
       prices:
-      - interval: month
-        unit_amount: 10000
-        nickname: domain_scan_monthly
-        lookup_key: domain_scan_monthly
-        price_id: price_1RnPNBQsIOtQgZAImWlQr0gc
-      - interval: year
-        unit_amount: 100000
-        nickname: domain_scan_annually
-        lookup_key: domain_scan_annually
-        price_id: price_1RnPNDQsIOtQgZAII2FicFRM
+        - interval: month
+          unit_amount: 10000
+          nickname: domain_scan_monthly
+          lookup_key: domain_scan_monthly
+          price_id: price_1S3qXLJIzM4Pa2ZcYRPuLSoJ
+        - interval: year
+          unit_amount: 100000
+          nickname: domain_scan_annually
+          lookup_key: domain_scan_annually
+          price_id: price_1S3qXLJIzM4Pa2Zc8Y6fRo5x
     audience: private
-    product_id: prod_Sir5sZmMkwJadw
+    product_id: prod_SzqDWb1fSmvyXC
   extra_evidence_storage_addon:
     display_name: Additional Evidence Storage (100GB)
     lookup_key: extra_evidence_storage_addon
@@ -127,15 +127,15 @@ addons:
     marketing_description: Expand your secure storage capacity for compliance evidence. Keep your documentation organized and accessible.
     billing:
       prices:
-      - interval: month
-        unit_amount: 1000
-        nickname: extra_evidence_storage_100gb
-        lookup_key: extra_evidence_storage_100gb
-        metadata:
-          increment_gb: "100"
-        price_id: price_1RnPNGQsIOtQgZAIvgnH6EGi
+        - interval: month
+          unit_amount: 1000
+          nickname: extra_evidence_storage_100gb
+          lookup_key: extra_evidence_storage_100gb
+          metadata:
+            increment_gb: "100"
+          price_id: price_1S3qXFJIzM4Pa2ZcUKyDYErM
     audience: public
-    product_id: prod_Sir59RpF5oXO5U
+    product_id: prod_SzqDCzuPVc6Lrn
   policy_management_addon:
     display_name: Policy and Procedure Management
     lookup_key: policy_management_addon
@@ -143,18 +143,18 @@ addons:
     marketing_description: Create and maintain your security policies with version control. Keep your documentation audit-ready
     billing:
       prices:
-      - interval: month
-        unit_amount: 1000
-        nickname: price_policy_mgmt_monthly
-        lookup_key: price_policy_mgmt_monthly
-        price_id: price_1RnPNKQsIOtQgZAIBlQEWIvR
-      - interval: month
-        unit_amount: 10000
-        nickname: price_policy_mgmt_annually
-        lookup_key: price_policy_mgmt_annually
-        price_id: price_1RnPNLQsIOtQgZAISH7iKY8K
+        - interval: month
+          unit_amount: 1000
+          nickname: price_policy_mgmt_monthly
+          lookup_key: price_policy_mgmt_monthly
+          price_id: price_1S3qXHJIzM4Pa2ZcWKG6pb5z
+        - interval: month
+          unit_amount: 10000
+          nickname: price_policy_mgmt_annually
+          lookup_key: price_policy_mgmt_annually
+          price_id: price_1S3qXHJIzM4Pa2Zcjl8y3TWX
     audience: beta
-    product_id: prod_Sir59lIzlGXEeQ
+    product_id: prod_SzqDMmZeWJiUDm
   risk_management_addon:
     display_name: Risk Management
     lookup_key: risk_management_addon
@@ -162,15 +162,15 @@ addons:
     marketing_description: Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.
     billing:
       prices:
-      - interval: month
-        unit_amount: 1000
-        nickname: price_risk_mgmt_monthly
-        lookup_key: price_risk_mgmt_monthly
-        price_id: price_1RnPNOQsIOtQgZAIBj29WWvu
-      - interval: year
-        unit_amount: 10000
-        nickname: price_risk_mgmt_annually
-        lookup_key: price_risk_mgmt_annually
-        price_id: price_1RnPNQQsIOtQgZAIaoA1EEYR
+        - interval: month
+          unit_amount: 1000
+          nickname: price_risk_mgmt_monthly
+          lookup_key: price_risk_mgmt_monthly
+          price_id: price_1S3qXJJIzM4Pa2Zcl4Vn7Gc6
+        - interval: year
+          unit_amount: 10000
+          nickname: price_risk_mgmt_annually
+          lookup_key: price_risk_mgmt_annually
+          price_id: price_1S3qXJJIzM4Pa2Zc0V7TvS0A
     audience: beta
-    product_id: prod_Sir5v8JKCLB3mf
+    product_id: prod_SzqDvmryWdfvr7
