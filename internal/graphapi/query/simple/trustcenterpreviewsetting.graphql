@@ -1,0 +1,25 @@
+mutation CreateTrustCenterPreviewSetting($input: CreateTrustCenterPreviewSettingInput!) {
+  createTrustCenterPreviewSetting(input: $input) {
+    trustCenterSetting {
+      accentColor
+      backgroundColor
+      createdAt
+      createdBy
+      environment
+      faviconLocalFileID
+      faviconRemoteURL
+      font
+      foregroundColor
+      id
+      logoLocalFileID
+      logoRemoteURL
+      overview
+      primaryColor
+      themeMode
+      title
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
