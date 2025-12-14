@@ -155,9 +155,12 @@ func HookTrustCenter() ent.Hook {
 				return trustCenter, nil
 			}
 
+			// Set default font to ensure it's not empty string
+			defaultFont := enums.FontHelvetica
 			input := generated.CreateTrustCenterWatermarkConfigInput{
 				TrustCenterID:  &id,
 				Text:           &defaultWatermarkText,
+				Font:           &defaultFont, // Explicitly set to prevent empty string in database
 				OwnerID:        &orgID,
 				TrustCenterIDs: []string{trustCenter.ID},
 			}

@@ -5,7 +5,6 @@ import (
 	"errors"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
@@ -63,33 +62,39 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				m.SetOriginalFileID(docFiles[0].ID)
 			}
 
-			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
-			if !watermarkingEnabled {
-				orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+			_, watermarkingEnabledSet := m.WatermarkingEnabled()
+			trustCenterID, trustCenterIDSet := m.TrustCenterID()
 
-				if orgID != "" {
-					// check the config to see if watermarking is enabled by default
-					config, err := m.Client().TrustCenterWatermarkConfig.Query().
-						Where(trustcenterwatermarkconfig.OwnerID(orgID)).
-						Only(ctx)
-					if err == nil && config != nil {
-						watermarkingEnabled = config.IsEnabled
-
-						m.SetWatermarkingEnabled(watermarkingEnabled)
+			if trustCenterIDSet {
+				// check the config to see if watermarking is enabled by default
+				config, err := m.Client().TrustCenterWatermarkConfig.Query().
+					Where(trustcenterwatermarkconfig.TrustCenterID(trustCenterID)).
+					Only(ctx)
+				if err == nil && config != nil {
+					// If global config is enabled, force document-level watermarking to true
+					if config.IsEnabled {
+						m.SetWatermarkingEnabled(true)
+					} else if !watermarkingEnabledSet {
+						// Global config is disabled, and user didn't explicitly set value, use config default
+						m.SetWatermarkingEnabled(config.IsEnabled)
 					}
 				}
 			}
 
+			// Get the final watermarking enabled value after config overrides
+			finalWatermarkingEnabled, _ := m.WatermarkingEnabled()
+
 			// if we have no uploaded files
 			if !mutationSetsOriginalFileID && len(docFiles) == 0 {
 				// check if watermarking is enabled because if it is a file must be present
-				if watermarkingEnabledSet && watermarkingEnabled {
+				if finalWatermarkingEnabled {
 					return nil, errMissingFileID
 				}
 
 				// otherwise set the visibility to NOT_VISIBLE
 				m.SetVisibility(enums.TrustCenterDocumentVisibilityNotVisible)
-			} else if !watermarkingEnabledSet || !watermarkingEnabled {
+			} else if !finalWatermarkingEnabled {
+				// Watermarking is disabled, so set file_id = original_file_id
 				origFileID, origFileIDSet := m.OriginalFileID()
 				if !origFileIDSet {
 					return nil, errMissingFileID
@@ -151,10 +156,22 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 
 			logx.FromContext(ctx).Debug().Msg("trust center doc hook")
 
-			// if the watermark status is true already, we do not want to be able to revert it under any circumstances
-			if _, ok := m.WatermarkingEnabled(); ok {
-				if oldWatermarkingEnabled, err := m.OldWatermarkingEnabled(ctx); err == nil && oldWatermarkingEnabled {
-					m.ResetWatermarkingEnabled()
+			// Check if watermarking is being modified and enforce global config override rules
+			if newWatermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled(); watermarkingEnabledSet {
+				// Get the trust center ID - for updates we need to look it up from the document
+				docID, docIDSet := m.ID()
+				if docIDSet {
+					doc, err := m.Client().TrustCenterDoc.Get(ctx, docID)
+					if err == nil && doc != nil {
+						config, err := m.Client().TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.TrustCenterID(doc.TrustCenterID)).Only(ctx)
+						if err == nil && config != nil {
+							// If global config is enabled, force document-level watermarking to true
+							if config.IsEnabled && !newWatermarkingEnabled {
+								logx.FromContext(ctx).Debug().Msg("global watermark config is enabled, forcing document watermarking to true")
+								m.SetWatermarkingEnabled(true)
+							}
+						}
+					}
 				}
 			}
 
