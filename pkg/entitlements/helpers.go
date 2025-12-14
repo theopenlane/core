@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 	"gopkg.in/yaml.v3"
 )
 

@@ -89,7 +89,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
-	github.com/stripe/stripe-go/v83 v83.2.1
+	github.com/stripe/stripe-go/v84 v84.0.0
 	github.com/theopenlane/beacon v0.3.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4

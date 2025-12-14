@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 )
 
 const (

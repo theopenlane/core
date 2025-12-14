@@ -13,7 +13,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gotest.tools/v3/assert"
 
@@ -464,7 +464,7 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// mock customer search
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v83.Customer]")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v84.Customer]")).Run(func(args mock.Arguments) {
 		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
 
 		// Build a payload that matches Stripe search response shape

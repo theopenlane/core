@@ -10,8 +10,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v83"
-	"github.com/stripe/stripe-go/v83/webhook"
+	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v84/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
