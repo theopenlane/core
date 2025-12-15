@@ -124,26 +124,6 @@ func (_u *WorkflowDefinitionHistoryUpdate) ClearTags() *WorkflowDefinitionHistor
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetOwnerID(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableOwnerID(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearOwnerID() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *WorkflowDefinitionHistoryUpdate) SetInternalNotes(v string) *WorkflowDefinitionHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -543,9 +523,6 @@ func (_u *WorkflowDefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldOwnerID, field.TypeString)
 	}
@@ -756,26 +733,6 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) AppendTags(v []string) *WorkflowDe
 // ClearTags clears the value of the "tags" field.
 func (_u *WorkflowDefinitionHistoryUpdateOne) ClearTags() *WorkflowDefinitionHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetOwnerID(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableOwnerID(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearOwnerID() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -1207,9 +1164,6 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldOwnerID, field.TypeString)

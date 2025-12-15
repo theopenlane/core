@@ -383,6 +383,18 @@ func (_c *SubcontrolHistoryCreate) SetReferences(v []models.Reference) *Subcontr
 	return _c
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_c *SubcontrolHistoryCreate) SetTestingProcedures(v []models.TestingProcedures) *SubcontrolHistoryCreate {
+	_c.mutation.SetTestingProcedures(v)
+	return _c
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_c *SubcontrolHistoryCreate) SetEvidenceRequests(v []models.EvidenceRequests) *SubcontrolHistoryCreate {
+	_c.mutation.SetEvidenceRequests(v)
+	return _c
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_c *SubcontrolHistoryCreate) SetControlOwnerID(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetControlOwnerID(v)
@@ -809,6 +821,14 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.References(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferences, field.TypeJSON, value)
 		_node.References = value
+	}
+	if value, ok := _c.mutation.TestingProcedures(); ok {
+		_spec.SetField(subcontrolhistory.FieldTestingProcedures, field.TypeJSON, value)
+		_node.TestingProcedures = value
+	}
+	if value, ok := _c.mutation.EvidenceRequests(); ok {
+		_spec.SetField(subcontrolhistory.FieldEvidenceRequests, field.TypeJSON, value)
+		_node.EvidenceRequests = value
 	}
 	if value, ok := _c.mutation.ControlOwnerID(); ok {
 		_spec.SetField(subcontrolhistory.FieldControlOwnerID, field.TypeString, value)

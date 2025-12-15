@@ -76,33 +76,6 @@ func (r *mutationResolver) CreateBulkCSVWorkflowObjectRef(ctx context.Context, i
 	return r.bulkCreateWorkflowObjectRef(ctx, data)
 }
 
-// UpdateWorkflowObjectRef is the resolver for the updateWorkflowObjectRef field.
-func (r *mutationResolver) UpdateWorkflowObjectRef(ctx context.Context, id string, input generated.UpdateWorkflowObjectRefInput) (*model.WorkflowObjectRefUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).WorkflowObjectRef.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowobjectref"})
-	}
-
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowobjectref"})
-	}
-
-	return &model.WorkflowObjectRefUpdatePayload{
-		WorkflowObjectRef: res,
-	}, nil
-}
-
 // DeleteWorkflowObjectRef is the resolver for the deleteWorkflowObjectRef field.
 func (r *mutationResolver) DeleteWorkflowObjectRef(ctx context.Context, id string) (*model.WorkflowObjectRefDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).WorkflowObjectRef.DeleteOneID(id).Exec(ctx); err != nil {

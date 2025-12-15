@@ -193,6 +193,16 @@ func ControlKindID(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldControlKindID, v))
 }
 
+// ProposedByUserID applies equality check predicate on the "proposed_by_user_id" field. It's identical to ProposedByUserIDEQ.
+func ProposedByUserID(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldProposedByUserID, v))
+}
+
+// ProposedAt applies equality check predicate on the "proposed_at" field. It's identical to ProposedAtEQ.
+func ProposedAt(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldProposedAt, v))
+}
+
 // RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
 func RefCode(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldRefCode, v))
@@ -1603,6 +1613,26 @@ func ReferencesNotNil() predicate.Control {
 	return predicate.Control(sql.FieldNotNull(FieldReferences))
 }
 
+// TestingProceduresIsNil applies the IsNil predicate on the "testing_procedures" field.
+func TestingProceduresIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldTestingProcedures))
+}
+
+// TestingProceduresNotNil applies the NotNil predicate on the "testing_procedures" field.
+func TestingProceduresNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldTestingProcedures))
+}
+
+// EvidenceRequestsIsNil applies the IsNil predicate on the "evidence_requests" field.
+func EvidenceRequestsIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldEvidenceRequests))
+}
+
+// EvidenceRequestsNotNil applies the NotNil predicate on the "evidence_requests" field.
+func EvidenceRequestsNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldEvidenceRequests))
+}
+
 // ControlOwnerIDEQ applies the EQ predicate on the "control_owner_id" field.
 func ControlOwnerIDEQ(v string) predicate.Control {
 	return predicate.Control(sql.FieldEQ(FieldControlOwnerID, v))
@@ -2146,6 +2176,141 @@ func ControlKindIDEqualFold(v string) predicate.Control {
 // ControlKindIDContainsFold applies the ContainsFold predicate on the "control_kind_id" field.
 func ControlKindIDContainsFold(v string) predicate.Control {
 	return predicate.Control(sql.FieldContainsFold(FieldControlKindID, v))
+}
+
+// ProposedChangesIsNil applies the IsNil predicate on the "proposed_changes" field.
+func ProposedChangesIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldProposedChanges))
+}
+
+// ProposedChangesNotNil applies the NotNil predicate on the "proposed_changes" field.
+func ProposedChangesNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldProposedChanges))
+}
+
+// ProposedByUserIDEQ applies the EQ predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDNEQ applies the NEQ predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDNEQ(v string) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDIn applies the In predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldProposedByUserID, vs...))
+}
+
+// ProposedByUserIDNotIn applies the NotIn predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDNotIn(vs ...string) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldProposedByUserID, vs...))
+}
+
+// ProposedByUserIDGT applies the GT predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDGT(v string) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDGTE applies the GTE predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDGTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDLT applies the LT predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDLT(v string) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDLTE applies the LTE predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDLTE(v string) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDContains applies the Contains predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDContains(v string) predicate.Control {
+	return predicate.Control(sql.FieldContains(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDHasPrefix applies the HasPrefix predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDHasPrefix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasPrefix(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDHasSuffix applies the HasSuffix predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDHasSuffix(v string) predicate.Control {
+	return predicate.Control(sql.FieldHasSuffix(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDIsNil applies the IsNil predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldProposedByUserID))
+}
+
+// ProposedByUserIDNotNil applies the NotNil predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldProposedByUserID))
+}
+
+// ProposedByUserIDEqualFold applies the EqualFold predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDEqualFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldEqualFold(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDContainsFold applies the ContainsFold predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDContainsFold(v string) predicate.Control {
+	return predicate.Control(sql.FieldContainsFold(FieldProposedByUserID, v))
+}
+
+// ProposedAtEQ applies the EQ predicate on the "proposed_at" field.
+func ProposedAtEQ(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldEQ(FieldProposedAt, v))
+}
+
+// ProposedAtNEQ applies the NEQ predicate on the "proposed_at" field.
+func ProposedAtNEQ(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldNEQ(FieldProposedAt, v))
+}
+
+// ProposedAtIn applies the In predicate on the "proposed_at" field.
+func ProposedAtIn(vs ...time.Time) predicate.Control {
+	return predicate.Control(sql.FieldIn(FieldProposedAt, vs...))
+}
+
+// ProposedAtNotIn applies the NotIn predicate on the "proposed_at" field.
+func ProposedAtNotIn(vs ...time.Time) predicate.Control {
+	return predicate.Control(sql.FieldNotIn(FieldProposedAt, vs...))
+}
+
+// ProposedAtGT applies the GT predicate on the "proposed_at" field.
+func ProposedAtGT(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldGT(FieldProposedAt, v))
+}
+
+// ProposedAtGTE applies the GTE predicate on the "proposed_at" field.
+func ProposedAtGTE(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldGTE(FieldProposedAt, v))
+}
+
+// ProposedAtLT applies the LT predicate on the "proposed_at" field.
+func ProposedAtLT(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldLT(FieldProposedAt, v))
+}
+
+// ProposedAtLTE applies the LTE predicate on the "proposed_at" field.
+func ProposedAtLTE(v time.Time) predicate.Control {
+	return predicate.Control(sql.FieldLTE(FieldProposedAt, v))
+}
+
+// ProposedAtIsNil applies the IsNil predicate on the "proposed_at" field.
+func ProposedAtIsNil() predicate.Control {
+	return predicate.Control(sql.FieldIsNull(FieldProposedAt))
+}
+
+// ProposedAtNotNil applies the NotNil predicate on the "proposed_at" field.
+func ProposedAtNotNil() predicate.Control {
+	return predicate.Control(sql.FieldNotNull(FieldProposedAt))
 }
 
 // RefCodeEQ applies the EQ predicate on the "ref_code" field.

@@ -427,6 +427,40 @@ func (_c *InternalPolicyCreate) SetNillableInternalPolicyKindID(v *string) *Inte
 	return _c
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_c *InternalPolicyCreate) SetProposedChanges(v map[string]interface{}) *InternalPolicyCreate {
+	_c.mutation.SetProposedChanges(v)
+	return _c
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_c *InternalPolicyCreate) SetProposedByUserID(v string) *InternalPolicyCreate {
+	_c.mutation.SetProposedByUserID(v)
+	return _c
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableProposedByUserID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetProposedByUserID(*v)
+	}
+	return _c
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_c *InternalPolicyCreate) SetProposedAt(v time.Time) *InternalPolicyCreate {
+	_c.mutation.SetProposedAt(v)
+	return _c
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableProposedAt(v *time.Time) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetProposedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *InternalPolicyCreate) SetID(v string) *InternalPolicyCreate {
 	_c.mutation.SetID(v)
@@ -969,6 +1003,18 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.InternalPolicyKindName(); ok {
 		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
 		_node.InternalPolicyKindName = value
+	}
+	if value, ok := _c.mutation.ProposedChanges(); ok {
+		_spec.SetField(internalpolicy.FieldProposedChanges, field.TypeJSON, value)
+		_node.ProposedChanges = value
+	}
+	if value, ok := _c.mutation.ProposedByUserID(); ok {
+		_spec.SetField(internalpolicy.FieldProposedByUserID, field.TypeString, value)
+		_node.ProposedByUserID = value
+	}
+	if value, ok := _c.mutation.ProposedAt(); ok {
+		_spec.SetField(internalpolicy.FieldProposedAt, field.TypeTime, value)
+		_node.ProposedAt = &value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

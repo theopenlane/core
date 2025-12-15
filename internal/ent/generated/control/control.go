@@ -76,6 +76,10 @@ const (
 	FieldExampleEvidence = "example_evidence"
 	// FieldReferences holds the string denoting the references field in the database.
 	FieldReferences = "references"
+	// FieldTestingProcedures holds the string denoting the testing_procedures field in the database.
+	FieldTestingProcedures = "testing_procedures"
+	// FieldEvidenceRequests holds the string denoting the evidence_requests field in the database.
+	FieldEvidenceRequests = "evidence_requests"
 	// FieldControlOwnerID holds the string denoting the control_owner_id field in the database.
 	FieldControlOwnerID = "control_owner_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
@@ -92,6 +96,12 @@ const (
 	FieldControlKindName = "control_kind_name"
 	// FieldControlKindID holds the string denoting the control_kind_id field in the database.
 	FieldControlKindID = "control_kind_id"
+	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
+	FieldProposedChanges = "proposed_changes"
+	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
+	FieldProposedByUserID = "proposed_by_user_id"
+	// FieldProposedAt holds the string denoting the proposed_at field in the database.
+	FieldProposedAt = "proposed_at"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
@@ -359,6 +369,8 @@ var Columns = []string{
 	FieldImplementationGuidance,
 	FieldExampleEvidence,
 	FieldReferences,
+	FieldTestingProcedures,
+	FieldEvidenceRequests,
 	FieldControlOwnerID,
 	FieldDelegateID,
 	FieldOwnerID,
@@ -367,6 +379,9 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldControlKindName,
 	FieldControlKindID,
+	FieldProposedChanges,
+	FieldProposedByUserID,
+	FieldProposedAt,
 	FieldRefCode,
 	FieldStandardID,
 }
@@ -660,6 +675,16 @@ func ByControlKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByControlKindID orders the results by the control_kind_id field.
 func ByControlKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlKindID, opts...).ToFunc()
+}
+
+// ByProposedByUserID orders the results by the proposed_by_user_id field.
+func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
+}
+
+// ByProposedAt orders the results by the proposed_at field.
+func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
 }
 
 // ByRefCode orders the results by the ref_code field.

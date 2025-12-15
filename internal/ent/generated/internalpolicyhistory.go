@@ -92,7 +92,13 @@ type InternalPolicyHistory struct {
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindID string `json:"internal_policy_kind_id,omitempty"`
-	selectValues         sql.SelectValues
+	// pending changes awaiting workflow approval
+	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
+	// user who proposed the changes
+	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
+	// when changes were proposed
+	ProposedAt   *time.Time `json:"proposed_at,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -100,15 +106,15 @@ func (*InternalPolicyHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicyhistory.FieldTags, internalpolicyhistory.FieldTagSuggestions, internalpolicyhistory.FieldDismissedTagSuggestions, internalpolicyhistory.FieldControlSuggestions, internalpolicyhistory.FieldDismissedControlSuggestions, internalpolicyhistory.FieldImprovementSuggestions, internalpolicyhistory.FieldDismissedImprovementSuggestions:
+		case internalpolicyhistory.FieldTags, internalpolicyhistory.FieldTagSuggestions, internalpolicyhistory.FieldDismissedTagSuggestions, internalpolicyhistory.FieldControlSuggestions, internalpolicyhistory.FieldDismissedControlSuggestions, internalpolicyhistory.FieldImprovementSuggestions, internalpolicyhistory.FieldDismissedImprovementSuggestions, internalpolicyhistory.FieldProposedChanges:
 			values[i] = new([]byte)
 		case internalpolicyhistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case internalpolicyhistory.FieldSystemOwned, internalpolicyhistory.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID:
+		case internalpolicyhistory.FieldID, internalpolicyhistory.FieldRef, internalpolicyhistory.FieldCreatedBy, internalpolicyhistory.FieldUpdatedBy, internalpolicyhistory.FieldDeletedBy, internalpolicyhistory.FieldDisplayID, internalpolicyhistory.FieldRevision, internalpolicyhistory.FieldOwnerID, internalpolicyhistory.FieldInternalNotes, internalpolicyhistory.FieldSystemInternalID, internalpolicyhistory.FieldName, internalpolicyhistory.FieldStatus, internalpolicyhistory.FieldPolicyType, internalpolicyhistory.FieldDetails, internalpolicyhistory.FieldReviewFrequency, internalpolicyhistory.FieldApproverID, internalpolicyhistory.FieldDelegateID, internalpolicyhistory.FieldSummary, internalpolicyhistory.FieldURL, internalpolicyhistory.FieldFileID, internalpolicyhistory.FieldInternalPolicyKindName, internalpolicyhistory.FieldInternalPolicyKindID, internalpolicyhistory.FieldProposedByUserID:
 			values[i] = new(sql.NullString)
-		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue:
+		case internalpolicyhistory.FieldHistoryTime, internalpolicyhistory.FieldCreatedAt, internalpolicyhistory.FieldUpdatedAt, internalpolicyhistory.FieldDeletedAt, internalpolicyhistory.FieldReviewDue, internalpolicyhistory.FieldProposedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -365,6 +371,27 @@ func (_m *InternalPolicyHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.InternalPolicyKindID = value.String
 			}
+		case internalpolicyhistory.FieldProposedChanges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
+					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
+				}
+			}
+		case internalpolicyhistory.FieldProposedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ProposedByUserID = value.String
+			}
+		case internalpolicyhistory.FieldProposedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
+			} else if value.Valid {
+				_m.ProposedAt = new(time.Time)
+				*_m.ProposedAt = value.Time
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -516,6 +543,17 @@ func (_m *InternalPolicyHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_policy_kind_id=")
 	builder.WriteString(_m.InternalPolicyKindID)
+	builder.WriteString(", ")
+	builder.WriteString("proposed_changes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
+	builder.WriteString(", ")
+	builder.WriteString("proposed_by_user_id=")
+	builder.WriteString(_m.ProposedByUserID)
+	builder.WriteString(", ")
+	if v := _m.ProposedAt; v != nil {
+		builder.WriteString("proposed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

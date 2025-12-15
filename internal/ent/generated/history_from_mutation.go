@@ -1781,6 +1781,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetReferences(references)
 	}
 
+	if testingProcedures, exists := m.TestingProcedures(); exists {
+		create = create.SetTestingProcedures(testingProcedures)
+	}
+
+	if evidenceRequests, exists := m.EvidenceRequests(); exists {
+		create = create.SetEvidenceRequests(evidenceRequests)
+	}
+
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
 		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
@@ -1811,6 +1819,18 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if controlKindID, exists := m.ControlKindID(); exists {
 		create = create.SetControlKindID(controlKindID)
+	}
+
+	if proposedChanges, exists := m.ProposedChanges(); exists {
+		create = create.SetProposedChanges(proposedChanges)
+	}
+
+	if proposedByUserID, exists := m.ProposedByUserID(); exists {
+		create = create.SetProposedByUserID(proposedByUserID)
+	}
+
+	if proposedAt, exists := m.ProposedAt(); exists {
+		create = create.SetNillableProposedAt(&proposedAt)
 	}
 
 	if refCode, exists := m.RefCode(); exists {
@@ -2026,6 +2046,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReferences(control.References)
 		}
 
+		if testingProcedures, exists := m.TestingProcedures(); exists {
+			create = create.SetTestingProcedures(testingProcedures)
+		} else {
+			create = create.SetTestingProcedures(control.TestingProcedures)
+		}
+
+		if evidenceRequests, exists := m.EvidenceRequests(); exists {
+			create = create.SetEvidenceRequests(evidenceRequests)
+		} else {
+			create = create.SetEvidenceRequests(control.EvidenceRequests)
+		}
+
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
 			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
@@ -2072,6 +2104,24 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetControlKindID(controlKindID)
 		} else {
 			create = create.SetControlKindID(control.ControlKindID)
+		}
+
+		if proposedChanges, exists := m.ProposedChanges(); exists {
+			create = create.SetProposedChanges(proposedChanges)
+		} else {
+			create = create.SetProposedChanges(control.ProposedChanges)
+		}
+
+		if proposedByUserID, exists := m.ProposedByUserID(); exists {
+			create = create.SetProposedByUserID(proposedByUserID)
+		} else {
+			create = create.SetProposedByUserID(control.ProposedByUserID)
+		}
+
+		if proposedAt, exists := m.ProposedAt(); exists {
+			create = create.SetNillableProposedAt(&proposedAt)
+		} else {
+			create = create.SetNillableProposedAt(control.ProposedAt)
 		}
 
 		if refCode, exists := m.RefCode(); exists {
@@ -2150,6 +2200,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetImplementationGuidance(control.ImplementationGuidance).
 			SetExampleEvidence(control.ExampleEvidence).
 			SetReferences(control.References).
+			SetTestingProcedures(control.TestingProcedures).
+			SetEvidenceRequests(control.EvidenceRequests).
 			SetNillableControlOwnerID(control.ControlOwnerID).
 			SetDelegateID(control.DelegateID).
 			SetOwnerID(control.OwnerID).
@@ -2158,6 +2210,9 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableSystemInternalID(control.SystemInternalID).
 			SetControlKindName(control.ControlKindName).
 			SetControlKindID(control.ControlKindID).
+			SetProposedChanges(control.ProposedChanges).
+			SetProposedByUserID(control.ProposedByUserID).
+			SetNillableProposedAt(control.ProposedAt).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
 			Save(ctx)
@@ -5224,6 +5279,18 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if proposedChanges, exists := m.ProposedChanges(); exists {
+		create = create.SetProposedChanges(proposedChanges)
+	}
+
+	if proposedByUserID, exists := m.ProposedByUserID(); exists {
+		create = create.SetProposedByUserID(proposedByUserID)
+	}
+
+	if proposedAt, exists := m.ProposedAt(); exists {
+		create = create.SetNillableProposedAt(&proposedAt)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -5345,6 +5412,24 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(evidence.OwnerID)
 		}
 
+		if proposedChanges, exists := m.ProposedChanges(); exists {
+			create = create.SetProposedChanges(proposedChanges)
+		} else {
+			create = create.SetProposedChanges(evidence.ProposedChanges)
+		}
+
+		if proposedByUserID, exists := m.ProposedByUserID(); exists {
+			create = create.SetProposedByUserID(proposedByUserID)
+		} else {
+			create = create.SetProposedByUserID(evidence.ProposedByUserID)
+		}
+
+		if proposedAt, exists := m.ProposedAt(); exists {
+			create = create.SetNillableProposedAt(&proposedAt)
+		} else {
+			create = create.SetNillableProposedAt(evidence.ProposedAt)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -5443,6 +5528,9 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(evidence.DisplayID).
 			SetTags(evidence.Tags).
 			SetOwnerID(evidence.OwnerID).
+			SetProposedChanges(evidence.ProposedChanges).
+			SetProposedByUserID(evidence.ProposedByUserID).
+			SetNillableProposedAt(evidence.ProposedAt).
 			SetName(evidence.Name).
 			SetDescription(evidence.Description).
 			SetCollectionProcedure(evidence.CollectionProcedure).
@@ -8119,6 +8207,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetInternalPolicyKindID(internalPolicyKindID)
 	}
 
+	if proposedChanges, exists := m.ProposedChanges(); exists {
+		create = create.SetProposedChanges(proposedChanges)
+	}
+
+	if proposedByUserID, exists := m.ProposedByUserID(); exists {
+		create = create.SetProposedByUserID(proposedByUserID)
+	}
+
+	if proposedAt, exists := m.ProposedAt(); exists {
+		create = create.SetNillableProposedAt(&proposedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8348,6 +8448,24 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID)
 		}
 
+		if proposedChanges, exists := m.ProposedChanges(); exists {
+			create = create.SetProposedChanges(proposedChanges)
+		} else {
+			create = create.SetProposedChanges(internalpolicy.ProposedChanges)
+		}
+
+		if proposedByUserID, exists := m.ProposedByUserID(); exists {
+			create = create.SetProposedByUserID(proposedByUserID)
+		} else {
+			create = create.SetProposedByUserID(internalpolicy.ProposedByUserID)
+		}
+
+		if proposedAt, exists := m.ProposedAt(); exists {
+			create = create.SetNillableProposedAt(&proposedAt)
+		} else {
+			create = create.SetNillableProposedAt(internalpolicy.ProposedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8416,6 +8534,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetNillableFileID(internalpolicy.FileID).
 			SetInternalPolicyKindName(internalpolicy.InternalPolicyKindName).
 			SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID).
+			SetProposedChanges(internalpolicy.ProposedChanges).
+			SetProposedByUserID(internalpolicy.ProposedByUserID).
+			SetNillableProposedAt(internalpolicy.ProposedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -13946,6 +14067,14 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetReferences(references)
 	}
 
+	if testingProcedures, exists := m.TestingProcedures(); exists {
+		create = create.SetTestingProcedures(testingProcedures)
+	}
+
+	if evidenceRequests, exists := m.EvidenceRequests(); exists {
+		create = create.SetEvidenceRequests(evidenceRequests)
+	}
+
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
 		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
@@ -14191,6 +14320,18 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetReferences(subcontrol.References)
 		}
 
+		if testingProcedures, exists := m.TestingProcedures(); exists {
+			create = create.SetTestingProcedures(testingProcedures)
+		} else {
+			create = create.SetTestingProcedures(subcontrol.TestingProcedures)
+		}
+
+		if evidenceRequests, exists := m.EvidenceRequests(); exists {
+			create = create.SetEvidenceRequests(evidenceRequests)
+		} else {
+			create = create.SetEvidenceRequests(subcontrol.EvidenceRequests)
+		}
+
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
 			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
@@ -14315,6 +14456,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImplementationGuidance(subcontrol.ImplementationGuidance).
 			SetExampleEvidence(subcontrol.ExampleEvidence).
 			SetReferences(subcontrol.References).
+			SetTestingProcedures(subcontrol.TestingProcedures).
+			SetEvidenceRequests(subcontrol.EvidenceRequests).
 			SetNillableControlOwnerID(subcontrol.ControlOwnerID).
 			SetDelegateID(subcontrol.DelegateID).
 			SetOwnerID(subcontrol.OwnerID).
@@ -19352,6 +19495,18 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDefinitionSnapshot(definitionSnapshot)
 	}
 
+	if controlID, exists := m.ControlID(); exists {
+		create = create.SetControlID(controlID)
+	}
+
+	if internalPolicyID, exists := m.InternalPolicyID(); exists {
+		create = create.SetInternalPolicyID(internalPolicyID)
+	}
+
+	if evidenceID, exists := m.EvidenceID(); exists {
+		create = create.SetEvidenceID(evidenceID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -19467,6 +19622,24 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot)
 		}
 
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		} else {
+			create = create.SetControlID(workflowinstance.ControlID)
+		}
+
+		if internalPolicyID, exists := m.InternalPolicyID(); exists {
+			create = create.SetInternalPolicyID(internalPolicyID)
+		} else {
+			create = create.SetInternalPolicyID(workflowinstance.InternalPolicyID)
+		}
+
+		if evidenceID, exists := m.EvidenceID(); exists {
+			create = create.SetEvidenceID(evidenceID)
+		} else {
+			create = create.SetEvidenceID(workflowinstance.EvidenceID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -19516,6 +19689,9 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetContext(workflowinstance.Context).
 			SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt).
 			SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot).
+			SetControlID(workflowinstance.ControlID).
+			SetInternalPolicyID(workflowinstance.InternalPolicyID).
+			SetEvidenceID(workflowinstance.EvidenceID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -19595,6 +19771,10 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if directoryMembershipID, exists := m.DirectoryMembershipID(); exists {
 		create = create.SetDirectoryMembershipID(directoryMembershipID)
+	}
+
+	if evidenceID, exists := m.EvidenceID(); exists {
+		create = create.SetEvidenceID(evidenceID)
 	}
 
 	_, err := create.Save(ctx)
@@ -19712,6 +19892,12 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID)
 		}
 
+		if evidenceID, exists := m.EvidenceID(); exists {
+			create = create.SetEvidenceID(evidenceID)
+		} else {
+			create = create.SetEvidenceID(workflowobjectref.EvidenceID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -19761,6 +19947,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetDirectoryAccountID(workflowobjectref.DirectoryAccountID).
 			SetDirectoryGroupID(workflowobjectref.DirectoryGroupID).
 			SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID).
+			SetEvidenceID(workflowobjectref.EvidenceID).
 			Save(ctx)
 		if err != nil {
 			return err

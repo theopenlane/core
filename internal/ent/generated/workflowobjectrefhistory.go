@@ -34,7 +34,7 @@ type WorkflowObjectRefHistory struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// a shortened prefixed id field to use as a human readable identifier
 	DisplayID string `json:"display_id,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// Workflow instance this object is associated with
 	WorkflowInstanceID string `json:"workflow_instance_id,omitempty"`
@@ -52,7 +52,9 @@ type WorkflowObjectRefHistory struct {
 	DirectoryGroupID string `json:"directory_group_id,omitempty"`
 	// Directory membership referenced by this workflow instance
 	DirectoryMembershipID string `json:"directory_membership_id,omitempty"`
-	selectValues          sql.SelectValues
+	// Evidence referenced by this workflow instance
+	EvidenceID   string `json:"evidence_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -62,7 +64,7 @@ func (*WorkflowObjectRefHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case workflowobjectrefhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID:
+		case workflowobjectrefhistory.FieldID, workflowobjectrefhistory.FieldRef, workflowobjectrefhistory.FieldCreatedBy, workflowobjectrefhistory.FieldUpdatedBy, workflowobjectrefhistory.FieldDisplayID, workflowobjectrefhistory.FieldOwnerID, workflowobjectrefhistory.FieldWorkflowInstanceID, workflowobjectrefhistory.FieldControlID, workflowobjectrefhistory.FieldTaskID, workflowobjectrefhistory.FieldInternalPolicyID, workflowobjectrefhistory.FieldFindingID, workflowobjectrefhistory.FieldDirectoryAccountID, workflowobjectrefhistory.FieldDirectoryGroupID, workflowobjectrefhistory.FieldDirectoryMembershipID, workflowobjectrefhistory.FieldEvidenceID:
 			values[i] = new(sql.NullString)
 		case workflowobjectrefhistory.FieldHistoryTime, workflowobjectrefhistory.FieldCreatedAt, workflowobjectrefhistory.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -189,6 +191,12 @@ func (_m *WorkflowObjectRefHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				_m.DirectoryMembershipID = value.String
 			}
+		case workflowobjectrefhistory.FieldEvidenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_id", values[i])
+			} else if value.Valid {
+				_m.EvidenceID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -275,6 +283,9 @@ func (_m *WorkflowObjectRefHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("directory_membership_id=")
 	builder.WriteString(_m.DirectoryMembershipID)
+	builder.WriteString(", ")
+	builder.WriteString("evidence_id=")
+	builder.WriteString(_m.EvidenceID)
 	builder.WriteByte(')')
 	return builder.String()
 }

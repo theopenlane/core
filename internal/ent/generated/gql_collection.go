@@ -6535,6 +6535,16 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldReferences)
 				fieldSeen[control.FieldReferences] = struct{}{}
 			}
+		case "testingProcedures":
+			if _, ok := fieldSeen[control.FieldTestingProcedures]; !ok {
+				selectedFields = append(selectedFields, control.FieldTestingProcedures)
+				fieldSeen[control.FieldTestingProcedures] = struct{}{}
+			}
+		case "evidenceRequests":
+			if _, ok := fieldSeen[control.FieldEvidenceRequests]; !ok {
+				selectedFields = append(selectedFields, control.FieldEvidenceRequests)
+				fieldSeen[control.FieldEvidenceRequests] = struct{}{}
+			}
 		case "controlOwnerID":
 			if _, ok := fieldSeen[control.FieldControlOwnerID]; !ok {
 				selectedFields = append(selectedFields, control.FieldControlOwnerID)
@@ -6574,6 +6584,21 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[control.FieldControlKindID]; !ok {
 				selectedFields = append(selectedFields, control.FieldControlKindID)
 				fieldSeen[control.FieldControlKindID] = struct{}{}
+			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[control.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, control.FieldProposedChanges)
+				fieldSeen[control.FieldProposedChanges] = struct{}{}
+			}
+		case "proposedByUserID":
+			if _, ok := fieldSeen[control.FieldProposedByUserID]; !ok {
+				selectedFields = append(selectedFields, control.FieldProposedByUserID)
+				fieldSeen[control.FieldProposedByUserID] = struct{}{}
+			}
+		case "proposedAt":
+			if _, ok := fieldSeen[control.FieldProposedAt]; !ok {
+				selectedFields = append(selectedFields, control.FieldProposedAt)
+				fieldSeen[control.FieldProposedAt] = struct{}{}
 			}
 		case "refCode":
 			if _, ok := fieldSeen[control.FieldRefCode]; !ok {
@@ -6825,6 +6850,16 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, controlhistory.FieldReferences)
 				fieldSeen[controlhistory.FieldReferences] = struct{}{}
 			}
+		case "testingProcedures":
+			if _, ok := fieldSeen[controlhistory.FieldTestingProcedures]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldTestingProcedures)
+				fieldSeen[controlhistory.FieldTestingProcedures] = struct{}{}
+			}
+		case "evidenceRequests":
+			if _, ok := fieldSeen[controlhistory.FieldEvidenceRequests]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldEvidenceRequests)
+				fieldSeen[controlhistory.FieldEvidenceRequests] = struct{}{}
+			}
 		case "controlOwnerID":
 			if _, ok := fieldSeen[controlhistory.FieldControlOwnerID]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldControlOwnerID)
@@ -6864,6 +6899,21 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldControlKindID]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldControlKindID)
 				fieldSeen[controlhistory.FieldControlKindID] = struct{}{}
+			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[controlhistory.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldProposedChanges)
+				fieldSeen[controlhistory.FieldProposedChanges] = struct{}{}
+			}
+		case "proposedByUserID":
+			if _, ok := fieldSeen[controlhistory.FieldProposedByUserID]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldProposedByUserID)
+				fieldSeen[controlhistory.FieldProposedByUserID] = struct{}{}
+			}
+		case "proposedAt":
+			if _, ok := fieldSeen[controlhistory.FieldProposedAt]; !ok {
+				selectedFields = append(selectedFields, controlhistory.FieldProposedAt)
+				fieldSeen[controlhistory.FieldProposedAt] = struct{}{}
 			}
 		case "refCode":
 			if _, ok := fieldSeen[controlhistory.FieldRefCode]; !ok {
@@ -18242,6 +18292,21 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, evidence.FieldOwnerID)
 				fieldSeen[evidence.FieldOwnerID] = struct{}{}
 			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[evidence.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldProposedChanges)
+				fieldSeen[evidence.FieldProposedChanges] = struct{}{}
+			}
+		case "proposedByUserID":
+			if _, ok := fieldSeen[evidence.FieldProposedByUserID]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldProposedByUserID)
+				fieldSeen[evidence.FieldProposedByUserID] = struct{}{}
+			}
+		case "proposedAt":
+			if _, ok := fieldSeen[evidence.FieldProposedAt]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldProposedAt)
+				fieldSeen[evidence.FieldProposedAt] = struct{}{}
+			}
 		case "name":
 			if _, ok := fieldSeen[evidence.FieldName]; !ok {
 				selectedFields = append(selectedFields, evidence.FieldName)
@@ -18426,6 +18491,21 @@ func (_q *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[evidencehistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, evidencehistory.FieldOwnerID)
 				fieldSeen[evidencehistory.FieldOwnerID] = struct{}{}
+			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[evidencehistory.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldProposedChanges)
+				fieldSeen[evidencehistory.FieldProposedChanges] = struct{}{}
+			}
+		case "proposedByUserID":
+			if _, ok := fieldSeen[evidencehistory.FieldProposedByUserID]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldProposedByUserID)
+				fieldSeen[evidencehistory.FieldProposedByUserID] = struct{}{}
+			}
+		case "proposedAt":
+			if _, ok := fieldSeen[evidencehistory.FieldProposedAt]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldProposedAt)
+				fieldSeen[evidencehistory.FieldProposedAt] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[evidencehistory.FieldName]; !ok {
@@ -30738,6 +30818,21 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldInternalPolicyKindID)
 				fieldSeen[internalpolicy.FieldInternalPolicyKindID] = struct{}{}
 			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[internalpolicy.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldProposedChanges)
+				fieldSeen[internalpolicy.FieldProposedChanges] = struct{}{}
+			}
+		case "proposedByUserID":
+			if _, ok := fieldSeen[internalpolicy.FieldProposedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldProposedByUserID)
+				fieldSeen[internalpolicy.FieldProposedByUserID] = struct{}{}
+			}
+		case "proposedAt":
+			if _, ok := fieldSeen[internalpolicy.FieldProposedAt]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldProposedAt)
+				fieldSeen[internalpolicy.FieldProposedAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -30997,6 +31092,21 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[internalpolicyhistory.FieldInternalPolicyKindID]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldInternalPolicyKindID)
 				fieldSeen[internalpolicyhistory.FieldInternalPolicyKindID] = struct{}{}
+			}
+		case "proposedChanges":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldProposedChanges]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldProposedChanges)
+				fieldSeen[internalpolicyhistory.FieldProposedChanges] = struct{}{}
+			}
+		case "proposedByUserID":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldProposedByUserID]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldProposedByUserID)
+				fieldSeen[internalpolicyhistory.FieldProposedByUserID] = struct{}{}
+			}
+		case "proposedAt":
+			if _, ok := fieldSeen[internalpolicyhistory.FieldProposedAt]; !ok {
+				selectedFields = append(selectedFields, internalpolicyhistory.FieldProposedAt)
+				fieldSeen[internalpolicyhistory.FieldProposedAt] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -58659,6 +58769,16 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldReferences)
 				fieldSeen[subcontrol.FieldReferences] = struct{}{}
 			}
+		case "testingProcedures":
+			if _, ok := fieldSeen[subcontrol.FieldTestingProcedures]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldTestingProcedures)
+				fieldSeen[subcontrol.FieldTestingProcedures] = struct{}{}
+			}
+		case "evidenceRequests":
+			if _, ok := fieldSeen[subcontrol.FieldEvidenceRequests]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldEvidenceRequests)
+				fieldSeen[subcontrol.FieldEvidenceRequests] = struct{}{}
+			}
 		case "controlOwnerID":
 			if _, ok := fieldSeen[subcontrol.FieldControlOwnerID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldControlOwnerID)
@@ -58948,6 +59068,16 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[subcontrolhistory.FieldReferences]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldReferences)
 				fieldSeen[subcontrolhistory.FieldReferences] = struct{}{}
+			}
+		case "testingProcedures":
+			if _, ok := fieldSeen[subcontrolhistory.FieldTestingProcedures]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldTestingProcedures)
+				fieldSeen[subcontrolhistory.FieldTestingProcedures] = struct{}{}
+			}
+		case "evidenceRequests":
+			if _, ok := fieldSeen[subcontrolhistory.FieldEvidenceRequests]; !ok {
+				selectedFields = append(selectedFields, subcontrolhistory.FieldEvidenceRequests)
+				fieldSeen[subcontrolhistory.FieldEvidenceRequests] = struct{}{}
 			}
 		case "controlOwnerID":
 			if _, ok := fieldSeen[subcontrolhistory.FieldControlOwnerID]; !ok {
@@ -71876,6 +72006,51 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				fieldSeen[workflowinstance.FieldWorkflowDefinitionID] = struct{}{}
 			}
 
+		case "control":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			_q.withControl = query
+			if _, ok := fieldSeen[workflowinstance.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldControlID)
+				fieldSeen[workflowinstance.FieldControlID] = struct{}{}
+			}
+
+		case "internalPolicy":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			_q.withInternalPolicy = query
+			if _, ok := fieldSeen[workflowinstance.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldInternalPolicyID)
+				fieldSeen[workflowinstance.FieldInternalPolicyID] = struct{}{}
+			}
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			_q.withEvidence = query
+			if _, ok := fieldSeen[workflowinstance.FieldEvidenceID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldEvidenceID)
+				fieldSeen[workflowinstance.FieldEvidenceID] = struct{}{}
+			}
+
 		case "workflowAssignments":
 			var (
 				alias = field.Alias
@@ -71919,10 +72094,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[5][alias] = n
 						}
 						return nil
 					})
@@ -71930,10 +72105,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowAssignments)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[2][alias] = n
+							nodes[i].Edges.totalCount[5][alias] = n
 						}
 						return nil
 					})
@@ -72008,10 +72183,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[3] == nil {
-								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[3][alias] = n
+							nodes[i].Edges.totalCount[6][alias] = n
 						}
 						return nil
 					})
@@ -72019,10 +72194,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowEvents)
-							if nodes[i].Edges.totalCount[3] == nil {
-								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[3][alias] = n
+							nodes[i].Edges.totalCount[6][alias] = n
 						}
 						return nil
 					})
@@ -72097,10 +72272,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[7][alias] = n
 						}
 						return nil
 					})
@@ -72108,10 +72283,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[7][alias] = n
 						}
 						return nil
 					})
@@ -72201,6 +72376,21 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[workflowinstance.FieldDefinitionSnapshot]; !ok {
 				selectedFields = append(selectedFields, workflowinstance.FieldDefinitionSnapshot)
 				fieldSeen[workflowinstance.FieldDefinitionSnapshot] = struct{}{}
+			}
+		case "controlID":
+			if _, ok := fieldSeen[workflowinstance.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldControlID)
+				fieldSeen[workflowinstance.FieldControlID] = struct{}{}
+			}
+		case "internalPolicyID":
+			if _, ok := fieldSeen[workflowinstance.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldInternalPolicyID)
+				fieldSeen[workflowinstance.FieldInternalPolicyID] = struct{}{}
+			}
+		case "evidenceID":
+			if _, ok := fieldSeen[workflowinstance.FieldEvidenceID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldEvidenceID)
+				fieldSeen[workflowinstance.FieldEvidenceID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -72366,6 +72556,21 @@ func (_q *WorkflowInstanceHistoryQuery) collectField(ctx context.Context, oneNod
 			if _, ok := fieldSeen[workflowinstancehistory.FieldDefinitionSnapshot]; !ok {
 				selectedFields = append(selectedFields, workflowinstancehistory.FieldDefinitionSnapshot)
 				fieldSeen[workflowinstancehistory.FieldDefinitionSnapshot] = struct{}{}
+			}
+		case "controlID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldControlID)
+				fieldSeen[workflowinstancehistory.FieldControlID] = struct{}{}
+			}
+		case "internalPolicyID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldInternalPolicyID)
+				fieldSeen[workflowinstancehistory.FieldInternalPolicyID] = struct{}{}
+			}
+		case "evidenceID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldEvidenceID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldEvidenceID)
+				fieldSeen[workflowinstancehistory.FieldEvidenceID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -72586,6 +72791,21 @@ func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryMembershipID)
 				fieldSeen[workflowobjectref.FieldDirectoryMembershipID] = struct{}{}
 			}
+
+		case "evidence":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EvidenceClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, evidenceImplementors)...); err != nil {
+				return err
+			}
+			_q.withEvidence = query
+			if _, ok := fieldSeen[workflowobjectref.FieldEvidenceID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldEvidenceID)
+				fieldSeen[workflowobjectref.FieldEvidenceID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[workflowobjectref.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, workflowobjectref.FieldCreatedAt)
@@ -72655,6 +72875,11 @@ func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryMembershipID]; !ok {
 				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryMembershipID)
 				fieldSeen[workflowobjectref.FieldDirectoryMembershipID] = struct{}{}
+			}
+		case "evidenceID":
+			if _, ok := fieldSeen[workflowobjectref.FieldEvidenceID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldEvidenceID)
+				fieldSeen[workflowobjectref.FieldEvidenceID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -72830,6 +73055,11 @@ func (_q *WorkflowObjectRefHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[workflowobjectrefhistory.FieldDirectoryMembershipID]; !ok {
 				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldDirectoryMembershipID)
 				fieldSeen[workflowobjectrefhistory.FieldDirectoryMembershipID] = struct{}{}
+			}
+		case "evidenceID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldEvidenceID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldEvidenceID)
+				fieldSeen[workflowobjectrefhistory.FieldEvidenceID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

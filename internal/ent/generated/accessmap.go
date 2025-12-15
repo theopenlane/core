@@ -2877,8 +2877,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "workflow_instance": {
 	ObjectType:      "workflow_instance",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "workflow_assignment_targets": {
 	ObjectType:      "workflow_assignment_target",
 	SkipEditCheck:   false,
@@ -2937,6 +2937,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "workflow_definition": {
 	ObjectType:      "workflow_definition",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "control": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "internal_policy": {
+	ObjectType:      "internal_policy",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "workflow_assignments": {
@@ -2958,35 +2970,39 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "workflow_instance": {
 	ObjectType:      "workflow_instance",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "control": {
 	ObjectType:      "control",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "task": {
 	ObjectType:      "task",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "internal_policy": {
 	ObjectType:      "internal_policy",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "finding": {
 	ObjectType:      "finding",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "directory_account": {
 	ObjectType:      "directory_account",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "directory_group": {
 	ObjectType:      "directory_group",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "directory_membership": {
 	ObjectType:      "directory_membership",
-	SkipEditCheck:   true,
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
 },

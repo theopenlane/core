@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -209,6 +210,20 @@ func (_c *WorkflowObjectRefCreate) SetNillableDirectoryMembershipID(v *string) *
 	return _c
 }
 
+// SetEvidenceID sets the "evidence_id" field.
+func (_c *WorkflowObjectRefCreate) SetEvidenceID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetEvidenceID(v)
+	return _c
+}
+
+// SetNillableEvidenceID sets the "evidence_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableEvidenceID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetEvidenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefCreate) SetID(v string) *WorkflowObjectRefCreate {
 	_c.mutation.SetID(v)
@@ -266,6 +281,11 @@ func (_c *WorkflowObjectRefCreate) SetDirectoryGroup(v *DirectoryGroup) *Workflo
 // SetDirectoryMembership sets the "directory_membership" edge to the DirectoryMembership entity.
 func (_c *WorkflowObjectRefCreate) SetDirectoryMembership(v *DirectoryMembership) *WorkflowObjectRefCreate {
 	return _c.SetDirectoryMembershipID(v.ID)
+}
+
+// SetEvidence sets the "evidence" edge to the Evidence entity.
+func (_c *WorkflowObjectRefCreate) SetEvidence(v *Evidence) *WorkflowObjectRefCreate {
+	return _c.SetEvidenceID(v.ID)
 }
 
 // Mutation returns the WorkflowObjectRefMutation object of the builder.
@@ -571,6 +591,24 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.DirectoryMembershipID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.EvidenceTable,
+			Columns: []string{workflowobjectref.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EvidenceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

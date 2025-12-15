@@ -124,26 +124,6 @@ func (_u *WorkflowEventHistoryUpdate) ClearTags() *WorkflowEventHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowEventHistoryUpdate) SetOwnerID(v string) *WorkflowEventHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowEventHistoryUpdate) SetNillableOwnerID(v *string) *WorkflowEventHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowEventHistoryUpdate) ClearOwnerID() *WorkflowEventHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetWorkflowInstanceID sets the "workflow_instance_id" field.
 func (_u *WorkflowEventHistoryUpdate) SetWorkflowInstanceID(v string) *WorkflowEventHistoryUpdate {
 	_u.mutation.SetWorkflowInstanceID(v)
@@ -311,9 +291,6 @@ func (_u *WorkflowEventHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workfloweventhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workfloweventhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workfloweventhistory.FieldOwnerID, field.TypeString)
 	}
@@ -440,26 +417,6 @@ func (_u *WorkflowEventHistoryUpdateOne) AppendTags(v []string) *WorkflowEventHi
 // ClearTags clears the value of the "tags" field.
 func (_u *WorkflowEventHistoryUpdateOne) ClearTags() *WorkflowEventHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowEventHistoryUpdateOne) SetOwnerID(v string) *WorkflowEventHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowEventHistoryUpdateOne) SetNillableOwnerID(v *string) *WorkflowEventHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowEventHistoryUpdateOne) ClearOwnerID() *WorkflowEventHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -659,9 +616,6 @@ func (_u *WorkflowEventHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Wo
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workfloweventhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(workfloweventhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workfloweventhistory.FieldOwnerID, field.TypeString)

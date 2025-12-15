@@ -788,6 +788,12 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	if !reflect.DeepEqual(_m.References, new.References) {
 		changes = append(changes, NewChange(controlhistory.FieldReferences, _m.References, new.References))
 	}
+	if !reflect.DeepEqual(_m.TestingProcedures, new.TestingProcedures) {
+		changes = append(changes, NewChange(controlhistory.FieldTestingProcedures, _m.TestingProcedures, new.TestingProcedures))
+	}
+	if !reflect.DeepEqual(_m.EvidenceRequests, new.EvidenceRequests) {
+		changes = append(changes, NewChange(controlhistory.FieldEvidenceRequests, _m.EvidenceRequests, new.EvidenceRequests))
+	}
 	if !reflect.DeepEqual(_m.ControlOwnerID, new.ControlOwnerID) {
 		changes = append(changes, NewChange(controlhistory.FieldControlOwnerID, _m.ControlOwnerID, new.ControlOwnerID))
 	}
@@ -811,6 +817,15 @@ func (_m *ControlHistory) changes(new *ControlHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.ControlKindID, new.ControlKindID) {
 		changes = append(changes, NewChange(controlhistory.FieldControlKindID, _m.ControlKindID, new.ControlKindID))
+	}
+	if !reflect.DeepEqual(_m.ProposedChanges, new.ProposedChanges) {
+		changes = append(changes, NewChange(controlhistory.FieldProposedChanges, _m.ProposedChanges, new.ProposedChanges))
+	}
+	if !reflect.DeepEqual(_m.ProposedByUserID, new.ProposedByUserID) {
+		changes = append(changes, NewChange(controlhistory.FieldProposedByUserID, _m.ProposedByUserID, new.ProposedByUserID))
+	}
+	if !reflect.DeepEqual(_m.ProposedAt, new.ProposedAt) {
+		changes = append(changes, NewChange(controlhistory.FieldProposedAt, _m.ProposedAt, new.ProposedAt))
 	}
 	if !reflect.DeepEqual(_m.RefCode, new.RefCode) {
 		changes = append(changes, NewChange(controlhistory.FieldRefCode, _m.RefCode, new.RefCode))
@@ -1715,6 +1730,15 @@ func (_m *EvidenceHistory) changes(new *EvidenceHistory) []Change {
 	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
 		changes = append(changes, NewChange(evidencehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
 	}
+	if !reflect.DeepEqual(_m.ProposedChanges, new.ProposedChanges) {
+		changes = append(changes, NewChange(evidencehistory.FieldProposedChanges, _m.ProposedChanges, new.ProposedChanges))
+	}
+	if !reflect.DeepEqual(_m.ProposedByUserID, new.ProposedByUserID) {
+		changes = append(changes, NewChange(evidencehistory.FieldProposedByUserID, _m.ProposedByUserID, new.ProposedByUserID))
+	}
+	if !reflect.DeepEqual(_m.ProposedAt, new.ProposedAt) {
+		changes = append(changes, NewChange(evidencehistory.FieldProposedAt, _m.ProposedAt, new.ProposedAt))
+	}
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(evidencehistory.FieldName, _m.Name, new.Name))
 	}
@@ -2569,6 +2593,15 @@ func (_m *InternalPolicyHistory) changes(new *InternalPolicyHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.InternalPolicyKindID, new.InternalPolicyKindID) {
 		changes = append(changes, NewChange(internalpolicyhistory.FieldInternalPolicyKindID, _m.InternalPolicyKindID, new.InternalPolicyKindID))
+	}
+	if !reflect.DeepEqual(_m.ProposedChanges, new.ProposedChanges) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldProposedChanges, _m.ProposedChanges, new.ProposedChanges))
+	}
+	if !reflect.DeepEqual(_m.ProposedByUserID, new.ProposedByUserID) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldProposedByUserID, _m.ProposedByUserID, new.ProposedByUserID))
+	}
+	if !reflect.DeepEqual(_m.ProposedAt, new.ProposedAt) {
+		changes = append(changes, NewChange(internalpolicyhistory.FieldProposedAt, _m.ProposedAt, new.ProposedAt))
 	}
 	return changes
 }
@@ -4193,6 +4226,12 @@ func (_m *SubcontrolHistory) changes(new *SubcontrolHistory) []Change {
 	if !reflect.DeepEqual(_m.References, new.References) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldReferences, _m.References, new.References))
 	}
+	if !reflect.DeepEqual(_m.TestingProcedures, new.TestingProcedures) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldTestingProcedures, _m.TestingProcedures, new.TestingProcedures))
+	}
+	if !reflect.DeepEqual(_m.EvidenceRequests, new.EvidenceRequests) {
+		changes = append(changes, NewChange(subcontrolhistory.FieldEvidenceRequests, _m.EvidenceRequests, new.EvidenceRequests))
+	}
 	if !reflect.DeepEqual(_m.ControlOwnerID, new.ControlOwnerID) {
 		changes = append(changes, NewChange(subcontrolhistory.FieldControlOwnerID, _m.ControlOwnerID, new.ControlOwnerID))
 	}
@@ -5678,6 +5717,15 @@ func (_m *WorkflowInstanceHistory) changes(new *WorkflowInstanceHistory) []Chang
 	if !reflect.DeepEqual(_m.DefinitionSnapshot, new.DefinitionSnapshot) {
 		changes = append(changes, NewChange(workflowinstancehistory.FieldDefinitionSnapshot, _m.DefinitionSnapshot, new.DefinitionSnapshot))
 	}
+	if !reflect.DeepEqual(_m.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldControlID, _m.ControlID, new.ControlID))
+	}
+	if !reflect.DeepEqual(_m.InternalPolicyID, new.InternalPolicyID) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldInternalPolicyID, _m.InternalPolicyID, new.InternalPolicyID))
+	}
+	if !reflect.DeepEqual(_m.EvidenceID, new.EvidenceID) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldEvidenceID, _m.EvidenceID, new.EvidenceID))
+	}
 	return changes
 }
 
@@ -5746,6 +5794,9 @@ func (_m *WorkflowObjectRefHistory) changes(new *WorkflowObjectRefHistory) []Cha
 	}
 	if !reflect.DeepEqual(_m.DirectoryMembershipID, new.DirectoryMembershipID) {
 		changes = append(changes, NewChange(workflowobjectrefhistory.FieldDirectoryMembershipID, _m.DirectoryMembershipID, new.DirectoryMembershipID))
+	}
+	if !reflect.DeepEqual(_m.EvidenceID, new.EvidenceID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldEvidenceID, _m.EvidenceID, new.EvidenceID))
 	}
 	return changes
 }
