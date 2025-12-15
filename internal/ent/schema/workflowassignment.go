@@ -99,9 +99,6 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			edgeSchema: WorkflowAssignmentTarget{},
 			name:       "targets",
 			comment:    "Targets for this assignment (user/group/resolver)",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -109,9 +106,6 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			name:       "actor_user",
 			field:      "actor_user_id",
 			comment:    "User who acted on this assignment",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -119,9 +113,6 @@ func (w WorkflowAssignment) Edges() []ent.Edge {
 			name:       "actor_group",
 			field:      "actor_group_id",
 			comment:    "Group that acted on this assignment",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 	}
 }
@@ -162,7 +153,6 @@ func (WorkflowAssignment) Annotations() []schema.Annotation {
 // Policy of the WorkflowAssignment
 func (WorkflowAssignment) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowAssignmentMutation](),

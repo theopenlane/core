@@ -9,7 +9,6 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -92,9 +91,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Workflow instance this object is associated with",
 			required:   true,
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -102,9 +98,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "control_id",
 			comment:    "Control referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -112,9 +105,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "task_id",
 			comment:    "Task referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -122,9 +112,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "internal_policy_id",
 			comment:    "Policy referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -132,9 +119,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "finding_id",
 			comment:    "Finding referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -142,9 +126,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "directory_account_id",
 			comment:    "Directory account referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -152,9 +133,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "directory_group_id",
 			comment:    "Directory group referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -162,9 +140,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "directory_membership_id",
 			comment:    "Directory membership referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -172,9 +147,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "evidence_id",
 			comment:    "Evidence referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 	}
 }
@@ -233,7 +205,6 @@ func (WorkflowObjectRef) Annotations() []schema.Annotation {
 // Policy of the WorkflowObjectRef
 func (WorkflowObjectRef) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),

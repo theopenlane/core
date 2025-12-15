@@ -90,27 +90,18 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			edgeSchema: Control{},
 			field:      "control_id",
 			comment:    "Control this workflow instance is associated with",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
 			edgeSchema: InternalPolicy{},
 			field:      "internal_policy_id",
 			comment:    "Internal policy this workflow instance is associated with",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
 			edgeSchema: Evidence{},
 			field:      "evidence_id",
 			comment:    "Evidence this workflow instance is associated with",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: w,
@@ -169,7 +160,6 @@ func (WorkflowInstance) Annotations() []schema.Annotation {
 // Policy of the WorkflowInstance
 func (WorkflowInstance) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowInstanceMutation](),

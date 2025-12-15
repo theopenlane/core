@@ -379,6 +379,11 @@ func (_c *JobRunnerCreate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "JobRunner.status": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.IPAddress(); ok {
+		if err := jobrunner.IPAddressValidator(v); err != nil {
+			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "JobRunner.ip_address": %w`, err)}
+		}
+	}
 	return nil
 }
 

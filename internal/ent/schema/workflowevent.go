@@ -2,12 +2,9 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-
-	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -61,9 +58,6 @@ func (WorkflowEvent) Edges() []ent.Edge {
 			edgeSchema: WorkflowInstance{},
 			field:      "workflow_instance_id",
 			required:   true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 	}
 }
