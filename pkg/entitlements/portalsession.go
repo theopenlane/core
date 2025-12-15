@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 )
 
 // CreateBillingPortalPaymentMethods generates a session in stripe's billing portal which allows the customer to add / update payment methods

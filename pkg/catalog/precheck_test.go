@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/core/pkg/catalog"
 )
