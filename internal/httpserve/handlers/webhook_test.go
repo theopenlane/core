@@ -13,8 +13,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/stripe/stripe-go/v83"
-	"github.com/stripe/stripe-go/v83/webhook"
+	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v84/webhook"
 	echo "github.com/theopenlane/echox"
 
 	entEvent "github.com/theopenlane/core/internal/ent/generated/event"

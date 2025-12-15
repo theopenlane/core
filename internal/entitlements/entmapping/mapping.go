@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	catalog "github.com/theopenlane/core/internal/entitlements"

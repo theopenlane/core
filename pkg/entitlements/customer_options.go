@@ -1,6 +1,6 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v83"
+import "github.com/stripe/stripe-go/v84"
 
 // CustomerCreateOption allows customizing CustomerCreateParams
 type CustomerCreateOption func(params *stripe.CustomerCreateParams)
