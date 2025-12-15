@@ -44,7 +44,7 @@ func HookCreateAssessmentResponse() ent.Hook {
 			existingResponse, err := m.Client().AssessmentResponse.Query().
 				Where(
 					assessmentresponse.AssessmentID(id),
-					assessmentresponse.Email(email),
+					assessmentresponse.EmailEqualFold(email),
 				).
 				Only(ctx)
 
