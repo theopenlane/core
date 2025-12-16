@@ -12,10 +12,11 @@ import (
 	api "github.com/windmill-labs/windmill-go-client/api"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
+
+	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 var (
@@ -316,12 +317,12 @@ func (c *Client) CreateScheduledJob(ctx context.Context, req CreateScheduledJobR
 func getWindmillLanguage(language enums.JobPlatformType) api.SchemasRawScriptLanguage {
 	switch language {
 	case enums.JobPlatformTypeGo:
-		return api.Go
+		return api.SchemasRawScriptLanguageGo
 	case enums.JobPlatformTypeTs:
-		return api.Bun
+		return api.SchemasRawScriptLanguageBun
 	default:
 		// fall back to bash for any other language
-		return api.Bash
+		return api.SchemasRawScriptLanguageBash
 	}
 }
 
