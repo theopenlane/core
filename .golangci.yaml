@@ -51,7 +51,8 @@ formatters:
     generated: lax
     warn-unused: true
     paths:
-      - internal/graphapi/**/gen_models.go
+      - internal/graphapi/generated/gen_models.go
+      - internal/graphapi/historygenerated/gen_models.go
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - pkg/entitlements/test/*
