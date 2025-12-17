@@ -27,7 +27,7 @@ var (
 	ErrTagsNotFetched = errors.New("an error occurred while fetching all tags")
 )
 
-func HookTagDefintion() ent.Hook {
+func HookTagDefinition() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TagDefinitionFunc(func(ctx context.Context, m *generated.TagDefinitionMutation) (generated.Value, error) {
 			name, ok := m.Name()
@@ -184,11 +184,11 @@ func isTagDefinitionInUse(ctx context.Context, client *generated.Client, tagDefI
 			// we need to check if tag_definition is in use by checking the referenced entity and making sure it exists and
 			// not deleted
 			query := fmt.Sprintf(`
-				SELECT count(td.id) 
+				SELECT count(td.id)
 				FROM %s td
 				INNER JOIN %s ref ON td.%s = ref.id
-				WHERE td.id = $1 
-					AND td.deleted_at IS NULL 
+				WHERE td.id = $1
+					AND td.deleted_at IS NULL
 					AND ref.deleted_at IS NULL`, config.table, config.referencedTable, config.field)
 
 			var rows sql.Rows
