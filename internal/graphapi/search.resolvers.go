@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -15,7 +16,7 @@ import (
 // Search is the resolver for the search field.
 func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*model.SearchResults, error) {
 	if len(query) < 3 {
-		return nil, ErrSearchQueryTooShort
+		return nil, common.ErrSearchQueryTooShort
 	}
 
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
@@ -642,7 +643,7 @@ func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string, afte
 	actionplanResults, err := searchActionPlans(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -652,7 +653,7 @@ func (r *queryResolver) AssessmentSearch(ctx context.Context, query string, afte
 	assessmentResults, err := searchAssessments(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -662,7 +663,7 @@ func (r *queryResolver) AssessmentResponseSearch(ctx context.Context, query stri
 	assessmentresponseResults, err := searchAssessmentResponses(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -672,7 +673,7 @@ func (r *queryResolver) AssetSearch(ctx context.Context, query string, after *en
 	assetResults, err := searchAssets(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -682,7 +683,7 @@ func (r *queryResolver) ContactSearch(ctx context.Context, query string, after *
 	contactResults, err := searchContacts(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -692,7 +693,7 @@ func (r *queryResolver) ControlSearch(ctx context.Context, query string, after *
 	controlResults, err := searchControls(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -702,7 +703,7 @@ func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string
 	controlobjectiveResults, err := searchControlObjectives(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -712,7 +713,7 @@ func (r *queryResolver) CustomTypeEnumSearch(ctx context.Context, query string, 
 	customtypeenumResults, err := searchCustomTypeEnums(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -722,7 +723,7 @@ func (r *queryResolver) EntitySearch(ctx context.Context, query string, after *e
 	entityResults, err := searchEntities(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -732,7 +733,7 @@ func (r *queryResolver) EvidenceSearch(ctx context.Context, query string, after 
 	evidenceResults, err := searchEvidences(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -742,7 +743,7 @@ func (r *queryResolver) FindingSearch(ctx context.Context, query string, after *
 	findingResults, err := searchFindings(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -752,7 +753,7 @@ func (r *queryResolver) GroupSearch(ctx context.Context, query string, after *en
 	groupResults, err := searchGroups(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -762,7 +763,7 @@ func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string, 
 	internalpolicyResults, err := searchInternalPolicies(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -772,7 +773,7 @@ func (r *queryResolver) InviteSearch(ctx context.Context, query string, after *e
 	inviteResults, err := searchInvites(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -782,7 +783,7 @@ func (r *queryResolver) JobRunnerSearch(ctx context.Context, query string, after
 	jobrunnerResults, err := searchJobRunners(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -792,7 +793,7 @@ func (r *queryResolver) JobTemplateSearch(ctx context.Context, query string, aft
 	jobtemplateResults, err := searchJobTemplates(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -802,7 +803,7 @@ func (r *queryResolver) NarrativeSearch(ctx context.Context, query string, after
 	narrativeResults, err := searchNarratives(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -812,7 +813,7 @@ func (r *queryResolver) OrganizationSearch(ctx context.Context, query string, af
 	organizationResults, err := searchOrganizations(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -822,7 +823,7 @@ func (r *queryResolver) ProcedureSearch(ctx context.Context, query string, after
 	procedureResults, err := searchProcedures(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -832,7 +833,7 @@ func (r *queryResolver) ProgramSearch(ctx context.Context, query string, after *
 	programResults, err := searchPrograms(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -842,7 +843,7 @@ func (r *queryResolver) RemediationSearch(ctx context.Context, query string, aft
 	remediationResults, err := searchRemediations(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -852,7 +853,7 @@ func (r *queryResolver) ReviewSearch(ctx context.Context, query string, after *e
 	reviewResults, err := searchReviews(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -862,7 +863,7 @@ func (r *queryResolver) RiskSearch(ctx context.Context, query string, after *ent
 	riskResults, err := searchRisks(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -872,7 +873,7 @@ func (r *queryResolver) ScanSearch(ctx context.Context, query string, after *ent
 	scanResults, err := searchScans(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -882,7 +883,7 @@ func (r *queryResolver) StandardSearch(ctx context.Context, query string, after 
 	standardResults, err := searchStandards(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -892,7 +893,7 @@ func (r *queryResolver) SubcontrolSearch(ctx context.Context, query string, afte
 	subcontrolResults, err := searchSubcontrols(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -902,7 +903,7 @@ func (r *queryResolver) SubprocessorSearch(ctx context.Context, query string, af
 	subprocessorResults, err := searchSubprocessors(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -912,7 +913,7 @@ func (r *queryResolver) SubscriberSearch(ctx context.Context, query string, afte
 	subscriberResults, err := searchSubscribers(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -922,7 +923,7 @@ func (r *queryResolver) TagDefinitionSearch(ctx context.Context, query string, a
 	tagdefinitionResults, err := searchTagDefinitions(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -932,7 +933,7 @@ func (r *queryResolver) TaskSearch(ctx context.Context, query string, after *ent
 	taskResults, err := searchTasks(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -942,7 +943,7 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after 
 	templateResults, err := searchTemplates(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -952,7 +953,7 @@ func (r *queryResolver) TrustcenterEntitySearch(ctx context.Context, query strin
 	trustcenterentityResults, err := searchTrustcenterEntities(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results
@@ -962,7 +963,7 @@ func (r *queryResolver) VulnerabilitySearch(ctx context.Context, query string, a
 	vulnerabilityResults, err := searchVulnerabilities(ctx, query, after, first, before, last)
 
 	if err != nil {
-		return nil, ErrSearchFailed
+		return nil, common.ErrSearchFailed
 	}
 
 	// return the results

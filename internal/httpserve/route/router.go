@@ -559,6 +559,7 @@ func (r *Router) AddGraphQLToOpenAPI() {
 
 	// Add the operation to the OpenAPI spec
 	r.OAS.AddOperation("/query", "POST", operation)
+	r.OAS.AddOperation("/history/query", "POST", operation)
 }
 
 // RegisterRoutes with the echo routers - Router is defined within openapi.go

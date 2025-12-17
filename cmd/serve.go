@@ -139,6 +139,12 @@ func serve(ctx context.Context) error {
 		CnameTarget:   so.Config.Settings.Server.TrustCenterCnameTarget,
 	})
 
+	// create history client
+	historyClient, err := entdb.NewHistory(ctx, so.Config.Settings.DB)
+	if err != nil {
+		return err
+	}
+
 	// add additional ent dependencies
 	entOpts = append(
 		entOpts,
@@ -154,6 +160,7 @@ func serve(ctx context.Context) error {
 		ent.Windmill(so.Config.Handler.Windmill),
 		ent.PondPool(pool),
 		ent.EmailVerifier(verifier),
+		ent.HistoryClient(historyClient),
 	)
 
 	// Setup DB connection
@@ -237,6 +244,7 @@ func serve(ctx context.Context) error {
 
 	// Setup Graph API Handlers
 	so.AddServerOptions(serveropts.WithGraphRoute(srv, dbClient))
+	so.AddServerOptions(serveropts.WithHistoryGraphRoute(srv, historyClient))
 
 	if err := srv.StartEchoServer(ctx); err != nil {
 		log.Error().Err(err).Msg("failed to run server")

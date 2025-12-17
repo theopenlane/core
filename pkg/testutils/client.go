@@ -13,6 +13,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/labstack/gommon/log"
 	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -215,22 +216,22 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 	})
 
 	// add all extension to the server
-	graphapi.AddAllExtensions(srv)
+	common.AddAllExtensions(srv)
 
 	graphapi.WithTransactions(srv, c)
 
 	// add metrics middleware to the server
-	graphapi.WithMetrics(srv)
+	common.WithMetrics(srv)
 
 	// add the file uploader middleware to the server
 	if u != nil {
-		graphapi.WithFileUploader(srv, u)
+		common.WithFileUploader(srv, u)
 	}
 
 	// if you do not want sleeps (the writer prefers naps anyways), skip cache
-	graphapi.WithSkipCache(srv)
+	common.WithSkipCache(srv)
 
-	graphapi.WithResultLimit(srv, &MaxResultLimit)
+	common.WithResultLimit(srv, &MaxResultLimit)
 
 	// Set the error presenter to use the custom error presenter
 	srv.SetErrorPresenter(gqlerrors.ErrorPresenter)

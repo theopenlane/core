@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateSubscriber is the resolver for the createSubscriber field.
 func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).Subscriber.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
 	}
 
 	return &model.SubscriberCreatePayload{
@@ -39,7 +40,7 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*generated.CreateSubscriberInput) (*model.SubscriberBulkCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -50,16 +51,16 @@ func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*ge
 
 // CreateBulkCSVSubscriber is the resolver for the createBulkCSVSubscriber field.
 func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateSubscriberInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateSubscriberInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -75,11 +76,11 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 			subscriber.EmailEQ(email),
 		).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subscriber"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -90,7 +91,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subscriber"})
 	}
 
 	return &model.SubscriberUpdatePayload{
@@ -101,7 +102,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 // DeleteSubscriber is the resolver for the deleteSubscriber field.
 func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, ownerID *string) (*model.SubscriberDeletePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, ownerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -111,15 +112,15 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 			subscriber.EmailEQ(email),
 		).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "subscriber"})
 	}
 
 	if err := withTransactionalMutation(ctx).Subscriber.DeleteOneID(subscriber.ID).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "subscriber"})
 	}
 
 	if err := generated.SubscriberEdgeCleanup(ctx, subscriber.ID); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.SubscriberDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 func (r *queryResolver) Subscriber(ctx context.Context, email string) (*generated.Subscriber, error) {
 	query, err := withTransactionalMutation(ctx).Subscriber.Query().Where(subscriber.EmailEQ(email)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subscriber"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subscriber"})
 	}
 
 	return res, nil

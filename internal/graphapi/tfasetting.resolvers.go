@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -17,19 +18,19 @@ import (
 
 // CreateTFASetting is the resolver for the createTFASetting field.
 func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated.CreateTFASettingInput) (*model.TFASettingCreatePayload, error) {
-	if err := checkAllowedAuthType(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tfasetting"})
+	if err := common.CheckAllowedAuthType(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tfasetting"})
 	}
 
 	// get the userID from the context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tfasetting"})
 	}
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tfasetting"})
 	}
 
 	// get the new settings with the owner so we can get the email later
@@ -38,17 +39,17 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 		WithOwner(). // get the owner so we can get the email later
 		Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	qrCode, err := r.generateTFAQRCode(ctx, settings, settings.Edges.Owner.Email, userID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	secret, err := r.getDecryptedTFASecret(ctx, settings)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	return &model.TFASettingCreatePayload{TfaSetting: settings, QRCode: &qrCode, TfaSecret: &secret}, nil
@@ -56,14 +57,14 @@ func (r *mutationResolver) CreateTFASetting(ctx context.Context, input generated
 
 // UpdateTFASetting is the resolver for the updateTFASetting field.
 func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated.UpdateTFASettingInput) (*model.TFASettingUpdatePayload, error) {
-	if err := checkAllowedAuthType(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+	if err := common.CheckAllowedAuthType(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	// get the userID from the context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	settings, err := withTransactionalMutation(ctx).TFASetting.Query().
@@ -71,22 +72,22 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 		WithOwner(). // get the owner so we can get the email later
 		Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	updatedSettings, err := settings.Update().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	qrCode, err := r.generateTFAQRCode(ctx, updatedSettings, settings.Edges.Owner.Email, userID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	secret, err := r.getDecryptedTFASecret(ctx, updatedSettings)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tfasetting"})
 	}
 
 	out := &model.TFASettingUpdatePayload{
@@ -113,25 +114,25 @@ func (r *mutationResolver) UpdateTFASetting(ctx context.Context, input generated
 
 // TfaSetting is the resolver for the tfaSettings field.
 func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.TFASetting, error) {
-	if err := checkAllowedAuthType(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
+	if err := common.CheckAllowedAuthType(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 	}
 
 	// get the userID from the context
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 	}
 
 	if id != nil && *id != "" {
 		query, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.ID(*id)).CollectFields(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 		}
 
 		settings, err := query.Only(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 		}
 
 		return settings, nil
@@ -139,12 +140,12 @@ func (r *queryResolver) TfaSetting(ctx context.Context, id *string) (*generated.
 
 	query, err := withTransactionalMutation(ctx).TFASetting.Query().Where(tfasetting.OwnerID(userID)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 	}
 
 	settings, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tfasetting"})
 	}
 
 	return settings, nil

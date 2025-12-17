@@ -32,6 +32,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -54,6 +55,7 @@ import (
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 )
 
 // TestOperations consolidates all test operations for easier access
@@ -196,6 +198,13 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
+	// setup history client
+	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
+	require.NoError(t, err)
+
+	// run automigrations for history client
+	_ = historygenerated.NewClient()
+
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
 	require.NoError(t, err)
@@ -216,6 +225,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.TOTP(suite.sharedOTPManager),
 		ent.PondPool(suite.sharedPondPool),
 		ent.EntitlementManager(entitlements),
+		ent.HistoryClient(hc),
 	}
 
 	// create database connection

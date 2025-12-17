@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateTagDefinition is the resolver for the createTagDefinition field.
 func (r *mutationResolver) CreateTagDefinition(ctx context.Context, input generated.CreateTagDefinitionInput) (*model.TagDefinitionCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateTagDefinition(ctx context.Context, input genera
 
 	res, err := withTransactionalMutation(ctx).TagDefinition.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tagdefinition"})
 	}
 
 	return &model.TagDefinitionCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkTagDefinition(ctx context.Context, input []
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkTagDefinition(ctx context.Context, input []
 
 // CreateBulkCSVTagDefinition is the resolver for the createBulkCSVTagDefinition field.
 func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input graphql.Upload) (*model.TagDefinitionBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTagDefinitionInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTagDefinitionInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tagdefinition"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input
 func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, input generated.UpdateTagDefinitionInput) (*model.TagDefinitionUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TagDefinition.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tagdefinition"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "tagdefinition"})
 	}
 
 	return &model.TagDefinitionUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, i
 // DeleteTagDefinition is the resolver for the deleteTagDefinition field.
 func (r *mutationResolver) DeleteTagDefinition(ctx context.Context, id string) (*model.TagDefinitionDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TagDefinition.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "tagdefinition"})
 	}
 
 	if err := generated.TagDefinitionEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TagDefinitionDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteTagDefinition(ctx context.Context, id string) (
 func (r *queryResolver) TagDefinition(ctx context.Context, id string) (*generated.TagDefinition, error) {
 	query, err := withTransactionalMutation(ctx).TagDefinition.Query().Where(tagdefinition.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tagdefinition"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "tagdefinition"})
 	}
 
 	return res, nil

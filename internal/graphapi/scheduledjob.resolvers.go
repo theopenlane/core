@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateScheduledJob is the resolver for the createScheduledJob field.
 func (r *mutationResolver) CreateScheduledJob(ctx context.Context, input generated.CreateScheduledJobInput) (*model.ScheduledJobCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateScheduledJob(ctx context.Context, input generat
 
 	res, err := withTransactionalMutation(ctx).ScheduledJob.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "scheduledjob"})
 	}
 
 	return &model.ScheduledJobCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkScheduledJob(ctx context.Context, input []*
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkScheduledJob(ctx context.Context, input []*
 
 // CreateBulkCSVScheduledJob is the resolver for the createBulkCSVScheduledJob field.
 func (r *mutationResolver) CreateBulkCSVScheduledJob(ctx context.Context, input graphql.Upload) (*model.ScheduledJobBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateScheduledJobInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateScheduledJobInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "scheduledjob"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVScheduledJob(ctx context.Context, input 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVScheduledJob(ctx context.Context, input 
 func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, input generated.UpdateScheduledJobInput) (*model.ScheduledJobUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ScheduledJob.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scheduledjob"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scheduledjob"})
 	}
 
 	return &model.ScheduledJobUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, in
 // DeleteScheduledJob is the resolver for the deleteScheduledJob field.
 func (r *mutationResolver) DeleteScheduledJob(ctx context.Context, id string) (*model.ScheduledJobDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "scheduledjob"})
 	}
 
 	if err := generated.ScheduledJobEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ScheduledJobDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkScheduledJob(ctx context.Context, ids []str
 func (r *queryResolver) ScheduledJob(ctx context.Context, id string) (*generated.ScheduledJob, error) {
 	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().Where(scheduledjob.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "scheduledjob"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "scheduledjob"})
 	}
 
 	return res, nil

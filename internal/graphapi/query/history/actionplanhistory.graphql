@@ -1,0 +1,123 @@
+
+
+query GetAllActionPlanHistories {
+  actionPlanHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        actionPlanKindID
+        actionPlanKindName
+        actionPlanType
+        approvalRequired
+        approverID
+        blocked
+        blockerReason
+        completedAt
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        description
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        dueDate
+        fileID
+        historyTime
+        id
+        improvementSuggestions
+        internalNotes
+        metadata
+        name
+        operation
+        ownerID
+        priority
+        rawPayload
+        ref
+        requiresApproval
+        reviewDue
+        reviewFrequency
+        revision
+        source
+        status
+        summary
+        systemInternalID
+        systemOwned
+        tagSuggestions
+        tags
+        title
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}
+
+query GetActionPlanHistories($first: Int, $last: Int, $where: ActionPlanHistoryWhereInput) {
+  actionPlanHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        actionPlanKindID
+        actionPlanKindName
+        actionPlanType
+        approvalRequired
+        approverID
+        blocked
+        blockerReason
+        completedAt
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        description
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        dueDate
+        fileID
+        historyTime
+        id
+        improvementSuggestions
+        internalNotes
+        metadata
+        name
+        operation
+        ownerID
+        priority
+        rawPayload
+        ref
+        requiresApproval
+        reviewDue
+        reviewFrequency
+        revision
+        source
+        status
+        summary
+        systemInternalID
+        systemOwned
+        tagSuggestions
+        tags
+        title
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}

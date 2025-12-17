@@ -63,8 +63,12 @@ func IsShuttingDown() bool {
 	return defaultShutdown.IsSet()
 }
 
+type dbClientWithDriver interface {
+	Driver() dialect.Driver
+}
+
 // SQLDB unwraps the ent driver and returns the underlying *sql.DB
-func SQLDB(c *ent.Client) *stdsql.DB {
+func SQLDB(c dbClientWithDriver) *stdsql.DB {
 	if c == nil {
 		return nil
 	}

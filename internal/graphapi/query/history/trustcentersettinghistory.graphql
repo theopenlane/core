@@ -1,0 +1,81 @@
+
+
+query GetAllTrustCenterSettingHistories {
+  trustCenterSettingHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accentColor
+        backgroundColor
+        createdAt
+        createdBy
+        environment
+        faviconLocalFileID
+        faviconRemoteURL
+        font
+        foregroundColor
+        historyTime
+        id
+        logoLocalFileID
+        logoRemoteURL
+        operation
+        overview
+        primaryColor
+        ref
+        secondaryBackgroundColor
+        secondaryForegroundColor
+        themeMode
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetTrustCenterSettingHistories($first: Int, $last: Int, $where: TrustCenterSettingHistoryWhereInput) {
+  trustCenterSettingHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accentColor
+        backgroundColor
+        createdAt
+        createdBy
+        environment
+        faviconLocalFileID
+        faviconRemoteURL
+        font
+        foregroundColor
+        historyTime
+        id
+        logoLocalFileID
+        logoRemoteURL
+        operation
+        overview
+        primaryColor
+        ref
+        secondaryBackgroundColor
+        secondaryForegroundColor
+        themeMode
+        title
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

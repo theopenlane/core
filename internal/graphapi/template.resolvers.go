@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateTemplate is the resolver for the createTemplate field.
 func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.C
 
 	res, err := withTransactionalMutation(ctx).Template.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "template"})
 	}
 
 	return &model.TemplateCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkTemplate(ctx context.Context, input []*gene
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkTemplate(ctx context.Context, input []*gene
 
 // CreateBulkCSVTemplate is the resolver for the createBulkCSVTemplate field.
 func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input graphql.Upload) (*model.TemplateBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTemplateInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTemplateInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "template"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Template.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "template"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "template"})
 	}
 
 	return &model.TemplateUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input 
 // DeleteTemplate is the resolver for the deleteTemplate field.
 func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*model.TemplateDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Template.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "template"})
 	}
 
 	if err := generated.TemplateEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TemplateDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkTemplate(ctx context.Context, ids []string)
 func (r *queryResolver) Template(ctx context.Context, id string) (*generated.Template, error) {
 	query, err := withTransactionalMutation(ctx).Template.Query().Where(template.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "template"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "template"})
 	}
 
 	return res, nil

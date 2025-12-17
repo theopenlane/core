@@ -1,0 +1,135 @@
+
+
+query GetAllFindingHistories {
+  findingHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        blocksProduction
+        categories
+        category
+        createdAt
+        createdBy
+        description
+        displayID
+        displayName
+        eventTime
+        exploitability
+        externalID
+        externalOwnerID
+        externalURI
+        findingClass
+        historyTime
+        id
+        impact
+        internalNotes
+        metadata
+        numericSeverity
+        open
+        operation
+        ownerID
+        priority
+        production
+        public
+        rawPayload
+        recommendation
+        recommendedActions
+        ref
+        references
+        remediationSLA
+        reportedAt
+        resourceName
+        score
+        severity
+        source
+        sourceUpdatedAt
+        state
+        status
+        stepsToReproduce
+        systemInternalID
+        systemOwned
+        tags
+        targetDetails
+        targets
+        updatedAt
+        updatedBy
+        validated
+        vector
+      }
+    }
+  }
+}
+
+query GetFindingHistories($first: Int, $last: Int, $where: FindingHistoryWhereInput) {
+  findingHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        blocksProduction
+        categories
+        category
+        createdAt
+        createdBy
+        description
+        displayID
+        displayName
+        eventTime
+        exploitability
+        externalID
+        externalOwnerID
+        externalURI
+        findingClass
+        historyTime
+        id
+        impact
+        internalNotes
+        metadata
+        numericSeverity
+        open
+        operation
+        ownerID
+        priority
+        production
+        public
+        rawPayload
+        recommendation
+        recommendedActions
+        ref
+        references
+        remediationSLA
+        reportedAt
+        resourceName
+        score
+        severity
+        source
+        sourceUpdatedAt
+        state
+        status
+        stepsToReproduce
+        systemInternalID
+        systemOwned
+        tags
+        targetDetails
+        targets
+        updatedAt
+        updatedBy
+        validated
+        vector
+      }
+    }
+  }
+}

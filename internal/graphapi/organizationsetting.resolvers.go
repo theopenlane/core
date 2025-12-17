@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateOrganizationSetting(ctx context.Context, input generated.CreateOrganizationSettingInput) (*model.OrganizationSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrganizationSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organizationsetting"})
 	}
 
 	return &model.OrganizationSettingCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkOrganizationSetting(ctx context.Context, in
 
 // CreateBulkCSVOrganizationSetting is the resolver for the createBulkCSVOrganizationSetting field.
 func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context, input graphql.Upload) (*model.OrganizationSettingBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateOrganizationSettingInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateOrganizationSettingInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organizationsetting"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVOrganizationSetting(ctx context.Context,
 func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id string, input generated.UpdateOrganizationSettingInput) (*model.OrganizationSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrganizationSetting.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationsetting"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id str
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organizationsetting"})
 	}
 
 	return &model.OrganizationSettingUpdatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) UpdateOrganizationSetting(ctx context.Context, id str
 // DeleteOrganizationSetting is the resolver for the deleteOrganizationSetting field.
 func (r *mutationResolver) DeleteOrganizationSetting(ctx context.Context, id string) (*model.OrganizationSettingDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "organizationsetting"})
 	}
 
 	if err := generated.OrganizationSettingEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrganizationSettingDeletePayload{
@@ -101,12 +102,12 @@ func (r *mutationResolver) DeleteBulkOrganizationSetting(ctx context.Context, id
 func (r *queryResolver) OrganizationSetting(ctx context.Context, id string) (*generated.OrganizationSetting, error) {
 	query, err := withTransactionalMutation(ctx).OrganizationSetting.Query().Where(organizationsetting.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationsetting"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organizationsetting"})
 	}
 
 	return res, nil

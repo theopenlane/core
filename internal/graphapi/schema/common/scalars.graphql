@@ -1,0 +1,110 @@
+"""
+The builtin Time type
+"""
+scalar Time
+"""
+The builtin Map type
+"""
+scalar Map
+"""
+Define a Relay Cursor type:
+https://relay.dev/graphql/connections.htm#sec-Cursor
+"""
+scalar Cursor
+"""
+The `Upload` scalar type represents a file upload.
+This scalar is typically used to handle file uploads in GraphQL mutations.
+"""
+scalar Upload
+"""
+The `Address` scalar type represents a physical or mailing address.
+This scalar can be used to store and validate address information in the GraphQL schema.
+It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
+"""
+scalar Address
+"""
+The `Price` scalar type represents a monetary value for a subscription, including the numerical amount, the interval of recurrence and the currency to be charged in (e.g. USD)
+"""
+scalar Price
+"""
+The `AssessmentObjective` scalar type represents objectives that are validated during the audit to ensure the control is implemented
+"""
+scalar AssessmentObjective
+"""
+The `AssessmentMethod` scalar type represents methods that can be used during the audit to assess the control implementation
+"""
+scalar AssessmentMethod
+"""
+The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
+"""
+scalar ExampleEvidence
+"""
+The `Reference` represents are links to external sources that can be used to gain more information about the control
+"""
+scalar Reference
+"""
+The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
+"""
+scalar ImplementationGuidance
+"""
+The TestingProcedures scalar type that represents steps to take to test a control; they can come directly from the control source or pulled from external sources
+"""
+scalar TestingProcedures
+"""
+The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control
+"""
+scalar EvidenceRequests
+"""
+VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
+"""
+scalar VersionBump
+"""
+DateTime allows clients to use multiple time/date formats ( 2006-01-10 or 2025-04-28T04:00:00Z )
+"""
+scalar DateTime
+"""
+AAGUID (Authenticator Attestation Global Unique Identifier) is a 128-bit identifier used in the WebAuthn and FIDO2 protocols to uniquely identify the model of an authenticator device
+"""
+scalar AAGUID
+"""
+JobConfiguration is the configuration for an automated job
+"""
+scalar JobConfiguration
+"""
+JobCadence is when a job should be scheduled to run
+"""
+scalar JobCadence
+"""
+Change is a difference between two updates to an object used by
+the audit history resolvers
+"""
+scalar Change
+"""
+SSOAuthorizationMap is a map of organization IDs to SSO verification timestamps.
+This scalar is used to track SSO verification times for organizations in the context of token authorization.
+"""
+scalar SSOAuthorizationMap
+"""
+CredentialSet is a json of of credential keys that are used to authenticate to a third party
+"""
+scalar CredentialSet
+"""
+WorkflowDefinitionDocument captures triggers, conditions, actions, and selectors that define a workflow.
+"""
+scalar WorkflowDefinitionDocument
+"""
+WorkflowDefinitionSchema is a JSON schema describing the shape of workflow definitions for validation.
+"""
+scalar WorkflowDefinitionSchema
+"""
+WorkflowInstanceContext contains runtime context for a workflow instance including assignments and object info.
+"""
+scalar WorkflowInstanceContext
+"""
+WorkflowEventPayload stores payloads emitted by workflow events and actions.
+"""
+scalar WorkflowEventPayload
+"""
+Channel notifications will be sent to including in-app, slack, etc
+"""
+scalar Channel

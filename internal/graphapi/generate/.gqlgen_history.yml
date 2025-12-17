@@ -1,0 +1,143 @@
+schema:
+  - internal/graphapi/schema/common/*.graphql
+  - internal/graphapi/schemahistory/*.graphql
+exec:
+  dir: internal/graphapi/historygenerated/
+  package: gqlhistorygenerated
+  layout: follow-schema
+
+model:
+  filename: internal/graphapi/historymodel/gen_models.go
+  package: historymodel
+
+resolver:
+  layout: follow-schema
+  dir: internal/graphapi/history
+  package: graphapihistory
+  filename_template: "{name}.resolvers.go"
+  # omit_template_comment: false
+struct_tag: json
+# Optional: turn on to use []Thing instead of []*Thing
+# omit_slice_element_pointers: false
+
+# Optional: turn on to omit Is<Name>() methods to interface and unions
+# omit_interface_checks : true
+
+# Optional: turn on to skip generation of ComplexityRoot struct content and Complexity function
+# omit_complexity: false
+
+# Optional: turn on to not generate any file notice comments in generated files
+# omit_gqlgen_file_notice: false
+
+# Optional: turn on to exclude the gqlgen version in the generated file notice. No effect if `omit_gqlgen_file_notice` is true.
+omit_gqlgen_version_in_file_notice: true
+# Optional: turn off to make struct-type struct fields not use pointers
+# e.g. type Thing struct { FieldA OtherThing } instead of { FieldA *OtherThing }
+# struct_fields_always_pointers: true
+
+# Optional: turn off to make resolvers return values instead of pointers for structs
+# resolvers_always_return_pointers: true
+
+# Optional: turn on to return pointers instead of values in unmarshalInput
+# return_pointers_in_unmarshalinput: false
+
+# Optional: wrap nullable input fields with Omittable
+# nullable_input_omittable: true
+
+# Optional: set to speed up generation time by not performing a final validation pass.
+# skip_validation: true
+
+# Optional: set to skip running `go mod tidy` when generating server code
+# skip_mod_tidy: true
+
+# gqlgen will search for any type names in the schema in these go packages
+# if they match it will use them, otherwise it will generate them.
+autobind:
+  - "github.com/theopenlane/core/internal/graphapi/history"
+  - "github.com/theopenlane/core/internal/ent/historygenerated"
+# This section declares type mapping between the GraphQL and go type systems
+#
+# The first line in each type will be used as defaults for resolver arguments and
+# modelgen, the others will be allowed when binding to fields. Configure them to
+# your liking
+models:
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.String
+  Int:
+    model:
+      - github.com/99designs/gqlgen/graphql.Int
+      - github.com/99designs/gqlgen/graphql.Int64
+      - github.com/99designs/gqlgen/graphql.Int32
+  Uint:
+    model:
+      - github.com/99designs/gqlgen/graphql.Uint
+      - github.com/99designs/gqlgen/graphql.Uint64
+      - github.com/99designs/gqlgen/graphql.Uint32
+      - github.com/theopenlane/core/internal/ent/customtypes.Uint8
+  Node:
+    model:
+      - github.com/theopenlane/core/internal/ent/historygenerated.Noder
+  JSON:
+    model:
+      - github.com/theopenlane/entx.RawMessage
+  Any:
+    model:
+      - github.com/99designs/gqlgen/graphql.Any
+  Address:
+    model:
+      - github.com/theopenlane/core/pkg/models.Address
+  Price:
+    model:
+      - github.com/theopenlane/core/pkg/models.Price
+  AssessmentObjective:
+    model:
+      - github.com/theopenlane/core/pkg/models.AssessmentObjective
+  AssessmentMethod:
+    model:
+      - github.com/theopenlane/core/pkg/models.AssessmentMethod
+  Reference:
+    model:
+      - github.com/theopenlane/core/pkg/models.Reference
+  ImplementationGuidance:
+    model:
+      - github.com/theopenlane/core/pkg/models.ImplementationGuidance
+  ExampleEvidence:
+    model:
+      - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  VersionBump:
+    model:
+      - github.com/theopenlane/core/pkg/models.VersionBump
+  DateTime:
+    model: github.com/theopenlane/core/pkg/models.DateTime
+  AAGUID:
+    model: github.com/theopenlane/core/pkg/models.AAGUID
+  JobConfiguration:
+    model: github.com/theopenlane/core/pkg/models.JobConfiguration
+  JobCadence:
+    model: github.com/theopenlane/core/pkg/models.JobCadence
+  Change:
+    model: github.com/theopenlane/core/pkg/models.Change
+  AuditLogOrderField:
+    model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
+  CredentialSet:
+    model:
+      - github.com/theopenlane/core/pkg/models.CredentialSet
+  SearchContext:
+    model:
+      - github.com/theopenlane/core/pkg/models.SearchContext
+  SearchSnippet:
+    model:
+      - github.com/theopenlane/core/pkg/models.SearchSnippet
+  WorkflowDefinitionDocument:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowDefinitionDocument
+  WorkflowDefinitionSchema:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowDefinitionSchema
+  WorkflowInstanceContext:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowInstanceContext
+  WorkflowEventPayload:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowEventPayload

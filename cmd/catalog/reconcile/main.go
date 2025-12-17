@@ -12,6 +12,7 @@ import (
 
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/ent/generated"
+
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/entitlements/reconciler"

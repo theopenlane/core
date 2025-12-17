@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -20,7 +21,7 @@ import (
 // CreateDiscussion is the resolver for the createDiscussion field.
 func (r *mutationResolver) CreateDiscussion(ctx context.Context, input generated.CreateDiscussionInput) (*model.DiscussionCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -28,7 +29,7 @@ func (r *mutationResolver) CreateDiscussion(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).Discussion.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
 	return &model.DiscussionCreatePayload{
@@ -44,7 +45,7 @@ func (r *mutationResolver) CreateBulkDiscussion(ctx context.Context, input []*ge
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -55,11 +56,11 @@ func (r *mutationResolver) CreateBulkDiscussion(ctx context.Context, input []*ge
 
 // CreateBulkCSVDiscussion is the resolver for the createBulkCSVDiscussion field.
 func (r *mutationResolver) CreateBulkCSVDiscussion(ctx context.Context, input graphql.Upload) (*model.DiscussionBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateDiscussionInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateDiscussionInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
 	if len(data) == 0 {
@@ -68,7 +69,7 @@ func (r *mutationResolver) CreateBulkCSVDiscussion(ctx context.Context, input gr
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -81,11 +82,11 @@ func (r *mutationResolver) CreateBulkCSVDiscussion(ctx context.Context, input gr
 func (r *mutationResolver) UpdateDiscussion(ctx context.Context, id string, input generated.UpdateDiscussionInput) (*model.DiscussionUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussion"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -96,7 +97,7 @@ func (r *mutationResolver) UpdateDiscussion(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussion"})
 	}
 
 	return &model.DiscussionUpdatePayload{
@@ -107,11 +108,11 @@ func (r *mutationResolver) UpdateDiscussion(ctx context.Context, id string, inpu
 // DeleteDiscussion is the resolver for the deleteDiscussion field.
 func (r *mutationResolver) DeleteDiscussion(ctx context.Context, id string) (*model.DiscussionDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Discussion.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "discussion"})
 	}
 
 	if err := generated.DiscussionEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DiscussionDeletePayload{
@@ -123,12 +124,12 @@ func (r *mutationResolver) DeleteDiscussion(ctx context.Context, id string) (*mo
 func (r *queryResolver) Discussion(ctx context.Context, id string) (*generated.Discussion, error) {
 	query, err := withTransactionalMutation(ctx).Discussion.Query().Where(discussion.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "discussion"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "discussion"})
 	}
 
 	return res, nil
@@ -141,7 +142,7 @@ func (r *createDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -149,7 +150,7 @@ func (r *createDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 
 	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
 
 	obj.CommentIDs = append(obj.CommentIDs, comment.ID)
@@ -164,7 +165,7 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
@@ -172,12 +173,12 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 
 	data.DiscussionID = graphutils.GetStringInputVariableByName(ctx, "id")
 	if data.DiscussionID == nil {
-		return newNotFoundError("discussion")
+		return common.NewNotFoundError("discussion")
 	}
 
 	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
 
 	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
@@ -192,7 +193,7 @@ func (r *updateDiscussionInputResolver) DeleteComment(ctx context.Context, obj *
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "comment"})
 	}
 
 	return nil

@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateGroupMembership(ctx context.Context, input generated.CreateGroupMembershipInput) (*model.GroupMembershipCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupmembership"})
 	}
 
 	return &model.GroupMembershipCreatePayload{
@@ -35,7 +36,7 @@ func (r *mutationResolver) CreateBulkGroupMembership(ctx context.Context, input 
 	}
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -46,11 +47,11 @@ func (r *mutationResolver) CreateBulkGroupMembership(ctx context.Context, input 
 
 // CreateBulkCSVGroupMembership is the resolver for the createBulkCSVGroupMembership field.
 func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, input graphql.Upload) (*model.GroupMembershipBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateGroupMembershipInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateGroupMembershipInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupmembership"})
 	}
 
 	if len(data) == 0 {
@@ -64,7 +65,7 @@ func (r *mutationResolver) CreateBulkCSVGroupMembership(ctx context.Context, inp
 func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string, input generated.UpdateGroupMembershipInput) (*model.GroupMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupMembership.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupmembership"})
 	}
 
 	// setup update request
@@ -72,7 +73,7 @@ func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupmembership"})
 	}
 
 	return &model.GroupMembershipUpdatePayload{
@@ -83,11 +84,11 @@ func (r *mutationResolver) UpdateGroupMembership(ctx context.Context, id string,
 // DeleteGroupMembership is the resolver for the deleteGroupMembership field.
 func (r *mutationResolver) DeleteGroupMembership(ctx context.Context, id string) (*model.GroupMembershipDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "groupmembership"})
 	}
 
 	if err := generated.GroupMembershipEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.GroupMembershipDeletePayload{
@@ -108,12 +109,12 @@ func (r *mutationResolver) DeleteBulkGroupMembership(ctx context.Context, ids []
 func (r *queryResolver) GroupMembership(ctx context.Context, id string) (*generated.GroupMembership, error) {
 	query, err := withTransactionalMutation(ctx).GroupMembership.Query().Where(groupmembership.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "groupmembership"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "groupmembership"})
 	}
 
 	return res, nil

@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateWorkflowEvent is the resolver for the createWorkflowEvent field.
 func (r *mutationResolver) CreateWorkflowEvent(ctx context.Context, input generated.CreateWorkflowEventInput) (*model.WorkflowEventCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateWorkflowEvent(ctx context.Context, input genera
 
 	res, err := withTransactionalMutation(ctx).WorkflowEvent.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowevent"})
 	}
 
 	return &model.WorkflowEventCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkWorkflowEvent(ctx context.Context, input []
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkWorkflowEvent(ctx context.Context, input []
 
 // CreateBulkCSVWorkflowEvent is the resolver for the createBulkCSVWorkflowEvent field.
 func (r *mutationResolver) CreateBulkCSVWorkflowEvent(ctx context.Context, input graphql.Upload) (*model.WorkflowEventBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateWorkflowEventInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateWorkflowEventInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowevent"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVWorkflowEvent(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVWorkflowEvent(ctx context.Context, input
 func (r *mutationResolver) UpdateWorkflowEvent(ctx context.Context, id string, input generated.UpdateWorkflowEventInput) (*model.WorkflowEventUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).WorkflowEvent.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowevent"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateWorkflowEvent(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowevent"})
 	}
 
 	return &model.WorkflowEventUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateWorkflowEvent(ctx context.Context, id string, i
 // DeleteWorkflowEvent is the resolver for the deleteWorkflowEvent field.
 func (r *mutationResolver) DeleteWorkflowEvent(ctx context.Context, id string) (*model.WorkflowEventDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).WorkflowEvent.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowevent"})
 	}
 
 	if err := generated.WorkflowEventEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.WorkflowEventDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteWorkflowEvent(ctx context.Context, id string) (
 func (r *queryResolver) WorkflowEvent(ctx context.Context, id string) (*generated.WorkflowEvent, error) {
 	query, err := withTransactionalMutation(ctx).WorkflowEvent.Query().Where(workflowevent.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowevent"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowevent"})
 	}
 
 	return res, nil
