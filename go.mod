@@ -103,7 +103,6 @@ require (
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.1
 	github.com/vektah/gqlparser/v2 v2.5.31
-	github.com/windmill-labs/windmill-go-client v1.589.3
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.1
 	gocloud.dev v0.44.0
@@ -153,7 +152,6 @@ require (
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
-	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.4 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.16 // indirect
@@ -215,7 +213,6 @@ require (
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/muhlemmer/gu v0.3.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
-	github.com/oapi-codegen/runtime v1.1.2 // indirect
 	github.com/oasdiff/yaml v0.0.0-20250309154309-f31be36b4037 // indirect
 	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect

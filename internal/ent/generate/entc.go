@@ -10,7 +10,6 @@ import (
 	"os"
 
 	"github.com/rs/zerolog/log"
-	"github.com/vektah/gqlparser/v2/ast"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/entc"
@@ -29,7 +28,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums/exportenums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -150,9 +148,7 @@ func getEntfgaExtension() *entfga.AuthzExtension {
 
 func getEntGqlExtension() *entgql.Extension {
 	// initialize schema hooks for entgql
-	schemaHooks := []entgql.SchemaHook{
-		removeExtraScalars,
-	}
+	schemaHooks := []entgql.SchemaHook{}
 
 	xExt, err := entx.NewExtension(entx.WithJSONScalar())
 	if err != nil {
@@ -184,16 +180,11 @@ func getEntGqlExtension() *entgql.Extension {
 }
 
 func getEntHistoryGqlExtension() *entgql.Extension {
-	schemaHooks := []entgql.SchemaHook{
-		removeExtraScalars,
-	}
-
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath(graphHistorySchemaDir+"ent.graphql"),
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen_history.yml"),
 		entgql.WithWhereInputs(true),
-		entgql.WithSchemaHook(schemaHooks...),
 		WithGqlWithTemplates(),
 	)
 	if err != nil {
@@ -306,10 +297,6 @@ func schemaGenerate(extensions ...entc.Extension) {
 			entc.DependencyType(&summarizer.Client{}),
 		),
 		entc.Dependency(
-			entc.DependencyName("Windmill"),
-			entc.DependencyType(&windmill.Client{}),
-		),
-		entc.Dependency(
 			entc.DependencyName("PondPool"),
 			entc.DependencyType(&soiree.PondPool{}),
 		),
@@ -344,23 +331,14 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 			entc.DependencyName("EntConfig"),
 			entc.DependencyType(&entconfig.Config{}),
 		),
+		entc.Dependency(
+			entc.DependencyName("Authz"),
+			entc.DependencyType(fgax.Client{}),
+		),
 		entc.TemplateFiles(templateDir+"/client.tmpl", templateDir+"/config.tmpl", templateDir+"/count.tmpl"),
 		entc.Extensions(
 			extensions...,
 		)); err != nil {
 		log.Fatal().Err(err).Msg("running ent codegen")
 	}
-}
-
-// TODO: see if this does anything?
-var removeExtraScalars entgql.SchemaHook = func(_ *gen.Graph, s *ast.Schema) error {
-	// Remove scalar *definitions* from the generated schema file.
-	// these scalars are defined already in the common graphql schema file
-	for _, name := range []string{"JSON", "Map", "Cursor", "Time"} {
-		def, ok := s.Types[name]
-		if ok && def.Kind == ast.Scalar {
-			delete(s.Types, name)
-		}
-	}
-	return nil
 }

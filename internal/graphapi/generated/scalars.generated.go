@@ -4,9 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
-	"time"
 
-	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -94,16 +92,6 @@ func (ec *executionContext) marshalNChannel2string(ctx context.Context, sel ast.
 	return res
 }
 
-func (ec *executionContext) unmarshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, v any) (entgql.Cursor[string], error) {
-	var res entgql.Cursor[string]
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, sel ast.SelectionSet, v entgql.Cursor[string]) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
 	var res models.DateTime
 	err := res.UnmarshalGQL(v)
@@ -144,28 +132,6 @@ func (ec *executionContext) marshalNImplementationGuidance2githubᚗcomᚋtheope
 	return v
 }
 
-func (ec *executionContext) unmarshalNMap2map(ctx context.Context, v any) (map[string]any, error) {
-	res, err := graphql.UnmarshalMap(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNMap2map(ctx context.Context, sel ast.SelectionSet, v map[string]any) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	_ = sel
-	res := graphql.MarshalMap(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
-}
-
 func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, v any) (models.Reference, error) {
 	var res models.Reference
 	err := res.UnmarshalGQL(v)
@@ -184,22 +150,6 @@ func (ec *executionContext) unmarshalNTestingProcedures2githubᚗcomᚋtheopenla
 
 func (ec *executionContext) marshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProcedures(ctx context.Context, sel ast.SelectionSet, v models.TestingProcedures) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v any) (time.Time, error) {
-	res, err := graphql.UnmarshalTime(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
-	_ = sel
-	res := graphql.MarshalTime(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-	}
-	return res
 }
 
 func (ec *executionContext) unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, v any) (graphql.Upload, error) {
@@ -400,22 +350,6 @@ func (ec *executionContext) marshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlane�
 	return v
 }
 
-func (ec *executionContext) unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, v any) (*entgql.Cursor[string], error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(entgql.Cursor[string])
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx context.Context, sel ast.SelectionSet, v *entgql.Cursor[string]) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
 	if v == nil {
 		return nil, nil
@@ -592,24 +526,6 @@ func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlane�
 	return v
 }
 
-func (ec *executionContext) unmarshalOMap2map(ctx context.Context, v any) (map[string]any, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalMap(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOMap2map(ctx context.Context, sel ast.SelectionSet, v map[string]any) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	_ = sel
-	_ = ctx
-	res := graphql.MarshalMap(v)
-	return res
-}
-
 func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
 	if v == nil {
 		return nil, nil
@@ -696,72 +612,6 @@ func (ec *executionContext) marshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenl
 	}
 
 	return ret
-}
-
-func (ec *executionContext) unmarshalOTime2timeᚐTime(ctx context.Context, v any) (time.Time, error) {
-	res, err := graphql.UnmarshalTime(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
-	_ = sel
-	_ = ctx
-	res := graphql.MarshalTime(v)
-	return res
-}
-
-func (ec *executionContext) unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx context.Context, v any) ([]time.Time, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]time.Time, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNTime2timeᚐTime(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalOTime2ᚕtimeᚐTimeᚄ(ctx context.Context, sel ast.SelectionSet, v []time.Time) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNTime2timeᚐTime(ctx, sel, v[i])
-	}
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
-func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v any) (*time.Time, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalTime(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v *time.Time) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	_ = sel
-	_ = ctx
-	res := graphql.MarshalTime(*v)
-	return res
 }
 
 func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ(ctx context.Context, v any) ([]*graphql.Upload, error) {

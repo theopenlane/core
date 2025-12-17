@@ -3814,6 +3814,11 @@ input ControlObjectiveHistoryWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
 }
+"""
+Define a Relay Cursor type:
+https://relay.dev/graphql/connections.htm#sec-Cursor
+"""
+scalar Cursor
 type CustomDomainHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -12177,6 +12182,10 @@ input JobTemplateHistoryWhereInput {
   platformIn: [JobTemplateHistoryJobPlatformType!]
   platformNotIn: [JobTemplateHistoryJobPlatformType!]
 }
+"""
+The builtin Map type
+"""
+scalar Map
 type MappableDomainHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -23407,6 +23416,10 @@ input TemplateHistoryWhereInput {
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
 }
+"""
+The builtin Time type
+"""
+scalar Time
 type TrustCenterComplianceHistory implements Node {
   id: ID!
   historyTime: Time!

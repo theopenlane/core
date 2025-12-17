@@ -1,17 +1,4 @@
 """
-The builtin Time type
-"""
-scalar Time
-"""
-The builtin Map type
-"""
-scalar Map
-"""
-Define a Relay Cursor type:
-https://relay.dev/graphql/connections.htm#sec-Cursor
-"""
-scalar Cursor
-"""
 The `Upload` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
 """

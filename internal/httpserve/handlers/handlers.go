@@ -32,7 +32,6 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -116,8 +115,6 @@ type Handler struct {
 	Entitlements *entitlements.StripeClient
 	// Summarizer contains the summarizing client
 	Summarizer *summarizer.Client
-	// Windmill contains the Windmill workflow automation client
-	Windmill *windmill.Client
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string
 	// ObjectStore handles file storage operations

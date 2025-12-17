@@ -3419,8 +3419,6 @@ func init() {
 	jobtemplate.Hooks[7] = jobtemplateMixinHooks7[0]
 
 	jobtemplate.Hooks[8] = jobtemplateHooks[0]
-
-	jobtemplate.Hooks[9] = jobtemplateHooks[1]
 	jobtemplateMixinInters1 := jobtemplateMixin[1].Interceptors()
 	jobtemplateMixinInters2 := jobtemplateMixin[2].Interceptors()
 	jobtemplateMixinInters6 := jobtemplateMixin[6].Interceptors()
@@ -3463,6 +3461,10 @@ func init() {
 	jobtemplateDescTitle := jobtemplateFields[0].Descriptor()
 	// jobtemplate.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	jobtemplate.TitleValidator = jobtemplateDescTitle.Validators[0].(func(string) error)
+	// jobtemplateDescWindmillPath is the schema descriptor for windmill_path field.
+	jobtemplateDescWindmillPath := jobtemplateFields[3].Descriptor()
+	// jobtemplate.WindmillPathValidator is a validator for the "windmill_path" field. It is called by the builders before save.
+	jobtemplate.WindmillPathValidator = jobtemplateDescWindmillPath.Validators[0].(func(string) error)
 	// jobtemplateDescCron is the schema descriptor for cron field.
 	jobtemplateDescCron := jobtemplateFields[6].Descriptor()
 	// jobtemplate.CronValidator is a validator for the "cron" field. It is called by the builders before save.

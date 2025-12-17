@@ -36894,19 +36894,6 @@ This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION`, BuiltIn: false},
 	{Name: "../schema/common/scalars.graphql", Input: `"""
-The builtin Time type
-"""
-scalar Time
-"""
-The builtin Map type
-"""
-scalar Map
-"""
-Define a Relay Cursor type:
-https://relay.dev/graphql/connections.htm#sec-Cursor
-"""
-scalar Cursor
-"""
 The ` + "`" + `Upload` + "`" + ` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
 """
@@ -49477,6 +49464,11 @@ input CreateWorkflowObjectRefInput {
   directoryGroupID: ID
   evidenceID: ID
 }
+"""
+Define a Relay Cursor type:
+https://relay.dev/graphql/connections.htm#sec-Cursor
+"""
+scalar Cursor
 type CustomDomain implements Node {
   id: ID!
   createdAt: Time
@@ -65171,6 +65163,10 @@ input JobTemplateWhereInput {
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
 }
+"""
+The builtin Map type
+"""
+scalar Map
 type MappableDomain implements Node {
   id: ID!
   createdAt: Time
@@ -85561,6 +85557,10 @@ input TemplateWhereInput {
   hasAssessments: Boolean
   hasAssessmentsWith: [AssessmentWhereInput!]
 }
+"""
+The builtin Time type
+"""
+scalar Time
 type TrustCenter implements Node {
   id: ID!
   createdAt: Time

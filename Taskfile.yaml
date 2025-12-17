@@ -40,9 +40,6 @@ env:
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
   GO_INLINE_FLAG: "-gcflags=all=-l"
 
-# load the .env file for windmill
-dotenv: ['docker/configs/windmill/.env']
-
 tasks:
   default:
     silent: true

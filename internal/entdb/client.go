@@ -178,105 +178,31 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	return db, nil
 }
 
-// NewHistory returns a enthistory client with a primary and secondary, if configured, write database
-func NewHistory(ctx context.Context, c entx.Config) (*historygenerated.Client, error) {
+// NewHistory returns a enthistory client with a primary database
+func NewHistory(c entx.Config, opts ...historygenerated.Option) (*historygenerated.Client, error) {
 	if !c.EnableHistory {
 		log.Info().Msg("history is not enabled, not creating history client")
 
 		return nil, nil
 	}
 
-	client := &client{
-		config: &c,
-	}
-
-	dbOpts := []entx.DBOption{}
-
-	if c.MultiWrite {
-		dbOpts = append(dbOpts, entx.WithSecondaryDB())
-	}
-
-	entConfig, err := entx.NewDBConfig(c, dbOpts...)
+	entConfig, err := entx.NewDBConfig(c)
 	if err != nil {
 		return nil, err
 	}
 
-	// setup driver(s)
-	var drvPrimary dialect.Driver
+	// setup driver for the client
+	drvPrimary := entConfig.GetPrimaryDB()
 
-	var drvSecondary dialect.Driver
+	opts = append(opts, historygenerated.Driver(drvPrimary))
 
-	drvPrimary = entConfig.GetPrimaryDB()
-	client.pc = client.createEntDBClient(entConfig.GetPrimaryDB())
-
-	// run migrations on primary driver
-	if c.RunMigrations {
-		if err := client.runMigrations(ctx); err != nil {
-			log.Error().Err(err).Msg("failed running migrations")
-
-			return nil, err
-		}
-	}
-
-	var cOpts []historygenerated.Option
-
-	// if multi-write is enabled, create a secondary client
-	if c.MultiWrite {
-		drvSecondary = entConfig.GetSecondaryDB()
-		client.sc = client.createEntDBClient(entConfig.GetSecondaryDB())
-
-		// run  migrations on secondary driver
-		if c.RunMigrations {
-			if err := client.runMigrations(ctx); err != nil {
-				log.Error().Err(err).Msg("failed running migrations")
-
-				return nil, err
-			}
-		}
-	}
-
-	// if cache TTL is set, wrap the driver with the cache driver
-	// as of (2025-02-18) entcache needs to be enabled after migrations are run
-	// if using atlas migrations due to an incompatibility in versions
-	// even with entcache.Skip(ctx) set on atlas migrations
-	if c.CacheTTL > 0 {
-		drvPrimary = entcacheDriver(drvPrimary, c.CacheTTL)
-
-		if drvSecondary != nil {
-			drvSecondary = entcacheDriver(drvSecondary, c.CacheTTL)
-		}
-	}
-
-	drvPrimary = blockDriver(drvPrimary)
-
-	if drvSecondary != nil {
-		drvSecondary = blockDriver(drvSecondary)
-	}
-
-	// add the option to the client for the drivers
-	if drvSecondary != nil {
-		cOpts = []historygenerated.Option{historygenerated.Driver(&entx.MultiWriteDriver{Wp: drvPrimary, Ws: drvSecondary})}
-	} else {
-		cOpts = []historygenerated.Option{historygenerated.Driver(drvPrimary)}
-	}
-
-	if c.Debug {
-		cOpts = append(cOpts,
-			historygenerated.Log(log.Print),
-			historygenerated.Debug(),
-		)
-	}
-
-	db := historygenerated.NewClient(cOpts...)
+	db := historygenerated.NewClient(opts...)
 
 	db.Config = entConfig
 
-	db.Intercept(interceptors.QueryLogger())
-	db.Intercept(BlockInterceptor())
+	db.Intercept(BlockHistoryInterceptor())
 
 	db.Use(hooks.MetricsHook())
-
-	db.Use(BlockHook())
 
 	return db, nil
 }
@@ -537,7 +463,7 @@ func NewTestHistoryClient(ctx context.Context, ctr *testutils.TestFixture) (*his
 		err = ctr.Pool.Retry(func() error {
 			log.Info().Msg("connecting to database...")
 
-			db, err = NewHistory(ctx, dbconf)
+			db, err = NewHistory(dbconf)
 			if err != nil {
 				log.Info().Err(err).Msg("retrying connection to database...")
 			}
@@ -545,7 +471,7 @@ func NewTestHistoryClient(ctx context.Context, ctr *testutils.TestFixture) (*his
 			return err
 		})
 	} else {
-		db, err = NewHistory(ctx, dbconf)
+		db, err = NewHistory(dbconf)
 	}
 
 	client := &client{

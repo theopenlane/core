@@ -4,6 +4,7 @@ package task
 
 import (
 	"context"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -68,10 +69,10 @@ func updateValidation() (id string, input openlaneclient.UpdateTaskInput, err er
 		input.AssigneeID = &assignee
 	}
 
-	due := cmd.Config.String("due")
-	if due != "" {
+	due := cmd.Config.Duration("due")
+	if due > 0 {
 		var err error
-		input.Due, err = models.ToDateTime(due)
+		input.Due, err = models.ToDateTime(time.Now().Add(due).String())
 		if err != nil {
 			return "", input, err
 		}

@@ -35,9 +35,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
-	ControlHistory() ControlHistoryResolver
 	Query() QueryResolver
-	SubcontrolHistory() SubcontrolHistoryResolver
 }
 
 type DirectiveRoot struct {
@@ -15717,19 +15715,6 @@ This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION`, BuiltIn: false},
 	{Name: "../schema/common/scalars.graphql", Input: `"""
-The builtin Time type
-"""
-scalar Time
-"""
-The builtin Map type
-"""
-scalar Map
-"""
-Define a Relay Cursor type:
-https://relay.dev/graphql/connections.htm#sec-Cursor
-"""
-scalar Cursor
-"""
 The ` + "`" + `Upload` + "`" + ` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
 """
@@ -19643,6 +19628,11 @@ input ControlObjectiveHistoryWhereInput {
   subcategoryEqualFold: String
   subcategoryContainsFold: String
 }
+"""
+Define a Relay Cursor type:
+https://relay.dev/graphql/connections.htm#sec-Cursor
+"""
+scalar Cursor
 type CustomDomainHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -28006,6 +27996,10 @@ input JobTemplateHistoryWhereInput {
   platformIn: [JobTemplateHistoryJobPlatformType!]
   platformNotIn: [JobTemplateHistoryJobPlatformType!]
 }
+"""
+The builtin Map type
+"""
+scalar Map
 type MappableDomainHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -39236,6 +39230,10 @@ input TemplateHistoryWhereInput {
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
 }
+"""
+The builtin Time type
+"""
+scalar Time
 type TrustCenterComplianceHistory implements Node {
   id: ID!
   historyTime: Time!

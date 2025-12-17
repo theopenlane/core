@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/utils/cache"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -62,7 +63,6 @@ func serve(ctx context.Context) error {
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
-		serveropts.WithWindmill(),
 		serveropts.WithKeyDirOption(),
 		serveropts.WithSecretManagerKeysOption(),
 	)
@@ -140,7 +140,12 @@ func serve(ctx context.Context) error {
 	})
 
 	// create history client
-	historyClient, err := entdb.NewHistory(ctx, so.Config.Settings.DB)
+	histOpts := []historygenerated.Option{
+		historygenerated.Authz(*fgaClient),
+		historygenerated.EntConfig(&so.Config.Settings.EntConfig),
+	}
+
+	historyClient, err := entdb.NewHistory(so.Config.Settings.DB, histOpts...)
 	if err != nil {
 		return err
 	}
@@ -157,7 +162,6 @@ func serve(ctx context.Context) error {
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
-		ent.Windmill(so.Config.Handler.Windmill),
 		ent.PondPool(pool),
 		ent.EmailVerifier(verifier),
 		ent.HistoryClient(historyClient),

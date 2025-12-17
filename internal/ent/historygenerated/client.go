@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/workfloweventhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowinstancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowobjectrefhistory"
+	"github.com/theopenlane/iam/fgax"
 
 	stdsql "database/sql"
 
@@ -322,6 +323,7 @@ type (
 		// interceptors to execute on queries.
 		inters    *inters
 		EntConfig *entconfig.Config
+		Authz     fgax.Client
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
@@ -374,6 +376,13 @@ func Driver(driver dialect.Driver) Option {
 func EntConfig(v *entconfig.Config) Option {
 	return func(c *config) {
 		c.EntConfig = v
+	}
+}
+
+// Authz configures the Authz.
+func Authz(v fgax.Client) Option {
+	return func(c *config) {
+		c.Authz = v
 	}
 }
 

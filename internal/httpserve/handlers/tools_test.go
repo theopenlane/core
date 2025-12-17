@@ -1,3 +1,5 @@
+//go:build test
+
 package handlers_test
 
 import (
@@ -32,7 +34,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -201,9 +202,6 @@ func (suite *HandlerTestSuite) SetupTest() {
 	// setup history client
 	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
 	require.NoError(t, err)
-
-	// run automigrations for history client
-	_ = historygenerated.NewClient()
 
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()

@@ -115,7 +115,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/core/pkg/windmill"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -451,7 +450,6 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
-		Windmill           *windmill.Client
 		PondPool           *soiree.PondPool
 		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
@@ -576,13 +574,6 @@ func ObjectManager(v *objects.Service) Option {
 func Summarizer(v *summarizer.Client) Option {
 	return func(c *config) {
 		c.Summarizer = v
-	}
-}
-
-// Windmill configures the Windmill.
-func Windmill(v *windmill.Client) Option {
-	return func(c *config) {
-		c.Windmill = v
 	}
 }
 

@@ -29,7 +29,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -196,9 +195,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// setup history client
 	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
 	requireNoError(err)
-
-	// run automigrations for history client
-	_ = historygenerated.NewClient()
 
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
