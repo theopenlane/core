@@ -267,6 +267,7 @@ coreConfiguration:
         secretsize: 32  # @schema type:integer; default:32
         delimiter: "."  # @schema type:string; default:.
         prefix: ""  # @schema type:string
+      assessmentaccessduration: "1h0m0s"  # @schema type:integer; default:1h
     # -- SupportedProviders are the supported oauth providers that have been configured
     supportedproviders: []
     # -- Providers contains supported oauth2 providers configuration

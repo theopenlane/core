@@ -33,6 +33,7 @@ auth:
             keys: null
             prefix: ""
             secretsize: 32
+        assessmentaccessduration: 3600000000000
         audience: ""
         generatekeys: true
         issuer: ""
