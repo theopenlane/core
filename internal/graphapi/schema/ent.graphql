@@ -3183,6 +3183,14 @@ type Control implements Node {
   """
   references: [Reference!]
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  """
   the id of the group that owns the control
   """
   controlOwnerID: ID
@@ -3214,6 +3222,18 @@ type Control implements Node {
   the kind of the control
   """
   controlKindID: ID
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
   """
   the unique reference code for the control
   """
@@ -5818,6 +5838,37 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
+  proposed_by_user_id field predicates
+  """
+  proposedByUserID: String
+  proposedByUserIDNEQ: String
+  proposedByUserIDIn: [String!]
+  proposedByUserIDNotIn: [String!]
+  proposedByUserIDGT: String
+  proposedByUserIDGTE: String
+  proposedByUserIDLT: String
+  proposedByUserIDLTE: String
+  proposedByUserIDContains: String
+  proposedByUserIDHasPrefix: String
+  proposedByUserIDHasSuffix: String
+  proposedByUserIDIsNil: Boolean
+  proposedByUserIDNotNil: Boolean
+  proposedByUserIDEqualFold: String
+  proposedByUserIDContainsFold: String
+  """
+  proposed_at field predicates
+  """
+  proposedAt: Time
+  proposedAtNEQ: Time
+  proposedAtIn: [Time!]
+  proposedAtNotIn: [Time!]
+  proposedAtGT: Time
+  proposedAtGTE: Time
+  proposedAtLT: Time
+  proposedAtLTE: Time
+  proposedAtIsNil: Boolean
+  proposedAtNotNil: Boolean
+  """
   ref_code field predicates
   """
   refCode: String
@@ -6444,6 +6495,14 @@ input CreateControlInput {
   """
   references: [Reference!]
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -6455,6 +6514,18 @@ input CreateControlInput {
   the kind of the control
   """
   controlKindName: String
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
   """
   the unique reference code for the control
   """
@@ -7047,6 +7118,18 @@ input CreateEvidenceInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
   """
   the name of the evidence
   """
@@ -7673,6 +7756,18 @@ input CreateInternalPolicyInput {
   the kind of the internal_policy
   """
   internalPolicyKindName: String
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -9080,6 +9175,14 @@ input CreateSubcontrolInput {
   """
   references: [Reference!]
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -10006,6 +10109,9 @@ input CreateWorkflowInstanceInput {
   definitionSnapshot: WorkflowDefinitionDocument
   ownerID: ID
   workflowDefinitionID: ID!
+  controlID: ID
+  internalPolicyID: ID
+  evidenceID: ID
   workflowAssignmentIDs: [ID!]
   workflowEventIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -10023,6 +10129,7 @@ input CreateWorkflowObjectRefInput {
   findingID: ID
   directoryAccountID: ID
   directoryGroupID: ID
+  evidenceID: ID
 }
 type CustomDomain implements Node {
   id: ID!
@@ -15699,6 +15806,18 @@ type Evidence implements Node {
   """
   ownerID: ID
   """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
+  """
   the name of the evidence
   """
   name: String!
@@ -16167,6 +16286,37 @@ input EvidenceWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  proposed_by_user_id field predicates
+  """
+  proposedByUserID: String
+  proposedByUserIDNEQ: String
+  proposedByUserIDIn: [String!]
+  proposedByUserIDNotIn: [String!]
+  proposedByUserIDGT: String
+  proposedByUserIDGTE: String
+  proposedByUserIDLT: String
+  proposedByUserIDLTE: String
+  proposedByUserIDContains: String
+  proposedByUserIDHasPrefix: String
+  proposedByUserIDHasSuffix: String
+  proposedByUserIDIsNil: Boolean
+  proposedByUserIDNotNil: Boolean
+  proposedByUserIDEqualFold: String
+  proposedByUserIDContainsFold: String
+  """
+  proposed_at field predicates
+  """
+  proposedAt: Time
+  proposedAtNEQ: Time
+  proposedAtIn: [Time!]
+  proposedAtNotIn: [Time!]
+  proposedAtGT: Time
+  proposedAtGTE: Time
+  proposedAtLT: Time
+  proposedAtLTE: Time
+  proposedAtIsNil: Boolean
+  proposedAtNotNil: Boolean
   """
   name field predicates
   """
@@ -22662,6 +22812,18 @@ type InternalPolicy implements Node {
   the kind of the internal_policy
   """
   internalPolicyKindID: ID
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
   owner: Organization
   blockedGroups(
     """
@@ -23558,6 +23720,37 @@ input InternalPolicyWhereInput {
   internalPolicyKindIDNotNil: Boolean
   internalPolicyKindIDEqualFold: ID
   internalPolicyKindIDContainsFold: ID
+  """
+  proposed_by_user_id field predicates
+  """
+  proposedByUserID: String
+  proposedByUserIDNEQ: String
+  proposedByUserIDIn: [String!]
+  proposedByUserIDNotIn: [String!]
+  proposedByUserIDGT: String
+  proposedByUserIDGTE: String
+  proposedByUserIDLT: String
+  proposedByUserIDLTE: String
+  proposedByUserIDContains: String
+  proposedByUserIDHasPrefix: String
+  proposedByUserIDHasSuffix: String
+  proposedByUserIDIsNil: Boolean
+  proposedByUserIDNotNil: Boolean
+  proposedByUserIDEqualFold: String
+  proposedByUserIDContainsFold: String
+  """
+  proposed_at field predicates
+  """
+  proposedAt: Time
+  proposedAtNEQ: Time
+  proposedAtIn: [Time!]
+  proposedAtNotIn: [Time!]
+  proposedAtGT: Time
+  proposedAtGTE: Time
+  proposedAtLT: Time
+  proposedAtLTE: Time
+  proposedAtIsNil: Boolean
+  proposedAtNotNil: Boolean
   """
   owner edge predicates
   """
@@ -42375,6 +42568,14 @@ type Subcontrol implements Node {
   """
   references: [Reference!]
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  """
   the id of the group that owns the control
   """
   controlOwnerID: ID
@@ -49077,6 +49278,18 @@ input UpdateControlInput {
   appendReferences: [Reference!]
   clearReferences: Boolean
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  appendTestingProcedures: [TestingProcedures!]
+  clearTestingProcedures: Boolean
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  appendEvidenceRequests: [EvidenceRequests!]
+  clearEvidenceRequests: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -49091,6 +49304,21 @@ input UpdateControlInput {
   """
   controlKindName: String
   clearControlKindName: Boolean
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  clearProposedChanges: Boolean
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  clearProposedByUserID: Boolean
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
+  clearProposedAt: Boolean
   """
   the unique reference code for the control
   """
@@ -49885,6 +50113,21 @@ input UpdateEvidenceInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  clearProposedChanges: Boolean
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  clearProposedByUserID: Boolean
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
+  clearProposedAt: Boolean
   """
   the name of the evidence
   """
@@ -50773,6 +51016,21 @@ input UpdateInternalPolicyInput {
   """
   internalPolicyKindName: String
   clearInternalPolicyKindName: Boolean
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  clearProposedChanges: Boolean
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  clearProposedByUserID: Boolean
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
+  clearProposedAt: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -52720,6 +52978,18 @@ input UpdateSubcontrolInput {
   appendReferences: [Reference!]
   clearReferences: Boolean
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  appendTestingProcedures: [TestingProcedures!]
+  clearTestingProcedures: Boolean
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  appendEvidenceRequests: [EvidenceRequests!]
+  clearEvidenceRequests: Boolean
+  """
   internal notes about the object creation, this field is only available to system admins
   """
   internalNotes: String @readOnly
@@ -53788,8 +54058,6 @@ input UpdateWorkflowAssignmentInput {
   """
   notes: String
   clearNotes: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   workflowInstanceID: ID
   addWorkflowAssignmentTargetIDs: [ID!]
   removeWorkflowAssignmentTargetIDs: [ID!]
@@ -53819,8 +54087,6 @@ input UpdateWorkflowAssignmentTargetInput {
   """
   resolverKey: String
   clearResolverKey: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   workflowAssignmentID: ID
   userID: ID
   clearUser: Boolean
@@ -53913,8 +54179,6 @@ input UpdateWorkflowDefinitionInput {
   trackedFields: [String!]
   appendTrackedFields: [String!]
   clearTrackedFields: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addTagDefinitionIDs: [ID!]
   removeTagDefinitionIDs: [ID!]
   clearTagDefinitions: Boolean
@@ -53942,8 +54206,6 @@ input UpdateWorkflowEventInput {
   """
   payload: WorkflowEventPayload
   clearPayload: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   workflowInstanceID: ID
 }
 """
@@ -53976,9 +54238,13 @@ input UpdateWorkflowInstanceInput {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   clearDefinitionSnapshot: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   workflowDefinitionID: ID
+  controlID: ID
+  clearControl: Boolean
+  internalPolicyID: ID
+  clearInternalPolicy: Boolean
+  evidenceID: ID
+  clearEvidence: Boolean
   addWorkflowAssignmentIDs: [ID!]
   removeWorkflowAssignmentIDs: [ID!]
   clearWorkflowAssignments: Boolean
@@ -53988,14 +54254,6 @@ input UpdateWorkflowInstanceInput {
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
-}
-"""
-UpdateWorkflowObjectRefInput is used for update WorkflowObjectRef object.
-Input was generated by ent.
-"""
-input UpdateWorkflowObjectRefInput {
-  ownerID: ID
-  clearOwner: Boolean
 }
 type User implements Node {
   id: ID!
@@ -56866,7 +57124,7 @@ type WorkflowAssignment implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -57023,7 +57281,7 @@ type WorkflowAssignmentTarget implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -57645,7 +57903,7 @@ type WorkflowDefinition implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -58136,7 +58394,7 @@ type WorkflowEvent implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -58378,7 +58636,7 @@ type WorkflowInstance implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -58401,11 +58659,35 @@ type WorkflowInstance implements Node {
   Copy of definition JSON used for this instance
   """
   definitionSnapshot: WorkflowDefinitionDocument
+  """
+  ID of the control this workflow instance is associated with
+  """
+  controlID: ID
+  """
+  ID of the internal policy this workflow instance is associated with
+  """
+  internalPolicyID: ID
+  """
+  ID of the evidence this workflow instance is associated with
+  """
+  evidenceID: ID
   owner: Organization
   """
   Definition driving this instance
   """
   workflowDefinition: WorkflowDefinition!
+  """
+  Control this workflow instance is associated with
+  """
+  control: Control
+  """
+  Internal policy this workflow instance is associated with
+  """
+  internalPolicy: InternalPolicy
+  """
+  Evidence this workflow instance is associated with
+  """
+  evidence: Evidence
   workflowAssignments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -58704,6 +58986,60 @@ input WorkflowInstanceWhereInput {
   lastEvaluatedAtIsNil: Boolean
   lastEvaluatedAtNotNil: Boolean
   """
+  control_id field predicates
+  """
+  controlID: ID
+  controlIDNEQ: ID
+  controlIDIn: [ID!]
+  controlIDNotIn: [ID!]
+  controlIDGT: ID
+  controlIDGTE: ID
+  controlIDLT: ID
+  controlIDLTE: ID
+  controlIDContains: ID
+  controlIDHasPrefix: ID
+  controlIDHasSuffix: ID
+  controlIDIsNil: Boolean
+  controlIDNotNil: Boolean
+  controlIDEqualFold: ID
+  controlIDContainsFold: ID
+  """
+  internal_policy_id field predicates
+  """
+  internalPolicyID: ID
+  internalPolicyIDNEQ: ID
+  internalPolicyIDIn: [ID!]
+  internalPolicyIDNotIn: [ID!]
+  internalPolicyIDGT: ID
+  internalPolicyIDGTE: ID
+  internalPolicyIDLT: ID
+  internalPolicyIDLTE: ID
+  internalPolicyIDContains: ID
+  internalPolicyIDHasPrefix: ID
+  internalPolicyIDHasSuffix: ID
+  internalPolicyIDIsNil: Boolean
+  internalPolicyIDNotNil: Boolean
+  internalPolicyIDEqualFold: ID
+  internalPolicyIDContainsFold: ID
+  """
+  evidence_id field predicates
+  """
+  evidenceID: ID
+  evidenceIDNEQ: ID
+  evidenceIDIn: [ID!]
+  evidenceIDNotIn: [ID!]
+  evidenceIDGT: ID
+  evidenceIDGTE: ID
+  evidenceIDLT: ID
+  evidenceIDLTE: ID
+  evidenceIDContains: ID
+  evidenceIDHasPrefix: ID
+  evidenceIDHasSuffix: ID
+  evidenceIDIsNil: Boolean
+  evidenceIDNotNil: Boolean
+  evidenceIDEqualFold: ID
+  evidenceIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -58713,6 +59049,21 @@ input WorkflowInstanceWhereInput {
   """
   hasWorkflowDefinition: Boolean
   hasWorkflowDefinitionWith: [WorkflowDefinitionWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
   """
   workflow_assignments edge predicates
   """
@@ -58749,7 +59100,7 @@ type WorkflowObjectRef implements Node {
   """
   displayID: String!
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -58784,6 +59135,10 @@ type WorkflowObjectRef implements Node {
   Directory membership referenced by this workflow instance
   """
   directoryMembershipID: ID
+  """
+  Evidence referenced by this workflow instance
+  """
+  evidenceID: ID
   owner: Organization
   """
   Workflow instance this object is associated with
@@ -58817,6 +59172,10 @@ type WorkflowObjectRef implements Node {
   Directory membership referenced by this workflow instance
   """
   directoryMembership: DirectoryMembership
+  """
+  Evidence referenced by this workflow instance
+  """
+  evidence: Evidence
 }
 """
 A connection to a list of items.
@@ -59128,6 +59487,24 @@ input WorkflowObjectRefWhereInput {
   directoryMembershipIDEqualFold: ID
   directoryMembershipIDContainsFold: ID
   """
+  evidence_id field predicates
+  """
+  evidenceID: ID
+  evidenceIDNEQ: ID
+  evidenceIDIn: [ID!]
+  evidenceIDNotIn: [ID!]
+  evidenceIDGT: ID
+  evidenceIDGTE: ID
+  evidenceIDLT: ID
+  evidenceIDLTE: ID
+  evidenceIDContains: ID
+  evidenceIDHasPrefix: ID
+  evidenceIDHasSuffix: ID
+  evidenceIDIsNil: Boolean
+  evidenceIDNotNil: Boolean
+  evidenceIDEqualFold: ID
+  evidenceIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -59172,4 +59549,9 @@ input WorkflowObjectRefWhereInput {
   """
   hasDirectoryMembership: Boolean
   hasDirectoryMembershipWith: [DirectoryMembershipWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
 }

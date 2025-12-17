@@ -7,6 +7,7 @@ package graphapihistory
 
 import (
 	"context"
+	"fmt"
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
@@ -14,6 +15,16 @@ import (
 	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
+
+// TestingProcedures is the resolver for the testingProcedures field.
+func (r *controlHistoryResolver) TestingProcedures(ctx context.Context, obj *historygenerated.ControlHistory) ([]string, error) {
+	panic(fmt.Errorf("not implemented: TestingProcedures - testingProcedures"))
+}
+
+// EvidenceRequests is the resolver for the evidenceRequests field.
+func (r *controlHistoryResolver) EvidenceRequests(ctx context.Context, obj *historygenerated.ControlHistory) ([]string, error) {
+	panic(fmt.Errorf("not implemented: EvidenceRequests - evidenceRequests"))
+}
 
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (historygenerated.Noder, error) {
@@ -2115,7 +2126,29 @@ func (r *queryResolver) WorkflowObjectRefHistories(ctx context.Context, after *e
 	return res, err
 }
 
+// TestingProcedures is the resolver for the testingProcedures field.
+func (r *subcontrolHistoryResolver) TestingProcedures(ctx context.Context, obj *historygenerated.SubcontrolHistory) ([]string, error) {
+	panic(fmt.Errorf("not implemented: TestingProcedures - testingProcedures"))
+}
+
+// EvidenceRequests is the resolver for the evidenceRequests field.
+func (r *subcontrolHistoryResolver) EvidenceRequests(ctx context.Context, obj *historygenerated.SubcontrolHistory) ([]string, error) {
+	panic(fmt.Errorf("not implemented: EvidenceRequests - evidenceRequests"))
+}
+
+// ControlHistory returns gqlhistorygenerated.ControlHistoryResolver implementation.
+func (r *Resolver) ControlHistory() gqlhistorygenerated.ControlHistoryResolver {
+	return &controlHistoryResolver{r}
+}
+
 // Query returns gqlhistorygenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlhistorygenerated.QueryResolver { return &queryResolver{r} }
 
+// SubcontrolHistory returns gqlhistorygenerated.SubcontrolHistoryResolver implementation.
+func (r *Resolver) SubcontrolHistory() gqlhistorygenerated.SubcontrolHistoryResolver {
+	return &subcontrolHistoryResolver{r}
+}
+
+type controlHistoryResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subcontrolHistoryResolver struct{ *Resolver }

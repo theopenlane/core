@@ -5616,6 +5616,35 @@ type ControlHistoryWhereInput struct {
 	ControlKindIDEqualFold    *string  `json:"controlKindIDEqualFold,omitempty"`
 	ControlKindIDContainsFold *string  `json:"controlKindIDContainsFold,omitempty"`
 
+	// "proposed_by_user_id" field predicates.
+	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
+	ProposedByUserIDNEQ          *string  `json:"proposedByUserIDNEQ,omitempty"`
+	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
+	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
+	ProposedByUserIDGT           *string  `json:"proposedByUserIDGT,omitempty"`
+	ProposedByUserIDGTE          *string  `json:"proposedByUserIDGTE,omitempty"`
+	ProposedByUserIDLT           *string  `json:"proposedByUserIDLT,omitempty"`
+	ProposedByUserIDLTE          *string  `json:"proposedByUserIDLTE,omitempty"`
+	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
+	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
+	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
+	ProposedByUserIDIsNil        bool     `json:"proposedByUserIDIsNil,omitempty"`
+	ProposedByUserIDNotNil       bool     `json:"proposedByUserIDNotNil,omitempty"`
+	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
+	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
+
+	// "proposed_at" field predicates.
+	ProposedAt       *time.Time  `json:"proposedAt,omitempty"`
+	ProposedAtNEQ    *time.Time  `json:"proposedAtNEQ,omitempty"`
+	ProposedAtIn     []time.Time `json:"proposedAtIn,omitempty"`
+	ProposedAtNotIn  []time.Time `json:"proposedAtNotIn,omitempty"`
+	ProposedAtGT     *time.Time  `json:"proposedAtGT,omitempty"`
+	ProposedAtGTE    *time.Time  `json:"proposedAtGTE,omitempty"`
+	ProposedAtLT     *time.Time  `json:"proposedAtLT,omitempty"`
+	ProposedAtLTE    *time.Time  `json:"proposedAtLTE,omitempty"`
+	ProposedAtIsNil  bool        `json:"proposedAtIsNil,omitempty"`
+	ProposedAtNotNil bool        `json:"proposedAtNotNil,omitempty"`
+
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNEQ          *string  `json:"refCodeNEQ,omitempty"`
@@ -6850,6 +6879,81 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.ControlKindIDContainsFold != nil {
 		predicates = append(predicates, controlhistory.ControlKindIDContainsFold(*i.ControlKindIDContainsFold))
+	}
+	if i.ProposedByUserID != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDEQ(*i.ProposedByUserID))
+	}
+	if i.ProposedByUserIDNEQ != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDNEQ(*i.ProposedByUserIDNEQ))
+	}
+	if len(i.ProposedByUserIDIn) > 0 {
+		predicates = append(predicates, controlhistory.ProposedByUserIDIn(i.ProposedByUserIDIn...))
+	}
+	if len(i.ProposedByUserIDNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ProposedByUserIDNotIn(i.ProposedByUserIDNotIn...))
+	}
+	if i.ProposedByUserIDGT != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDGT(*i.ProposedByUserIDGT))
+	}
+	if i.ProposedByUserIDGTE != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDGTE(*i.ProposedByUserIDGTE))
+	}
+	if i.ProposedByUserIDLT != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDLT(*i.ProposedByUserIDLT))
+	}
+	if i.ProposedByUserIDLTE != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDLTE(*i.ProposedByUserIDLTE))
+	}
+	if i.ProposedByUserIDContains != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDContains(*i.ProposedByUserIDContains))
+	}
+	if i.ProposedByUserIDHasPrefix != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDHasPrefix(*i.ProposedByUserIDHasPrefix))
+	}
+	if i.ProposedByUserIDHasSuffix != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDHasSuffix(*i.ProposedByUserIDHasSuffix))
+	}
+	if i.ProposedByUserIDIsNil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDIsNil())
+	}
+	if i.ProposedByUserIDNotNil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDNotNil())
+	}
+	if i.ProposedByUserIDEqualFold != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDEqualFold(*i.ProposedByUserIDEqualFold))
+	}
+	if i.ProposedByUserIDContainsFold != nil {
+		predicates = append(predicates, controlhistory.ProposedByUserIDContainsFold(*i.ProposedByUserIDContainsFold))
+	}
+	if i.ProposedAt != nil {
+		predicates = append(predicates, controlhistory.ProposedAtEQ(*i.ProposedAt))
+	}
+	if i.ProposedAtNEQ != nil {
+		predicates = append(predicates, controlhistory.ProposedAtNEQ(*i.ProposedAtNEQ))
+	}
+	if len(i.ProposedAtIn) > 0 {
+		predicates = append(predicates, controlhistory.ProposedAtIn(i.ProposedAtIn...))
+	}
+	if len(i.ProposedAtNotIn) > 0 {
+		predicates = append(predicates, controlhistory.ProposedAtNotIn(i.ProposedAtNotIn...))
+	}
+	if i.ProposedAtGT != nil {
+		predicates = append(predicates, controlhistory.ProposedAtGT(*i.ProposedAtGT))
+	}
+	if i.ProposedAtGTE != nil {
+		predicates = append(predicates, controlhistory.ProposedAtGTE(*i.ProposedAtGTE))
+	}
+	if i.ProposedAtLT != nil {
+		predicates = append(predicates, controlhistory.ProposedAtLT(*i.ProposedAtLT))
+	}
+	if i.ProposedAtLTE != nil {
+		predicates = append(predicates, controlhistory.ProposedAtLTE(*i.ProposedAtLTE))
+	}
+	if i.ProposedAtIsNil {
+		predicates = append(predicates, controlhistory.ProposedAtIsNil())
+	}
+	if i.ProposedAtNotNil {
+		predicates = append(predicates, controlhistory.ProposedAtNotNil())
 	}
 	if i.RefCode != nil {
 		predicates = append(predicates, controlhistory.RefCodeEQ(*i.RefCode))
@@ -17330,6 +17434,35 @@ type EvidenceHistoryWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "proposed_by_user_id" field predicates.
+	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
+	ProposedByUserIDNEQ          *string  `json:"proposedByUserIDNEQ,omitempty"`
+	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
+	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
+	ProposedByUserIDGT           *string  `json:"proposedByUserIDGT,omitempty"`
+	ProposedByUserIDGTE          *string  `json:"proposedByUserIDGTE,omitempty"`
+	ProposedByUserIDLT           *string  `json:"proposedByUserIDLT,omitempty"`
+	ProposedByUserIDLTE          *string  `json:"proposedByUserIDLTE,omitempty"`
+	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
+	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
+	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
+	ProposedByUserIDIsNil        bool     `json:"proposedByUserIDIsNil,omitempty"`
+	ProposedByUserIDNotNil       bool     `json:"proposedByUserIDNotNil,omitempty"`
+	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
+	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
+
+	// "proposed_at" field predicates.
+	ProposedAt       *time.Time  `json:"proposedAt,omitempty"`
+	ProposedAtNEQ    *time.Time  `json:"proposedAtNEQ,omitempty"`
+	ProposedAtIn     []time.Time `json:"proposedAtIn,omitempty"`
+	ProposedAtNotIn  []time.Time `json:"proposedAtNotIn,omitempty"`
+	ProposedAtGT     *time.Time  `json:"proposedAtGT,omitempty"`
+	ProposedAtGTE    *time.Time  `json:"proposedAtGTE,omitempty"`
+	ProposedAtLT     *time.Time  `json:"proposedAtLT,omitempty"`
+	ProposedAtLTE    *time.Time  `json:"proposedAtLTE,omitempty"`
+	ProposedAtIsNil  bool        `json:"proposedAtIsNil,omitempty"`
+	ProposedAtNotNil bool        `json:"proposedAtNotNil,omitempty"`
+
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
 	NameNEQ          *string  `json:"nameNEQ,omitempty"`
@@ -17865,6 +17998,81 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, evidencehistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.ProposedByUserID != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDEQ(*i.ProposedByUserID))
+	}
+	if i.ProposedByUserIDNEQ != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDNEQ(*i.ProposedByUserIDNEQ))
+	}
+	if len(i.ProposedByUserIDIn) > 0 {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDIn(i.ProposedByUserIDIn...))
+	}
+	if len(i.ProposedByUserIDNotIn) > 0 {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDNotIn(i.ProposedByUserIDNotIn...))
+	}
+	if i.ProposedByUserIDGT != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDGT(*i.ProposedByUserIDGT))
+	}
+	if i.ProposedByUserIDGTE != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDGTE(*i.ProposedByUserIDGTE))
+	}
+	if i.ProposedByUserIDLT != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDLT(*i.ProposedByUserIDLT))
+	}
+	if i.ProposedByUserIDLTE != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDLTE(*i.ProposedByUserIDLTE))
+	}
+	if i.ProposedByUserIDContains != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDContains(*i.ProposedByUserIDContains))
+	}
+	if i.ProposedByUserIDHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDHasPrefix(*i.ProposedByUserIDHasPrefix))
+	}
+	if i.ProposedByUserIDHasSuffix != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDHasSuffix(*i.ProposedByUserIDHasSuffix))
+	}
+	if i.ProposedByUserIDIsNil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDIsNil())
+	}
+	if i.ProposedByUserIDNotNil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDNotNil())
+	}
+	if i.ProposedByUserIDEqualFold != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDEqualFold(*i.ProposedByUserIDEqualFold))
+	}
+	if i.ProposedByUserIDContainsFold != nil {
+		predicates = append(predicates, evidencehistory.ProposedByUserIDContainsFold(*i.ProposedByUserIDContainsFold))
+	}
+	if i.ProposedAt != nil {
+		predicates = append(predicates, evidencehistory.ProposedAtEQ(*i.ProposedAt))
+	}
+	if i.ProposedAtNEQ != nil {
+		predicates = append(predicates, evidencehistory.ProposedAtNEQ(*i.ProposedAtNEQ))
+	}
+	if len(i.ProposedAtIn) > 0 {
+		predicates = append(predicates, evidencehistory.ProposedAtIn(i.ProposedAtIn...))
+	}
+	if len(i.ProposedAtNotIn) > 0 {
+		predicates = append(predicates, evidencehistory.ProposedAtNotIn(i.ProposedAtNotIn...))
+	}
+	if i.ProposedAtGT != nil {
+		predicates = append(predicates, evidencehistory.ProposedAtGT(*i.ProposedAtGT))
+	}
+	if i.ProposedAtGTE != nil {
+		predicates = append(predicates, evidencehistory.ProposedAtGTE(*i.ProposedAtGTE))
+	}
+	if i.ProposedAtLT != nil {
+		predicates = append(predicates, evidencehistory.ProposedAtLT(*i.ProposedAtLT))
+	}
+	if i.ProposedAtLTE != nil {
+		predicates = append(predicates, evidencehistory.ProposedAtLTE(*i.ProposedAtLTE))
+	}
+	if i.ProposedAtIsNil {
+		predicates = append(predicates, evidencehistory.ProposedAtIsNil())
+	}
+	if i.ProposedAtNotNil {
+		predicates = append(predicates, evidencehistory.ProposedAtNotNil())
 	}
 	if i.Name != nil {
 		predicates = append(predicates, evidencehistory.NameEQ(*i.Name))
@@ -26997,6 +27205,35 @@ type InternalPolicyHistoryWhereInput struct {
 	InternalPolicyKindIDNotNil       bool     `json:"internalPolicyKindIDNotNil,omitempty"`
 	InternalPolicyKindIDEqualFold    *string  `json:"internalPolicyKindIDEqualFold,omitempty"`
 	InternalPolicyKindIDContainsFold *string  `json:"internalPolicyKindIDContainsFold,omitempty"`
+
+	// "proposed_by_user_id" field predicates.
+	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
+	ProposedByUserIDNEQ          *string  `json:"proposedByUserIDNEQ,omitempty"`
+	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
+	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
+	ProposedByUserIDGT           *string  `json:"proposedByUserIDGT,omitempty"`
+	ProposedByUserIDGTE          *string  `json:"proposedByUserIDGTE,omitempty"`
+	ProposedByUserIDLT           *string  `json:"proposedByUserIDLT,omitempty"`
+	ProposedByUserIDLTE          *string  `json:"proposedByUserIDLTE,omitempty"`
+	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
+	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
+	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
+	ProposedByUserIDIsNil        bool     `json:"proposedByUserIDIsNil,omitempty"`
+	ProposedByUserIDNotNil       bool     `json:"proposedByUserIDNotNil,omitempty"`
+	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
+	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
+
+	// "proposed_at" field predicates.
+	ProposedAt       *time.Time  `json:"proposedAt,omitempty"`
+	ProposedAtNEQ    *time.Time  `json:"proposedAtNEQ,omitempty"`
+	ProposedAtIn     []time.Time `json:"proposedAtIn,omitempty"`
+	ProposedAtNotIn  []time.Time `json:"proposedAtNotIn,omitempty"`
+	ProposedAtGT     *time.Time  `json:"proposedAtGT,omitempty"`
+	ProposedAtGTE    *time.Time  `json:"proposedAtGTE,omitempty"`
+	ProposedAtLT     *time.Time  `json:"proposedAtLT,omitempty"`
+	ProposedAtLTE    *time.Time  `json:"proposedAtLTE,omitempty"`
+	ProposedAtIsNil  bool        `json:"proposedAtIsNil,omitempty"`
+	ProposedAtNotNil bool        `json:"proposedAtNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -28038,6 +28275,81 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.InternalPolicyKindIDContainsFold != nil {
 		predicates = append(predicates, internalpolicyhistory.InternalPolicyKindIDContainsFold(*i.InternalPolicyKindIDContainsFold))
+	}
+	if i.ProposedByUserID != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDEQ(*i.ProposedByUserID))
+	}
+	if i.ProposedByUserIDNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDNEQ(*i.ProposedByUserIDNEQ))
+	}
+	if len(i.ProposedByUserIDIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDIn(i.ProposedByUserIDIn...))
+	}
+	if len(i.ProposedByUserIDNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDNotIn(i.ProposedByUserIDNotIn...))
+	}
+	if i.ProposedByUserIDGT != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDGT(*i.ProposedByUserIDGT))
+	}
+	if i.ProposedByUserIDGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDGTE(*i.ProposedByUserIDGTE))
+	}
+	if i.ProposedByUserIDLT != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDLT(*i.ProposedByUserIDLT))
+	}
+	if i.ProposedByUserIDLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDLTE(*i.ProposedByUserIDLTE))
+	}
+	if i.ProposedByUserIDContains != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDContains(*i.ProposedByUserIDContains))
+	}
+	if i.ProposedByUserIDHasPrefix != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDHasPrefix(*i.ProposedByUserIDHasPrefix))
+	}
+	if i.ProposedByUserIDHasSuffix != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDHasSuffix(*i.ProposedByUserIDHasSuffix))
+	}
+	if i.ProposedByUserIDIsNil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDIsNil())
+	}
+	if i.ProposedByUserIDNotNil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDNotNil())
+	}
+	if i.ProposedByUserIDEqualFold != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDEqualFold(*i.ProposedByUserIDEqualFold))
+	}
+	if i.ProposedByUserIDContainsFold != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedByUserIDContainsFold(*i.ProposedByUserIDContainsFold))
+	}
+	if i.ProposedAt != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtEQ(*i.ProposedAt))
+	}
+	if i.ProposedAtNEQ != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtNEQ(*i.ProposedAtNEQ))
+	}
+	if len(i.ProposedAtIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtIn(i.ProposedAtIn...))
+	}
+	if len(i.ProposedAtNotIn) > 0 {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtNotIn(i.ProposedAtNotIn...))
+	}
+	if i.ProposedAtGT != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtGT(*i.ProposedAtGT))
+	}
+	if i.ProposedAtGTE != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtGTE(*i.ProposedAtGTE))
+	}
+	if i.ProposedAtLT != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtLT(*i.ProposedAtLT))
+	}
+	if i.ProposedAtLTE != nil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtLTE(*i.ProposedAtLTE))
+	}
+	if i.ProposedAtIsNil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtIsNil())
+	}
+	if i.ProposedAtNotNil {
+		predicates = append(predicates, internalpolicyhistory.ProposedAtNotNil())
 	}
 
 	switch len(predicates) {
@@ -64522,6 +64834,57 @@ type WorkflowInstanceHistoryWhereInput struct {
 	LastEvaluatedAtLTE    *time.Time  `json:"lastEvaluatedAtLTE,omitempty"`
 	LastEvaluatedAtIsNil  bool        `json:"lastEvaluatedAtIsNil,omitempty"`
 	LastEvaluatedAtNotNil bool        `json:"lastEvaluatedAtNotNil,omitempty"`
+
+	// "control_id" field predicates.
+	ControlID             *string  `json:"controlID,omitempty"`
+	ControlIDNEQ          *string  `json:"controlIDNEQ,omitempty"`
+	ControlIDIn           []string `json:"controlIDIn,omitempty"`
+	ControlIDNotIn        []string `json:"controlIDNotIn,omitempty"`
+	ControlIDGT           *string  `json:"controlIDGT,omitempty"`
+	ControlIDGTE          *string  `json:"controlIDGTE,omitempty"`
+	ControlIDLT           *string  `json:"controlIDLT,omitempty"`
+	ControlIDLTE          *string  `json:"controlIDLTE,omitempty"`
+	ControlIDContains     *string  `json:"controlIDContains,omitempty"`
+	ControlIDHasPrefix    *string  `json:"controlIDHasPrefix,omitempty"`
+	ControlIDHasSuffix    *string  `json:"controlIDHasSuffix,omitempty"`
+	ControlIDIsNil        bool     `json:"controlIDIsNil,omitempty"`
+	ControlIDNotNil       bool     `json:"controlIDNotNil,omitempty"`
+	ControlIDEqualFold    *string  `json:"controlIDEqualFold,omitempty"`
+	ControlIDContainsFold *string  `json:"controlIDContainsFold,omitempty"`
+
+	// "internal_policy_id" field predicates.
+	InternalPolicyID             *string  `json:"internalPolicyID,omitempty"`
+	InternalPolicyIDNEQ          *string  `json:"internalPolicyIDNEQ,omitempty"`
+	InternalPolicyIDIn           []string `json:"internalPolicyIDIn,omitempty"`
+	InternalPolicyIDNotIn        []string `json:"internalPolicyIDNotIn,omitempty"`
+	InternalPolicyIDGT           *string  `json:"internalPolicyIDGT,omitempty"`
+	InternalPolicyIDGTE          *string  `json:"internalPolicyIDGTE,omitempty"`
+	InternalPolicyIDLT           *string  `json:"internalPolicyIDLT,omitempty"`
+	InternalPolicyIDLTE          *string  `json:"internalPolicyIDLTE,omitempty"`
+	InternalPolicyIDContains     *string  `json:"internalPolicyIDContains,omitempty"`
+	InternalPolicyIDHasPrefix    *string  `json:"internalPolicyIDHasPrefix,omitempty"`
+	InternalPolicyIDHasSuffix    *string  `json:"internalPolicyIDHasSuffix,omitempty"`
+	InternalPolicyIDIsNil        bool     `json:"internalPolicyIDIsNil,omitempty"`
+	InternalPolicyIDNotNil       bool     `json:"internalPolicyIDNotNil,omitempty"`
+	InternalPolicyIDEqualFold    *string  `json:"internalPolicyIDEqualFold,omitempty"`
+	InternalPolicyIDContainsFold *string  `json:"internalPolicyIDContainsFold,omitempty"`
+
+	// "evidence_id" field predicates.
+	EvidenceID             *string  `json:"evidenceID,omitempty"`
+	EvidenceIDNEQ          *string  `json:"evidenceIDNEQ,omitempty"`
+	EvidenceIDIn           []string `json:"evidenceIDIn,omitempty"`
+	EvidenceIDNotIn        []string `json:"evidenceIDNotIn,omitempty"`
+	EvidenceIDGT           *string  `json:"evidenceIDGT,omitempty"`
+	EvidenceIDGTE          *string  `json:"evidenceIDGTE,omitempty"`
+	EvidenceIDLT           *string  `json:"evidenceIDLT,omitempty"`
+	EvidenceIDLTE          *string  `json:"evidenceIDLTE,omitempty"`
+	EvidenceIDContains     *string  `json:"evidenceIDContains,omitempty"`
+	EvidenceIDHasPrefix    *string  `json:"evidenceIDHasPrefix,omitempty"`
+	EvidenceIDHasSuffix    *string  `json:"evidenceIDHasSuffix,omitempty"`
+	EvidenceIDIsNil        bool     `json:"evidenceIDIsNil,omitempty"`
+	EvidenceIDNotNil       bool     `json:"evidenceIDNotNil,omitempty"`
+	EvidenceIDEqualFold    *string  `json:"evidenceIDEqualFold,omitempty"`
+	EvidenceIDContainsFold *string  `json:"evidenceIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -65021,6 +65384,141 @@ func (i *WorkflowInstanceHistoryWhereInput) P() (predicate.WorkflowInstanceHisto
 	if i.LastEvaluatedAtNotNil {
 		predicates = append(predicates, workflowinstancehistory.LastEvaluatedAtNotNil())
 	}
+	if i.ControlID != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDEQ(*i.ControlID))
+	}
+	if i.ControlIDNEQ != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDNEQ(*i.ControlIDNEQ))
+	}
+	if len(i.ControlIDIn) > 0 {
+		predicates = append(predicates, workflowinstancehistory.ControlIDIn(i.ControlIDIn...))
+	}
+	if len(i.ControlIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstancehistory.ControlIDNotIn(i.ControlIDNotIn...))
+	}
+	if i.ControlIDGT != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDGT(*i.ControlIDGT))
+	}
+	if i.ControlIDGTE != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDGTE(*i.ControlIDGTE))
+	}
+	if i.ControlIDLT != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDLT(*i.ControlIDLT))
+	}
+	if i.ControlIDLTE != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDLTE(*i.ControlIDLTE))
+	}
+	if i.ControlIDContains != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDContains(*i.ControlIDContains))
+	}
+	if i.ControlIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDHasPrefix(*i.ControlIDHasPrefix))
+	}
+	if i.ControlIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDHasSuffix(*i.ControlIDHasSuffix))
+	}
+	if i.ControlIDIsNil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDIsNil())
+	}
+	if i.ControlIDNotNil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDNotNil())
+	}
+	if i.ControlIDEqualFold != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDEqualFold(*i.ControlIDEqualFold))
+	}
+	if i.ControlIDContainsFold != nil {
+		predicates = append(predicates, workflowinstancehistory.ControlIDContainsFold(*i.ControlIDContainsFold))
+	}
+	if i.InternalPolicyID != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDEQ(*i.InternalPolicyID))
+	}
+	if i.InternalPolicyIDNEQ != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDNEQ(*i.InternalPolicyIDNEQ))
+	}
+	if len(i.InternalPolicyIDIn) > 0 {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDIn(i.InternalPolicyIDIn...))
+	}
+	if len(i.InternalPolicyIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDNotIn(i.InternalPolicyIDNotIn...))
+	}
+	if i.InternalPolicyIDGT != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDGT(*i.InternalPolicyIDGT))
+	}
+	if i.InternalPolicyIDGTE != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDGTE(*i.InternalPolicyIDGTE))
+	}
+	if i.InternalPolicyIDLT != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDLT(*i.InternalPolicyIDLT))
+	}
+	if i.InternalPolicyIDLTE != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDLTE(*i.InternalPolicyIDLTE))
+	}
+	if i.InternalPolicyIDContains != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDContains(*i.InternalPolicyIDContains))
+	}
+	if i.InternalPolicyIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDHasPrefix(*i.InternalPolicyIDHasPrefix))
+	}
+	if i.InternalPolicyIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDHasSuffix(*i.InternalPolicyIDHasSuffix))
+	}
+	if i.InternalPolicyIDIsNil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDIsNil())
+	}
+	if i.InternalPolicyIDNotNil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDNotNil())
+	}
+	if i.InternalPolicyIDEqualFold != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDEqualFold(*i.InternalPolicyIDEqualFold))
+	}
+	if i.InternalPolicyIDContainsFold != nil {
+		predicates = append(predicates, workflowinstancehistory.InternalPolicyIDContainsFold(*i.InternalPolicyIDContainsFold))
+	}
+	if i.EvidenceID != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDEQ(*i.EvidenceID))
+	}
+	if i.EvidenceIDNEQ != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDNEQ(*i.EvidenceIDNEQ))
+	}
+	if len(i.EvidenceIDIn) > 0 {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDIn(i.EvidenceIDIn...))
+	}
+	if len(i.EvidenceIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDNotIn(i.EvidenceIDNotIn...))
+	}
+	if i.EvidenceIDGT != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDGT(*i.EvidenceIDGT))
+	}
+	if i.EvidenceIDGTE != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDGTE(*i.EvidenceIDGTE))
+	}
+	if i.EvidenceIDLT != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDLT(*i.EvidenceIDLT))
+	}
+	if i.EvidenceIDLTE != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDLTE(*i.EvidenceIDLTE))
+	}
+	if i.EvidenceIDContains != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDContains(*i.EvidenceIDContains))
+	}
+	if i.EvidenceIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDHasPrefix(*i.EvidenceIDHasPrefix))
+	}
+	if i.EvidenceIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDHasSuffix(*i.EvidenceIDHasSuffix))
+	}
+	if i.EvidenceIDIsNil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDIsNil())
+	}
+	if i.EvidenceIDNotNil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDNotNil())
+	}
+	if i.EvidenceIDEqualFold != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDEqualFold(*i.EvidenceIDEqualFold))
+	}
+	if i.EvidenceIDContainsFold != nil {
+		predicates = append(predicates, workflowinstancehistory.EvidenceIDContainsFold(*i.EvidenceIDContainsFold))
+	}
 
 	switch len(predicates) {
 	case 0:
@@ -65307,6 +65805,23 @@ type WorkflowObjectRefHistoryWhereInput struct {
 	DirectoryMembershipIDNotNil       bool     `json:"directoryMembershipIDNotNil,omitempty"`
 	DirectoryMembershipIDEqualFold    *string  `json:"directoryMembershipIDEqualFold,omitempty"`
 	DirectoryMembershipIDContainsFold *string  `json:"directoryMembershipIDContainsFold,omitempty"`
+
+	// "evidence_id" field predicates.
+	EvidenceID             *string  `json:"evidenceID,omitempty"`
+	EvidenceIDNEQ          *string  `json:"evidenceIDNEQ,omitempty"`
+	EvidenceIDIn           []string `json:"evidenceIDIn,omitempty"`
+	EvidenceIDNotIn        []string `json:"evidenceIDNotIn,omitempty"`
+	EvidenceIDGT           *string  `json:"evidenceIDGT,omitempty"`
+	EvidenceIDGTE          *string  `json:"evidenceIDGTE,omitempty"`
+	EvidenceIDLT           *string  `json:"evidenceIDLT,omitempty"`
+	EvidenceIDLTE          *string  `json:"evidenceIDLTE,omitempty"`
+	EvidenceIDContains     *string  `json:"evidenceIDContains,omitempty"`
+	EvidenceIDHasPrefix    *string  `json:"evidenceIDHasPrefix,omitempty"`
+	EvidenceIDHasSuffix    *string  `json:"evidenceIDHasSuffix,omitempty"`
+	EvidenceIDIsNil        bool     `json:"evidenceIDIsNil,omitempty"`
+	EvidenceIDNotNil       bool     `json:"evidenceIDNotNil,omitempty"`
+	EvidenceIDEqualFold    *string  `json:"evidenceIDEqualFold,omitempty"`
+	EvidenceIDContainsFold *string  `json:"evidenceIDContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -66078,6 +66593,51 @@ func (i *WorkflowObjectRefHistoryWhereInput) P() (predicate.WorkflowObjectRefHis
 	}
 	if i.DirectoryMembershipIDContainsFold != nil {
 		predicates = append(predicates, workflowobjectrefhistory.DirectoryMembershipIDContainsFold(*i.DirectoryMembershipIDContainsFold))
+	}
+	if i.EvidenceID != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDEQ(*i.EvidenceID))
+	}
+	if i.EvidenceIDNEQ != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDNEQ(*i.EvidenceIDNEQ))
+	}
+	if len(i.EvidenceIDIn) > 0 {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDIn(i.EvidenceIDIn...))
+	}
+	if len(i.EvidenceIDNotIn) > 0 {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDNotIn(i.EvidenceIDNotIn...))
+	}
+	if i.EvidenceIDGT != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDGT(*i.EvidenceIDGT))
+	}
+	if i.EvidenceIDGTE != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDGTE(*i.EvidenceIDGTE))
+	}
+	if i.EvidenceIDLT != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDLT(*i.EvidenceIDLT))
+	}
+	if i.EvidenceIDLTE != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDLTE(*i.EvidenceIDLTE))
+	}
+	if i.EvidenceIDContains != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDContains(*i.EvidenceIDContains))
+	}
+	if i.EvidenceIDHasPrefix != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDHasPrefix(*i.EvidenceIDHasPrefix))
+	}
+	if i.EvidenceIDHasSuffix != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDHasSuffix(*i.EvidenceIDHasSuffix))
+	}
+	if i.EvidenceIDIsNil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDIsNil())
+	}
+	if i.EvidenceIDNotNil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDNotNil())
+	}
+	if i.EvidenceIDEqualFold != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDEqualFold(*i.EvidenceIDEqualFold))
+	}
+	if i.EvidenceIDContainsFold != nil {
+		predicates = append(predicates, workflowobjectrefhistory.EvidenceIDContainsFold(*i.EvidenceIDContainsFold))
 	}
 
 	switch len(predicates) {

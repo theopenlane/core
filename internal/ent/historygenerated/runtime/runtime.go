@@ -348,7 +348,7 @@ func init() {
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
 	controlhistory.DefaultTags = controlhistoryDescTags.Default.([]string)
 	// controlhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	controlhistoryDescSystemOwned := controlhistoryFields[36].Descriptor()
+	controlhistoryDescSystemOwned := controlhistoryFields[38].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
@@ -820,15 +820,15 @@ func init() {
 	// evidencehistory.DefaultTags holds the default value on creation for the tags field.
 	evidencehistory.DefaultTags = evidencehistoryDescTags.Default.([]string)
 	// evidencehistoryDescCreationDate is the schema descriptor for creation_date field.
-	evidencehistoryDescCreationDate := evidencehistoryFields[16].Descriptor()
+	evidencehistoryDescCreationDate := evidencehistoryFields[19].Descriptor()
 	// evidencehistory.DefaultCreationDate holds the default value on creation for the creation_date field.
 	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() time.Time)
 	// evidencehistoryDescRenewalDate is the schema descriptor for renewal_date field.
-	evidencehistoryDescRenewalDate := evidencehistoryFields[17].Descriptor()
+	evidencehistoryDescRenewalDate := evidencehistoryFields[20].Descriptor()
 	// evidencehistory.DefaultRenewalDate holds the default value on creation for the renewal_date field.
 	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(time.Time)
 	// evidencehistoryDescIsAutomated is the schema descriptor for is_automated field.
-	evidencehistoryDescIsAutomated := evidencehistoryFields[19].Descriptor()
+	evidencehistoryDescIsAutomated := evidencehistoryFields[22].Descriptor()
 	// evidencehistory.DefaultIsAutomated holds the default value on creation for the is_automated field.
 	evidencehistory.DefaultIsAutomated = evidencehistoryDescIsAutomated.Default.(bool)
 	// evidencehistoryDescID is the schema descriptor for id field.
@@ -2015,7 +2015,7 @@ func init() {
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
 	subcontrolhistory.DefaultTags = subcontrolhistoryDescTags.Default.([]string)
 	// subcontrolhistoryDescSystemOwned is the schema descriptor for system_owned field.
-	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[36].Descriptor()
+	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[38].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.

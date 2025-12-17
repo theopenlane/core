@@ -114,6 +114,16 @@ func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNEvidenceRequests2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐEvidenceRequests(ctx context.Context, v any) (models.EvidenceRequests, error) {
+	var res models.EvidenceRequests
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNEvidenceRequests2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐEvidenceRequests(ctx context.Context, sel ast.SelectionSet, v models.EvidenceRequests) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, v any) (models.ExampleEvidence, error) {
 	var res models.ExampleEvidence
 	err := res.UnmarshalGQL(v)
@@ -163,6 +173,16 @@ func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcor
 }
 
 func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, sel ast.SelectionSet, v models.Reference) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProcedures(ctx context.Context, v any) (models.TestingProcedures, error) {
+	var res models.TestingProcedures
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProcedures(ctx context.Context, sel ast.SelectionSet, v models.TestingProcedures) graphql.Marshaler {
 	return v
 }
 
@@ -448,6 +468,42 @@ func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 	return v
 }
 
+func (ec *executionContext) unmarshalOEvidenceRequests2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐEvidenceRequestsᚄ(ctx context.Context, v any) ([]models.EvidenceRequests, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]models.EvidenceRequests, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNEvidenceRequests2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐEvidenceRequests(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOEvidenceRequests2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐEvidenceRequestsᚄ(ctx context.Context, sel ast.SelectionSet, v []models.EvidenceRequests) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNEvidenceRequests2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐEvidenceRequests(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, v any) ([]models.ExampleEvidence, error) {
 	if v == nil {
 		return nil, nil
@@ -604,6 +660,42 @@ func (ec *executionContext) marshalOSSOAuthorizationMap2githubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) unmarshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProceduresᚄ(ctx context.Context, v any) ([]models.TestingProcedures, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]models.TestingProcedures, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProcedures(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProceduresᚄ(ctx context.Context, sel ast.SelectionSet, v []models.TestingProcedures) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNTestingProcedures2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐTestingProcedures(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOTime2timeᚐTime(ctx context.Context, v any) (time.Time, error) {

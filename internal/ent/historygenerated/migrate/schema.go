@@ -250,6 +250,8 @@ var (
 		{Name: "implementation_guidance", Type: field.TypeJSON, Nullable: true},
 		{Name: "example_evidence", Type: field.TypeJSON, Nullable: true},
 		{Name: "references", Type: field.TypeJSON, Nullable: true},
+		{Name: "testing_procedures", Type: field.TypeJSON, Nullable: true},
+		{Name: "evidence_requests", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -258,6 +260,9 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "control_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "control_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "proposed_changes", Type: field.TypeJSON, Nullable: true},
+		{Name: "proposed_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "proposed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
@@ -691,6 +696,9 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "proposed_changes", Type: field.TypeJSON, Nullable: true},
+		{Name: "proposed_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "proposed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1075,6 +1083,9 @@ var (
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "proposed_changes", Type: field.TypeJSON, Nullable: true},
+		{Name: "proposed_by_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "proposed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -1825,6 +1836,8 @@ var (
 		{Name: "implementation_guidance", Type: field.TypeJSON, Nullable: true},
 		{Name: "example_evidence", Type: field.TypeJSON, Nullable: true},
 		{Name: "references", Type: field.TypeJSON, Nullable: true},
+		{Name: "testing_procedures", Type: field.TypeJSON, Nullable: true},
+		{Name: "evidence_requests", Type: field.TypeJSON, Nullable: true},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2518,6 +2531,9 @@ var (
 		{Name: "context", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_evaluated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "definition_snapshot", Type: field.TypeJSON, Nullable: true},
+		{Name: "control_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_id", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_id", Type: field.TypeString, Nullable: true},
 	}
 	// WorkflowInstanceHistoryTable holds the schema information for the "workflow_instance_history" table.
 	WorkflowInstanceHistoryTable = &schema.Table{
@@ -2552,6 +2568,7 @@ var (
 		{Name: "directory_account_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_membership_id", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_id", Type: field.TypeString, Nullable: true},
 	}
 	// WorkflowObjectRefHistoryTable holds the schema information for the "workflow_object_ref_history" table.
 	WorkflowObjectRefHistoryTable = &schema.Table{

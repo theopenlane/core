@@ -2340,6 +2340,14 @@ type ControlHistory implements Node {
 	"""
 	references: [Reference!]
 	"""
+	reference steps to take to test the control
+	"""
+	testingProcedures: [TestingProcedures!]
+	"""
+	list of common evidence requests for the control
+	"""
+	evidenceRequests: [EvidenceRequests!]
+	"""
 	the id of the group that owns the control
 	"""
 	controlOwnerID: String
@@ -2371,6 +2379,18 @@ type ControlHistory implements Node {
 	the kind of the control
 	"""
 	controlKindID: String
+	"""
+	pending changes awaiting workflow approval
+	"""
+	proposedChanges: Map
+	"""
+	user who proposed the changes
+	"""
+	proposedByUserID: String
+	"""
+	when changes were proposed
+	"""
+	proposedAt: Time
 	"""
 	the unique reference code for the control
 	"""
@@ -2952,6 +2972,37 @@ input ControlHistoryWhereInput {
 	controlKindIDNotNil: Boolean
 	controlKindIDEqualFold: String
 	controlKindIDContainsFold: String
+	"""
+	proposed_by_user_id field predicates
+	"""
+	proposedByUserID: String
+	proposedByUserIDNEQ: String
+	proposedByUserIDIn: [String!]
+	proposedByUserIDNotIn: [String!]
+	proposedByUserIDGT: String
+	proposedByUserIDGTE: String
+	proposedByUserIDLT: String
+	proposedByUserIDLTE: String
+	proposedByUserIDContains: String
+	proposedByUserIDHasPrefix: String
+	proposedByUserIDHasSuffix: String
+	proposedByUserIDIsNil: Boolean
+	proposedByUserIDNotNil: Boolean
+	proposedByUserIDEqualFold: String
+	proposedByUserIDContainsFold: String
+	"""
+	proposed_at field predicates
+	"""
+	proposedAt: Time
+	proposedAtNEQ: Time
+	proposedAtIn: [Time!]
+	proposedAtNotIn: [Time!]
+	proposedAtGT: Time
+	proposedAtGTE: Time
+	proposedAtLT: Time
+	proposedAtLTE: Time
+	proposedAtIsNil: Boolean
+	proposedAtNotNil: Boolean
 	"""
 	ref_code field predicates
 	"""
@@ -7309,6 +7360,18 @@ type EvidenceHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	pending changes awaiting workflow approval
+	"""
+	proposedChanges: Map
+	"""
+	user who proposed the changes
+	"""
+	proposedByUserID: String
+	"""
+	when changes were proposed
+	"""
+	proposedAt: Time
+	"""
 	the name of the evidence
 	"""
 	name: String!
@@ -7574,6 +7637,37 @@ input EvidenceHistoryWhereInput {
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
 	"""
+	proposed_by_user_id field predicates
+	"""
+	proposedByUserID: String
+	proposedByUserIDNEQ: String
+	proposedByUserIDIn: [String!]
+	proposedByUserIDNotIn: [String!]
+	proposedByUserIDGT: String
+	proposedByUserIDGTE: String
+	proposedByUserIDLT: String
+	proposedByUserIDLTE: String
+	proposedByUserIDContains: String
+	proposedByUserIDHasPrefix: String
+	proposedByUserIDHasSuffix: String
+	proposedByUserIDIsNil: Boolean
+	proposedByUserIDNotNil: Boolean
+	proposedByUserIDEqualFold: String
+	proposedByUserIDContainsFold: String
+	"""
+	proposed_at field predicates
+	"""
+	proposedAt: Time
+	proposedAtNEQ: Time
+	proposedAtIn: [Time!]
+	proposedAtNotIn: [Time!]
+	proposedAtGT: Time
+	proposedAtGTE: Time
+	proposedAtLT: Time
+	proposedAtLTE: Time
+	proposedAtIsNil: Boolean
+	proposedAtNotNil: Boolean
+	"""
 	name field predicates
 	"""
 	name: String
@@ -7702,6 +7796,10 @@ input EvidenceHistoryWhereInput {
 	statusIsNil: Boolean
 	statusNotNil: Boolean
 }
+"""
+The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control
+"""
+scalar EvidenceRequests
 """
 The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
 """
@@ -11258,6 +11356,18 @@ type InternalPolicyHistory implements Node {
 	the kind of the internal_policy
 	"""
 	internalPolicyKindID: String
+	"""
+	pending changes awaiting workflow approval
+	"""
+	proposedChanges: Map
+	"""
+	user who proposed the changes
+	"""
+	proposedByUserID: String
+	"""
+	when changes were proposed
+	"""
+	proposedAt: Time
 }
 """
 A connection to a list of items.
@@ -11754,6 +11864,37 @@ input InternalPolicyHistoryWhereInput {
 	internalPolicyKindIDNotNil: Boolean
 	internalPolicyKindIDEqualFold: String
 	internalPolicyKindIDContainsFold: String
+	"""
+	proposed_by_user_id field predicates
+	"""
+	proposedByUserID: String
+	proposedByUserIDNEQ: String
+	proposedByUserIDIn: [String!]
+	proposedByUserIDNotIn: [String!]
+	proposedByUserIDGT: String
+	proposedByUserIDGTE: String
+	proposedByUserIDLT: String
+	proposedByUserIDLTE: String
+	proposedByUserIDContains: String
+	proposedByUserIDHasPrefix: String
+	proposedByUserIDHasSuffix: String
+	proposedByUserIDIsNil: Boolean
+	proposedByUserIDNotNil: Boolean
+	proposedByUserIDEqualFold: String
+	proposedByUserIDContainsFold: String
+	"""
+	proposed_at field predicates
+	"""
+	proposedAt: Time
+	proposedAtNEQ: Time
+	proposedAtIn: [Time!]
+	proposedAtNotIn: [Time!]
+	proposedAtGT: Time
+	proposedAtGTE: Time
+	proposedAtLT: Time
+	proposedAtLTE: Time
+	proposedAtIsNil: Boolean
+	proposedAtNotNil: Boolean
 }
 """
 JobCadence is when a job should be scheduled to run
@@ -21477,6 +21618,14 @@ type SubcontrolHistory implements Node {
 	"""
 	references: [Reference!]
 	"""
+	reference steps to take to test the control
+	"""
+	testingProcedures: [TestingProcedures!]
+	"""
+	list of common evidence requests for the control
+	"""
+	evidenceRequests: [EvidenceRequests!]
+	"""
 	the id of the group that owns the control
 	"""
 	controlOwnerID: String
@@ -23366,6 +23515,10 @@ input TemplateHistoryWhereInput {
 	trustCenterIDEqualFold: String
 	trustCenterIDContainsFold: String
 }
+"""
+The TestingProcedures scalar type that represents steps to take to test a control; they can come directly from the control source or pulled from external sources
+"""
+scalar TestingProcedures
 """
 The builtin Time type
 """
@@ -27414,7 +27567,7 @@ type WorkflowAssignmentHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -27846,7 +27999,7 @@ type WorkflowAssignmentTargetHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -28191,7 +28344,7 @@ type WorkflowDefinitionHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -28656,7 +28809,7 @@ type WorkflowEventHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -28942,7 +29095,7 @@ type WorkflowInstanceHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -28965,6 +29118,18 @@ type WorkflowInstanceHistory implements Node {
 	Copy of definition JSON used for this instance
 	"""
 	definitionSnapshot: WorkflowDefinitionDocument
+	"""
+	ID of the control this workflow instance is associated with
+	"""
+	controlID: String
+	"""
+	ID of the internal policy this workflow instance is associated with
+	"""
+	internalPolicyID: String
+	"""
+	ID of the evidence this workflow instance is associated with
+	"""
+	evidenceID: String
 }
 """
 A connection to a list of items.
@@ -29214,6 +29379,60 @@ input WorkflowInstanceHistoryWhereInput {
 	lastEvaluatedAtLTE: Time
 	lastEvaluatedAtIsNil: Boolean
 	lastEvaluatedAtNotNil: Boolean
+	"""
+	control_id field predicates
+	"""
+	controlID: String
+	controlIDNEQ: String
+	controlIDIn: [String!]
+	controlIDNotIn: [String!]
+	controlIDGT: String
+	controlIDGTE: String
+	controlIDLT: String
+	controlIDLTE: String
+	controlIDContains: String
+	controlIDHasPrefix: String
+	controlIDHasSuffix: String
+	controlIDIsNil: Boolean
+	controlIDNotNil: Boolean
+	controlIDEqualFold: String
+	controlIDContainsFold: String
+	"""
+	internal_policy_id field predicates
+	"""
+	internalPolicyID: String
+	internalPolicyIDNEQ: String
+	internalPolicyIDIn: [String!]
+	internalPolicyIDNotIn: [String!]
+	internalPolicyIDGT: String
+	internalPolicyIDGTE: String
+	internalPolicyIDLT: String
+	internalPolicyIDLTE: String
+	internalPolicyIDContains: String
+	internalPolicyIDHasPrefix: String
+	internalPolicyIDHasSuffix: String
+	internalPolicyIDIsNil: Boolean
+	internalPolicyIDNotNil: Boolean
+	internalPolicyIDEqualFold: String
+	internalPolicyIDContainsFold: String
+	"""
+	evidence_id field predicates
+	"""
+	evidenceID: String
+	evidenceIDNEQ: String
+	evidenceIDIn: [String!]
+	evidenceIDNotIn: [String!]
+	evidenceIDGT: String
+	evidenceIDGTE: String
+	evidenceIDLT: String
+	evidenceIDLTE: String
+	evidenceIDContains: String
+	evidenceIDHasPrefix: String
+	evidenceIDHasSuffix: String
+	evidenceIDIsNil: Boolean
+	evidenceIDNotNil: Boolean
+	evidenceIDEqualFold: String
+	evidenceIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
@@ -29238,7 +29457,7 @@ type WorkflowObjectRefHistory implements Node {
 	"""
 	displayID: String!
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -29273,6 +29492,10 @@ type WorkflowObjectRefHistory implements Node {
 	Directory membership referenced by this workflow instance
 	"""
 	directoryMembershipID: String
+	"""
+	Evidence referenced by this workflow instance
+	"""
+	evidenceID: String
 }
 """
 A connection to a list of items.
@@ -29628,4 +29851,22 @@ input WorkflowObjectRefHistoryWhereInput {
 	directoryMembershipIDNotNil: Boolean
 	directoryMembershipIDEqualFold: String
 	directoryMembershipIDContainsFold: String
+	"""
+	evidence_id field predicates
+	"""
+	evidenceID: String
+	evidenceIDNEQ: String
+	evidenceIDIn: [String!]
+	evidenceIDNotIn: [String!]
+	evidenceIDGT: String
+	evidenceIDGTE: String
+	evidenceIDLT: String
+	evidenceIDLTE: String
+	evidenceIDContains: String
+	evidenceIDHasPrefix: String
+	evidenceIDHasSuffix: String
+	evidenceIDIsNil: Boolean
+	evidenceIDNotNil: Boolean
+	evidenceIDEqualFold: String
+	evidenceIDContainsFold: String
 }

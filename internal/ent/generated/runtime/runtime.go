@@ -2754,6 +2754,10 @@ func init() {
 	impersonationeventDescTags := impersonationeventMixinFields4[0].Descriptor()
 	// impersonationevent.DefaultTags holds the default value on creation for the tags field.
 	impersonationevent.DefaultTags = impersonationeventDescTags.Default.([]string)
+	// impersonationeventDescIPAddress is the schema descriptor for ip_address field.
+	impersonationeventDescIPAddress := impersonationeventFields[3].Descriptor()
+	// impersonationevent.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
+	impersonationevent.IPAddressValidator = impersonationeventDescIPAddress.Validators[0].(func(string) error)
 	// impersonationeventDescID is the schema descriptor for id field.
 	impersonationeventDescID := impersonationeventMixinFields3[0].Descriptor()
 	// impersonationevent.DefaultID holds the default value on creation for the id field.
@@ -3226,6 +3230,10 @@ func init() {
 	jobrunnerDescSystemOwned := jobrunnerMixinFields7[0].Descriptor()
 	// jobrunner.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	jobrunner.DefaultSystemOwned = jobrunnerDescSystemOwned.Default.(bool)
+	// jobrunnerDescIPAddress is the schema descriptor for ip_address field.
+	jobrunnerDescIPAddress := jobrunnerFields[2].Descriptor()
+	// jobrunner.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
+	jobrunner.IPAddressValidator = jobrunnerDescIPAddress.Validators[0].(func(string) error)
 	// jobrunnerDescID is the schema descriptor for id field.
 	jobrunnerDescID := jobrunnerMixinFields3[0].Descriptor()
 	// jobrunner.DefaultID holds the default value on creation for the id field.
@@ -7164,12 +7172,15 @@ func init() {
 	workflowassignment.Hooks[5] = workflowassignmentMixinHooks4[0]
 
 	workflowassignment.Hooks[6] = workflowassignmentMixinHooks6[0]
+
+	workflowassignment.Hooks[7] = workflowassignmentMixinHooks6[1]
 	workflowassignmentMixinInters1 := workflowassignmentMixin[1].Interceptors()
 	workflowassignmentMixinInters2 := workflowassignmentMixin[2].Interceptors()
 	workflowassignmentMixinInters6 := workflowassignmentMixin[6].Interceptors()
 	workflowassignment.Interceptors[0] = workflowassignmentMixinInters1[0]
 	workflowassignment.Interceptors[1] = workflowassignmentMixinInters2[0]
 	workflowassignment.Interceptors[2] = workflowassignmentMixinInters6[0]
+	workflowassignment.Interceptors[3] = workflowassignmentMixinInters6[1]
 	workflowassignmentMixinFields0 := workflowassignmentMixin[0].Fields()
 	_ = workflowassignmentMixinFields0
 	workflowassignmentMixinFields3 := workflowassignmentMixin[3].Fields()
@@ -7250,12 +7261,15 @@ func init() {
 	workflowassignmenttarget.Hooks[5] = workflowassignmenttargetMixinHooks4[0]
 
 	workflowassignmenttarget.Hooks[6] = workflowassignmenttargetMixinHooks6[0]
+
+	workflowassignmenttarget.Hooks[7] = workflowassignmenttargetMixinHooks6[1]
 	workflowassignmenttargetMixinInters1 := workflowassignmenttargetMixin[1].Interceptors()
 	workflowassignmenttargetMixinInters2 := workflowassignmenttargetMixin[2].Interceptors()
 	workflowassignmenttargetMixinInters6 := workflowassignmenttargetMixin[6].Interceptors()
 	workflowassignmenttarget.Interceptors[0] = workflowassignmenttargetMixinInters1[0]
 	workflowassignmenttarget.Interceptors[1] = workflowassignmenttargetMixinInters2[0]
 	workflowassignmenttarget.Interceptors[2] = workflowassignmenttargetMixinInters6[0]
+	workflowassignmenttarget.Interceptors[3] = workflowassignmenttargetMixinInters6[1]
 	workflowassignmenttargetMixinFields0 := workflowassignmenttargetMixin[0].Fields()
 	_ = workflowassignmenttargetMixinFields0
 	workflowassignmenttargetMixinFields3 := workflowassignmenttargetMixin[3].Fields()
@@ -7326,19 +7340,24 @@ func init() {
 
 	workflowdefinition.Hooks[6] = workflowdefinitionMixinHooks6[0]
 
-	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks7[0]
+	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks6[1]
+
+	workflowdefinition.Hooks[8] = workflowdefinitionMixinHooks7[0]
 	workflowdefinitionMixinInters1 := workflowdefinitionMixin[1].Interceptors()
 	workflowdefinitionMixinInters2 := workflowdefinitionMixin[2].Interceptors()
 	workflowdefinitionMixinInters6 := workflowdefinitionMixin[6].Interceptors()
 	workflowdefinition.Interceptors[0] = workflowdefinitionMixinInters1[0]
 	workflowdefinition.Interceptors[1] = workflowdefinitionMixinInters2[0]
 	workflowdefinition.Interceptors[2] = workflowdefinitionMixinInters6[0]
+	workflowdefinition.Interceptors[3] = workflowdefinitionMixinInters6[1]
 	workflowdefinitionMixinFields0 := workflowdefinitionMixin[0].Fields()
 	_ = workflowdefinitionMixinFields0
 	workflowdefinitionMixinFields3 := workflowdefinitionMixin[3].Fields()
 	_ = workflowdefinitionMixinFields3
 	workflowdefinitionMixinFields4 := workflowdefinitionMixin[4].Fields()
 	_ = workflowdefinitionMixinFields4
+	workflowdefinitionMixinFields6 := workflowdefinitionMixin[6].Fields()
+	_ = workflowdefinitionMixinFields6
 	workflowdefinitionMixinFields7 := workflowdefinitionMixin[7].Fields()
 	_ = workflowdefinitionMixinFields7
 	workflowdefinitionFields := schema.WorkflowDefinition{}.Fields()
@@ -7361,6 +7380,10 @@ func init() {
 	workflowdefinitionDescTags := workflowdefinitionMixinFields4[0].Descriptor()
 	// workflowdefinition.DefaultTags holds the default value on creation for the tags field.
 	workflowdefinition.DefaultTags = workflowdefinitionDescTags.Default.([]string)
+	// workflowdefinitionDescOwnerID is the schema descriptor for owner_id field.
+	workflowdefinitionDescOwnerID := workflowdefinitionMixinFields6[0].Descriptor()
+	// workflowdefinition.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowdefinition.OwnerIDValidator = workflowdefinitionDescOwnerID.Validators[0].(func(string) error)
 	// workflowdefinitionDescSystemOwned is the schema descriptor for system_owned field.
 	workflowdefinitionDescSystemOwned := workflowdefinitionMixinFields7[0].Descriptor()
 	// workflowdefinition.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -7433,12 +7456,15 @@ func init() {
 	workflowevent.Hooks[5] = workfloweventMixinHooks4[0]
 
 	workflowevent.Hooks[6] = workfloweventMixinHooks6[0]
+
+	workflowevent.Hooks[7] = workfloweventMixinHooks6[1]
 	workfloweventMixinInters1 := workfloweventMixin[1].Interceptors()
 	workfloweventMixinInters2 := workfloweventMixin[2].Interceptors()
 	workfloweventMixinInters6 := workfloweventMixin[6].Interceptors()
 	workflowevent.Interceptors[0] = workfloweventMixinInters1[0]
 	workflowevent.Interceptors[1] = workfloweventMixinInters2[0]
 	workflowevent.Interceptors[2] = workfloweventMixinInters6[0]
+	workflowevent.Interceptors[3] = workfloweventMixinInters6[1]
 	workfloweventMixinFields0 := workfloweventMixin[0].Fields()
 	_ = workfloweventMixinFields0
 	workfloweventMixinFields3 := workfloweventMixin[3].Fields()
@@ -7507,12 +7533,15 @@ func init() {
 	workflowinstance.Hooks[5] = workflowinstanceMixinHooks4[0]
 
 	workflowinstance.Hooks[6] = workflowinstanceMixinHooks6[0]
+
+	workflowinstance.Hooks[7] = workflowinstanceMixinHooks6[1]
 	workflowinstanceMixinInters1 := workflowinstanceMixin[1].Interceptors()
 	workflowinstanceMixinInters2 := workflowinstanceMixin[2].Interceptors()
 	workflowinstanceMixinInters6 := workflowinstanceMixin[6].Interceptors()
 	workflowinstance.Interceptors[0] = workflowinstanceMixinInters1[0]
 	workflowinstance.Interceptors[1] = workflowinstanceMixinInters2[0]
 	workflowinstance.Interceptors[2] = workflowinstanceMixinInters6[0]
+	workflowinstance.Interceptors[3] = workflowinstanceMixinInters6[1]
 	workflowinstanceMixinFields0 := workflowinstanceMixin[0].Fields()
 	_ = workflowinstanceMixinFields0
 	workflowinstanceMixinFields3 := workflowinstanceMixin[3].Fields()
@@ -7575,10 +7604,13 @@ func init() {
 	workflowobjectref.Hooks[3] = workflowobjectrefMixinHooks2[0]
 
 	workflowobjectref.Hooks[4] = workflowobjectrefMixinHooks4[0]
+
+	workflowobjectref.Hooks[5] = workflowobjectrefMixinHooks4[1]
 	workflowobjectrefMixinInters1 := workflowobjectrefMixin[1].Interceptors()
 	workflowobjectrefMixinInters4 := workflowobjectrefMixin[4].Interceptors()
 	workflowobjectref.Interceptors[0] = workflowobjectrefMixinInters1[0]
 	workflowobjectref.Interceptors[1] = workflowobjectrefMixinInters4[0]
+	workflowobjectref.Interceptors[2] = workflowobjectrefMixinInters4[1]
 	workflowobjectrefMixinFields0 := workflowobjectrefMixin[0].Fields()
 	_ = workflowobjectrefMixinFields0
 	workflowobjectrefMixinFields2 := workflowobjectrefMixin[2].Fields()

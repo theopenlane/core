@@ -22,7 +22,8 @@ linters:
       - legacy
       - std-error-handling
     paths:
-      - internal/graphapi/**/gen_models.go
+      - internal/graphapi/generated/gen_models.go
+      - internal/graphapi/historygenerated/gen_models.go
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - internal/ent/generated/*

@@ -35,7 +35,9 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	ControlHistory() ControlHistoryResolver
 	Query() QueryResolver
+	SubcontrolHistory() SubcontrolHistoryResolver
 }
 
 type DirectiveRoot struct {
@@ -249,6 +251,7 @@ type ComplexityRoot struct {
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
+		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
@@ -257,6 +260,9 @@ type ComplexityRoot struct {
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
+		ProposedAt                 func(childComplexity int) int
+		ProposedByUserID           func(childComplexity int) int
+		ProposedChanges            func(childComplexity int) int
 		Ref                        func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
@@ -271,6 +277,7 @@ type ComplexityRoot struct {
 		SystemInternalID           func(childComplexity int) int
 		SystemOwned                func(childComplexity int) int
 		Tags                       func(childComplexity int) int
+		TestingProcedures          func(childComplexity int) int
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
@@ -664,6 +671,9 @@ type ComplexityRoot struct {
 		Name                func(childComplexity int) int
 		Operation           func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		ProposedAt          func(childComplexity int) int
+		ProposedByUserID    func(childComplexity int) int
+		ProposedChanges     func(childComplexity int) int
 		Ref                 func(childComplexity int) int
 		RenewalDate         func(childComplexity int) int
 		Source              func(childComplexity int) int
@@ -1000,6 +1010,9 @@ type ComplexityRoot struct {
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
 		PolicyType                      func(childComplexity int) int
+		ProposedAt                      func(childComplexity int) int
+		ProposedByUserID                func(childComplexity int) int
+		ProposedChanges                 func(childComplexity int) int
 		Ref                             func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
@@ -1750,6 +1763,7 @@ type ComplexityRoot struct {
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
+		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
@@ -1773,6 +1787,7 @@ type ComplexityRoot struct {
 		SystemInternalID           func(childComplexity int) int
 		SystemOwned                func(childComplexity int) int
 		Tags                       func(childComplexity int) int
+		TestingProcedures          func(childComplexity int) int
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
@@ -2370,12 +2385,15 @@ type ComplexityRoot struct {
 
 	WorkflowInstanceHistory struct {
 		Context              func(childComplexity int) int
+		ControlID            func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DefinitionSnapshot   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
+		EvidenceID           func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
+		InternalPolicyID     func(childComplexity int) int
 		LastEvaluatedAt      func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
@@ -2406,6 +2424,7 @@ type ComplexityRoot struct {
 		DirectoryGroupID      func(childComplexity int) int
 		DirectoryMembershipID func(childComplexity int) int
 		DisplayID             func(childComplexity int) int
+		EvidenceID            func(childComplexity int) int
 		FindingID             func(childComplexity int) int
 		HistoryTime           func(childComplexity int) int
 		ID                    func(childComplexity int) int
@@ -3549,6 +3568,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.DisplayID(childComplexity), true
 
+	case "ControlHistory.evidenceRequests":
+		if e.complexity.ControlHistory.EvidenceRequests == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.EvidenceRequests(childComplexity), true
+
 	case "ControlHistory.exampleEvidence":
 		if e.complexity.ControlHistory.ExampleEvidence == nil {
 			break
@@ -3604,6 +3630,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.OwnerID(childComplexity), true
+
+	case "ControlHistory.proposedAt":
+		if e.complexity.ControlHistory.ProposedAt == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ProposedAt(childComplexity), true
+
+	case "ControlHistory.proposedByUserID":
+		if e.complexity.ControlHistory.ProposedByUserID == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ProposedByUserID(childComplexity), true
+
+	case "ControlHistory.proposedChanges":
+		if e.complexity.ControlHistory.ProposedChanges == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.ProposedChanges(childComplexity), true
 
 	case "ControlHistory.ref":
 		if e.complexity.ControlHistory.Ref == nil {
@@ -3702,6 +3749,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.Tags(childComplexity), true
+
+	case "ControlHistory.testingProcedures":
+		if e.complexity.ControlHistory.TestingProcedures == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.TestingProcedures(childComplexity), true
 
 	case "ControlHistory.title":
 		if e.complexity.ControlHistory.Title == nil {
@@ -5698,6 +5752,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceHistory.OwnerID(childComplexity), true
 
+	case "EvidenceHistory.proposedAt":
+		if e.complexity.EvidenceHistory.ProposedAt == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.ProposedAt(childComplexity), true
+
+	case "EvidenceHistory.proposedByUserID":
+		if e.complexity.EvidenceHistory.ProposedByUserID == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.ProposedByUserID(childComplexity), true
+
+	case "EvidenceHistory.proposedChanges":
+		if e.complexity.EvidenceHistory.ProposedChanges == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.ProposedChanges(childComplexity), true
+
 	case "EvidenceHistory.ref":
 		if e.complexity.EvidenceHistory.Ref == nil {
 			break
@@ -7482,6 +7557,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.PolicyType(childComplexity), true
+
+	case "InternalPolicyHistory.proposedAt":
+		if e.complexity.InternalPolicyHistory.ProposedAt == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ProposedAt(childComplexity), true
+
+	case "InternalPolicyHistory.proposedByUserID":
+		if e.complexity.InternalPolicyHistory.ProposedByUserID == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ProposedByUserID(childComplexity), true
+
+	case "InternalPolicyHistory.proposedChanges":
+		if e.complexity.InternalPolicyHistory.ProposedChanges == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.ProposedChanges(childComplexity), true
 
 	case "InternalPolicyHistory.ref":
 		if e.complexity.InternalPolicyHistory.Ref == nil {
@@ -11829,6 +11925,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolHistory.DisplayID(childComplexity), true
 
+	case "SubcontrolHistory.evidenceRequests":
+		if e.complexity.SubcontrolHistory.EvidenceRequests == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.EvidenceRequests(childComplexity), true
+
 	case "SubcontrolHistory.exampleEvidence":
 		if e.complexity.SubcontrolHistory.ExampleEvidence == nil {
 			break
@@ -11989,6 +12092,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.Tags(childComplexity), true
+
+	case "SubcontrolHistory.testingProcedures":
+		if e.complexity.SubcontrolHistory.TestingProcedures == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.TestingProcedures(childComplexity), true
 
 	case "SubcontrolHistory.title":
 		if e.complexity.SubcontrolHistory.Title == nil {
@@ -15035,6 +15145,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstanceHistory.Context(childComplexity), true
 
+	case "WorkflowInstanceHistory.controlID":
+		if e.complexity.WorkflowInstanceHistory.ControlID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.ControlID(childComplexity), true
+
 	case "WorkflowInstanceHistory.createdAt":
 		if e.complexity.WorkflowInstanceHistory.CreatedAt == nil {
 			break
@@ -15063,6 +15180,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstanceHistory.DisplayID(childComplexity), true
 
+	case "WorkflowInstanceHistory.evidenceID":
+		if e.complexity.WorkflowInstanceHistory.EvidenceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.EvidenceID(childComplexity), true
+
 	case "WorkflowInstanceHistory.historyTime":
 		if e.complexity.WorkflowInstanceHistory.HistoryTime == nil {
 			break
@@ -15076,6 +15200,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceHistory.ID(childComplexity), true
+
+	case "WorkflowInstanceHistory.internalPolicyID":
+		if e.complexity.WorkflowInstanceHistory.InternalPolicyID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.InternalPolicyID(childComplexity), true
 
 	case "WorkflowInstanceHistory.lastEvaluatedAt":
 		if e.complexity.WorkflowInstanceHistory.LastEvaluatedAt == nil {
@@ -15223,6 +15354,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectRefHistory.DisplayID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.evidenceID":
+		if e.complexity.WorkflowObjectRefHistory.EvidenceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.EvidenceID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.findingID":
 		if e.complexity.WorkflowObjectRefHistory.FindingID == nil {
@@ -15627,6 +15765,14 @@ The ` + "`" + `ImplementationGuidance` + "`" + ` scalar type that represents ste
 """
 scalar ImplementationGuidance
 """
+The TestingProcedures scalar type that represents steps to take to test a control; they can come directly from the control source or pulled from external sources
+"""
+scalar TestingProcedures
+"""
+The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control
+"""
+scalar EvidenceRequests
+"""
 VersionBump allows a revision to automatically be bumped based on "Major", "Minor", "Patch", or "Draft"
 """
 scalar VersionBump
@@ -15679,7 +15825,8 @@ scalar WorkflowEventPayload
 """
 Channel notifications will be sent to including in-app, slack, etc
 """
-scalar Channel`, BuiltIn: false},
+scalar Channel
+`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type ActionPlanHistory implements Node {
@@ -17964,6 +18111,14 @@ type ControlHistory implements Node {
   """
   references: [Reference!]
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  """
   the id of the group that owns the control
   """
   controlOwnerID: String
@@ -17995,6 +18150,18 @@ type ControlHistory implements Node {
   the kind of the control
   """
   controlKindID: String
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
   """
   the unique reference code for the control
   """
@@ -18576,6 +18743,37 @@ input ControlHistoryWhereInput {
   controlKindIDNotNil: Boolean
   controlKindIDEqualFold: String
   controlKindIDContainsFold: String
+  """
+  proposed_by_user_id field predicates
+  """
+  proposedByUserID: String
+  proposedByUserIDNEQ: String
+  proposedByUserIDIn: [String!]
+  proposedByUserIDNotIn: [String!]
+  proposedByUserIDGT: String
+  proposedByUserIDGTE: String
+  proposedByUserIDLT: String
+  proposedByUserIDLTE: String
+  proposedByUserIDContains: String
+  proposedByUserIDHasPrefix: String
+  proposedByUserIDHasSuffix: String
+  proposedByUserIDIsNil: Boolean
+  proposedByUserIDNotNil: Boolean
+  proposedByUserIDEqualFold: String
+  proposedByUserIDContainsFold: String
+  """
+  proposed_at field predicates
+  """
+  proposedAt: Time
+  proposedAtNEQ: Time
+  proposedAtIn: [Time!]
+  proposedAtNotIn: [Time!]
+  proposedAtGT: Time
+  proposedAtGTE: Time
+  proposedAtLT: Time
+  proposedAtLTE: Time
+  proposedAtIsNil: Boolean
+  proposedAtNotNil: Boolean
   """
   ref_code field predicates
   """
@@ -22920,6 +23118,18 @@ type EvidenceHistory implements Node {
   """
   ownerID: String
   """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
+  """
   the name of the evidence
   """
   name: String!
@@ -23184,6 +23394,37 @@ input EvidenceHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  proposed_by_user_id field predicates
+  """
+  proposedByUserID: String
+  proposedByUserIDNEQ: String
+  proposedByUserIDIn: [String!]
+  proposedByUserIDNotIn: [String!]
+  proposedByUserIDGT: String
+  proposedByUserIDGTE: String
+  proposedByUserIDLT: String
+  proposedByUserIDLTE: String
+  proposedByUserIDContains: String
+  proposedByUserIDHasPrefix: String
+  proposedByUserIDHasSuffix: String
+  proposedByUserIDIsNil: Boolean
+  proposedByUserIDNotNil: Boolean
+  proposedByUserIDEqualFold: String
+  proposedByUserIDContainsFold: String
+  """
+  proposed_at field predicates
+  """
+  proposedAt: Time
+  proposedAtNEQ: Time
+  proposedAtIn: [Time!]
+  proposedAtNotIn: [Time!]
+  proposedAtGT: Time
+  proposedAtGTE: Time
+  proposedAtLT: Time
+  proposedAtLTE: Time
+  proposedAtIsNil: Boolean
+  proposedAtNotNil: Boolean
   """
   name field predicates
   """
@@ -26861,6 +27102,18 @@ type InternalPolicyHistory implements Node {
   the kind of the internal_policy
   """
   internalPolicyKindID: String
+  """
+  pending changes awaiting workflow approval
+  """
+  proposedChanges: Map
+  """
+  user who proposed the changes
+  """
+  proposedByUserID: String
+  """
+  when changes were proposed
+  """
+  proposedAt: Time
 }
 """
 A connection to a list of items.
@@ -27357,6 +27610,37 @@ input InternalPolicyHistoryWhereInput {
   internalPolicyKindIDNotNil: Boolean
   internalPolicyKindIDEqualFold: String
   internalPolicyKindIDContainsFold: String
+  """
+  proposed_by_user_id field predicates
+  """
+  proposedByUserID: String
+  proposedByUserIDNEQ: String
+  proposedByUserIDIn: [String!]
+  proposedByUserIDNotIn: [String!]
+  proposedByUserIDGT: String
+  proposedByUserIDGTE: String
+  proposedByUserIDLT: String
+  proposedByUserIDLTE: String
+  proposedByUserIDContains: String
+  proposedByUserIDHasPrefix: String
+  proposedByUserIDHasSuffix: String
+  proposedByUserIDIsNil: Boolean
+  proposedByUserIDNotNil: Boolean
+  proposedByUserIDEqualFold: String
+  proposedByUserIDContainsFold: String
+  """
+  proposed_at field predicates
+  """
+  proposedAt: Time
+  proposedAtNEQ: Time
+  proposedAtIn: [Time!]
+  proposedAtNotIn: [Time!]
+  proposedAtGT: Time
+  proposedAtGTE: Time
+  proposedAtLT: Time
+  proposedAtLTE: Time
+  proposedAtIsNil: Boolean
+  proposedAtNotNil: Boolean
 }
 type JobTemplateHistory implements Node {
   id: ID!
@@ -37055,6 +37339,14 @@ type SubcontrolHistory implements Node {
   """
   references: [Reference!]
   """
+  reference steps to take to test the control
+  """
+  testingProcedures: [TestingProcedures!]
+  """
+  list of common evidence requests for the control
+  """
+  evidenceRequests: [EvidenceRequests!]
+  """
   the id of the group that owns the control
   """
   controlOwnerID: String
@@ -42979,7 +43271,7 @@ type WorkflowAssignmentHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -43411,7 +43703,7 @@ type WorkflowAssignmentTargetHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -43752,7 +44044,7 @@ type WorkflowDefinitionHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -44213,7 +44505,7 @@ type WorkflowEventHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -44491,7 +44783,7 @@ type WorkflowInstanceHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -44514,6 +44806,18 @@ type WorkflowInstanceHistory implements Node {
   Copy of definition JSON used for this instance
   """
   definitionSnapshot: WorkflowDefinitionDocument
+  """
+  ID of the control this workflow instance is associated with
+  """
+  controlID: String
+  """
+  ID of the internal policy this workflow instance is associated with
+  """
+  internalPolicyID: String
+  """
+  ID of the evidence this workflow instance is associated with
+  """
+  evidenceID: String
 }
 """
 A connection to a list of items.
@@ -44763,6 +45067,60 @@ input WorkflowInstanceHistoryWhereInput {
   lastEvaluatedAtLTE: Time
   lastEvaluatedAtIsNil: Boolean
   lastEvaluatedAtNotNil: Boolean
+  """
+  control_id field predicates
+  """
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDIsNil: Boolean
+  controlIDNotNil: Boolean
+  controlIDEqualFold: String
+  controlIDContainsFold: String
+  """
+  internal_policy_id field predicates
+  """
+  internalPolicyID: String
+  internalPolicyIDNEQ: String
+  internalPolicyIDIn: [String!]
+  internalPolicyIDNotIn: [String!]
+  internalPolicyIDGT: String
+  internalPolicyIDGTE: String
+  internalPolicyIDLT: String
+  internalPolicyIDLTE: String
+  internalPolicyIDContains: String
+  internalPolicyIDHasPrefix: String
+  internalPolicyIDHasSuffix: String
+  internalPolicyIDIsNil: Boolean
+  internalPolicyIDNotNil: Boolean
+  internalPolicyIDEqualFold: String
+  internalPolicyIDContainsFold: String
+  """
+  evidence_id field predicates
+  """
+  evidenceID: String
+  evidenceIDNEQ: String
+  evidenceIDIn: [String!]
+  evidenceIDNotIn: [String!]
+  evidenceIDGT: String
+  evidenceIDGTE: String
+  evidenceIDLT: String
+  evidenceIDLTE: String
+  evidenceIDContains: String
+  evidenceIDHasPrefix: String
+  evidenceIDHasSuffix: String
+  evidenceIDIsNil: Boolean
+  evidenceIDNotNil: Boolean
+  evidenceIDEqualFold: String
+  evidenceIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
@@ -44787,7 +45145,7 @@ type WorkflowObjectRefHistory implements Node {
   """
   displayID: String!
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -44822,6 +45180,10 @@ type WorkflowObjectRefHistory implements Node {
   Directory membership referenced by this workflow instance
   """
   directoryMembershipID: String
+  """
+  Evidence referenced by this workflow instance
+  """
+  evidenceID: String
 }
 """
 A connection to a list of items.
@@ -45177,6 +45539,24 @@ input WorkflowObjectRefHistoryWhereInput {
   directoryMembershipIDNotNil: Boolean
   directoryMembershipIDEqualFold: String
   directoryMembershipIDContainsFold: String
+  """
+  evidence_id field predicates
+  """
+  evidenceID: String
+  evidenceIDNEQ: String
+  evidenceIDIn: [String!]
+  evidenceIDNotIn: [String!]
+  evidenceIDGT: String
+  evidenceIDGTE: String
+  evidenceIDLT: String
+  evidenceIDLTE: String
+  evidenceIDContains: String
+  evidenceIDHasPrefix: String
+  evidenceIDHasSuffix: String
+  evidenceIDIsNil: Boolean
+  evidenceIDNotNil: Boolean
+  evidenceIDEqualFold: String
+  evidenceIDContainsFold: String
 }
 `, BuiltIn: false},
 	{Name: "../schemahistory/enums.graphql", Input: `"""

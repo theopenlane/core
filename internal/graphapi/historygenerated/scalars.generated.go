@@ -82,6 +82,22 @@ func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNEvidenceRequests2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNEvidenceRequests2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, v any) (models.ExampleEvidence, error) {
 	var res models.ExampleEvidence
 	err := res.UnmarshalGQL(v)
@@ -132,6 +148,22 @@ func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcor
 
 func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, sel ast.SelectionSet, v models.Reference) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalNTestingProcedures2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTestingProcedures2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v any) (time.Time, error) {
@@ -310,6 +342,42 @@ func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 	return v
 }
 
+func (ec *executionContext) unmarshalOEvidenceRequests2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNEvidenceRequests2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOEvidenceRequests2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNEvidenceRequests2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, v any) ([]models.ExampleEvidence, error) {
 	if v == nil {
 		return nil, nil
@@ -441,6 +509,42 @@ func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋco
 	ret := make(graphql.Array, len(v))
 	for i := range v {
 		ret[i] = ec.marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOTestingProcedures2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNTestingProcedures2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOTestingProcedures2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNTestingProcedures2string(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {

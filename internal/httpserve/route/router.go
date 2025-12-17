@@ -544,22 +544,31 @@ func (r *Router) AddGraphQLToOpenAPI() {
 	operation.Description = "Handles all GraphQL queries, mutations, and subscriptions"
 	operation.Tags = []string{"graphql"}
 
+	// Create the GraphQLHistory operation
+	operationHistory := openapi3.NewOperation()
+	operationHistory.OperationID = "GraphQLQueryHistory"
+	operationHistory.Summary = "GraphQL History Endpoint"
+	operationHistory.Description = "Handles all GraphQL queries for historical data"
+	operationHistory.Tags = []string{"graphql", "history", "audit logs"}
+
 	// Add request body
 	requestBody := openapi3.NewRequestBody()
 	requestBody.Required = true
 	requestBody.Description = "GraphQL query request"
 	requestBody.WithJSONSchema(requestSchema)
 	operation.RequestBody = &openapi3.RequestBodyRef{Value: requestBody}
+	operationHistory.RequestBody = &openapi3.RequestBodyRef{Value: requestBody}
 
 	// Add response
 	response := openapi3.NewResponse()
 	response.WithDescription("Successful GraphQL response")
 	response.WithJSONSchema(responseSchema)
-	operation.AddResponse(200, response) // nolint:mnd
+	operation.AddResponse(200, response)        // nolint:mnd
+	operationHistory.AddResponse(200, response) // nolint:mnd
 
 	// Add the operation to the OpenAPI spec
 	r.OAS.AddOperation("/query", "POST", operation)
-	r.OAS.AddOperation("/history/query", "POST", operation)
+	r.OAS.AddOperation("/history/query", "POST", operationHistory)
 }
 
 // RegisterRoutes with the echo routers - Router is defined within openapi.go

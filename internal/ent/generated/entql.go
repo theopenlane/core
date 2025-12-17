@@ -33554,3 +33554,17 @@ func (f *WorkflowObjectRefFilter) WhereHasDirectoryMembershipWith(preds ...predi
 		}
 	})))
 }
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *WorkflowObjectRefFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *WorkflowObjectRefFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}

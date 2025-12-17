@@ -106,8 +106,6 @@ func main() {
 		return
 	}
 
-	log.Info().Msg("running ent history codegen")
-
 	if !*skipHistory {
 		historySchemaGenerate(getEntHistoryGqlExtension())
 	} else {
@@ -332,7 +330,7 @@ func schemaGenerate(extensions ...entc.Extension) {
 }
 
 func historySchemaGenerate(extensions ...entc.Extension) {
-	log.Info().Msg("running ent history codegen")
+	log.Info().Msg("generating history schemas")
 	if err := entc.Generate(historySchemaPath, &gen.Config{
 		Target: "./" + entGeneratedHistoryPath,
 		Hooks: []gen.Hook{
