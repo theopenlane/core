@@ -291,7 +291,7 @@ func (r *updateControlInputResolver) UpdateDiscussions(ctx context.Context, obj 
 		}
 		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 
 		// setup update request
@@ -299,7 +299,7 @@ func (r *updateControlInputResolver) UpdateDiscussions(ctx context.Context, obj 
 
 		res, err = req.Save(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 	}
 
@@ -433,7 +433,7 @@ func (r *updateInternalPolicyInputResolver) UpdateDiscussions(ctx context.Contex
 		}
 		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 
 		// setup update request
@@ -441,7 +441,7 @@ func (r *updateInternalPolicyInputResolver) UpdateDiscussions(ctx context.Contex
 
 		res, err = req.Save(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 	}
 
@@ -537,7 +537,7 @@ func (r *updateProcedureInputResolver) UpdateDiscussions(ctx context.Context, ob
 		}
 		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 
 		// setup update request
@@ -545,7 +545,7 @@ func (r *updateProcedureInputResolver) UpdateDiscussions(ctx context.Context, ob
 
 		res, err = req.Save(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 	}
 
@@ -641,7 +641,7 @@ func (r *updateRiskInputResolver) UpdateDiscussions(ctx context.Context, obj *ge
 		}
 		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 
 		// setup update request
@@ -649,7 +649,7 @@ func (r *updateRiskInputResolver) UpdateDiscussions(ctx context.Context, obj *ge
 
 		res, err = req.Save(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 	}
 
@@ -745,7 +745,7 @@ func (r *updateSubcontrolInputResolver) UpdateDiscussions(ctx context.Context, o
 		}
 		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 
 		// setup update request
@@ -753,7 +753,7 @@ func (r *updateSubcontrolInputResolver) UpdateDiscussions(ctx context.Context, o
 
 		res, err = req.Save(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
 		}
 	}
 

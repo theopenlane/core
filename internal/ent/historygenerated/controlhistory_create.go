@@ -181,6 +181,12 @@ func (_c *ControlHistoryCreate) SetNillableDescription(v *string) *ControlHistor
 	return _c
 }
 
+// SetDescriptionJSON sets the "description_json" field.
+func (_c *ControlHistoryCreate) SetDescriptionJSON(v []interface{}) *ControlHistoryCreate {
+	_c.mutation.SetDescriptionJSON(v)
+	return _c
+}
+
 // SetAliases sets the "aliases" field.
 func (_c *ControlHistoryCreate) SetAliases(v []string) *ControlHistoryCreate {
 	_c.mutation.SetAliases(v)
@@ -784,6 +790,10 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Description(); ok {
 		_spec.SetField(controlhistory.FieldDescription, field.TypeString, value)
 		_node.Description = value
+	}
+	if value, ok := _c.mutation.DescriptionJSON(); ok {
+		_spec.SetField(controlhistory.FieldDescriptionJSON, field.TypeJSON, value)
+		_node.DescriptionJSON = value
 	}
 	if value, ok := _c.mutation.Aliases(); ok {
 		_spec.SetField(controlhistory.FieldAliases, field.TypeJSON, value)

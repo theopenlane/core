@@ -56,6 +56,8 @@ type ControlObjectiveHistory struct {
 	Name string `json:"name,omitempty"`
 	// the desired outcome or target of the control objective
 	DesiredOutcome string `json:"desired_outcome,omitempty"`
+	// structured details of the control objective in JSON format
+	DesiredOutcomeJSON []interface{} `json:"desired_outcome_json,omitempty"`
 	// status of the control objective
 	Status enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -74,7 +76,7 @@ func (*ControlObjectiveHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlobjectivehistory.FieldTags:
+		case controlobjectivehistory.FieldTags, controlobjectivehistory.FieldDesiredOutcomeJSON:
 			values[i] = new([]byte)
 		case controlobjectivehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -217,6 +219,14 @@ func (_m *ControlObjectiveHistory) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				_m.DesiredOutcome = value.String
 			}
+		case controlobjectivehistory.FieldDesiredOutcomeJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field desired_outcome_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DesiredOutcomeJSON); err != nil {
+					return fmt.Errorf("unmarshal field desired_outcome_json: %w", err)
+				}
+			}
 		case controlobjectivehistory.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
@@ -340,6 +350,9 @@ func (_m *ControlObjectiveHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("desired_outcome=")
 	builder.WriteString(_m.DesiredOutcome)
+	builder.WriteString(", ")
+	builder.WriteString("desired_outcome_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DesiredOutcomeJSON))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

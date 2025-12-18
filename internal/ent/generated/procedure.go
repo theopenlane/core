@@ -51,6 +51,8 @@ type Procedure struct {
 	ProcedureType string `json:"procedure_type,omitempty"`
 	// details of the procedure
 	Details string `json:"details,omitempty"`
+	// structured details of the procedure in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// whether approval is required for edits to the procedure
 	ApprovalRequired bool `json:"approval_required,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
@@ -309,7 +311,7 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedure.FieldTags, procedure.FieldTagSuggestions, procedure.FieldDismissedTagSuggestions, procedure.FieldControlSuggestions, procedure.FieldDismissedControlSuggestions, procedure.FieldImprovementSuggestions, procedure.FieldDismissedImprovementSuggestions:
+		case procedure.FieldTags, procedure.FieldDetailsJSON, procedure.FieldTagSuggestions, procedure.FieldDismissedTagSuggestions, procedure.FieldControlSuggestions, procedure.FieldDismissedControlSuggestions, procedure.FieldImprovementSuggestions, procedure.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
 		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -427,6 +429,14 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case procedure.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case procedure.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -729,6 +739,9 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
+	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))

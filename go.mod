@@ -92,7 +92,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.3.0
-	github.com/theopenlane/entx v0.20.0
+	github.com/theopenlane/entx v0.20.2-0.20251218185526-a16a513985fd
 	github.com/theopenlane/gqlgen-plugins v0.13.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.1
@@ -146,7 +146,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.40.0 // indirect
+	github.com/XSAM/otelsql v0.41.0 // indirect
 	github.com/Yiling-J/theine-go v0.6.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect

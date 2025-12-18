@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_Subscription_taskCreated(_ context.Cont
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
 				return ec.fieldContext_Task_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Task_detailsJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_Task_status(ctx, field)
 			case "category":

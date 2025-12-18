@@ -46,8 +46,8 @@ github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 h1:TngWCqHvy9oXAN6lEV
 github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5/go.mod h1:lmUJ/7eu/Q8D7ML55dXQrVaamCz2vxCfdQBasLZfHKk=
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2 h1:ZBbLwSJqkHBuFDA6DUhhse0IGJ7T5bemHyNILUjvOq4=
 github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2/go.mod h1:VSw57q4QFiWDbRnjdX8Cb3Ow0SFncRw+bA/ofY6Q83w=
-github.com/XSAM/otelsql v0.40.0 h1:8jaiQ6KcoEXF46fBmPEqb+pp29w2xjWfuXjZXTXBjaA=
-github.com/XSAM/otelsql v0.40.0/go.mod h1:/7F+1XKt3/sTlYtwKtkHQ5Gzoom+EerXmD1VdnTqfB4=
+github.com/XSAM/otelsql v0.41.0 h1:uZifjQhZhv5EDYJh+IVk1DiYxQZJBlNSen0MBFnfxB8=
+github.com/XSAM/otelsql v0.41.0/go.mod h1:NMQT0PiKoFILp9QgjQz+D5mvW+9mT0suR7OejqrtMaM=
 github.com/Yamashou/gqlgenc v0.33.0 h1:0fxTnNE8/JVmFpfo7reA5pEgOcr7VjNc+/nEpVhNjfc=
 github.com/Yamashou/gqlgenc v0.33.0/go.mod h1:MZGXx/nALyxcehcFeLGmYiNsJ+hQTOGJzNYCGNX4rL0=
 github.com/Yiling-J/theine-go v0.6.2 h1:1GeoXeQ0O0AUkiwj2S9Jc0Mzx+hpqzmqsJ4kIC4M9AY=
@@ -678,8 +678,8 @@ github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4l
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
 github.com/theopenlane/emailtemplates v0.3.0 h1:vuU5AlSzG3hog7QoBSKuKKfIixOe9yxbY8L8XNYIbOM=
 github.com/theopenlane/emailtemplates v0.3.0/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
-github.com/theopenlane/entx v0.20.0 h1:Kpfl5UHXcPaGVr4H2y3PznSSz9e140uwWskx8PjTKPc=
-github.com/theopenlane/entx v0.20.0/go.mod h1:aLvpnaCIb/z7TOPQrrpEFtn8o4oZcIGG7Dcq9jYFooI=
+github.com/theopenlane/entx v0.20.2-0.20251218185526-a16a513985fd h1:38YW1qp7OqN7zNfdQ2OcqCg5eVIbpbAwz1hOdlBq6QE=
+github.com/theopenlane/entx v0.20.2-0.20251218185526-a16a513985fd/go.mod h1:QXHK1vJlnxEHC6TMRoTr4lznJrbp6Gf9yBVeNobCI3E=
 github.com/theopenlane/gqlgen-plugins v0.13.0 h1:GCmzUpC39VVIDUNAlB+zjBc+kgB+GJJb4ixpkg4ml4M=
 github.com/theopenlane/gqlgen-plugins v0.13.0/go.mod h1:dUjGeXPU3g7EB0XkSsd4hGkMrkh77VE9w48CPj/j2as=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
