@@ -1,3 +1,5 @@
+//go:build test
+
 package hooks_test
 
 import (

@@ -12,56 +12,29 @@ type APIToken func(*sql.Selector)
 // ActionPlan is the predicate function for actionplan builders.
 type ActionPlan func(*sql.Selector)
 
-// ActionPlanHistory is the predicate function for actionplanhistory builders.
-type ActionPlanHistory func(*sql.Selector)
-
 // Assessment is the predicate function for assessment builders.
 type Assessment func(*sql.Selector)
-
-// AssessmentHistory is the predicate function for assessmenthistory builders.
-type AssessmentHistory func(*sql.Selector)
 
 // AssessmentResponse is the predicate function for assessmentresponse builders.
 type AssessmentResponse func(*sql.Selector)
 
-// AssessmentResponseHistory is the predicate function for assessmentresponsehistory builders.
-type AssessmentResponseHistory func(*sql.Selector)
-
 // Asset is the predicate function for asset builders.
 type Asset func(*sql.Selector)
-
-// AssetHistory is the predicate function for assethistory builders.
-type AssetHistory func(*sql.Selector)
 
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 
-// ContactHistory is the predicate function for contacthistory builders.
-type ContactHistory func(*sql.Selector)
-
 // Control is the predicate function for control builders.
 type Control func(*sql.Selector)
-
-// ControlHistory is the predicate function for controlhistory builders.
-type ControlHistory func(*sql.Selector)
 
 // ControlImplementation is the predicate function for controlimplementation builders.
 type ControlImplementation func(*sql.Selector)
 
-// ControlImplementationHistory is the predicate function for controlimplementationhistory builders.
-type ControlImplementationHistory func(*sql.Selector)
-
 // ControlObjective is the predicate function for controlobjective builders.
 type ControlObjective func(*sql.Selector)
 
-// ControlObjectiveHistory is the predicate function for controlobjectivehistory builders.
-type ControlObjectiveHistory func(*sql.Selector)
-
 // CustomDomain is the predicate function for customdomain builders.
 type CustomDomain func(*sql.Selector)
-
-// CustomDomainHistory is the predicate function for customdomainhistory builders.
-type CustomDomainHistory func(*sql.Selector)
 
 // CustomTypeEnum is the predicate function for customtypeenum builders.
 type CustomTypeEnum func(*sql.Selector)
@@ -69,26 +42,14 @@ type CustomTypeEnum func(*sql.Selector)
 // DNSVerification is the predicate function for dnsverification builders.
 type DNSVerification func(*sql.Selector)
 
-// DNSVerificationHistory is the predicate function for dnsverificationhistory builders.
-type DNSVerificationHistory func(*sql.Selector)
-
 // DirectoryAccount is the predicate function for directoryaccount builders.
 type DirectoryAccount func(*sql.Selector)
-
-// DirectoryAccountHistory is the predicate function for directoryaccounthistory builders.
-type DirectoryAccountHistory func(*sql.Selector)
 
 // DirectoryGroup is the predicate function for directorygroup builders.
 type DirectoryGroup func(*sql.Selector)
 
-// DirectoryGroupHistory is the predicate function for directorygrouphistory builders.
-type DirectoryGroupHistory func(*sql.Selector)
-
 // DirectoryMembership is the predicate function for directorymembership builders.
 type DirectoryMembership func(*sql.Selector)
-
-// DirectoryMembershipHistory is the predicate function for directorymembershiphistory builders.
-type DirectoryMembershipHistory func(*sql.Selector)
 
 // DirectorySyncRun is the predicate function for directorysyncrun builders.
 type DirectorySyncRun func(*sql.Selector)
@@ -96,14 +57,8 @@ type DirectorySyncRun func(*sql.Selector)
 // Discussion is the predicate function for discussion builders.
 type Discussion func(*sql.Selector)
 
-// DiscussionHistory is the predicate function for discussionhistory builders.
-type DiscussionHistory func(*sql.Selector)
-
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
-
-// DocumentDataHistory is the predicate function for documentdatahistory builders.
-type DocumentDataHistory func(*sql.Selector)
 
 // EmailVerificationToken is the predicate function for emailverificationtoken builders.
 type EmailVerificationToken func(*sql.Selector)
@@ -111,23 +66,14 @@ type EmailVerificationToken func(*sql.Selector)
 // Entity is the predicate function for entity builders.
 type Entity func(*sql.Selector)
 
-// EntityHistory is the predicate function for entityhistory builders.
-type EntityHistory func(*sql.Selector)
-
 // EntityType is the predicate function for entitytype builders.
 type EntityType func(*sql.Selector)
-
-// EntityTypeHistory is the predicate function for entitytypehistory builders.
-type EntityTypeHistory func(*sql.Selector)
 
 // Event is the predicate function for event builders.
 type Event func(*sql.Selector)
 
 // Evidence is the predicate function for evidence builders.
 type Evidence func(*sql.Selector)
-
-// EvidenceHistory is the predicate function for evidencehistory builders.
-type EvidenceHistory func(*sql.Selector)
 
 // Export is the predicate function for export builders.
 type Export func(*sql.Selector)
@@ -138,44 +84,23 @@ type File func(*sql.Selector)
 // FileDownloadToken is the predicate function for filedownloadtoken builders.
 type FileDownloadToken func(*sql.Selector)
 
-// FileHistory is the predicate function for filehistory builders.
-type FileHistory func(*sql.Selector)
-
 // Finding is the predicate function for finding builders.
 type Finding func(*sql.Selector)
 
 // FindingControl is the predicate function for findingcontrol builders.
 type FindingControl func(*sql.Selector)
 
-// FindingControlHistory is the predicate function for findingcontrolhistory builders.
-type FindingControlHistory func(*sql.Selector)
-
-// FindingHistory is the predicate function for findinghistory builders.
-type FindingHistory func(*sql.Selector)
-
 // Group is the predicate function for group builders.
 type Group func(*sql.Selector)
-
-// GroupHistory is the predicate function for grouphistory builders.
-type GroupHistory func(*sql.Selector)
 
 // GroupMembership is the predicate function for groupmembership builders.
 type GroupMembership func(*sql.Selector)
 
-// GroupMembershipHistory is the predicate function for groupmembershiphistory builders.
-type GroupMembershipHistory func(*sql.Selector)
-
 // GroupSetting is the predicate function for groupsetting builders.
 type GroupSetting func(*sql.Selector)
 
-// GroupSettingHistory is the predicate function for groupsettinghistory builders.
-type GroupSettingHistory func(*sql.Selector)
-
 // Hush is the predicate function for hush builders.
 type Hush func(*sql.Selector)
-
-// HushHistory is the predicate function for hushhistory builders.
-type HushHistory func(*sql.Selector)
 
 // ImpersonationEvent is the predicate function for impersonationevent builders.
 type ImpersonationEvent func(*sql.Selector)
@@ -183,14 +108,8 @@ type ImpersonationEvent func(*sql.Selector)
 // Integration is the predicate function for integration builders.
 type Integration func(*sql.Selector)
 
-// IntegrationHistory is the predicate function for integrationhistory builders.
-type IntegrationHistory func(*sql.Selector)
-
 // InternalPolicy is the predicate function for internalpolicy builders.
 type InternalPolicy func(*sql.Selector)
-
-// InternalPolicyHistory is the predicate function for internalpolicyhistory builders.
-type InternalPolicyHistory func(*sql.Selector)
 
 // Invite is the predicate function for invite builders.
 type Invite func(*sql.Selector)
@@ -210,32 +129,17 @@ type JobRunnerToken func(*sql.Selector)
 // JobTemplate is the predicate function for jobtemplate builders.
 type JobTemplate func(*sql.Selector)
 
-// JobTemplateHistory is the predicate function for jobtemplatehistory builders.
-type JobTemplateHistory func(*sql.Selector)
-
 // MappableDomain is the predicate function for mappabledomain builders.
 type MappableDomain func(*sql.Selector)
-
-// MappableDomainHistory is the predicate function for mappabledomainhistory builders.
-type MappableDomainHistory func(*sql.Selector)
 
 // MappedControl is the predicate function for mappedcontrol builders.
 type MappedControl func(*sql.Selector)
 
-// MappedControlHistory is the predicate function for mappedcontrolhistory builders.
-type MappedControlHistory func(*sql.Selector)
-
 // Narrative is the predicate function for narrative builders.
 type Narrative func(*sql.Selector)
 
-// NarrativeHistory is the predicate function for narrativehistory builders.
-type NarrativeHistory func(*sql.Selector)
-
 // Note is the predicate function for note builders.
 type Note func(*sql.Selector)
-
-// NoteHistory is the predicate function for notehistory builders.
-type NoteHistory func(*sql.Selector)
 
 // Notification is the predicate function for notification builders.
 type Notification func(*sql.Selector)
@@ -245,9 +149,6 @@ type Onboarding func(*sql.Selector)
 
 // OrgMembership is the predicate function for orgmembership builders.
 type OrgMembership func(*sql.Selector)
-
-// OrgMembershipHistory is the predicate function for orgmembershiphistory builders.
-type OrgMembershipHistory func(*sql.Selector)
 
 // OrgModule is the predicate function for orgmodule builders.
 type OrgModule func(*sql.Selector)
@@ -261,20 +162,11 @@ type OrgProduct func(*sql.Selector)
 // OrgSubscription is the predicate function for orgsubscription builders.
 type OrgSubscription func(*sql.Selector)
 
-// OrgSubscriptionHistory is the predicate function for orgsubscriptionhistory builders.
-type OrgSubscriptionHistory func(*sql.Selector)
-
 // Organization is the predicate function for organization builders.
 type Organization func(*sql.Selector)
 
-// OrganizationHistory is the predicate function for organizationhistory builders.
-type OrganizationHistory func(*sql.Selector)
-
 // OrganizationSetting is the predicate function for organizationsetting builders.
 type OrganizationSetting func(*sql.Selector)
-
-// OrganizationSettingHistory is the predicate function for organizationsettinghistory builders.
-type OrganizationSettingHistory func(*sql.Selector)
 
 // PasswordResetToken is the predicate function for passwordresettoken builders.
 type PasswordResetToken func(*sql.Selector)
@@ -285,50 +177,26 @@ type PersonalAccessToken func(*sql.Selector)
 // Procedure is the predicate function for procedure builders.
 type Procedure func(*sql.Selector)
 
-// ProcedureHistory is the predicate function for procedurehistory builders.
-type ProcedureHistory func(*sql.Selector)
-
 // Program is the predicate function for program builders.
 type Program func(*sql.Selector)
-
-// ProgramHistory is the predicate function for programhistory builders.
-type ProgramHistory func(*sql.Selector)
 
 // ProgramMembership is the predicate function for programmembership builders.
 type ProgramMembership func(*sql.Selector)
 
-// ProgramMembershipHistory is the predicate function for programmembershiphistory builders.
-type ProgramMembershipHistory func(*sql.Selector)
-
 // Remediation is the predicate function for remediation builders.
 type Remediation func(*sql.Selector)
-
-// RemediationHistory is the predicate function for remediationhistory builders.
-type RemediationHistory func(*sql.Selector)
 
 // Review is the predicate function for review builders.
 type Review func(*sql.Selector)
 
-// ReviewHistory is the predicate function for reviewhistory builders.
-type ReviewHistory func(*sql.Selector)
-
 // Risk is the predicate function for risk builders.
 type Risk func(*sql.Selector)
-
-// RiskHistory is the predicate function for riskhistory builders.
-type RiskHistory func(*sql.Selector)
 
 // Scan is the predicate function for scan builders.
 type Scan func(*sql.Selector)
 
-// ScanHistory is the predicate function for scanhistory builders.
-type ScanHistory func(*sql.Selector)
-
 // ScheduledJob is the predicate function for scheduledjob builders.
 type ScheduledJob func(*sql.Selector)
-
-// ScheduledJobHistory is the predicate function for scheduledjobhistory builders.
-type ScheduledJobHistory func(*sql.Selector)
 
 // ScheduledJobRun is the predicate function for scheduledjobrun builders.
 type ScheduledJobRun func(*sql.Selector)
@@ -336,20 +204,11 @@ type ScheduledJobRun func(*sql.Selector)
 // Standard is the predicate function for standard builders.
 type Standard func(*sql.Selector)
 
-// StandardHistory is the predicate function for standardhistory builders.
-type StandardHistory func(*sql.Selector)
-
 // Subcontrol is the predicate function for subcontrol builders.
 type Subcontrol func(*sql.Selector)
 
-// SubcontrolHistory is the predicate function for subcontrolhistory builders.
-type SubcontrolHistory func(*sql.Selector)
-
 // Subprocessor is the predicate function for subprocessor builders.
 type Subprocessor func(*sql.Selector)
-
-// SubprocessorHistory is the predicate function for subprocessorhistory builders.
-type SubprocessorHistory func(*sql.Selector)
 
 // Subscriber is the predicate function for subscriber builders.
 type Subscriber func(*sql.Selector)
@@ -363,14 +222,8 @@ type TagDefinition func(*sql.Selector)
 // Task is the predicate function for task builders.
 type Task func(*sql.Selector)
 
-// TaskHistory is the predicate function for taskhistory builders.
-type TaskHistory func(*sql.Selector)
-
 // Template is the predicate function for template builders.
 type Template func(*sql.Selector)
-
-// TemplateHistory is the predicate function for templatehistory builders.
-type TemplateHistory func(*sql.Selector)
 
 // TrustCenter is the predicate function for trustcenter builders.
 type TrustCenter func(*sql.Selector)
@@ -378,59 +231,29 @@ type TrustCenter func(*sql.Selector)
 // TrustCenterCompliance is the predicate function for trustcentercompliance builders.
 type TrustCenterCompliance func(*sql.Selector)
 
-// TrustCenterComplianceHistory is the predicate function for trustcentercompliancehistory builders.
-type TrustCenterComplianceHistory func(*sql.Selector)
-
 // TrustCenterDoc is the predicate function for trustcenterdoc builders.
 type TrustCenterDoc func(*sql.Selector)
-
-// TrustCenterDocHistory is the predicate function for trustcenterdochistory builders.
-type TrustCenterDocHistory func(*sql.Selector)
-
-// TrustCenterHistory is the predicate function for trustcenterhistory builders.
-type TrustCenterHistory func(*sql.Selector)
 
 // TrustCenterSetting is the predicate function for trustcentersetting builders.
 type TrustCenterSetting func(*sql.Selector)
 
-// TrustCenterSettingHistory is the predicate function for trustcentersettinghistory builders.
-type TrustCenterSettingHistory func(*sql.Selector)
-
 // TrustCenterSubprocessor is the predicate function for trustcentersubprocessor builders.
 type TrustCenterSubprocessor func(*sql.Selector)
-
-// TrustCenterSubprocessorHistory is the predicate function for trustcentersubprocessorhistory builders.
-type TrustCenterSubprocessorHistory func(*sql.Selector)
 
 // TrustCenterWatermarkConfig is the predicate function for trustcenterwatermarkconfig builders.
 type TrustCenterWatermarkConfig func(*sql.Selector)
 
-// TrustCenterWatermarkConfigHistory is the predicate function for trustcenterwatermarkconfighistory builders.
-type TrustCenterWatermarkConfigHistory func(*sql.Selector)
-
 // TrustcenterEntity is the predicate function for trustcenterentity builders.
 type TrustcenterEntity func(*sql.Selector)
-
-// TrustcenterEntityHistory is the predicate function for trustcenterentityhistory builders.
-type TrustcenterEntityHistory func(*sql.Selector)
 
 // User is the predicate function for user builders.
 type User func(*sql.Selector)
 
-// UserHistory is the predicate function for userhistory builders.
-type UserHistory func(*sql.Selector)
-
 // UserSetting is the predicate function for usersetting builders.
 type UserSetting func(*sql.Selector)
 
-// UserSettingHistory is the predicate function for usersettinghistory builders.
-type UserSettingHistory func(*sql.Selector)
-
 // Vulnerability is the predicate function for vulnerability builders.
 type Vulnerability func(*sql.Selector)
-
-// VulnerabilityHistory is the predicate function for vulnerabilityhistory builders.
-type VulnerabilityHistory func(*sql.Selector)
 
 // Webauthn is the predicate function for webauthn builders.
 type Webauthn func(*sql.Selector)
@@ -438,35 +261,17 @@ type Webauthn func(*sql.Selector)
 // WorkflowAssignment is the predicate function for workflowassignment builders.
 type WorkflowAssignment func(*sql.Selector)
 
-// WorkflowAssignmentHistory is the predicate function for workflowassignmenthistory builders.
-type WorkflowAssignmentHistory func(*sql.Selector)
-
 // WorkflowAssignmentTarget is the predicate function for workflowassignmenttarget builders.
 type WorkflowAssignmentTarget func(*sql.Selector)
-
-// WorkflowAssignmentTargetHistory is the predicate function for workflowassignmenttargethistory builders.
-type WorkflowAssignmentTargetHistory func(*sql.Selector)
 
 // WorkflowDefinition is the predicate function for workflowdefinition builders.
 type WorkflowDefinition func(*sql.Selector)
 
-// WorkflowDefinitionHistory is the predicate function for workflowdefinitionhistory builders.
-type WorkflowDefinitionHistory func(*sql.Selector)
-
 // WorkflowEvent is the predicate function for workflowevent builders.
 type WorkflowEvent func(*sql.Selector)
-
-// WorkflowEventHistory is the predicate function for workfloweventhistory builders.
-type WorkflowEventHistory func(*sql.Selector)
 
 // WorkflowInstance is the predicate function for workflowinstance builders.
 type WorkflowInstance func(*sql.Selector)
 
-// WorkflowInstanceHistory is the predicate function for workflowinstancehistory builders.
-type WorkflowInstanceHistory func(*sql.Selector)
-
 // WorkflowObjectRef is the predicate function for workflowobjectref builders.
 type WorkflowObjectRef func(*sql.Selector)
-
-// WorkflowObjectRefHistory is the predicate function for workflowobjectrefhistory builders.
-type WorkflowObjectRefHistory func(*sql.Selector)

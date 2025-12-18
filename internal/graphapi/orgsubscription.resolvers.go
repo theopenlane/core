@@ -10,18 +10,19 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/internal/graphapi/common"
 )
 
 // OrgSubscription is the resolver for the orgSubscription field.
 func (r *queryResolver) OrgSubscription(ctx context.Context, id string) (*generated.OrgSubscription, error) {
 	query, err := withTransactionalMutation(ctx).OrgSubscription.Query().Where(orgsubscription.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscription"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "orgsubscription"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscription"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "orgsubscription"})
 	}
 
 	return res, nil

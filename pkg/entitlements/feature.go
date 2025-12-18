@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 )
 
 // CreateProductFeatureWithOptions creates a product feature using functional options

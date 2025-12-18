@@ -131,6 +131,58 @@ func (_u *EvidenceUpdate) ClearTags() *EvidenceUpdate {
 	return _u
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *EvidenceUpdate) SetProposedChanges(v map[string]interface{}) *EvidenceUpdate {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *EvidenceUpdate) ClearProposedChanges() *EvidenceUpdate {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *EvidenceUpdate) SetProposedByUserID(v string) *EvidenceUpdate {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableProposedByUserID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *EvidenceUpdate) ClearProposedByUserID() *EvidenceUpdate {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *EvidenceUpdate) SetProposedAt(v time.Time) *EvidenceUpdate {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableProposedAt(v *time.Time) *EvidenceUpdate {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *EvidenceUpdate) ClearProposedAt() *EvidenceUpdate {
+	_u.mutation.ClearProposedAt()
+	return _u
+}
+
 // SetName sets the "name" field.
 func (_u *EvidenceUpdate) SetName(v string) *EvidenceUpdate {
 	_u.mutation.SetName(v)
@@ -713,6 +765,24 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(evidence.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(evidence.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(evidence.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(evidence.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(evidence.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(evidence.FieldProposedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
 	}
@@ -1256,6 +1326,58 @@ func (_u *EvidenceUpdateOne) AppendTags(v []string) *EvidenceUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *EvidenceUpdateOne) ClearTags() *EvidenceUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *EvidenceUpdateOne) SetProposedChanges(v map[string]interface{}) *EvidenceUpdateOne {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *EvidenceUpdateOne) ClearProposedChanges() *EvidenceUpdateOne {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *EvidenceUpdateOne) SetProposedByUserID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableProposedByUserID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *EvidenceUpdateOne) ClearProposedByUserID() *EvidenceUpdateOne {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *EvidenceUpdateOne) SetProposedAt(v time.Time) *EvidenceUpdateOne {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableProposedAt(v *time.Time) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *EvidenceUpdateOne) ClearProposedAt() *EvidenceUpdateOne {
+	_u.mutation.ClearProposedAt()
 	return _u
 }
 
@@ -1870,6 +1992,24 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(evidence.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(evidence.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(evidence.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(evidence.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(evidence.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(evidence.FieldProposedAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)

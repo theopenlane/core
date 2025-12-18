@@ -1,3 +1,5 @@
+//go:build test
+
 package handlers_test
 
 import (
@@ -15,7 +17,7 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 	"golang.org/x/oauth2"
 
 	"github.com/redis/go-redis/v9"
@@ -54,6 +56,7 @@ import (
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 )
 
 // TestOperations consolidates all test operations for easier access
@@ -196,6 +199,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
+	// setup history client
+	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
+	require.NoError(t, err)
+
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
 	require.NoError(t, err)
@@ -216,6 +223,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.TOTP(suite.sharedOTPManager),
 		ent.PondPool(suite.sharedPondPool),
 		ent.EntitlementManager(entitlements),
+		ent.HistoryClient(hc),
 	}
 
 	// create database connection
@@ -581,7 +589,7 @@ var mockProduct = &stripe.Product{
 // orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
 func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	// mock customer search
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v83.Customer]")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v84.Customer]")).Run(func(args mock.Arguments) {
 		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
 
 		// Build a payload that matches Stripe search response shape

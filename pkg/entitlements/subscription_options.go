@@ -3,7 +3,7 @@ package entitlements
 import (
 	"context"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 )
 
 // SubscriptionCreateOption allows customizing SubscriptionCreateParams

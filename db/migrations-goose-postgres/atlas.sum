@@ -1,4 +1,4 @@
-h1:0FvrnWcc5b/WzVC9C9fLI2AnN/Zs0TKsicCUbfy/H+E=
+h1:WH1w4TFgMQqhhhsJBfb00PcsRjKGjETaw/wr/d20c0U=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -96,3 +96,6 @@ h1:0FvrnWcc5b/WzVC9C9fLI2AnN/Zs0TKsicCUbfy/H+E=
 20251208150616_full_name_contact_optional.sql h1:J0OKMrqUtS+nWDGaPC2H3gHDUjhRkY0ZgLM55dYFe5k=
 20251209222810_task_edge_task.sql h1:OcnzO0nATMAs2DxaD4SH7nc4l15Wlm9yg08kgyAfrSQ=
 20251210195522_plate_discussions.sql h1:4l7E1AvMbJMtun86Xth1BcJDhIU+Cj3ezJ5v7qpV9hw=
+20251213220033_objectownedworkflows.sql h1:r5OBmC7cslSeU1xyyeaR8g5cVqWKKR+j4pwABLyblqM=
+20251218005250_watermark_status.sql h1:irLacIjUnTNhG+yEn5uVFR9CfAW6hXZ5FXE5gPHB/gk=
+20251218005253_watermark_status_history.sql h1:4cIfiTI+YstPFVzxLzgpheRwIdnbosj/4Rof0vDXrVY=

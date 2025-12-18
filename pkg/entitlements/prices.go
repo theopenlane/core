@@ -3,7 +3,7 @@ package entitlements
 import (
 	"context"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 )
 
 // MigrateToKey is the metadata key used to indicate the price that a subscription should migrate to

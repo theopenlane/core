@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -100,7 +101,10 @@ func (WorkflowAssignmentTarget) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "WFT",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(WorkflowAssignmentTarget{}),
+			newObjectOwnedMixin[generated.WorkflowAssignmentTarget](WorkflowAssignmentTarget{},
+				withParents(WorkflowAssignment{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(WorkflowAssignmentTarget{})
 }
@@ -113,6 +117,9 @@ func (WorkflowAssignmentTarget) Modules() []models.OrgModule {
 // Policy of the WorkflowAssignmentTarget
 func (WorkflowAssignmentTarget) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

@@ -1,4 +1,5 @@
 schema:
+  - internal/graphapi/schema/common/*.graphql
   - internal/graphapi/schema/*.graphql
 exec:
   dir: internal/graphapi/generated/
@@ -80,7 +81,6 @@ models:
   JSON:
     model:
       - github.com/theopenlane/entx.RawMessage
-      - github.com/theopenlane/core/internal/ent/customtypes.JSONObject
   Any:
     model:
       - github.com/99designs/gqlgen/graphql.Any
@@ -105,6 +105,12 @@ models:
   ExampleEvidence:
     model:
       - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  TestingProcedures:
+    model:
+      - github.com/theopenlane/core/pkg/models.TestingProcedures
+  EvidenceRequests:
+    model:
+      - github.com/theopenlane/core/pkg/models.EvidenceRequests
   VersionBump:
     model:
       - github.com/theopenlane/core/pkg/models.VersionBump

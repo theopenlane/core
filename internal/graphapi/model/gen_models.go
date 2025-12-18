@@ -2519,12 +2519,6 @@ type WorkflowObjectRefDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for updateWorkflowObjectRef mutation
-type WorkflowObjectRefUpdatePayload struct {
-	// Updated workflowObjectRef
-	WorkflowObjectRef *generated.WorkflowObjectRef `json:"workflowObjectRef"`
-}
-
 // Properties by which ControlCategory connections can be ordered.
 type ControlCategoryOrderField string
 

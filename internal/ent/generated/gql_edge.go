@@ -11591,6 +11591,30 @@ func (_m *WorkflowInstance) WorkflowDefinition(ctx context.Context) (*WorkflowDe
 	return result, err
 }
 
+func (_m *WorkflowInstance) Control(ctx context.Context) (*Control, error) {
+	result, err := _m.Edges.ControlOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryControl().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) InternalPolicy(ctx context.Context) (*InternalPolicy, error) {
+	result, err := _m.Edges.InternalPolicyOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryInternalPolicy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) Evidence(ctx context.Context) (*Evidence, error) {
+	result, err := _m.Edges.EvidenceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryEvidence().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *WorkflowInstance) WorkflowAssignments(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowAssignmentOrder, where *WorkflowAssignmentWhereInput,
 ) (*WorkflowAssignmentConnection, error) {
@@ -11599,7 +11623,7 @@ func (_m *WorkflowInstance) WorkflowAssignments(
 		WithWorkflowAssignmentFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
 	if nodes, err := _m.NamedWorkflowAssignments(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowAssignmentPager(opts, last != nil)
 		if err != nil {
@@ -11620,7 +11644,7 @@ func (_m *WorkflowInstance) WorkflowEvents(
 		WithWorkflowEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
 	if nodes, err := _m.NamedWorkflowEvents(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowEventPager(opts, last != nil)
 		if err != nil {
@@ -11641,7 +11665,7 @@ func (_m *WorkflowInstance) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
 	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
@@ -11722,6 +11746,14 @@ func (_m *WorkflowObjectRef) DirectoryMembership(ctx context.Context) (*Director
 	result, err := _m.Edges.DirectoryMembershipOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QueryDirectoryMembership().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Evidence(ctx context.Context) (*Evidence, error) {
+	result, err := _m.Edges.EvidenceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryEvidence().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

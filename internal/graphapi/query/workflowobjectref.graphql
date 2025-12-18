@@ -151,24 +151,3 @@ query GetWorkflowObjectRefs($first: Int, $last: Int, $where: WorkflowObjectRefWh
     }
   }
 }
-mutation UpdateWorkflowObjectRef($updateWorkflowObjectRefId: ID!, $input: UpdateWorkflowObjectRefInput!) {
-  updateWorkflowObjectRef(id: $updateWorkflowObjectRefId, input: $input) {
-    workflowObjectRef {
-      controlID
-      createdAt
-      createdBy
-      directoryAccountID
-      directoryGroupID
-      directoryMembershipID
-      displayID
-      findingID
-      id
-      internalPolicyID
-      ownerID
-      taskID
-      updatedAt
-      updatedBy
-      workflowInstanceID
-    }
-  }
-}

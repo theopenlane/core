@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
 
@@ -51,6 +52,11 @@ func AuthzClientFromContext(ctx context.Context) *fgax.Client {
 	tx := transaction.FromContext(ctx)
 	if tx != nil {
 		return &tx.Authz
+	}
+
+	histClient := historygenerated.FromContext(ctx)
+	if histClient != nil {
+		return &histClient.Authz
 	}
 
 	return nil

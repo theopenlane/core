@@ -1,0 +1,22 @@
+"""
+Indicates if a field will be returned in a query, if true, only system-admins
+can retrieve the value
+"""
+directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
+"""
+Indicates is the input field is read-only by non-system admin users.
+If an input is marked as @readOnly, only system-admin users
+can set the field
+"""
+directive @readOnly on INPUT_FIELD_DEFINITION
+"""
+Indicates is the input field is read-only by non-system admin users for system-owned objects
+If an input is marked as @externalReadOnly, only system-admin users
+can set the field if the object is marked as source == ControlSourceFramework
+"""
+directive @externalReadOnly(source: ControlControlSource) on INPUT_FIELD_DEFINITION
+"""
+Indicates that this field cannot be set on the input, and comes from an external source
+This does not prevent the viewing of the field
+"""
+directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION

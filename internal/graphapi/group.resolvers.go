@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateGroup is the resolver for the createGroup field.
 func (r *mutationResolver) CreateGroup(ctx context.Context, input generated.CreateGroupInput) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateGroup(ctx context.Context, input generated.Crea
 
 	res, err := withTransactionalMutation(ctx).Group.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	return &model.GroupCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkGroup(ctx context.Context, input []*generat
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkGroup(ctx context.Context, input []*generat
 
 // CreateBulkCSVGroup is the resolver for the createBulkCSVGroup field.
 func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateGroupInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateGroupInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Group.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input gen
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 	}
 
 	return &model.GroupUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input gen
 // DeleteGroup is the resolver for the deleteGroup field.
 func (r *mutationResolver) DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Group.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "group"})
 	}
 
 	if err := generated.GroupEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.GroupDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkGroup(ctx context.Context, ids []string) (*
 func (r *queryResolver) Group(ctx context.Context, id string) (*generated.Group, error) {
 	query, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "group"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "group"})
 	}
 
 	return res, nil

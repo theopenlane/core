@@ -10,16 +10,11 @@ type SchemaConfig struct {
 	APIToken                           string // APIToken table.
 	ActionPlan                         string // ActionPlan table.
 	ActionPlanTasks                    string // ActionPlan-tasks->Task table.
-	ActionPlanHistory                  string // ActionPlanHistory table.
 	Assessment                         string // Assessment table.
-	AssessmentHistory                  string // AssessmentHistory table.
 	AssessmentResponse                 string // AssessmentResponse table.
-	AssessmentResponseHistory          string // AssessmentResponseHistory table.
 	Asset                              string // Asset table.
-	AssetHistory                       string // AssetHistory table.
 	Contact                            string // Contact table.
 	ContactFiles                       string // Contact-files->File table.
-	ContactHistory                     string // ContactHistory table.
 	Control                            string // Control table.
 	ControlControlObjectives           string // Control-control_objectives->ControlObjective table.
 	ControlTasks                       string // Control-tasks->Task table.
@@ -31,37 +26,27 @@ type SchemaConfig struct {
 	ControlEditors                     string // Control-editors->Group table.
 	ControlAssets                      string // Control-assets->Asset table.
 	ControlControlImplementations      string // Control-control_implementations->ControlImplementation table.
-	ControlHistory                     string // ControlHistory table.
 	ControlImplementation              string // ControlImplementation table.
 	ControlImplementationBlockedGroups string // ControlImplementation-blocked_groups->Group table.
 	ControlImplementationEditors       string // ControlImplementation-editors->Group table.
 	ControlImplementationViewers       string // ControlImplementation-viewers->Group table.
 	ControlImplementationTasks         string // ControlImplementation-tasks->Task table.
-	ControlImplementationHistory       string // ControlImplementationHistory table.
 	ControlObjective                   string // ControlObjective table.
 	ControlObjectiveBlockedGroups      string // ControlObjective-blocked_groups->Group table.
 	ControlObjectiveEditors            string // ControlObjective-editors->Group table.
 	ControlObjectiveViewers            string // ControlObjective-viewers->Group table.
 	ControlObjectiveTasks              string // ControlObjective-tasks->Task table.
-	ControlObjectiveHistory            string // ControlObjectiveHistory table.
 	CustomDomain                       string // CustomDomain table.
-	CustomDomainHistory                string // CustomDomainHistory table.
 	CustomTypeEnum                     string // CustomTypeEnum table.
 	DNSVerification                    string // DNSVerification table.
-	DNSVerificationHistory             string // DNSVerificationHistory table.
 	DirectoryAccount                   string // DirectoryAccount table.
 	DirectoryAccountGroups             string // DirectoryAccount-groups->DirectoryGroup table.
-	DirectoryAccountHistory            string // DirectoryAccountHistory table.
 	DirectoryGroup                     string // DirectoryGroup table.
-	DirectoryGroupHistory              string // DirectoryGroupHistory table.
 	DirectoryMembership                string // DirectoryMembership table.
-	DirectoryMembershipHistory         string // DirectoryMembershipHistory table.
 	DirectorySyncRun                   string // DirectorySyncRun table.
 	Discussion                         string // Discussion table.
-	DiscussionHistory                  string // DiscussionHistory table.
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
-	DocumentDataHistory                string // DocumentDataHistory table.
 	EmailVerificationToken             string // EmailVerificationToken table.
 	Entity                             string // Entity table.
 	EntityBlockedGroups                string // Entity-blocked_groups->Group table.
@@ -71,41 +56,31 @@ type SchemaConfig struct {
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
 	EntityAssets                       string // Entity-assets->Asset table.
-	EntityHistory                      string // EntityHistory table.
 	EntityType                         string // EntityType table.
-	EntityTypeHistory                  string // EntityTypeHistory table.
 	Event                              string // Event table.
 	Evidence                           string // Evidence table.
 	EvidenceControls                   string // Evidence-controls->Control table.
 	EvidenceSubcontrols                string // Evidence-subcontrols->Subcontrol table.
 	EvidenceControlObjectives          string // Evidence-control_objectives->ControlObjective table.
 	EvidenceFiles                      string // Evidence-files->File table.
-	EvidenceHistory                    string // EvidenceHistory table.
 	Export                             string // Export table.
 	File                               string // File table.
 	FileEvents                         string // File-events->Event table.
 	FileSecrets                        string // File-secrets->Hush table.
 	FileDownloadToken                  string // FileDownloadToken table.
-	FileHistory                        string // FileHistory table.
 	Finding                            string // Finding table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
 	FindingControl                     string // FindingControl table.
-	FindingControlHistory              string // FindingControlHistory table.
-	FindingHistory                     string // FindingHistory table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.
 	GroupFiles                         string // Group-files->File table.
 	GroupTasks                         string // Group-tasks->Task table.
-	GroupHistory                       string // GroupHistory table.
 	GroupMembership                    string // GroupMembership table.
 	GroupMembershipEvents              string // GroupMembership-events->Event table.
-	GroupMembershipHistory             string // GroupMembershipHistory table.
 	GroupSetting                       string // GroupSetting table.
-	GroupSettingHistory                string // GroupSettingHistory table.
 	Hush                               string // Hush table.
 	HushEvents                         string // Hush-events->Event table.
-	HushHistory                        string // HushHistory table.
 	ImpersonationEvent                 string // ImpersonationEvent table.
 	Integration                        string // Integration table.
 	IntegrationSecrets                 string // Integration-secrets->Hush table.
@@ -115,7 +90,6 @@ type SchemaConfig struct {
 	IntegrationReviews                 string // Integration-reviews->Review table.
 	IntegrationRemediations            string // Integration-remediations->Remediation table.
 	IntegrationActionPlans             string // Integration-action_plans->ActionPlan table.
-	IntegrationHistory                 string // IntegrationHistory table.
 	InternalPolicy                     string // InternalPolicy table.
 	InternalPolicyBlockedGroups        string // InternalPolicy-blocked_groups->Group table.
 	InternalPolicyEditors              string // InternalPolicy-editors->Group table.
@@ -126,7 +100,6 @@ type SchemaConfig struct {
 	InternalPolicyNarratives           string // InternalPolicy-narratives->Narrative table.
 	InternalPolicyTasks                string // InternalPolicy-tasks->Task table.
 	InternalPolicyRisks                string // InternalPolicy-risks->Risk table.
-	InternalPolicyHistory              string // InternalPolicyHistory table.
 	Invite                             string // Invite table.
 	InviteEvents                       string // Invite-events->Event table.
 	InviteGroups                       string // Invite-groups->Group table.
@@ -136,9 +109,7 @@ type SchemaConfig struct {
 	JobRunnerRegistrationToken         string // JobRunnerRegistrationToken table.
 	JobRunnerToken                     string // JobRunnerToken table.
 	JobTemplate                        string // JobTemplate table.
-	JobTemplateHistory                 string // JobTemplateHistory table.
 	MappableDomain                     string // MappableDomain table.
-	MappableDomainHistory              string // MappableDomainHistory table.
 	MappedControl                      string // MappedControl table.
 	MappedControlBlockedGroups         string // MappedControl-blocked_groups->Group table.
 	MappedControlEditors               string // MappedControl-editors->Group table.
@@ -146,19 +117,15 @@ type SchemaConfig struct {
 	MappedControlToControls            string // MappedControl-to_controls->Control table.
 	MappedControlFromSubcontrols       string // MappedControl-from_subcontrols->Subcontrol table.
 	MappedControlToSubcontrols         string // MappedControl-to_subcontrols->Subcontrol table.
-	MappedControlHistory               string // MappedControlHistory table.
 	Narrative                          string // Narrative table.
 	NarrativeBlockedGroups             string // Narrative-blocked_groups->Group table.
 	NarrativeEditors                   string // Narrative-editors->Group table.
 	NarrativeViewers                   string // Narrative-viewers->Group table.
-	NarrativeHistory                   string // NarrativeHistory table.
 	Note                               string // Note table.
-	NoteHistory                        string // NoteHistory table.
 	Notification                       string // Notification table.
 	Onboarding                         string // Onboarding table.
 	OrgMembership                      string // OrgMembership table.
 	OrgMembershipEvents                string // OrgMembership-events->Event table.
-	OrgMembershipHistory               string // OrgMembershipHistory table.
 	OrgModule                          string // OrgModule table.
 	OrgModuleOrgPrices                 string // OrgModule-org_prices->OrgPrice table.
 	OrgPrice                           string // OrgPrice table.
@@ -166,15 +133,12 @@ type SchemaConfig struct {
 	OrgProductOrgPrices                string // OrgProduct-org_prices->OrgPrice table.
 	OrgSubscription                    string // OrgSubscription table.
 	OrgSubscriptionEvents              string // OrgSubscription-events->Event table.
-	OrgSubscriptionHistory             string // OrgSubscriptionHistory table.
 	Organization                       string // Organization table.
 	OrganizationPersonalAccessTokens   string // Organization-personal_access_tokens->PersonalAccessToken table.
 	OrganizationFiles                  string // Organization-files->File table.
 	OrganizationEvents                 string // Organization-events->Event table.
-	OrganizationHistory                string // OrganizationHistory table.
 	OrganizationSetting                string // OrganizationSetting table.
 	OrganizationSettingFiles           string // OrganizationSetting-files->File table.
-	OrganizationSettingHistory         string // OrganizationSettingHistory table.
 	PasswordResetToken                 string // PasswordResetToken table.
 	PersonalAccessToken                string // PersonalAccessToken table.
 	PersonalAccessTokenEvents          string // PersonalAccessToken-events->Event table.
@@ -184,7 +148,6 @@ type SchemaConfig struct {
 	ProcedureNarratives                string // Procedure-narratives->Narrative table.
 	ProcedureRisks                     string // Procedure-risks->Risk table.
 	ProcedureTasks                     string // Procedure-tasks->Task table.
-	ProcedureHistory                   string // ProcedureHistory table.
 	Program                            string // Program table.
 	ProgramBlockedGroups               string // Program-blocked_groups->Group table.
 	ProgramEditors                     string // Program-editors->Group table.
@@ -199,93 +162,65 @@ type SchemaConfig struct {
 	ProgramEvidence                    string // Program-evidence->Evidence table.
 	ProgramNarratives                  string // Program-narratives->Narrative table.
 	ProgramActionPlans                 string // Program-action_plans->ActionPlan table.
-	ProgramHistory                     string // ProgramHistory table.
 	ProgramMembership                  string // ProgramMembership table.
-	ProgramMembershipHistory           string // ProgramMembershipHistory table.
 	Remediation                        string // Remediation table.
 	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
-	RemediationHistory                 string // RemediationHistory table.
 	Review                             string // Review table.
 	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
-	ReviewHistory                      string // ReviewHistory table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.
 	RiskViewers                        string // Risk-viewers->Group table.
 	RiskActionPlans                    string // Risk-action_plans->ActionPlan table.
 	RiskTasks                          string // Risk-tasks->Task table.
-	RiskHistory                        string // RiskHistory table.
 	Scan                               string // Scan table.
 	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
 	ScanEditors                        string // Scan-editors->Group table.
 	ScanViewers                        string // Scan-viewers->Group table.
 	ScanAssets                         string // Scan-assets->Asset table.
-	ScanHistory                        string // ScanHistory table.
 	ScheduledJob                       string // ScheduledJob table.
 	ScheduledJobControls               string // ScheduledJob-controls->Control table.
 	ScheduledJobSubcontrols            string // ScheduledJob-subcontrols->Subcontrol table.
-	ScheduledJobHistory                string // ScheduledJobHistory table.
 	ScheduledJobRun                    string // ScheduledJobRun table.
 	Standard                           string // Standard table.
-	StandardHistory                    string // StandardHistory table.
 	Subcontrol                         string // Subcontrol table.
 	SubcontrolControlObjectives        string // Subcontrol-control_objectives->ControlObjective table.
 	SubcontrolTasks                    string // Subcontrol-tasks->Task table.
 	SubcontrolRisks                    string // Subcontrol-risks->Risk table.
 	SubcontrolProcedures               string // Subcontrol-procedures->Procedure table.
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
-	SubcontrolHistory                  string // SubcontrolHistory table.
 	Subprocessor                       string // Subprocessor table.
-	SubprocessorHistory                string // SubprocessorHistory table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
 	TFASetting                         string // TFASetting table.
 	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.
 	TaskEvidence                       string // Task-evidence->Evidence table.
-	TaskHistory                        string // TaskHistory table.
 	Template                           string // Template table.
 	TemplateFiles                      string // Template-files->File table.
-	TemplateHistory                    string // TemplateHistory table.
 	TrustCenter                        string // TrustCenter table.
 	TrustCenterCompliance              string // TrustCenterCompliance table.
-	TrustCenterComplianceHistory       string // TrustCenterComplianceHistory table.
 	TrustCenterDoc                     string // TrustCenterDoc table.
-	TrustCenterDocHistory              string // TrustCenterDocHistory table.
-	TrustCenterHistory                 string // TrustCenterHistory table.
 	TrustCenterSetting                 string // TrustCenterSetting table.
 	TrustCenterSettingFiles            string // TrustCenterSetting-files->File table.
-	TrustCenterSettingHistory          string // TrustCenterSettingHistory table.
 	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.
-	TrustCenterSubprocessorHistory     string // TrustCenterSubprocessorHistory table.
 	TrustCenterWatermarkConfig         string // TrustCenterWatermarkConfig table.
-	TrustCenterWatermarkConfigHistory  string // TrustCenterWatermarkConfigHistory table.
 	TrustcenterEntity                  string // TrustcenterEntity table.
-	TrustcenterEntityHistory           string // TrustcenterEntityHistory table.
 	User                               string // User table.
 	UserGroups                         string // User-groups->Group table.
 	UserOrganizations                  string // User-organizations->Organization table.
 	UserEvents                         string // User-events->Event table.
 	UserPrograms                       string // User-programs->Program table.
-	UserHistory                        string // UserHistory table.
 	UserSetting                        string // UserSetting table.
-	UserSettingHistory                 string // UserSettingHistory table.
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
-	VulnerabilityHistory               string // VulnerabilityHistory table.
 	Webauthn                           string // Webauthn table.
 	WorkflowAssignment                 string // WorkflowAssignment table.
-	WorkflowAssignmentHistory          string // WorkflowAssignmentHistory table.
 	WorkflowAssignmentTarget           string // WorkflowAssignmentTarget table.
-	WorkflowAssignmentTargetHistory    string // WorkflowAssignmentTargetHistory table.
 	WorkflowDefinition                 string // WorkflowDefinition table.
-	WorkflowDefinitionHistory          string // WorkflowDefinitionHistory table.
 	WorkflowEvent                      string // WorkflowEvent table.
-	WorkflowEventHistory               string // WorkflowEventHistory table.
 	WorkflowInstance                   string // WorkflowInstance table.
-	WorkflowInstanceHistory            string // WorkflowInstanceHistory table.
 	WorkflowObjectRef                  string // WorkflowObjectRef table.
-	WorkflowObjectRefHistory           string // WorkflowObjectRefHistory table.
 }
 
 type schemaCtxKey struct{}

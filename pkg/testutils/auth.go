@@ -1,3 +1,5 @@
+//go:build test
+
 package testutils
 
 import (
@@ -64,11 +66,12 @@ func CreateTokenManager(refreshOverlap time.Duration) (*tokens.TokenManager, err
 	}
 
 	conf := tokens.Config{
-		Audience:        "http://localhost:17608",
-		Issuer:          "http://localhost:17608",
-		AccessDuration:  1 * time.Hour, //nolint:mnd
-		RefreshDuration: 2 * time.Hour, //nolint:mnd
-		RefreshOverlap:  refreshOverlap,
+		Audience:                 "http://localhost:17608",
+		Issuer:                   "http://localhost:17608",
+		AccessDuration:           time.Hour,
+		RefreshDuration:          2 * time.Hour, //nolint:mnd
+		RefreshOverlap:           refreshOverlap,
+		AssessmentAccessDuration: time.Hour,
 	}
 
 	if -refreshOverlap >= conf.AccessDuration {

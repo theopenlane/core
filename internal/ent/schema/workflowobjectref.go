@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -8,8 +9,9 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -72,6 +74,10 @@ func (WorkflowObjectRef) Fields() []ent.Field {
 			Immutable().
 			Comment("Directory membership referenced by this workflow instance").
 			Optional(),
+		field.String("evidence_id").
+			Immutable().
+			Comment("Evidence referenced by this workflow instance").
+			Optional(),
 	}
 }
 
@@ -85,9 +91,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Workflow instance this object is associated with",
 			required:   true,
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -95,9 +98,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "control_id",
 			comment:    "Control referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -105,9 +105,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "task_id",
 			comment:    "Task referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -115,9 +112,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "internal_policy_id",
 			comment:    "Policy referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -125,9 +119,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "finding_id",
 			comment:    "Finding referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -135,9 +126,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "directory_account_id",
 			comment:    "Directory account referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -145,9 +133,6 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "directory_group_id",
 			comment:    "Directory group referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -155,9 +140,13 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			field:      "directory_membership_id",
 			comment:    "Directory membership referenced by this workflow instance",
 			immutable:  true,
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Evidence{},
+			field:      "evidence_id",
+			comment:    "Evidence referenced by this workflow instance",
+			immutable:  true,
 		}),
 	}
 }
@@ -179,6 +168,8 @@ func (WorkflowObjectRef) Indexes() []ent.Index {
 			Unique(),
 		index.Fields("workflow_instance_id", "directory_membership_id").
 			Unique(),
+		index.Fields("workflow_instance_id", "evidence_id").
+			Unique(),
 	}
 }
 
@@ -189,7 +180,10 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 		excludeTags:       true,
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(w),
+			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
+				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(w)
 }
@@ -203,6 +197,8 @@ func (WorkflowObjectRef) Modules() []models.OrgModule {
 func (WorkflowObjectRef) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
+		entfga.SelfAccessChecks(),
+		entgql.Skip(entgql.SkipMutationUpdateInput),
 	}
 }
 
@@ -210,7 +206,9 @@ func (WorkflowObjectRef) Annotations() []schema.Annotation {
 func (WorkflowObjectRef) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.WorkflowObjectRefMutation](),
+			entfga.CheckDeleteAccess[*generated.WorkflowObjectRefMutation](),
 		),
 	)
 }

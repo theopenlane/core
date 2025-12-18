@@ -545,6 +545,42 @@ func (_u *SubcontrolUpdate) ClearReferences() *SubcontrolUpdate {
 	return _u
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_u *SubcontrolUpdate) SetTestingProcedures(v []models.TestingProcedures) *SubcontrolUpdate {
+	_u.mutation.SetTestingProcedures(v)
+	return _u
+}
+
+// AppendTestingProcedures appends value to the "testing_procedures" field.
+func (_u *SubcontrolUpdate) AppendTestingProcedures(v []models.TestingProcedures) *SubcontrolUpdate {
+	_u.mutation.AppendTestingProcedures(v)
+	return _u
+}
+
+// ClearTestingProcedures clears the value of the "testing_procedures" field.
+func (_u *SubcontrolUpdate) ClearTestingProcedures() *SubcontrolUpdate {
+	_u.mutation.ClearTestingProcedures()
+	return _u
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_u *SubcontrolUpdate) SetEvidenceRequests(v []models.EvidenceRequests) *SubcontrolUpdate {
+	_u.mutation.SetEvidenceRequests(v)
+	return _u
+}
+
+// AppendEvidenceRequests appends value to the "evidence_requests" field.
+func (_u *SubcontrolUpdate) AppendEvidenceRequests(v []models.EvidenceRequests) *SubcontrolUpdate {
+	_u.mutation.AppendEvidenceRequests(v)
+	return _u
+}
+
+// ClearEvidenceRequests clears the value of the "evidence_requests" field.
+func (_u *SubcontrolUpdate) ClearEvidenceRequests() *SubcontrolUpdate {
+	_u.mutation.ClearEvidenceRequests()
+	return _u
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_u *SubcontrolUpdate) SetControlOwnerID(v string) *SubcontrolUpdate {
 	_u.mutation.SetControlOwnerID(v)
@@ -1550,6 +1586,28 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(subcontrol.FieldReferences, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TestingProcedures(); ok {
+		_spec.SetField(subcontrol.FieldTestingProcedures, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTestingProcedures(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrol.FieldTestingProcedures, value)
+		})
+	}
+	if _u.mutation.TestingProceduresCleared() {
+		_spec.ClearField(subcontrol.FieldTestingProcedures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EvidenceRequests(); ok {
+		_spec.SetField(subcontrol.FieldEvidenceRequests, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEvidenceRequests(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrol.FieldEvidenceRequests, value)
+		})
+	}
+	if _u.mutation.EvidenceRequestsCleared() {
+		_spec.ClearField(subcontrol.FieldEvidenceRequests, field.TypeJSON)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subcontrol.FieldSystemOwned, field.TypeBool)
@@ -2920,6 +2978,42 @@ func (_u *SubcontrolUpdateOne) ClearReferences() *SubcontrolUpdateOne {
 	return _u
 }
 
+// SetTestingProcedures sets the "testing_procedures" field.
+func (_u *SubcontrolUpdateOne) SetTestingProcedures(v []models.TestingProcedures) *SubcontrolUpdateOne {
+	_u.mutation.SetTestingProcedures(v)
+	return _u
+}
+
+// AppendTestingProcedures appends value to the "testing_procedures" field.
+func (_u *SubcontrolUpdateOne) AppendTestingProcedures(v []models.TestingProcedures) *SubcontrolUpdateOne {
+	_u.mutation.AppendTestingProcedures(v)
+	return _u
+}
+
+// ClearTestingProcedures clears the value of the "testing_procedures" field.
+func (_u *SubcontrolUpdateOne) ClearTestingProcedures() *SubcontrolUpdateOne {
+	_u.mutation.ClearTestingProcedures()
+	return _u
+}
+
+// SetEvidenceRequests sets the "evidence_requests" field.
+func (_u *SubcontrolUpdateOne) SetEvidenceRequests(v []models.EvidenceRequests) *SubcontrolUpdateOne {
+	_u.mutation.SetEvidenceRequests(v)
+	return _u
+}
+
+// AppendEvidenceRequests appends value to the "evidence_requests" field.
+func (_u *SubcontrolUpdateOne) AppendEvidenceRequests(v []models.EvidenceRequests) *SubcontrolUpdateOne {
+	_u.mutation.AppendEvidenceRequests(v)
+	return _u
+}
+
+// ClearEvidenceRequests clears the value of the "evidence_requests" field.
+func (_u *SubcontrolUpdateOne) ClearEvidenceRequests() *SubcontrolUpdateOne {
+	_u.mutation.ClearEvidenceRequests()
+	return _u
+}
+
 // SetControlOwnerID sets the "control_owner_id" field.
 func (_u *SubcontrolUpdateOne) SetControlOwnerID(v string) *SubcontrolUpdateOne {
 	_u.mutation.SetControlOwnerID(v)
@@ -3955,6 +4049,28 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 	}
 	if _u.mutation.ReferencesCleared() {
 		_spec.ClearField(subcontrol.FieldReferences, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.TestingProcedures(); ok {
+		_spec.SetField(subcontrol.FieldTestingProcedures, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTestingProcedures(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrol.FieldTestingProcedures, value)
+		})
+	}
+	if _u.mutation.TestingProceduresCleared() {
+		_spec.ClearField(subcontrol.FieldTestingProcedures, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.EvidenceRequests(); ok {
+		_spec.SetField(subcontrol.FieldEvidenceRequests, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedEvidenceRequests(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrol.FieldEvidenceRequests, value)
+		})
+	}
+	if _u.mutation.EvidenceRequestsCleared() {
+		_spec.ClearField(subcontrol.FieldEvidenceRequests, field.TypeJSON)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(subcontrol.FieldSystemOwned, field.TypeBool)

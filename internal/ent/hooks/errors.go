@@ -32,6 +32,8 @@ var (
 	ErrEmailRequired = errors.New("email is required but not provided")
 	// ErrMaxAttempts is returned when a user has reached the max attempts to resend an invitation to an org
 	ErrMaxAttempts = errors.New("too many attempts to resend org invitation")
+	// ErrMaxAttemptsAssessments is returned when a user has reached the max attempts to resend an assessment
+	ErrMaxAttemptsAssessments = errors.New("too many attempts to resend assessment invitation")
 	// ErrMaxSubscriptionAttempts is returned when a user has reached the max attempts to subscribe to an org
 	ErrMaxSubscriptionAttempts = errors.New("too many attempts to resend org subscription email")
 	// ErrAssessmentInProgress is returned when attempting to resend an email for an assessment that is already in progress

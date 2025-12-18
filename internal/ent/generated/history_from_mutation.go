@@ -37,7 +37,7 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		return idNotFoundError
 	}
 
-	create := client.ActionPlanHistory.Create()
+	create := client.HistoryClient.ActionPlanHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -240,7 +240,7 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			return err
 		}
 
-		create := client.ActionPlanHistory.Create()
+		create := client.HistoryClient.ActionPlanHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -534,7 +534,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			return err
 		}
 
-		create := client.ActionPlanHistory.Create()
+		create := client.HistoryClient.ActionPlanHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -601,7 +601,7 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		return idNotFoundError
 	}
 
-	create := client.AssessmentHistory.Create()
+	create := client.HistoryClient.AssessmentHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -688,7 +688,7 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			return err
 		}
 
-		create := client.AssessmentHistory.Create()
+		create := client.HistoryClient.AssessmentHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -808,7 +808,7 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			return err
 		}
 
-		create := client.AssessmentHistory.Create()
+		create := client.HistoryClient.AssessmentHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -846,7 +846,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 		return idNotFoundError
 	}
 
-	create := client.AssessmentResponseHistory.Create()
+	create := client.HistoryClient.AssessmentResponseHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -941,7 +941,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			return err
 		}
 
-		create := client.AssessmentResponseHistory.Create()
+		create := client.HistoryClient.AssessmentResponseHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1073,7 +1073,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			return err
 		}
 
-		create := client.AssessmentResponseHistory.Create()
+		create := client.HistoryClient.AssessmentResponseHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1113,7 +1113,7 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.AssetHistory.Create()
+	create := client.HistoryClient.AssetHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1216,7 +1216,7 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.AssetHistory.Create()
+		create := client.HistoryClient.AssetHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1360,7 +1360,7 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.AssetHistory.Create()
+		create := client.HistoryClient.AssetHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1402,7 +1402,7 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.ContactHistory.Create()
+	create := client.HistoryClient.ContactHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1493,7 +1493,7 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ContactHistory.Create()
+		create := client.HistoryClient.ContactHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1619,7 +1619,7 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ContactHistory.Create()
+		create := client.HistoryClient.ContactHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1658,7 +1658,7 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.ControlHistory.Create()
+	create := client.HistoryClient.ControlHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -1781,6 +1781,14 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetReferences(references)
 	}
 
+	if testingProcedures, exists := m.TestingProcedures(); exists {
+		create = create.SetTestingProcedures(testingProcedures)
+	}
+
+	if evidenceRequests, exists := m.EvidenceRequests(); exists {
+		create = create.SetEvidenceRequests(evidenceRequests)
+	}
+
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
 		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
@@ -1811,6 +1819,18 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if controlKindID, exists := m.ControlKindID(); exists {
 		create = create.SetControlKindID(controlKindID)
+	}
+
+	if proposedChanges, exists := m.ProposedChanges(); exists {
+		create = create.SetProposedChanges(proposedChanges)
+	}
+
+	if proposedByUserID, exists := m.ProposedByUserID(); exists {
+		create = create.SetProposedByUserID(proposedByUserID)
+	}
+
+	if proposedAt, exists := m.ProposedAt(); exists {
+		create = create.SetNillableProposedAt(&proposedAt)
 	}
 
 	if refCode, exists := m.RefCode(); exists {
@@ -1845,7 +1865,7 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ControlHistory.Create()
+		create := client.HistoryClient.ControlHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2026,6 +2046,18 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReferences(control.References)
 		}
 
+		if testingProcedures, exists := m.TestingProcedures(); exists {
+			create = create.SetTestingProcedures(testingProcedures)
+		} else {
+			create = create.SetTestingProcedures(control.TestingProcedures)
+		}
+
+		if evidenceRequests, exists := m.EvidenceRequests(); exists {
+			create = create.SetEvidenceRequests(evidenceRequests)
+		} else {
+			create = create.SetEvidenceRequests(control.EvidenceRequests)
+		}
+
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
 			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
@@ -2074,6 +2106,24 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetControlKindID(control.ControlKindID)
 		}
 
+		if proposedChanges, exists := m.ProposedChanges(); exists {
+			create = create.SetProposedChanges(proposedChanges)
+		} else {
+			create = create.SetProposedChanges(control.ProposedChanges)
+		}
+
+		if proposedByUserID, exists := m.ProposedByUserID(); exists {
+			create = create.SetProposedByUserID(proposedByUserID)
+		} else {
+			create = create.SetProposedByUserID(control.ProposedByUserID)
+		}
+
+		if proposedAt, exists := m.ProposedAt(); exists {
+			create = create.SetNillableProposedAt(&proposedAt)
+		} else {
+			create = create.SetNillableProposedAt(control.ProposedAt)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -2115,7 +2165,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ControlHistory.Create()
+		create := client.HistoryClient.ControlHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2150,6 +2200,8 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetImplementationGuidance(control.ImplementationGuidance).
 			SetExampleEvidence(control.ExampleEvidence).
 			SetReferences(control.References).
+			SetTestingProcedures(control.TestingProcedures).
+			SetEvidenceRequests(control.EvidenceRequests).
 			SetNillableControlOwnerID(control.ControlOwnerID).
 			SetDelegateID(control.DelegateID).
 			SetOwnerID(control.OwnerID).
@@ -2158,6 +2210,9 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableSystemInternalID(control.SystemInternalID).
 			SetControlKindName(control.ControlKindName).
 			SetControlKindID(control.ControlKindID).
+			SetProposedChanges(control.ProposedChanges).
+			SetProposedByUserID(control.ProposedByUserID).
+			SetNillableProposedAt(control.ProposedAt).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
 			Save(ctx)
@@ -2178,7 +2233,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 		return idNotFoundError
 	}
 
-	create := client.ControlImplementationHistory.Create()
+	create := client.HistoryClient.ControlImplementationHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2273,7 +2328,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 			return err
 		}
 
-		create := client.ControlImplementationHistory.Create()
+		create := client.HistoryClient.ControlImplementationHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2405,7 +2460,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 			return err
 		}
 
-		create := client.ControlImplementationHistory.Create()
+		create := client.HistoryClient.ControlImplementationHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2445,7 +2500,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 		return idNotFoundError
 	}
 
-	create := client.ControlObjectiveHistory.Create()
+	create := client.HistoryClient.ControlObjectiveHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2556,7 +2611,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			return err
 		}
 
-		create := client.ControlObjectiveHistory.Create()
+		create := client.HistoryClient.ControlObjectiveHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2712,7 +2767,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 			return err
 		}
 
-		create := client.ControlObjectiveHistory.Create()
+		create := client.HistoryClient.ControlObjectiveHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2756,7 +2811,7 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		return idNotFoundError
 	}
 
-	create := client.CustomDomainHistory.Create()
+	create := client.HistoryClient.CustomDomainHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2843,7 +2898,7 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			return err
 		}
 
-		create := client.CustomDomainHistory.Create()
+		create := client.HistoryClient.CustomDomainHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -2963,7 +3018,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			return err
 		}
 
-		create := client.CustomDomainHistory.Create()
+		create := client.HistoryClient.CustomDomainHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3001,7 +3056,7 @@ func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) e
 		return idNotFoundError
 	}
 
-	create := client.DNSVerificationHistory.Create()
+	create := client.HistoryClient.DNSVerificationHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3100,7 +3155,7 @@ func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			return err
 		}
 
-		create := client.DNSVerificationHistory.Create()
+		create := client.HistoryClient.DNSVerificationHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3238,7 +3293,7 @@ func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) e
 			return err
 		}
 
-		create := client.DNSVerificationHistory.Create()
+		create := client.HistoryClient.DNSVerificationHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3279,7 +3334,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 		return idNotFoundError
 	}
 
-	create := client.DirectoryAccountHistory.Create()
+	create := client.HistoryClient.DirectoryAccountHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3422,7 +3477,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			return err
 		}
 
-		create := client.DirectoryAccountHistory.Create()
+		create := client.HistoryClient.DirectoryAccountHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3626,7 +3681,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 			return err
 		}
 
-		create := client.DirectoryAccountHistory.Create()
+		create := client.HistoryClient.DirectoryAccountHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3678,7 +3733,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 		return idNotFoundError
 	}
 
-	create := client.DirectoryGroupHistory.Create()
+	create := client.HistoryClient.DirectoryGroupHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3797,7 +3852,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			return err
 		}
 
-		create := client.DirectoryGroupHistory.Create()
+		create := client.HistoryClient.DirectoryGroupHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -3965,7 +4020,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 			return err
 		}
 
-		create := client.DirectoryGroupHistory.Create()
+		create := client.HistoryClient.DirectoryGroupHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4011,7 +4066,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 		return idNotFoundError
 	}
 
-	create := client.DirectoryMembershipHistory.Create()
+	create := client.HistoryClient.DirectoryMembershipHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4110,7 +4165,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 			return err
 		}
 
-		create := client.DirectoryMembershipHistory.Create()
+		create := client.HistoryClient.DirectoryMembershipHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4248,7 +4303,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 			return err
 		}
 
-		create := client.DirectoryMembershipHistory.Create()
+		create := client.HistoryClient.DirectoryMembershipHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4289,7 +4344,7 @@ func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		return idNotFoundError
 	}
 
-	create := client.DiscussionHistory.Create()
+	create := client.HistoryClient.DiscussionHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4356,7 +4411,7 @@ func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			return err
 		}
 
-		create := client.DiscussionHistory.Create()
+		create := client.HistoryClient.DiscussionHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4446,7 +4501,7 @@ func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			return err
 		}
 
-		create := client.DiscussionHistory.Create()
+		create := client.HistoryClient.DiscussionHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4479,7 +4534,7 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		return idNotFoundError
 	}
 
-	create := client.DocumentDataHistory.Create()
+	create := client.HistoryClient.DocumentDataHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4550,7 +4605,7 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			return err
 		}
 
-		create := client.DocumentDataHistory.Create()
+		create := client.HistoryClient.DocumentDataHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4646,7 +4701,7 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			return err
 		}
 
-		create := client.DocumentDataHistory.Create()
+		create := client.HistoryClient.DocumentDataHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4680,7 +4735,7 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.EntityHistory.Create()
+	create := client.HistoryClient.EntityHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4779,7 +4834,7 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.EntityHistory.Create()
+		create := client.HistoryClient.EntityHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4917,7 +4972,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.EntityHistory.Create()
+		create := client.HistoryClient.EntityHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -4958,7 +5013,7 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		return idNotFoundError
 	}
 
-	create := client.EntityTypeHistory.Create()
+	create := client.HistoryClient.EntityTypeHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5037,7 +5092,7 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			return err
 		}
 
-		create := client.EntityTypeHistory.Create()
+		create := client.HistoryClient.EntityTypeHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5145,7 +5200,7 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			return err
 		}
 
-		create := client.EntityTypeHistory.Create()
+		create := client.HistoryClient.EntityTypeHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5181,7 +5236,7 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.EvidenceHistory.Create()
+	create := client.HistoryClient.EvidenceHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5222,6 +5277,18 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if proposedChanges, exists := m.ProposedChanges(); exists {
+		create = create.SetProposedChanges(proposedChanges)
+	}
+
+	if proposedByUserID, exists := m.ProposedByUserID(); exists {
+		create = create.SetProposedByUserID(proposedByUserID)
+	}
+
+	if proposedAt, exists := m.ProposedAt(); exists {
+		create = create.SetNillableProposedAt(&proposedAt)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -5284,7 +5351,7 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.EvidenceHistory.Create()
+		create := client.HistoryClient.EvidenceHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5343,6 +5410,24 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(evidence.OwnerID)
+		}
+
+		if proposedChanges, exists := m.ProposedChanges(); exists {
+			create = create.SetProposedChanges(proposedChanges)
+		} else {
+			create = create.SetProposedChanges(evidence.ProposedChanges)
+		}
+
+		if proposedByUserID, exists := m.ProposedByUserID(); exists {
+			create = create.SetProposedByUserID(proposedByUserID)
+		} else {
+			create = create.SetProposedByUserID(evidence.ProposedByUserID)
+		}
+
+		if proposedAt, exists := m.ProposedAt(); exists {
+			create = create.SetNillableProposedAt(&proposedAt)
+		} else {
+			create = create.SetNillableProposedAt(evidence.ProposedAt)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -5428,7 +5513,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.EvidenceHistory.Create()
+		create := client.HistoryClient.EvidenceHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5443,6 +5528,9 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(evidence.DisplayID).
 			SetTags(evidence.Tags).
 			SetOwnerID(evidence.OwnerID).
+			SetProposedChanges(evidence.ProposedChanges).
+			SetProposedByUserID(evidence.ProposedByUserID).
+			SetNillableProposedAt(evidence.ProposedAt).
 			SetName(evidence.Name).
 			SetDescription(evidence.Description).
 			SetCollectionProcedure(evidence.CollectionProcedure).
@@ -5470,7 +5558,7 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.FileHistory.Create()
+	create := client.HistoryClient.FileHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5613,7 +5701,7 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.FileHistory.Create()
+		create := client.HistoryClient.FileHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5817,7 +5905,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.FileHistory.Create()
+		create := client.HistoryClient.FileHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -5869,7 +5957,7 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.FindingHistory.Create()
+	create := client.HistoryClient.FindingHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6096,7 +6184,7 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.FindingHistory.Create()
+		create := client.HistoryClient.FindingHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6426,7 +6514,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.FindingHistory.Create()
+		create := client.HistoryClient.FindingHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6499,7 +6587,7 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 		return idNotFoundError
 	}
 
-	create := client.FindingControlHistory.Create()
+	create := client.HistoryClient.FindingControlHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6582,7 +6670,7 @@ func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			return err
 		}
 
-		create := client.FindingControlHistory.Create()
+		create := client.HistoryClient.FindingControlHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6696,7 +6784,7 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 			return err
 		}
 
-		create := client.FindingControlHistory.Create()
+		create := client.HistoryClient.FindingControlHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6733,7 +6821,7 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.GroupHistory.Create()
+	create := client.HistoryClient.GroupHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6840,7 +6928,7 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.GroupHistory.Create()
+		create := client.HistoryClient.GroupHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -6990,7 +7078,7 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.GroupHistory.Create()
+		create := client.HistoryClient.GroupHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7033,7 +7121,7 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 		return idNotFoundError
 	}
 
-	create := client.GroupMembershipHistory.Create()
+	create := client.HistoryClient.GroupMembershipHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7092,7 +7180,7 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			return err
 		}
 
-		create := client.GroupMembershipHistory.Create()
+		create := client.HistoryClient.GroupMembershipHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7170,7 +7258,7 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 			return err
 		}
 
-		create := client.GroupMembershipHistory.Create()
+		create := client.HistoryClient.GroupMembershipHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7201,7 +7289,7 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		return idNotFoundError
 	}
 
-	create := client.GroupSettingHistory.Create()
+	create := client.HistoryClient.GroupSettingHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7276,7 +7364,7 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			return err
 		}
 
-		create := client.GroupSettingHistory.Create()
+		create := client.HistoryClient.GroupSettingHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7378,7 +7466,7 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			return err
 		}
 
-		create := client.GroupSettingHistory.Create()
+		create := client.HistoryClient.GroupSettingHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7413,7 +7501,7 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.HushHistory.Create()
+	create := client.HistoryClient.HushHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7520,7 +7608,7 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.HushHistory.Create()
+		create := client.HistoryClient.HushHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7670,7 +7758,7 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.HushHistory.Create()
+		create := client.HistoryClient.HushHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7713,7 +7801,7 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		return idNotFoundError
 	}
 
-	create := client.IntegrationHistory.Create()
+	create := client.HistoryClient.IntegrationHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7808,7 +7896,7 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			return err
 		}
 
-		create := client.IntegrationHistory.Create()
+		create := client.HistoryClient.IntegrationHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7940,7 +8028,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			return err
 		}
 
-		create := client.IntegrationHistory.Create()
+		create := client.HistoryClient.IntegrationHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -7980,7 +8068,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		return idNotFoundError
 	}
 
-	create := client.InternalPolicyHistory.Create()
+	create := client.HistoryClient.InternalPolicyHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8119,6 +8207,18 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetInternalPolicyKindID(internalPolicyKindID)
 	}
 
+	if proposedChanges, exists := m.ProposedChanges(); exists {
+		create = create.SetProposedChanges(proposedChanges)
+	}
+
+	if proposedByUserID, exists := m.ProposedByUserID(); exists {
+		create = create.SetProposedByUserID(proposedByUserID)
+	}
+
+	if proposedAt, exists := m.ProposedAt(); exists {
+		create = create.SetNillableProposedAt(&proposedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -8143,7 +8243,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			return err
 		}
 
-		create := client.InternalPolicyHistory.Create()
+		create := client.HistoryClient.InternalPolicyHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8348,6 +8448,24 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID)
 		}
 
+		if proposedChanges, exists := m.ProposedChanges(); exists {
+			create = create.SetProposedChanges(proposedChanges)
+		} else {
+			create = create.SetProposedChanges(internalpolicy.ProposedChanges)
+		}
+
+		if proposedByUserID, exists := m.ProposedByUserID(); exists {
+			create = create.SetProposedByUserID(proposedByUserID)
+		} else {
+			create = create.SetProposedByUserID(internalpolicy.ProposedByUserID)
+		}
+
+		if proposedAt, exists := m.ProposedAt(); exists {
+			create = create.SetNillableProposedAt(&proposedAt)
+		} else {
+			create = create.SetNillableProposedAt(internalpolicy.ProposedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -8377,7 +8495,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			return err
 		}
 
-		create := client.InternalPolicyHistory.Create()
+		create := client.HistoryClient.InternalPolicyHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8416,6 +8534,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetNillableFileID(internalpolicy.FileID).
 			SetInternalPolicyKindName(internalpolicy.InternalPolicyKindName).
 			SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID).
+			SetProposedChanges(internalpolicy.ProposedChanges).
+			SetProposedByUserID(internalpolicy.ProposedByUserID).
+			SetNillableProposedAt(internalpolicy.ProposedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -8434,7 +8555,7 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 		return idNotFoundError
 	}
 
-	create := client.JobTemplateHistory.Create()
+	create := client.HistoryClient.JobTemplateHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8541,7 +8662,7 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			return err
 		}
 
-		create := client.JobTemplateHistory.Create()
+		create := client.HistoryClient.JobTemplateHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8691,7 +8812,7 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 			return err
 		}
 
-		create := client.JobTemplateHistory.Create()
+		create := client.HistoryClient.JobTemplateHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8734,7 +8855,7 @@ func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) er
 		return idNotFoundError
 	}
 
-	create := client.MappableDomainHistory.Create()
+	create := client.HistoryClient.MappableDomainHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8801,7 +8922,7 @@ func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			return err
 		}
 
-		create := client.MappableDomainHistory.Create()
+		create := client.HistoryClient.MappableDomainHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8891,7 +9012,7 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 			return err
 		}
 
-		create := client.MappableDomainHistory.Create()
+		create := client.HistoryClient.MappableDomainHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -8924,7 +9045,7 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 		return idNotFoundError
 	}
 
-	create := client.MappedControlHistory.Create()
+	create := client.HistoryClient.MappedControlHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9015,7 +9136,7 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			return err
 		}
 
-		create := client.MappedControlHistory.Create()
+		create := client.HistoryClient.MappedControlHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9141,7 +9262,7 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 			return err
 		}
 
-		create := client.MappedControlHistory.Create()
+		create := client.HistoryClient.MappedControlHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9180,7 +9301,7 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.NarrativeHistory.Create()
+	create := client.HistoryClient.NarrativeHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9271,7 +9392,7 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.NarrativeHistory.Create()
+		create := client.HistoryClient.NarrativeHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9397,7 +9518,7 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.NarrativeHistory.Create()
+		create := client.HistoryClient.NarrativeHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9436,7 +9557,7 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.NoteHistory.Create()
+	create := client.HistoryClient.NoteHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9515,7 +9636,7 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.NoteHistory.Create()
+		create := client.HistoryClient.NoteHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9623,7 +9744,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.NoteHistory.Create()
+		create := client.HistoryClient.NoteHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9659,7 +9780,7 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		return idNotFoundError
 	}
 
-	create := client.OrgMembershipHistory.Create()
+	create := client.HistoryClient.OrgMembershipHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9718,7 +9839,7 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			return err
 		}
 
-		create := client.OrgMembershipHistory.Create()
+		create := client.HistoryClient.OrgMembershipHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9796,7 +9917,7 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			return err
 		}
 
-		create := client.OrgMembershipHistory.Create()
+		create := client.HistoryClient.OrgMembershipHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9827,7 +9948,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 		return idNotFoundError
 	}
 
-	create := client.OrgSubscriptionHistory.Create()
+	create := client.HistoryClient.OrgSubscriptionHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -9914,7 +10035,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 			return err
 		}
 
-		create := client.OrgSubscriptionHistory.Create()
+		create := client.HistoryClient.OrgSubscriptionHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10034,7 +10155,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 			return err
 		}
 
-		create := client.OrgSubscriptionHistory.Create()
+		create := client.HistoryClient.OrgSubscriptionHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10072,7 +10193,7 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		return idNotFoundError
 	}
 
-	create := client.OrganizationHistory.Create()
+	create := client.HistoryClient.OrganizationHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10171,7 +10292,7 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			return err
 		}
 
-		create := client.OrganizationHistory.Create()
+		create := client.HistoryClient.OrganizationHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10309,7 +10430,7 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			return err
 		}
 
-		create := client.OrganizationHistory.Create()
+		create := client.HistoryClient.OrganizationHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10350,7 +10471,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 		return idNotFoundError
 	}
 
-	create := client.OrganizationSettingHistory.Create()
+	create := client.HistoryClient.OrganizationSettingHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10509,7 +10630,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 			return err
 		}
 
-		create := client.OrganizationSettingHistory.Create()
+		create := client.HistoryClient.OrganizationSettingHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10737,7 +10858,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 			return err
 		}
 
-		create := client.OrganizationSettingHistory.Create()
+		create := client.HistoryClient.OrganizationSettingHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10793,7 +10914,7 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.ProcedureHistory.Create()
+	create := client.HistoryClient.ProcedureHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -10956,7 +11077,7 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ProcedureHistory.Create()
+		create := client.HistoryClient.ProcedureHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11190,7 +11311,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ProcedureHistory.Create()
+		create := client.HistoryClient.ProcedureHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11247,7 +11368,7 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.ProgramHistory.Create()
+	create := client.HistoryClient.ProgramHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11378,7 +11499,7 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ProgramHistory.Create()
+		create := client.HistoryClient.ProgramHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11564,7 +11685,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ProgramHistory.Create()
+		create := client.HistoryClient.ProgramHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11613,7 +11734,7 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 		return idNotFoundError
 	}
 
-	create := client.ProgramMembershipHistory.Create()
+	create := client.HistoryClient.ProgramMembershipHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11672,7 +11793,7 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 			return err
 		}
 
-		create := client.ProgramMembershipHistory.Create()
+		create := client.HistoryClient.ProgramMembershipHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11750,7 +11871,7 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 			return err
 		}
 
-		create := client.ProgramMembershipHistory.Create()
+		create := client.HistoryClient.ProgramMembershipHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11781,7 +11902,7 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		return idNotFoundError
 	}
 
-	create := client.RemediationHistory.Create()
+	create := client.HistoryClient.RemediationHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -11936,7 +12057,7 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			return err
 		}
 
-		create := client.RemediationHistory.Create()
+		create := client.HistoryClient.RemediationHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12158,7 +12279,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			return err
 		}
 
-		create := client.RemediationHistory.Create()
+		create := client.HistoryClient.RemediationHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12213,7 +12334,7 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.ReviewHistory.Create()
+	create := client.HistoryClient.ReviewHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12360,7 +12481,7 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ReviewHistory.Create()
+		create := client.HistoryClient.ReviewHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12570,7 +12691,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ReviewHistory.Create()
+		create := client.HistoryClient.ReviewHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12623,7 +12744,7 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.RiskHistory.Create()
+	create := client.HistoryClient.RiskHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12754,7 +12875,7 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.RiskHistory.Create()
+		create := client.HistoryClient.RiskHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12940,7 +13061,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.RiskHistory.Create()
+		create := client.HistoryClient.RiskHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -12989,7 +13110,7 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.ScanHistory.Create()
+	create := client.HistoryClient.ScanHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13068,7 +13189,7 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ScanHistory.Create()
+		create := client.HistoryClient.ScanHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13176,7 +13297,7 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.ScanHistory.Create()
+		create := client.HistoryClient.ScanHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13212,7 +13333,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		return idNotFoundError
 	}
 
-	create := client.ScheduledJobHistory.Create()
+	create := client.HistoryClient.ScheduledJobHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13295,7 +13416,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			return err
 		}
 
-		create := client.ScheduledJobHistory.Create()
+		create := client.HistoryClient.ScheduledJobHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13409,7 +13530,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			return err
 		}
 
-		create := client.ScheduledJobHistory.Create()
+		create := client.HistoryClient.ScheduledJobHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13446,7 +13567,7 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.StandardHistory.Create()
+	create := client.HistoryClient.StandardHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13581,7 +13702,7 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.StandardHistory.Create()
+		create := client.HistoryClient.StandardHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13773,7 +13894,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.StandardHistory.Create()
+		create := client.HistoryClient.StandardHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13823,7 +13944,7 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		return idNotFoundError
 	}
 
-	create := client.SubcontrolHistory.Create()
+	create := client.HistoryClient.SubcontrolHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -13946,6 +14067,14 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetReferences(references)
 	}
 
+	if testingProcedures, exists := m.TestingProcedures(); exists {
+		create = create.SetTestingProcedures(testingProcedures)
+	}
+
+	if evidenceRequests, exists := m.EvidenceRequests(); exists {
+		create = create.SetEvidenceRequests(evidenceRequests)
+	}
+
 	if controlOwnerID, exists := m.ControlOwnerID(); exists {
 		create = create.SetNillableControlOwnerID(&controlOwnerID)
 	}
@@ -14010,7 +14139,7 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			return err
 		}
 
-		create := client.SubcontrolHistory.Create()
+		create := client.HistoryClient.SubcontrolHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14191,6 +14320,18 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetReferences(subcontrol.References)
 		}
 
+		if testingProcedures, exists := m.TestingProcedures(); exists {
+			create = create.SetTestingProcedures(testingProcedures)
+		} else {
+			create = create.SetTestingProcedures(subcontrol.TestingProcedures)
+		}
+
+		if evidenceRequests, exists := m.EvidenceRequests(); exists {
+			create = create.SetEvidenceRequests(evidenceRequests)
+		} else {
+			create = create.SetEvidenceRequests(subcontrol.EvidenceRequests)
+		}
+
 		if controlOwnerID, exists := m.ControlOwnerID(); exists {
 			create = create.SetNillableControlOwnerID(&controlOwnerID)
 		} else {
@@ -14280,7 +14421,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			return err
 		}
 
-		create := client.SubcontrolHistory.Create()
+		create := client.HistoryClient.SubcontrolHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14315,6 +14456,8 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetImplementationGuidance(subcontrol.ImplementationGuidance).
 			SetExampleEvidence(subcontrol.ExampleEvidence).
 			SetReferences(subcontrol.References).
+			SetTestingProcedures(subcontrol.TestingProcedures).
+			SetEvidenceRequests(subcontrol.EvidenceRequests).
 			SetNillableControlOwnerID(subcontrol.ControlOwnerID).
 			SetDelegateID(subcontrol.DelegateID).
 			SetOwnerID(subcontrol.OwnerID).
@@ -14343,7 +14486,7 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		return idNotFoundError
 	}
 
-	create := client.SubprocessorHistory.Create()
+	create := client.HistoryClient.SubprocessorHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14434,7 +14577,7 @@ func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			return err
 		}
 
-		create := client.SubprocessorHistory.Create()
+		create := client.HistoryClient.SubprocessorHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14560,7 +14703,7 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			return err
 		}
 
-		create := client.SubprocessorHistory.Create()
+		create := client.HistoryClient.SubprocessorHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14599,7 +14742,7 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.TaskHistory.Create()
+	create := client.HistoryClient.TaskHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14722,7 +14865,7 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.TaskHistory.Create()
+		create := client.HistoryClient.TaskHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14896,7 +15039,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.TaskHistory.Create()
+		create := client.HistoryClient.TaskHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -14943,7 +15086,7 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.TemplateHistory.Create()
+	create := client.HistoryClient.TemplateHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15046,7 +15189,7 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.TemplateHistory.Create()
+		create := client.HistoryClient.TemplateHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15190,7 +15333,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.TemplateHistory.Create()
+		create := client.HistoryClient.TemplateHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15232,7 +15375,7 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 		return idNotFoundError
 	}
 
-	create := client.TrustCenterHistory.Create()
+	create := client.HistoryClient.TrustCenterHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15319,7 +15462,7 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			return err
 		}
 
-		create := client.TrustCenterHistory.Create()
+		create := client.HistoryClient.TrustCenterHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15439,7 +15582,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			return err
 		}
 
-		create := client.TrustCenterHistory.Create()
+		create := client.HistoryClient.TrustCenterHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15477,7 +15620,7 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Cont
 		return idNotFoundError
 	}
 
-	create := client.TrustCenterComplianceHistory.Create()
+	create := client.HistoryClient.TrustCenterComplianceHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15544,7 +15687,7 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Cont
 			return err
 		}
 
-		create := client.TrustCenterComplianceHistory.Create()
+		create := client.HistoryClient.TrustCenterComplianceHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15634,7 +15777,7 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 			return err
 		}
 
-		create := client.TrustCenterComplianceHistory.Create()
+		create := client.HistoryClient.TrustCenterComplianceHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15667,7 +15810,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		return idNotFoundError
 	}
 
-	create := client.TrustCenterDocHistory.Create()
+	create := client.HistoryClient.TrustCenterDocHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15762,7 +15905,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			return err
 		}
 
-		create := client.TrustCenterDocHistory.Create()
+		create := client.HistoryClient.TrustCenterDocHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15894,7 +16037,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			return err
 		}
 
-		create := client.TrustCenterDocHistory.Create()
+		create := client.HistoryClient.TrustCenterDocHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -15934,7 +16077,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		return idNotFoundError
 	}
 
-	create := client.TrustCenterSettingHistory.Create()
+	create := client.HistoryClient.TrustCenterSettingHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16053,7 +16196,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			return err
 		}
 
-		create := client.TrustCenterSettingHistory.Create()
+		create := client.HistoryClient.TrustCenterSettingHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16221,7 +16364,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			return err
 		}
 
-		create := client.TrustCenterSettingHistory.Create()
+		create := client.HistoryClient.TrustCenterSettingHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16267,7 +16410,7 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 		return idNotFoundError
 	}
 
-	create := client.TrustCenterSubprocessorHistory.Create()
+	create := client.HistoryClient.TrustCenterSubprocessorHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16338,7 +16481,7 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 			return err
 		}
 
-		create := client.TrustCenterSubprocessorHistory.Create()
+		create := client.HistoryClient.TrustCenterSubprocessorHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16434,7 +16577,7 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 			return err
 		}
 
-		create := client.TrustCenterSubprocessorHistory.Create()
+		create := client.HistoryClient.TrustCenterSubprocessorHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16468,7 +16611,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 		return idNotFoundError
 	}
 
-	create := client.TrustCenterWatermarkConfigHistory.Create()
+	create := client.HistoryClient.TrustCenterWatermarkConfigHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16563,7 +16706,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 			return err
 		}
 
-		create := client.TrustCenterWatermarkConfigHistory.Create()
+		create := client.HistoryClient.TrustCenterWatermarkConfigHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16695,7 +16838,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			return err
 		}
 
-		create := client.TrustCenterWatermarkConfigHistory.Create()
+		create := client.HistoryClient.TrustCenterWatermarkConfigHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16735,7 +16878,7 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromCreate(ctx context.Context)
 		return idNotFoundError
 	}
 
-	create := client.TrustcenterEntityHistory.Create()
+	create := client.HistoryClient.TrustcenterEntityHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16810,7 +16953,7 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context)
 			return err
 		}
 
-		create := client.TrustcenterEntityHistory.Create()
+		create := client.HistoryClient.TrustcenterEntityHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16912,7 +17055,7 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 			return err
 		}
 
-		create := client.TrustcenterEntityHistory.Create()
+		create := client.HistoryClient.TrustcenterEntityHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -16947,7 +17090,7 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		return idNotFoundError
 	}
 
-	create := client.UserHistory.Create()
+	create := client.HistoryClient.UserHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17082,7 +17225,7 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			return err
 		}
 
-		create := client.UserHistory.Create()
+		create := client.HistoryClient.UserHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17274,7 +17417,7 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			return err
 		}
 
-		create := client.UserHistory.Create()
+		create := client.HistoryClient.UserHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17324,7 +17467,7 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 		return idNotFoundError
 	}
 
-	create := client.UserSettingHistory.Create()
+	create := client.HistoryClient.UserSettingHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17419,7 +17562,7 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			return err
 		}
 
-		create := client.UserSettingHistory.Create()
+		create := client.HistoryClient.UserSettingHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17551,7 +17694,7 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 			return err
 		}
 
-		create := client.UserSettingHistory.Create()
+		create := client.HistoryClient.UserSettingHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17591,7 +17734,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		return idNotFoundError
 	}
 
-	create := client.VulnerabilityHistory.Create()
+	create := client.HistoryClient.VulnerabilityHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -17786,7 +17929,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			return err
 		}
 
-		create := client.VulnerabilityHistory.Create()
+		create := client.HistoryClient.VulnerabilityHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18068,7 +18211,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			return err
 		}
 
-		create := client.VulnerabilityHistory.Create()
+		create := client.HistoryClient.VulnerabilityHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18133,7 +18276,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 		return idNotFoundError
 	}
 
-	create := client.WorkflowAssignmentHistory.Create()
+	create := client.HistoryClient.WorkflowAssignmentHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18244,7 +18387,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 			return err
 		}
 
-		create := client.WorkflowAssignmentHistory.Create()
+		create := client.HistoryClient.WorkflowAssignmentHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18400,7 +18543,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 			return err
 		}
 
-		create := client.WorkflowAssignmentHistory.Create()
+		create := client.HistoryClient.WorkflowAssignmentHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18444,7 +18587,7 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.C
 		return idNotFoundError
 	}
 
-	create := client.WorkflowAssignmentTargetHistory.Create()
+	create := client.HistoryClient.WorkflowAssignmentTargetHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18531,7 +18674,7 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.C
 			return err
 		}
 
-		create := client.WorkflowAssignmentTargetHistory.Create()
+		create := client.HistoryClient.WorkflowAssignmentTargetHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18651,7 +18794,7 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.C
 			return err
 		}
 
-		create := client.WorkflowAssignmentTargetHistory.Create()
+		create := client.HistoryClient.WorkflowAssignmentTargetHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18689,7 +18832,7 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context
 		return idNotFoundError
 	}
 
-	create := client.WorkflowDefinitionHistory.Create()
+	create := client.HistoryClient.WorkflowDefinitionHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -18824,7 +18967,7 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context
 			return err
 		}
 
-		create := client.WorkflowDefinitionHistory.Create()
+		create := client.HistoryClient.WorkflowDefinitionHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19016,7 +19159,7 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context
 			return err
 		}
 
-		create := client.WorkflowDefinitionHistory.Create()
+		create := client.HistoryClient.WorkflowDefinitionHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19066,7 +19209,7 @@ func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) err
 		return idNotFoundError
 	}
 
-	create := client.WorkflowEventHistory.Create()
+	create := client.HistoryClient.WorkflowEventHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19145,7 +19288,7 @@ func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			return err
 		}
 
-		create := client.WorkflowEventHistory.Create()
+		create := client.HistoryClient.WorkflowEventHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19253,7 +19396,7 @@ func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) err
 			return err
 		}
 
-		create := client.WorkflowEventHistory.Create()
+		create := client.HistoryClient.WorkflowEventHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19289,7 +19432,7 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 		return idNotFoundError
 	}
 
-	create := client.WorkflowInstanceHistory.Create()
+	create := client.HistoryClient.WorkflowInstanceHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19352,6 +19495,18 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDefinitionSnapshot(definitionSnapshot)
 	}
 
+	if controlID, exists := m.ControlID(); exists {
+		create = create.SetControlID(controlID)
+	}
+
+	if internalPolicyID, exists := m.InternalPolicyID(); exists {
+		create = create.SetInternalPolicyID(internalPolicyID)
+	}
+
+	if evidenceID, exists := m.EvidenceID(); exists {
+		create = create.SetEvidenceID(evidenceID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -19376,7 +19531,7 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			return err
 		}
 
-		create := client.WorkflowInstanceHistory.Create()
+		create := client.HistoryClient.WorkflowInstanceHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19467,6 +19622,24 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot)
 		}
 
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		} else {
+			create = create.SetControlID(workflowinstance.ControlID)
+		}
+
+		if internalPolicyID, exists := m.InternalPolicyID(); exists {
+			create = create.SetInternalPolicyID(internalPolicyID)
+		} else {
+			create = create.SetInternalPolicyID(workflowinstance.InternalPolicyID)
+		}
+
+		if evidenceID, exists := m.EvidenceID(); exists {
+			create = create.SetEvidenceID(evidenceID)
+		} else {
+			create = create.SetEvidenceID(workflowinstance.EvidenceID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -19496,7 +19669,7 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 			return err
 		}
 
-		create := client.WorkflowInstanceHistory.Create()
+		create := client.HistoryClient.WorkflowInstanceHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19516,6 +19689,9 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetContext(workflowinstance.Context).
 			SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt).
 			SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot).
+			SetControlID(workflowinstance.ControlID).
+			SetInternalPolicyID(workflowinstance.InternalPolicyID).
+			SetEvidenceID(workflowinstance.EvidenceID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -19534,7 +19710,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 		return idNotFoundError
 	}
 
-	create := client.WorkflowObjectRefHistory.Create()
+	create := client.HistoryClient.WorkflowObjectRefHistory.Create()
 
 	create = create.
 		SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19597,6 +19773,10 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 		create = create.SetDirectoryMembershipID(directoryMembershipID)
 	}
 
+	if evidenceID, exists := m.EvidenceID(); exists {
+		create = create.SetEvidenceID(evidenceID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -19621,7 +19801,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 			return err
 		}
 
-		create := client.WorkflowObjectRefHistory.Create()
+		create := client.HistoryClient.WorkflowObjectRefHistory.Create()
 
 		create = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19712,6 +19892,12 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID)
 		}
 
+		if evidenceID, exists := m.EvidenceID(); exists {
+			create = create.SetEvidenceID(evidenceID)
+		} else {
+			create = create.SetEvidenceID(workflowobjectref.EvidenceID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -19741,7 +19927,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 			return err
 		}
 
-		create := client.WorkflowObjectRefHistory.Create()
+		create := client.HistoryClient.WorkflowObjectRefHistory.Create()
 
 		_, err = create.
 			SetOperation(EntOpToHistoryOp(m.Op())).
@@ -19761,6 +19947,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetDirectoryAccountID(workflowobjectref.DirectoryAccountID).
 			SetDirectoryGroupID(workflowobjectref.DirectoryGroupID).
 			SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID).
+			SetEvidenceID(workflowobjectref.EvidenceID).
 			Save(ctx)
 		if err != nil {
 			return err

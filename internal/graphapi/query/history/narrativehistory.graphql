@@ -1,0 +1,67 @@
+
+
+query GetAllNarrativeHistories {
+  narrativeHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        details
+        displayID
+        historyTime
+        id
+        internalNotes
+        name
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetNarrativeHistories($first: Int, $last: Int, $where: NarrativeHistoryWhereInput) {
+  narrativeHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        details
+        displayID
+        historyTime
+        id
+        internalNotes
+        name
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

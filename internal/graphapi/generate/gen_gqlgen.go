@@ -18,6 +18,8 @@ const (
 	graphapiGenDir = "internal/graphapi/generate/"
 	// csvDir is the directory where the CSV files will be stored for example bulk operations
 	csvDir = "internal/httpserve/handlers/csv"
+	// graphqlImport that includes the transaction wrappers and other common graphql helpers
+	graphqlImport = "github.com/theopenlane/core/internal/graphapi/common"
 )
 
 func main() {
@@ -26,6 +28,11 @@ func main() {
 	// change to the root of the repo so that the config hierarchy is correct
 	genhelpers.ChangeToRootDir("../../../")
 
+	gqlGenerate()
+	gqlHistoryGenerate()
+}
+
+func gqlGenerate() {
 	cfg, err := config.LoadConfig(graphapiGenDir + ".gqlgen.yml")
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to load config")
@@ -39,19 +46,40 @@ func main() {
 		api.ReplacePlugin(resolvergen.NewWithOptions(
 			resolvergen.WithEntGeneratedPackage(entPackage),
 			resolvergen.WithArchivableSchemas([]string{schema.Program{}.Name()}),
+			resolvergen.WithGraphQLImport(graphqlImport),
 		)), // replace the resolvergen plugin
 		api.AddPlugin(bulkgen.NewWithOptions(
 			bulkgen.WithModelPackage(modelImport),
 			bulkgen.WithEntGeneratedPackage(entPackage),
 			bulkgen.WithCSVOutputPath(csvDir),
+			bulkgen.WithGraphQLImport(graphqlImport),
 		)), // add the bulkgen plugin
 		api.AddPlugin(searchgen.NewWithOptions(
 			searchgen.WithEntGeneratedPackage(entPackage),
 			searchgen.WithModelPackage(modelImport),
 			searchgen.WithRulePackage(rulePackage),
 			searchgen.WithIncludeAdminSearch(false),
+			searchgen.WithGraphQLImport(graphqlImport),
 		)), // add the search plugin
 	); err != nil {
 		log.Fatal().Err(err).Msg("failed to generate gqlgen server")
+	}
+}
+
+func gqlHistoryGenerate() {
+	cfg, err := config.LoadConfig(graphapiGenDir + ".gqlgen_history.yml")
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to load config")
+	}
+
+	entPackage := "github.com/theopenlane/core/internal/ent/historygenerated"
+
+	if err := api.Generate(cfg,
+		api.ReplacePlugin(resolvergen.NewWithOptions(
+			resolvergen.WithEntGeneratedPackage(entPackage),
+			resolvergen.WithGraphQLImport(graphqlImport),
+		)),
+	); err != nil {
+		log.Fatal().Err(err).Msg("failed to generate gqlgen history server")
 	}
 }

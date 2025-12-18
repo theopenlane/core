@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateDirectorySyncRun is the resolver for the createDirectorySyncRun field.
 func (r *mutationResolver) CreateDirectorySyncRun(ctx context.Context, input generated.CreateDirectorySyncRunInput) (*model.DirectorySyncRunCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateDirectorySyncRun(ctx context.Context, input gen
 
 	res, err := withTransactionalMutation(ctx).DirectorySyncRun.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorysyncrun"})
 	}
 
 	return &model.DirectorySyncRunCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkDirectorySyncRun(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkDirectorySyncRun(ctx context.Context, input
 
 // CreateBulkCSVDirectorySyncRun is the resolver for the createBulkCSVDirectorySyncRun field.
 func (r *mutationResolver) CreateBulkCSVDirectorySyncRun(ctx context.Context, input graphql.Upload) (*model.DirectorySyncRunBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateDirectorySyncRunInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateDirectorySyncRunInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorysyncrun"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVDirectorySyncRun(ctx context.Context, in
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVDirectorySyncRun(ctx context.Context, in
 func (r *mutationResolver) UpdateDirectorySyncRun(ctx context.Context, id string, input generated.UpdateDirectorySyncRunInput) (*model.DirectorySyncRunUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DirectorySyncRun.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "directorysyncrun"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateDirectorySyncRun(ctx context.Context, id string
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "directorysyncrun"})
 	}
 
 	return &model.DirectorySyncRunUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateDirectorySyncRun(ctx context.Context, id string
 // DeleteDirectorySyncRun is the resolver for the deleteDirectorySyncRun field.
 func (r *mutationResolver) DeleteDirectorySyncRun(ctx context.Context, id string) (*model.DirectorySyncRunDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DirectorySyncRun.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "directorysyncrun"})
 	}
 
 	if err := generated.DirectorySyncRunEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DirectorySyncRunDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteDirectorySyncRun(ctx context.Context, id string
 func (r *queryResolver) DirectorySyncRun(ctx context.Context, id string) (*generated.DirectorySyncRun, error) {
 	query, err := withTransactionalMutation(ctx).DirectorySyncRun.Query().Where(directorysyncrun.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "directorysyncrun"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "directorysyncrun"})
 	}
 
 	return res, nil

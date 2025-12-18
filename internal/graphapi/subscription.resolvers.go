@@ -9,6 +9,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
@@ -26,7 +27,7 @@ func (r *subscriptionResolver) TaskCreated(ctx context.Context) (<-chan *generat
 	// Check if subscription manager is available
 	if r.subscriptionManager == nil {
 		logx.FromContext(ctx).Info().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
-		return nil, ErrInternalServerError
+		return nil, common.ErrInternalServerError
 	}
 
 	// Create a buffered channel to send task events

@@ -57,7 +57,6 @@ Config contains the configuration for the core server
                 "openai": {}
             }
         },
-        "windmill": {},
         "modules": {},
         "emailvalidation": {
             "allowedemailtypes": {}
@@ -419,7 +418,6 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entitytypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
-|[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxpoolsize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 |**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
@@ -439,7 +437,6 @@ Config holds the configuration for the ent server
             "openai": {}
         }
     },
-    "windmill": {},
     "modules": {},
     "emailvalidation": {
         "allowedemailtypes": {}
@@ -555,26 +552,6 @@ OpenAIConfig contains OpenAI specific configuration
 |**apikey**|`string`|APIKey contains the authentication key for the service<br/>||
 |**url**|`string`|URL specifies the API endpoint<br/>||
 |**organizationid**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
-
-**Additional Properties:** not allowed  
-<a name="entconfigwindmill"></a>
-### entconfig\.windmill: object
-
-Windmill holds configuration for the Windmill workflow automation platform
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled specifies whether Windmill integration is enabled<br/>||
-|**baseurl**|`string`|BaseURL is the base URL of the Windmill instance<br/>||
-|**workspace**|`string`|Workspace is the Windmill workspace to use<br/>||
-|**token**|`string`|Token is the API token for authentication with Windmill<br/>||
-|**defaulttimeout**|`string`|DefaultTimeout is the default timeout for API requests<br/>||
-|**timezone**|`string`|Timezone for scheduled jobs<br/>||
-|**onfailurescript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
-|**onsuccessscript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfigmodules"></a>
@@ -721,6 +698,7 @@ Auth settings including oauth2 providers and token configuration
 |**jwkscachettl**|`integer`||no|
 |[**redis**](#authtokenredis)|`object`||no|
 |[**apitokens**](#authtokenapitokens)|`object`||no|
+|**assessmentaccessduration**|`integer`||no|
 
 **Additional Properties:** not allowed  
 **Example**

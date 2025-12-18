@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateWorkflowObjectRef is the resolver for the createWorkflowObjectRef field.
 func (r *mutationResolver) CreateWorkflowObjectRef(ctx context.Context, input generated.CreateWorkflowObjectRefInput) (*model.WorkflowObjectRefCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateWorkflowObjectRef(ctx context.Context, input ge
 
 	res, err := withTransactionalMutation(ctx).WorkflowObjectRef.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowobjectref"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowobjectref"})
 	}
 
 	return &model.WorkflowObjectRefCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkWorkflowObjectRef(ctx context.Context, inpu
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkWorkflowObjectRef(ctx context.Context, inpu
 
 // CreateBulkCSVWorkflowObjectRef is the resolver for the createBulkCSVWorkflowObjectRef field.
 func (r *mutationResolver) CreateBulkCSVWorkflowObjectRef(ctx context.Context, input graphql.Upload) (*model.WorkflowObjectRefBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateWorkflowObjectRefInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateWorkflowObjectRefInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowobjectref"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowobjectref"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVWorkflowObjectRef(ctx context.Context, i
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -76,41 +77,14 @@ func (r *mutationResolver) CreateBulkCSVWorkflowObjectRef(ctx context.Context, i
 	return r.bulkCreateWorkflowObjectRef(ctx, data)
 }
 
-// UpdateWorkflowObjectRef is the resolver for the updateWorkflowObjectRef field.
-func (r *mutationResolver) UpdateWorkflowObjectRef(ctx context.Context, id string, input generated.UpdateWorkflowObjectRefInput) (*model.WorkflowObjectRefUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).WorkflowObjectRef.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowobjectref"})
-	}
-
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowobjectref"})
-	}
-
-	return &model.WorkflowObjectRefUpdatePayload{
-		WorkflowObjectRef: res,
-	}, nil
-}
-
 // DeleteWorkflowObjectRef is the resolver for the deleteWorkflowObjectRef field.
 func (r *mutationResolver) DeleteWorkflowObjectRef(ctx context.Context, id string) (*model.WorkflowObjectRefDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).WorkflowObjectRef.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "workflowobjectref"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowobjectref"})
 	}
 
 	if err := generated.WorkflowObjectRefEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.WorkflowObjectRefDeletePayload{
@@ -122,12 +96,12 @@ func (r *mutationResolver) DeleteWorkflowObjectRef(ctx context.Context, id strin
 func (r *queryResolver) WorkflowObjectRef(ctx context.Context, id string) (*generated.WorkflowObjectRef, error) {
 	query, err := withTransactionalMutation(ctx).WorkflowObjectRef.Query().Where(workflowobjectref.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowobjectref"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobjectref"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowobjectref"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobjectref"})
 	}
 
 	return res, nil

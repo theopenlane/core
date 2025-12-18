@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateRisk is the resolver for the createRisk field.
 func (r *mutationResolver) CreateRisk(ctx context.Context, input generated.CreateRiskInput) (*model.RiskCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateRisk(ctx context.Context, input generated.Creat
 
 	res, err := withTransactionalMutation(ctx).Risk.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "risk"})
 	}
 
 	return &model.RiskCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkRisk(ctx context.Context, input []*generate
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkRisk(ctx context.Context, input []*generate
 
 // CreateBulkCSVRisk is the resolver for the createBulkCSVRisk field.
 func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.Upload) (*model.RiskBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateRiskInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateRiskInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "risk"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -89,11 +90,11 @@ func (r *mutationResolver) UpdateBulkRisk(ctx context.Context, ids []string, inp
 func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Risk.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -104,7 +105,7 @@ func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
 	}
 
 	return &model.RiskUpdatePayload{
@@ -115,11 +116,11 @@ func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input gene
 // DeleteRisk is the resolver for the deleteRisk field.
 func (r *mutationResolver) DeleteRisk(ctx context.Context, id string) (*model.RiskDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Risk.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "risk"})
 	}
 
 	if err := generated.RiskEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.RiskDeletePayload{
@@ -140,12 +141,12 @@ func (r *mutationResolver) DeleteBulkRisk(ctx context.Context, ids []string) (*m
 func (r *queryResolver) Risk(ctx context.Context, id string) (*generated.Risk, error) {
 	query, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "risk"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "risk"})
 	}
 
 	return res, nil

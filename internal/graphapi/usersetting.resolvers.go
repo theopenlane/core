@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateUserSetting(ctx context.Context, input generated.CreateUserSettingInput) (*model.UserSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).UserSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "usersetting"})
 	}
 
 	return &model.UserSettingCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkUserSetting(ctx context.Context, input []*g
 
 // CreateBulkCSVUserSetting is the resolver for the createBulkCSVUserSetting field.
 func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input graphql.Upload) (*model.UserSettingBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateUserSettingInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateUserSettingInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "usersetting"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVUserSetting(ctx context.Context, input g
 func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, input generated.UpdateUserSettingInput) (*model.UserSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).UserSetting.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "usersetting"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateUserSetting(ctx context.Context, id string, inp
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "usersetting"})
 	}
 
 	return &model.UserSettingUpdatePayload{
@@ -86,12 +87,12 @@ func (r *mutationResolver) DeleteBulkUserSetting(ctx context.Context, ids []stri
 func (r *queryResolver) UserSetting(ctx context.Context, id string) (*generated.UserSetting, error) {
 	query, err := withTransactionalMutation(ctx).UserSetting.Query().Where(usersetting.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "usersetting"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "usersetting"})
 	}
 
 	return res, nil

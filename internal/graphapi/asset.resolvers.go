@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateAsset is the resolver for the createAsset field.
 func (r *mutationResolver) CreateAsset(ctx context.Context, input generated.CreateAssetInput) (*model.AssetCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateAsset(ctx context.Context, input generated.Crea
 
 	res, err := withTransactionalMutation(ctx).Asset.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "asset"})
 	}
 
 	return &model.AssetCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkAsset(ctx context.Context, input []*generat
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkAsset(ctx context.Context, input []*generat
 
 // CreateBulkCSVAsset is the resolver for the createBulkCSVAsset field.
 func (r *mutationResolver) CreateBulkCSVAsset(ctx context.Context, input graphql.Upload) (*model.AssetBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateAssetInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateAssetInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "asset"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVAsset(ctx context.Context, input graphql
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVAsset(ctx context.Context, input graphql
 func (r *mutationResolver) UpdateAsset(ctx context.Context, id string, input generated.UpdateAssetInput) (*model.AssetUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Asset.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "asset"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateAsset(ctx context.Context, id string, input gen
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "asset"})
 	}
 
 	return &model.AssetUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateAsset(ctx context.Context, id string, input gen
 // DeleteAsset is the resolver for the deleteAsset field.
 func (r *mutationResolver) DeleteAsset(ctx context.Context, id string) (*model.AssetDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Asset.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "asset"})
 	}
 
 	if err := generated.AssetEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.AssetDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkAsset(ctx context.Context, ids []string) (*
 func (r *queryResolver) Asset(ctx context.Context, id string) (*generated.Asset, error) {
 	query, err := withTransactionalMutation(ctx).Asset.Query().Where(asset.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "asset"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "asset"})
 	}
 
 	return res, nil

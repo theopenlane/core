@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -18,7 +19,7 @@ import (
 // CreateTrustCenter is the resolver for the createTrustCenter field.
 func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generated.CreateTrustCenterInput) (*model.TrustCenterCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -26,7 +27,7 @@ func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generate
 
 	res, err := withTransactionalMutation(ctx).TrustCenter.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenter"})
 	}
 
 	return &model.TrustCenterCreatePayload{
@@ -38,11 +39,11 @@ func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generate
 func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, input generated.UpdateTrustCenterInput) (*model.TrustCenterUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenter.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -53,7 +54,7 @@ func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, inp
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
 	}
 
 	return &model.TrustCenterUpdatePayload{
@@ -64,11 +65,11 @@ func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, inp
 // DeleteTrustCenter is the resolver for the deleteTrustCenter field.
 func (r *mutationResolver) DeleteTrustCenter(ctx context.Context, id string) (*model.TrustCenterDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenter.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenter"})
 	}
 
 	if err := generated.TrustCenterEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterDeletePayload{
@@ -80,12 +81,12 @@ func (r *mutationResolver) DeleteTrustCenter(ctx context.Context, id string) (*m
 func (r *queryResolver) TrustCenter(ctx context.Context, id string) (*generated.TrustCenter, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenter.Query().Where(trustcenter.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenter"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenter"})
 	}
 
 	return res, nil

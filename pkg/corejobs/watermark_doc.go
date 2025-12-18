@@ -14,7 +14,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
@@ -166,6 +165,7 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to apply text watermark")
 			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
+
 			return fmt.Errorf("failed to apply text watermark: %w", err)
 		}
 	case watermarkConfig.File != nil && watermarkConfig.File.PresignedURL != nil && *watermarkConfig.File.PresignedURL != "":
@@ -174,18 +174,23 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to download watermark image")
 			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
+
 			return fmt.Errorf("failed to download watermark image: %w", err)
 		}
+
 		imageReader := bytes.NewReader(imageBytes)
+
 		err = watermarkPDFWithImage(originalReader, &watermarkedDoc, imageReader, genConfig)
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to apply image watermark")
 			w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
+
 			return fmt.Errorf("failed to apply image watermark: %w", err)
 		}
 	default:
 		logger.Error().Msg("watermark config has neither text nor image")
 		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
+
 		return ErrWatermarkConfigNoTextOrImage
 	}
 
@@ -197,33 +202,38 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 	}
 	// Update the trust center document status to success
 	successStatus := enums.WatermarkStatusSuccess
+
 	_, err = w.olClient.UpdateTrustCenterDoc(ctx, job.Args.TrustCenterDocumentID, openlaneclient.UpdateTrustCenterDocInput{
 		WatermarkStatus: &successStatus,
 	}, nil, uploadFile)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to update trust center document status")
 		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
+
 		return fmt.Errorf("failed to update trust center document status: %w", err)
 	}
 
 	logger.Info().Msg("document watermarking completed successfully")
+
 	return nil
 }
 
-func watermarkPDFWithText(rs io.ReadSeeker, w io.Writer, config *generated.TrustCenterWatermarkConfig) error {
+func watermarkPDFWithText(rs io.ReadSeeker, w io.Writer, config *openlaneclient.TrustCenterWatermarkConfig) error {
 	// Create watermark description string
 	// You can find the allowed configuration docs here: https://pdfcpu.io/core/watermark.html
-	wmDesc := fmt.Sprintf("fontname:%s, points:%d, fillcolor:%s, op:%.2f, rot:%.0f",
+	wmDesc := fmt.Sprintf("fontname:%s, points:%.0f, fillcolor:%s, op:%.2f, rot:%.0f",
 		config.Font.ToFontStr(),
-		int(config.FontSize),
-		config.Color,
-		config.Opacity,
-		config.Rotation,
+		*config.FontSize,
+		*config.Color,
+		*config.Opacity,
+		*config.Rotation,
 	)
+
 	// Define watermark parameters
 	selectedPages := []string{"1-"} // Apply to all pages. Use `nil` for all pages.
 	onTop := true                   // true = watermark appears over content; false = under content
-	wm, err := api.TextWatermark(config.Text, wmDesc, onTop, false, types.POINTS)
+
+	wm, err := api.TextWatermark(*config.Text, wmDesc, onTop, false, types.POINTS)
 	if err != nil {
 		return err
 	}
@@ -231,17 +241,18 @@ func watermarkPDFWithText(rs io.ReadSeeker, w io.Writer, config *generated.Trust
 	return api.AddWatermarks(rs, w, selectedPages, wm, nil)
 }
 
-func watermarkPDFWithImage(rs io.ReadSeeker, w io.Writer, imgReader io.Reader, config *generated.TrustCenterWatermarkConfig) error {
+func watermarkPDFWithImage(rs io.ReadSeeker, w io.Writer, imgReader io.Reader, config *openlaneclient.TrustCenterWatermarkConfig) error {
 	// Create image watermark description
 	// You can find the allowed configuration docs here: https://pdfcpu.io/core/watermark.html
 	wmDesc := fmt.Sprintf("op:%.2f, rot:%.0f",
-		config.Opacity,
-		config.Rotation,
+		*config.Opacity,
+		*config.Rotation,
 	)
 
 	selectedPages := []string{"1-"} // Apply to all pages. Use `nil` for all pages.
 	onTop := true                   // true = watermark appears over content; false = under content
 	unit := types.POINTS
+
 	wm, err := api.ImageWatermarkForReader(imgReader, wmDesc, onTop, false, unit)
 	if err != nil {
 		return err
@@ -282,40 +293,40 @@ func (w *WatermarkDocWorker) downloadFile(ctx context.Context, url string) ([]by
 }
 
 // convertWatermarkConfig converts the client watermark config to the generated type
-func (w *WatermarkDocWorker) convertWatermarkConfig(clientConfig *openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) *generated.TrustCenterWatermarkConfig {
-	config := &generated.TrustCenterWatermarkConfig{
+func (w *WatermarkDocWorker) convertWatermarkConfig(clientConfig *openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node) *openlaneclient.TrustCenterWatermarkConfig {
+	config := &openlaneclient.TrustCenterWatermarkConfig{
 		ID: clientConfig.ID,
 	}
 
 	if clientConfig.TrustCenterID != nil {
-		config.TrustCenterID = *clientConfig.TrustCenterID
+		config.TrustCenterID = clientConfig.TrustCenterID
 	}
 
 	if clientConfig.Text != nil {
-		config.Text = *clientConfig.Text
+		config.Text = clientConfig.Text
 	}
 
 	if clientConfig.FontSize != nil {
-		config.FontSize = *clientConfig.FontSize
+		config.FontSize = clientConfig.FontSize
 	}
 
 	if clientConfig.Opacity != nil {
-		config.Opacity = *clientConfig.Opacity
+		config.Opacity = clientConfig.Opacity
 	}
 
 	if clientConfig.Rotation != nil {
-		config.Rotation = *clientConfig.Rotation
+		config.Rotation = clientConfig.Rotation
 	}
 
 	if clientConfig.Color != nil {
-		config.Color = *clientConfig.Color
+		config.Color = clientConfig.Color
 	}
 
 	if clientConfig.Font != nil {
-		config.Font = enums.Font(*clientConfig.Font)
+		config.Font = clientConfig.Font
 	} else {
 		// Set default font if none is provided
-		config.Font = enums.FontHelvetica
+		config.Font = &enums.FontHelvetica
 	}
 
 	return config

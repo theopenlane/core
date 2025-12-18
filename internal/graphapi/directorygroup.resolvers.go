@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateDirectoryGroup is the resolver for the createDirectoryGroup field.
 func (r *mutationResolver) CreateDirectoryGroup(ctx context.Context, input generated.CreateDirectoryGroupInput) (*model.DirectoryGroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateDirectoryGroup(ctx context.Context, input gener
 
 	res, err := withTransactionalMutation(ctx).DirectoryGroup.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorygroup"})
 	}
 
 	return &model.DirectoryGroupCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkDirectoryGroup(ctx context.Context, input [
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkDirectoryGroup(ctx context.Context, input [
 
 // CreateBulkCSVDirectoryGroup is the resolver for the createBulkCSVDirectoryGroup field.
 func (r *mutationResolver) CreateBulkCSVDirectoryGroup(ctx context.Context, input graphql.Upload) (*model.DirectoryGroupBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateDirectoryGroupInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateDirectoryGroupInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorygroup"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVDirectoryGroup(ctx context.Context, inpu
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVDirectoryGroup(ctx context.Context, inpu
 func (r *mutationResolver) UpdateDirectoryGroup(ctx context.Context, id string, input generated.UpdateDirectoryGroupInput) (*model.DirectoryGroupUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DirectoryGroup.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "directorygroup"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateDirectoryGroup(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "directorygroup"})
 	}
 
 	return &model.DirectoryGroupUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateDirectoryGroup(ctx context.Context, id string, 
 // DeleteDirectoryGroup is the resolver for the deleteDirectoryGroup field.
 func (r *mutationResolver) DeleteDirectoryGroup(ctx context.Context, id string) (*model.DirectoryGroupDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DirectoryGroup.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "directorygroup"})
 	}
 
 	if err := generated.DirectoryGroupEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DirectoryGroupDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteDirectoryGroup(ctx context.Context, id string) 
 func (r *queryResolver) DirectoryGroup(ctx context.Context, id string) (*generated.DirectoryGroup, error) {
 	query, err := withTransactionalMutation(ctx).DirectoryGroup.Query().Where(directorygroup.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "directorygroup"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "directorygroup"})
 	}
 
 	return res, nil

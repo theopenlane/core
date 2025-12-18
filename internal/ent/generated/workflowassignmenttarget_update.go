@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -127,26 +126,6 @@ func (_u *WorkflowAssignmentTargetUpdate) ClearTags() *WorkflowAssignmentTargetU
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowAssignmentTargetUpdate) SetOwnerID(v string) *WorkflowAssignmentTargetUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetUpdate) SetNillableOwnerID(v *string) *WorkflowAssignmentTargetUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowAssignmentTargetUpdate) ClearOwnerID() *WorkflowAssignmentTargetUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetWorkflowAssignmentID sets the "workflow_assignment_id" field.
 func (_u *WorkflowAssignmentTargetUpdate) SetWorkflowAssignmentID(v string) *WorkflowAssignmentTargetUpdate {
 	_u.mutation.SetWorkflowAssignmentID(v)
@@ -235,11 +214,6 @@ func (_u *WorkflowAssignmentTargetUpdate) ClearResolverKey() *WorkflowAssignment
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *WorkflowAssignmentTargetUpdate) SetOwner(v *Organization) *WorkflowAssignmentTargetUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetWorkflowAssignment sets the "workflow_assignment" edge to the WorkflowAssignment entity.
 func (_u *WorkflowAssignmentTargetUpdate) SetWorkflowAssignment(v *WorkflowAssignment) *WorkflowAssignmentTargetUpdate {
 	return _u.SetWorkflowAssignmentID(v.ID)
@@ -286,12 +260,6 @@ func (_u *WorkflowAssignmentTargetUpdate) SetGroup(v *Group) *WorkflowAssignment
 // Mutation returns the WorkflowAssignmentTargetMutation object of the builder.
 func (_u *WorkflowAssignmentTargetUpdate) Mutation() *WorkflowAssignmentTargetMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *WorkflowAssignmentTargetUpdate) ClearOwner() *WorkflowAssignmentTargetUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearWorkflowAssignment clears the "workflow_assignment" edge to the WorkflowAssignment entity.
@@ -356,11 +324,6 @@ func (_u *WorkflowAssignmentTargetUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *WorkflowAssignmentTargetUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := workflowassignmenttarget.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "WorkflowAssignmentTarget.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.WorkflowAssignmentID(); ok {
 		if err := workflowassignmenttarget.WorkflowAssignmentIDValidator(v); err != nil {
 			return &ValidationError{Name: "workflow_assignment_id", err: fmt.Errorf(`generated: validator failed for field "WorkflowAssignmentTarget.workflow_assignment_id": %w`, err)}
@@ -444,37 +407,6 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 	}
 	if _u.mutation.ResolverKeyCleared() {
 		_spec.ClearField(workflowassignmenttarget.FieldResolverKey, field.TypeString)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowassignmenttarget.OwnerTable,
-			Columns: []string{workflowassignmenttarget.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowassignmenttarget.OwnerTable,
-			Columns: []string{workflowassignmenttarget.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.WorkflowAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -683,26 +615,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) ClearTags() *WorkflowAssignmentTarg
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *WorkflowAssignmentTargetUpdateOne) SetOwnerID(v string) *WorkflowAssignmentTargetUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetUpdateOne) SetNillableOwnerID(v *string) *WorkflowAssignmentTargetUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *WorkflowAssignmentTargetUpdateOne) ClearOwnerID() *WorkflowAssignmentTargetUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetWorkflowAssignmentID sets the "workflow_assignment_id" field.
 func (_u *WorkflowAssignmentTargetUpdateOne) SetWorkflowAssignmentID(v string) *WorkflowAssignmentTargetUpdateOne {
 	_u.mutation.SetWorkflowAssignmentID(v)
@@ -791,11 +703,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) ClearResolverKey() *WorkflowAssignm
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *WorkflowAssignmentTargetUpdateOne) SetOwner(v *Organization) *WorkflowAssignmentTargetUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetWorkflowAssignment sets the "workflow_assignment" edge to the WorkflowAssignment entity.
 func (_u *WorkflowAssignmentTargetUpdateOne) SetWorkflowAssignment(v *WorkflowAssignment) *WorkflowAssignmentTargetUpdateOne {
 	return _u.SetWorkflowAssignmentID(v.ID)
@@ -842,12 +749,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) SetGroup(v *Group) *WorkflowAssignm
 // Mutation returns the WorkflowAssignmentTargetMutation object of the builder.
 func (_u *WorkflowAssignmentTargetUpdateOne) Mutation() *WorkflowAssignmentTargetMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *WorkflowAssignmentTargetUpdateOne) ClearOwner() *WorkflowAssignmentTargetUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearWorkflowAssignment clears the "workflow_assignment" edge to the WorkflowAssignment entity.
@@ -925,11 +826,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *WorkflowAssignmentTargetUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := workflowassignmenttarget.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "WorkflowAssignmentTarget.owner_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.WorkflowAssignmentID(); ok {
 		if err := workflowassignmenttarget.WorkflowAssignmentIDValidator(v); err != nil {
 			return &ValidationError{Name: "workflow_assignment_id", err: fmt.Errorf(`generated: validator failed for field "WorkflowAssignmentTarget.workflow_assignment_id": %w`, err)}
@@ -1030,37 +926,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if _u.mutation.ResolverKeyCleared() {
 		_spec.ClearField(workflowassignmenttarget.FieldResolverKey, field.TypeString)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowassignmenttarget.OwnerTable,
-			Columns: []string{workflowassignmenttarget.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   workflowassignmenttarget.OwnerTable,
-			Columns: []string{workflowassignmenttarget.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.WorkflowAssignmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

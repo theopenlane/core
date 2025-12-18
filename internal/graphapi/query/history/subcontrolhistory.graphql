@@ -1,0 +1,115 @@
+
+
+query GetAllSubcontrolHistories {
+  subcontrolHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlID
+        controlOwnerID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        historyTime
+        id
+        implementationGuidance
+        internalNotes
+        mappedCategories
+        operation
+        ownerID
+        ref
+        refCode
+        referenceFramework
+        referenceFrameworkRevision
+        referenceID
+        references
+        responsiblePartyID
+        source
+        status
+        subcategory
+        subcontrolKindID
+        subcontrolKindName
+        systemInternalID
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetSubcontrolHistories($first: Int, $last: Int, $where: SubcontrolHistoryWhereInput) {
+  subcontrolHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlID
+        controlOwnerID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        historyTime
+        id
+        implementationGuidance
+        internalNotes
+        mappedCategories
+        operation
+        ownerID
+        ref
+        refCode
+        referenceFramework
+        referenceFrameworkRevision
+        referenceID
+        references
+        responsiblePartyID
+        source
+        status
+        subcategory
+        subcontrolKindID
+        subcontrolKindName
+        systemInternalID
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

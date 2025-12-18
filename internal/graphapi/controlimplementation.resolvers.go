@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateControlImplementation is the resolver for the createControlImplementation field.
 func (r *mutationResolver) CreateControlImplementation(ctx context.Context, input generated.CreateControlImplementationInput) (*model.ControlImplementationCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateControlImplementation(ctx context.Context, inpu
 
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlimplementation"})
 	}
 
 	return &model.ControlImplementationCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkControlImplementation(ctx context.Context, 
 
 // CreateBulkCSVControlImplementation is the resolver for the createBulkCSVControlImplementation field.
 func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Context, input graphql.Upload) (*model.ControlImplementationBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateControlImplementationInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateControlImplementationInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlimplementation"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVControlImplementation(ctx context.Contex
 func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id string, input generated.UpdateControlImplementationInput) (*model.ControlImplementationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ControlImplementation.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id s
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlimplementation"})
 	}
 
 	return &model.ControlImplementationUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateControlImplementation(ctx context.Context, id s
 // DeleteControlImplementation is the resolver for the deleteControlImplementation field.
 func (r *mutationResolver) DeleteControlImplementation(ctx context.Context, id string) (*model.ControlImplementationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ControlImplementation.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "controlimplementation"})
 	}
 
 	if err := generated.ControlImplementationEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ControlImplementationDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkControlImplementation(ctx context.Context, 
 func (r *queryResolver) ControlImplementation(ctx context.Context, id string) (*generated.ControlImplementation, error) {
 	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().Where(controlimplementation.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlimplementation"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlimplementation"})
 	}
 
 	return res, nil

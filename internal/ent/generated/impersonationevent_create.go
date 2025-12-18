@@ -303,6 +303,11 @@ func (_c *ImpersonationEventCreate) check() error {
 			return &ValidationError{Name: "action", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.action": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.IPAddress(); ok {
+		if err := impersonationevent.IPAddressValidator(v); err != nil {
+			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.ip_address": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`generated: missing required field "ImpersonationEvent.user_id"`)}
 	}
