@@ -41,8 +41,6 @@ type cmd struct {
 	Name string
 	// ListOnly is a flag to indicate if the command is list only
 	ListOnly bool
-	// HistoryCmd is a flag to indicate if the command is for history
-	HistoryCmd bool
 }
 
 var (
@@ -204,13 +202,10 @@ func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, fo
 		return nil
 	}
 
-	isHistory := strings.Contains(cmdName, "History")
-
 	// setup the data required for the template
 	c := cmd{
-		Name:       cmdName,
-		ListOnly:   readOnly, // if read only, set the list only flag
-		HistoryCmd: isHistory,
+		Name:     cmdName,
+		ListOnly: readOnly, // if read only, set the list only flag
 	}
 
 	fmt.Println("----> executing template:", templateName)
@@ -288,19 +283,7 @@ func updateMainImports(cmdName string) error {
 	}
 
 	// Insert the import in the right section
-	isHistory := strings.HasSuffix(strings.ToLower(cmdName), "history")
-
-	switch {
-	case isHistory && strings.Contains(fileContent, "// history commands\n"):
-		// Insert after "// history commands" for history commands
-		fileContent = strings.Replace(fileContent, "// history commands\n", "// history commands\n"+newImport+"\n", 1)
-	case !isHistory && strings.Contains(fileContent, "\n\t// history commands"):
-		// Insert before "// history commands" for regular commands
-		fileContent = strings.Replace(fileContent, "\n\t// history commands", newImport+"\n\t// history commands", 1)
-	default:
-		// Fallback: insert before closing import parenthesis
-		fileContent = strings.Replace(fileContent, "\n)", "\n"+newImport+"\n)", 1)
-	}
+	fileContent = strings.Replace(fileContent, "\n)", "\n"+newImport+"\n)", 1)
 
 	if err := os.WriteFile(mainPath, []byte(fileContent), 0600); err != nil { // nolint:mnd
 		return fmt.Errorf("failed to write main.go: %w", err)

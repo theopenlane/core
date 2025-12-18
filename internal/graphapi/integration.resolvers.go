@@ -10,17 +10,18 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // DeleteIntegration is the resolver for the deleteIntegration field.
 func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Integration.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "integration"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "integration"})
 	}
 
 	if err := generated.IntegrationEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.IntegrationDeletePayload{
@@ -32,12 +33,12 @@ func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*m
 func (r *queryResolver) Integration(ctx context.Context, id string) (*generated.Integration, error) {
 	query, err := withTransactionalMutation(ctx).Integration.Query().Where(integration.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integration"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integration"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integration"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integration"})
 	}
 
 	return res, nil

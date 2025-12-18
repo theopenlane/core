@@ -10,13 +10,14 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/graphapi/common"
 )
 
 // FromControlRefCodes is the resolver for the fromControlRefCodes field.
 func (r *createMappedControlInputResolver) FromControlRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, data)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	obj.FromControlIDs = ids
@@ -28,7 +29,7 @@ func (r *createMappedControlInputResolver) FromControlRefCodes(ctx context.Conte
 func (r *createMappedControlInputResolver) FromSubcontrolRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Subcontrol](ctx, data)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	obj.FromSubcontrolIDs = ids
@@ -40,7 +41,7 @@ func (r *createMappedControlInputResolver) FromSubcontrolRefCodes(ctx context.Co
 func (r *createMappedControlInputResolver) ToControlRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, data)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	obj.ToControlIDs = ids
@@ -52,7 +53,7 @@ func (r *createMappedControlInputResolver) ToControlRefCodes(ctx context.Context
 func (r *createMappedControlInputResolver) ToSubcontrolRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Subcontrol](ctx, data)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	obj.ToSubcontrolIDs = ids

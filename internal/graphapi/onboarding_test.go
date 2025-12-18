@@ -9,7 +9,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
@@ -75,7 +75,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			},
 			client:      suite.client.apiWithPAT,
 			ctx:         context.Background(),
-			expectedErr: graphapi.ErrResourceNotAccessibleWithToken.Error(),
+			expectedErr: common.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
 			name: "not allowed with token",
@@ -84,7 +84,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			},
 			client:      suite.client.apiWithToken,
 			ctx:         context.Background(),
-			expectedErr: graphapi.ErrResourceNotAccessibleWithToken.Error(),
+			expectedErr: common.ErrResourceNotAccessibleWithToken.Error(),
 		},
 	}
 

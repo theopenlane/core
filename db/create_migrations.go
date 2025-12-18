@@ -19,6 +19,7 @@ import (
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
 	"github.com/theopenlane/core/internal/ent/generated/migrate"
+	historymigrate "github.com/theopenlane/core/internal/ent/historygenerated/migrate"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/utils/testutils"
 )
@@ -82,22 +83,46 @@ func main() {
 		schema.WithFormatter(atlas.DefaultFormatter),
 	)
 
+	// Enable required Postgres extensions before running migrations
 	if err := entdb.EnablePostgresExtensions(db); err != nil {
 		log.Fatal().Err(err).Msg("failed enabling citext extension")
 	}
 
+	// Generate the migration file for the main schemas
 	if err := migrate.NamedDiff(ctx, tf.URI, os.Args[1], atlasOpts...); err != nil {
 		log.Fatal().Err(err).Msg("failed generating atlas migration file")
+	}
+
+	// Enable required Postgres extensions before running migrations
+	if err := entdb.EnablePostgresExtensions(db); err != nil {
+		log.Fatal().Err(err).Msg("failed enabling citext extension")
+	}
+
+	// Generate the migration file for the history schemas
+	if err := historymigrate.NamedDiff(ctx, tf.URI, os.Args[1]+"_history", atlasOpts...); err != nil {
+		log.Fatal().Err(err).Msg("failed generating history atlas migration file")
 	}
 
 	// Generate migrations using Goose support for postgres
 	gooseOptsPG := append(postgresOpts, schema.WithDir(gooseDirPG))
 
+	// Enable required Postgres extensions before running migrations
 	if err := entdb.EnablePostgresExtensions(db); err != nil {
 		log.Fatal().Err(err).Msg("failed enabling citext extension")
 	}
 
+	// Generate the goose migration file for the main schemas
 	if err = migrate.NamedDiff(ctx, tf.URI, os.Args[1], gooseOptsPG...); err != nil {
+		log.Fatal().Err(err).Msg("failed generating goose migration file for postgres")
+	}
+
+	// Enable required Postgres extensions before running migrations
+	if err := entdb.EnablePostgresExtensions(db); err != nil {
+		log.Fatal().Err(err).Msg("failed enabling citext extension")
+	}
+
+	// Generate the goose migration file for the history schemas
+	if err = historymigrate.NamedDiff(ctx, tf.URI, os.Args[1]+"_history", gooseOptsPG...); err != nil {
 		log.Fatal().Err(err).Msg("failed generating goose migration file for postgres")
 	}
 }

@@ -35,18 +35,10 @@ env:
   # for test container settings
   RYUK_CONNECTION_TIMEOUT: "5m"
   RYUK_VERBOSE: "true"
-  ## generate env vars for caching
-  GO_GENERATE_FAST_DEBUG: "false" # set to true to debug go-generate-fast
-  GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
-  GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
-  GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
   GO_INLINE_FLAG: "-gcflags=all=-l"
-
-# load the .env file for windmill
-dotenv: ['docker/configs/windmill/.env']
 
 tasks:
   default:
@@ -62,25 +54,9 @@ tasks:
       - go generate ./...
       - task: tidy
 
-  generate:
-    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
-    env:
-      GOFLAGS: "{{.GO_INLINE_FLAG}}"
-    cmds:
-      - go-generate-fast ./...
-      - task: tidy
-
-  regenerate:
-    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
-    env:
-      GO_GENERATE_FAST_RECACHE: "true"
-      GOFLAGS: "{{.GO_INLINE_FLAG}}"
-    cmds:
-      - go-generate-fast ./...
-      - task: tidy
-
   generate:checksums:
     desc: Generate with checksum tracking for CI optimization
+    aliases: [regenerate, generate]
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
@@ -90,7 +66,7 @@ tasks:
       - task: tidy
 
   generate:ent:smart:
-    internal: true
+    aliases: ['generate:ent']
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
@@ -100,12 +76,14 @@ tasks:
       - internal/ent/templates/**/*
     generates:
       - internal/ent/generated/**/*.go
+      - internal/graphapi/schema/ent.graphql
+      - internal/graphapi/schema/history/ent.graphql
     method: checksum
     cmds:
       - go generate internal/ent/generate/generate.go
 
   generate:graphql:smart:
-    internal: true
+    aliases: ['generate:gql']
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
@@ -200,18 +178,6 @@ tasks:
     preconditions:
       - sh: '[[ -n "${BUILDKITE_TAG:-}" ]]'
         msg: "Only runs on tag builds"
-
-  generate:ent:
-    desc: generate ent models
-    cmds:
-      - go-generate-fast internal/ent/generate/generate.go
-      - task: tidy
-
-  generate:gql:
-    desc: generate gql graphql models and resolvers, along with the client
-    cmds:
-      - go-generate-fast internal/graphapi/generate/generate.go
-      - task: tidy
 
   ## Go tasks
   go:lint:

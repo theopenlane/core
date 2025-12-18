@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -22,7 +23,7 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 
 	res, err := c.ActionPlan.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "actionplan"})
 	}
 
 	// return response
@@ -130,7 +131,7 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 
 	res, err := c.APIToken.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "apitoken"})
 	}
 
 	// return response
@@ -245,7 +246,7 @@ func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generat
 
 	res, err := c.Asset.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "asset"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "asset"})
 	}
 
 	// return response
@@ -312,7 +313,7 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 
 	res, err := c.Contact.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "contact"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "contact"})
 	}
 
 	// return response
@@ -420,7 +421,7 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 
 	res, err := c.Control.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	// return response
@@ -528,7 +529,7 @@ func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, 
 
 	res, err := c.ControlImplementation.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlimplementation"})
 	}
 
 	// return response
@@ -595,7 +596,7 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 
 	res, err := c.ControlObjective.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlobjective"})
 	}
 
 	// return response
@@ -662,7 +663,7 @@ func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*
 
 	res, err := c.CustomDomain.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customdomain"})
 	}
 
 	// return response
@@ -729,7 +730,7 @@ func (r *mutationResolver) bulkCreateCustomTypeEnum(ctx context.Context, input [
 
 	res, err := c.CustomTypeEnum.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customtypeenum"})
 	}
 
 	// return response
@@ -748,7 +749,7 @@ func (r *mutationResolver) bulkCreateDirectoryAccount(ctx context.Context, input
 
 	res, err := c.DirectoryAccount.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directoryaccount"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directoryaccount"})
 	}
 
 	// return response
@@ -767,7 +768,7 @@ func (r *mutationResolver) bulkCreateDirectoryGroup(ctx context.Context, input [
 
 	res, err := c.DirectoryGroup.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorygroup"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorygroup"})
 	}
 
 	// return response
@@ -786,7 +787,7 @@ func (r *mutationResolver) bulkCreateDirectoryMembership(ctx context.Context, in
 
 	res, err := c.DirectoryMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorymembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorymembership"})
 	}
 
 	// return response
@@ -805,7 +806,7 @@ func (r *mutationResolver) bulkCreateDirectorySyncRun(ctx context.Context, input
 
 	res, err := c.DirectorySyncRun.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorysyncrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "directorysyncrun"})
 	}
 
 	// return response
@@ -824,7 +825,7 @@ func (r *mutationResolver) bulkCreateDiscussion(ctx context.Context, input []*ge
 
 	res, err := c.Discussion.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "discussion"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
 	// return response
@@ -843,7 +844,7 @@ func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input 
 
 	res, err := c.DNSVerification.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "dnsverification"})
 	}
 
 	// return response
@@ -910,7 +911,7 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 
 	res, err := c.DocumentData.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "documentdata"})
 	}
 
 	// return response
@@ -977,7 +978,7 @@ func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*genera
 
 	res, err := c.Entity.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
 	}
 
 	// return response
@@ -1044,7 +1045,7 @@ func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*ge
 
 	res, err := c.EntityType.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entitytype"})
 	}
 
 	// return response
@@ -1111,7 +1112,7 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 
 	res, err := c.Event.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "event"})
 	}
 
 	// return response
@@ -1226,7 +1227,7 @@ func (r *mutationResolver) bulkCreateFinding(ctx context.Context, input []*gener
 
 	res, err := c.Finding.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "finding"})
 	}
 
 	// return response
@@ -1245,7 +1246,7 @@ func (r *mutationResolver) bulkCreateFindingControl(ctx context.Context, input [
 
 	res, err := c.FindingControl.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "findingcontrol"})
 	}
 
 	// return response
@@ -1264,7 +1265,7 @@ func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generat
 
 	res, err := c.Group.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	// return response
@@ -1331,7 +1332,7 @@ func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input 
 
 	res, err := c.GroupMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupmembership"})
 	}
 
 	// return response
@@ -1398,7 +1399,7 @@ func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*
 
 	res, err := c.GroupSetting.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupsetting"})
 	}
 
 	// return response
@@ -1465,7 +1466,7 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 
 	res, err := c.Hush.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "hush"})
 	}
 
 	// return response
@@ -1573,7 +1574,7 @@ func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input [
 
 	res, err := c.InternalPolicy.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "internalpolicy"})
 	}
 
 	// return response
@@ -1681,7 +1682,7 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 
 	res, err := c.Invite.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
 	}
 
 	// return response
@@ -1748,7 +1749,7 @@ func (r *mutationResolver) bulkCreateJobTemplate(ctx context.Context, input []*g
 
 	res, err := c.JobTemplate.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "jobtemplate"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "jobtemplate"})
 	}
 
 	// return response
@@ -1815,7 +1816,7 @@ func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input [
 
 	res, err := c.MappableDomain.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappabledomain"})
 	}
 
 	// return response
@@ -1882,7 +1883,7 @@ func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []
 
 	res, err := c.MappedControl.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	// return response
@@ -1949,7 +1950,7 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 
 	res, err := c.Narrative.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "narrative"})
 	}
 
 	// return response
@@ -2016,7 +2017,7 @@ func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, in
 
 	res, err := c.OrganizationSetting.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organizationsetting"})
 	}
 
 	// return response
@@ -2083,7 +2084,7 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 
 	res, err := c.OrgMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "orgmembership"})
 	}
 
 	// return response
@@ -2150,7 +2151,7 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 
 	res, err := c.Procedure.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "procedure"})
 	}
 
 	// return response
@@ -2258,7 +2259,7 @@ func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*gener
 
 	res, err := c.Program.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 	}
 
 	// return response
@@ -2325,7 +2326,7 @@ func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, inpu
 
 	res, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "programmembership"})
 	}
 
 	// return response
@@ -2392,7 +2393,7 @@ func (r *mutationResolver) bulkCreateRemediation(ctx context.Context, input []*g
 
 	res, err := c.Remediation.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "remediation"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "remediation"})
 	}
 
 	// return response
@@ -2411,7 +2412,7 @@ func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*genera
 
 	res, err := c.Review.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "review"})
 	}
 
 	// return response
@@ -2430,7 +2431,7 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 
 	res, err := c.Risk.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "risk"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "risk"})
 	}
 
 	// return response
@@ -2538,7 +2539,7 @@ func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generate
 
 	res, err := c.Scan.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scan"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "scan"})
 	}
 
 	// return response
@@ -2646,7 +2647,7 @@ func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*
 
 	res, err := c.ScheduledJob.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "scheduledjob"})
 	}
 
 	// return response
@@ -2713,7 +2714,7 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 
 	res, err := c.Subcontrol.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subcontrol"})
 	}
 
 	// return response
@@ -2780,7 +2781,7 @@ func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*
 
 	res, err := c.Subprocessor.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subprocessor"})
 	}
 
 	// return response
@@ -2888,7 +2889,7 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 
 	res, err := c.Subscriber.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subscriber"})
 	}
 
 	// return response
@@ -2907,7 +2908,7 @@ func (r *mutationResolver) bulkCreateTagDefinition(ctx context.Context, input []
 
 	res, err := c.TagDefinition.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "tagdefinition"})
 	}
 
 	// return response
@@ -2926,7 +2927,7 @@ func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generate
 
 	res, err := c.Task.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "task"})
 	}
 
 	// return response
@@ -3034,7 +3035,7 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 
 	res, err := c.Template.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "template"})
 	}
 
 	// return response
@@ -3101,7 +3102,7 @@ func (r *mutationResolver) bulkCreateTrustCenterCompliance(ctx context.Context, 
 
 	res, err := c.TrustCenterCompliance.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentercompliance"})
 	}
 
 	// return response
@@ -3168,7 +3169,7 @@ func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input [
 
 	res, err := c.TrustCenterDoc.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterdoc"})
 	}
 
 	// return response
@@ -3276,7 +3277,7 @@ func (r *mutationResolver) bulkCreateTrustcenterEntity(ctx context.Context, inpu
 
 	res, err := c.TrustcenterEntity.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
 	}
 
 	// return response
@@ -3295,7 +3296,7 @@ func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context
 
 	res, err := c.TrustCenterSubprocessor.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentersubprocessor"})
 	}
 
 	// return response
@@ -3403,7 +3404,7 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 
 	res, err := c.UserSetting.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "usersetting"})
 	}
 
 	// return response
@@ -3470,7 +3471,7 @@ func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []
 
 	res, err := c.Vulnerability.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "vulnerability"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "vulnerability"})
 	}
 
 	// return response
@@ -3489,7 +3490,7 @@ func (r *mutationResolver) bulkCreateWorkflowAssignment(ctx context.Context, inp
 
 	res, err := c.WorkflowAssignment.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignment"})
 	}
 
 	// return response
@@ -3508,7 +3509,7 @@ func (r *mutationResolver) bulkCreateWorkflowAssignmentTarget(ctx context.Contex
 
 	res, err := c.WorkflowAssignmentTarget.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
 	}
 
 	// return response
@@ -3527,7 +3528,7 @@ func (r *mutationResolver) bulkCreateWorkflowDefinition(ctx context.Context, inp
 
 	res, err := c.WorkflowDefinition.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowdefinition"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowdefinition"})
 	}
 
 	// return response
@@ -3546,7 +3547,7 @@ func (r *mutationResolver) bulkCreateWorkflowEvent(ctx context.Context, input []
 
 	res, err := c.WorkflowEvent.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowevent"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowevent"})
 	}
 
 	// return response
@@ -3565,7 +3566,7 @@ func (r *mutationResolver) bulkCreateWorkflowInstance(ctx context.Context, input
 
 	res, err := c.WorkflowInstance.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowinstance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowinstance"})
 	}
 
 	// return response
@@ -3584,7 +3585,7 @@ func (r *mutationResolver) bulkCreateWorkflowObjectRef(ctx context.Context, inpu
 
 	res, err := c.WorkflowObjectRef.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowobjectref"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowobjectref"})
 	}
 
 	// return response

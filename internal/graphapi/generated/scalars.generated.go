@@ -76,22 +76,6 @@ func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenla
 	return v
 }
 
-func (ec *executionContext) unmarshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx context.Context, v any) (*models.Change, error) {
-	var res = new(models.Change)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx context.Context, sel ast.SelectionSet, v *models.Change) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalNChannel2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -293,42 +277,6 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	ret := make(graphql.Array, len(v))
 	for i := range v {
 		ret[i] = ec.marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx, sel, v[i])
-	}
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
-func (ec *executionContext) unmarshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ(ctx context.Context, v any) ([]*models.Change, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*models.Change, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Change) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {

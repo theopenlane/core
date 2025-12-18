@@ -1,0 +1,59 @@
+
+
+query GetAllTrustcenterEntityHistories {
+  trustcenterEntityHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        entityTypeID
+        historyTime
+        id
+        logoFileID
+        name
+        operation
+        ref
+        trustCenterID
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}
+
+query GetTrustcenterEntityHistories($first: Int, $last: Int, $where: TrustcenterEntityHistoryWhereInput) {
+  trustcenterEntityHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        entityTypeID
+        historyTime
+        id
+        logoFileID
+        name
+        operation
+        ref
+        trustCenterID
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}

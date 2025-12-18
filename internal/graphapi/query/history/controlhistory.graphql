@@ -1,0 +1,115 @@
+
+
+query GetAllControlHistories {
+  controlHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlKindID
+        controlKindName
+        controlOwnerID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        historyTime
+        id
+        implementationGuidance
+        internalNotes
+        mappedCategories
+        operation
+        ownerID
+        ref
+        refCode
+        referenceFramework
+        referenceFrameworkRevision
+        referenceID
+        references
+        responsiblePartyID
+        source
+        standardID
+        status
+        subcategory
+        systemInternalID
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetControlHistories($first: Int, $last: Int, $where: ControlHistoryWhereInput) {
+  controlHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlKindID
+        controlKindName
+        controlOwnerID
+        controlQuestions
+        controlType
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        historyTime
+        id
+        implementationGuidance
+        internalNotes
+        mappedCategories
+        operation
+        ownerID
+        ref
+        refCode
+        referenceFramework
+        referenceFrameworkRevision
+        referenceID
+        references
+        responsiblePartyID
+        source
+        standardID
+        status
+        subcategory
+        systemInternalID
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

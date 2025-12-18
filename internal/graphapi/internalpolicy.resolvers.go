@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateInternalPolicy is the resolver for the createInternalPolicy field.
 func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input gener
 
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "internalpolicy"})
 	}
 
 	return &model.InternalPolicyCreatePayload{
@@ -44,14 +45,14 @@ func (r *mutationResolver) CreateUploadInternalPolicy(ctx context.Context, inter
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, ownerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Create().SetInput(internalPolicyInput).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "internalpolicy"})
 	}
 
 	return &model.InternalPolicyCreatePayload{
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -78,11 +79,11 @@ func (r *mutationResolver) CreateBulkInternalPolicy(ctx context.Context, input [
 
 // CreateBulkCSVInternalPolicy is the resolver for the createBulkCSVInternalPolicy field.
 func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateInternalPolicyInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateInternalPolicyInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "internalpolicy"})
 	}
 
 	if len(data) == 0 {
@@ -91,7 +92,7 @@ func (r *mutationResolver) CreateBulkCSVInternalPolicy(ctx context.Context, inpu
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -113,11 +114,11 @@ func (r *mutationResolver) UpdateBulkInternalPolicy(ctx context.Context, ids []s
 func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) (*model.InternalPolicyUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).InternalPolicy.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -128,7 +129,7 @@ func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
 	}
 
 	return &model.InternalPolicyUpdatePayload{
@@ -139,11 +140,11 @@ func (r *mutationResolver) UpdateInternalPolicy(ctx context.Context, id string, 
 // DeleteInternalPolicy is the resolver for the deleteInternalPolicy field.
 func (r *mutationResolver) DeleteInternalPolicy(ctx context.Context, id string) (*model.InternalPolicyDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "internalpolicy"})
 	}
 
 	if err := generated.InternalPolicyEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.InternalPolicyDeletePayload{
@@ -164,12 +165,12 @@ func (r *mutationResolver) DeleteBulkInternalPolicy(ctx context.Context, ids []s
 func (r *queryResolver) InternalPolicy(ctx context.Context, id string) (*generated.InternalPolicy, error) {
 	query, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "internalpolicy"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "internalpolicy"})
 	}
 
 	return res, nil

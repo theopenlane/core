@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateFinding(ctx context.Context, input generated.CreateFindingInput) (*model.FindingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Finding.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "finding"})
 	}
 
 	return &model.FindingCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkFinding(ctx context.Context, input []*gener
 
 // CreateBulkCSVFinding is the resolver for the createBulkCSVFinding field.
 func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graphql.Upload) (*model.FindingBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateFindingInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateFindingInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "finding"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVFinding(ctx context.Context, input graph
 func (r *mutationResolver) UpdateFinding(ctx context.Context, id string, input generated.UpdateFindingInput) (*model.FindingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Finding.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateFinding(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "finding"})
 	}
 
 	return &model.FindingUpdatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) UpdateFinding(ctx context.Context, id string, input g
 // DeleteFinding is the resolver for the deleteFinding field.
 func (r *mutationResolver) DeleteFinding(ctx context.Context, id string) (*model.FindingDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Finding.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "finding"})
 	}
 
 	if err := generated.FindingEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.FindingDeletePayload{
@@ -92,12 +93,12 @@ func (r *mutationResolver) DeleteFinding(ctx context.Context, id string) (*model
 func (r *queryResolver) Finding(ctx context.Context, id string) (*generated.Finding, error) {
 	query, err := withTransactionalMutation(ctx).Finding.Query().Where(finding.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "finding"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "finding"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "finding"})
 	}
 
 	return res, nil

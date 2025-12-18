@@ -11,8 +11,6 @@ type Config struct {
 	EntityTypes []string `json:"entitytypes" koanf:"entitytypes" default:"" description:"entity types to create for the organization"`
 	// Summarizer contains configuration for text summarization
 	Summarizer summarizer.Config `json:"summarizer" koanf:"summarizer"`
-	// Windmill contains configuration for Windmill workflow automation
-	Windmill Windmill `json:"windmill" koanf:"windmill"`
 	// MaxPoolSize is the max pond pool workers that can be used by the ent client
 	MaxPoolSize int `json:"maxpoolsize" koanf:"maxpoolsize" default:"100"`
 	// Modules contains the configuration for the module system
@@ -25,33 +23,6 @@ type Config struct {
 	Billing Billing `json:"billing" koanf:"billing"`
 	// Notifications contains configuration for notifications sent to users based on events
 	Notifications Notifications `json:"notifications" koanf:"notifications"`
-}
-
-// Windmill holds configuration for the Windmill workflow automation platform
-type Windmill struct {
-	// Enabled specifies whether Windmill integration is enabled
-	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
-
-	// BaseURL is the base URL of the Windmill instance
-	BaseURL string `json:"baseurl" koanf:"baseurl" default:"https://app.windmill.dev"`
-
-	// Workspace is the Windmill workspace to use
-	Workspace string `json:"workspace" koanf:"workspace"`
-
-	// Token is the API token for authentication with Windmill
-	Token string `json:"token" koanf:"token" sensitive:"true"`
-
-	// DefaultTimeout is the default timeout for API requests
-	DefaultTimeout string `json:"defaulttimeout" koanf:"defaulttimeout" default:"30s"`
-
-	// Timezone for scheduled jobs
-	Timezone string `json:"timezone" koanf:"timezone" default:"UTC"`
-
-	// OnFailureScript script to run when a scheduled job fails
-	OnFailureScript string `json:"onfailurescript" koanf:"onfailurescript"`
-
-	// OnSuccessScript script to run when a scheduled job succeeds
-	OnSuccessScript string `json:"onsuccessscript" koanf:"onsuccessscript"`
 }
 
 // Modules settings for features access

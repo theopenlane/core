@@ -1,3 +1,5 @@
+//go:build test
+
 package handlers_test
 
 import (
@@ -54,6 +56,7 @@ import (
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 )
 
 // TestOperations consolidates all test operations for easier access
@@ -196,6 +199,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	sessionConfig.CookieConfig = sessions.DebugOnlyCookieConfig
 
+	// setup history client
+	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
+	require.NoError(t, err)
+
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
 	require.NoError(t, err)
@@ -216,6 +223,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 		ent.TOTP(suite.sharedOTPManager),
 		ent.PondPool(suite.sharedPondPool),
 		ent.EntitlementManager(entitlements),
+		ent.HistoryClient(hc),
 	}
 
 	// create database connection

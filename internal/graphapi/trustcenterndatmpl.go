@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
@@ -46,11 +47,11 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 
 	trustCenter, err := txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -68,13 +69,13 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 			},
 		).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "template"})
 	}
 
 	// Parse the template
 	tmpl, err := template.New("nda").Parse(trustCenterNDATemplate)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	key := "templateFiles"
@@ -83,7 +84,7 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 	files, _ := objects.FilesFromContextWithKey(ctx, key)
 
 	if len(files) != 1 {
-		return nil, parseRequestError(ctx, errOneNDAOnly, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, errOneNDAOnly, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	// Define the data to be used in the template
@@ -101,7 +102,7 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 	// Execute the template, writing the output to the buffer
 	err = tmpl.Execute(&buf, data)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	// Get the output as a string from the buffer
@@ -109,12 +110,12 @@ func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAI
 
 	var outputInterface map[string]interface{}
 	if err := json.Unmarshal([]byte(outputString), &outputInterface); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	updatedTmpl, err := txnCtx.Template.UpdateOne(templateObj).SetJsonconfig(outputInterface).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	return &model.TrustCenterNDACreatePayload{
@@ -127,7 +128,7 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 	ndaTemplate, err := txnCtx.Template.Query().Where(gentemplate.TrustCenterIDEQ(id)).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
 	key := "templateFiles"
@@ -142,7 +143,7 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 	// Parse the template
 	tmpl, err := template.New("nda").Parse(trustCenterNDATemplate)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
 	// Define the data to be used in the template
@@ -168,12 +169,12 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 
 	var outputInterface map[string]interface{}
 	if err := json.Unmarshal([]byte(outputString), &outputInterface); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
 	updatedTmpl, err := txnCtx.Template.UpdateOne(ndaTemplate).SetJsonconfig(outputInterface).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
 	return &model.TrustCenterNDAUpdatePayload{
@@ -193,7 +194,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		// allow for system admins to also send the email
 		admin, err := rule.CheckIsSystemAdminWithContext(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 		}
 
 		if !admin {
@@ -212,18 +213,18 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 
 	trustCenter, err := txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	trustCenterOwner, err := txnCtx.Organization.Get(allowCtx, trustCenter.OwnerID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	if trustCenterOwner == nil {
-		return nil, parseRequestError(ctx, errTrustCenterOwnerNotFound, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, errTrustCenterOwnerNotFound, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	orgName := trustCenterOwner.Name
@@ -242,7 +243,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 	// create a new token pair for the user
 	access, _, err := r.db.TokenManager.CreateTokenPair(newClaims)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	trustCenterURL := url.URL{
@@ -264,7 +265,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		),
 	).Only(allowCtx)
 	if err != nil && !generated.IsNotFound(err) {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	if ndaTemplate != nil {
@@ -285,7 +286,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 			),
 		).Count(allowCtx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 		}
 
 		if count > 0 {
@@ -297,13 +298,13 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 				TrustCenterURL:   trustCenterURL.String(),
 			})
 			if err != nil {
-				return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 			}
 			// Send the email via job queue
 			if _, err := r.db.Job.Insert(ctx, jobs.EmailArgs{
 				Message: *email,
 			}, nil); err != nil {
-				return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 			}
 
 			return &model.SendTrustCenterNDAEmailPayload{
@@ -321,14 +322,14 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		TrustCenterURL:   trustCenterURL.String(),
 	})
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	// Send the email via job queue
 	if _, err := r.db.Job.Insert(ctx, jobs.EmailArgs{
 		Message: *email,
 	}, nil); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterndaemail"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
 
 	return &model.SendTrustCenterNDAEmailPayload{
@@ -354,7 +355,7 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 		},
 	).Save(allowCtx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	return &model.SubmitTrustCenterNDAResponsePayload{
