@@ -413,7 +413,7 @@ type Faker struct {
 func randomName(t *testing.T) string {
 	var f Faker
 	err := gofakeit.Struct(&f)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	var b strings.Builder
 	for _, r := range f.Name {
@@ -471,22 +471,22 @@ func (c *Cleanup[DeleteExec]) MustDelete(ctx context.Context, t *testing.T) {
 	if _, ok := any(c.client).(*ent.StandardClient); ok && auth.IsSystemAdminFromContext(ctx) {
 		if c.ID != "" {
 			err := suite.client.db.Standard.UpdateOneID(c.ID).SetIsPublic(false).Exec(ctx)
-			requireNoError(err)
+			requireNoError(t, err)
 		}
 		for _, id := range c.IDs {
 			err := suite.client.db.Standard.UpdateOneID(id).SetIsPublic(false).Exec(ctx)
-			requireNoError(err)
+			requireNoError(t, err)
 		}
 	}
 
 	for _, id := range c.IDs {
 		err := c.client.DeleteOneID(id).Exec(ctx)
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	if c.ID != "" {
 		err := c.client.DeleteOneID(c.ID).Exec(ctx)
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 }
 
@@ -524,14 +524,14 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	}
 
 	org, err := m.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	if o.AllowedDomains != nil {
 		orgSetting, err := org.Setting(ctx)
-		requireNoError(err)
+		requireNoError(t, err)
 
 		err = orgSetting.Update().SetAllowedEmailDomains(o.AllowedDomains).Exec(ctx)
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	o.enableModules(ctx, t, org.ID)
@@ -597,7 +597,7 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 
 	// create user setting
 	userSetting, err := u.client.db.UserSetting.Create().Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	user, err := u.client.db.User.Create().
 		SetFirstName(u.FirstName).
@@ -608,10 +608,10 @@ func (u *UserBuilder) MustNew(ctx context.Context, t *testing.T) *ent.User {
 		SetLastSeen(time.Now()).
 		SetSetting(userSetting).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	_, err = user.Edges.Setting.DefaultOrg(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return user
 }
@@ -643,7 +643,7 @@ func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRu
 		SetName(randomName(t)).
 		SetIPAddress(gofakeit.IPv4Address()).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return wn
 }
@@ -651,7 +651,7 @@ func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRu
 // MustNew webauthn settings builder is used to create passkeys without the browser setup process
 func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webauthn {
 	uuidBytes, err := uuid.NewUUID()
-	requireNoError(err)
+	requireNoError(t, err)
 
 	wn, err := w.client.db.Webauthn.Create().
 		SetAaguid(models.ToAAGUID(uuidBytes[:])).
@@ -662,7 +662,7 @@ func (w *WebauthnBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Webaut
 		SetCredentialID([]byte(uuid.NewString())).
 		SetTransports([]string{uuid.NewString()}).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return wn
 }
@@ -685,7 +685,7 @@ func (om *OrgMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.OrgM
 		SetUserID(om.UserID).
 		SetRole(*role).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return orgMember
 }
@@ -709,7 +709,7 @@ func (g *GroupBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Group {
 	}
 
 	group, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return group
 }
@@ -733,7 +733,7 @@ func (i *InviteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Invite {
 	}
 
 	invite, err := inviteQuery.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return invite
 }
@@ -752,7 +752,7 @@ func (i *SubscriberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subs
 	sub, err := i.client.db.Subscriber.Create().
 		SetEmail(rec).
 		SetActive(true).Save(reqCtx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return sub
 }
@@ -784,7 +784,7 @@ func (pat *PersonalAccessTokenBuilder) MustNew(ctx context.Context, t *testing.T
 	}
 
 	token, err := request.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return token
 }
@@ -815,7 +815,7 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 	}
 
 	token, err := request.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return token
 }
@@ -843,13 +843,13 @@ func (gm *GroupMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Gr
 	}
 
 	groupMember, err := mut.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	gmToReturn, err := gm.client.db.GroupMembership.Query().
 		WithUser().
 		WithOrgMembership().
 		Where(groupmembership.ID(groupMember.ID)).Only(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return gmToReturn
 }
@@ -865,7 +865,7 @@ func (e *EntityTypeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Enti
 	entityType, err := e.client.db.EntityType.Create().
 		SetName(e.Name).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return entityType
 }
@@ -897,7 +897,7 @@ func (e *EntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Entity {
 		SetEntityTypeID(e.TypeID).
 		SetDescription(e.Description).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return entity
 }
@@ -939,7 +939,7 @@ func (c *ContactBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Contact
 		SetTitle(c.Title).
 		SetCompany(c.Company).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return entity
 }
@@ -981,7 +981,7 @@ func (c *TaskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Task {
 	}
 
 	task, err := taskCreate.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return task
 }
@@ -1021,7 +1021,7 @@ func (p *ProgramBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Program
 
 	program, err := mutation.
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return program
 }
@@ -1050,13 +1050,13 @@ func (pm *ProgramMemberBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	}
 
 	programMember, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	programMember, err = pm.client.db.ProgramMembership.Query().
 		WithUser().
 		WithOrgMembership().
 		Where(programmembership.ID(programMember.ID)).Only(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return programMember
 }
@@ -1077,7 +1077,7 @@ func (p *ProcedureBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Proce
 	}
 
 	procedure, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return procedure
 }
@@ -1106,7 +1106,7 @@ func (p *InternalPolicyBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	}
 
 	policy, err := mut.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return policy
 }
@@ -1127,7 +1127,7 @@ func (r *RiskBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Risk {
 	}
 
 	risk, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return risk
 }
@@ -1148,7 +1148,7 @@ func (c *ControlObjectiveBuilder) MustNew(ctx context.Context, t *testing.T) *en
 	}
 
 	co, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return co
 }
@@ -1170,7 +1170,7 @@ func (n *NarrativeBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Narra
 
 	narrative, err := mutation.
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return narrative
 }
@@ -1268,7 +1268,7 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 
 	control, err := mutation.
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return control
 }
@@ -1302,7 +1302,7 @@ func (s *SubcontrolBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Subc
 	sc, err := mutation.
 		Save(ctx)
 
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return sc
 }
@@ -1335,11 +1335,11 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 
 	ev, err := mutation.
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	if e.IncludeFile {
 		ev, err := e.client.db.Evidence.Query().WithFiles().Where(evidence.ID(ev.ID)).Only(ctx)
-		requireNoError(err)
+		requireNoError(t, err)
 
 		return ev
 	}
@@ -1365,7 +1365,7 @@ func (s *StandardBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Standa
 		SetIsPublic(s.IsPublic)
 
 	standard, err := mut.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return standard
 }
@@ -1396,7 +1396,7 @@ func (s *SubprocessorBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Su
 	}
 
 	subprocessor, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return subprocessor
 }
@@ -1421,7 +1421,7 @@ func (n *NoteBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Note {
 	}
 
 	note, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return note
 }
@@ -1452,7 +1452,7 @@ func (e *ControlImplementationBuilder) MustNew(ctx context.Context, t *testing.T
 
 	controlImplementation, err := mutation.
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return controlImplementation
 }
@@ -1518,7 +1518,7 @@ func (e *MappedControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.M
 	}
 
 	mappedControl, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	res, err := e.client.db.MappedControl.Query().
 		WithFromControls().
@@ -1545,7 +1545,7 @@ func (e *MappableDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 		SetName(e.Name).
 		SetZoneID(e.ZoneID).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return mappableDomain
 }
@@ -1593,7 +1593,7 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 		SetCnameRecord(c.CnameRecord).
 		SetMappableDomainID(c.MappableDomainID).
 		Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return customDomain
 }
@@ -1626,7 +1626,7 @@ func (j *JobRunnerTokenBuilder) MustNew(ctx context.Context, t *testing.T) *gene
 	}
 
 	token, err := create.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return token
 }
@@ -1647,7 +1647,7 @@ func (j *JobRunnerRegistrationTokenBuilder) MustNew(ctx context.Context, t *test
 	}
 
 	token, err := create.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return token
 }
@@ -1696,7 +1696,7 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	}
 
 	dnsVerification, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return dnsVerification
 }
@@ -1746,7 +1746,7 @@ func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Job
 	}
 
 	jt, err := mut.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return jt
 }
@@ -1778,7 +1778,7 @@ func (b *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *genera
 	}
 
 	result, err := job.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return result
 }
@@ -1816,10 +1816,9 @@ type TrustCenterComplianceBuilder struct {
 
 // MustNew trust center builder is used to create, without authz checks, trust centers in the database
 func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenter {
-	// do not use internal ctx or skip the checks so
-	// the owner_id can be applied
+	// Add the database client to context so the authz client is available for feature checks
+	// Do not use internal ctx or skip privacy checks so the owner_id can be applied correctly
 	ctx = ent.NewContext(ctx, tc.client.db)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 
 	if tc.Slug == "" {
@@ -1834,13 +1833,13 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 	}
 
 	trustCenter, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	// Create the organization parent tuple for the trust center
 	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	parentReq := fgax.TupleRequest{
@@ -1853,7 +1852,7 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	tuple := fgax.GetTupleKey(parentReq)
 	if _, err := tc.client.db.Authz.WriteTupleKeys(ctx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	return trustCenter
@@ -1892,7 +1891,7 @@ func (tcs *TrustCenterSettingBuilder) MustNew(ctx context.Context, t *testing.T)
 		SetTrustCenterID(tcs.TrustCenterID)
 
 	trustCenterSetting, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return trustCenterSetting
 }
@@ -1920,7 +1919,7 @@ func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testin
 	}
 
 	trustCenterCompliance, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return trustCenterCompliance
 }
@@ -1963,7 +1962,7 @@ func (te *TrustcenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *
 	}
 
 	trustcenterEntity, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return trustcenterEntity
 }
@@ -2000,7 +1999,7 @@ func (ib *IntegrationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.In
 		SetKind(ib.Kind)
 
 	integration, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return integration
 }
@@ -2073,7 +2072,7 @@ func (sb *SecretBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Hush {
 	}
 
 	secret, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return secret
 }
@@ -2089,7 +2088,7 @@ func (ic *IntegrationCleanup) MustDelete(ctx context.Context, t *testing.T) {
 	ctx = setContext(ctx, ic.client.db)
 
 	err := ic.client.db.Integration.DeleteOneID(ic.ID).Exec(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 }
 
 // SecretCleanup is used to delete secrets
@@ -2103,7 +2102,7 @@ func (sc *SecretCleanup) MustDelete(ctx context.Context, t *testing.T) {
 	ctx = setContext(ctx, sc.client.db)
 
 	err := sc.client.db.Hush.DeleteOneID(sc.ID).Exec(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 }
 
 // MustNew file builder is used to create, without authz checks, files in the database
@@ -2123,7 +2122,7 @@ func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
 		SetURI(url)
 
 	file, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return file
 }
@@ -2164,7 +2163,7 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 	}
 
 	template, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return template
 }
@@ -2214,7 +2213,7 @@ func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ass
 	mutation.SetJsonconfig(jsonConfig)
 
 	assessment, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return assessment
 }
@@ -2239,7 +2238,7 @@ func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T)
 		if assessment == nil {
 			var err error
 			assessment, err = arb.client.db.Assessment.Get(ctx, arb.AssessmentID)
-			requireNoError(err)
+			requireNoError(t, err)
 		}
 		arb.OwnerID = assessment.OwnerID
 	}
@@ -2262,7 +2261,7 @@ func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T)
 	}
 
 	response, err := mutation.Save(allowCtx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return response
 }
@@ -2319,7 +2318,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 	// Create a test PDF file for upload
 	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	requireNoError(err)
+	requireNoError(t, err)
 
 	fileUpload := graphql.Upload{
 		File:        pdfFile.RawFile,
@@ -2345,13 +2344,13 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 	// Create the trust center document using the GraphQL API
 	resp, err := tcdb.client.api.CreateTrustCenterDoc(ctx, input, fileUpload)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	// Convert the GraphQL response to an ent entity
 	// We need to fetch it from the database to get the full ent.TrustCenterDoc
 	dbCtx := setContext(ctx, tcdb.client.db)
 	trustCenterDoc, err := tcdb.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return trustCenterDoc
 }
@@ -2405,7 +2404,7 @@ func (tcwcb *TrustCenterWatermarkConfigBuilder) MustNew(ctx context.Context, t *
 	}
 
 	watermarkConfig, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return watermarkConfig
 }
@@ -2426,7 +2425,7 @@ func (td *TagDefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	}
 
 	tagDefinition, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return tagDefinition
 }
@@ -2455,7 +2454,7 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	}
 
 	customTypeEnum, err := mutation.Save(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return customTypeEnum
 }

@@ -38,7 +38,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 	testCases := []struct {
 		name                  string
@@ -192,7 +192,7 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	testCases := []struct {
@@ -570,7 +570,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	testCases := []struct {
@@ -857,7 +857,7 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	t.Run("sysadmin can update protected document", func(t *testing.T) {
@@ -1284,7 +1284,7 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	testCases := []struct {
