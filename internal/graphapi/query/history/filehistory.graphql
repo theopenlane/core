@@ -1,0 +1,91 @@
+
+
+query GetAllFileHistories {
+  fileHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        categoryType
+        createdAt
+        createdBy
+        detectedContentType
+        detectedMimeType
+        historyTime
+        id
+        internalNotes
+        lastAccessedAt
+        md5Hash
+        metadata
+        operation
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        ref
+        storagePath
+        storageProvider
+        storageRegion
+        storageScheme
+        storageVolume
+        storeKey
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        uri
+      }
+    }
+  }
+}
+
+query GetFileHistories($first: Int, $last: Int, $where: FileHistoryWhereInput) {
+  fileHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        categoryType
+        createdAt
+        createdBy
+        detectedContentType
+        detectedMimeType
+        historyTime
+        id
+        internalNotes
+        lastAccessedAt
+        md5Hash
+        metadata
+        operation
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        ref
+        storagePath
+        storageProvider
+        storageRegion
+        storageScheme
+        storageVolume
+        storeKey
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        uri
+      }
+    }
+  }
+}

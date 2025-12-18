@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateEntity is the resolver for the createEntity field.
 func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.Cre
 
 	res, err := withTransactionalMutation(ctx).Entity.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
 	}
 
 	return &model.EntityCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 
 // CreateBulkCSVEntity is the resolver for the createBulkCSVEntity field.
 func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateEntityInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateEntityInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "entity"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input ge
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "entity"})
 	}
 
 	return &model.EntityUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input ge
 // DeleteEntity is the resolver for the deleteEntity field.
 func (r *mutationResolver) DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Entity.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "entity"})
 	}
 
 	if err := generated.EntityEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.EntityDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkEntity(ctx context.Context, ids []string) (
 func (r *queryResolver) Entity(ctx context.Context, id string) (*generated.Entity, error) {
 	query, err := withTransactionalMutation(ctx).Entity.Query().Where(entity.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "entity"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "entity"})
 	}
 
 	return res, nil

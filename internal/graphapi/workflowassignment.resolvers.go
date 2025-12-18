@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateWorkflowAssignment is the resolver for the createWorkflowAssignment field.
 func (r *mutationResolver) CreateWorkflowAssignment(ctx context.Context, input generated.CreateWorkflowAssignmentInput) (*model.WorkflowAssignmentCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateWorkflowAssignment(ctx context.Context, input g
 
 	res, err := withTransactionalMutation(ctx).WorkflowAssignment.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignment"})
 	}
 
 	return &model.WorkflowAssignmentCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkWorkflowAssignment(ctx context.Context, inp
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkWorkflowAssignment(ctx context.Context, inp
 
 // CreateBulkCSVWorkflowAssignment is the resolver for the createBulkCSVWorkflowAssignment field.
 func (r *mutationResolver) CreateBulkCSVWorkflowAssignment(ctx context.Context, input graphql.Upload) (*model.WorkflowAssignmentBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateWorkflowAssignmentInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateWorkflowAssignmentInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignment"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVWorkflowAssignment(ctx context.Context, 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVWorkflowAssignment(ctx context.Context, 
 func (r *mutationResolver) UpdateWorkflowAssignment(ctx context.Context, id string, input generated.UpdateWorkflowAssignmentInput) (*model.WorkflowAssignmentUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).WorkflowAssignment.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateWorkflowAssignment(ctx context.Context, id stri
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignment"})
 	}
 
 	return &model.WorkflowAssignmentUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateWorkflowAssignment(ctx context.Context, id stri
 // DeleteWorkflowAssignment is the resolver for the deleteWorkflowAssignment field.
 func (r *mutationResolver) DeleteWorkflowAssignment(ctx context.Context, id string) (*model.WorkflowAssignmentDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).WorkflowAssignment.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowassignment"})
 	}
 
 	if err := generated.WorkflowAssignmentEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.WorkflowAssignmentDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteWorkflowAssignment(ctx context.Context, id stri
 func (r *queryResolver) WorkflowAssignment(ctx context.Context, id string) (*generated.WorkflowAssignment, error) {
 	query, err := withTransactionalMutation(ctx).WorkflowAssignment.Query().Where(workflowassignment.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignment"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignment"})
 	}
 
 	return res, nil

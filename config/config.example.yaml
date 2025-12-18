@@ -152,15 +152,6 @@ entconfig:
             provider: none
         maximumsentences: 10
         type: lexrank
-    windmill:
-        baseurl: https://app.windmill.dev
-        defaulttimeout: 30s
-        enabled: false
-        onfailurescript: ""
-        onsuccessscript: ""
-        timezone: UTC
-        token: ""
-        workspace: ""
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""

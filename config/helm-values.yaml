@@ -170,22 +170,6 @@ coreConfiguration:
           organizationid: ""  # @schema type:string
       # -- MaximumSentences specifies the maximum number of sentences in the summary
       maximumsentences: 10  # @schema type:integer; default:10
-    # -- Windmill contains configuration for Windmill workflow automation
-    windmill:
-      # -- Enabled specifies whether Windmill integration is enabled
-      enabled: false  # @schema type:boolean; default:false
-      # -- BaseURL is the base URL of the Windmill instance
-      baseurl: "https://app.windmill.dev"  # @schema type:string; default:https://app.windmill.dev
-      # -- Workspace is the Windmill workspace to use
-      workspace: ""  # @schema type:string
-      # -- DefaultTimeout is the default timeout for API requests
-      defaulttimeout: "30s"  # @schema type:string; default:30s
-      # -- Timezone for scheduled jobs
-      timezone: "UTC"  # @schema type:string; default:UTC
-      # -- OnFailureScript script to run when a scheduled job fails
-      onfailurescript: ""  # @schema type:string
-      # -- OnSuccessScript script to run when a scheduled job succeeds
-      onsuccessscript: ""  # @schema type:string
     # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
     maxpoolsize: 100  # @schema type:integer; default:100
     # -- Modules contains the configuration for the module system
@@ -595,14 +579,6 @@ externalSecrets:
       secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
-    # -- core-entconfig-windmill-token secret configuration
-    core-entconfig-windmill-token:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for entconfig.windmill.token
-      secretKey: "CORE_ENTCONFIG_WINDMILL_TOKEN"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-entconfig-windmill-token"  # @schema type:string
     # -- core-auth-providers-github-clientsecret secret configuration
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret

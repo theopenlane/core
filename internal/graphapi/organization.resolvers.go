@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -21,15 +22,15 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
 		logx.FromContext(ctx).Info().Msg("organization attempted to be created with non-JWT auth type")
 
-		return nil, ErrResourceNotAccessibleWithToken
+		return nil, common.ErrResourceNotAccessibleWithToken
 	}
 
 	// set the parent organization in the auth context, used when creating a sub-organization with a personal access token
 	if input.ParentID != nil {
-		if err := setOrganizationInAuthContext(ctx, input.ParentID); err != nil {
+		if err := common.SetOrganizationInAuthContext(ctx, input.ParentID); err != nil {
 			logx.FromContext(ctx).Error().Str("organization_id", *input.ParentID).Err(err).Msg("failed to set organization in auth context for parent organization")
 
-			return nil, newNotFoundError("parent_id")
+			return nil, common.NewNotFoundError("parent_id")
 		}
 	}
 
@@ -37,7 +38,7 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create organization")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organization"})
 	}
 
 	return &model.OrganizationCreatePayload{
@@ -51,7 +52,7 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to get organization")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
 	// setup update request
@@ -61,7 +62,7 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to update organization")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
 	return &model.OrganizationUpdatePayload{
@@ -74,19 +75,19 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 	if auth.GetAuthTypeFromContext(ctx) != auth.JWTAuthentication {
 		logx.FromContext(ctx).Info().Msg("organization attempted to be deleted with non-JWT auth type")
 
-		return nil, ErrResourceNotAccessibleWithToken
+		return nil, common.ErrResourceNotAccessibleWithToken
 	}
 
 	if err := withTransactionalMutation(ctx).Organization.DeleteOneID(id).Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to delete organization")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "organization"})
 	}
 
 	if err := generated.OrganizationEdgeCleanup(ctx, id); err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to cascade delete organization edges")
 
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrganizationDeletePayload{
@@ -96,22 +97,22 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 
 // Organization is the resolver for the organization field.
 func (r *queryResolver) Organization(ctx context.Context, id string) (*generated.Organization, error) {
-	if err := setOrganizationInAuthContext(ctx, &id); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &id); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-		return nil, newNotFoundError("id")
+		return nil, common.NewNotFoundError("id")
 	}
 
 	query, err := withTransactionalMutation(ctx).Organization.Query().Where(organization.ID(id)).CollectFields(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to query organization")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organization"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organization"})
 	}
 
 	return res, nil

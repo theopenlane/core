@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateWorkflowAssignmentTarget is the resolver for the createWorkflowAssignmentTarget field.
 func (r *mutationResolver) CreateWorkflowAssignmentTarget(ctx context.Context, input generated.CreateWorkflowAssignmentTargetInput) (*model.WorkflowAssignmentTargetCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateWorkflowAssignmentTarget(ctx context.Context, i
 
 	res, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
 	}
 
 	return &model.WorkflowAssignmentTargetCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkWorkflowAssignmentTarget(ctx context.Contex
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkWorkflowAssignmentTarget(ctx context.Contex
 
 // CreateBulkCSVWorkflowAssignmentTarget is the resolver for the createBulkCSVWorkflowAssignmentTarget field.
 func (r *mutationResolver) CreateBulkCSVWorkflowAssignmentTarget(ctx context.Context, input graphql.Upload) (*model.WorkflowAssignmentTargetBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateWorkflowAssignmentTargetInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateWorkflowAssignmentTargetInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVWorkflowAssignmentTarget(ctx context.Con
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVWorkflowAssignmentTarget(ctx context.Con
 func (r *mutationResolver) UpdateWorkflowAssignmentTarget(ctx context.Context, id string, input generated.UpdateWorkflowAssignmentTargetInput) (*model.WorkflowAssignmentTargetUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignmenttarget"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateWorkflowAssignmentTarget(ctx context.Context, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "workflowassignmenttarget"})
 	}
 
 	return &model.WorkflowAssignmentTargetUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateWorkflowAssignmentTarget(ctx context.Context, i
 // DeleteWorkflowAssignmentTarget is the resolver for the deleteWorkflowAssignmentTarget field.
 func (r *mutationResolver) DeleteWorkflowAssignmentTarget(ctx context.Context, id string) (*model.WorkflowAssignmentTargetDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "workflowassignmenttarget"})
 	}
 
 	if err := generated.WorkflowAssignmentTargetEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.WorkflowAssignmentTargetDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteWorkflowAssignmentTarget(ctx context.Context, i
 func (r *queryResolver) WorkflowAssignmentTarget(ctx context.Context, id string) (*generated.WorkflowAssignmentTarget, error) {
 	query, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().Where(workflowassignmenttarget.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignmenttarget"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenttarget"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowassignmenttarget"})
 	}
 
 	return res, nil

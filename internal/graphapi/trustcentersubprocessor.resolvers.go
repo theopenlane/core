@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -34,7 +35,7 @@ func (r *mutationResolver) CreateTrustCenterSubprocessor(ctx context.Context, in
 
 	res, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentersubprocessor"})
 	}
 
 	return &model.TrustCenterSubprocessorCreatePayload{
@@ -53,11 +54,11 @@ func (r *mutationResolver) CreateBulkTrustCenterSubprocessor(ctx context.Context
 
 // CreateBulkCSVTrustCenterSubprocessor is the resolver for the createBulkCSVTrustCenterSubprocessor field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload) (*model.TrustCenterSubprocessorBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTrustCenterSubprocessorInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterSubprocessorInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentersubprocessor"})
 	}
 
 	if len(data) == 0 {
@@ -71,7 +72,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterSubprocessor(ctx context.Cont
 func (r *mutationResolver) UpdateTrustCenterSubprocessor(ctx context.Context, id string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.UpdateOneID(id).SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersubprocessor"})
 	}
 
 	return &model.TrustCenterSubprocessorUpdatePayload{
@@ -91,11 +92,11 @@ func (r *mutationResolver) UpdateBulkTrustCenterSubprocessor(ctx context.Context
 // DeleteTrustCenterSubprocessor is the resolver for the deleteTrustCenterSubprocessor field.
 func (r *mutationResolver) DeleteTrustCenterSubprocessor(ctx context.Context, id string) (*model.TrustCenterSubprocessorDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcentersubprocessor"})
 	}
 
 	if err := generated.TrustCenterSubprocessorEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterSubprocessorDeletePayload{
@@ -116,12 +117,12 @@ func (r *mutationResolver) DeleteBulkTrustCenterSubprocessor(ctx context.Context
 func (r *queryResolver) TrustCenterSubprocessor(ctx context.Context, id string) (*generated.TrustCenterSubprocessor, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().Where(trustcentersubprocessor.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersubprocessor"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersubprocessor"})
 	}
 
 	return res, nil

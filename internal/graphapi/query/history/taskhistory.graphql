@@ -1,0 +1,81 @@
+query GetAllTaskHistories {
+  taskHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assigneeID
+        assignerID
+        category
+        completed
+        createdAt
+        createdBy
+        details
+        displayID
+        due
+        externalReferenceURL
+        historyTime
+        id
+        idempotencyKey
+        operation
+        ownerID
+        parentTaskID
+        ref
+        status
+        systemGenerated
+        tags
+        taskKindID
+        taskKindName
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetTaskHistories($first: Int, $last: Int, $where: TaskHistoryWhereInput) {
+  taskHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assigneeID
+        assignerID
+        category
+        completed
+        createdAt
+        createdBy
+        details
+        displayID
+        due
+        externalReferenceURL
+        historyTime
+        id
+        idempotencyKey
+        operation
+        ownerID
+        parentTaskID
+        ref
+        status
+        systemGenerated
+        tags
+        taskKindID
+        taskKindName
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

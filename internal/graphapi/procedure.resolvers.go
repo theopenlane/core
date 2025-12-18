@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateProcedure is the resolver for the createProcedure field.
 func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.CreateProcedureInput) (*model.ProcedureCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 
 	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "procedure"})
 	}
 
 	return &model.ProcedureCreatePayload{
@@ -44,14 +45,14 @@ func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureF
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, ownerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(procedureInput).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "procedure"})
 	}
 
 	return &model.ProcedureCreatePayload{
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -78,11 +79,11 @@ func (r *mutationResolver) CreateBulkProcedure(ctx context.Context, input []*gen
 
 // CreateBulkCSVProcedure is the resolver for the createBulkCSVProcedure field.
 func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateProcedureInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateProcedureInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "procedure"})
 	}
 
 	if len(data) == 0 {
@@ -91,7 +92,7 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -113,11 +114,11 @@ func (r *mutationResolver) UpdateBulkProcedure(ctx context.Context, ids []string
 func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -128,7 +129,7 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
 	}
 
 	return &model.ProcedureUpdatePayload{
@@ -139,11 +140,11 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 // DeleteProcedure is the resolver for the deleteProcedure field.
 func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Procedure.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "procedure"})
 	}
 
 	if err := generated.ProcedureEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ProcedureDeletePayload{
@@ -164,12 +165,12 @@ func (r *mutationResolver) DeleteBulkProcedure(ctx context.Context, ids []string
 func (r *queryResolver) Procedure(ctx context.Context, id string) (*generated.Procedure, error) {
 	query, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "procedure"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedure"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "procedure"})
 	}
 
 	return res, nil

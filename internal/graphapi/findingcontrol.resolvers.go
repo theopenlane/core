@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateFindingControl(ctx context.Context, input generated.CreateFindingControlInput) (*model.FindingControlCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).FindingControl.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "findingcontrol"})
 	}
 
 	return &model.FindingControlCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkFindingControl(ctx context.Context, input [
 
 // CreateBulkCSVFindingControl is the resolver for the createBulkCSVFindingControl field.
 func (r *mutationResolver) CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload) (*model.FindingControlBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateFindingControlInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateFindingControlInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "findingcontrol"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVFindingControl(ctx context.Context, inpu
 func (r *mutationResolver) UpdateFindingControl(ctx context.Context, id string, input generated.UpdateFindingControlInput) (*model.FindingControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).FindingControl.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "findingcontrol"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateFindingControl(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "findingcontrol"})
 	}
 
 	return &model.FindingControlUpdatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) UpdateFindingControl(ctx context.Context, id string, 
 // DeleteFindingControl is the resolver for the deleteFindingControl field.
 func (r *mutationResolver) DeleteFindingControl(ctx context.Context, id string) (*model.FindingControlDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).FindingControl.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "findingcontrol"})
 	}
 
 	if err := generated.FindingControlEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.FindingControlDeletePayload{
@@ -92,12 +93,12 @@ func (r *mutationResolver) DeleteFindingControl(ctx context.Context, id string) 
 func (r *queryResolver) FindingControl(ctx context.Context, id string) (*generated.FindingControl, error) {
 	query, err := withTransactionalMutation(ctx).FindingControl.Query().Where(findingcontrol.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "findingcontrol"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "findingcontrol"})
 	}
 
 	return res, nil

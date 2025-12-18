@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -21,7 +22,7 @@ func getTrustCenterID(ctx context.Context, trustCenterID *string, object string)
 				return nil, rout.NewMissingRequiredFieldError("trustCenterID")
 			}
 
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: object})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: object})
 		}
 
 		if trustCenterID == "" {

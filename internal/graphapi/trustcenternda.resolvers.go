@@ -10,6 +10,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -18,12 +19,12 @@ import (
 func (r *mutationResolver) CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error) {
 	trustCenterNDAPayload, err := createTrustCenterNDA(ctx, input)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	wildcardTuple := fgax.CreateWildcardViewerTuple(trustCenterNDAPayload.Template.ID, generated.TypeTemplate)
 	if _, err := r.db.Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenternda"})
 	}
 
 	return trustCenterNDAPayload, nil

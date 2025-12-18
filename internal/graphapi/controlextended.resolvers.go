@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
@@ -27,7 +28,7 @@ import (
 func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *model.CloneControlInput) (*model.ControlBulkCreatePayload, error) {
 	logger := logx.FromContext(ctx)
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logger.Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -39,7 +40,7 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 	if filterByStandard(filters) {
 		res, err := r.cloneControlsFromStandard(ctx, filters, input.ProgramID)
 		if err != nil {
-			return nil, parseRequestError(ctx, generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
+			return nil, parseRequestError(ctx, generated.ErrPermissionDenied, common.Action{Action: common.ActionCreate, Object: "control"})
 		}
 
 		return &model.ControlBulkCreatePayload{
@@ -56,16 +57,16 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 		WithStandard().
 		All(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	if len(existingControls) == 0 {
-		return nil, parseRequestError(ctx, generated.ErrPermissionDenied, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, generated.ErrPermissionDenied, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	createdControls, err := r.cloneControls(ctx, existingControls, input.ProgramID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	return &model.ControlBulkCreatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) CreateControlsByClone(ctx context.Context, input *mod
 // CloneBulkCSVControl is the resolver for the cloneBulkCSVControl field.
 func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error) {
 	logger := logx.FromContext(ctx)
-	data, err := unmarshalBulkData[model.CloneControlUploadInput](input)
+	data, err := common.UnmarshalBulkData[model.CloneControlUploadInput](input)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	if len(data) == 0 {
@@ -91,7 +92,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 	if err != nil {
 		logger.Error().Err(err).Msg("failed to convert clone control input")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	out := &model.ControlBulkCreatePayload{
@@ -101,7 +102,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 	for _, ci := range convertedInput {
 		res, err := r.CreateControlsByClone(ctx, ci)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 		}
 
 		if res == nil || len(res.Controls) == 0 {
@@ -126,7 +127,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 
 		commentIDs, err := r.createComment(ctx, c.OwnerID, c.Comment)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 		}
 
 		if isSubControl {
@@ -167,7 +168,7 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 
 				if err := base.Exec(ctx); err != nil {
-					return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+					return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 				}
 			}
 		} else {
@@ -208,17 +209,17 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 				}
 
 				if err := base.Exec(ctx); err != nil {
-					return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+					return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 				}
 			}
 		}
 
 		if err := r.createControlImplementation(ctx, c.OwnerID, *controlID, c.ControlImplementation); err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control implementation"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control implementation"})
 		}
 
 		if err := r.createControlObjective(ctx, c.OwnerID, *controlID, c.ControlObjective); err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control objective"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control objective"})
 		}
 	}
 
@@ -236,11 +237,11 @@ func (r *mutationResolver) CloneBulkCSVControl(ctx context.Context, input graphq
 		WithControlObjectives().
 		All(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	if err := r.markSubcontrolsAsNotApplicable(ctx, data, out.Controls); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
 	}
 
 	return out, nil
@@ -254,7 +255,7 @@ func (r *queryResolver) ControlCategories(ctx context.Context) ([]string, error)
 		GroupBy(control.FieldCategory).
 		Strings(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "categories"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "categories"})
 	}
 
 	subcontrolCategories, err := withTransactionalMutation(ctx).Subcontrol.Query().Select(control.FieldCategory).
@@ -263,7 +264,7 @@ func (r *queryResolver) ControlCategories(ctx context.Context) ([]string, error)
 		GroupBy(control.FieldCategory).
 		Strings(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "categories"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "categories"})
 	}
 
 	for _, subcontrolCategory := range subcontrolCategories {
@@ -293,7 +294,7 @@ func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, err
 		GroupBy(control.FieldSubcategory).
 		Strings(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcategories"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcategories"})
 	}
 
 	subcontrolCategories, err := withTransactionalMutation(ctx).Subcontrol.Query().Select(control.FieldSubcategory).
@@ -302,7 +303,7 @@ func (r *queryResolver) ControlSubcategories(ctx context.Context) ([]string, err
 		GroupBy(control.FieldSubcategory).
 		Strings(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcategories"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcategories"})
 	}
 
 	// append the subcontrol categories to the main categories
@@ -358,7 +359,7 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 
 	whereP, err := getControlWherePredicate(where)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
 	}
 
 	categories := []string{}
@@ -377,7 +378,7 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 			GroupBy(control.FieldCategory).
 			Strings(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
 		}
 
 		// always add "No Category" for controls with empty/null categories
@@ -413,7 +414,7 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 			combinedFilter,
 		).CollectFields(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
 		}
 
 		resp, err := query.Paginate(
@@ -424,7 +425,7 @@ func (r *queryResolver) ControlsGroupByCategory(ctx context.Context, after *entg
 			last,
 			generated.WithControlOrder(orderBy))
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "control"})
 		}
 
 		controlGroupEdge := &model.ControlGroupEdge{

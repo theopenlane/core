@@ -1,0 +1,73 @@
+
+
+query GetAllAssetHistories {
+  assetHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assetType
+        categories
+        cpe
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        identifier
+        internalNotes
+        name
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        website
+      }
+    }
+  }
+}
+
+query GetAssetHistories($first: Int, $last: Int, $where: AssetHistoryWhereInput) {
+  assetHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assetType
+        categories
+        cpe
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        identifier
+        internalNotes
+        name
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        website
+      }
+    }
+  }
+}

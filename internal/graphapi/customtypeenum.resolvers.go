@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateCustomTypeEnum is the resolver for the createCustomTypeEnum field.
 func (r *mutationResolver) CreateCustomTypeEnum(ctx context.Context, input generated.CreateCustomTypeEnumInput) (*model.CustomTypeEnumCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateCustomTypeEnum(ctx context.Context, input gener
 
 	res, err := withTransactionalMutation(ctx).CustomTypeEnum.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customtypeenum"})
 	}
 
 	return &model.CustomTypeEnumCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkCustomTypeEnum(ctx context.Context, input [
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkCustomTypeEnum(ctx context.Context, input [
 
 // CreateBulkCSVCustomTypeEnum is the resolver for the createBulkCSVCustomTypeEnum field.
 func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload) (*model.CustomTypeEnumBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateCustomTypeEnumInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateCustomTypeEnumInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customtypeenum"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, inpu
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, inpu
 func (r *mutationResolver) UpdateCustomTypeEnum(ctx context.Context, id string, input generated.UpdateCustomTypeEnumInput) (*model.CustomTypeEnumUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).CustomTypeEnum.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customtypeenum"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateCustomTypeEnum(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customtypeenum"})
 	}
 
 	return &model.CustomTypeEnumUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateCustomTypeEnum(ctx context.Context, id string, 
 // DeleteCustomTypeEnum is the resolver for the deleteCustomTypeEnum field.
 func (r *mutationResolver) DeleteCustomTypeEnum(ctx context.Context, id string) (*model.CustomTypeEnumDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).CustomTypeEnum.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "customtypeenum"})
 	}
 
 	if err := generated.CustomTypeEnumEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.CustomTypeEnumDeletePayload{
@@ -122,12 +123,12 @@ func (r *mutationResolver) DeleteCustomTypeEnum(ctx context.Context, id string) 
 func (r *queryResolver) CustomTypeEnum(ctx context.Context, id string) (*generated.CustomTypeEnum, error) {
 	query, err := withTransactionalMutation(ctx).CustomTypeEnum.Query().Where(customtypeenum.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "customtypeenum"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "customtypeenum"})
 	}
 
 	return res, nil

@@ -12,6 +12,8 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
@@ -35,6 +37,15 @@ const (
 // ImplementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
 // in the resolver setup
 func ImplementAllDirectives(cfg *gqlgenerated.Config) {
+	cfg.Directives.Hidden = HiddenDirective
+	cfg.Directives.ReadOnly = ReadOnlyDirective
+	cfg.Directives.ExternalReadOnly = ExternalReadOnlyDirective
+	cfg.Directives.ExternalSource = ExternalSourceDirective
+}
+
+// ImplementAllHistoryDirectives is a helper function that can be used to add all active directives to the gqlgen config
+// in the resolver setup for the history api
+func ImplementAllHistoryDirectives(cfg *gqlhistorygenerated.Config) {
 	cfg.Directives.Hidden = HiddenDirective
 	cfg.Directives.ReadOnly = ReadOnlyDirective
 	cfg.Directives.ExternalReadOnly = ExternalReadOnlyDirective

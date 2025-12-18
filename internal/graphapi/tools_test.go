@@ -46,6 +46,7 @@ import (
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 )
 
 const (
@@ -191,6 +192,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		soiree.WithName("ent_client_pool"),
 	)
 
+	// setup history client
+	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
+	requireNoError(err)
+
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
 	requireNoError(err)
@@ -208,6 +213,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.PondPool(pool),
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),
+		ent.HistoryClient(hc),
 	}
 
 	// create database connection

@@ -1,0 +1,69 @@
+
+
+query GetAllControlImplementationHistories {
+  controlImplementationHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        details
+        historyTime
+        id
+        implementationDate
+        internalNotes
+        operation
+        ownerID
+        ref
+        status
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        verificationDate
+        verified
+      }
+    }
+  }
+}
+
+query GetControlImplementationHistories($first: Int, $last: Int, $where: ControlImplementationHistoryWhereInput) {
+  controlImplementationHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        details
+        historyTime
+        id
+        implementationDate
+        internalNotes
+        operation
+        ownerID
+        ref
+        status
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+        verificationDate
+        verified
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateStandard is the resolver for the createStandard field.
 func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload) (*model.StandardCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "standard"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "standard"})
 	}
 
 	return &model.StandardCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) (*model.StandardUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "standard"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "standard"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -54,7 +55,7 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "standard"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "standard"})
 	}
 
 	return &model.StandardUpdatePayload{
@@ -65,11 +66,11 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 // DeleteStandard is the resolver for the deleteStandard field.
 func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*model.StandardDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Standard.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "standard"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "standard"})
 	}
 
 	if err := generated.StandardEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.StandardDeletePayload{
@@ -81,12 +82,12 @@ func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*mode
 func (r *queryResolver) Standard(ctx context.Context, id string) (*generated.Standard, error) {
 	query, err := withTransactionalMutation(ctx).Standard.Query().Where(standard.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standard"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "standard"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standard"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "standard"})
 	}
 
 	return res, nil

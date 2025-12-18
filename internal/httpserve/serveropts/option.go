@@ -31,8 +31,10 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/graphapi"
+	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -49,7 +51,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/core/pkg/windmill"
 )
 
 type ServerOption interface {
@@ -265,6 +266,29 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
 			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions)
+
+		// add pool to the resolver to manage the number of goroutines
+		r.WithPool(
+			s.Config.Settings.Server.GraphPool.MaxWorkers,
+			true, // include metrics collectors
+		)
+
+		handler := r.Handler()
+
+		// Add Graph Handler
+		srv.AddHandler(handler)
+	})
+}
+
+// WithGraphRoute adds the graph handler to the server
+func WithHistoryGraphRoute(srv *server.Server, c *historygenerated.Client) ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		// Setup Graph API Handlers
+		r := graphapihistory.NewResolver(c).
+			WithExtensions(s.Config.Settings.Server.EnableGraphExtensions).
+			WithDevelopment(s.Config.Settings.Server.Dev).
+			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
+			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(
@@ -533,23 +557,6 @@ func WithSummarizer() ServerOption {
 		}
 
 		s.Config.Handler.Summarizer = client
-	})
-}
-
-// WithWindmill sets up the Windmill workflow automation client
-func WithWindmill() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		client, err := windmill.NewWindmill(s.Config.Settings.EntConfig)
-		if err != nil {
-			if errors.Is(err, windmill.ErrWindmillDisabled) {
-				log.Info().Msg("Windmill is not enabled, skipping Windmill client setup")
-				return
-			}
-
-			log.Panic().Err(err).Msg("error creating Windmill client")
-		}
-
-		s.Config.Handler.Windmill = client
 	})
 }
 
