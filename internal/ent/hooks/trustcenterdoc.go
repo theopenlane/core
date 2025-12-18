@@ -64,7 +64,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			}
 
 			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
-			if !watermarkingEnabled {
+			if !watermarkingEnabledSet {
 				orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 				if orgID != "" {
@@ -76,6 +76,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 						watermarkingEnabled = config.IsEnabled
 
 						m.SetWatermarkingEnabled(watermarkingEnabled)
+						watermarkingEnabledSet = true
 					}
 				}
 			}
