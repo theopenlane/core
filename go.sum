@@ -678,8 +678,8 @@ github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4l
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
 github.com/theopenlane/emailtemplates v0.3.0 h1:vuU5AlSzG3hog7QoBSKuKKfIixOe9yxbY8L8XNYIbOM=
 github.com/theopenlane/emailtemplates v0.3.0/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
-github.com/theopenlane/entx v0.20.2-0.20251218185526-a16a513985fd h1:38YW1qp7OqN7zNfdQ2OcqCg5eVIbpbAwz1hOdlBq6QE=
-github.com/theopenlane/entx v0.20.2-0.20251218185526-a16a513985fd/go.mod h1:QXHK1vJlnxEHC6TMRoTr4lznJrbp6Gf9yBVeNobCI3E=
+github.com/theopenlane/entx v0.20.2 h1:BHdEWiHVbgKHTnepxMbd5E5/DiQnjN3qo8z0B/0unGE=
+github.com/theopenlane/entx v0.20.2/go.mod h1:QXHK1vJlnxEHC6TMRoTr4lznJrbp6Gf9yBVeNobCI3E=
 github.com/theopenlane/gqlgen-plugins v0.13.0 h1:GCmzUpC39VVIDUNAlB+zjBc+kgB+GJJb4ixpkg4ml4M=
 github.com/theopenlane/gqlgen-plugins v0.13.0/go.mod h1:dUjGeXPU3g7EB0XkSsd4hGkMrkh77VE9w48CPj/j2as=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
