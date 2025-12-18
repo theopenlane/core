@@ -20,6 +20,10 @@ type APIToken implements Node {
   name: String!
   token: String!
   """
+  the public id of the token
+  """
+  tokenPublicID: String
+  """
   when the token expires
   """
   expiresAt: Time
@@ -222,6 +226,24 @@ input APITokenWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  token_public_id field predicates
+  """
+  tokenPublicID: String
+  tokenPublicIDNEQ: String
+  tokenPublicIDIn: [String!]
+  tokenPublicIDNotIn: [String!]
+  tokenPublicIDGT: String
+  tokenPublicIDGTE: String
+  tokenPublicIDLT: String
+  tokenPublicIDLTE: String
+  tokenPublicIDContains: String
+  tokenPublicIDHasPrefix: String
+  tokenPublicIDHasSuffix: String
+  tokenPublicIDIsNil: Boolean
+  tokenPublicIDNotNil: Boolean
+  tokenPublicIDEqualFold: String
+  tokenPublicIDContainsFold: String
   """
   expires_at field predicates
   """
@@ -6052,6 +6074,14 @@ input CreateAPITokenInput {
   """
   name: String!
   """
+  the public id of the token
+  """
+  tokenPublicID: String
+  """
+  the secret of the token
+  """
+  tokenSecret: String
+  """
   when the token expires
   """
   expiresAt: Time
@@ -8425,6 +8455,14 @@ input CreatePersonalAccessTokenInput {
   the name associated with the token
   """
   name: String!
+  """
+  the public id of the token
+  """
+  tokenPublicID: String
+  """
+  the secret of the token
+  """
+  tokenSecret: String
   """
   when the token expires
   """
@@ -32108,6 +32146,10 @@ type PersonalAccessToken implements Node {
   name: String!
   token: String!
   """
+  the public id of the token
+  """
+  tokenPublicID: String
+  """
   when the token expires
   """
   expiresAt: Time
@@ -32354,6 +32396,24 @@ input PersonalAccessTokenWhereInput {
   nameHasSuffix: String
   nameEqualFold: String
   nameContainsFold: String
+  """
+  token_public_id field predicates
+  """
+  tokenPublicID: String
+  tokenPublicIDNEQ: String
+  tokenPublicIDIn: [String!]
+  tokenPublicIDNotIn: [String!]
+  tokenPublicIDGT: String
+  tokenPublicIDGTE: String
+  tokenPublicIDLT: String
+  tokenPublicIDLTE: String
+  tokenPublicIDContains: String
+  tokenPublicIDHasPrefix: String
+  tokenPublicIDHasSuffix: String
+  tokenPublicIDIsNil: Boolean
+  tokenPublicIDNotNil: Boolean
+  tokenPublicIDEqualFold: String
+  tokenPublicIDContainsFold: String
   """
   expires_at field predicates
   """
@@ -48704,6 +48764,16 @@ input UpdateAPITokenInput {
   """
   name: String
   """
+  the public id of the token
+  """
+  tokenPublicID: String
+  clearTokenPublicID: Boolean
+  """
+  the secret of the token
+  """
+  tokenSecret: String
+  clearTokenSecret: Boolean
+  """
   when the token expires
   """
   expiresAt: Time
@@ -51918,6 +51988,16 @@ input UpdatePersonalAccessTokenInput {
   the name associated with the token
   """
   name: String
+  """
+  the public id of the token
+  """
+  tokenPublicID: String
+  clearTokenPublicID: Boolean
+  """
+  the secret of the token
+  """
+  tokenSecret: String
+  clearTokenSecret: Boolean
   """
   when the token expires
   """

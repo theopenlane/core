@@ -78,17 +78,21 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			// Create a reauthenticator function to handle refresh tokens if they are provided.
 			reauthenticate := Reauthenticate(conf, validator)
 
-			// Get access token from the request, if not available then attempt to refresh
-			// using the refresh token cookie.
 			bearerToken, err := auth.GetBearerToken(c)
+
 			if err != nil {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
 					if bearerToken, err = reauthenticate(c); err != nil {
+						if errors.Is(err, ErrRefreshDisabled) {
+							return unauthorized(c, ErrNoAuthorization, conf, validator)
+						}
+
 						return unauthorized(c, err, conf, validator)
 					}
 				default:
 					return unauthorized(c, err, conf, validator)
+
 				}
 			}
 
@@ -335,9 +339,20 @@ func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string)
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
 func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 	token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
-	pat, err := fetchPATFunc(ctx, dbClient, token)
+	// verify the token format and extract the public ID and secret
+	publicID, secret, err := parseToken(token)
 	if err != nil {
 		return nil, "", err
+	}
+
+	pat, err := fetchPATFunc(ctx, dbClient, publicID)
+	if err != nil {
+		return nil, "", err
+	}
+
+	// verify the secret
+	if pat.TokenSecret != secret {
+		return nil, "", rout.ErrInvalidCredentials
 	}
 
 	// check if the token has expired
@@ -397,9 +412,33 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 }
 
 func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
-	t, err := fetchAPITokenFunc(ctx, dbClient, token)
+	// verify the token format and extract the public ID and secret
+	publicID, secret, err := parseToken(token)
+
+	var t *ent.APIToken
+
 	if err != nil {
-		return nil, "", err
+		if errors.Is(err, rout.ErrInvalidCredentials) {
+			var err error
+			t, err = fetchAPITokenFunc(ctx, dbClient, token)
+			if err != nil {
+				return nil, "", err
+			}
+		} else {
+
+			return nil, "", err
+		}
+	} else {
+
+		t, err = fetchAPITokenFunc(ctx, dbClient, publicID)
+		if err != nil {
+			return nil, "", err
+		}
+	}
+
+	// verify the secret
+	if t.TokenSecret != secret {
+		return nil, "", rout.ErrInvalidCredentials
 	}
 
 	// check if the token has expired
@@ -610,14 +649,14 @@ var (
 	}
 
 	fetchPATFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.PersonalAccessToken, error) {
-		return db.PersonalAccessToken.Query().Where(personalaccesstoken.Token(token)).
+		return db.PersonalAccessToken.Query().Where(personalaccesstoken.TokenPublicID(token)).
 			WithOwner().
 			WithOrganizations().
 			Only(ctx)
 	}
 
 	fetchAPITokenFunc = func(ctx context.Context, db *ent.Client, token string) (*ent.APIToken, error) {
-		return db.APIToken.Query().Where(apitoken.Token(token)).Only(ctx)
+		return db.APIToken.Query().Where(apitoken.TokenPublicID(token)).Only(ctx)
 	}
 
 	isPATSSOAuthorizedFunc = isPATSSOAuthorized
@@ -626,3 +665,23 @@ var (
 
 	isSystemAdminFunc = isSystemAdmin
 )
+
+// parseToken parses the token string and returns the public ID and secret
+func parseToken(token string) (publicID, secret string, err error) {
+	const PartsCount int = 3
+	if strings.HasPrefix(token, "tola_") {
+		parts := strings.Split(token, "_")
+		if len(parts) != PartsCount {
+			return "", "", rout.ErrInvalidCredentials
+		}
+		return parts[1], parts[2], nil
+	} else if strings.HasPrefix(token, "tolp_") {
+		parts := strings.Split(token, "_")
+		if len(parts) != PartsCount {
+			return "", "", rout.ErrInvalidCredentials
+		}
+		return parts[1], parts[2], nil
+	}
+
+	return "", "", rout.ErrInvalidCredentials
+}

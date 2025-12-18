@@ -203,6 +203,40 @@ type APITokenWhereInput struct {
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
+	// "token_public_id" field predicates.
+	TokenPublicID             *string  `json:"tokenPublicID,omitempty"`
+	TokenPublicIDNEQ          *string  `json:"tokenPublicIDNEQ,omitempty"`
+	TokenPublicIDIn           []string `json:"tokenPublicIDIn,omitempty"`
+	TokenPublicIDNotIn        []string `json:"tokenPublicIDNotIn,omitempty"`
+	TokenPublicIDGT           *string  `json:"tokenPublicIDGT,omitempty"`
+	TokenPublicIDGTE          *string  `json:"tokenPublicIDGTE,omitempty"`
+	TokenPublicIDLT           *string  `json:"tokenPublicIDLT,omitempty"`
+	TokenPublicIDLTE          *string  `json:"tokenPublicIDLTE,omitempty"`
+	TokenPublicIDContains     *string  `json:"tokenPublicIDContains,omitempty"`
+	TokenPublicIDHasPrefix    *string  `json:"tokenPublicIDHasPrefix,omitempty"`
+	TokenPublicIDHasSuffix    *string  `json:"tokenPublicIDHasSuffix,omitempty"`
+	TokenPublicIDIsNil        bool     `json:"tokenPublicIDIsNil,omitempty"`
+	TokenPublicIDNotNil       bool     `json:"tokenPublicIDNotNil,omitempty"`
+	TokenPublicIDEqualFold    *string  `json:"tokenPublicIDEqualFold,omitempty"`
+	TokenPublicIDContainsFold *string  `json:"tokenPublicIDContainsFold,omitempty"`
+
+	// "token_secret" field predicates.
+	TokenSecret             *string  `json:"tokenSecret,omitempty"`
+	TokenSecretNEQ          *string  `json:"tokenSecretNEQ,omitempty"`
+	TokenSecretIn           []string `json:"tokenSecretIn,omitempty"`
+	TokenSecretNotIn        []string `json:"tokenSecretNotIn,omitempty"`
+	TokenSecretGT           *string  `json:"tokenSecretGT,omitempty"`
+	TokenSecretGTE          *string  `json:"tokenSecretGTE,omitempty"`
+	TokenSecretLT           *string  `json:"tokenSecretLT,omitempty"`
+	TokenSecretLTE          *string  `json:"tokenSecretLTE,omitempty"`
+	TokenSecretContains     *string  `json:"tokenSecretContains,omitempty"`
+	TokenSecretHasPrefix    *string  `json:"tokenSecretHasPrefix,omitempty"`
+	TokenSecretHasSuffix    *string  `json:"tokenSecretHasSuffix,omitempty"`
+	TokenSecretIsNil        bool     `json:"tokenSecretIsNil,omitempty"`
+	TokenSecretNotNil       bool     `json:"tokenSecretNotNil,omitempty"`
+	TokenSecretEqualFold    *string  `json:"tokenSecretEqualFold,omitempty"`
+	TokenSecretContainsFold *string  `json:"tokenSecretContainsFold,omitempty"`
+
 	// "expires_at" field predicates.
 	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
 	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
@@ -618,6 +652,96 @@ func (i *APITokenWhereInput) P() (predicate.APIToken, error) {
 	}
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, apitoken.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.TokenPublicID != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDEQ(*i.TokenPublicID))
+	}
+	if i.TokenPublicIDNEQ != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDNEQ(*i.TokenPublicIDNEQ))
+	}
+	if len(i.TokenPublicIDIn) > 0 {
+		predicates = append(predicates, apitoken.TokenPublicIDIn(i.TokenPublicIDIn...))
+	}
+	if len(i.TokenPublicIDNotIn) > 0 {
+		predicates = append(predicates, apitoken.TokenPublicIDNotIn(i.TokenPublicIDNotIn...))
+	}
+	if i.TokenPublicIDGT != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDGT(*i.TokenPublicIDGT))
+	}
+	if i.TokenPublicIDGTE != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDGTE(*i.TokenPublicIDGTE))
+	}
+	if i.TokenPublicIDLT != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDLT(*i.TokenPublicIDLT))
+	}
+	if i.TokenPublicIDLTE != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDLTE(*i.TokenPublicIDLTE))
+	}
+	if i.TokenPublicIDContains != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDContains(*i.TokenPublicIDContains))
+	}
+	if i.TokenPublicIDHasPrefix != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDHasPrefix(*i.TokenPublicIDHasPrefix))
+	}
+	if i.TokenPublicIDHasSuffix != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDHasSuffix(*i.TokenPublicIDHasSuffix))
+	}
+	if i.TokenPublicIDIsNil {
+		predicates = append(predicates, apitoken.TokenPublicIDIsNil())
+	}
+	if i.TokenPublicIDNotNil {
+		predicates = append(predicates, apitoken.TokenPublicIDNotNil())
+	}
+	if i.TokenPublicIDEqualFold != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDEqualFold(*i.TokenPublicIDEqualFold))
+	}
+	if i.TokenPublicIDContainsFold != nil {
+		predicates = append(predicates, apitoken.TokenPublicIDContainsFold(*i.TokenPublicIDContainsFold))
+	}
+	if i.TokenSecret != nil {
+		predicates = append(predicates, apitoken.TokenSecretEQ(*i.TokenSecret))
+	}
+	if i.TokenSecretNEQ != nil {
+		predicates = append(predicates, apitoken.TokenSecretNEQ(*i.TokenSecretNEQ))
+	}
+	if len(i.TokenSecretIn) > 0 {
+		predicates = append(predicates, apitoken.TokenSecretIn(i.TokenSecretIn...))
+	}
+	if len(i.TokenSecretNotIn) > 0 {
+		predicates = append(predicates, apitoken.TokenSecretNotIn(i.TokenSecretNotIn...))
+	}
+	if i.TokenSecretGT != nil {
+		predicates = append(predicates, apitoken.TokenSecretGT(*i.TokenSecretGT))
+	}
+	if i.TokenSecretGTE != nil {
+		predicates = append(predicates, apitoken.TokenSecretGTE(*i.TokenSecretGTE))
+	}
+	if i.TokenSecretLT != nil {
+		predicates = append(predicates, apitoken.TokenSecretLT(*i.TokenSecretLT))
+	}
+	if i.TokenSecretLTE != nil {
+		predicates = append(predicates, apitoken.TokenSecretLTE(*i.TokenSecretLTE))
+	}
+	if i.TokenSecretContains != nil {
+		predicates = append(predicates, apitoken.TokenSecretContains(*i.TokenSecretContains))
+	}
+	if i.TokenSecretHasPrefix != nil {
+		predicates = append(predicates, apitoken.TokenSecretHasPrefix(*i.TokenSecretHasPrefix))
+	}
+	if i.TokenSecretHasSuffix != nil {
+		predicates = append(predicates, apitoken.TokenSecretHasSuffix(*i.TokenSecretHasSuffix))
+	}
+	if i.TokenSecretIsNil {
+		predicates = append(predicates, apitoken.TokenSecretIsNil())
+	}
+	if i.TokenSecretNotNil {
+		predicates = append(predicates, apitoken.TokenSecretNotNil())
+	}
+	if i.TokenSecretEqualFold != nil {
+		predicates = append(predicates, apitoken.TokenSecretEqualFold(*i.TokenSecretEqualFold))
+	}
+	if i.TokenSecretContainsFold != nil {
+		predicates = append(predicates, apitoken.TokenSecretContainsFold(*i.TokenSecretContainsFold))
 	}
 	if i.ExpiresAt != nil {
 		predicates = append(predicates, apitoken.ExpiresAtEQ(*i.ExpiresAt))
@@ -48312,6 +48436,40 @@ type PersonalAccessTokenWhereInput struct {
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
 
+	// "token_public_id" field predicates.
+	TokenPublicID             *string  `json:"tokenPublicID,omitempty"`
+	TokenPublicIDNEQ          *string  `json:"tokenPublicIDNEQ,omitempty"`
+	TokenPublicIDIn           []string `json:"tokenPublicIDIn,omitempty"`
+	TokenPublicIDNotIn        []string `json:"tokenPublicIDNotIn,omitempty"`
+	TokenPublicIDGT           *string  `json:"tokenPublicIDGT,omitempty"`
+	TokenPublicIDGTE          *string  `json:"tokenPublicIDGTE,omitempty"`
+	TokenPublicIDLT           *string  `json:"tokenPublicIDLT,omitempty"`
+	TokenPublicIDLTE          *string  `json:"tokenPublicIDLTE,omitempty"`
+	TokenPublicIDContains     *string  `json:"tokenPublicIDContains,omitempty"`
+	TokenPublicIDHasPrefix    *string  `json:"tokenPublicIDHasPrefix,omitempty"`
+	TokenPublicIDHasSuffix    *string  `json:"tokenPublicIDHasSuffix,omitempty"`
+	TokenPublicIDIsNil        bool     `json:"tokenPublicIDIsNil,omitempty"`
+	TokenPublicIDNotNil       bool     `json:"tokenPublicIDNotNil,omitempty"`
+	TokenPublicIDEqualFold    *string  `json:"tokenPublicIDEqualFold,omitempty"`
+	TokenPublicIDContainsFold *string  `json:"tokenPublicIDContainsFold,omitempty"`
+
+	// "token_secret" field predicates.
+	TokenSecret             *string  `json:"tokenSecret,omitempty"`
+	TokenSecretNEQ          *string  `json:"tokenSecretNEQ,omitempty"`
+	TokenSecretIn           []string `json:"tokenSecretIn,omitempty"`
+	TokenSecretNotIn        []string `json:"tokenSecretNotIn,omitempty"`
+	TokenSecretGT           *string  `json:"tokenSecretGT,omitempty"`
+	TokenSecretGTE          *string  `json:"tokenSecretGTE,omitempty"`
+	TokenSecretLT           *string  `json:"tokenSecretLT,omitempty"`
+	TokenSecretLTE          *string  `json:"tokenSecretLTE,omitempty"`
+	TokenSecretContains     *string  `json:"tokenSecretContains,omitempty"`
+	TokenSecretHasPrefix    *string  `json:"tokenSecretHasPrefix,omitempty"`
+	TokenSecretHasSuffix    *string  `json:"tokenSecretHasSuffix,omitempty"`
+	TokenSecretIsNil        bool     `json:"tokenSecretIsNil,omitempty"`
+	TokenSecretNotNil       bool     `json:"tokenSecretNotNil,omitempty"`
+	TokenSecretEqualFold    *string  `json:"tokenSecretEqualFold,omitempty"`
+	TokenSecretContainsFold *string  `json:"tokenSecretContainsFold,omitempty"`
+
 	// "expires_at" field predicates.
 	ExpiresAt       *time.Time  `json:"expiresAt,omitempty"`
 	ExpiresAtNEQ    *time.Time  `json:"expiresAtNEQ,omitempty"`
@@ -48690,6 +48848,96 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 	}
 	if i.NameContainsFold != nil {
 		predicates = append(predicates, personalaccesstoken.NameContainsFold(*i.NameContainsFold))
+	}
+	if i.TokenPublicID != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDEQ(*i.TokenPublicID))
+	}
+	if i.TokenPublicIDNEQ != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDNEQ(*i.TokenPublicIDNEQ))
+	}
+	if len(i.TokenPublicIDIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDIn(i.TokenPublicIDIn...))
+	}
+	if len(i.TokenPublicIDNotIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDNotIn(i.TokenPublicIDNotIn...))
+	}
+	if i.TokenPublicIDGT != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDGT(*i.TokenPublicIDGT))
+	}
+	if i.TokenPublicIDGTE != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDGTE(*i.TokenPublicIDGTE))
+	}
+	if i.TokenPublicIDLT != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDLT(*i.TokenPublicIDLT))
+	}
+	if i.TokenPublicIDLTE != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDLTE(*i.TokenPublicIDLTE))
+	}
+	if i.TokenPublicIDContains != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDContains(*i.TokenPublicIDContains))
+	}
+	if i.TokenPublicIDHasPrefix != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDHasPrefix(*i.TokenPublicIDHasPrefix))
+	}
+	if i.TokenPublicIDHasSuffix != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDHasSuffix(*i.TokenPublicIDHasSuffix))
+	}
+	if i.TokenPublicIDIsNil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDIsNil())
+	}
+	if i.TokenPublicIDNotNil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDNotNil())
+	}
+	if i.TokenPublicIDEqualFold != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDEqualFold(*i.TokenPublicIDEqualFold))
+	}
+	if i.TokenPublicIDContainsFold != nil {
+		predicates = append(predicates, personalaccesstoken.TokenPublicIDContainsFold(*i.TokenPublicIDContainsFold))
+	}
+	if i.TokenSecret != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretEQ(*i.TokenSecret))
+	}
+	if i.TokenSecretNEQ != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretNEQ(*i.TokenSecretNEQ))
+	}
+	if len(i.TokenSecretIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.TokenSecretIn(i.TokenSecretIn...))
+	}
+	if len(i.TokenSecretNotIn) > 0 {
+		predicates = append(predicates, personalaccesstoken.TokenSecretNotIn(i.TokenSecretNotIn...))
+	}
+	if i.TokenSecretGT != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretGT(*i.TokenSecretGT))
+	}
+	if i.TokenSecretGTE != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretGTE(*i.TokenSecretGTE))
+	}
+	if i.TokenSecretLT != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretLT(*i.TokenSecretLT))
+	}
+	if i.TokenSecretLTE != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretLTE(*i.TokenSecretLTE))
+	}
+	if i.TokenSecretContains != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretContains(*i.TokenSecretContains))
+	}
+	if i.TokenSecretHasPrefix != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretHasPrefix(*i.TokenSecretHasPrefix))
+	}
+	if i.TokenSecretHasSuffix != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretHasSuffix(*i.TokenSecretHasSuffix))
+	}
+	if i.TokenSecretIsNil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretIsNil())
+	}
+	if i.TokenSecretNotNil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretNotNil())
+	}
+	if i.TokenSecretEqualFold != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretEqualFold(*i.TokenSecretEqualFold))
+	}
+	if i.TokenSecretContainsFold != nil {
+		predicates = append(predicates, personalaccesstoken.TokenSecretContainsFold(*i.TokenSecretContainsFold))
 	}
 	if i.ExpiresAt != nil {
 		predicates = append(predicates, personalaccesstoken.ExpiresAtEQ(*i.ExpiresAt))
