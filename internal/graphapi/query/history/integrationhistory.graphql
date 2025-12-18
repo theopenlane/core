@@ -1,0 +1,69 @@
+
+
+query GetAllIntegrationHistories {
+  integrationHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        integrationType
+        internalNotes
+        kind
+        metadata
+        name
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetIntegrationHistories($first: Int, $last: Int, $where: IntegrationHistoryWhereInput) {
+  integrationHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        historyTime
+        id
+        integrationType
+        internalNotes
+        kind
+        metadata
+        name
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

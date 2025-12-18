@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/review"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateReview(ctx context.Context, input generated.CreateReviewInput) (*model.ReviewCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Review.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "review"})
 	}
 
 	return &model.ReviewCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkReview(ctx context.Context, input []*genera
 
 // CreateBulkCSVReview is the resolver for the createBulkCSVReview field.
 func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphql.Upload) (*model.ReviewBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateReviewInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateReviewInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "review"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVReview(ctx context.Context, input graphq
 func (r *mutationResolver) UpdateReview(ctx context.Context, id string, input generated.UpdateReviewInput) (*model.ReviewUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Review.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateReview(ctx context.Context, id string, input ge
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "review"})
 	}
 
 	return &model.ReviewUpdatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) UpdateReview(ctx context.Context, id string, input ge
 // DeleteReview is the resolver for the deleteReview field.
 func (r *mutationResolver) DeleteReview(ctx context.Context, id string) (*model.ReviewDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Review.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "review"})
 	}
 
 	if err := generated.ReviewEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ReviewDeletePayload{
@@ -92,12 +93,12 @@ func (r *mutationResolver) DeleteReview(ctx context.Context, id string) (*model.
 func (r *queryResolver) Review(ctx context.Context, id string) (*generated.Review, error) {
 	query, err := withTransactionalMutation(ctx).Review.Query().Where(review.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "review"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "review"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "review"})
 	}
 
 	return res, nil

@@ -21,6 +21,7 @@ import (
 
 	migratedb "github.com/theopenlane/core/db"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -45,6 +46,8 @@ type client struct {
 	pc *ent.Client
 	// sc is the secondary ent client
 	sc *ent.Client
+	// hc is the history ent client
+	hc *historygenerated.Client
 }
 
 // New returns a ent client with a primary and secondary, if configured, write database
@@ -175,6 +178,35 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	return db, nil
 }
 
+// NewHistory returns a enthistory client with a primary database
+func NewHistory(c entx.Config, opts ...historygenerated.Option) (*historygenerated.Client, error) {
+	if !c.EnableHistory {
+		log.Info().Msg("history is not enabled, not creating history client")
+
+		return nil, nil
+	}
+
+	entConfig, err := entx.NewDBConfig(c)
+	if err != nil {
+		return nil, err
+	}
+
+	// setup driver for the client
+	drvPrimary := entConfig.GetPrimaryDB()
+
+	opts = append(opts, historygenerated.Driver(drvPrimary))
+
+	db := historygenerated.NewClient(opts...)
+
+	db.Config = entConfig
+
+	db.Intercept(BlockHistoryInterceptor())
+
+	db.Use(hooks.MetricsHook())
+
+	return db, nil
+}
+
 func entcacheDriver(driver dialect.Driver, cacheTTL time.Duration) *entcache.Driver {
 	return entcache.NewDriver(
 		driver,
@@ -240,11 +272,22 @@ func (c *client) runGooseMigrations() error {
 // this do not use the generated versioned migrations files from ent
 func (c *client) runAtlasMigrations(ctx context.Context) error {
 	// Run the automatic migration tool to create all schema resources.
-	if err := c.pc.Schema.Create(ctx,
-		EnablePostgresOption(SQLDB(c.pc))); err != nil {
-		log.Error().Err(err).Msg("failed creating schema resources")
+	if c.pc != nil {
+		if err := c.pc.Schema.Create(ctx,
+			EnablePostgresOption(SQLDB(c.pc))); err != nil {
+			log.Error().Err(err).Msg("failed creating schema resources")
 
-		return err
+			return err
+		}
+	}
+
+	if c.hc != nil {
+		if err := c.hc.Schema.Create(ctx,
+			EnablePostgresOption(SQLDB(c.hc))); err != nil {
+			log.Error().Err(err).Msg("failed creating history schema resources")
+
+			return err
+		}
 	}
 
 	return nil
@@ -397,4 +440,48 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 	}
 
 	return db, nil
+}
+
+// NewTestHistoryClient creates a ent history client that can be used for TEST purposes ONLY
+func NewTestHistoryClient(ctx context.Context, ctr *testutils.TestFixture) (*historygenerated.Client, error) {
+	dbconf := entx.Config{
+		Debug:           true,
+		DriverName:      ctr.Dialect,
+		PrimaryDBSource: ctr.URI,
+		EnableHistory:   true,            // enable history so the code path is checked during unit tests
+		CacheTTL:        0 * time.Second, // do not cache results in tests
+	}
+
+	// Create the db client
+	var db *historygenerated.Client
+
+	// Retry the connection to the database to ensure it is up and running
+	var err error
+
+	// If a test container is used, retry the connection to the database to ensure it is up and running
+	if ctr.Pool != nil {
+		err = ctr.Pool.Retry(func() error {
+			log.Info().Msg("connecting to database...")
+
+			db, err = NewHistory(dbconf)
+			if err != nil {
+				log.Info().Err(err).Msg("retrying connection to database...")
+			}
+
+			return err
+		})
+	} else {
+		db, err = NewHistory(dbconf)
+	}
+
+	client := &client{
+		config: &dbconf,
+		hc:     db,
+	}
+
+	if err := client.runAtlasMigrations(ctx); err != nil {
+		return nil, err
+	}
+
+	return db, err
 }

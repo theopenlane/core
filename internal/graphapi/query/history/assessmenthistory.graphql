@@ -1,0 +1,65 @@
+
+
+query GetAllAssessmentHistories {
+  assessmentHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentType
+        createdAt
+        createdBy
+        historyTime
+        id
+        jsonconfig
+        name
+        operation
+        ownerID
+        ref
+        responseDueDuration
+        tags
+        templateID
+        uischema
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetAssessmentHistories($first: Int, $last: Int, $where: AssessmentHistoryWhereInput) {
+  assessmentHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentType
+        createdAt
+        createdBy
+        historyTime
+        id
+        jsonconfig
+        name
+        operation
+        ownerID
+        ref
+        responseDueDuration
+        tags
+        templateID
+        uischema
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

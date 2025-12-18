@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateGroupSetting(ctx context.Context, input generated.CreateGroupSettingInput) (*model.GroupSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupsetting"})
 	}
 
 	return &model.GroupSettingCreatePayload{
@@ -35,7 +36,7 @@ func (r *mutationResolver) CreateBulkGroupSetting(ctx context.Context, input []*
 	}
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -46,11 +47,11 @@ func (r *mutationResolver) CreateBulkGroupSetting(ctx context.Context, input []*
 
 // CreateBulkCSVGroupSetting is the resolver for the createBulkCSVGroupSetting field.
 func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input graphql.Upload) (*model.GroupSettingBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateGroupSettingInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateGroupSettingInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "groupsetting"})
 	}
 
 	if len(data) == 0 {
@@ -64,7 +65,7 @@ func (r *mutationResolver) CreateBulkCSVGroupSetting(ctx context.Context, input 
 func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, input generated.UpdateGroupSettingInput) (*model.GroupSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).GroupSetting.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupsetting"})
 	}
 
 	// setup update request
@@ -72,7 +73,7 @@ func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "groupsetting"})
 	}
 
 	return &model.GroupSettingUpdatePayload{
@@ -83,11 +84,11 @@ func (r *mutationResolver) UpdateGroupSetting(ctx context.Context, id string, in
 // DeleteGroupSetting is the resolver for the deleteGroupSetting field.
 func (r *mutationResolver) DeleteGroupSetting(ctx context.Context, id string) (*model.GroupSettingDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "groupsetting"})
 	}
 
 	if err := generated.GroupSettingEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.GroupSettingDeletePayload{
@@ -108,12 +109,12 @@ func (r *mutationResolver) DeleteBulkGroupSetting(ctx context.Context, ids []str
 func (r *queryResolver) GroupSetting(ctx context.Context, id string) (*generated.GroupSetting, error) {
 	query, err := withTransactionalMutation(ctx).GroupSetting.Query().Where(groupsetting.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "groupsetting"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "groupsetting"})
 	}
 
 	return res, nil

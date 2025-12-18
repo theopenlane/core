@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -163,11 +164,11 @@ func convertToCloneControlInput(input []*model.CloneControlUploadInput) ([]*mode
 
 		for _, ci := range controlInputs {
 			if !stripeAndCompare(i.StandardVersion, ci.StandardVersion) {
-				return nil, fmt.Errorf("%w: all controls for a standard must have the same version", ErrInvalidInput)
+				return nil, fmt.Errorf("%w: all controls for a standard must have the same version", common.ErrInvalidInput)
 			}
 
 			if !stripeAndCompare(i.OwnerID, ci.OwnerID) {
-				return nil, fmt.Errorf("%w: all controls for a standard must have the same owner", ErrInvalidInput)
+				return nil, fmt.Errorf("%w: all controls for a standard must have the same owner", common.ErrInvalidInput)
 			}
 
 			if ci.RefCode != nil {

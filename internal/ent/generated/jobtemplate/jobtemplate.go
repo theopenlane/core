@@ -118,7 +118,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -135,6 +135,8 @@ var (
 	DefaultSystemOwned bool
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// WindmillPathValidator is a validator for the "windmill_path" field. It is called by the builders before save.
+	WindmillPathValidator func(string) error
 	// CronValidator is a validator for the "cron" field. It is called by the builders before save.
 	CronValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.

@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateJobResult is the resolver for the createJobResult field.
 func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.
 
 	res, err := withTransactionalMutation(ctx).JobResult.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "jobresult"})
 	}
 
 	return &model.JobResultCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateJobResult(ctx context.Context, input generated.
 func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) (*model.JobResultUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).JobResult.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "jobresult"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -54,7 +55,7 @@ func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "jobresult"})
 	}
 
 	return &model.JobResultUpdatePayload{
@@ -65,11 +66,11 @@ func (r *mutationResolver) UpdateJobResult(ctx context.Context, id string, input
 // DeleteJobResult is the resolver for the deleteJobResult field.
 func (r *mutationResolver) DeleteJobResult(ctx context.Context, id string) (*model.JobResultDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).JobResult.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "jobresult"})
 	}
 
 	if err := generated.JobResultEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.JobResultDeletePayload{
@@ -81,12 +82,12 @@ func (r *mutationResolver) DeleteJobResult(ctx context.Context, id string) (*mod
 func (r *queryResolver) JobResult(ctx context.Context, id string) (*generated.JobResult, error) {
 	query, err := withTransactionalMutation(ctx).JobResult.Query().Where(jobresult.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "jobresult"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "jobresult"})
 	}
 
 	return res, nil

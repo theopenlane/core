@@ -1,0 +1,65 @@
+
+
+query GetAllCustomDomainHistories {
+  customDomainHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cnameRecord
+        createdAt
+        createdBy
+        dnsVerificationID
+        historyTime
+        id
+        internalNotes
+        mappableDomainID
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetCustomDomainHistories($first: Int, $last: Int, $where: CustomDomainHistoryWhereInput) {
+  customDomainHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        cnameRecord
+        createdAt
+        createdBy
+        dnsVerificationID
+        historyTime
+        id
+        internalNotes
+        mappableDomainID
+        operation
+        ownerID
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

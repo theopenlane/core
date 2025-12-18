@@ -22,17 +22,7 @@ func main() {
 
 	genhelpers.ChangeToRootDir("../../../")
 
-	cfg, err := config.LoadConfig(graphapiGenDir + ".gqlgenc_cliclient.yml")
-	if err != nil {
-		log.Fatal().Err(err).Msg("Failed to load config")
-		os.Exit(2)
-	}
-
-	if err := generator.Generate(context.Background(), cfg); err != nil {
-		log.Error().Err(err).Msg("Failed to generate gqlgenc client")
-	}
-
-	cfg, err = config.LoadConfig(graphapiGenDir + ".gqlgenc_testclient.yml")
+	cfg, err := config.LoadConfig(graphapiGenDir + ".gqlgenc_testclient.yml")
 	if err != nil {
 		log.Fatal().Err(err).Msg("Failed to load config")
 		os.Exit(2)

@@ -1,0 +1,55 @@
+
+
+query GetAllProgramMembershipHistories {
+  programMembershipHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        programID
+        ref
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+
+query GetProgramMembershipHistories($first: Int, $last: Int, $where: ProgramMembershipHistoryWhereInput) {
+  programMembershipHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        historyTime
+        id
+        operation
+        programID
+        ref
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}

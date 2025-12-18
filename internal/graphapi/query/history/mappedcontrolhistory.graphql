@@ -1,0 +1,67 @@
+
+
+query GetAllMappedControlHistories {
+  mappedControlHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        confidence
+        createdAt
+        createdBy
+        historyTime
+        id
+        internalNotes
+        mappingType
+        operation
+        ownerID
+        ref
+        relation
+        source
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetMappedControlHistories($first: Int, $last: Int, $where: MappedControlHistoryWhereInput) {
+  mappedControlHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        confidence
+        createdAt
+        createdBy
+        historyTime
+        id
+        internalNotes
+        mappingType
+        operation
+        ownerID
+        ref
+        relation
+        source
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

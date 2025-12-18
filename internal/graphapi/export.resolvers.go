@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/export"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateExport is the resolver for the createExport field.
 func (r *mutationResolver) CreateExport(ctx context.Context, input generated.CreateExportInput) (*model.ExportCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateExport(ctx context.Context, input generated.Cre
 
 	res, err := withTransactionalMutation(ctx).Export.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "export"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "export"})
 	}
 
 	return &model.ExportCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateExport(ctx context.Context, input generated.Cre
 func (r *mutationResolver) UpdateExport(ctx context.Context, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) (*model.ExportUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Export.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "export"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "export"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -54,7 +55,7 @@ func (r *mutationResolver) UpdateExport(ctx context.Context, id string, input ge
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "export"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "export"})
 	}
 
 	return &model.ExportUpdatePayload{
@@ -65,11 +66,11 @@ func (r *mutationResolver) UpdateExport(ctx context.Context, id string, input ge
 // DeleteExport is the resolver for the deleteExport field.
 func (r *mutationResolver) DeleteExport(ctx context.Context, id string) (*model.ExportDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Export.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "export"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "export"})
 	}
 
 	if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ExportDeletePayload{
@@ -90,12 +91,12 @@ func (r *mutationResolver) DeleteBulkExport(ctx context.Context, ids []string) (
 func (r *queryResolver) Export(ctx context.Context, id string) (*generated.Export, error) {
 	query, err := withTransactionalMutation(ctx).Export.Query().Where(export.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "export"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "export"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "export"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "export"})
 	}
 
 	return res, nil

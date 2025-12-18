@@ -19,7 +19,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -269,7 +269,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			parentOrgID:    orgUser.OrganizationID,
 			client:         patClient,
 			ctx:            context.Background(),
-			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
+			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
 			name:           "organization with parent org using personal access token, no access to parent, not allowed",
@@ -278,7 +278,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			parentOrgID:    testUser2.OrganizationID,
 			client:         patClient,
 			ctx:            context.Background(),
-			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
+			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
 			name:           "organization create with api token not allowed",
@@ -286,7 +286,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription: gofakeit.HipsterSentence(),
 			client:         tokenClient,
 			ctx:            context.Background(),
-			errorMsg:       graphapi.ErrResourceNotAccessibleWithToken.Error(),
+			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
 		{
 			name:           "organization with parent personal org",

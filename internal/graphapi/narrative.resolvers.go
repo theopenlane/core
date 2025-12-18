@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateNarrative is the resolver for the createNarrative field.
 func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.CreateNarrativeInput) (*model.NarrativeCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.
 
 	res, err := withTransactionalMutation(ctx).Narrative.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "narrative"})
 	}
 
 	return &model.NarrativeCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkNarrative(ctx context.Context, input []*gen
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkNarrative(ctx context.Context, input []*gen
 
 // CreateBulkCSVNarrative is the resolver for the createBulkCSVNarrative field.
 func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input graphql.Upload) (*model.NarrativeBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateNarrativeInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateNarrativeInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "narrative"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Narrative.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "narrative"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "narrative"})
 	}
 
 	return &model.NarrativeUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input
 // DeleteNarrative is the resolver for the deleteNarrative field.
 func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Narrative.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "narrative"})
 	}
 
 	if err := generated.NarrativeEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.NarrativeDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkNarrative(ctx context.Context, ids []string
 func (r *queryResolver) Narrative(ctx context.Context, id string) (*generated.Narrative, error) {
 	query, err := withTransactionalMutation(ctx).Narrative.Query().Where(narrative.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "narrative"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrative"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "narrative"})
 	}
 
 	return res, nil

@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/internal/ent/authzgenerated"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -257,21 +258,21 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 // mapEdgeToObjectType maps the edge to the object type and returns the EdgeAccess
 // based on the generated access map
-func mapEdgeToObjectType(ctx context.Context, schema string, edge string) generated.EdgeAccess {
+func mapEdgeToObjectType(ctx context.Context, schema string, edge string) authzgenerated.EdgeAccess {
 	logx.FromContext(ctx).Debug().Str("schema", schema).Str("edge", edge).Msg("mapping edge to object type")
 	schemaType := strcase.SnakeCase(schema)
 
-	schemaMap, ok := generated.EdgeAccessMap[schemaType]
+	schemaMap, ok := authzgenerated.EdgeAccessMap[schemaType]
 	if !ok {
 		logx.FromContext(ctx).Error().Str("schema", schema).Msg("schema not found in edge access map")
-		return generated.EdgeAccess{}
+		return authzgenerated.EdgeAccess{}
 	}
 
 	edgeAccess, ok := schemaMap[edge]
 	if !ok {
 		logx.FromContext(ctx).Error().Str("edge", edge).Msg("edge not found in edge access map for schema")
 
-		return generated.EdgeAccess{}
+		return authzgenerated.EdgeAccess{}
 	}
 
 	return edgeAccess

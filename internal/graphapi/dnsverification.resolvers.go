@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateDNSVerification is the resolver for the createDNSVerification field.
 func (r *mutationResolver) CreateDNSVerification(ctx context.Context, input generated.CreateDNSVerificationInput) (*model.DNSVerificationCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateDNSVerification(ctx context.Context, input gene
 
 	res, err := withTransactionalMutation(ctx).DNSVerification.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "dnsverification"})
 	}
 
 	return &model.DNSVerificationCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkDNSVerification(ctx context.Context, input 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkDNSVerification(ctx context.Context, input 
 
 // CreateBulkCSVDNSVerification is the resolver for the createBulkCSVDNSVerification field.
 func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, input graphql.Upload) (*model.DNSVerificationBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateDNSVerificationInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateDNSVerificationInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "dnsverification"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, inp
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, inp
 func (r *mutationResolver) UpdateDNSVerification(ctx context.Context, id string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DNSVerification.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "dnsverification"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateDNSVerification(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "dnsverification"})
 	}
 
 	return &model.DNSVerificationUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateDNSVerification(ctx context.Context, id string,
 // DeleteDNSVerification is the resolver for the deleteDNSVerification field.
 func (r *mutationResolver) DeleteDNSVerification(ctx context.Context, id string) (*model.DNSVerificationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "dnsverification"})
 	}
 
 	if err := generated.DNSVerificationEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DNSVerificationDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkDNSVerification(ctx context.Context, ids []
 func (r *queryResolver) DNSVerification(ctx context.Context, id string) (*generated.DNSVerification, error) {
 	query, err := withTransactionalMutation(ctx).DNSVerification.Query().Where(dnsverification.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "dnsverification"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "dnsverification"})
 	}
 
 	return res, nil
