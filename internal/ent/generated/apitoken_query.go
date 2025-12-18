@@ -560,17 +560,18 @@ func (_q *APITokenQuery) Modify(modifiers ...func(s *sql.Selector)) *APITokenSel
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (atq *APITokenQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "APIToken").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "APIToken").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, atq.ctx, ent.OpQueryIDs)
 
 	ids, err := atq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "APIToken").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "APIToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "APIToken").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "APIToken").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

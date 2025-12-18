@@ -478,17 +478,18 @@ func (_q *TrustCenterHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *T
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (tchq *TrustCenterHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, tchq.ctx, ent.OpQueryIDs)
 
 	ids, err := tchq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

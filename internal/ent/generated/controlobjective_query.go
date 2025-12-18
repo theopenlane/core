@@ -2040,17 +2040,18 @@ func (_q *ControlObjectiveQuery) WithNamedTasks(name string, opts ...func(*TaskQ
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (coq *ControlObjectiveQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "ControlObjective").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "ControlObjective").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, coq.ctx, ent.OpQueryIDs)
 
 	ids, err := coq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ControlObjective").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ControlObjective").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "ControlObjective").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "ControlObjective").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

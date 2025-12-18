@@ -478,17 +478,18 @@ func (_q *ProgramMembershipHistoryQuery) Modify(modifiers ...func(s *sql.Selecto
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (pmhq *ProgramMembershipHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "ProgramMembershipHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "ProgramMembershipHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, pmhq.ctx, ent.OpQueryIDs)
 
 	ids, err := pmhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ProgramMembershipHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ProgramMembershipHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "ProgramMembershipHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "ProgramMembershipHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

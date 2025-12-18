@@ -984,17 +984,18 @@ func (_q *OrgSubscriptionQuery) WithNamedPrices(name string, opts ...func(*OrgPr
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (osq *OrgSubscriptionQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscription").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscription").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, osq.ctx, ent.OpQueryIDs)
 
 	ids, err := osq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "OrgSubscription").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "OrgSubscription").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscription").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscription").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

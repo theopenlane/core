@@ -1267,17 +1267,18 @@ func (_q *WorkflowObjectRefQuery) Modify(modifiers ...func(s *sql.Selector)) *Wo
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (worq *WorkflowObjectRefQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowObjectRef").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowObjectRef").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, worq.ctx, ent.OpQueryIDs)
 
 	ids, err := worq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowObjectRef").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowObjectRef").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowObjectRef").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowObjectRef").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

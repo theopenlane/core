@@ -774,17 +774,18 @@ func (_q *TrustCenterSettingQuery) WithNamedFiles(name string, opts ...func(*Fil
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (tcsq *TrustCenterSettingQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterSetting").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterSetting").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, tcsq.ctx, ent.OpQueryIDs)
 
 	ids, err := tcsq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterSetting").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterSetting").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterSetting").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterSetting").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

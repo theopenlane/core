@@ -9,7 +9,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -17,9 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-// TagHookExecutedKey is a context key to track whether the tag hook has already been executed for this mutation
-type TagHookExecutedKey struct{}
 
 // tagMutation is an interface for mutations that have tags
 type tagMutation interface {
@@ -33,12 +29,6 @@ type tagMutation interface {
 func HookTags() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			// Prevent duplicate execution within same mutation
-			if _, ok := contextx.From[TagHookExecutedKey](ctx); ok {
-				return next.Mutate(ctx, m)
-			}
-			ctx = contextx.With(ctx, TagHookExecutedKey{})
-
 			mut := m.(tagMutation)
 
 			tags, ok := mut.Tags()

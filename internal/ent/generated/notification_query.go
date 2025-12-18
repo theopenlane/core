@@ -638,17 +638,18 @@ func (_q *NotificationQuery) Modify(modifiers ...func(s *sql.Selector)) *Notific
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (nq *NotificationQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Notification").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Notification").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, nq.ctx, ent.OpQueryIDs)
 
 	ids, err := nq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Notification").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Notification").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Notification").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Notification").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

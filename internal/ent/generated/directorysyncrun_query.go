@@ -950,17 +950,18 @@ func (_q *DirectorySyncRunQuery) WithNamedDirectoryMemberships(name string, opts
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (dsrq *DirectorySyncRunQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "DirectorySyncRun").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectorySyncRun").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, dsrq.ctx, ent.OpQueryIDs)
 
 	ids, err := dsrq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectorySyncRun").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectorySyncRun").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "DirectorySyncRun").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectorySyncRun").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

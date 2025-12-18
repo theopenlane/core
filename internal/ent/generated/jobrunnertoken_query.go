@@ -692,17 +692,18 @@ func (_q *JobRunnerTokenQuery) WithNamedJobRunners(name string, opts ...func(*Jo
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (jrtq *JobRunnerTokenQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "JobRunnerToken").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "JobRunnerToken").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, jrtq.ctx, ent.OpQueryIDs)
 
 	ids, err := jrtq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "JobRunnerToken").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "JobRunnerToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "JobRunnerToken").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "JobRunnerToken").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

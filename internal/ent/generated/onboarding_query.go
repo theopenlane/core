@@ -560,17 +560,18 @@ func (_q *OnboardingQuery) Modify(modifiers ...func(s *sql.Selector)) *Onboardin
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (oq *OnboardingQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Onboarding").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Onboarding").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
 
 	ids, err := oq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Onboarding").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Onboarding").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Onboarding").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Onboarding").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

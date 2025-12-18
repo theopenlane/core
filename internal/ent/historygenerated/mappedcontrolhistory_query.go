@@ -478,17 +478,18 @@ func (_q *MappedControlHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) 
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (mchq *MappedControlHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "MappedControlHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "MappedControlHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, mchq.ctx, ent.OpQueryIDs)
 
 	ids, err := mchq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "MappedControlHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "MappedControlHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "MappedControlHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "MappedControlHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -478,17 +478,18 @@ func (_q *FindingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Findi
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (fhq *FindingHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "FindingHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "FindingHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryIDs)
 
 	ids, err := fhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FindingHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FindingHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "FindingHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "FindingHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -478,17 +478,18 @@ func (_q *NarrativeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Nar
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (nhq *NarrativeHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "NarrativeHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "NarrativeHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryIDs)
 
 	ids, err := nhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "NarrativeHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "NarrativeHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "NarrativeHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "NarrativeHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

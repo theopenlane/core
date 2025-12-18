@@ -565,17 +565,18 @@ func (_q *TagDefinitionQuery) Modify(modifiers ...func(s *sql.Selector)) *TagDef
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (tdq *TagDefinitionQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TagDefinition").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "TagDefinition").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, tdq.ctx, ent.OpQueryIDs)
 
 	ids, err := tdq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TagDefinition").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TagDefinition").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TagDefinition").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TagDefinition").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

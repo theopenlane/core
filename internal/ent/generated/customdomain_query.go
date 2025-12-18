@@ -721,17 +721,18 @@ func (_q *CustomDomainQuery) Modify(modifiers ...func(s *sql.Selector)) *CustomD
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (cdq *CustomDomainQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "CustomDomain").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "CustomDomain").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, cdq.ctx, ent.OpQueryIDs)
 
 	ids, err := cdq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "CustomDomain").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "CustomDomain").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "CustomDomain").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "CustomDomain").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

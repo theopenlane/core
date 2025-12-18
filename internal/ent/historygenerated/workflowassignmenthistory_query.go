@@ -478,17 +478,18 @@ func (_q *WorkflowAssignmentHistoryQuery) Modify(modifiers ...func(s *sql.Select
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (wahq *WorkflowAssignmentHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowAssignmentHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowAssignmentHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, wahq.ctx, ent.OpQueryIDs)
 
 	ids, err := wahq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowAssignmentHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowAssignmentHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowAssignmentHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowAssignmentHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

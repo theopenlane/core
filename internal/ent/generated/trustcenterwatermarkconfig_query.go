@@ -744,17 +744,18 @@ func (_q *TrustCenterWatermarkConfigQuery) WithNamedTrustCenter(name string, opt
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (tcwcq *TrustCenterWatermarkConfigQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterWatermarkConfig").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterWatermarkConfig").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, tcwcq.ctx, ent.OpQueryIDs)
 
 	ids, err := tcwcq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterWatermarkConfig").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterWatermarkConfig").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterWatermarkConfig").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterWatermarkConfig").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

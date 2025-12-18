@@ -2062,17 +2062,18 @@ func (_q *EventQuery) WithNamedOrgSubscriptions(name string, opts ...func(*OrgSu
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (eq *EventQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Event").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Event").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
 
 	ids, err := eq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Event").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Event").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Event").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Event").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

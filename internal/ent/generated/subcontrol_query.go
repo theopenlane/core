@@ -2675,17 +2675,18 @@ func (_q *SubcontrolQuery) WithNamedMappedFromSubcontrols(name string, opts ...f
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (sq *SubcontrolQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Subcontrol").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Subcontrol").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
 
 	ids, err := sq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Subcontrol").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Subcontrol").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Subcontrol").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Subcontrol").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

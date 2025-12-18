@@ -660,17 +660,18 @@ func (_q *JobTemplateQuery) WithNamedScheduledJobs(name string, opts ...func(*Sc
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (jtq *JobTemplateQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "JobTemplate").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "JobTemplate").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, jtq.ctx, ent.OpQueryIDs)
 
 	ids, err := jtq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "JobTemplate").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "JobTemplate").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "JobTemplate").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "JobTemplate").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

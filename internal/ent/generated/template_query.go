@@ -968,17 +968,18 @@ func (_q *TemplateQuery) WithNamedAssessments(name string, opts ...func(*Assessm
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (tq *TemplateQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Template").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Template").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
 
 	ids, err := tq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Template").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Template").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Template").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Template").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

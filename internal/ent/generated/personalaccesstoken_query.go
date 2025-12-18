@@ -825,17 +825,18 @@ func (_q *PersonalAccessTokenQuery) WithNamedEvents(name string, opts ...func(*E
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (patq *PersonalAccessTokenQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "PersonalAccessToken").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "PersonalAccessToken").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, patq.ctx, ent.OpQueryIDs)
 
 	ids, err := patq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "PersonalAccessToken").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "PersonalAccessToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "PersonalAccessToken").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "PersonalAccessToken").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

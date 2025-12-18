@@ -2257,17 +2257,18 @@ func (_q *ProcedureQuery) WithNamedDiscussions(name string, opts ...func(*Discus
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (pq *ProcedureQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Procedure").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Procedure").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, pq.ctx, ent.OpQueryIDs)
 
 	ids, err := pq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Procedure").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Procedure").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Procedure").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Procedure").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

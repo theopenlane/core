@@ -2658,17 +2658,18 @@ func (_q *FindingQuery) WithNamedControlMappings(name string, opts ...func(*Find
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (fq *FindingQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Finding").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Finding").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, fq.ctx, ent.OpQueryIDs)
 
 	ids, err := fq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Finding").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Finding").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Finding").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Finding").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

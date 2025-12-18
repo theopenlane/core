@@ -2059,17 +2059,18 @@ func (_q *ActionPlanQuery) WithNamedIntegrations(name string, opts ...func(*Inte
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (apq *ActionPlanQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlan").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlan").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, apq.ctx, ent.OpQueryIDs)
 
 	ids, err := apq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ActionPlan").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ActionPlan").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlan").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlan").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

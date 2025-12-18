@@ -478,17 +478,18 @@ func (_q *GroupHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupHi
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (ghq *GroupHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "GroupHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "GroupHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, ghq.ctx, ent.OpQueryIDs)
 
 	ids, err := ghq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "GroupHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "GroupHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "GroupHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "GroupHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

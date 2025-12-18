@@ -1759,17 +1759,18 @@ func (_q *EntityQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *En
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (eq *EntityQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Entity").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Entity").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
 
 	ids, err := eq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Entity").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Entity").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Entity").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Entity").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

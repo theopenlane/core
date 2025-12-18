@@ -478,17 +478,18 @@ func (_q *DirectoryGroupHistoryQuery) Modify(modifiers ...func(s *sql.Selector))
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (dghq *DirectoryGroupHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryGroupHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryGroupHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, dghq.ctx, ent.OpQueryIDs)
 
 	ids, err := dghq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectoryGroupHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectoryGroupHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryGroupHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryGroupHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

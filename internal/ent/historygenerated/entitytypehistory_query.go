@@ -478,17 +478,18 @@ func (_q *EntityTypeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *En
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (ethq *EntityTypeHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "EntityTypeHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "EntityTypeHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, ethq.ctx, ent.OpQueryIDs)
 
 	ids, err := ethq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "EntityTypeHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "EntityTypeHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "EntityTypeHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "EntityTypeHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

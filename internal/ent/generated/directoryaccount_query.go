@@ -1057,17 +1057,18 @@ func (_q *DirectoryAccountQuery) WithNamedMemberships(name string, opts ...func(
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (daq *DirectoryAccountQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccount").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccount").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, daq.ctx, ent.OpQueryIDs)
 
 	ids, err := daq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectoryAccount").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectoryAccount").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccount").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccount").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -661,17 +661,18 @@ func (_q *DNSVerificationQuery) WithNamedCustomDomains(name string, opts ...func
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (dvq *DNSVerificationQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "DNSVerification").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "DNSVerification").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, dvq.ctx, ent.OpQueryIDs)
 
 	ids, err := dvq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DNSVerification").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DNSVerification").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "DNSVerification").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "DNSVerification").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -954,17 +954,18 @@ func (_q *HushQuery) WithNamedEvents(name string, opts ...func(*EventQuery)) *Hu
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (hq *HushQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Hush").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Hush").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, hq.ctx, ent.OpQueryIDs)
 
 	ids, err := hq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Hush").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Hush").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Hush").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Hush").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

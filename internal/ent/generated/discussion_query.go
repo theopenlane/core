@@ -1059,17 +1059,18 @@ func (_q *DiscussionQuery) WithNamedComments(name string, opts ...func(*NoteQuer
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (dq *DiscussionQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Discussion").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Discussion").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, dq.ctx, ent.OpQueryIDs)
 
 	ids, err := dq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Discussion").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Discussion").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Discussion").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Discussion").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

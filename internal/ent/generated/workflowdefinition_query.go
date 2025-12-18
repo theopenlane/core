@@ -763,17 +763,18 @@ func (_q *WorkflowDefinitionQuery) WithNamedGroups(name string, opts ...func(*Gr
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (wdq *WorkflowDefinitionQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowDefinition").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowDefinition").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, wdq.ctx, ent.OpQueryIDs)
 
 	ids, err := wdq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowDefinition").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowDefinition").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowDefinition").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowDefinition").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

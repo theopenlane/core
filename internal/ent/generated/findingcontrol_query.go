@@ -716,17 +716,18 @@ func (_q *FindingControlQuery) Modify(modifiers ...func(s *sql.Selector)) *Findi
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (fcq *FindingControlQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "FindingControl").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "FindingControl").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, fcq.ctx, ent.OpQueryIDs)
 
 	ids, err := fcq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FindingControl").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FindingControl").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "FindingControl").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "FindingControl").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -478,17 +478,18 @@ func (_q *HushHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *HushHist
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (hhq *HushHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "HushHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "HushHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, hhq.ctx, ent.OpQueryIDs)
 
 	ids, err := hhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "HushHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "HushHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "HushHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "HushHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

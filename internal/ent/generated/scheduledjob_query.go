@@ -979,17 +979,18 @@ func (_q *ScheduledJobQuery) WithNamedSubcontrols(name string, opts ...func(*Sub
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (sjq *ScheduledJobQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "ScheduledJob").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "ScheduledJob").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, sjq.ctx, ent.OpQueryIDs)
 
 	ids, err := sjq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ScheduledJob").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ScheduledJob").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "ScheduledJob").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "ScheduledJob").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

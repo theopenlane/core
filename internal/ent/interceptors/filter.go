@@ -7,11 +7,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/rs/zerolog"
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
-
-	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -126,6 +126,17 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 
 type skipperFunc func(ctx context.Context) bool
 
+// logObjectIDs logs object IDs with full details at debug level, just counts at info level
+func logObjectIDs(ctx context.Context, objectType string, objectIDs []string, msg string) {
+	logger := logx.FromContext(ctx)
+
+	if logger.GetLevel() == zerolog.DebugLevel {
+		logger.Debug().Str("object_type", objectType).Strs("object_ids", objectIDs).Msg(msg)
+	} else {
+		logger.Info().Str("object_type", objectType).Int("object_count", len(objectIDs)).Msg(msg)
+	}
+}
+
 // FilterQueryResults filters the results of a query to only include the objects that the user has access to
 // This is automatically added to all schemas using the ObjectOwnedMixin, so should not be added
 // directly if that mixin is used
@@ -134,7 +145,6 @@ type skipperFunc func(ctx context.Context) bool
 func FilterQueryResults[V any](skipperFunc ...skipperFunc) ent.InterceptFunc {
 	return func(next ent.Querier) ent.Querier {
 		return ent.QuerierFunc(func(ctx context.Context, query ent.Query) (ent.Value, error) {
-			logx.FromContext(ctx).Debug().Msg("FilterQueryResults")
 			return filterQueryResults[V](ctx, query, next, skipperFunc...)
 		})
 	}
@@ -168,12 +178,10 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 	case ent.OpQueryIDs, ent.OpQueryFirstID:
 		ids, ok := v.([]string)
 		if !ok {
-			logx.FromContext(ctx).Error().Str("query_type", q.Type()).Msgf("failed to cast query results to expected slice %T", v)
+			logx.FromContext(ctx).Error().Str("query_type", q.Type()).Str("operation", string(ctxQuery.Op)).Msgf("failed to cast query results to expected slice %T", v)
 
 			return nil, ErrRetrievingObjects
 		}
-
-		logx.FromContext(ctx).Debug().Str("query_type", q.Type()).Int("id_count_before_filter", len(ids)).Msg("FilterQueryResults: OpQueryIDs path, calling filterIDList")
 
 		return filterIDList(ctx, ids, getFGAObjectType(q))
 	case ent.OpQueryOnlyID:
@@ -224,22 +232,16 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 
 // filterIDList filters a list of object ids to only include the objects that the user has access to
 func filterIDList(ctx context.Context, ids []string, objectType string) ([]string, error) {
-	logx.FromContext(ctx).Debug().Str("object", objectType).Int("id_count", len(ids)).Msg("filterIDList: calling filterAuthorizedObjectIDs for FGA batch check")
-
 	allowedIDs, err := filterAuthorizedObjectIDs(ctx, objectType, ids)
 	if err != nil {
 		return nil, err
 	}
-
-	logx.FromContext(ctx).Debug().Str("object", objectType).Int("allowed_count", len(allowedIDs)).Int("filtered_count", len(ids)-len(allowedIDs)).Msg("filterIDList: FGA batch check complete")
 
 	return allowedIDs, nil
 }
 
 // singleIDCheck checks if a single object id is allowed and returns a boolean
 func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, error) {
-	logx.FromContext(ctx).Debug().Str("object", objectType).Msg("singleIDCheck")
-
 	id, ok := v.(string)
 	if !ok {
 		logx.FromContext(ctx).Error().Msgf("failed to cast query results to expected single ID %T", v)
@@ -262,8 +264,6 @@ func singleIDCheck(ctx context.Context, v ent.Value, objectType string) (bool, e
 // filterListObjects filters a list of objects to only include the objects that the user has access to
 // and returns the filtered list as the ent.Value
 func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Query) (ent.Value, error) {
-	logx.FromContext(ctx).Debug().Str("type", q.Type()).Msg("filterListObjects")
-
 	listResults := v.([]*T)
 	if len(listResults) == 0 {
 		return v, nil
@@ -313,8 +313,6 @@ func filterListObjects[T any](ctx context.Context, v ent.Value, q intercept.Quer
 
 // singleObjectCheck checks if a single object is allowed and returns the object if it is
 func singleObjectCheck[T any](ctx context.Context, v ent.Value, q intercept.Query) (ent.Value, error) {
-	logx.FromContext(ctx).Debug().Str("type", q.Type()).Msg("singleObjectCheck")
-
 	objectIDs, err := getObjectIDsFromEntValues(v)
 	if err != nil {
 		return nil, err
@@ -399,7 +397,7 @@ func getObjectIDFromEntValue(m ent.Value) (string, error) {
 // this is intended to be used in place of GetAuthorizedObjectIDs when you already have the object ids
 // and just need to filter them based on the user's permissions
 func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs []string) ([]string, error) {
-	logx.FromContext(ctx).Debug().Str("object_type", objectType).Strs("object_ids", objectIDs).Msg("filtering authorized object ids")
+	logObjectIDs(ctx, objectType, objectIDs, "filtering authorized object ids")
 
 	var (
 		context   *map[string]any

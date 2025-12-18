@@ -478,17 +478,18 @@ func (_q *ActionPlanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *Ac
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (aphq *ActionPlanHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlanHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlanHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, aphq.ctx, ent.OpQueryIDs)
 
 	ids, err := aphq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ActionPlanHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ActionPlanHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlanHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "ActionPlanHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

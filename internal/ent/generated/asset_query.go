@@ -1257,17 +1257,18 @@ func (_q *AssetQuery) WithNamedControls(name string, opts ...func(*ControlQuery)
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (aq *AssetQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Asset").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Asset").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, aq.ctx, ent.OpQueryIDs)
 
 	ids, err := aq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Asset").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Asset").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Asset").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Asset").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

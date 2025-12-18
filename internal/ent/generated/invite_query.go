@@ -823,17 +823,18 @@ func (_q *InviteQuery) WithNamedGroups(name string, opts ...func(*GroupQuery)) *
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (iq *InviteQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Invite").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Invite").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, iq.ctx, ent.OpQueryIDs)
 
 	ids, err := iq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Invite").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Invite").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Invite").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Invite").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

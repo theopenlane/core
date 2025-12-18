@@ -9743,17 +9743,18 @@ func (_q *OrganizationQuery) WithNamedMembers(name string, opts ...func(*OrgMemb
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (oq *OrganizationQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "Organization").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "Organization").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, oq.ctx, ent.OpQueryIDs)
 
 	ids, err := oq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Organization").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Organization").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "Organization").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "Organization").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

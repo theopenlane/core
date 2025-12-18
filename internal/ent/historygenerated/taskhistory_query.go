@@ -478,17 +478,18 @@ func (_q *TaskHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TaskHist
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (thq *TaskHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TaskHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "TaskHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, thq.ctx, ent.OpQueryIDs)
 
 	ids, err := thq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TaskHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TaskHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TaskHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TaskHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

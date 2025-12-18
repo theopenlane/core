@@ -471,17 +471,18 @@ func (_q *OrgSubscriptionHistoryQuery) Modify(modifiers ...func(s *sql.Selector)
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (oshq *OrgSubscriptionHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscriptionHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscriptionHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, oshq.ctx, ent.OpQueryIDs)
 
 	ids, err := oshq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "OrgSubscriptionHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "OrgSubscriptionHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscriptionHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "OrgSubscriptionHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

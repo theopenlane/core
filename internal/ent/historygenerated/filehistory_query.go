@@ -478,17 +478,18 @@ func (_q *FileHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *FileHist
 
 // CountIDs returns the count of ids with FGA batch filtering applied
 func (fhq *FileHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "FileHistory").Msg("CountIDs: starting")
+	logx.FromContext(ctx).Debug().Str("query_type", "FileHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
 	ctx = setContextOp(ctx, fhq.ctx, ent.OpQueryIDs)
 
 	ids, err := fhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FileHistory").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FileHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "FileHistory").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "FileHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }
