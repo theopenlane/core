@@ -1546,12 +1546,12 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 		expectedWatermarking bool
 	}{
 		{
-			name:                 "watermarkingEnabled explicitly set to false should check config",
+			name:                 "watermarkingEnabled explicitly set to false should override global config (true)",
 			watermarkingEnabled:  lo.ToPtr(false),
-			expectedWatermarking: true,
+			expectedWatermarking: false,
 		},
 		{
-			name:                 "watermarkingEnabled not set should check config",
+			name:                 "watermarkingEnabled not set should use global config (true)",
 			watermarkingEnabled:  nil,
 			expectedWatermarking: true,
 		},
@@ -1619,6 +1619,155 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 	})
 
 	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: watermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
+
+	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
+		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
+		Only(allowCtx)
+	assert.NilError(t, err)
+
+	createPDFUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
+	t.Run("global config enabled=true, individual docs can override", func(t *testing.T) {
+		// set config to enabled
+		_, err := suite.client.db.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
+			SetIsEnabled(true).
+			Save(allowCtx)
+		assert.NilError(t, err)
+
+		testCases := []struct {
+			name                 string
+			watermarkingEnabled  *bool
+			expectedWatermarking bool
+			description          string
+		}{
+			{
+				name:                 "doc without watermarking_enabled field should use global config (true)",
+				watermarkingEnabled:  nil,
+				expectedWatermarking: true,
+				description:          "When not explicitly set, should inherit from global config",
+			},
+			{
+				name:                 "doc with watermarking_enabled=true should be enabled",
+				watermarkingEnabled:  lo.ToPtr(true),
+				expectedWatermarking: true,
+				description:          "Explicitly enabled should remain enabled",
+			},
+			{
+				name:                 "doc with watermarking_enabled=false should override global config and be disabled",
+				watermarkingEnabled:  lo.ToPtr(false),
+				expectedWatermarking: false,
+				description:          "Individual doc can override global config to disable watermarking",
+			},
+		}
+
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				file := createPDFUpload()
+				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
+
+				input := testclient.CreateTrustCenterDocInput{
+					Title:         "Test Document - " + tc.name,
+					Category:      "Policy",
+					TrustCenterID: &trustCenter.ID,
+				}
+
+				if tc.watermarkingEnabled != nil {
+					input.WatermarkingEnabled = tc.watermarkingEnabled
+				}
+
+				resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+				assert.NilError(t, err, tc.description)
+				assert.Assert(t, resp != nil)
+
+				dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+				dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled), tc.description)
+
+				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+			})
+		}
+	})
+
+	t.Run("global config enabled=false, individual docs can override", func(t *testing.T) {
+		// set global config to disabled
+		_, err := suite.client.db.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
+			SetIsEnabled(false).
+			Save(allowCtx)
+		assert.NilError(t, err)
+
+		testCases := []struct {
+			name                 string
+			watermarkingEnabled  *bool
+			expectedWatermarking bool
+			description          string
+		}{
+			{
+				name:                 "doc without watermarking_enabled field should use global config (false)",
+				watermarkingEnabled:  nil,
+				expectedWatermarking: false,
+				description:          "When not explicitly set, should inherit from global config",
+			},
+			{
+				name:                 "doc with watermarking_enabled=false should be disabled",
+				watermarkingEnabled:  lo.ToPtr(false),
+				expectedWatermarking: false,
+				description:          "Explicitly disabled should remain disabled",
+			},
+			{
+				name:                 "doc with watermarking_enabled=true should override global config and be enabled",
+				watermarkingEnabled:  lo.ToPtr(true),
+				expectedWatermarking: true,
+				description:          "Individual doc can override global config to enable watermarking",
+			},
+		}
+
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				file := createPDFUpload()
+				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
+
+				input := testclient.CreateTrustCenterDocInput{
+					Title:         "Test Document - " + tc.name,
+					Category:      "Policy",
+					TrustCenterID: &trustCenter.ID,
+				}
+
+				if tc.watermarkingEnabled != nil {
+					input.WatermarkingEnabled = tc.watermarkingEnabled
+				}
+
+				resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+				assert.NilError(t, err, tc.description)
+				assert.Assert(t, resp != nil)
+
+				dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+				dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
+				assert.NilError(t, err)
+				assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled), tc.description)
+
+				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+			})
+		}
+	})
+
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 

@@ -52046,8 +52046,10 @@ type TrustCenterDocHistoryWhereInput struct {
 	OriginalFileIDContainsFold *string  `json:"originalFileIDContainsFold,omitempty"`
 
 	// "watermarking_enabled" field predicates.
-	WatermarkingEnabled    *bool `json:"watermarkingEnabled,omitempty"`
-	WatermarkingEnabledNEQ *bool `json:"watermarkingEnabledNEQ,omitempty"`
+	WatermarkingEnabled       *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabledNEQ    *bool `json:"watermarkingEnabledNEQ,omitempty"`
+	WatermarkingEnabledIsNil  bool  `json:"watermarkingEnabledIsNil,omitempty"`
+	WatermarkingEnabledNotNil bool  `json:"watermarkingEnabledNotNil,omitempty"`
 
 	// "watermark_status" field predicates.
 	WatermarkStatus       *enums.WatermarkStatus  `json:"watermarkStatus,omitempty"`
@@ -52633,6 +52635,12 @@ func (i *TrustCenterDocHistoryWhereInput) P() (predicate.TrustCenterDocHistory, 
 	}
 	if i.WatermarkingEnabledNEQ != nil {
 		predicates = append(predicates, trustcenterdochistory.WatermarkingEnabledNEQ(*i.WatermarkingEnabledNEQ))
+	}
+	if i.WatermarkingEnabledIsNil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkingEnabledIsNil())
+	}
+	if i.WatermarkingEnabledNotNil {
+		predicates = append(predicates, trustcenterdochistory.WatermarkingEnabledNotNil())
 	}
 	if i.WatermarkStatus != nil {
 		predicates = append(predicates, trustcenterdochistory.WatermarkStatusEQ(*i.WatermarkStatus))

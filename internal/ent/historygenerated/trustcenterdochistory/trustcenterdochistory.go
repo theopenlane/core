@@ -113,8 +113,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// DefaultWatermarkingEnabled holds the default value on creation for the "watermarking_enabled" field.
-	DefaultWatermarkingEnabled bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

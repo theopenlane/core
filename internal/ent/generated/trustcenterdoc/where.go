@@ -883,6 +883,16 @@ func WatermarkingEnabledNEQ(v bool) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldWatermarkingEnabled, v))
 }
 
+// WatermarkingEnabledIsNil applies the IsNil predicate on the "watermarking_enabled" field.
+func WatermarkingEnabledIsNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIsNull(FieldWatermarkingEnabled))
+}
+
+// WatermarkingEnabledNotNil applies the NotNil predicate on the "watermarking_enabled" field.
+func WatermarkingEnabledNotNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldWatermarkingEnabled))
+}
+
 // WatermarkStatusEQ applies the EQ predicate on the "watermark_status" field.
 func WatermarkStatusEQ(v enums.WatermarkStatus) predicate.TrustCenterDoc {
 	vc := v

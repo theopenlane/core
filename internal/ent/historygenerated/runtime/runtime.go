@@ -2205,10 +2205,6 @@ func init() {
 	trustcenterdochistoryDescTags := trustcenterdochistoryFields[10].Descriptor()
 	// trustcenterdochistory.DefaultTags holds the default value on creation for the tags field.
 	trustcenterdochistory.DefaultTags = trustcenterdochistoryDescTags.Default.([]string)
-	// trustcenterdochistoryDescWatermarkingEnabled is the schema descriptor for watermarking_enabled field.
-	trustcenterdochistoryDescWatermarkingEnabled := trustcenterdochistoryFields[16].Descriptor()
-	// trustcenterdochistory.DefaultWatermarkingEnabled holds the default value on creation for the watermarking_enabled field.
-	trustcenterdochistory.DefaultWatermarkingEnabled = trustcenterdochistoryDescWatermarkingEnabled.Default.(bool)
 	// trustcenterdochistoryDescID is the schema descriptor for id field.
 	trustcenterdochistoryDescID := trustcenterdochistoryFields[9].Descriptor()
 	// trustcenterdochistory.DefaultID holds the default value on creation for the id field.

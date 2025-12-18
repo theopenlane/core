@@ -144,8 +144,6 @@ var (
 	TitleValidator func(string) error
 	// CategoryValidator is a validator for the "category" field. It is called by the builders before save.
 	CategoryValidator func(string) error
-	// DefaultWatermarkingEnabled holds the default value on creation for the "watermarking_enabled" field.
-	DefaultWatermarkingEnabled bool
 	// StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
 	StandardIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.

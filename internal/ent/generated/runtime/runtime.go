@@ -6355,10 +6355,6 @@ func init() {
 	trustcenterdocDescCategory := trustcenterdocFields[2].Descriptor()
 	// trustcenterdoc.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
 	trustcenterdoc.CategoryValidator = trustcenterdocDescCategory.Validators[0].(func(string) error)
-	// trustcenterdocDescWatermarkingEnabled is the schema descriptor for watermarking_enabled field.
-	trustcenterdocDescWatermarkingEnabled := trustcenterdocFields[5].Descriptor()
-	// trustcenterdoc.DefaultWatermarkingEnabled holds the default value on creation for the watermarking_enabled field.
-	trustcenterdoc.DefaultWatermarkingEnabled = trustcenterdocDescWatermarkingEnabled.Default.(bool)
 	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
 	trustcenterdocDescStandardID := trustcenterdocFields[8].Descriptor()
 	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.

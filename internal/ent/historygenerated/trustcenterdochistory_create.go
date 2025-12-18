@@ -332,10 +332,6 @@ func (_c *TrustCenterDocHistoryCreate) defaults() error {
 		v := trustcenterdochistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
-	if _, ok := _c.mutation.WatermarkingEnabled(); !ok {
-		v := trustcenterdochistory.DefaultWatermarkingEnabled
-		_c.mutation.SetWatermarkingEnabled(v)
-	}
 	if _, ok := _c.mutation.WatermarkStatus(); !ok {
 		v := trustcenterdochistory.DefaultWatermarkStatus
 		_c.mutation.SetWatermarkStatus(v)
@@ -372,9 +368,6 @@ func (_c *TrustCenterDocHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Category(); !ok {
 		return &ValidationError{Name: "category", err: errors.New(`historygenerated: missing required field "TrustCenterDocHistory.category"`)}
-	}
-	if _, ok := _c.mutation.WatermarkingEnabled(); !ok {
-		return &ValidationError{Name: "watermarking_enabled", err: errors.New(`historygenerated: missing required field "TrustCenterDocHistory.watermarking_enabled"`)}
 	}
 	if v, ok := _c.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {

@@ -24596,7 +24596,7 @@ type TrustCenterDoc struct {
 	// ID of the file containing the document, before any watermarking
 	OriginalFileID *string `json:"originalFileID,omitempty"`
 	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
-	WatermarkingEnabled bool `json:"watermarkingEnabled"`
+	WatermarkingEnabled *bool `json:"watermarkingEnabled,omitempty"`
 	// status of the watermarking
 	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
@@ -24825,8 +24825,10 @@ type TrustCenterDocWhereInput struct {
 	OriginalFileIDEqualFold    *string  `json:"originalFileIDEqualFold,omitempty"`
 	OriginalFileIDContainsFold *string  `json:"originalFileIDContainsFold,omitempty"`
 	// watermarking_enabled field predicates
-	WatermarkingEnabled    *bool `json:"watermarkingEnabled,omitempty"`
-	WatermarkingEnabledNeq *bool `json:"watermarkingEnabledNEQ,omitempty"`
+	WatermarkingEnabled       *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabledNeq    *bool `json:"watermarkingEnabledNEQ,omitempty"`
+	WatermarkingEnabledIsNil  *bool `json:"watermarkingEnabledIsNil,omitempty"`
+	WatermarkingEnabledNotNil *bool `json:"watermarkingEnabledNotNil,omitempty"`
 	// watermark_status field predicates
 	WatermarkStatus       *enums.WatermarkStatus  `json:"watermarkStatus,omitempty"`
 	WatermarkStatusNeq    *enums.WatermarkStatus  `json:"watermarkStatusNEQ,omitempty"`
@@ -29784,7 +29786,8 @@ type UpdateTrustCenterDocInput struct {
 	// category of the document
 	Category *string `json:"category,omitempty"`
 	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
-	WatermarkingEnabled *bool `json:"watermarkingEnabled,omitempty"`
+	WatermarkingEnabled      *bool `json:"watermarkingEnabled,omitempty"`
+	ClearWatermarkingEnabled *bool `json:"clearWatermarkingEnabled,omitempty"`
 	// status of the watermarking
 	WatermarkStatus      *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	ClearWatermarkStatus *bool                  `json:"clearWatermarkStatus,omitempty"`

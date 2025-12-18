@@ -2025,7 +2025,7 @@ var (
 		{Name: "category", Type: field.TypeString},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "watermarking_enabled", Type: field.TypeBool, Default: false},
+		{Name: "watermarking_enabled", Type: field.TypeBool, Nullable: true},
 		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
