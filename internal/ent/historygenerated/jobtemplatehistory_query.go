@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,19 @@ func (_q *JobTemplateHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *J
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (jthq *JobTemplateHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "JobTemplateHistory").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, jthq.ctx, ent.OpQueryIDs)
-	if err := jthq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return jthq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, jthq, qr, jthq.inters)
+	ids, err := jthq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "JobTemplateHistory").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "JobTemplateHistory").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -550,21 +551,19 @@ func (_q *GroupSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *GroupSe
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (gsq *GroupSettingQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "GroupSetting").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, gsq.ctx, ent.OpQueryIDs)
-	if err := gsq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return gsq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, gsq, qr, gsq.inters)
+	ids, err := gsq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "GroupSetting").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "GroupSetting").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

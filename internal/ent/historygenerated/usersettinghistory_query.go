@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,19 @@ func (_q *UserSettingHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *U
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (ushq *UserSettingHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "UserSettingHistory").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, ushq.ctx, ent.OpQueryIDs)
-	if err := ushq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return ushq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, ushq, qr, ushq.inters)
+	ids, err := ushq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "UserSettingHistory").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "UserSettingHistory").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -658,21 +659,19 @@ func (_q *DNSVerificationQuery) WithNamedCustomDomains(name string, opts ...func
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (dvq *DNSVerificationQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "DNSVerification").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, dvq.ctx, ent.OpQueryIDs)
-	if err := dvq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return dvq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, dvq, qr, dvq.inters)
+	ids, err := dvq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DNSVerification").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "DNSVerification").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,19 @@ func (_q *NoteHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *NoteHist
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (nhq *NoteHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "NoteHistory").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, nhq.ctx, ent.OpQueryIDs)
-	if err := nhq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return nhq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, nhq, qr, nhq.inters)
+	ids, err := nhq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "NoteHistory").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "NoteHistory").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

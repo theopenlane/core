@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1459,21 +1460,19 @@ func (_q *CustomTypeEnumQuery) WithNamedPrograms(name string, opts ...func(*Prog
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (cteq *CustomTypeEnumQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "CustomTypeEnum").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, cteq.ctx, ent.OpQueryIDs)
-	if err := cteq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return cteq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, cteq, qr, cteq.inters)
+	ids, err := cteq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "CustomTypeEnum").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "CustomTypeEnum").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

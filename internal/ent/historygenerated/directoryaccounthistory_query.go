@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/directoryaccounthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,19 @@ func (_q *DirectoryAccountHistoryQuery) Modify(modifiers ...func(s *sql.Selector
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (dahq *DirectoryAccountHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccountHistory").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, dahq.ctx, ent.OpQueryIDs)
-	if err := dahq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return dahq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, dahq, qr, dahq.inters)
+	ids, err := dahq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectoryAccountHistory").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccountHistory").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

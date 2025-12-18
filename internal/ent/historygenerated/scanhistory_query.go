@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,19 @@ func (_q *ScanHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ScanHist
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (shq *ScanHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "ScanHistory").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, shq.ctx, ent.OpQueryIDs)
-	if err := shq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return shq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, shq, qr, shq.inters)
+	ids, err := shq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ScanHistory").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "ScanHistory").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

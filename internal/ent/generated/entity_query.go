@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1756,21 +1757,19 @@ func (_q *EntityQuery) WithNamedScans(name string, opts ...func(*ScanQuery)) *En
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (eq *EntityQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "Entity").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, eq.ctx, ent.OpQueryIDs)
-	if err := eq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return eq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, eq, qr, eq.inters)
+	ids, err := eq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Entity").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "Entity").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

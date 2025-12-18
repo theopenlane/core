@@ -235,11 +235,7 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusInternalServerError, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusInternalServerError, errorResponse)
 }
 
 // Unauthorized returns a 401 Unauthorized response with the error message.
@@ -264,11 +260,7 @@ func (h *Handler) Unauthorized(ctx echo.Context, err error, openapi ...*OpenAPIC
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusUnauthorized, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusUnauthorized, errorResponse)
 }
 
 // NotFound returns a 404 Not Found response with the error message.
@@ -293,11 +285,7 @@ func (h *Handler) NotFound(ctx echo.Context, err error, openapi ...*OpenAPIConte
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusNotFound, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusNotFound, errorResponse)
 }
 
 // BadRequest returns a 400 Bad Request response with the error message.
@@ -322,11 +310,7 @@ func (h *Handler) BadRequest(ctx echo.Context, err error, openapi ...*OpenAPICon
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusBadRequest, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusBadRequest, errorResponse)
 }
 
 // BadRequestWithCode returns a 400 Bad Request response with the error message and code.
@@ -351,11 +335,7 @@ func (h *Handler) BadRequestWithCode(ctx echo.Context, err error, code rout.Erro
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusBadRequest, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusBadRequest, errorResponse)
 }
 
 // InvalidInput returns a 400 Bad Request response with the error message.
@@ -380,11 +360,7 @@ func (h *Handler) InvalidInput(ctx echo.Context, err error, openapi ...*OpenAPIC
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusBadRequest, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusBadRequest, errorResponse)
 }
 
 // Conflict returns a 409 Conflict response with the error message.
@@ -438,11 +414,7 @@ func (h *Handler) TooManyRequests(ctx echo.Context, err error, openapi ...*OpenA
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusTooManyRequests, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusTooManyRequests, errorResponse)
 }
 
 // Success returns a 200 OK response with the response object.
@@ -554,11 +526,7 @@ func (h *Handler) Forbidden(ctx echo.Context, err error, openapi ...*OpenAPICont
 		}
 	}
 
-	if jsonErr := ctx.JSON(http.StatusForbidden, errorResponse); jsonErr != nil {
-		return jsonErr
-	}
-
-	return err
+	return ctx.JSON(http.StatusForbidden, errorResponse)
 }
 
 // Redirect returns a 302 Found response with the location header.

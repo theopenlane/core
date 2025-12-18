@@ -173,6 +173,8 @@ func filterQueryResults[V any](ctx context.Context, query ent.Query, next ent.Qu
 			return nil, ErrRetrievingObjects
 		}
 
+		logx.FromContext(ctx).Debug().Str("query_type", q.Type()).Int("id_count_before_filter", len(ids)).Msg("FilterQueryResults: OpQueryIDs path, calling filterIDList")
+
 		return filterIDList(ctx, ids, getFGAObjectType(q))
 	case ent.OpQueryOnlyID:
 		allow, err := singleIDCheck(ctx, v, getFGAObjectType(q))
@@ -222,12 +224,14 @@ func skipFilter(ctx context.Context, customSkipperFunc ...skipperFunc) bool {
 
 // filterIDList filters a list of object ids to only include the objects that the user has access to
 func filterIDList(ctx context.Context, ids []string, objectType string) ([]string, error) {
-	logx.FromContext(ctx).Debug().Str("object", objectType).Strs("ids", ids).Msg("filterIDList")
+	logx.FromContext(ctx).Debug().Str("object", objectType).Int("id_count", len(ids)).Msg("filterIDList: calling filterAuthorizedObjectIDs for FGA batch check")
 
 	allowedIDs, err := filterAuthorizedObjectIDs(ctx, objectType, ids)
 	if err != nil {
 		return nil, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("object", objectType).Int("allowed_count", len(allowedIDs)).Int("filtered_count", len(ids)-len(allowedIDs)).Msg("filterIDList: FGA batch check complete")
 
 	return allowedIDs, nil
 }

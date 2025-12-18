@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,19 @@ func (_q *TrustCenterWatermarkConfigHistoryQuery) Modify(modifiers ...func(s *sq
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (tcwchq *TrustCenterWatermarkConfigHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterWatermarkConfigHistory").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, tcwchq.ctx, ent.OpQueryIDs)
-	if err := tcwchq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return tcwchq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, tcwchq, qr, tcwchq.inters)
+	ids, err := tcwchq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterWatermarkConfigHistory").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterWatermarkConfigHistory").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

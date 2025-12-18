@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -2323,21 +2324,19 @@ func (_q *RemediationQuery) WithNamedFiles(name string, opts ...func(*FileQuery)
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (rq *RemediationQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "Remediation").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, rq.ctx, ent.OpQueryIDs)
-	if err := rq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return rq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, rq, qr, rq.inters)
+	ids, err := rq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Remediation").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "Remediation").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -689,21 +690,19 @@ func (_q *JobRunnerQuery) WithNamedJobRunnerTokens(name string, opts ...func(*Jo
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (jrq *JobRunnerQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "JobRunner").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, jrq.ctx, ent.OpQueryIDs)
-	if err := jrq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return jrq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, jrq, qr, jrq.inters)
+	ids, err := jrq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "JobRunner").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "JobRunner").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1054,21 +1055,19 @@ func (_q *DirectoryAccountQuery) WithNamedMemberships(name string, opts ...func(
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (daq *DirectoryAccountQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccount").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, daq.ctx, ent.OpQueryIDs)
-	if err := daq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return daq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, daq, qr, daq.inters)
+	ids, err := daq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectoryAccount").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectoryAccount").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

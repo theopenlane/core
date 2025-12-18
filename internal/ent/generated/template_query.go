@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -965,21 +966,19 @@ func (_q *TemplateQuery) WithNamedAssessments(name string, opts ...func(*Assessm
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (tq *TemplateQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "Template").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, tq.ctx, ent.OpQueryIDs)
-	if err := tq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return tq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, tq, qr, tq.inters)
+	ids, err := tq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Template").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "Template").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

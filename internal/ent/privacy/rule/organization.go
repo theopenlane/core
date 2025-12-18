@@ -45,7 +45,7 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 			return privacy.Allow
 		}
 
-		return checkOrgAccess(ctx, relation, orgID)
+		return checkOrgAccess(ctx, relation, orgID, m)
 	}
 
 	// else we need to get the object id from the mutation and get the owner id, this should only happen on deletes when using personal access tokens
@@ -53,7 +53,7 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 	if ok {
 		orgID, ok = mut.OwnerID()
 		if ok && orgID != "" {
-			return checkOrgAccess(ctx, relation, orgID)
+			return checkOrgAccess(ctx, relation, orgID, m)
 		}
 	}
 
@@ -86,7 +86,7 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 	}
 
 	for _, org := range requestedOrgs {
-		if err := checkOrgAccess(ctx, relation, org.ID); err != nil && errors.Is(err, privacy.Deny) {
+		if err := checkOrgAccess(ctx, relation, org.ID, nil); err != nil && errors.Is(err, privacy.Deny) {
 			return err
 		}
 	}
@@ -95,7 +95,8 @@ func CheckOrgAccessBasedOnRequest(ctx context.Context, relation string, query *g
 }
 
 // checkOrgAccess checks if the authenticated user has access to the organization
-func checkOrgAccess(ctx context.Context, relation, organizationID string) error {
+// and logs additional context about the mutation if provided
+func checkOrgAccess(ctx context.Context, relation, organizationID string, m ent.Mutation) error {
 	// skip if permission is already set to allow or if it's an internal request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || IsInternalRequest(ctx) {
 		return nil
@@ -148,7 +149,27 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string) error 
 	}
 
 	// deny if it was a mutation is not allowed
-	logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", au.SubjectID).Str("email", au.SubjectEmail).Str("organization_id", organizationID).Msg("request denied by access for user in organization")
+	logger := logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", au.SubjectID).Str("email", au.SubjectEmail).Str("organization_id", organizationID)
+
+	// add authentication type
+	logger = logger.Str("auth_type", string(au.AuthenticationType))
+
+	// check if this is an impersonated request
+	if impUser, ok := auth.ImpersonatedUserFromContext(ctx); ok {
+		logger = logger.Bool("impersonated", true).Str("impersonator_id", impUser.ImpersonationContext.ImpersonatorID).Str("impersonator_email", impUser.ImpersonationContext.ImpersonatorEmail)
+	}
+
+	// add mutation context if available
+	if m != nil {
+		logger = logger.Str("entity_type", m.Type()).Str("operation", m.Op().String())
+		if mut, ok := m.(genericMutation); ok {
+			if entityID, exists := mut.ID(); exists && entityID != "" {
+				logger = logger.Str("entity_id", entityID)
+			}
+		}
+	}
+
+	logger.Msg("request denied by access for user in organization")
 
 	return generated.ErrPermissionDenied
 }
@@ -198,8 +219,11 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 				}
 
 				if !access {
-					logx.FromContext(ctx).Error().Str("relation", relation).Str("organization_id", parentOrgID).
-						Msg("access denied to parent org")
+					logger := logx.FromContext(ctx).Error().Str("relation", relation).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Str("organization_id", parentOrgID).Str("auth_type", string(user.AuthenticationType))
+					if impUser, ok := auth.ImpersonatedUserFromContext(ctx); ok {
+						logger = logger.Bool("impersonated", true).Str("impersonator_id", impUser.ImpersonationContext.ImpersonatorID).Str("impersonator_email", impUser.ImpersonationContext.ImpersonatorEmail)
+					}
+					logger.Msg("access denied to parent org")
 
 					return generated.ErrPermissionDenied
 				}
@@ -245,7 +269,11 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
-		logx.FromContext(ctx).Info().Str("relation", relation).Str("subject_id", user.SubjectID).Str("email", user.SubjectEmail).Str("organization_id", user.OrganizationID).Msg("request denied by access for user in organization")
+		logger := logx.FromContext(ctx).Info().Str("relation", relation).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Str("subject_id", user.SubjectID).Str("email", user.SubjectEmail).Str("organization_id", oID).Str("auth_type", string(user.AuthenticationType))
+		if impUser, ok := auth.ImpersonatedUserFromContext(ctx); ok {
+			logger = logger.Bool("impersonated", true).Str("impersonator_id", impUser.ImpersonationContext.ImpersonatorID).Str("impersonator_email", impUser.ImpersonationContext.ImpersonatorEmail)
+		}
+		logger.Msg("request denied by access for user in organization")
 
 		return generated.ErrPermissionDenied
 	})

@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -767,21 +768,19 @@ func (_q *OrgMembershipQuery) WithNamedEvents(name string, opts ...func(*EventQu
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (omq *OrgMembershipQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "OrgMembership").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, omq.ctx, ent.OpQueryIDs)
-	if err := omq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return omq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, omq, qr, omq.inters)
+	ids, err := omq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "OrgMembership").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "OrgMembership").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

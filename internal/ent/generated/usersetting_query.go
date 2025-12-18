@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -643,21 +644,19 @@ func (_q *UserSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *UserSett
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (usq *UserSettingQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "UserSetting").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, usq.ctx, ent.OpQueryIDs)
-	if err := usq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return usq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, usq, qr, usq.inters)
+	ids, err := usq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "UserSetting").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "UserSetting").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

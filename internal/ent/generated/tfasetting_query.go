@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -557,21 +558,19 @@ func (_q *TFASettingQuery) Modify(modifiers ...func(s *sql.Selector)) *TFASettin
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (tsq *TFASettingQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "TFASetting").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, tsq.ctx, ent.OpQueryIDs)
-	if err := tsq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return tsq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, tsq, qr, tsq.inters)
+	ids, err := tsq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TFASetting").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "TFASetting").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

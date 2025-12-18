@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -796,21 +797,19 @@ func (_q *TrustCenterDocQuery) Modify(modifiers ...func(s *sql.Selector)) *Trust
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (tcdq *TrustCenterDocQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterDoc").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, tcdq.ctx, ent.OpQueryIDs)
-	if err := tcdq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return tcdq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, tcdq, qr, tcdq.inters)
+	ids, err := tcdq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterDoc").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterDoc").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

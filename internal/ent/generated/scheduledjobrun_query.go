@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -713,21 +714,19 @@ func (_q *ScheduledJobRunQuery) Modify(modifiers ...func(s *sql.Selector)) *Sche
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (sjrq *ScheduledJobRunQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "ScheduledJobRun").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, sjrq.ctx, ent.OpQueryIDs)
-	if err := sjrq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return sjrq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, sjrq, qr, sjrq.inters)
+	ids, err := sjrq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ScheduledJobRun").Msg("CountIDs: IDs() failed")
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "ScheduledJobRun").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }
