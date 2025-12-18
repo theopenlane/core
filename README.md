@@ -187,12 +187,6 @@ You can load up a local openFGA environment with the compose setup in this
 repository; `task fga:up` - this will launch an interactive playground where you
 can model permissions model(s) or changes to the models
 
-### Windmill
-
-We use Windmill to run automated scripts periodically amongst others. You can
-load up a local instance by running `task docker:windmill:up`. This will
-launch the Windmill UI console where you can manage your tokens and/or workspaces
-
 ### Creating a new Schema
 
 To ease the effort required to add additional schemas into the system a

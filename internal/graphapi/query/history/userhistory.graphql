@@ -1,0 +1,87 @@
+
+
+query GetAllUserHistories {
+  userHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authProvider
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayID
+        displayName
+        email
+        firstName
+        historyTime
+        id
+        lastLoginProvider
+        lastName
+        lastSeen
+        operation
+        ref
+        role
+        scimActive
+        scimExternalID
+        scimLocale
+        scimPreferredLanguage
+        scimUsername
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetUserHistories($first: Int, $last: Int, $where: UserHistoryWhereInput) {
+  userHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authProvider
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayID
+        displayName
+        email
+        firstName
+        historyTime
+        id
+        lastLoginProvider
+        lastName
+        lastSeen
+        operation
+        ref
+        role
+        scimActive
+        scimExternalID
+        scimLocale
+        scimPreferredLanguage
+        scimUsername
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

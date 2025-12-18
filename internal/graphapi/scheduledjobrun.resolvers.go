@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -18,7 +19,7 @@ import (
 // CreateScheduledJobRun is the resolver for the createScheduledJobRun field.
 func (r *mutationResolver) CreateScheduledJobRun(ctx context.Context, input generated.CreateScheduledJobRunInput) (*model.ScheduledJobRunCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -26,7 +27,7 @@ func (r *mutationResolver) CreateScheduledJobRun(ctx context.Context, input gene
 
 	res, err := withTransactionalMutation(ctx).ScheduledJobRun.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "scheduledjobrun"})
 	}
 
 	return &model.ScheduledJobRunCreatePayload{
@@ -38,11 +39,11 @@ func (r *mutationResolver) CreateScheduledJobRun(ctx context.Context, input gene
 func (r *mutationResolver) UpdateScheduledJobRun(ctx context.Context, id string, input generated.UpdateScheduledJobRunInput) (*model.ScheduledJobRunUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ScheduledJobRun.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scheduledjobrun"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -53,7 +54,7 @@ func (r *mutationResolver) UpdateScheduledJobRun(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "scheduledjobrun"})
 	}
 
 	return &model.ScheduledJobRunUpdatePayload{
@@ -64,11 +65,11 @@ func (r *mutationResolver) UpdateScheduledJobRun(ctx context.Context, id string,
 // DeleteScheduledJobRun is the resolver for the deleteScheduledJobRun field.
 func (r *mutationResolver) DeleteScheduledJobRun(ctx context.Context, id string) (*model.ScheduledJobRunDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ScheduledJobRun.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "scheduledjobrun"})
 	}
 
 	if err := generated.ScheduledJobRunEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ScheduledJobRunDeletePayload{
@@ -80,12 +81,12 @@ func (r *mutationResolver) DeleteScheduledJobRun(ctx context.Context, id string)
 func (r *queryResolver) ScheduledJobRun(ctx context.Context, id string) (*generated.ScheduledJobRun, error) {
 	query, err := withTransactionalMutation(ctx).ScheduledJobRun.Query().Where(scheduledjobrun.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "scheduledjobrun"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "scheduledjobrun"})
 	}
 
 	return res, nil

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
@@ -69,7 +70,7 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 		WithNarrativeBlockedGroups().
 		Paginate(ctx, after, first, before, last)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "group"})
 	}
 
 	for _, r := range res.Edges {
@@ -121,7 +122,7 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 // CreateGroupWithMembers is the resolver for the createGroupWithMembers field.
 func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -129,7 +130,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 
 	res, err := r.CreateGroup(ctx, groupInput)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	if len(members) > 0 {
@@ -144,7 +145,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		}
 
 		if _, err := r.CreateBulkGroupMembership(ctx, memberInput); err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 		}
 	}
 
@@ -154,12 +155,12 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		Where(group.IDEQ(res.Group.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	return &model.GroupCreatePayload{
@@ -170,7 +171,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 // CreateGroupByClone is the resolver for the createGroupByClone field.
 func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -179,7 +180,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 	if inheritGroupPermissions != nil {
 		groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, inheritGroupPermissions)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 		}
 
 		for _, controlEditor := range groupWithPermissions.Edges.ControlEditors {
@@ -277,17 +278,17 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 
 	res, err := withTransactionalMutation(ctx).Group.Create().SetInput(groupInput).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	if cloneGroupMembers != nil {
 		existingMembers, err := res.QueryMembers().All(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 		}
 
 		if err := r.createGroupMembersViaClone(ctx, cloneGroupMembers, res.ID, existingMembers); err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 		}
 	}
 
@@ -296,12 +297,12 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		WithMembers().
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	return &model.GroupCreatePayload{
@@ -312,7 +313,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 // CreateGroupSettings is the resolver for the createGroupSettings field.
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.ErrPermissionDenied
@@ -320,7 +321,7 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 
 	groupSettings, err := withTransactionalMutation(ctx).GroupSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	obj.SettingID = &groupSettings.ID
@@ -338,7 +339,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 	if groupID == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get group from context")
 
-		return ErrInternalServerError
+		return common.ErrInternalServerError
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -350,7 +351,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 	}
 
 	if err := c.GroupMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 	}
 
 	return nil
@@ -366,7 +367,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 	if groupID == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get group from context")
 
-		return ErrInternalServerError
+		return common.ErrInternalServerError
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -376,7 +377,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 			Where(groupmembership.GroupID(*groupID)).
 			Exec(ctx); err != nil {
 
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 		}
 	}
 
@@ -389,7 +390,7 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 	if groupID == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get group from context")
 
-		return ErrInternalServerError
+		return common.ErrInternalServerError
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -399,12 +400,12 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 	if settingID == nil {
 		group, err := c.Group.Get(ctx, *groupID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 		}
 
 		setting, err := group.Setting(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "group"})
 		}
 
 		settingID = &setting.ID
@@ -422,7 +423,7 @@ func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, 
 
 	groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, data)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	for _, controlEditor := range groupWithPermissions.Edges.ControlEditors {

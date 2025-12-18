@@ -1,0 +1,53 @@
+query GetAllGroupMembershipHistories {
+  groupMembershipHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        groupID
+        historyTime
+        id
+        operation
+        ref
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}
+
+query GetGroupMembershipHistories($first: Int, $last: Int, $where: GroupMembershipHistoryWhereInput) {
+  groupMembershipHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        groupID
+        historyTime
+        id
+        operation
+        ref
+        role
+        updatedAt
+        updatedBy
+        userID
+      }
+    }
+  }
+}

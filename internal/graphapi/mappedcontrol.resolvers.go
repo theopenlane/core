@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 // CreateMappedControl is the resolver for the createMappedControl field.
 func (r *mutationResolver) CreateMappedControl(ctx context.Context, input generated.CreateMappedControlInput) (*model.MappedControlCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -28,7 +29,7 @@ func (r *mutationResolver) CreateMappedControl(ctx context.Context, input genera
 
 	res, err := withTransactionalMutation(ctx).MappedControl.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	return &model.MappedControlCreatePayload{
@@ -44,7 +45,7 @@ func (r *mutationResolver) CreateBulkMappedControl(ctx context.Context, input []
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -55,11 +56,11 @@ func (r *mutationResolver) CreateBulkMappedControl(ctx context.Context, input []
 
 // CreateBulkCSVMappedControl is the resolver for the createBulkCSVMappedControl field.
 func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input graphql.Upload) (*model.MappedControlBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[extendedMappedControlInput](input)
+	data, err := common.UnmarshalBulkData[ExtendedMappedControlInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 	}
 
 	if len(data) == 0 {
@@ -68,7 +69,7 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -79,28 +80,28 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 	for _, obj := range data {
 		ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, obj.FromControlRefCodes)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 		}
 
 		obj.FromControlIDs = ids
 
 		ids, err = getControlIDsFromRefCodes[predicate.Subcontrol](ctx, obj.FromSubcontrolRefCodes)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 		}
 
 		obj.FromSubcontrolIDs = ids
 
 		ids, err = getControlIDsFromRefCodes[predicate.Control](ctx, obj.ToControlRefCodes)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 		}
 
 		obj.ToControlIDs = ids
 
 		ids, err = getControlIDsFromRefCodes[predicate.Subcontrol](ctx, obj.ToSubcontrolRefCodes)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "mappedcontrol"})
 		}
 
 		obj.ToSubcontrolIDs = ids
@@ -116,11 +117,11 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, input generated.UpdateMappedControlInput) (*model.MappedControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).MappedControl.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -131,7 +132,7 @@ func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "mappedcontrol"})
 	}
 
 	return &model.MappedControlUpdatePayload{
@@ -142,11 +143,11 @@ func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, i
 // DeleteMappedControl is the resolver for the deleteMappedControl field.
 func (r *mutationResolver) DeleteMappedControl(ctx context.Context, id string) (*model.MappedControlDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "mappedcontrol"})
 	}
 
 	if err := generated.MappedControlEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.MappedControlDeletePayload{
@@ -167,12 +168,12 @@ func (r *mutationResolver) DeleteBulkMappedControl(ctx context.Context, ids []st
 func (r *queryResolver) MappedControl(ctx context.Context, id string) (*generated.MappedControl, error) {
 	query, err := withTransactionalMutation(ctx).MappedControl.Query().Where(mappedcontrol.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "mappedcontrol"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "mappedcontrol"})
 	}
 
 	return res, nil

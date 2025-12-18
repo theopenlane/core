@@ -26,14 +26,14 @@ import (
 // This function is intended to filter the query before it is run using the ListObjectsRequest
 // and should not be used for large lists
 func FilterListQuery() ent.Interceptor {
-	return intercept.TraverseFunc(AddIDPredicate)
+	return TraverseFunc(AddIDPredicate)
 }
 
 // AddIDPredicate adds a predicate to the query to only include the objects that the user has access to
 // This should only be used for queries where we are not directly filtering on the `id` field of the object
 // e.g. memberships and history tables, and when there are a limited number of objects to filter
 // the FilterQueryResults function should be used in most cases due to performance issues of ListObjectsRequest
-func AddIDPredicate(ctx context.Context, q intercept.Query) error {
+func AddIDPredicate(ctx context.Context, q Query) error {
 	// by pass checks on invite or pre-allowed request
 	if _, allow := privacy.DecisionFromContext(ctx); allow || rule.IsInternalRequest(ctx) {
 		return nil
@@ -97,7 +97,10 @@ func GetAuthorizedObjectIDs(ctx context.Context, queryType string, relation fgax
 	if strings.Contains(queryType, "History") {
 		logx.FromContext(ctx).Debug().Msg("adding history relation to list request")
 
-		req.Relation = fgax.CanViewAuditLog
+		// this was audit_log_viewer but changed to CanView to be consistent
+		// if you can view an object, you should be able to see the history of it
+		// TODO(sfunk): clean-up this in FGA policies
+		req.Relation = fgax.CanView
 	}
 
 	logx.FromContext(ctx).Debug().Interface("req", req).Msg("getting authorized object ids")

@@ -84,6 +84,12 @@ const (
 	FieldInternalPolicyKindName = "internal_policy_kind_name"
 	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
 	FieldInternalPolicyKindID = "internal_policy_kind_id"
+	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
+	FieldProposedChanges = "proposed_changes"
+	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
+	FieldProposedByUserID = "proposed_by_user_id"
+	// FieldProposedAt holds the string denoting the proposed_at field in the database.
+	FieldProposedAt = "proposed_at"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -118,6 +124,8 @@ const (
 	EdgeFile = "file"
 	// EdgeComments holds the string denoting the comments edge name in mutations.
 	EdgeComments = "comments"
+	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
+	EdgeDiscussions = "discussions"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the internalpolicy in the database.
@@ -221,6 +229,13 @@ const (
 	CommentsInverseTable = "notes"
 	// CommentsColumn is the table column denoting the comments relation/edge.
 	CommentsColumn = "internal_policy_comments"
+	// DiscussionsTable is the table that holds the discussions relation/edge.
+	DiscussionsTable = "discussions"
+	// DiscussionsInverseTable is the table name for the Discussion entity.
+	// It exists in this package in order to avoid circular dependency with the "discussion" package.
+	DiscussionsInverseTable = "discussions"
+	// DiscussionsColumn is the table column denoting the discussions relation/edge.
+	DiscussionsColumn = "internal_policy_discussions"
 	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
 	WorkflowObjectRefsTable = "workflow_object_refs"
 	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
@@ -266,6 +281,9 @@ var Columns = []string{
 	FieldFileID,
 	FieldInternalPolicyKindName,
 	FieldInternalPolicyKindID,
+	FieldProposedChanges,
+	FieldProposedByUserID,
+	FieldProposedAt,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
@@ -531,6 +549,16 @@ func ByInternalPolicyKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalPolicyKindID, opts...).ToFunc()
 }
 
+// ByProposedByUserID orders the results by the proposed_by_user_id field.
+func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
+}
+
+// ByProposedAt orders the results by the proposed_at field.
+func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -734,6 +762,20 @@ func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByDiscussionsCount orders the results by discussions count.
+func ByDiscussionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDiscussionsStep(), opts...)
+	}
+}
+
+// ByDiscussions orders the results by discussions terms.
+func ByDiscussions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDiscussionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
 func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -864,6 +906,13 @@ func newCommentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CommentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+	)
+}
+func newDiscussionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DiscussionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
 	)
 }
 func newWorkflowObjectRefsStep() *sqlgraph.Step {

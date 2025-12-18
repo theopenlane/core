@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -610,6 +611,21 @@ func (_c *RiskCreate) AddComments(v ...*Note) *RiskCreate {
 	return _c.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_c *RiskCreate) AddDiscussionIDs(ids ...string) *RiskCreate {
+	_c.mutation.AddDiscussionIDs(ids...)
+	return _c
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_c *RiskCreate) AddDiscussions(v ...*Discussion) *RiskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddDiscussionIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (_c *RiskCreate) Mutation() *RiskMutation {
 	return _c.mutation
@@ -1164,6 +1180,23 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

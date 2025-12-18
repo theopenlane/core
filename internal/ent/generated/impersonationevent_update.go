@@ -365,6 +365,11 @@ func (_u *ImpersonationEventUpdate) check() error {
 			return &ValidationError{Name: "action", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.action": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IPAddress(); ok {
+		if err := impersonationevent.IPAddressValidator(v); err != nil {
+			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.ip_address": %w`, err)}
+		}
+	}
 	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "ImpersonationEvent.user"`)
 	}
@@ -929,6 +934,11 @@ func (_u *ImpersonationEventUpdateOne) check() error {
 	if v, ok := _u.mutation.Action(); ok {
 		if err := impersonationevent.ActionValidator(v); err != nil {
 			return &ValidationError{Name: "action", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.action": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.IPAddress(); ok {
+		if err := impersonationevent.IPAddressValidator(v); err != nil {
+			return &ValidationError{Name: "ip_address", err: fmt.Errorf(`generated: validator failed for field "ImpersonationEvent.ip_address": %w`, err)}
 		}
 	}
 	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {

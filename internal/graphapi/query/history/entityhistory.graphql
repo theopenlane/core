@@ -1,0 +1,71 @@
+
+
+query GetAllEntityHistories {
+  entityHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        domains
+        entityTypeID
+        historyTime
+        id
+        internalNotes
+        name
+        operation
+        ownerID
+        ref
+        status
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetEntityHistories($first: Int, $last: Int, $where: EntityHistoryWhereInput) {
+  entityHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        domains
+        entityTypeID
+        historyTime
+        id
+        internalNotes
+        name
+        operation
+        ownerID
+        ref
+        status
+        systemInternalID
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

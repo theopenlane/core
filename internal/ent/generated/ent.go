@@ -13,158 +13,95 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/assethistory"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/event"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
-	"github.com/theopenlane/core/internal/ent/generated/filehistory"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/generated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/notehistory"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
 	"github.com/theopenlane/core/internal/ent/generated/orgprice"
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/taskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentityhistory"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -225,159 +162,96 @@ var (
 func checkColumn(t, c string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			apitoken.Table:                          apitoken.ValidColumn,
-			actionplan.Table:                        actionplan.ValidColumn,
-			actionplanhistory.Table:                 actionplanhistory.ValidColumn,
-			assessment.Table:                        assessment.ValidColumn,
-			assessmenthistory.Table:                 assessmenthistory.ValidColumn,
-			assessmentresponse.Table:                assessmentresponse.ValidColumn,
-			assessmentresponsehistory.Table:         assessmentresponsehistory.ValidColumn,
-			asset.Table:                             asset.ValidColumn,
-			assethistory.Table:                      assethistory.ValidColumn,
-			contact.Table:                           contact.ValidColumn,
-			contacthistory.Table:                    contacthistory.ValidColumn,
-			control.Table:                           control.ValidColumn,
-			controlhistory.Table:                    controlhistory.ValidColumn,
-			controlimplementation.Table:             controlimplementation.ValidColumn,
-			controlimplementationhistory.Table:      controlimplementationhistory.ValidColumn,
-			controlobjective.Table:                  controlobjective.ValidColumn,
-			controlobjectivehistory.Table:           controlobjectivehistory.ValidColumn,
-			customdomain.Table:                      customdomain.ValidColumn,
-			customdomainhistory.Table:               customdomainhistory.ValidColumn,
-			customtypeenum.Table:                    customtypeenum.ValidColumn,
-			dnsverification.Table:                   dnsverification.ValidColumn,
-			dnsverificationhistory.Table:            dnsverificationhistory.ValidColumn,
-			directoryaccount.Table:                  directoryaccount.ValidColumn,
-			directoryaccounthistory.Table:           directoryaccounthistory.ValidColumn,
-			directorygroup.Table:                    directorygroup.ValidColumn,
-			directorygrouphistory.Table:             directorygrouphistory.ValidColumn,
-			directorymembership.Table:               directorymembership.ValidColumn,
-			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
-			directorysyncrun.Table:                  directorysyncrun.ValidColumn,
-			documentdata.Table:                      documentdata.ValidColumn,
-			documentdatahistory.Table:               documentdatahistory.ValidColumn,
-			emailverificationtoken.Table:            emailverificationtoken.ValidColumn,
-			entity.Table:                            entity.ValidColumn,
-			entityhistory.Table:                     entityhistory.ValidColumn,
-			entitytype.Table:                        entitytype.ValidColumn,
-			entitytypehistory.Table:                 entitytypehistory.ValidColumn,
-			event.Table:                             event.ValidColumn,
-			evidence.Table:                          evidence.ValidColumn,
-			evidencehistory.Table:                   evidencehistory.ValidColumn,
-			export.Table:                            export.ValidColumn,
-			file.Table:                              file.ValidColumn,
-			filedownloadtoken.Table:                 filedownloadtoken.ValidColumn,
-			filehistory.Table:                       filehistory.ValidColumn,
-			finding.Table:                           finding.ValidColumn,
-			findingcontrol.Table:                    findingcontrol.ValidColumn,
-			findingcontrolhistory.Table:             findingcontrolhistory.ValidColumn,
-			findinghistory.Table:                    findinghistory.ValidColumn,
-			group.Table:                             group.ValidColumn,
-			grouphistory.Table:                      grouphistory.ValidColumn,
-			groupmembership.Table:                   groupmembership.ValidColumn,
-			groupmembershiphistory.Table:            groupmembershiphistory.ValidColumn,
-			groupsetting.Table:                      groupsetting.ValidColumn,
-			groupsettinghistory.Table:               groupsettinghistory.ValidColumn,
-			hush.Table:                              hush.ValidColumn,
-			hushhistory.Table:                       hushhistory.ValidColumn,
-			impersonationevent.Table:                impersonationevent.ValidColumn,
-			integration.Table:                       integration.ValidColumn,
-			integrationhistory.Table:                integrationhistory.ValidColumn,
-			internalpolicy.Table:                    internalpolicy.ValidColumn,
-			internalpolicyhistory.Table:             internalpolicyhistory.ValidColumn,
-			invite.Table:                            invite.ValidColumn,
-			jobresult.Table:                         jobresult.ValidColumn,
-			jobrunner.Table:                         jobrunner.ValidColumn,
-			jobrunnerregistrationtoken.Table:        jobrunnerregistrationtoken.ValidColumn,
-			jobrunnertoken.Table:                    jobrunnertoken.ValidColumn,
-			jobtemplate.Table:                       jobtemplate.ValidColumn,
-			jobtemplatehistory.Table:                jobtemplatehistory.ValidColumn,
-			mappabledomain.Table:                    mappabledomain.ValidColumn,
-			mappabledomainhistory.Table:             mappabledomainhistory.ValidColumn,
-			mappedcontrol.Table:                     mappedcontrol.ValidColumn,
-			mappedcontrolhistory.Table:              mappedcontrolhistory.ValidColumn,
-			narrative.Table:                         narrative.ValidColumn,
-			narrativehistory.Table:                  narrativehistory.ValidColumn,
-			note.Table:                              note.ValidColumn,
-			notehistory.Table:                       notehistory.ValidColumn,
-			notification.Table:                      notification.ValidColumn,
-			onboarding.Table:                        onboarding.ValidColumn,
-			orgmembership.Table:                     orgmembership.ValidColumn,
-			orgmembershiphistory.Table:              orgmembershiphistory.ValidColumn,
-			orgmodule.Table:                         orgmodule.ValidColumn,
-			orgprice.Table:                          orgprice.ValidColumn,
-			orgproduct.Table:                        orgproduct.ValidColumn,
-			orgsubscription.Table:                   orgsubscription.ValidColumn,
-			orgsubscriptionhistory.Table:            orgsubscriptionhistory.ValidColumn,
-			organization.Table:                      organization.ValidColumn,
-			organizationhistory.Table:               organizationhistory.ValidColumn,
-			organizationsetting.Table:               organizationsetting.ValidColumn,
-			organizationsettinghistory.Table:        organizationsettinghistory.ValidColumn,
-			passwordresettoken.Table:                passwordresettoken.ValidColumn,
-			personalaccesstoken.Table:               personalaccesstoken.ValidColumn,
-			procedure.Table:                         procedure.ValidColumn,
-			procedurehistory.Table:                  procedurehistory.ValidColumn,
-			program.Table:                           program.ValidColumn,
-			programhistory.Table:                    programhistory.ValidColumn,
-			programmembership.Table:                 programmembership.ValidColumn,
-			programmembershiphistory.Table:          programmembershiphistory.ValidColumn,
-			remediation.Table:                       remediation.ValidColumn,
-			remediationhistory.Table:                remediationhistory.ValidColumn,
-			review.Table:                            review.ValidColumn,
-			reviewhistory.Table:                     reviewhistory.ValidColumn,
-			risk.Table:                              risk.ValidColumn,
-			riskhistory.Table:                       riskhistory.ValidColumn,
-			scan.Table:                              scan.ValidColumn,
-			scanhistory.Table:                       scanhistory.ValidColumn,
-			scheduledjob.Table:                      scheduledjob.ValidColumn,
-			scheduledjobhistory.Table:               scheduledjobhistory.ValidColumn,
-			scheduledjobrun.Table:                   scheduledjobrun.ValidColumn,
-			standard.Table:                          standard.ValidColumn,
-			standardhistory.Table:                   standardhistory.ValidColumn,
-			subcontrol.Table:                        subcontrol.ValidColumn,
-			subcontrolhistory.Table:                 subcontrolhistory.ValidColumn,
-			subprocessor.Table:                      subprocessor.ValidColumn,
-			subprocessorhistory.Table:               subprocessorhistory.ValidColumn,
-			subscriber.Table:                        subscriber.ValidColumn,
-			tfasetting.Table:                        tfasetting.ValidColumn,
-			tagdefinition.Table:                     tagdefinition.ValidColumn,
-			task.Table:                              task.ValidColumn,
-			taskhistory.Table:                       taskhistory.ValidColumn,
-			template.Table:                          template.ValidColumn,
-			templatehistory.Table:                   templatehistory.ValidColumn,
-			trustcenter.Table:                       trustcenter.ValidColumn,
-			trustcentercompliance.Table:             trustcentercompliance.ValidColumn,
-			trustcentercompliancehistory.Table:      trustcentercompliancehistory.ValidColumn,
-			trustcenterdoc.Table:                    trustcenterdoc.ValidColumn,
-			trustcenterdochistory.Table:             trustcenterdochistory.ValidColumn,
-			trustcenterhistory.Table:                trustcenterhistory.ValidColumn,
-			trustcentersetting.Table:                trustcentersetting.ValidColumn,
-			trustcentersettinghistory.Table:         trustcentersettinghistory.ValidColumn,
-			trustcentersubprocessor.Table:           trustcentersubprocessor.ValidColumn,
-			trustcentersubprocessorhistory.Table:    trustcentersubprocessorhistory.ValidColumn,
-			trustcenterwatermarkconfig.Table:        trustcenterwatermarkconfig.ValidColumn,
-			trustcenterwatermarkconfighistory.Table: trustcenterwatermarkconfighistory.ValidColumn,
-			trustcenterentity.Table:                 trustcenterentity.ValidColumn,
-			trustcenterentityhistory.Table:          trustcenterentityhistory.ValidColumn,
-			user.Table:                              user.ValidColumn,
-			userhistory.Table:                       userhistory.ValidColumn,
-			usersetting.Table:                       usersetting.ValidColumn,
-			usersettinghistory.Table:                usersettinghistory.ValidColumn,
-			vulnerability.Table:                     vulnerability.ValidColumn,
-			vulnerabilityhistory.Table:              vulnerabilityhistory.ValidColumn,
-			webauthn.Table:                          webauthn.ValidColumn,
-			workflowassignment.Table:                workflowassignment.ValidColumn,
-			workflowassignmenthistory.Table:         workflowassignmenthistory.ValidColumn,
-			workflowassignmenttarget.Table:          workflowassignmenttarget.ValidColumn,
-			workflowassignmenttargethistory.Table:   workflowassignmenttargethistory.ValidColumn,
-			workflowdefinition.Table:                workflowdefinition.ValidColumn,
-			workflowdefinitionhistory.Table:         workflowdefinitionhistory.ValidColumn,
-			workflowevent.Table:                     workflowevent.ValidColumn,
-			workfloweventhistory.Table:              workfloweventhistory.ValidColumn,
-			workflowinstance.Table:                  workflowinstance.ValidColumn,
-			workflowinstancehistory.Table:           workflowinstancehistory.ValidColumn,
-			workflowobjectref.Table:                 workflowobjectref.ValidColumn,
-			workflowobjectrefhistory.Table:          workflowobjectrefhistory.ValidColumn,
+			apitoken.Table:                   apitoken.ValidColumn,
+			actionplan.Table:                 actionplan.ValidColumn,
+			assessment.Table:                 assessment.ValidColumn,
+			assessmentresponse.Table:         assessmentresponse.ValidColumn,
+			asset.Table:                      asset.ValidColumn,
+			contact.Table:                    contact.ValidColumn,
+			control.Table:                    control.ValidColumn,
+			controlimplementation.Table:      controlimplementation.ValidColumn,
+			controlobjective.Table:           controlobjective.ValidColumn,
+			customdomain.Table:               customdomain.ValidColumn,
+			customtypeenum.Table:             customtypeenum.ValidColumn,
+			dnsverification.Table:            dnsverification.ValidColumn,
+			directoryaccount.Table:           directoryaccount.ValidColumn,
+			directorygroup.Table:             directorygroup.ValidColumn,
+			directorymembership.Table:        directorymembership.ValidColumn,
+			directorysyncrun.Table:           directorysyncrun.ValidColumn,
+			discussion.Table:                 discussion.ValidColumn,
+			documentdata.Table:               documentdata.ValidColumn,
+			emailverificationtoken.Table:     emailverificationtoken.ValidColumn,
+			entity.Table:                     entity.ValidColumn,
+			entitytype.Table:                 entitytype.ValidColumn,
+			event.Table:                      event.ValidColumn,
+			evidence.Table:                   evidence.ValidColumn,
+			export.Table:                     export.ValidColumn,
+			file.Table:                       file.ValidColumn,
+			filedownloadtoken.Table:          filedownloadtoken.ValidColumn,
+			finding.Table:                    finding.ValidColumn,
+			findingcontrol.Table:             findingcontrol.ValidColumn,
+			group.Table:                      group.ValidColumn,
+			groupmembership.Table:            groupmembership.ValidColumn,
+			groupsetting.Table:               groupsetting.ValidColumn,
+			hush.Table:                       hush.ValidColumn,
+			impersonationevent.Table:         impersonationevent.ValidColumn,
+			integration.Table:                integration.ValidColumn,
+			internalpolicy.Table:             internalpolicy.ValidColumn,
+			invite.Table:                     invite.ValidColumn,
+			jobresult.Table:                  jobresult.ValidColumn,
+			jobrunner.Table:                  jobrunner.ValidColumn,
+			jobrunnerregistrationtoken.Table: jobrunnerregistrationtoken.ValidColumn,
+			jobrunnertoken.Table:             jobrunnertoken.ValidColumn,
+			jobtemplate.Table:                jobtemplate.ValidColumn,
+			mappabledomain.Table:             mappabledomain.ValidColumn,
+			mappedcontrol.Table:              mappedcontrol.ValidColumn,
+			narrative.Table:                  narrative.ValidColumn,
+			note.Table:                       note.ValidColumn,
+			notification.Table:               notification.ValidColumn,
+			onboarding.Table:                 onboarding.ValidColumn,
+			orgmembership.Table:              orgmembership.ValidColumn,
+			orgmodule.Table:                  orgmodule.ValidColumn,
+			orgprice.Table:                   orgprice.ValidColumn,
+			orgproduct.Table:                 orgproduct.ValidColumn,
+			orgsubscription.Table:            orgsubscription.ValidColumn,
+			organization.Table:               organization.ValidColumn,
+			organizationsetting.Table:        organizationsetting.ValidColumn,
+			passwordresettoken.Table:         passwordresettoken.ValidColumn,
+			personalaccesstoken.Table:        personalaccesstoken.ValidColumn,
+			procedure.Table:                  procedure.ValidColumn,
+			program.Table:                    program.ValidColumn,
+			programmembership.Table:          programmembership.ValidColumn,
+			remediation.Table:                remediation.ValidColumn,
+			review.Table:                     review.ValidColumn,
+			risk.Table:                       risk.ValidColumn,
+			scan.Table:                       scan.ValidColumn,
+			scheduledjob.Table:               scheduledjob.ValidColumn,
+			scheduledjobrun.Table:            scheduledjobrun.ValidColumn,
+			standard.Table:                   standard.ValidColumn,
+			subcontrol.Table:                 subcontrol.ValidColumn,
+			subprocessor.Table:               subprocessor.ValidColumn,
+			subscriber.Table:                 subscriber.ValidColumn,
+			tfasetting.Table:                 tfasetting.ValidColumn,
+			tagdefinition.Table:              tagdefinition.ValidColumn,
+			task.Table:                       task.ValidColumn,
+			template.Table:                   template.ValidColumn,
+			trustcenter.Table:                trustcenter.ValidColumn,
+			trustcentercompliance.Table:      trustcentercompliance.ValidColumn,
+			trustcenterdoc.Table:             trustcenterdoc.ValidColumn,
+			trustcentersetting.Table:         trustcentersetting.ValidColumn,
+			trustcentersubprocessor.Table:    trustcentersubprocessor.ValidColumn,
+			trustcenterwatermarkconfig.Table: trustcenterwatermarkconfig.ValidColumn,
+			trustcenterentity.Table:          trustcenterentity.ValidColumn,
+			user.Table:                       user.ValidColumn,
+			usersetting.Table:                usersetting.ValidColumn,
+			vulnerability.Table:              vulnerability.ValidColumn,
+			webauthn.Table:                   webauthn.ValidColumn,
+			workflowassignment.Table:         workflowassignment.ValidColumn,
+			workflowassignmenttarget.Table:   workflowassignmenttarget.ValidColumn,
+			workflowdefinition.Table:         workflowdefinition.ValidColumn,
+			workflowevent.Table:              workflowevent.ValidColumn,
+			workflowinstance.Table:           workflowinstance.ValidColumn,
+			workflowobjectref.Table:          workflowobjectref.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

@@ -1,0 +1,103 @@
+
+
+query GetAllInternalPolicyHistories {
+  internalPolicyHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approvalRequired
+        approverID
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        displayID
+        fileID
+        historyTime
+        id
+        improvementSuggestions
+        internalNotes
+        internalPolicyKindID
+        internalPolicyKindName
+        name
+        operation
+        ownerID
+        policyType
+        ref
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        summary
+        systemInternalID
+        systemOwned
+        tagSuggestions
+        tags
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}
+
+query GetInternalPolicyHistories($first: Int, $last: Int, $where: InternalPolicyHistoryWhereInput) {
+  internalPolicyHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approvalRequired
+        approverID
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        displayID
+        fileID
+        historyTime
+        id
+        improvementSuggestions
+        internalNotes
+        internalPolicyKindID
+        internalPolicyKindName
+        name
+        operation
+        ownerID
+        policyType
+        ref
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        summary
+        systemInternalID
+        systemOwned
+        tagSuggestions
+        tags
+        updatedAt
+        updatedBy
+        url
+      }
+    }
+  }
+}

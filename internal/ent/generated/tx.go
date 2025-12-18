@@ -16,122 +16,72 @@ type Tx struct {
 	APIToken *APITokenClient
 	// ActionPlan is the client for interacting with the ActionPlan builders.
 	ActionPlan *ActionPlanClient
-	// ActionPlanHistory is the client for interacting with the ActionPlanHistory builders.
-	ActionPlanHistory *ActionPlanHistoryClient
 	// Assessment is the client for interacting with the Assessment builders.
 	Assessment *AssessmentClient
-	// AssessmentHistory is the client for interacting with the AssessmentHistory builders.
-	AssessmentHistory *AssessmentHistoryClient
 	// AssessmentResponse is the client for interacting with the AssessmentResponse builders.
 	AssessmentResponse *AssessmentResponseClient
-	// AssessmentResponseHistory is the client for interacting with the AssessmentResponseHistory builders.
-	AssessmentResponseHistory *AssessmentResponseHistoryClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
-	// AssetHistory is the client for interacting with the AssetHistory builders.
-	AssetHistory *AssetHistoryClient
 	// Contact is the client for interacting with the Contact builders.
 	Contact *ContactClient
-	// ContactHistory is the client for interacting with the ContactHistory builders.
-	ContactHistory *ContactHistoryClient
 	// Control is the client for interacting with the Control builders.
 	Control *ControlClient
-	// ControlHistory is the client for interacting with the ControlHistory builders.
-	ControlHistory *ControlHistoryClient
 	// ControlImplementation is the client for interacting with the ControlImplementation builders.
 	ControlImplementation *ControlImplementationClient
-	// ControlImplementationHistory is the client for interacting with the ControlImplementationHistory builders.
-	ControlImplementationHistory *ControlImplementationHistoryClient
 	// ControlObjective is the client for interacting with the ControlObjective builders.
 	ControlObjective *ControlObjectiveClient
-	// ControlObjectiveHistory is the client for interacting with the ControlObjectiveHistory builders.
-	ControlObjectiveHistory *ControlObjectiveHistoryClient
 	// CustomDomain is the client for interacting with the CustomDomain builders.
 	CustomDomain *CustomDomainClient
-	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
-	CustomDomainHistory *CustomDomainHistoryClient
 	// CustomTypeEnum is the client for interacting with the CustomTypeEnum builders.
 	CustomTypeEnum *CustomTypeEnumClient
 	// DNSVerification is the client for interacting with the DNSVerification builders.
 	DNSVerification *DNSVerificationClient
-	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
-	DNSVerificationHistory *DNSVerificationHistoryClient
 	// DirectoryAccount is the client for interacting with the DirectoryAccount builders.
 	DirectoryAccount *DirectoryAccountClient
-	// DirectoryAccountHistory is the client for interacting with the DirectoryAccountHistory builders.
-	DirectoryAccountHistory *DirectoryAccountHistoryClient
 	// DirectoryGroup is the client for interacting with the DirectoryGroup builders.
 	DirectoryGroup *DirectoryGroupClient
-	// DirectoryGroupHistory is the client for interacting with the DirectoryGroupHistory builders.
-	DirectoryGroupHistory *DirectoryGroupHistoryClient
 	// DirectoryMembership is the client for interacting with the DirectoryMembership builders.
 	DirectoryMembership *DirectoryMembershipClient
-	// DirectoryMembershipHistory is the client for interacting with the DirectoryMembershipHistory builders.
-	DirectoryMembershipHistory *DirectoryMembershipHistoryClient
 	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
 	DirectorySyncRun *DirectorySyncRunClient
+	// Discussion is the client for interacting with the Discussion builders.
+	Discussion *DiscussionClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
-	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
-	DocumentDataHistory *DocumentDataHistoryClient
 	// EmailVerificationToken is the client for interacting with the EmailVerificationToken builders.
 	EmailVerificationToken *EmailVerificationTokenClient
 	// Entity is the client for interacting with the Entity builders.
 	Entity *EntityClient
-	// EntityHistory is the client for interacting with the EntityHistory builders.
-	EntityHistory *EntityHistoryClient
 	// EntityType is the client for interacting with the EntityType builders.
 	EntityType *EntityTypeClient
-	// EntityTypeHistory is the client for interacting with the EntityTypeHistory builders.
-	EntityTypeHistory *EntityTypeHistoryClient
 	// Event is the client for interacting with the Event builders.
 	Event *EventClient
 	// Evidence is the client for interacting with the Evidence builders.
 	Evidence *EvidenceClient
-	// EvidenceHistory is the client for interacting with the EvidenceHistory builders.
-	EvidenceHistory *EvidenceHistoryClient
 	// Export is the client for interacting with the Export builders.
 	Export *ExportClient
 	// File is the client for interacting with the File builders.
 	File *FileClient
 	// FileDownloadToken is the client for interacting with the FileDownloadToken builders.
 	FileDownloadToken *FileDownloadTokenClient
-	// FileHistory is the client for interacting with the FileHistory builders.
-	FileHistory *FileHistoryClient
 	// Finding is the client for interacting with the Finding builders.
 	Finding *FindingClient
 	// FindingControl is the client for interacting with the FindingControl builders.
 	FindingControl *FindingControlClient
-	// FindingControlHistory is the client for interacting with the FindingControlHistory builders.
-	FindingControlHistory *FindingControlHistoryClient
-	// FindingHistory is the client for interacting with the FindingHistory builders.
-	FindingHistory *FindingHistoryClient
 	// Group is the client for interacting with the Group builders.
 	Group *GroupClient
-	// GroupHistory is the client for interacting with the GroupHistory builders.
-	GroupHistory *GroupHistoryClient
 	// GroupMembership is the client for interacting with the GroupMembership builders.
 	GroupMembership *GroupMembershipClient
-	// GroupMembershipHistory is the client for interacting with the GroupMembershipHistory builders.
-	GroupMembershipHistory *GroupMembershipHistoryClient
 	// GroupSetting is the client for interacting with the GroupSetting builders.
 	GroupSetting *GroupSettingClient
-	// GroupSettingHistory is the client for interacting with the GroupSettingHistory builders.
-	GroupSettingHistory *GroupSettingHistoryClient
 	// Hush is the client for interacting with the Hush builders.
 	Hush *HushClient
-	// HushHistory is the client for interacting with the HushHistory builders.
-	HushHistory *HushHistoryClient
 	// ImpersonationEvent is the client for interacting with the ImpersonationEvent builders.
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
-	// IntegrationHistory is the client for interacting with the IntegrationHistory builders.
-	IntegrationHistory *IntegrationHistoryClient
 	// InternalPolicy is the client for interacting with the InternalPolicy builders.
 	InternalPolicy *InternalPolicyClient
-	// InternalPolicyHistory is the client for interacting with the InternalPolicyHistory builders.
-	InternalPolicyHistory *InternalPolicyHistoryClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
 	// JobResult is the client for interacting with the JobResult builders.
@@ -144,32 +94,20 @@ type Tx struct {
 	JobRunnerToken *JobRunnerTokenClient
 	// JobTemplate is the client for interacting with the JobTemplate builders.
 	JobTemplate *JobTemplateClient
-	// JobTemplateHistory is the client for interacting with the JobTemplateHistory builders.
-	JobTemplateHistory *JobTemplateHistoryClient
 	// MappableDomain is the client for interacting with the MappableDomain builders.
 	MappableDomain *MappableDomainClient
-	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
-	MappableDomainHistory *MappableDomainHistoryClient
 	// MappedControl is the client for interacting with the MappedControl builders.
 	MappedControl *MappedControlClient
-	// MappedControlHistory is the client for interacting with the MappedControlHistory builders.
-	MappedControlHistory *MappedControlHistoryClient
 	// Narrative is the client for interacting with the Narrative builders.
 	Narrative *NarrativeClient
-	// NarrativeHistory is the client for interacting with the NarrativeHistory builders.
-	NarrativeHistory *NarrativeHistoryClient
 	// Note is the client for interacting with the Note builders.
 	Note *NoteClient
-	// NoteHistory is the client for interacting with the NoteHistory builders.
-	NoteHistory *NoteHistoryClient
 	// Notification is the client for interacting with the Notification builders.
 	Notification *NotificationClient
 	// Onboarding is the client for interacting with the Onboarding builders.
 	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
 	OrgMembership *OrgMembershipClient
-	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
-	OrgMembershipHistory *OrgMembershipHistoryClient
 	// OrgModule is the client for interacting with the OrgModule builders.
 	OrgModule *OrgModuleClient
 	// OrgPrice is the client for interacting with the OrgPrice builders.
@@ -178,66 +116,38 @@ type Tx struct {
 	OrgProduct *OrgProductClient
 	// OrgSubscription is the client for interacting with the OrgSubscription builders.
 	OrgSubscription *OrgSubscriptionClient
-	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
-	OrgSubscriptionHistory *OrgSubscriptionHistoryClient
 	// Organization is the client for interacting with the Organization builders.
 	Organization *OrganizationClient
-	// OrganizationHistory is the client for interacting with the OrganizationHistory builders.
-	OrganizationHistory *OrganizationHistoryClient
 	// OrganizationSetting is the client for interacting with the OrganizationSetting builders.
 	OrganizationSetting *OrganizationSettingClient
-	// OrganizationSettingHistory is the client for interacting with the OrganizationSettingHistory builders.
-	OrganizationSettingHistory *OrganizationSettingHistoryClient
 	// PasswordResetToken is the client for interacting with the PasswordResetToken builders.
 	PasswordResetToken *PasswordResetTokenClient
 	// PersonalAccessToken is the client for interacting with the PersonalAccessToken builders.
 	PersonalAccessToken *PersonalAccessTokenClient
 	// Procedure is the client for interacting with the Procedure builders.
 	Procedure *ProcedureClient
-	// ProcedureHistory is the client for interacting with the ProcedureHistory builders.
-	ProcedureHistory *ProcedureHistoryClient
 	// Program is the client for interacting with the Program builders.
 	Program *ProgramClient
-	// ProgramHistory is the client for interacting with the ProgramHistory builders.
-	ProgramHistory *ProgramHistoryClient
 	// ProgramMembership is the client for interacting with the ProgramMembership builders.
 	ProgramMembership *ProgramMembershipClient
-	// ProgramMembershipHistory is the client for interacting with the ProgramMembershipHistory builders.
-	ProgramMembershipHistory *ProgramMembershipHistoryClient
 	// Remediation is the client for interacting with the Remediation builders.
 	Remediation *RemediationClient
-	// RemediationHistory is the client for interacting with the RemediationHistory builders.
-	RemediationHistory *RemediationHistoryClient
 	// Review is the client for interacting with the Review builders.
 	Review *ReviewClient
-	// ReviewHistory is the client for interacting with the ReviewHistory builders.
-	ReviewHistory *ReviewHistoryClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
-	// RiskHistory is the client for interacting with the RiskHistory builders.
-	RiskHistory *RiskHistoryClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
-	// ScanHistory is the client for interacting with the ScanHistory builders.
-	ScanHistory *ScanHistoryClient
 	// ScheduledJob is the client for interacting with the ScheduledJob builders.
 	ScheduledJob *ScheduledJobClient
-	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
-	ScheduledJobHistory *ScheduledJobHistoryClient
 	// ScheduledJobRun is the client for interacting with the ScheduledJobRun builders.
 	ScheduledJobRun *ScheduledJobRunClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
-	// StandardHistory is the client for interacting with the StandardHistory builders.
-	StandardHistory *StandardHistoryClient
 	// Subcontrol is the client for interacting with the Subcontrol builders.
 	Subcontrol *SubcontrolClient
-	// SubcontrolHistory is the client for interacting with the SubcontrolHistory builders.
-	SubcontrolHistory *SubcontrolHistoryClient
 	// Subprocessor is the client for interacting with the Subprocessor builders.
 	Subprocessor *SubprocessorClient
-	// SubprocessorHistory is the client for interacting with the SubprocessorHistory builders.
-	SubprocessorHistory *SubprocessorHistoryClient
 	// Subscriber is the client for interacting with the Subscriber builders.
 	Subscriber *SubscriberClient
 	// TFASetting is the client for interacting with the TFASetting builders.
@@ -246,78 +156,42 @@ type Tx struct {
 	TagDefinition *TagDefinitionClient
 	// Task is the client for interacting with the Task builders.
 	Task *TaskClient
-	// TaskHistory is the client for interacting with the TaskHistory builders.
-	TaskHistory *TaskHistoryClient
 	// Template is the client for interacting with the Template builders.
 	Template *TemplateClient
-	// TemplateHistory is the client for interacting with the TemplateHistory builders.
-	TemplateHistory *TemplateHistoryClient
 	// TrustCenter is the client for interacting with the TrustCenter builders.
 	TrustCenter *TrustCenterClient
 	// TrustCenterCompliance is the client for interacting with the TrustCenterCompliance builders.
 	TrustCenterCompliance *TrustCenterComplianceClient
-	// TrustCenterComplianceHistory is the client for interacting with the TrustCenterComplianceHistory builders.
-	TrustCenterComplianceHistory *TrustCenterComplianceHistoryClient
 	// TrustCenterDoc is the client for interacting with the TrustCenterDoc builders.
 	TrustCenterDoc *TrustCenterDocClient
-	// TrustCenterDocHistory is the client for interacting with the TrustCenterDocHistory builders.
-	TrustCenterDocHistory *TrustCenterDocHistoryClient
-	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
-	TrustCenterHistory *TrustCenterHistoryClient
 	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
 	TrustCenterSetting *TrustCenterSettingClient
-	// TrustCenterSettingHistory is the client for interacting with the TrustCenterSettingHistory builders.
-	TrustCenterSettingHistory *TrustCenterSettingHistoryClient
 	// TrustCenterSubprocessor is the client for interacting with the TrustCenterSubprocessor builders.
 	TrustCenterSubprocessor *TrustCenterSubprocessorClient
-	// TrustCenterSubprocessorHistory is the client for interacting with the TrustCenterSubprocessorHistory builders.
-	TrustCenterSubprocessorHistory *TrustCenterSubprocessorHistoryClient
 	// TrustCenterWatermarkConfig is the client for interacting with the TrustCenterWatermarkConfig builders.
 	TrustCenterWatermarkConfig *TrustCenterWatermarkConfigClient
-	// TrustCenterWatermarkConfigHistory is the client for interacting with the TrustCenterWatermarkConfigHistory builders.
-	TrustCenterWatermarkConfigHistory *TrustCenterWatermarkConfigHistoryClient
 	// TrustcenterEntity is the client for interacting with the TrustcenterEntity builders.
 	TrustcenterEntity *TrustcenterEntityClient
-	// TrustcenterEntityHistory is the client for interacting with the TrustcenterEntityHistory builders.
-	TrustcenterEntityHistory *TrustcenterEntityHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
-	// UserHistory is the client for interacting with the UserHistory builders.
-	UserHistory *UserHistoryClient
 	// UserSetting is the client for interacting with the UserSetting builders.
 	UserSetting *UserSettingClient
-	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
-	UserSettingHistory *UserSettingHistoryClient
 	// Vulnerability is the client for interacting with the Vulnerability builders.
 	Vulnerability *VulnerabilityClient
-	// VulnerabilityHistory is the client for interacting with the VulnerabilityHistory builders.
-	VulnerabilityHistory *VulnerabilityHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
 	// WorkflowAssignment is the client for interacting with the WorkflowAssignment builders.
 	WorkflowAssignment *WorkflowAssignmentClient
-	// WorkflowAssignmentHistory is the client for interacting with the WorkflowAssignmentHistory builders.
-	WorkflowAssignmentHistory *WorkflowAssignmentHistoryClient
 	// WorkflowAssignmentTarget is the client for interacting with the WorkflowAssignmentTarget builders.
 	WorkflowAssignmentTarget *WorkflowAssignmentTargetClient
-	// WorkflowAssignmentTargetHistory is the client for interacting with the WorkflowAssignmentTargetHistory builders.
-	WorkflowAssignmentTargetHistory *WorkflowAssignmentTargetHistoryClient
 	// WorkflowDefinition is the client for interacting with the WorkflowDefinition builders.
 	WorkflowDefinition *WorkflowDefinitionClient
-	// WorkflowDefinitionHistory is the client for interacting with the WorkflowDefinitionHistory builders.
-	WorkflowDefinitionHistory *WorkflowDefinitionHistoryClient
 	// WorkflowEvent is the client for interacting with the WorkflowEvent builders.
 	WorkflowEvent *WorkflowEventClient
-	// WorkflowEventHistory is the client for interacting with the WorkflowEventHistory builders.
-	WorkflowEventHistory *WorkflowEventHistoryClient
 	// WorkflowInstance is the client for interacting with the WorkflowInstance builders.
 	WorkflowInstance *WorkflowInstanceClient
-	// WorkflowInstanceHistory is the client for interacting with the WorkflowInstanceHistory builders.
-	WorkflowInstanceHistory *WorkflowInstanceHistoryClient
 	// WorkflowObjectRef is the client for interacting with the WorkflowObjectRef builders.
 	WorkflowObjectRef *WorkflowObjectRefClient
-	// WorkflowObjectRefHistory is the client for interacting with the WorkflowObjectRefHistory builders.
-	WorkflowObjectRefHistory *WorkflowObjectRefHistoryClient
 
 	// lazily loaded.
 	client     *Client
@@ -451,157 +325,94 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.APIToken = NewAPITokenClient(tx.config)
 	tx.ActionPlan = NewActionPlanClient(tx.config)
-	tx.ActionPlanHistory = NewActionPlanHistoryClient(tx.config)
 	tx.Assessment = NewAssessmentClient(tx.config)
-	tx.AssessmentHistory = NewAssessmentHistoryClient(tx.config)
 	tx.AssessmentResponse = NewAssessmentResponseClient(tx.config)
-	tx.AssessmentResponseHistory = NewAssessmentResponseHistoryClient(tx.config)
 	tx.Asset = NewAssetClient(tx.config)
-	tx.AssetHistory = NewAssetHistoryClient(tx.config)
 	tx.Contact = NewContactClient(tx.config)
-	tx.ContactHistory = NewContactHistoryClient(tx.config)
 	tx.Control = NewControlClient(tx.config)
-	tx.ControlHistory = NewControlHistoryClient(tx.config)
 	tx.ControlImplementation = NewControlImplementationClient(tx.config)
-	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjective = NewControlObjectiveClient(tx.config)
-	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
 	tx.CustomDomain = NewCustomDomainClient(tx.config)
-	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
 	tx.CustomTypeEnum = NewCustomTypeEnumClient(tx.config)
 	tx.DNSVerification = NewDNSVerificationClient(tx.config)
-	tx.DNSVerificationHistory = NewDNSVerificationHistoryClient(tx.config)
 	tx.DirectoryAccount = NewDirectoryAccountClient(tx.config)
-	tx.DirectoryAccountHistory = NewDirectoryAccountHistoryClient(tx.config)
 	tx.DirectoryGroup = NewDirectoryGroupClient(tx.config)
-	tx.DirectoryGroupHistory = NewDirectoryGroupHistoryClient(tx.config)
 	tx.DirectoryMembership = NewDirectoryMembershipClient(tx.config)
-	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
 	tx.DirectorySyncRun = NewDirectorySyncRunClient(tx.config)
+	tx.Discussion = NewDiscussionClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
-	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
 	tx.Entity = NewEntityClient(tx.config)
-	tx.EntityHistory = NewEntityHistoryClient(tx.config)
 	tx.EntityType = NewEntityTypeClient(tx.config)
-	tx.EntityTypeHistory = NewEntityTypeHistoryClient(tx.config)
 	tx.Event = NewEventClient(tx.config)
 	tx.Evidence = NewEvidenceClient(tx.config)
-	tx.EvidenceHistory = NewEvidenceHistoryClient(tx.config)
 	tx.Export = NewExportClient(tx.config)
 	tx.File = NewFileClient(tx.config)
 	tx.FileDownloadToken = NewFileDownloadTokenClient(tx.config)
-	tx.FileHistory = NewFileHistoryClient(tx.config)
 	tx.Finding = NewFindingClient(tx.config)
 	tx.FindingControl = NewFindingControlClient(tx.config)
-	tx.FindingControlHistory = NewFindingControlHistoryClient(tx.config)
-	tx.FindingHistory = NewFindingHistoryClient(tx.config)
 	tx.Group = NewGroupClient(tx.config)
-	tx.GroupHistory = NewGroupHistoryClient(tx.config)
 	tx.GroupMembership = NewGroupMembershipClient(tx.config)
-	tx.GroupMembershipHistory = NewGroupMembershipHistoryClient(tx.config)
 	tx.GroupSetting = NewGroupSettingClient(tx.config)
-	tx.GroupSettingHistory = NewGroupSettingHistoryClient(tx.config)
 	tx.Hush = NewHushClient(tx.config)
-	tx.HushHistory = NewHushHistoryClient(tx.config)
 	tx.ImpersonationEvent = NewImpersonationEventClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
-	tx.IntegrationHistory = NewIntegrationHistoryClient(tx.config)
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
-	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
 	tx.JobResult = NewJobResultClient(tx.config)
 	tx.JobRunner = NewJobRunnerClient(tx.config)
 	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
 	tx.JobRunnerToken = NewJobRunnerTokenClient(tx.config)
 	tx.JobTemplate = NewJobTemplateClient(tx.config)
-	tx.JobTemplateHistory = NewJobTemplateHistoryClient(tx.config)
 	tx.MappableDomain = NewMappableDomainClient(tx.config)
-	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
 	tx.MappedControl = NewMappedControlClient(tx.config)
-	tx.MappedControlHistory = NewMappedControlHistoryClient(tx.config)
 	tx.Narrative = NewNarrativeClient(tx.config)
-	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
 	tx.Note = NewNoteClient(tx.config)
-	tx.NoteHistory = NewNoteHistoryClient(tx.config)
 	tx.Notification = NewNotificationClient(tx.config)
 	tx.Onboarding = NewOnboardingClient(tx.config)
 	tx.OrgMembership = NewOrgMembershipClient(tx.config)
-	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
 	tx.OrgModule = NewOrgModuleClient(tx.config)
 	tx.OrgPrice = NewOrgPriceClient(tx.config)
 	tx.OrgProduct = NewOrgProductClient(tx.config)
 	tx.OrgSubscription = NewOrgSubscriptionClient(tx.config)
-	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.Organization = NewOrganizationClient(tx.config)
-	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
 	tx.OrganizationSetting = NewOrganizationSettingClient(tx.config)
-	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PasswordResetToken = NewPasswordResetTokenClient(tx.config)
 	tx.PersonalAccessToken = NewPersonalAccessTokenClient(tx.config)
 	tx.Procedure = NewProcedureClient(tx.config)
-	tx.ProcedureHistory = NewProcedureHistoryClient(tx.config)
 	tx.Program = NewProgramClient(tx.config)
-	tx.ProgramHistory = NewProgramHistoryClient(tx.config)
 	tx.ProgramMembership = NewProgramMembershipClient(tx.config)
-	tx.ProgramMembershipHistory = NewProgramMembershipHistoryClient(tx.config)
 	tx.Remediation = NewRemediationClient(tx.config)
-	tx.RemediationHistory = NewRemediationHistoryClient(tx.config)
 	tx.Review = NewReviewClient(tx.config)
-	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.Risk = NewRiskClient(tx.config)
-	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
-	tx.ScanHistory = NewScanHistoryClient(tx.config)
 	tx.ScheduledJob = NewScheduledJobClient(tx.config)
-	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
-	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)
-	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
 	tx.Subprocessor = NewSubprocessorClient(tx.config)
-	tx.SubprocessorHistory = NewSubprocessorHistoryClient(tx.config)
 	tx.Subscriber = NewSubscriberClient(tx.config)
 	tx.TFASetting = NewTFASettingClient(tx.config)
 	tx.TagDefinition = NewTagDefinitionClient(tx.config)
 	tx.Task = NewTaskClient(tx.config)
-	tx.TaskHistory = NewTaskHistoryClient(tx.config)
 	tx.Template = NewTemplateClient(tx.config)
-	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
 	tx.TrustCenter = NewTrustCenterClient(tx.config)
 	tx.TrustCenterCompliance = NewTrustCenterComplianceClient(tx.config)
-	tx.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(tx.config)
 	tx.TrustCenterDoc = NewTrustCenterDocClient(tx.config)
-	tx.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(tx.config)
-	tx.TrustCenterHistory = NewTrustCenterHistoryClient(tx.config)
 	tx.TrustCenterSetting = NewTrustCenterSettingClient(tx.config)
-	tx.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(tx.config)
 	tx.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(tx.config)
-	tx.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(tx.config)
 	tx.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(tx.config)
-	tx.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(tx.config)
 	tx.TrustcenterEntity = NewTrustcenterEntityClient(tx.config)
-	tx.TrustcenterEntityHistory = NewTrustcenterEntityHistoryClient(tx.config)
 	tx.User = NewUserClient(tx.config)
-	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)
-	tx.UserSettingHistory = NewUserSettingHistoryClient(tx.config)
 	tx.Vulnerability = NewVulnerabilityClient(tx.config)
-	tx.VulnerabilityHistory = NewVulnerabilityHistoryClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)
 	tx.WorkflowAssignment = NewWorkflowAssignmentClient(tx.config)
-	tx.WorkflowAssignmentHistory = NewWorkflowAssignmentHistoryClient(tx.config)
 	tx.WorkflowAssignmentTarget = NewWorkflowAssignmentTargetClient(tx.config)
-	tx.WorkflowAssignmentTargetHistory = NewWorkflowAssignmentTargetHistoryClient(tx.config)
 	tx.WorkflowDefinition = NewWorkflowDefinitionClient(tx.config)
-	tx.WorkflowDefinitionHistory = NewWorkflowDefinitionHistoryClient(tx.config)
 	tx.WorkflowEvent = NewWorkflowEventClient(tx.config)
-	tx.WorkflowEventHistory = NewWorkflowEventHistoryClient(tx.config)
 	tx.WorkflowInstance = NewWorkflowInstanceClient(tx.config)
-	tx.WorkflowInstanceHistory = NewWorkflowInstanceHistoryClient(tx.config)
 	tx.WorkflowObjectRef = NewWorkflowObjectRefClient(tx.config)
-	tx.WorkflowObjectRefHistory = NewWorkflowObjectRefHistoryClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

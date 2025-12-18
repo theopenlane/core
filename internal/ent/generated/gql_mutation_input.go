@@ -1454,9 +1454,14 @@ type CreateControlInput struct {
 	ImplementationGuidance     []models.ImplementationGuidance
 	ExampleEvidence            []models.ExampleEvidence
 	References                 []models.Reference
+	TestingProcedures          []models.TestingProcedures
+	EvidenceRequests           []models.EvidenceRequests
 	InternalNotes              *string
 	SystemInternalID           *string
 	ControlKindName            *string
+	ProposedChanges            map[string]interface{}
+	ProposedByUserID           *string
+	ProposedAt                 *time.Time
 	RefCode                    string
 	EvidenceIDs                []string
 	ControlObjectiveIDs        []string
@@ -1467,6 +1472,7 @@ type CreateControlInput struct {
 	ProcedureIDs               []string
 	InternalPolicyIDs          []string
 	CommentIDs                 []string
+	DiscussionIDs              []string
 	ControlOwnerID             *string
 	DelegateID                 *string
 	ResponsiblePartyID         *string
@@ -1550,6 +1556,12 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.References; v != nil {
 		m.SetReferences(v)
 	}
+	if v := i.TestingProcedures; v != nil {
+		m.SetTestingProcedures(v)
+	}
+	if v := i.EvidenceRequests; v != nil {
+		m.SetEvidenceRequests(v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -1558,6 +1570,15 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
+	}
+	if v := i.ProposedChanges; v != nil {
+		m.SetProposedChanges(v)
+	}
+	if v := i.ProposedByUserID; v != nil {
+		m.SetProposedByUserID(*v)
+	}
+	if v := i.ProposedAt; v != nil {
+		m.SetProposedAt(*v)
 	}
 	m.SetRefCode(i.RefCode)
 	if v := i.EvidenceIDs; len(v) > 0 {
@@ -1586,6 +1607,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
+	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
 	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
@@ -1694,12 +1718,24 @@ type UpdateControlInput struct {
 	ClearReferences                 bool
 	References                      []models.Reference
 	AppendReferences                []models.Reference
+	ClearTestingProcedures          bool
+	TestingProcedures               []models.TestingProcedures
+	AppendTestingProcedures         []models.TestingProcedures
+	ClearEvidenceRequests           bool
+	EvidenceRequests                []models.EvidenceRequests
+	AppendEvidenceRequests          []models.EvidenceRequests
 	ClearInternalNotes              bool
 	InternalNotes                   *string
 	ClearSystemInternalID           bool
 	SystemInternalID                *string
 	ClearControlKindName            bool
 	ControlKindName                 *string
+	ClearProposedChanges            bool
+	ProposedChanges                 map[string]interface{}
+	ClearProposedByUserID           bool
+	ProposedByUserID                *string
+	ClearProposedAt                 bool
+	ProposedAt                      *time.Time
 	RefCode                         *string
 	ClearEvidence                   bool
 	AddEvidenceIDs                  []string
@@ -1728,6 +1764,9 @@ type UpdateControlInput struct {
 	ClearComments                   bool
 	AddCommentIDs                   []string
 	RemoveCommentIDs                []string
+	ClearDiscussions                bool
+	AddDiscussionIDs                []string
+	RemoveDiscussionIDs             []string
 	ClearControlOwner               bool
 	ControlOwnerID                  *string
 	ClearDelegate                   bool
@@ -1919,6 +1958,24 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	if i.AppendReferences != nil {
 		m.AppendReferences(i.References)
 	}
+	if i.ClearTestingProcedures {
+		m.ClearTestingProcedures()
+	}
+	if v := i.TestingProcedures; v != nil {
+		m.SetTestingProcedures(v)
+	}
+	if i.AppendTestingProcedures != nil {
+		m.AppendTestingProcedures(i.TestingProcedures)
+	}
+	if i.ClearEvidenceRequests {
+		m.ClearEvidenceRequests()
+	}
+	if v := i.EvidenceRequests; v != nil {
+		m.SetEvidenceRequests(v)
+	}
+	if i.AppendEvidenceRequests != nil {
+		m.AppendEvidenceRequests(i.EvidenceRequests)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -1936,6 +1993,24 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ControlKindName; v != nil {
 		m.SetControlKindName(*v)
+	}
+	if i.ClearProposedChanges {
+		m.ClearProposedChanges()
+	}
+	if v := i.ProposedChanges; v != nil {
+		m.SetProposedChanges(v)
+	}
+	if i.ClearProposedByUserID {
+		m.ClearProposedByUserID()
+	}
+	if v := i.ProposedByUserID; v != nil {
+		m.SetProposedByUserID(*v)
+	}
+	if i.ClearProposedAt {
+		m.ClearProposedAt()
+	}
+	if v := i.ProposedAt; v != nil {
+		m.SetProposedAt(*v)
 	}
 	if v := i.RefCode; v != nil {
 		m.SetRefCode(*v)
@@ -2020,6 +2095,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
@@ -4075,6 +4159,142 @@ func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *Dir
 	return c
 }
 
+// CreateDiscussionInput represents a mutation input for creating discussions.
+type CreateDiscussionInput struct {
+	ExternalID       string
+	IsResolved       *bool
+	OwnerID          *string
+	CommentIDs       []string
+	ControlID        *string
+	SubcontrolID     *string
+	ProcedureID      *string
+	RiskID           *string
+	InternalPolicyID *string
+}
+
+// Mutate applies the CreateDiscussionInput on the DiscussionMutation builder.
+func (i *CreateDiscussionInput) Mutate(m *DiscussionMutation) {
+	m.SetExternalID(i.ExternalID)
+	if v := i.IsResolved; v != nil {
+		m.SetIsResolved(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
+	}
+	if v := i.ProcedureID; v != nil {
+		m.SetProcedureID(*v)
+	}
+	if v := i.RiskID; v != nil {
+		m.SetRiskID(*v)
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateDiscussionInput on the DiscussionCreate builder.
+func (c *DiscussionCreate) SetInput(i CreateDiscussionInput) *DiscussionCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDiscussionInput represents a mutation input for updating discussions.
+type UpdateDiscussionInput struct {
+	ExternalID          *string
+	IsResolved          *bool
+	ClearOwner          bool
+	OwnerID             *string
+	ClearComments       bool
+	AddCommentIDs       []string
+	RemoveCommentIDs    []string
+	ClearControl        bool
+	ControlID           *string
+	ClearSubcontrol     bool
+	SubcontrolID        *string
+	ClearProcedure      bool
+	ProcedureID         *string
+	ClearRisk           bool
+	RiskID              *string
+	ClearInternalPolicy bool
+	InternalPolicyID    *string
+}
+
+// Mutate applies the UpdateDiscussionInput on the DiscussionMutation builder.
+func (i *UpdateDiscussionInput) Mutate(m *DiscussionMutation) {
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
+	if v := i.IsResolved; v != nil {
+		m.SetIsResolved(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearSubcontrol {
+		m.ClearSubcontrol()
+	}
+	if v := i.SubcontrolID; v != nil {
+		m.SetSubcontrolID(*v)
+	}
+	if i.ClearProcedure {
+		m.ClearProcedure()
+	}
+	if v := i.ProcedureID; v != nil {
+		m.SetProcedureID(*v)
+	}
+	if i.ClearRisk {
+		m.ClearRisk()
+	}
+	if v := i.RiskID; v != nil {
+		m.SetRiskID(*v)
+	}
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDiscussionInput on the DiscussionUpdate builder.
+func (c *DiscussionUpdate) SetInput(i UpdateDiscussionInput) *DiscussionUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDiscussionInput on the DiscussionUpdateOne builder.
+func (c *DiscussionUpdateOne) SetInput(i UpdateDiscussionInput) *DiscussionUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateDocumentDataInput represents a mutation input for creating documentdataslice.
 type CreateDocumentDataInput struct {
 	Tags       []string
@@ -4850,6 +5070,9 @@ func (c *EventUpdateOne) SetInput(i UpdateEventInput) *EventUpdateOne {
 // CreateEvidenceInput represents a mutation input for creating evidences.
 type CreateEvidenceInput struct {
 	Tags                     []string
+	ProposedChanges          map[string]interface{}
+	ProposedByUserID         *string
+	ProposedAt               *time.Time
 	Name                     string
 	Description              *string
 	CollectionProcedure      *string
@@ -4874,6 +5097,15 @@ type CreateEvidenceInput struct {
 func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.ProposedChanges; v != nil {
+		m.SetProposedChanges(v)
+	}
+	if v := i.ProposedByUserID; v != nil {
+		m.SetProposedByUserID(*v)
+	}
+	if v := i.ProposedAt; v != nil {
+		m.SetProposedAt(*v)
 	}
 	m.SetName(i.Name)
 	if v := i.Description; v != nil {
@@ -4940,6 +5172,12 @@ type UpdateEvidenceInput struct {
 	ClearTags                      bool
 	Tags                           []string
 	AppendTags                     []string
+	ClearProposedChanges           bool
+	ProposedChanges                map[string]interface{}
+	ClearProposedByUserID          bool
+	ProposedByUserID               *string
+	ClearProposedAt                bool
+	ProposedAt                     *time.Time
 	Name                           *string
 	ClearDescription               bool
 	Description                    *string
@@ -4992,6 +5230,24 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearProposedChanges {
+		m.ClearProposedChanges()
+	}
+	if v := i.ProposedChanges; v != nil {
+		m.SetProposedChanges(v)
+	}
+	if i.ClearProposedByUserID {
+		m.ClearProposedByUserID()
+	}
+	if v := i.ProposedByUserID; v != nil {
+		m.SetProposedByUserID(*v)
+	}
+	if i.ClearProposedAt {
+		m.ClearProposedAt()
+	}
+	if v := i.ProposedAt; v != nil {
+		m.SetProposedAt(*v)
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
@@ -7732,6 +7988,9 @@ type CreateInternalPolicyInput struct {
 	DismissedImprovementSuggestions []string
 	URL                             *string
 	InternalPolicyKindName          *string
+	ProposedChanges                 map[string]interface{}
+	ProposedByUserID                *string
+	ProposedAt                      *time.Time
 	OwnerID                         *string
 	BlockedGroupIDs                 []string
 	EditorIDs                       []string
@@ -7749,6 +8008,7 @@ type CreateInternalPolicyInput struct {
 	ProgramIDs                      []string
 	FileID                          *string
 	CommentIDs                      []string
+	DiscussionIDs                   []string
 	WorkflowObjectRefIDs            []string
 }
 
@@ -7809,6 +8069,15 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.InternalPolicyKindName; v != nil {
 		m.SetInternalPolicyKindName(*v)
 	}
+	if v := i.ProposedChanges; v != nil {
+		m.SetProposedChanges(v)
+	}
+	if v := i.ProposedByUserID; v != nil {
+		m.SetProposedByUserID(*v)
+	}
+	if v := i.ProposedAt; v != nil {
+		m.SetProposedAt(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -7859,6 +8128,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
+	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
 	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
@@ -7917,6 +8189,12 @@ type UpdateInternalPolicyInput struct {
 	URL                                   *string
 	ClearInternalPolicyKindName           bool
 	InternalPolicyKindName                *string
+	ClearProposedChanges                  bool
+	ProposedChanges                       map[string]interface{}
+	ClearProposedByUserID                 bool
+	ProposedByUserID                      *string
+	ClearProposedAt                       bool
+	ProposedAt                            *time.Time
 	ClearOwner                            bool
 	OwnerID                               *string
 	ClearBlockedGroups                    bool
@@ -7963,6 +8241,9 @@ type UpdateInternalPolicyInput struct {
 	ClearComments                         bool
 	AddCommentIDs                         []string
 	RemoveCommentIDs                      []string
+	ClearDiscussions                      bool
+	AddDiscussionIDs                      []string
+	RemoveDiscussionIDs                   []string
 	ClearWorkflowObjectRefs               bool
 	AddWorkflowObjectRefIDs               []string
 	RemoveWorkflowObjectRefIDs            []string
@@ -8102,6 +8383,24 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.InternalPolicyKindName; v != nil {
 		m.SetInternalPolicyKindName(*v)
 	}
+	if i.ClearProposedChanges {
+		m.ClearProposedChanges()
+	}
+	if v := i.ProposedChanges; v != nil {
+		m.SetProposedChanges(v)
+	}
+	if i.ClearProposedByUserID {
+		m.ClearProposedByUserID()
+	}
+	if v := i.ProposedByUserID; v != nil {
+		m.SetProposedByUserID(*v)
+	}
+	if i.ClearProposedAt {
+		m.ClearProposedAt()
+	}
+	if v := i.ProposedAt; v != nil {
+		m.SetProposedAt(*v)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -8239,6 +8538,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -9536,6 +9844,9 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
 	Text             string
+	NoteRef          *string
+	DiscussionID     *string
+	IsEdited         *bool
 	OwnerID          *string
 	TaskID           *string
 	ControlID        *string
@@ -9551,6 +9862,15 @@ type CreateNoteInput struct {
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
 func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	m.SetText(i.Text)
+	if v := i.NoteRef; v != nil {
+		m.SetNoteRef(*v)
+	}
+	if v := i.DiscussionID; v != nil {
+		m.SetDiscussionID(*v)
+	}
+	if v := i.IsEdited; v != nil {
+		m.SetIsEdited(*v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -9592,6 +9912,11 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
 	Text                *string
+	ClearNoteRef        bool
+	NoteRef             *string
+	ClearDiscussionID   bool
+	DiscussionID        *string
+	IsEdited            *bool
 	ClearTask           bool
 	TaskID              *string
 	ClearControl        bool
@@ -9617,6 +9942,21 @@ type UpdateNoteInput struct {
 func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.Text; v != nil {
 		m.SetText(*v)
+	}
+	if i.ClearNoteRef {
+		m.ClearNoteRef()
+	}
+	if v := i.NoteRef; v != nil {
+		m.SetNoteRef(*v)
+	}
+	if i.ClearDiscussionID {
+		m.ClearDiscussionID()
+	}
+	if v := i.DiscussionID; v != nil {
+		m.SetDiscussionID(*v)
+	}
+	if v := i.IsEdited; v != nil {
+		m.SetIsEdited(*v)
 	}
 	if i.ClearTask {
 		m.ClearTask()
@@ -9926,6 +10266,7 @@ type CreateOrganizationInput struct {
 	DirectoryAccountIDs               []string
 	DirectoryGroupIDs                 []string
 	DirectorySyncRunIDs               []string
+	DiscussionIDs                     []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -10201,6 +10542,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.DirectorySyncRunIDs; len(v) > 0 {
 		m.AddDirectorySyncRunIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -10466,6 +10810,9 @@ type UpdateOrganizationInput struct {
 	ClearDirectorySyncRuns                  bool
 	AddDirectorySyncRunIDs                  []string
 	RemoveDirectorySyncRunIDs               []string
+	ClearDiscussions                        bool
+	AddDiscussionIDs                        []string
+	RemoveDiscussionIDs                     []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -11235,6 +11582,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveDirectorySyncRunIDs; len(v) > 0 {
 		m.RemoveDirectorySyncRunIDs(v...)
 	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateOrganizationInput on the OrganizationUpdate builder.
@@ -11778,6 +12134,7 @@ type CreateProcedureInput struct {
 	RiskIDs                         []string
 	TaskIDs                         []string
 	CommentIDs                      []string
+	DiscussionIDs                   []string
 	FileID                          *string
 }
 
@@ -11880,6 +12237,9 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
 	}
@@ -11975,6 +12335,9 @@ type UpdateProcedureInput struct {
 	ClearComments                         bool
 	AddCommentIDs                         []string
 	RemoveCommentIDs                      []string
+	ClearDiscussions                      bool
+	AddDiscussionIDs                      []string
+	RemoveDiscussionIDs                   []string
 	ClearFile                             bool
 	FileID                                *string
 }
@@ -12226,6 +12589,15 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearFile {
 		m.ClearFile()
@@ -13933,6 +14305,7 @@ type CreateRiskInput struct {
 	StakeholderID     *string
 	DelegateID        *string
 	CommentIDs        []string
+	DiscussionIDs     []string
 }
 
 // Mutate applies the CreateRiskInput on the RiskMutation builder.
@@ -14031,6 +14404,9 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateRiskInput on the RiskCreate builder.
@@ -14117,6 +14493,9 @@ type UpdateRiskInput struct {
 	ClearComments           bool
 	AddCommentIDs           []string
 	RemoveCommentIDs        []string
+	ClearDiscussions        bool
+	AddDiscussionIDs        []string
+	RemoveDiscussionIDs     []string
 }
 
 // Mutate applies the UpdateRiskInput on the RiskMutation builder.
@@ -14348,6 +14727,15 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 }
 
@@ -15068,6 +15456,8 @@ type CreateSubcontrolInput struct {
 	ImplementationGuidance     []models.ImplementationGuidance
 	ExampleEvidence            []models.ExampleEvidence
 	References                 []models.Reference
+	TestingProcedures          []models.TestingProcedures
+	EvidenceRequests           []models.EvidenceRequests
 	InternalNotes              *string
 	SystemInternalID           *string
 	SubcontrolKindName         *string
@@ -15081,6 +15471,7 @@ type CreateSubcontrolInput struct {
 	ProcedureIDs               []string
 	InternalPolicyIDs          []string
 	CommentIDs                 []string
+	DiscussionIDs              []string
 	ControlOwnerID             *string
 	DelegateID                 *string
 	ResponsiblePartyID         *string
@@ -15156,6 +15547,12 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.References; v != nil {
 		m.SetReferences(v)
 	}
+	if v := i.TestingProcedures; v != nil {
+		m.SetTestingProcedures(v)
+	}
+	if v := i.EvidenceRequests; v != nil {
+		m.SetEvidenceRequests(v)
+	}
 	if v := i.InternalNotes; v != nil {
 		m.SetInternalNotes(*v)
 	}
@@ -15192,6 +15589,9 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
+	}
+	if v := i.DiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
 	}
 	if v := i.ControlOwnerID; v != nil {
 		m.SetControlOwnerID(*v)
@@ -15274,6 +15674,12 @@ type UpdateSubcontrolInput struct {
 	ClearReferences                 bool
 	References                      []models.Reference
 	AppendReferences                []models.Reference
+	ClearTestingProcedures          bool
+	TestingProcedures               []models.TestingProcedures
+	AppendTestingProcedures         []models.TestingProcedures
+	ClearEvidenceRequests           bool
+	EvidenceRequests                []models.EvidenceRequests
+	AppendEvidenceRequests          []models.EvidenceRequests
 	ClearInternalNotes              bool
 	InternalNotes                   *string
 	ClearSystemInternalID           bool
@@ -15308,6 +15714,9 @@ type UpdateSubcontrolInput struct {
 	ClearComments                   bool
 	AddCommentIDs                   []string
 	RemoveCommentIDs                []string
+	ClearDiscussions                bool
+	AddDiscussionIDs                []string
+	RemoveDiscussionIDs             []string
 	ClearControlOwner               bool
 	ControlOwnerID                  *string
 	ClearDelegate                   bool
@@ -15474,6 +15883,24 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if i.AppendReferences != nil {
 		m.AppendReferences(i.References)
 	}
+	if i.ClearTestingProcedures {
+		m.ClearTestingProcedures()
+	}
+	if v := i.TestingProcedures; v != nil {
+		m.SetTestingProcedures(v)
+	}
+	if i.AppendTestingProcedures != nil {
+		m.AppendTestingProcedures(i.TestingProcedures)
+	}
+	if i.ClearEvidenceRequests {
+		m.ClearEvidenceRequests()
+	}
+	if v := i.EvidenceRequests; v != nil {
+		m.SetEvidenceRequests(v)
+	}
+	if i.AppendEvidenceRequests != nil {
+		m.AppendEvidenceRequests(i.EvidenceRequests)
+	}
 	if i.ClearInternalNotes {
 		m.ClearInternalNotes()
 	}
@@ -15575,6 +16002,15 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearDiscussions {
+		m.ClearDiscussions()
+	}
+	if v := i.AddDiscussionIDs; len(v) > 0 {
+		m.AddDiscussionIDs(v...)
+	}
+	if v := i.RemoveDiscussionIDs; len(v) > 0 {
+		m.RemoveDiscussionIDs(v...)
 	}
 	if i.ClearControlOwner {
 		m.ClearControlOwner()
@@ -19076,8 +19512,6 @@ type UpdateWorkflowAssignmentInput struct {
 	DecidedAt                         *time.Time
 	ClearNotes                        bool
 	Notes                             *string
-	ClearOwner                        bool
-	OwnerID                           *string
 	WorkflowInstanceID                *string
 	ClearWorkflowAssignmentTargets    bool
 	AddWorkflowAssignmentTargetIDs    []string
@@ -19134,12 +19568,6 @@ func (i *UpdateWorkflowAssignmentInput) Mutate(m *WorkflowAssignmentMutation) {
 	}
 	if v := i.Notes; v != nil {
 		m.SetNotes(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if v := i.WorkflowInstanceID; v != nil {
 		m.SetWorkflowInstanceID(*v)
@@ -19225,8 +19653,6 @@ type UpdateWorkflowAssignmentTargetInput struct {
 	TargetType           *enums.WorkflowTargetType
 	ClearResolverKey     bool
 	ResolverKey          *string
-	ClearOwner           bool
-	OwnerID              *string
 	WorkflowAssignmentID *string
 	ClearUser            bool
 	UserID               *string
@@ -19253,12 +19679,6 @@ func (i *UpdateWorkflowAssignmentTargetInput) Mutate(m *WorkflowAssignmentTarget
 	}
 	if v := i.ResolverKey; v != nil {
 		m.SetResolverKey(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if v := i.WorkflowAssignmentID; v != nil {
 		m.SetWorkflowAssignmentID(*v)
@@ -19409,8 +19829,6 @@ type UpdateWorkflowDefinitionInput struct {
 	ClearTrackedFields      bool
 	TrackedFields           []string
 	AppendTrackedFields     []string
-	ClearOwner              bool
-	OwnerID                 *string
 	ClearTagDefinitions     bool
 	AddTagDefinitionIDs     []string
 	RemoveTagDefinitionIDs  []string
@@ -19511,12 +19929,6 @@ func (i *UpdateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	if i.AppendTrackedFields != nil {
 		m.AppendTrackedFields(i.TrackedFields)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
 	if i.ClearTagDefinitions {
 		m.ClearTagDefinitions()
 	}
@@ -19587,8 +19999,6 @@ type UpdateWorkflowEventInput struct {
 	EventType          *enums.WorkflowEventType
 	ClearPayload       bool
 	Payload            *models.WorkflowEventPayload
-	ClearOwner         bool
-	OwnerID            *string
 	WorkflowInstanceID *string
 }
 
@@ -19611,12 +20021,6 @@ func (i *UpdateWorkflowEventInput) Mutate(m *WorkflowEventMutation) {
 	}
 	if v := i.Payload; v != nil {
 		m.SetPayload(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if v := i.WorkflowInstanceID; v != nil {
 		m.SetWorkflowInstanceID(*v)
@@ -19644,6 +20048,9 @@ type CreateWorkflowInstanceInput struct {
 	DefinitionSnapshot    *models.WorkflowDefinitionDocument
 	OwnerID               *string
 	WorkflowDefinitionID  string
+	ControlID             *string
+	InternalPolicyID      *string
+	EvidenceID            *string
 	WorkflowAssignmentIDs []string
 	WorkflowEventIDs      []string
 	WorkflowObjectRefIDs  []string
@@ -19670,6 +20077,15 @@ func (i *CreateWorkflowInstanceInput) Mutate(m *WorkflowInstanceMutation) {
 		m.SetOwnerID(*v)
 	}
 	m.SetWorkflowDefinitionID(i.WorkflowDefinitionID)
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
+	}
 	if v := i.WorkflowAssignmentIDs; len(v) > 0 {
 		m.AddWorkflowAssignmentIDs(v...)
 	}
@@ -19699,9 +20115,13 @@ type UpdateWorkflowInstanceInput struct {
 	LastEvaluatedAt             *time.Time
 	ClearDefinitionSnapshot     bool
 	DefinitionSnapshot          *models.WorkflowDefinitionDocument
-	ClearOwner                  bool
-	OwnerID                     *string
 	WorkflowDefinitionID        *string
+	ClearControl                bool
+	ControlID                   *string
+	ClearInternalPolicy         bool
+	InternalPolicyID            *string
+	ClearEvidence               bool
+	EvidenceID                  *string
 	ClearWorkflowAssignments    bool
 	AddWorkflowAssignmentIDs    []string
 	RemoveWorkflowAssignmentIDs []string
@@ -19745,14 +20165,26 @@ func (i *UpdateWorkflowInstanceInput) Mutate(m *WorkflowInstanceMutation) {
 	if v := i.DefinitionSnapshot; v != nil {
 		m.SetDefinitionSnapshot(*v)
 	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
 	if v := i.WorkflowDefinitionID; v != nil {
 		m.SetWorkflowDefinitionID(*v)
+	}
+	if i.ClearControl {
+		m.ClearControl()
+	}
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if i.ClearInternalPolicy {
+		m.ClearInternalPolicy()
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
 	}
 	if i.ClearWorkflowAssignments {
 		m.ClearWorkflowAssignments()
@@ -19805,6 +20237,7 @@ type CreateWorkflowObjectRefInput struct {
 	FindingID          *string
 	DirectoryAccountID *string
 	DirectoryGroupID   *string
+	EvidenceID         *string
 }
 
 // Mutate applies the CreateWorkflowObjectRefInput on the WorkflowObjectRefMutation builder.
@@ -19831,38 +20264,13 @@ func (i *CreateWorkflowObjectRefInput) Mutate(m *WorkflowObjectRefMutation) {
 	if v := i.DirectoryGroupID; v != nil {
 		m.SetDirectoryGroupID(*v)
 	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateWorkflowObjectRefInput on the WorkflowObjectRefCreate builder.
 func (c *WorkflowObjectRefCreate) SetInput(i CreateWorkflowObjectRefInput) *WorkflowObjectRefCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateWorkflowObjectRefInput represents a mutation input for updating workflowobjectrefs.
-type UpdateWorkflowObjectRefInput struct {
-	ClearOwner bool
-	OwnerID    *string
-}
-
-// Mutate applies the UpdateWorkflowObjectRefInput on the WorkflowObjectRefMutation builder.
-func (i *UpdateWorkflowObjectRefInput) Mutate(m *WorkflowObjectRefMutation) {
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateWorkflowObjectRefInput on the WorkflowObjectRefUpdate builder.
-func (c *WorkflowObjectRefUpdate) SetInput(i UpdateWorkflowObjectRefInput) *WorkflowObjectRefUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateWorkflowObjectRefInput on the WorkflowObjectRefUpdateOne builder.
-func (c *WorkflowObjectRefUpdateOne) SetInput(i UpdateWorkflowObjectRefInput) *WorkflowObjectRefUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

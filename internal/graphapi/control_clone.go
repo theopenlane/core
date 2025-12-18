@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/schema"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
@@ -70,7 +71,7 @@ func (r *mutationResolver) cloneControlsFromStandard(ctx context.Context, filter
 	if len(stds) > 1 && (filters.standardShortName != nil && filters.standardVersion != nil) {
 		logger.Error().Err(err).Msgf("error getting standard with ID")
 
-		return nil, fmt.Errorf("%w: error getting standard, too many results", ErrInvalidInput)
+		return nil, fmt.Errorf("%w: error getting standard, too many results", common.ErrInvalidInput)
 	}
 
 	// if we get the standard back, all controls should be accessible so we can allow context to skip checks
@@ -582,7 +583,7 @@ func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontr
 	hasUpdate := false
 	updates := map[string]any{}
 
-	input, err := convertToObject[map[string]any](c.ControlInput)
+	input, err := common.ConvertToObject[map[string]any](c.ControlInput)
 	if err != nil {
 		return nil, false, err
 	}
@@ -592,13 +593,13 @@ func getFieldsToUpdate[T generated.UpdateControlInput | generated.UpdateSubcontr
 	}
 
 	for k, v := range *input {
-		if !isEmpty(v) {
+		if !common.IsEmpty(v) {
 			hasUpdate = true
 			updates[k] = v
 		}
 	}
 
-	out, err := convertToObject[T](updates)
+	out, err := common.ConvertToObject[T](updates)
 	if err != nil {
 		return nil, false, err
 	}

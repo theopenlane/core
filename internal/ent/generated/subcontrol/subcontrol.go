@@ -76,6 +76,10 @@ const (
 	FieldExampleEvidence = "example_evidence"
 	// FieldReferences holds the string denoting the references field in the database.
 	FieldReferences = "references"
+	// FieldTestingProcedures holds the string denoting the testing_procedures field in the database.
+	FieldTestingProcedures = "testing_procedures"
+	// FieldEvidenceRequests holds the string denoting the evidence_requests field in the database.
+	FieldEvidenceRequests = "evidence_requests"
 	// FieldControlOwnerID holds the string denoting the control_owner_id field in the database.
 	FieldControlOwnerID = "control_owner_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
@@ -114,6 +118,8 @@ const (
 	EdgeInternalPolicies = "internal_policies"
 	// EdgeComments holds the string denoting the comments edge name in mutations.
 	EdgeComments = "comments"
+	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
+	EdgeDiscussions = "discussions"
 	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
 	EdgeControlOwner = "control_owner"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
@@ -187,6 +193,13 @@ const (
 	CommentsInverseTable = "notes"
 	// CommentsColumn is the table column denoting the comments relation/edge.
 	CommentsColumn = "subcontrol_comments"
+	// DiscussionsTable is the table that holds the discussions relation/edge.
+	DiscussionsTable = "discussions"
+	// DiscussionsInverseTable is the table name for the Discussion entity.
+	// It exists in this package in order to avoid circular dependency with the "discussion" package.
+	DiscussionsInverseTable = "discussions"
+	// DiscussionsColumn is the table column denoting the discussions relation/edge.
+	DiscussionsColumn = "subcontrol_discussions"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "subcontrols"
 	// ControlOwnerInverseTable is the table name for the Group entity.
@@ -283,6 +296,8 @@ var Columns = []string{
 	FieldImplementationGuidance,
 	FieldExampleEvidence,
 	FieldReferences,
+	FieldTestingProcedures,
+	FieldEvidenceRequests,
 	FieldControlOwnerID,
 	FieldDelegateID,
 	FieldOwnerID,
@@ -706,6 +721,20 @@ func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByDiscussionsCount orders the results by discussions count.
+func ByDiscussionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDiscussionsStep(), opts...)
+	}
+}
+
+// ByDiscussions orders the results by discussions terms.
+func ByDiscussions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDiscussionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlOwnerField orders the results by control_owner field.
 func ByControlOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -864,6 +893,13 @@ func newCommentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CommentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+	)
+}
+func newDiscussionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DiscussionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
 	)
 }
 func newControlOwnerStep() *sqlgraph.Step {

@@ -432,6 +432,36 @@ type CreateTrustCenterNDAInput struct {
 	TrustCenterID string `json:"trustCenterID"`
 }
 
+// Input for createTrustCenterPreviewSetting mutation
+type CreateTrustCenterPreviewSettingInput struct {
+	// trust center ID
+	TrustCenterID string `json:"trustCenterID"`
+	// title of the trust center
+	Title *string `json:"title,omitempty"`
+	// overview of the trust center
+	Overview *string `json:"overview,omitempty"`
+	// primary color for the trust center
+	PrimaryColor *string `json:"primaryColor,omitempty"`
+	// logo remote URL
+	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
+	// logo local file ID
+	LogoFileID *string `json:"logoFileID,omitempty"`
+	// favicon remote URL
+	FaviconRemoteURL *string `json:"faviconRemoteURL,omitempty"`
+	// favicon local file ID
+	FaviconFileID *string `json:"faviconFileID,omitempty"`
+	// theme mode for the trust center
+	ThemeMode *enums.TrustCenterThemeMode `json:"themeMode,omitempty"`
+	// font for the trust center
+	Font *string `json:"font,omitempty"`
+	// foreground color for the trust center
+	ForegroundColor *string `json:"foregroundColor,omitempty"`
+	// background color for the trust center
+	BackgroundColor *string `json:"backgroundColor,omitempty"`
+	// accent color for the trust center
+	AccentColor *string `json:"accentColor,omitempty"`
+}
+
 // Return response for createBulkCustomDomain mutation
 type CustomDomainBulkCreatePayload struct {
 	// Created customDomains
@@ -610,6 +640,30 @@ type DirectorySyncRunDeletePayload struct {
 type DirectorySyncRunUpdatePayload struct {
 	// Updated directorySyncRun
 	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
+}
+
+// Return response for createBulkDiscussion mutation
+type DiscussionBulkCreatePayload struct {
+	// Created discussions
+	Discussions []*generated.Discussion `json:"discussions,omitempty"`
+}
+
+// Return response for createDiscussion mutation
+type DiscussionCreatePayload struct {
+	// Created discussion
+	Discussion *generated.Discussion `json:"discussion"`
+}
+
+// Return response for deleteDiscussion mutation
+type DiscussionDeletePayload struct {
+	// Deleted discussion ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDiscussion mutation
+type DiscussionUpdatePayload struct {
+	// Updated discussion
+	Discussion *generated.Discussion `json:"discussion"`
 }
 
 // Return response for createBulkDocumentData mutation
@@ -2127,6 +2181,12 @@ type TrustCenterNDAUpdatePayload struct {
 	Template *generated.Template `json:"template"`
 }
 
+// Return response for createTrustCenterPreviewSetting mutation
+type TrustCenterPreviewSettingCreatePayload struct {
+	// Created preview trust center setting
+	TrustCenterSetting *generated.TrustCenterSetting `json:"trustCenterSetting"`
+}
+
 // Return response for createBulkTrustCenterSetting mutation
 type TrustCenterSettingBulkCreatePayload struct {
 	// Created trustCenterSettings
@@ -2457,12 +2517,6 @@ type WorkflowObjectRefCreatePayload struct {
 type WorkflowObjectRefDeletePayload struct {
 	// Deleted workflowObjectRef ID
 	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowObjectRef mutation
-type WorkflowObjectRefUpdatePayload struct {
-	// Updated workflowObjectRef
-	WorkflowObjectRef *generated.WorkflowObjectRef `json:"workflowObjectRef"`
 }
 
 // Properties by which ControlCategory connections can be ordered.

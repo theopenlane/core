@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateControlObjective is the resolver for the createControlObjective field.
 func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateControlObjective(ctx context.Context, input gen
 
 	res, err := withTransactionalMutation(ctx).ControlObjective.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlobjective"})
 	}
 
 	return &model.ControlObjectiveCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 
 // CreateBulkCSVControlObjective is the resolver for the createBulkCSVControlObjective field.
 func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateControlObjectiveInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateControlObjectiveInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "controlobjective"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ControlObjective.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlobjective"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "controlobjective"})
 	}
 
 	return &model.ControlObjectiveUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string
 // DeleteControlObjective is the resolver for the deleteControlObjective field.
 func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string) (*model.ControlObjectiveDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "controlobjective"})
 	}
 
 	if err := generated.ControlObjectiveEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ControlObjectiveDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkControlObjective(ctx context.Context, ids [
 func (r *queryResolver) ControlObjective(ctx context.Context, id string) (*generated.ControlObjective, error) {
 	query, err := withTransactionalMutation(ctx).ControlObjective.Query().Where(controlobjective.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlobjective"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "controlobjective"})
 	}
 
 	return res, nil

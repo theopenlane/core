@@ -70,6 +70,10 @@ func (JobTemplate) Fields() []ent.Field {
 					entgql.SkipAll, // hidden from the graphql api, this is an internal field used to track the windmill path
 				),
 			).
+			Validate(func(s string) error {
+				_, err := models.ValidateURL(s)
+				return err
+			}).
 			Optional().
 			Comment("windmill path used to execute the job"),
 		field.String("download_url").
@@ -132,7 +136,6 @@ func (JobTemplate) Annotations() []schema.Annotation {
 // Hooks of the JobTemplate
 func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookJobTemplate(),
 		hook.On(
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,

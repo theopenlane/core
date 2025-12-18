@@ -76,6 +76,10 @@ const (
 	FieldExampleEvidence = "example_evidence"
 	// FieldReferences holds the string denoting the references field in the database.
 	FieldReferences = "references"
+	// FieldTestingProcedures holds the string denoting the testing_procedures field in the database.
+	FieldTestingProcedures = "testing_procedures"
+	// FieldEvidenceRequests holds the string denoting the evidence_requests field in the database.
+	FieldEvidenceRequests = "evidence_requests"
 	// FieldControlOwnerID holds the string denoting the control_owner_id field in the database.
 	FieldControlOwnerID = "control_owner_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
@@ -92,6 +96,12 @@ const (
 	FieldControlKindName = "control_kind_name"
 	// FieldControlKindID holds the string denoting the control_kind_id field in the database.
 	FieldControlKindID = "control_kind_id"
+	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
+	FieldProposedChanges = "proposed_changes"
+	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
+	FieldProposedByUserID = "proposed_by_user_id"
+	// FieldProposedAt holds the string denoting the proposed_at field in the database.
+	FieldProposedAt = "proposed_at"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
@@ -114,6 +124,8 @@ const (
 	EdgeInternalPolicies = "internal_policies"
 	// EdgeComments holds the string denoting the comments edge name in mutations.
 	EdgeComments = "comments"
+	// EdgeDiscussions holds the string denoting the discussions edge name in mutations.
+	EdgeDiscussions = "discussions"
 	// EdgeControlOwner holds the string denoting the control_owner edge name in mutations.
 	EdgeControlOwner = "control_owner"
 	// EdgeDelegate holds the string denoting the delegate edge name in mutations.
@@ -201,6 +213,13 @@ const (
 	CommentsInverseTable = "notes"
 	// CommentsColumn is the table column denoting the comments relation/edge.
 	CommentsColumn = "control_comments"
+	// DiscussionsTable is the table that holds the discussions relation/edge.
+	DiscussionsTable = "discussions"
+	// DiscussionsInverseTable is the table name for the Discussion entity.
+	// It exists in this package in order to avoid circular dependency with the "discussion" package.
+	DiscussionsInverseTable = "discussions"
+	// DiscussionsColumn is the table column denoting the discussions relation/edge.
+	DiscussionsColumn = "control_discussions"
 	// ControlOwnerTable is the table that holds the control_owner relation/edge.
 	ControlOwnerTable = "controls"
 	// ControlOwnerInverseTable is the table name for the Group entity.
@@ -350,6 +369,8 @@ var Columns = []string{
 	FieldImplementationGuidance,
 	FieldExampleEvidence,
 	FieldReferences,
+	FieldTestingProcedures,
+	FieldEvidenceRequests,
 	FieldControlOwnerID,
 	FieldDelegateID,
 	FieldOwnerID,
@@ -358,6 +379,9 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldControlKindName,
 	FieldControlKindID,
+	FieldProposedChanges,
+	FieldProposedByUserID,
+	FieldProposedAt,
 	FieldRefCode,
 	FieldStandardID,
 }
@@ -653,6 +677,16 @@ func ByControlKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlKindID, opts...).ToFunc()
 }
 
+// ByProposedByUserID orders the results by the proposed_by_user_id field.
+func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
+}
+
+// ByProposedAt orders the results by the proposed_at field.
+func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
+}
+
 // ByRefCode orders the results by the ref_code field.
 func ByRefCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRefCode, opts...).ToFunc()
@@ -786,6 +820,20 @@ func ByCommentsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByComments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newCommentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDiscussionsCount orders the results by discussions count.
+func ByDiscussionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDiscussionsStep(), opts...)
+	}
+}
+
+// ByDiscussions orders the results by discussions terms.
+func ByDiscussions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDiscussionsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1073,6 +1121,13 @@ func newCommentsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CommentsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CommentsTable, CommentsColumn),
+	)
+}
+func newDiscussionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DiscussionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
 	)
 }
 func newControlOwnerStep() *sqlgraph.Step {

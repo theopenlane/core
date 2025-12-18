@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateTask is the resolver for the createTask field.
 func (r *mutationResolver) CreateTask(ctx context.Context, input generated.CreateTaskInput) (*model.TaskCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input generated.Creat
 
 	res, err := withTransactionalMutation(ctx).Task.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "task"})
 	}
 
 	return &model.TaskCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkTask(ctx context.Context, input []*generate
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkTask(ctx context.Context, input []*generate
 
 // CreateBulkCSVTask is the resolver for the createBulkCSVTask field.
 func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.Upload) (*model.TaskBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTaskInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTaskInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "task"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -89,11 +90,11 @@ func (r *mutationResolver) UpdateBulkTask(ctx context.Context, ids []string, inp
 func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "task"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -104,7 +105,7 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "task"})
 	}
 
 	return &model.TaskUpdatePayload{
@@ -115,11 +116,11 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input gene
 // DeleteTask is the resolver for the deleteTask field.
 func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*model.TaskDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Task.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "task"})
 	}
 
 	if err := generated.TaskEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TaskDeletePayload{
@@ -140,12 +141,12 @@ func (r *mutationResolver) DeleteBulkTask(ctx context.Context, ids []string) (*m
 func (r *queryResolver) Task(ctx context.Context, id string) (*generated.Task, error) {
 	query, err := withTransactionalMutation(ctx).Task.Query().Where(task.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "task"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "task"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "task"})
 	}
 
 	return res, nil

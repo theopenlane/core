@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/pkg/entitlements"

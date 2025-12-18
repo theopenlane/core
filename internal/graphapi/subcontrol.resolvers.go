@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateSubcontrol is the resolver for the createSubcontrol field.
 func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).Subcontrol.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subcontrol"})
 	}
 
 	return &model.SubcontrolCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*ge
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*ge
 
 // CreateBulkCSVSubcontrol is the resolver for the createBulkCSVSubcontrol field.
 func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateSubcontrolInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateSubcontrolInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "subcontrol"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, input generated.UpdateSubcontrolInput) (*model.SubcontrolUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subcontrol.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
 	}
 
 	return &model.SubcontrolUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, inpu
 // DeleteSubcontrol is the resolver for the deleteSubcontrol field.
 func (r *mutationResolver) DeleteSubcontrol(ctx context.Context, id string) (*model.SubcontrolDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "subcontrol"})
 	}
 
 	if err := generated.SubcontrolEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.SubcontrolDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkSubcontrol(ctx context.Context, ids []strin
 func (r *queryResolver) Subcontrol(ctx context.Context, id string) (*generated.Subcontrol, error) {
 	query, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "subcontrol"})
 	}
 
 	return res, nil

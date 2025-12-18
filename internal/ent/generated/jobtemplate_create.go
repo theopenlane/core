@@ -371,6 +371,11 @@ func (_c *JobTemplateCreate) check() error {
 			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.platform": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.WindmillPath(); ok {
+		if err := jobtemplate.WindmillPathValidator(v); err != nil {
+			return &ValidationError{Name: "windmill_path", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.windmill_path": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.DownloadURL(); !ok {
 		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "JobTemplate.download_url"`)}
 	}

@@ -44,7 +44,7 @@ func HookCreateAssessmentResponse() ent.Hook {
 			existingResponse, err := m.Client().AssessmentResponse.Query().
 				Where(
 					assessmentresponse.AssessmentID(id),
-					assessmentresponse.Email(email),
+					assessmentresponse.EmailEqualFold(email),
 				).
 				Only(ctx)
 
@@ -95,7 +95,7 @@ func HookCreateAssessmentResponse() ent.Hook {
 				return nil, gqlerrors.NewCustomError(
 					gqlerrors.MaxAttemptsErrorCode,
 					"max attempts reached for this email, please delete the questionnaire request and try again",
-					ErrMaxAttempts)
+					ErrMaxAttemptsAssessments)
 			}
 
 			updatedResponse, err := m.Client().AssessmentResponse.UpdateOneID(existingResponse.ID).

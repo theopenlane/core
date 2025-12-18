@@ -3,6 +3,7 @@ package graphapi
 import (
 	"testing"
 
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
@@ -77,7 +78,7 @@ func TestGetStandardRefCodes(t *testing.T) {
 			result, err := getStandardRefCodes(tt.data)
 
 			if tt.wantErr {
-				assert.ErrorIs(t, err, ErrInvalidInput)
+				assert.ErrorIs(t, err, common.ErrInvalidInput)
 				assert.Check(t, result == nil)
 
 				return
