@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateTrustcenterEntity(ctx context.Context, input generated.CreateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustcenterEntity.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
 	}
 
 	return &model.TrustcenterEntityCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkTrustcenterEntity(ctx context.Context, inpu
 
 // CreateBulkCSVTrustcenterEntity is the resolver for the createBulkCSVTrustcenterEntity field.
 func (r *mutationResolver) CreateBulkCSVTrustcenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustcenterEntityBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTrustcenterEntityInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTrustcenterEntityInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVTrustcenterEntity(ctx context.Context, i
 func (r *mutationResolver) UpdateTrustcenterEntity(ctx context.Context, id string, input generated.UpdateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustcenterEntity.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterentity"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateTrustcenterEntity(ctx context.Context, id strin
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterentity"})
 	}
 
 	return &model.TrustcenterEntityUpdatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) UpdateTrustcenterEntity(ctx context.Context, id strin
 // DeleteTrustcenterEntity is the resolver for the deleteTrustcenterEntity field.
 func (r *mutationResolver) DeleteTrustcenterEntity(ctx context.Context, id string) (*model.TrustcenterEntityDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustcenterEntity.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterentity"})
 	}
 
 	if err := generated.TrustcenterEntityEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustcenterEntityDeletePayload{
@@ -92,12 +93,12 @@ func (r *mutationResolver) DeleteTrustcenterEntity(ctx context.Context, id strin
 func (r *queryResolver) TrustcenterEntity(ctx context.Context, id string) (*generated.TrustcenterEntity, error) {
 	query, err := withTransactionalMutation(ctx).TrustcenterEntity.Query().Where(trustcenterentity.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterentity"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
 	}
 
 	return res, nil

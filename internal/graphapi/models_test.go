@@ -1704,12 +1704,11 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 type JobTemplateBuilder struct {
 	client *client
 
-	Title        string
-	Description  *string
-	Cron         string
-	Platform     enums.JobPlatformType
-	DownloadURL  string
-	WindmillPath string
+	Title       string
+	Description *string
+	Cron        string
+	Platform    enums.JobPlatformType
+	DownloadURL string
 }
 
 const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
@@ -1729,15 +1728,10 @@ func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Job
 		j.Platform = enums.JobPlatformTypeGo
 	}
 
-	if j.WindmillPath == "" {
-		j.WindmillPath = "u/admin/gifted_script"
-	}
-
 	mut := j.client.db.JobTemplate.Create().
 		SetTitle(j.Title).
 		SetDownloadURL(j.DownloadURL).
-		SetPlatform(j.Platform).
-		SetWindmillPath(j.WindmillPath)
+		SetPlatform(j.Platform)
 
 	if j.Description != nil {
 		mut.SetDescription(*j.Description)

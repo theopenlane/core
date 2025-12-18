@@ -1,0 +1,73 @@
+
+
+query GetAllJobTemplateHistories {
+  jobTemplateHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        configuration
+        createdAt
+        createdBy
+        cron
+        description
+        displayID
+        downloadURL
+        historyTime
+        id
+        internalNotes
+        operation
+        ownerID
+        platform
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetJobTemplateHistories($first: Int, $last: Int, $where: JobTemplateHistoryWhereInput) {
+  jobTemplateHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        configuration
+        createdAt
+        createdBy
+        cron
+        description
+        displayID
+        downloadURL
+        historyTime
+        id
+        internalNotes
+        operation
+        ownerID
+        platform
+        ref
+        systemInternalID
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

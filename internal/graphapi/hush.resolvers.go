@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateHush(ctx context.Context, input generated.CreateHushInput) (*model.HushCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Hush.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "hush"})
 	}
 
 	return &model.HushCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkHush(ctx context.Context, input []*generate
 
 // CreateBulkCSVHush is the resolver for the createBulkCSVHush field.
 func (r *mutationResolver) CreateBulkCSVHush(ctx context.Context, input graphql.Upload) (*model.HushBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateHushInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateHushInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "hush"})
 	}
 
 	if len(data) == 0 {
@@ -66,7 +67,7 @@ func (r *mutationResolver) UpdateBulkHush(ctx context.Context, ids []string, inp
 func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input generated.UpdateHushInput) (*model.HushUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Hush.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
 	}
 
 	// setup update request
@@ -74,7 +75,7 @@ func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "hush"})
 	}
 
 	return &model.HushUpdatePayload{
@@ -85,11 +86,11 @@ func (r *mutationResolver) UpdateHush(ctx context.Context, id string, input gene
 // DeleteHush is the resolver for the deleteHush field.
 func (r *mutationResolver) DeleteHush(ctx context.Context, id string) (*model.HushDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Hush.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "hush"})
 	}
 
 	if err := generated.HushEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.HushDeletePayload{
@@ -110,12 +111,12 @@ func (r *mutationResolver) DeleteBulkHush(ctx context.Context, ids []string) (*m
 func (r *queryResolver) Hush(ctx context.Context, id string) (*generated.Hush, error) {
 	query, err := withTransactionalMutation(ctx).Hush.Query().Where(hush.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "hush"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "hush"})
 	}
 
 	return res, nil

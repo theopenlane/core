@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -34,7 +35,7 @@ func (r *mutationResolver) CreateTrustCenterDoc(ctx context.Context, input gener
 
 	res, err := withTransactionalMutation(ctx).TrustCenterDoc.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterdoc"})
 	}
 
 	return &model.TrustCenterDocCreatePayload{
@@ -53,11 +54,11 @@ func (r *mutationResolver) CreateBulkTrustCenterDoc(ctx context.Context, input [
 
 // CreateBulkCSVTrustCenterDoc is the resolver for the createBulkCSVTrustCenterDoc field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTrustCenterDocInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterDocInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterdoc"})
 	}
 
 	if len(data) == 0 {
@@ -71,7 +72,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterDoc(ctx context.Context, inpu
 func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterDoc.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})
 	}
 
 	// setup update request
@@ -79,7 +80,7 @@ func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterdoc"})
 	}
 
 	return &model.TrustCenterDocUpdatePayload{
@@ -99,11 +100,11 @@ func (r *mutationResolver) UpdateBulkTrustCenterDoc(ctx context.Context, ids []s
 // DeleteTrustCenterDoc is the resolver for the deleteTrustCenterDoc field.
 func (r *mutationResolver) DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterdoc"})
 	}
 
 	if err := generated.TrustCenterDocEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterDocDeletePayload{
@@ -124,12 +125,12 @@ func (r *mutationResolver) DeleteBulkTrustCenterDoc(ctx context.Context, ids []s
 func (r *queryResolver) TrustCenterDoc(ctx context.Context, id string) (*generated.TrustCenterDoc, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterDoc.Query().Where(trustcenterdoc.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterdoc"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterdoc"})
 	}
 
 	return res, nil

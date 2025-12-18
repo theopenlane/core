@@ -107,20 +107,8 @@ func ActionPlanEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func ActionPlanHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup actionplanhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func AssessmentEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessment edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func AssessmentHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmenthistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -131,32 +119,14 @@ func AssessmentResponseEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func AssessmentResponseHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assessmentresponsehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func AssetEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup asset edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
-func AssetHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup assethistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ContactEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contact edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ContactHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup contacthistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -174,20 +144,8 @@ func ControlEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func ControlHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ControlImplementationEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementation edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ControlImplementationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlimplementationhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -198,20 +156,8 @@ func ControlObjectiveEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func ControlObjectiveHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup controlobjectivehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func CustomDomainEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomain edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func CustomDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup customdomainhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -224,12 +170,6 @@ func CustomTypeEnumEdgeCleanup(ctx context.Context, id string) error {
 
 func DNSVerificationEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverification edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func DNSVerificationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverificationhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -247,12 +187,6 @@ func DirectoryAccountEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func DirectoryAccountHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directoryaccounthistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygroup edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -266,20 +200,8 @@ func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func DirectoryGroupHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygrouphistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func DirectoryMembershipEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembership edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func DirectoryMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -296,20 +218,8 @@ func DiscussionEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func DiscussionHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussionhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func DocumentDataEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdata edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func DocumentDataHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup documentdatahistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -326,20 +236,8 @@ func EntityEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func EntityHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entityhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func EntityTypeEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytype edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func EntityTypeHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup entitytypehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -352,12 +250,6 @@ func EventEdgeCleanup(ctx context.Context, id string) error {
 
 func EvidenceEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidence edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func EvidenceHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup evidencehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -380,12 +272,6 @@ func FileDownloadTokenEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func FileHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup filehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func FindingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup finding edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -394,18 +280,6 @@ func FindingEdgeCleanup(ctx context.Context, id string) error {
 
 func FindingControlEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrol edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func FindingControlHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findingcontrolhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func FindingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup findinghistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -430,20 +304,8 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func GroupHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup grouphistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func GroupMembershipEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembership edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func GroupMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -454,20 +316,8 @@ func GroupSettingEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func GroupSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup groupsettinghistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func HushEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hush edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func HushHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup hushhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -484,20 +334,8 @@ func IntegrationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func IntegrationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicy edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func InternalPolicyHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup internalpolicyhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -545,20 +383,8 @@ func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func JobTemplateHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobtemplatehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func MappableDomainEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomain edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func MappableDomainHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappabledomainhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -569,32 +395,14 @@ func MappedControlEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func MappedControlHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup mappedcontrolhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func NarrativeEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrative edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
-func NarrativeHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup narrativehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func NoteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup note edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func NoteHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -631,12 +439,6 @@ func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func OrgMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func OrgModuleEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgmodule edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -657,12 +459,6 @@ func OrgProductEdgeCleanup(ctx context.Context, id string) error {
 
 func OrgSubscriptionEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscription edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func OrgSubscriptionHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup orgsubscriptionhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1156,20 +952,8 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func OrganizationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func OrganizationSettingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsetting edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func OrganizationSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup organizationsettinghistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1192,12 +976,6 @@ func ProcedureEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func ProcedureHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup procedurehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ProgramEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup program edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -1211,20 +989,8 @@ func ProgramEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func ProgramHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ProgramMembershipEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembership edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ProgramMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup programmembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1235,20 +1001,8 @@ func RemediationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func RemediationHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup remediationhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ReviewEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup review edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ReviewHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup reviewhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1259,32 +1013,14 @@ func RiskEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func RiskHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup riskhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ScanEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scan edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
-func ScanHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scanhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func ScheduledJobEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func ScheduledJobHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1301,32 +1037,14 @@ func StandardEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func StandardHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standardhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrol edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
-func SubcontrolHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subcontrolhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func SubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1355,12 +1073,6 @@ func TaskEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func TaskHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup taskhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func TemplateEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup template edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -1370,12 +1082,6 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 			return err
 		}
 	}
-
-	return nil
-}
-
-func TemplateHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup templatehistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1434,26 +1140,8 @@ func TrustCenterComplianceEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func TrustCenterComplianceHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentercompliancehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func TrustCenterDocHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdochistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func TrustCenterHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1464,20 +1152,8 @@ func TrustCenterSettingEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func TrustCenterSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersettinghistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessor edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func TrustCenterSubprocessorHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcentersubprocessorhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1488,20 +1164,8 @@ func TrustCenterWatermarkConfigEdgeCleanup(ctx context.Context, id string) error
 	return nil
 }
 
-func TrustCenterWatermarkConfigHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfighistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func TrustcenterEntityEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentity edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func TrustcenterEntityHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentityhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1582,32 +1246,14 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func UserHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup userhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func UserSettingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersetting edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
 
-func UserSettingHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup usersettinghistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func VulnerabilityEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerability edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func VulnerabilityHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup vulnerabilityhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1624,20 +1270,8 @@ func WorkflowAssignmentEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func WorkflowAssignmentHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenthistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func WorkflowAssignmentTargetEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttarget edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func WorkflowAssignmentTargetHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttargethistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1648,20 +1282,8 @@ func WorkflowDefinitionEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func WorkflowDefinitionHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinitionhistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func WorkflowEventEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowevent edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func WorkflowEventHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workfloweventhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1672,20 +1294,8 @@ func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
-func WorkflowInstanceHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstancehistory edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
 func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func WorkflowObjectRefHistoryEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectrefhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

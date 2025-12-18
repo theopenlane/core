@@ -8,7 +8,6 @@ linters:
     - bodyclose
     - err113
     - gocritic
-    # - gocyclo # temporarily disabled due to high complexity in some files, and already caught by sonar lint
     - gosec
     - misspell
     - mnd
@@ -23,10 +22,12 @@ linters:
       - legacy
       - std-error-handling
     paths:
-      - internal/graphapi/model/gen_models.go
+      - internal/graphapi/generated/gen_models.go
+      - internal/graphapi/historygenerated/gen_models.go
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - internal/ent/generated/*
+      - internal/ent/historygenerated/*
       - internal/ent/templates/*
       - jsonschema/templates/*
       - pkg/objects/mocks/*
@@ -34,6 +35,7 @@ linters:
       - pkg/corejobs/internal/olclient/mocks/*
       - internal/graphapi/generate/*
       - internal/graphapi/generated/*
+      - internal/graphapi/historygenerated/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
       - pkg/sleuth/static/*
@@ -49,7 +51,8 @@ formatters:
     generated: lax
     warn-unused: true
     paths:
-      - internal/graphapi/model/gen_models.go
+      - internal/graphapi/generated/gen_models.go
+      - internal/graphapi/historygenerated/gen_models.go
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - pkg/entitlements/test/*

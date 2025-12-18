@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateProgram is the resolver for the createProgram field.
 func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.Cr
 
 	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 	}
 
 	return &model.ProgramCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*gener
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*gener
 
 // CreateBulkCSVProgram is the resolver for the createBulkCSVProgram field.
 func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*model.ProgramBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateProgramInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateProgramInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "program"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*model.ProgramUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Program.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "program"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "program"})
 	}
 
 	return &model.ProgramUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 // DeleteProgram is the resolver for the deleteProgram field.
 func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*model.ProgramDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Program.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "program"})
 	}
 
 	if err := generated.ProgramEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ProgramDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkProgram(ctx context.Context, ids []string) 
 func (r *queryResolver) Program(ctx context.Context, id string) (*generated.Program, error) {
 	query, err := withTransactionalMutation(ctx).Program.Query().Where(program.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "program"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "program"})
 	}
 
 	return res, nil

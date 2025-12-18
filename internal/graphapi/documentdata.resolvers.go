@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -19,7 +20,7 @@ import (
 // CreateDocumentData is the resolver for the createDocumentData field.
 func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generated.CreateDocumentDataInput) (*model.DocumentDataCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -27,7 +28,7 @@ func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generat
 
 	res, err := withTransactionalMutation(ctx).DocumentData.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "documentdata"})
 	}
 
 	return &model.DocumentDataCreatePayload{
@@ -43,7 +44,7 @@ func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -54,11 +55,11 @@ func (r *mutationResolver) CreateBulkDocumentData(ctx context.Context, input []*
 
 // CreateBulkCSVDocumentData is the resolver for the createBulkCSVDocumentData field.
 func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateDocumentDataInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateDocumentDataInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "documentdata"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +68,7 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
-	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -80,11 +81,11 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*model.DocumentDataUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DocumentData.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "documentdata"})
 	}
 
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
@@ -95,7 +96,7 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "documentdata"})
 	}
 
 	return &model.DocumentDataUpdatePayload{
@@ -106,11 +107,11 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 // DeleteDocumentData is the resolver for the deleteDocumentData field.
 func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*model.DocumentDataDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "documentdata"})
 	}
 
 	if err := generated.DocumentDataEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DocumentDataDeletePayload{
@@ -131,12 +132,12 @@ func (r *mutationResolver) DeleteBulkDocumentData(ctx context.Context, ids []str
 func (r *queryResolver) DocumentData(ctx context.Context, id string) (*generated.DocumentData, error) {
 	query, err := withTransactionalMutation(ctx).DocumentData.Query().Where(documentdata.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "documentdata"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "documentdata"})
 	}
 
 	return res, nil

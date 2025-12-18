@@ -3538,6 +3538,75 @@
         ]
       }
     },
+    "/history/query": {
+      "post": {
+        "description": "Handles all GraphQL queries for historical data",
+        "operationId": "GraphQLQueryHistory",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "query": "query GetBooks {\n  books {\n    id\n    title\n  }\n}",
+                  "variables": {}
+                },
+                "properties": {
+                  "operationName": {
+                    "description": "The name of the operation to execute (optional)",
+                    "type": "string"
+                  },
+                  "query": {
+                    "description": "The GraphQL query string",
+                    "type": "string"
+                  },
+                  "variables": {
+                    "description": "A JSON object containing variables for the query",
+                    "type": "object"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "description": "GraphQL query request",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "description": "The data returned by the GraphQL operation",
+                      "type": "object"
+                    },
+                    "errors": {
+                      "items": {
+                        "description": "An array of error objects if the operation failed",
+                        "type": "object"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful GraphQL response"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "summary": "GraphQL History Endpoint",
+        "tags": [
+          "graphql",
+          "history",
+          "audit logs"
+        ]
+      }
+    },
     "/livez": {
       "get": {
         "description": "Health check endpoint to verify the service is alive",
@@ -7327,6 +7396,10 @@
       "name": "acme"
     },
     {
+      "description": "GraphQL History Endpoint",
+      "name": "audit logs"
+    },
+    {
       "description": "JWKS",
       "name": "authentication"
     },
@@ -7373,6 +7446,10 @@
     {
       "description": "Livez",
       "name": "health"
+    },
+    {
+      "description": "GraphQL History Endpoint",
+      "name": "history"
     },
     {
       "description": "EndImpersonation",

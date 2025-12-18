@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -34,7 +35,7 @@ func (r *mutationResolver) CreateTrustCenterCompliance(ctx context.Context, inpu
 
 	res, err := withTransactionalMutation(ctx).TrustCenterCompliance.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentercompliance"})
 	}
 
 	return &model.TrustCenterComplianceCreatePayload{
@@ -53,11 +54,11 @@ func (r *mutationResolver) CreateBulkTrustCenterCompliance(ctx context.Context, 
 
 // CreateBulkCSVTrustCenterCompliance is the resolver for the createBulkCSVTrustCenterCompliance field.
 func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateTrustCenterComplianceInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateTrustCenterComplianceInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentercompliance"})
 	}
 
 	if len(data) == 0 {
@@ -71,7 +72,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Contex
 func (r *mutationResolver) UpdateTrustCenterCompliance(ctx context.Context, id string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterCompliance.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentercompliance"})
 	}
 
 	// setup update request
@@ -79,7 +80,7 @@ func (r *mutationResolver) UpdateTrustCenterCompliance(ctx context.Context, id s
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentercompliance"})
 	}
 
 	return &model.TrustCenterComplianceUpdatePayload{
@@ -90,11 +91,11 @@ func (r *mutationResolver) UpdateTrustCenterCompliance(ctx context.Context, id s
 // DeleteTrustCenterCompliance is the resolver for the deleteTrustCenterCompliance field.
 func (r *mutationResolver) DeleteTrustCenterCompliance(ctx context.Context, id string) (*model.TrustCenterComplianceDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcentercompliance"})
 	}
 
 	if err := generated.TrustCenterComplianceEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterComplianceDeletePayload{
@@ -115,12 +116,12 @@ func (r *mutationResolver) DeleteBulkTrustCenterCompliance(ctx context.Context, 
 func (r *queryResolver) TrustCenterCompliance(ctx context.Context, id string) (*generated.TrustCenterCompliance, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterCompliance.Query().Where(trustcentercompliance.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentercompliance"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentercompliance"})
 	}
 
 	return res, nil

@@ -1,0 +1,69 @@
+
+
+query GetAllTrustCenterWatermarkConfigHistories {
+  trustCenterWatermarkConfigHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        color
+        createdAt
+        createdBy
+        font
+        fontSize
+        historyTime
+        id
+        isEnabled
+        logoID
+        opacity
+        operation
+        ownerID
+        ref
+        rotation
+        text
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetTrustCenterWatermarkConfigHistories($first: Int, $last: Int, $where: TrustCenterWatermarkConfigHistoryWhereInput) {
+  trustCenterWatermarkConfigHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        color
+        createdAt
+        createdBy
+        font
+        fontSize
+        historyTime
+        id
+        isEnabled
+        logoID
+        opacity
+        operation
+        ownerID
+        ref
+        rotation
+        text
+        trustCenterID
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

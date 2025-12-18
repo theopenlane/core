@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -18,7 +19,7 @@ import (
 // CreateAssessmentResponse is the resolver for the createAssessmentResponse field.
 func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
@@ -26,7 +27,7 @@ func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input g
 
 	res, err := withTransactionalMutation(ctx).AssessmentResponse.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessmentresponse"})
 	}
 
 	return &model.AssessmentResponseCreatePayload{
@@ -37,11 +38,11 @@ func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input g
 // DeleteAssessmentResponse is the resolver for the deleteAssessmentResponse field.
 func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).AssessmentResponse.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "assessmentresponse"})
 	}
 
 	if err := generated.AssessmentResponseEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.AssessmentResponseDeletePayload{
@@ -53,12 +54,12 @@ func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id stri
 func (r *queryResolver) AssessmentResponse(ctx context.Context, id string) (*generated.AssessmentResponse, error) {
 	query, err := withTransactionalMutation(ctx).AssessmentResponse.Query().Where(assessmentresponse.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "assessmentresponse"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "assessmentresponse"})
 	}
 
 	return res, nil

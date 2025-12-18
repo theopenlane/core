@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -19,7 +20,7 @@ import (
 func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentersetting"})
 	}
 
 	return &model.TrustCenterSettingCreatePayload{
@@ -31,7 +32,7 @@ func (r *mutationResolver) CreateTrustCenterSetting(ctx context.Context, input g
 func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterSetting.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
 	// setup update request
@@ -39,7 +40,7 @@ func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id stri
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
 	return &model.TrustCenterSettingUpdatePayload{
@@ -54,13 +55,13 @@ func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, 
 	).Only(ctx)
 	if err != nil {
 		if !generated.IsNotFound(err) {
-			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 		}
 
 		// if not found, get the trust center to create new preview settings
 		trustCenter, err := withTransactionalMutation(ctx).TrustCenter.Query().Only(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 		}
 
 		// create new preview settings
@@ -69,7 +70,7 @@ func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, 
 			SetEnvironment(enums.TrustCenterEnvironmentPreview).
 			Save(ctx)
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 		}
 	}
 
@@ -77,7 +78,7 @@ func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, 
 
 	res, err := req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
 	return &model.TrustCenterSettingUpdatePayload{
@@ -91,14 +92,14 @@ func (r *mutationResolver) PublishTrustCenterSetting(ctx context.Context) (*mode
 		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
 	).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
 	liveSetting, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(
 		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
 	).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
 	// copy fields from preview to live
@@ -123,7 +124,7 @@ func (r *mutationResolver) PublishTrustCenterSetting(ctx context.Context) (*mode
 
 	res, err := req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
 	return &model.TrustCenterSettingUpdatePayload{
@@ -134,11 +135,11 @@ func (r *mutationResolver) PublishTrustCenterSetting(ctx context.Context) (*mode
 // DeleteTrustCenterSetting is the resolver for the deleteTrustCenterSetting field.
 func (r *mutationResolver) DeleteTrustCenterSetting(ctx context.Context, id string) (*model.TrustCenterSettingDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterSetting.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcentersetting"})
 	}
 
 	if err := generated.TrustCenterSettingEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterSettingDeletePayload{
@@ -150,12 +151,12 @@ func (r *mutationResolver) DeleteTrustCenterSetting(ctx context.Context, id stri
 func (r *queryResolver) TrustCenterSetting(ctx context.Context, id string) (*generated.TrustCenterSetting, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(trustcentersetting.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersetting"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcentersetting"})
 	}
 
 	return res, nil

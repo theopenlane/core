@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	queryEndpoint = "/query"
+	queryEndpoint        = "/query"
+	historyQueryEndpoint = "/history/query"
 )
 
 // CheckGraphReadRequest checks if the incoming GraphQL request is a read-only query via POST
@@ -19,7 +20,7 @@ const (
 func CheckGraphReadRequest(c echo.Context) bool {
 	req := c.Request()
 
-	if req.URL.Path != queryEndpoint {
+	if req.URL.Path != queryEndpoint && req.URL.Path != historyQueryEndpoint {
 		return false
 	}
 

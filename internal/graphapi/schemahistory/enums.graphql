@@ -1,0 +1,9 @@
+"""
+ControlControlSource is enum for the field source
+"""
+enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+  FRAMEWORK
+  TEMPLATE
+  USER_DEFINED
+  IMPORTED
+}

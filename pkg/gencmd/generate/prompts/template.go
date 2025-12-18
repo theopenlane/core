@@ -1,3 +1,5 @@
+//go:build gencmd
+
 package prompts
 
 import "github.com/manifoldco/promptui"

@@ -13,6 +13,8 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
+	hintercept "github.com/theopenlane/core/internal/ent/historygenerated/intercept"
 )
 
 // ShutdownFlag tracks whether a shutdown is in progress
@@ -63,8 +65,12 @@ func IsShuttingDown() bool {
 	return defaultShutdown.IsSet()
 }
 
+type dbClientWithDriver interface {
+	Driver() dialect.Driver
+}
+
 // SQLDB unwraps the ent driver and returns the underlying *sql.DB
-func SQLDB(c *ent.Client) *stdsql.DB {
+func SQLDB(c dbClientWithDriver) *stdsql.DB {
 	if c == nil {
 		return nil
 	}
@@ -190,6 +196,27 @@ func BlockInterceptor() ent.Interceptor {
 // this is useful for preventing new queries from being executed while the system is shutting down
 func BlockInterceptorWithFlag(f *ShutdownFlag) ent.Interceptor {
 	return intercept.Func(func(_ context.Context, _ intercept.Query) error {
+		if f.IsSet() {
+			return ErrShuttingDown
+		}
+
+		return nil
+	})
+}
+
+// BlockHistoryInterceptor returns an ent.Interceptor that prevents history queries once shutdown starts
+func BlockHistoryInterceptor() historygenerated.Interceptor {
+	return BlockHistoryInterceptorWithFlag(defaultShutdown)
+}
+
+// BlockHistoryInterceptorWithFlag returns an interceptor tied to the provided shutdown flag
+// it works similarly to BlockHistoryInterceptor, but is used for intercepting history queries
+// it checks the shutdown flag before allowing the query to proceed
+// if the flag is set, it returns ErrShuttingDown and blocks the query
+// if the flag is NOT set, it allows the query to proceed
+// this is useful for preventing new queries from being executed while the system is shutting down
+func BlockHistoryInterceptorWithFlag(f *ShutdownFlag) historygenerated.Interceptor {
+	return hintercept.Func(func(_ context.Context, _ hintercept.Query) error {
 		if f.IsSet() {
 			return ErrShuttingDown
 		}

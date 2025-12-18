@@ -9,17 +9,18 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // DeleteWebauthn is the resolver for the deleteWebauthn field.
 func (r *mutationResolver) DeleteWebauthn(ctx context.Context, id string) (*model.WebauthnDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Webauthn.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "webauthn"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "webauthn"})
 	}
 
 	if err := generated.WebauthnEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.WebauthnDeletePayload{
