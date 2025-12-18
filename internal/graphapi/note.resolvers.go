@@ -281,6 +281,31 @@ func (r *updateControlInputResolver) AddDiscussion(ctx context.Context, obj *gen
 	return nil
 }
 
+// UpdateDiscussions is the resolver for the updateDiscussions field.
+func (r *updateControlInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateControlInput, data []*model.UpdateDiscussionsInput) error {
+	for _, discussionInput := range data {
+		if discussionInput.Input == nil || discussionInput.ID == "" {
+			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+
+			continue
+		}
+		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+
+		// setup update request
+		req := res.Update().SetInput(*discussionInput.Input)
+
+		res, err = req.Save(ctx)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+	}
+
+	return nil
+}
+
 // DeleteDiscussion is the resolver for the deleteDiscussion field.
 func (r *updateControlInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateControlInput, data *string) error {
 	if data == nil {
@@ -398,6 +423,31 @@ func (r *updateInternalPolicyInputResolver) AddDiscussion(ctx context.Context, o
 	return nil
 }
 
+// UpdateDiscussions is the resolver for the updateDiscussions field.
+func (r *updateInternalPolicyInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data []*model.UpdateDiscussionsInput) error {
+	for _, discussionInput := range data {
+		if discussionInput.Input == nil || discussionInput.ID == "" {
+			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+
+			continue
+		}
+		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+
+		// setup update request
+		req := res.Update().SetInput(*discussionInput.Input)
+
+		res, err = req.Save(ctx)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+	}
+
+	return nil
+}
+
 // DeleteDiscussion is the resolver for the deleteDiscussion field.
 func (r *updateInternalPolicyInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *string) error {
 	if data == nil {
@@ -472,6 +522,31 @@ func (r *updateProcedureInputResolver) AddDiscussion(ctx context.Context, obj *g
 
 	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
+	}
+
+	return nil
+}
+
+// UpdateDiscussions is the resolver for the updateDiscussions field.
+func (r *updateProcedureInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateProcedureInput, data []*model.UpdateDiscussionsInput) error {
+	for _, discussionInput := range data {
+		if discussionInput.Input == nil || discussionInput.ID == "" {
+			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+
+			continue
+		}
+		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+
+		// setup update request
+		req := res.Update().SetInput(*discussionInput.Input)
+
+		res, err = req.Save(ctx)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
 	}
 
 	return nil
@@ -556,6 +631,31 @@ func (r *updateRiskInputResolver) AddDiscussion(ctx context.Context, obj *genera
 	return nil
 }
 
+// UpdateDiscussions is the resolver for the updateDiscussions field.
+func (r *updateRiskInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateRiskInput, data []*model.UpdateDiscussionsInput) error {
+	for _, discussionInput := range data {
+		if discussionInput.Input == nil || discussionInput.ID == "" {
+			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+
+			continue
+		}
+		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+
+		// setup update request
+		req := res.Update().SetInput(*discussionInput.Input)
+
+		res, err = req.Save(ctx)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+	}
+
+	return nil
+}
+
 // DeleteDiscussion is the resolver for the deleteDiscussion field.
 func (r *updateRiskInputResolver) DeleteDiscussion(ctx context.Context, obj *generated.UpdateRiskInput, data *string) error {
 	if data == nil {
@@ -630,6 +730,31 @@ func (r *updateSubcontrolInputResolver) AddDiscussion(ctx context.Context, obj *
 
 	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
+	}
+
+	return nil
+}
+
+// UpdateDiscussions is the resolver for the updateDiscussions field.
+func (r *updateSubcontrolInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateSubcontrolInput, data []*model.UpdateDiscussionsInput) error {
+	for _, discussionInput := range data {
+		if discussionInput.Input == nil || discussionInput.ID == "" {
+			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+
+			continue
+		}
+		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
+
+		// setup update request
+		req := res.Update().SetInput(*discussionInput.Input)
+
+		res, err = req.Save(ctx)
+		if err != nil {
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "discussionsinput"})
+		}
 	}
 
 	return nil
