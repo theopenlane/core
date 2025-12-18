@@ -86041,7 +86041,7 @@ type TrustCenterDoc implements Node {
   """
   whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
   """
-  watermarkingEnabled: Boolean!
+  watermarkingEnabled: Boolean
   """
   status of the watermarking
   """
@@ -86307,6 +86307,8 @@ input TrustCenterDocWhereInput {
   """
   watermarkingEnabled: Boolean
   watermarkingEnabledNEQ: Boolean
+  watermarkingEnabledIsNil: Boolean
+  watermarkingEnabledNotNil: Boolean
   """
   watermark_status field predicates
   """
@@ -92725,6 +92727,7 @@ input UpdateTrustCenterDocInput {
   whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
   """
   watermarkingEnabled: Boolean
+  clearWatermarkingEnabled: Boolean
   """
   status of the watermarking
   """

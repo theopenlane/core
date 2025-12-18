@@ -225,6 +225,12 @@ func (_u *TrustCenterDocHistoryUpdate) SetNillableWatermarkingEnabled(v *bool) *
 	return _u
 }
 
+// ClearWatermarkingEnabled clears the value of the "watermarking_enabled" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearWatermarkingEnabled() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearWatermarkingEnabled()
+	return _u
+}
+
 // SetWatermarkStatus sets the "watermark_status" field.
 func (_u *TrustCenterDocHistoryUpdate) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocHistoryUpdate {
 	_u.mutation.SetWatermarkStatus(v)
@@ -435,6 +441,9 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.WatermarkingEnabledCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool)
 	}
 	if value, ok := _u.mutation.WatermarkStatus(); ok {
 		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)
@@ -667,6 +676,12 @@ func (_u *TrustCenterDocHistoryUpdateOne) SetNillableWatermarkingEnabled(v *bool
 	if v != nil {
 		_u.SetWatermarkingEnabled(*v)
 	}
+	return _u
+}
+
+// ClearWatermarkingEnabled clears the value of the "watermarking_enabled" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearWatermarkingEnabled() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearWatermarkingEnabled()
 	return _u
 }
 
@@ -910,6 +925,9 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.WatermarkingEnabledCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool)
 	}
 	if value, ok := _u.mutation.WatermarkStatus(); ok {
 		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)

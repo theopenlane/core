@@ -313,10 +313,6 @@ func (_c *TrustCenterDocCreate) defaults() error {
 		v := trustcenterdoc.DefaultTags
 		_c.mutation.SetTags(v)
 	}
-	if _, ok := _c.mutation.WatermarkingEnabled(); !ok {
-		v := trustcenterdoc.DefaultWatermarkingEnabled
-		_c.mutation.SetWatermarkingEnabled(v)
-	}
 	if _, ok := _c.mutation.WatermarkStatus(); !ok {
 		v := trustcenterdoc.DefaultWatermarkStatus
 		_c.mutation.SetWatermarkStatus(v)
@@ -357,9 +353,6 @@ func (_c *TrustCenterDocCreate) check() error {
 		if err := trustcenterdoc.CategoryValidator(v); err != nil {
 			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.WatermarkingEnabled(); !ok {
-		return &ValidationError{Name: "watermarking_enabled", err: errors.New(`generated: missing required field "TrustCenterDoc.watermarking_enabled"`)}
 	}
 	if v, ok := _c.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {

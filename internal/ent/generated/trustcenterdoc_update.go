@@ -228,6 +228,12 @@ func (_u *TrustCenterDocUpdate) SetNillableWatermarkingEnabled(v *bool) *TrustCe
 	return _u
 }
 
+// ClearWatermarkingEnabled clears the value of the "watermarking_enabled" field.
+func (_u *TrustCenterDocUpdate) ClearWatermarkingEnabled() *TrustCenterDocUpdate {
+	_u.mutation.ClearWatermarkingEnabled()
+	return _u
+}
+
 // SetWatermarkStatus sets the "watermark_status" field.
 func (_u *TrustCenterDocUpdate) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocUpdate {
 	_u.mutation.SetWatermarkStatus(v)
@@ -481,6 +487,9 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.WatermarkingEnabledCleared() {
+		_spec.ClearField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool)
 	}
 	if value, ok := _u.mutation.WatermarkStatus(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkStatus, field.TypeEnum, value)
@@ -834,6 +843,12 @@ func (_u *TrustCenterDocUpdateOne) SetNillableWatermarkingEnabled(v *bool) *Trus
 	return _u
 }
 
+// ClearWatermarkingEnabled clears the value of the "watermarking_enabled" field.
+func (_u *TrustCenterDocUpdateOne) ClearWatermarkingEnabled() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearWatermarkingEnabled()
+	return _u
+}
+
 // SetWatermarkStatus sets the "watermark_status" field.
 func (_u *TrustCenterDocUpdateOne) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocUpdateOne {
 	_u.mutation.SetWatermarkStatus(v)
@@ -1117,6 +1132,9 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.WatermarkingEnabledCleared() {
+		_spec.ClearField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool)
 	}
 	if value, ok := _u.mutation.WatermarkStatus(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkStatus, field.TypeEnum, value)
