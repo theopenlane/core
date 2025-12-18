@@ -384,6 +384,14 @@ func adminSearchControls(ctx context.Context, query string, after *entgql.Cursor
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(references)::text LIKE $21", likeQuery)) // search by References
 				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(testing_procedures)::text LIKE $22", likeQuery)) // search by TestingProcedures
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(evidence_requests)::text LIKE $23", likeQuery)) // search by EvidenceRequests
+				},
 				control.ControlOwnerIDContainsFold(query),   // search by ControlOwnerID
 				control.DelegateIDContainsFold(query),       // search by DelegateID
 				control.OwnerIDContainsFold(query),          // search by OwnerID
@@ -391,6 +399,11 @@ func adminSearchControls(ctx context.Context, query string, after *entgql.Cursor
 				control.SystemInternalIDContainsFold(query), // search by SystemInternalID
 				control.ControlKindNameContainsFold(query),  // search by ControlKindName
 				control.ControlKindIDContainsFold(query),    // search by ControlKindID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(proposed_changes)::text LIKE $31", likeQuery)) // search by ProposedChanges
+				},
+				control.ProposedByUserIDContainsFold(query), // search by ProposedByUserID
 				control.RefCodeContainsFold(query),          // search by RefCode
 				control.StandardIDContainsFold(query),       // search by StandardID
 			),
@@ -556,7 +569,12 @@ func adminSearchEvidences(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
-				evidence.OwnerIDContainsFold(query),             // search by OwnerID
+				evidence.OwnerIDContainsFold(query), // search by OwnerID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(proposed_changes)::text LIKE $5", likeQuery)) // search by ProposedChanges
+				},
+				evidence.ProposedByUserIDContainsFold(query),    // search by ProposedByUserID
 				evidence.NameContainsFold(query),                // search by Name
 				evidence.DescriptionContainsFold(query),         // search by Description
 				evidence.CollectionProcedureContainsFold(query), // search by CollectionProcedure
@@ -762,6 +780,11 @@ func adminSearchInternalPolicies(ctx context.Context, query string, after *entgq
 				internalpolicy.FileIDContainsFold(query),                 // search by FileID
 				internalpolicy.InternalPolicyKindNameContainsFold(query), // search by InternalPolicyKindName
 				internalpolicy.InternalPolicyKindIDContainsFold(query),   // search by InternalPolicyKindID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(proposed_changes)::text LIKE $23", likeQuery)) // search by ProposedChanges
+				},
+				internalpolicy.ProposedByUserIDContainsFold(query), // search by ProposedByUserID
 			),
 		)
 
@@ -1423,6 +1446,14 @@ func adminSearchSubcontrols(ctx context.Context, query string, after *entgql.Cur
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(references)::text LIKE $21", likeQuery)) // search by References
 				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(testing_procedures)::text LIKE $22", likeQuery)) // search by TestingProcedures
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(evidence_requests)::text LIKE $23", likeQuery)) // search by EvidenceRequests
+				},
 				subcontrol.ControlOwnerIDContainsFold(query),     // search by ControlOwnerID
 				subcontrol.DelegateIDContainsFold(query),         // search by DelegateID
 				subcontrol.OwnerIDContainsFold(query),            // search by OwnerID
@@ -1592,6 +1623,7 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(external_reference_url)::text LIKE $13", likeQuery)) // search by ExternalReferenceURL
 				},
+				task.ParentTaskIDContainsFold(query), // search by ParentTaskID
 			),
 		)
 

@@ -1,0 +1,99 @@
+
+
+query GetAllRemediationHistories {
+  remediationHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        displayID
+        dueAt
+        error
+        explanation
+        externalID
+        externalOwnerID
+        externalURI
+        historyTime
+        id
+        instructions
+        intent
+        internalNotes
+        metadata
+        operation
+        ownerID
+        ownerReference
+        prGeneratedAt
+        pullRequestURI
+        ref
+        repositoryURI
+        source
+        state
+        summary
+        systemInternalID
+        systemOwned
+        tags
+        ticketReference
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetRemediationHistories($first: Int, $last: Int, $where: RemediationHistoryWhereInput) {
+  remediationHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        displayID
+        dueAt
+        error
+        explanation
+        externalID
+        externalOwnerID
+        externalURI
+        historyTime
+        id
+        instructions
+        intent
+        internalNotes
+        metadata
+        operation
+        ownerID
+        ownerReference
+        prGeneratedAt
+        pullRequestURI
+        ref
+        repositoryURI
+        source
+        state
+        summary
+        systemInternalID
+        systemOwned
+        tags
+        ticketReference
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

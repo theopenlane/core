@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
@@ -25,7 +26,7 @@ import (
 func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
 	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organization"})
 	}
 
 	memberInput := make([]*generated.CreateOrgMembershipInput, len(members))
@@ -39,7 +40,7 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 	}
 
 	if _, err := r.CreateBulkOrgMembership(ctx, memberInput); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "org_membership"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "org_membership"})
 	}
 
 	query, err := withTransactionalMutation(ctx).Organization.
@@ -48,12 +49,12 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 		Where(entorg.IDEQ(res.Organization.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "group"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organization"})
 	}
 
 	return &model.OrganizationCreatePayload{
@@ -66,7 +67,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 	// Step 1: Get current user from context
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
 	}
 
 	currentUserID := au.SubjectID
@@ -74,7 +75,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 
 	if organizationID == "" {
 		logx.FromContext(ctx).Error().Msg("unable to determine organization for ownership transfer")
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -82,7 +83,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 	// Step 2: Verify organization exists
 	org, err := c.Organization.Get(ctx, organizationID)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "organization"})
 	}
 
 	// Step 3: Verify current user is the owner
@@ -94,7 +95,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to find current user's membership")
-		return nil, newNotFoundError("org_membership")
+		return nil, common.NewNotFoundError("org_membership")
 	}
 
 	if currentUserMembership.Role != enums.RoleOwner {
@@ -146,7 +147,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 
 		if _, err := c.Invite.Create().SetInput(inviteInput).Save(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to create ownership transfer invitation")
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "invite"})
 		}
 
 		invitationSent = true
@@ -164,7 +165,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 			SetRole(newRole).
 			Exec(allowCtx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to update new owner role")
-			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "org_membership"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}
 
 		// Update current owner to ADMIN role
@@ -173,7 +174,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 			SetRole(adminRole).
 			Exec(allowCtx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to demote current owner to admin")
-			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "org_membership"})
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}
 
 		logx.FromContext(ctx).Info().
@@ -195,7 +196,7 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 
 	orgSettings, err := c.OrganizationSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "organization"})
 	}
 
 	obj.SettingID = &orgSettings.ID
@@ -209,7 +210,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 	if orgID == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get org from context")
 
-		return ErrInternalServerError
+		return common.ErrInternalServerError
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -221,7 +222,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 	}
 
 	if err := c.OrgMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
 	return nil
@@ -233,7 +234,7 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 	if orgID == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get org from context")
 
-		return ErrInternalServerError
+		return common.ErrInternalServerError
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -243,7 +244,7 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 		orgmembership.IDIn(data...),
 	).Exec(ctx)
 	if err != nil {
-		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
 	return nil
@@ -255,7 +256,7 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	if orgID == nil {
 		logx.FromContext(ctx).Error().Msg("unable to get org from context")
 
-		return ErrInternalServerError
+		return common.ErrInternalServerError
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -265,19 +266,19 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	if settingID == nil {
 		org, err := c.Organization.Get(ctx, *orgID)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 		}
 
 		setting, err := org.Setting(ctx)
 		if err != nil {
-			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 		}
 
 		settingID = &setting.ID
 	}
 
 	if err := c.OrganizationSetting.UpdateOneID(*settingID).SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "organization"})
 	}
 
 	return nil

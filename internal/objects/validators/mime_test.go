@@ -3,7 +3,7 @@ package validators
 import (
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
@@ -17,7 +17,7 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 			},
 		}
 
-		require.NoError(t, mimeTypeValidator(file))
+		assert.NoError(t, mimeTypeValidator(file))
 	})
 
 	t.Run("rejects disallowed avatar mime types", func(t *testing.T) {
@@ -28,7 +28,7 @@ func TestMimeTypeValidatorFieldSpecific(t *testing.T) {
 			},
 		}
 
-		require.Error(t, mimeTypeValidator(file))
+		assert.Error(t, mimeTypeValidator(file))
 	})
 }
 
@@ -41,7 +41,7 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 			},
 		}
 
-		require.NoError(t, mimeTypeValidator(file))
+		assert.NoError(t, mimeTypeValidator(file))
 	})
 
 	t.Run("shared defaults reject unsupported types", func(t *testing.T) {
@@ -52,6 +52,6 @@ func TestMimeTypeValidatorSharedFallback(t *testing.T) {
 			},
 		}
 
-		require.Error(t, mimeTypeValidator(file))
+		assert.Error(t, mimeTypeValidator(file))
 	})
 }

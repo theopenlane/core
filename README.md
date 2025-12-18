@@ -187,12 +187,6 @@ You can load up a local openFGA environment with the compose setup in this
 repository; `task fga:up` - this will launch an interactive playground where you
 can model permissions model(s) or changes to the models
 
-### Windmill
-
-We use Windmill to run automated scripts periodically amongst others. You can
-load up a local instance by running `task docker:windmill:up`. This will
-launch the Windmill UI console where you can manage your tokens and/or workspaces
-
 ### Creating a new Schema
 
 To ease the effort required to add additional schemas into the system a
@@ -259,7 +253,7 @@ extensible services:
   and more
 - Queuing and Scheduling: Task management and scheduling with
   [riverqueue](https://github.com/riverqueue/river)
-- External Storage Providers: store data in AWS S3, Google GCS, or locally
+- External Storage Providers: store data in AWS S3, Cloudflare R2 or locally
 - External Database Providers: Leverage NeonDB, or other PostgreSQL compatible
   vendors and libraries
 - Data Isolation and Management: Hierarchal organizations and granular

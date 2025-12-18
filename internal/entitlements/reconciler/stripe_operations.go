@@ -7,7 +7,7 @@ import (
 	"slices"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"

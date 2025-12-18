@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"time"
 
-	"ariga.io/entcache"
-	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -16,10 +14,10 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -31,22 +29,6 @@ import (
 // This file will not be regenerated automatically.
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
-
-const (
-	ActionGet    = "get"
-	ActionUpdate = "update"
-	ActionDelete = "delete"
-	ActionCreate = "create"
-
-	// DefaultMaxMemoryMB is the default max memory for multipart forms (32MB)
-	DefaultMaxMemoryMB = 32
-)
-
-var (
-	graphPath               = "query"
-	defaultComplexityLimit  = 100
-	introspectionComplexity = 200
-)
 
 // Resolver provides a graph response resolver
 type Resolver struct {
@@ -156,7 +138,7 @@ func (r *Resolver) Handler() *Handler {
 	srv.AddTransport(transport.POST{})
 	srv.AddTransport(transport.MultipartForm{
 		MaxUploadSize: r.uploader.MaxSize(),
-		MaxMemory:     DefaultMaxMemoryMB << 20, //nolint:mnd,
+		MaxMemory:     common.DefaultMaxMemoryMB << 20, //nolint:mnd,
 	})
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
@@ -177,11 +159,11 @@ func (r *Resolver) Handler() *Handler {
 	WithTransactions(srv, r.db)
 
 	// add context level caching
-	WithContextLevelCache(srv)
+	common.WithContextLevelCache(srv)
 
 	// add extensions if enabled
 	if r.extensionsEnabled {
-		AddAllExtensions(srv)
+		common.AddAllExtensions(srv)
 	}
 
 	// Set the error presenter to use the custom error presenter
@@ -189,13 +171,13 @@ func (r *Resolver) Handler() *Handler {
 
 	// add file uploader if it is configured
 	if r.uploader != nil {
-		WithFileUploader(srv, r.uploader)
+		common.WithFileUploader(srv, r.uploader)
 	}
 
 	// add max result limits to fields in requests
-	WithResultLimit(srv, r.maxResultLimit)
+	common.WithResultLimit(srv, r.maxResultLimit)
 
-	WithMetrics(srv)
+	common.WithMetrics(srv)
 
 	srv.Use(otelgqlgen.Middleware())
 
@@ -209,9 +191,9 @@ func (r *Resolver) Handler() *Handler {
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query
-	h.Use(newComplexityLimitWithMetrics(func(_ context.Context, rc *graphql.OperationContext) int {
+	h.Use(common.NewComplexityLimitWithMetrics(func(_ context.Context, rc *graphql.OperationContext) int {
 		if rc != nil && rc.OperationName == "IntrospectionQuery" {
-			return introspectionComplexity
+			return common.IntrospectionComplexity
 		}
 
 		if rc.OperationName == "GlobalSearch" {
@@ -224,57 +206,8 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 			return r.complexityLimit
 		}
 
-		return defaultComplexityLimit
+		return common.DefaultComplexityLimit
 	}))
-}
-
-// WithTransactions adds the transactioner to the ent db client
-func WithTransactions(h *handler.Server, d *ent.Client) {
-	// setup transactional db client
-	h.AroundOperations(injectClient(d))
-
-	h.Use(entgql.Transactioner{TxOpener: d})
-}
-
-// WithFileUploader adds the file uploader to the graphql handler
-// this will handle the file upload process for the multipart form
-func WithFileUploader(h *handler.Server, u *objects.Service) {
-	h.AroundFields(injectFileUploader(u))
-}
-
-// WithContextLevelCache adds a context level cache to the handler
-func WithContextLevelCache(h *handler.Server) {
-	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
-		if op := graphql.GetOperationContext(ctx).Operation; op != nil && op.Operation == ast.Query {
-			ctx = entcache.NewContext(ctx)
-		}
-
-		return next(ctx)
-	})
-}
-
-// WithResultLimit adds a max result limit to the handler in order to set limits on
-// all nested edges in the graphql request
-func WithResultLimit(h *handler.Server, limit *int) {
-	h.AroundFields(func(ctx context.Context, next graphql.Resolver) (res interface{}, err error) {
-		if limit == nil {
-			return next(ctx)
-		}
-
-		// grab preloads to set max result limits
-		graphutils.GetPreloads(ctx, limit)
-
-		return next(ctx)
-	})
-}
-
-// WithSkipCache adds a skip cache middleware to the handler
-// This is useful for testing, where you don't want to cache responses
-// so you can see the changes immediately
-func WithSkipCache(h *handler.Server) {
-	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
-		return next(entcache.Skip(ctx))
-	})
 }
 
 // WithPool adds a worker pool to the resolver for parallel processing
@@ -301,13 +234,13 @@ func (h *Handler) Routes(e *echo.Group) {
 	e.Use(h.middleware...)
 
 	// Create the default POST graph endpoint
-	e.POST("/"+graphPath, func(c echo.Context) error {
+	e.POST("/"+common.GraphPath, func(c echo.Context) error {
 		h.graphqlHandler.ServeHTTP(c.Response(), c.Request())
 		return nil
 	})
 
 	// Create a GET query endpoint in order to create short queries with a query string
-	e.GET("/"+graphPath, func(c echo.Context) error {
+	e.GET("/"+common.GraphPath, func(c echo.Context) error {
 		h.graphqlHandler.ServeHTTP(c.Response(), c.Request())
 		return nil
 	})

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -43,6 +44,7 @@ type WorkflowObjectRefQuery struct {
 	withDirectoryAccount    *DirectoryAccountQuery
 	withDirectoryGroup      *DirectoryGroupQuery
 	withDirectoryMembership *DirectoryMembershipQuery
+	withEvidence            *EvidenceQuery
 	withFKs                 bool
 	loadTotal               []func(context.Context, []*WorkflowObjectRef) error
 	modifiers               []func(*sql.Selector)
@@ -307,6 +309,31 @@ func (_q *WorkflowObjectRefQuery) QueryDirectoryMembership() *DirectoryMembershi
 	return query
 }
 
+// QueryEvidence chains the current query on the "evidence" edge.
+func (_q *WorkflowObjectRefQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.EvidenceTable, workflowobjectref.EvidenceColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first WorkflowObjectRef entity from the query.
 // Returns a *NotFoundError when no WorkflowObjectRef was found.
 func (_q *WorkflowObjectRefQuery) First(ctx context.Context) (*WorkflowObjectRef, error) {
@@ -508,6 +535,7 @@ func (_q *WorkflowObjectRefQuery) Clone() *WorkflowObjectRefQuery {
 		withDirectoryAccount:    _q.withDirectoryAccount.Clone(),
 		withDirectoryGroup:      _q.withDirectoryGroup.Clone(),
 		withDirectoryMembership: _q.withDirectoryMembership.Clone(),
+		withEvidence:            _q.withEvidence.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -614,6 +642,17 @@ func (_q *WorkflowObjectRefQuery) WithDirectoryMembership(opts ...func(*Director
 	return _q
 }
 
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowObjectRefQuery) WithEvidence(opts ...func(*EvidenceQuery)) *WorkflowObjectRefQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvidence = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -699,7 +738,7 @@ func (_q *WorkflowObjectRefQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes       = []*WorkflowObjectRef{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			_q.withOwner != nil,
 			_q.withWorkflowInstance != nil,
 			_q.withControl != nil,
@@ -709,6 +748,7 @@ func (_q *WorkflowObjectRefQuery) sqlAll(ctx context.Context, hooks ...queryHook
 			_q.withDirectoryAccount != nil,
 			_q.withDirectoryGroup != nil,
 			_q.withDirectoryMembership != nil,
+			_q.withEvidence != nil,
 		}
 	)
 	if withFKs {
@@ -788,6 +828,12 @@ func (_q *WorkflowObjectRefQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	if query := _q.withDirectoryMembership; query != nil {
 		if err := _q.loadDirectoryMembership(ctx, query, nodes, nil,
 			func(n *WorkflowObjectRef, e *DirectoryMembership) { n.Edges.DirectoryMembership = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes, nil,
+			func(n *WorkflowObjectRef, e *Evidence) { n.Edges.Evidence = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1060,6 +1106,35 @@ func (_q *WorkflowObjectRefQuery) loadDirectoryMembership(ctx context.Context, q
 	}
 	return nil
 }
+func (_q *WorkflowObjectRefQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*WorkflowObjectRef, init func(*WorkflowObjectRef), assign func(*WorkflowObjectRef, *Evidence)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowObjectRef)
+	for i := range nodes {
+		fk := nodes[i].EvidenceID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(evidence.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "evidence_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *WorkflowObjectRefQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1117,6 +1192,9 @@ func (_q *WorkflowObjectRefQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withDirectoryMembership != nil {
 			_spec.Node.AddColumnOnce(workflowobjectref.FieldDirectoryMembershipID)
+		}
+		if _q.withEvidence != nil {
+			_spec.Node.AddColumnOnce(workflowobjectref.FieldEvidenceID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

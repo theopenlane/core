@@ -6,6 +6,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -66,7 +67,10 @@ func (WorkflowEvent) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "WFE",
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(WorkflowEvent{}),
+			newObjectOwnedMixin[generated.WorkflowEvent](WorkflowEvent{},
+				withParents(WorkflowInstance{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(WorkflowEvent{})
 }
@@ -79,6 +83,9 @@ func (WorkflowEvent) Modules() []models.OrgModule {
 // Policy of the WorkflowEvent
 func (WorkflowEvent) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithQueryRules(
+			policy.CheckOrgReadAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),

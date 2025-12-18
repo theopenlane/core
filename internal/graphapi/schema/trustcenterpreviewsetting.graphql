@@ -1,0 +1,81 @@
+extend type Mutation {
+  """
+  Create or replace preview environment trust center settings
+  """
+  createTrustCenterPreviewSetting(
+    """
+    values of the preview trust center setting
+    """
+    input: CreateTrustCenterPreviewSettingInput!
+    logoFile: Upload
+    faviconFile: Upload
+  ): TrustCenterPreviewSettingCreatePayload!
+}
+
+"""
+Return response for createTrustCenterPreviewSetting mutation
+"""
+type TrustCenterPreviewSettingCreatePayload {
+  """
+  Created preview trust center setting
+  """
+  trustCenterSetting: TrustCenterSetting!
+}
+
+"""
+Input for createTrustCenterPreviewSetting mutation
+"""
+input CreateTrustCenterPreviewSettingInput {
+  """
+  trust center ID
+  """
+  trustCenterID: ID!
+  """
+  title of the trust center
+  """
+  title: String
+  """
+  overview of the trust center
+  """
+  overview: String
+  """
+  primary color for the trust center
+  """
+  primaryColor: String
+  """
+  logo remote URL
+  """
+  logoRemoteURL: String
+  """
+  logo local file ID
+  """
+  logoFileID: ID
+  """
+  favicon remote URL
+  """
+  faviconRemoteURL: String
+  """
+  favicon local file ID
+  """
+  faviconFileID: ID
+  """
+  theme mode for the trust center
+  """
+  themeMode: TrustCenterSettingTrustCenterThemeMode
+  """
+  font for the trust center
+  """
+  font: String
+  """
+  foreground color for the trust center
+  """
+  foregroundColor: String
+  """
+  background color for the trust center
+  """
+  backgroundColor: String
+  """
+  accent color for the trust center
+  """
+  accentColor: String
+}

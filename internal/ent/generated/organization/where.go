@@ -3727,6 +3727,35 @@ func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Org
 	})
 }
 
+// HasDiscussions applies the HasEdge predicate on the "discussions" edge.
+func HasDiscussions() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDiscussionsWith applies the HasEdge predicate on the "discussions" edge with a given conditions (other predicates).
+func HasDiscussionsWith(preds ...predicate.Discussion) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newDiscussionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

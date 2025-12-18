@@ -478,10 +478,6 @@
           "$ref": "#/$defs/summarizer.Config",
           "description": "Summarizer contains configuration for text summarization"
         },
-        "windmill": {
-          "$ref": "#/$defs/entconfig.Windmill",
-          "description": "Windmill contains configuration for Windmill workflow automation"
-        },
         "maxpoolsize": {
           "type": "integer",
           "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
@@ -536,45 +532,6 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Notifications settings for notifications sent to users based on events"
-    },
-    "entconfig.Windmill": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled specifies whether Windmill integration is enabled"
-        },
-        "baseurl": {
-          "type": "string",
-          "description": "BaseURL is the base URL of the Windmill instance"
-        },
-        "workspace": {
-          "type": "string",
-          "description": "Workspace is the Windmill workspace to use"
-        },
-        "token": {
-          "type": "string",
-          "description": "Token is the API token for authentication with Windmill"
-        },
-        "defaulttimeout": {
-          "type": "string",
-          "description": "DefaultTimeout is the default timeout for API requests"
-        },
-        "timezone": {
-          "type": "string",
-          "description": "Timezone for scheduled jobs"
-        },
-        "onfailurescript": {
-          "type": "string",
-          "description": "OnFailureScript script to run when a scheduled job fails"
-        },
-        "onsuccessscript": {
-          "type": "string",
-          "description": "OnSuccessScript script to run when a scheduled job succeeds"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Windmill holds configuration for the Windmill workflow automation platform"
     },
     "entitlements.Config": {
       "properties": {
@@ -1371,13 +1328,9 @@
           "$ref": "#/$defs/storage.ProviderConfigs",
           "description": "S3 provider configuration"
         },
-        "cloudflarer2": {
+        "r2": {
           "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "CloudflareR2 provider configuration"
-        },
-        "gcs": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "GCS provider configuration"
+          "description": "R2 provider configuration"
         },
         "disk": {
           "$ref": "#/$defs/storage.ProviderConfigs",

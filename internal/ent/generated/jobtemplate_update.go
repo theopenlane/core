@@ -392,6 +392,11 @@ func (_u *JobTemplateUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.title": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.WindmillPath(); ok {
+		if err := jobtemplate.WindmillPathValidator(v); err != nil {
+			return &ValidationError{Name: "windmill_path", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.windmill_path": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Cron(); ok {
 		if err := jobtemplate.CronValidator(string(v)); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.cron": %w`, err)}
@@ -980,6 +985,11 @@ func (_u *JobTemplateUpdateOne) check() error {
 	if v, ok := _u.mutation.Title(); ok {
 		if err := jobtemplate.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.title": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.WindmillPath(); ok {
+		if err := jobtemplate.WindmillPathValidator(v); err != nil {
+			return &ValidationError{Name: "windmill_path", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.windmill_path": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Cron(); ok {

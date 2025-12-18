@@ -5,6 +5,7 @@ package contact
 import (
 	"context"
 
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
@@ -35,10 +36,12 @@ func init() {
 // createValidation validates the required fields for the command
 func createValidation() (input openlaneclient.CreateContactInput, err error) {
 	// validation of required fields for the create command
-	input.FullName = cmd.Config.String("name")
-	if input.FullName == "" {
+	name := cmd.Config.String("name")
+	if name == "" {
 		return input, cmd.NewRequiredFieldMissingError("contact name")
 	}
+
+	input.FullName = lo.ToPtr(name)
 
 	email := cmd.Config.String("email")
 	if email != "" {

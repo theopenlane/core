@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -600,6 +601,58 @@ func (_u *InternalPolicyUpdate) ClearInternalPolicyKindID() *InternalPolicyUpdat
 	return _u
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *InternalPolicyUpdate) SetProposedChanges(v map[string]interface{}) *InternalPolicyUpdate {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *InternalPolicyUpdate) ClearProposedChanges() *InternalPolicyUpdate {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *InternalPolicyUpdate) SetProposedByUserID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableProposedByUserID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *InternalPolicyUpdate) ClearProposedByUserID() *InternalPolicyUpdate {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *InternalPolicyUpdate) SetProposedAt(v time.Time) *InternalPolicyUpdate {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableProposedAt(v *time.Time) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *InternalPolicyUpdate) ClearProposedAt() *InternalPolicyUpdate {
+	_u.mutation.ClearProposedAt()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InternalPolicyUpdate) SetOwner(v *Organization) *InternalPolicyUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -803,6 +856,21 @@ func (_u *InternalPolicyUpdate) AddComments(v ...*Note) *InternalPolicyUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddCommentIDs(ids...)
+}
+
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *InternalPolicyUpdate) AddDiscussionIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdate) AddDiscussions(v ...*Discussion) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -1107,6 +1175,27 @@ func (_u *InternalPolicyUpdate) RemoveComments(v ...*Note) *InternalPolicyUpdate
 	return _u.RemoveCommentIDs(ids...)
 }
 
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdate) ClearDiscussions() *InternalPolicyUpdate {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveDiscussionIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *InternalPolicyUpdate) RemoveDiscussions(v ...*Discussion) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
+}
+
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
 func (_u *InternalPolicyUpdate) ClearWorkflowObjectRefs() *InternalPolicyUpdate {
 	_u.mutation.ClearWorkflowObjectRefs()
@@ -1397,6 +1486,24 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.InternalPolicyKindNameCleared() {
 		_spec.ClearField(internalpolicy.FieldInternalPolicyKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(internalpolicy.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(internalpolicy.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(internalpolicy.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(internalpolicy.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(internalpolicy.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(internalpolicy.FieldProposedAt, field.TypeTime)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2124,6 +2231,54 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2753,6 +2908,58 @@ func (_u *InternalPolicyUpdateOne) ClearInternalPolicyKindID() *InternalPolicyUp
 	return _u
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_u *InternalPolicyUpdateOne) SetProposedChanges(v map[string]interface{}) *InternalPolicyUpdateOne {
+	_u.mutation.SetProposedChanges(v)
+	return _u
+}
+
+// ClearProposedChanges clears the value of the "proposed_changes" field.
+func (_u *InternalPolicyUpdateOne) ClearProposedChanges() *InternalPolicyUpdateOne {
+	_u.mutation.ClearProposedChanges()
+	return _u
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_u *InternalPolicyUpdateOne) SetProposedByUserID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetProposedByUserID(v)
+	return _u
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableProposedByUserID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetProposedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
+func (_u *InternalPolicyUpdateOne) ClearProposedByUserID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearProposedByUserID()
+	return _u
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_u *InternalPolicyUpdateOne) SetProposedAt(v time.Time) *InternalPolicyUpdateOne {
+	_u.mutation.SetProposedAt(v)
+	return _u
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableProposedAt(v *time.Time) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetProposedAt(*v)
+	}
+	return _u
+}
+
+// ClearProposedAt clears the value of the "proposed_at" field.
+func (_u *InternalPolicyUpdateOne) ClearProposedAt() *InternalPolicyUpdateOne {
+	_u.mutation.ClearProposedAt()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *InternalPolicyUpdateOne) SetOwner(v *Organization) *InternalPolicyUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2956,6 +3163,21 @@ func (_u *InternalPolicyUpdateOne) AddComments(v ...*Note) *InternalPolicyUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.AddCommentIDs(ids...)
+}
+
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddDiscussionIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdateOne) AddDiscussions(v ...*Discussion) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
 }
 
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
@@ -3258,6 +3480,27 @@ func (_u *InternalPolicyUpdateOne) RemoveComments(v ...*Note) *InternalPolicyUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdateOne) ClearDiscussions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveDiscussionIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *InternalPolicyUpdateOne) RemoveDiscussions(v ...*Discussion) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -3580,6 +3823,24 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.InternalPolicyKindNameCleared() {
 		_spec.ClearField(internalpolicy.FieldInternalPolicyKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedChanges(); ok {
+		_spec.SetField(internalpolicy.FieldProposedChanges, field.TypeJSON, value)
+	}
+	if _u.mutation.ProposedChangesCleared() {
+		_spec.ClearField(internalpolicy.FieldProposedChanges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ProposedByUserID(); ok {
+		_spec.SetField(internalpolicy.FieldProposedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ProposedByUserIDCleared() {
+		_spec.ClearField(internalpolicy.FieldProposedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProposedAt(); ok {
+		_spec.SetField(internalpolicy.FieldProposedAt, field.TypeTime, value)
+	}
+	if _u.mutation.ProposedAtCleared() {
+		_spec.ClearField(internalpolicy.FieldProposedAt, field.TypeTime)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4307,6 +4568,54 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -20,7 +20,6 @@ import (
 
 const (
 	defaultMinIOWaitTimeout = 30 * time.Second
-	defaultGCSWaitTimeout   = 30 * time.Second
 	defaultRetryDelay       = 1 * time.Second
 )
 

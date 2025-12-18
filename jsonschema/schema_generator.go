@@ -1579,7 +1579,7 @@ func findSensitiveFields(v reflect.Value, prefix string) []SensitiveField {
 				SecretName: baseSecretName,
 			})
 
-			if fieldValue.Kind() == reflect.Map && currentPath == "subscription.stripeWebhookSecrets" && fieldValue.Len() > 0 {
+			if fieldValue.Kind() == reflect.Map && strings.EqualFold(currentPath, "subscription.stripewebhooksecrets") && fieldValue.Len() > 0 {
 				keys := fieldValue.MapKeys()
 				keyStrings := make([]string, 0, len(keys))
 				for _, k := range keys {

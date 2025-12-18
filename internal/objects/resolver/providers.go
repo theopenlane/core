@@ -11,7 +11,7 @@ import (
 func (rc *ruleCoordinator) providerEnabled(provider storage.ProviderType) bool {
 	switch provider {
 	case storage.R2Provider:
-		return rc.config.Providers.CloudflareR2.Enabled
+		return rc.config.Providers.R2.Enabled
 	case storage.S3Provider:
 		return rc.config.Providers.S3.Enabled
 	case storage.DiskProvider:
@@ -53,7 +53,7 @@ func providerOptionsFromConfig(provider storage.ProviderType, config storage.Pro
 	case storage.S3Provider:
 		providerCfg = config.Providers.S3
 	case storage.R2Provider:
-		providerCfg = config.Providers.CloudflareR2
+		providerCfg = config.Providers.R2
 	case storage.DiskProvider:
 		providerCfg = config.Providers.Disk
 	case storage.DatabaseProvider:

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
@@ -34,7 +35,7 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 
 	whereP, err := getControlWherePredicate(where)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "categories"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "categories"})
 	}
 
 	whereFilter := control.CategoryNEQ("")
@@ -53,7 +54,7 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 			control.FieldReferenceFramework).
 		Where(whereFilter).All(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "categories"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "categories"})
 	}
 
 	tmp := map[string]map[string]bool{}
@@ -141,7 +142,7 @@ func getStandardRefCodes(data []string) (map[string][]string, error) {
 	for _, controlData := range data {
 		parts := strings.Split(controlData, "::")
 		if len(parts) != 2 { //nolint:mnd
-			return nil, fmt.Errorf("%w: expected format 'standard_short_name::control_ref_code'", ErrInvalidInput)
+			return nil, fmt.Errorf("%w: expected format 'standard_short_name::control_ref_code'", common.ErrInvalidInput)
 		}
 
 		standardShortName := parts[0]

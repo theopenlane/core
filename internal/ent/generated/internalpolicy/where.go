@@ -188,6 +188,16 @@ func InternalPolicyKindID(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldInternalPolicyKindID, v))
 }
 
+// ProposedByUserID applies equality check predicate on the "proposed_by_user_id" field. It's identical to ProposedByUserIDEQ.
+func ProposedByUserID(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldProposedByUserID, v))
+}
+
+// ProposedAt applies equality check predicate on the "proposed_at" field. It's identical to ProposedAtEQ.
+func ProposedAt(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldProposedAt, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldCreatedAt, v))
@@ -1908,6 +1918,141 @@ func InternalPolicyKindIDContainsFold(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldContainsFold(FieldInternalPolicyKindID, v))
 }
 
+// ProposedChangesIsNil applies the IsNil predicate on the "proposed_changes" field.
+func ProposedChangesIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldProposedChanges))
+}
+
+// ProposedChangesNotNil applies the NotNil predicate on the "proposed_changes" field.
+func ProposedChangesNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldProposedChanges))
+}
+
+// ProposedByUserIDEQ applies the EQ predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDNEQ applies the NEQ predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDNEQ(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDIn applies the In predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldProposedByUserID, vs...))
+}
+
+// ProposedByUserIDNotIn applies the NotIn predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDNotIn(vs ...string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldProposedByUserID, vs...))
+}
+
+// ProposedByUserIDGT applies the GT predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDGT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDGTE applies the GTE predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDGTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDLT applies the LT predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDLT(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDLTE applies the LTE predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDLTE(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDContains applies the Contains predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDContains(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContains(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDHasPrefix applies the HasPrefix predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDHasPrefix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDHasSuffix applies the HasSuffix predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDHasSuffix(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDIsNil applies the IsNil predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldProposedByUserID))
+}
+
+// ProposedByUserIDNotNil applies the NotNil predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldProposedByUserID))
+}
+
+// ProposedByUserIDEqualFold applies the EqualFold predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDEqualFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEqualFold(FieldProposedByUserID, v))
+}
+
+// ProposedByUserIDContainsFold applies the ContainsFold predicate on the "proposed_by_user_id" field.
+func ProposedByUserIDContainsFold(v string) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldContainsFold(FieldProposedByUserID, v))
+}
+
+// ProposedAtEQ applies the EQ predicate on the "proposed_at" field.
+func ProposedAtEQ(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldEQ(FieldProposedAt, v))
+}
+
+// ProposedAtNEQ applies the NEQ predicate on the "proposed_at" field.
+func ProposedAtNEQ(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNEQ(FieldProposedAt, v))
+}
+
+// ProposedAtIn applies the In predicate on the "proposed_at" field.
+func ProposedAtIn(vs ...time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIn(FieldProposedAt, vs...))
+}
+
+// ProposedAtNotIn applies the NotIn predicate on the "proposed_at" field.
+func ProposedAtNotIn(vs ...time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotIn(FieldProposedAt, vs...))
+}
+
+// ProposedAtGT applies the GT predicate on the "proposed_at" field.
+func ProposedAtGT(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGT(FieldProposedAt, v))
+}
+
+// ProposedAtGTE applies the GTE predicate on the "proposed_at" field.
+func ProposedAtGTE(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldGTE(FieldProposedAt, v))
+}
+
+// ProposedAtLT applies the LT predicate on the "proposed_at" field.
+func ProposedAtLT(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLT(FieldProposedAt, v))
+}
+
+// ProposedAtLTE applies the LTE predicate on the "proposed_at" field.
+func ProposedAtLTE(v time.Time) predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldLTE(FieldProposedAt, v))
+}
+
+// ProposedAtIsNil applies the IsNil predicate on the "proposed_at" field.
+func ProposedAtIsNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldIsNull(FieldProposedAt))
+}
+
+// ProposedAtNotNil applies the NotNil predicate on the "proposed_at" field.
+func ProposedAtNotNil() predicate.InternalPolicy {
+	return predicate.InternalPolicy(sql.FieldNotNull(FieldProposedAt))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.InternalPolicy {
 	return predicate.InternalPolicy(func(s *sql.Selector) {
@@ -2393,6 +2538,35 @@ func HasCommentsWith(preds ...predicate.Note) predicate.InternalPolicy {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDiscussions applies the HasEdge predicate on the "discussions" edge.
+func HasDiscussions() predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDiscussionsWith applies the HasEdge predicate on the "discussions" edge with a given conditions (other predicates).
+func HasDiscussionsWith(preds ...predicate.Discussion) predicate.InternalPolicy {
+	return predicate.InternalPolicy(func(s *sql.Selector) {
+		step := newDiscussionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

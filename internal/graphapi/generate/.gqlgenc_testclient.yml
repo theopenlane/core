@@ -13,7 +13,6 @@ models:
   JSON:
     model:
       - github.com/theopenlane/entx.RawMessage
-      - github.com/theopenlane/core/internal/ent/customtypes.JSONObject
   Address:
     model:
       - github.com/theopenlane/core/pkg/models.Address
@@ -35,6 +34,12 @@ models:
   ExampleEvidence:
     model:
       - github.com/theopenlane/core/pkg/models.ExampleEvidence
+  TestingProcedures:
+    model:
+      - github.com/theopenlane/core/pkg/models.TestingProcedures
+  EvidenceRequests:
+    model:
+      - github.com/theopenlane/core/pkg/models.EvidenceRequests
   VersionBump:
     model:
       - github.com/theopenlane/core/pkg/models.VersionBump

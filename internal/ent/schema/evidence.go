@@ -87,7 +87,6 @@ func (Evidence) Fields() []ent.Field {
 			Comment("the url of the evidence if not uploaded directly to the system"),
 		field.Enum("status").
 			GoType(enums.EvidenceStatus("")).
-			Default(enums.EvidenceStatusSubmitted.String()).
 			Annotations(
 				entgql.OrderField("STATUS"),
 			).
@@ -107,6 +106,7 @@ func (e Evidence) Mixin() []ent.Mixin {
 					Task{}, Procedure{}, InternalPolicy{}), // used to create parent tuples for the evidence
 				withOrganizationOwner(true),
 			),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(e)
 }

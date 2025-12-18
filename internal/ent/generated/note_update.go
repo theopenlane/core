@@ -126,6 +126,60 @@ func (_u *NoteUpdate) SetNillableText(v *string) *NoteUpdate {
 	return _u
 }
 
+// SetNoteRef sets the "note_ref" field.
+func (_u *NoteUpdate) SetNoteRef(v string) *NoteUpdate {
+	_u.mutation.SetNoteRef(v)
+	return _u
+}
+
+// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableNoteRef(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetNoteRef(*v)
+	}
+	return _u
+}
+
+// ClearNoteRef clears the value of the "note_ref" field.
+func (_u *NoteUpdate) ClearNoteRef() *NoteUpdate {
+	_u.mutation.ClearNoteRef()
+	return _u
+}
+
+// SetDiscussionID sets the "discussion_id" field.
+func (_u *NoteUpdate) SetDiscussionID(v string) *NoteUpdate {
+	_u.mutation.SetDiscussionID(v)
+	return _u
+}
+
+// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableDiscussionID(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetDiscussionID(*v)
+	}
+	return _u
+}
+
+// ClearDiscussionID clears the value of the "discussion_id" field.
+func (_u *NoteUpdate) ClearDiscussionID() *NoteUpdate {
+	_u.mutation.ClearDiscussionID()
+	return _u
+}
+
+// SetIsEdited sets the "is_edited" field.
+func (_u *NoteUpdate) SetIsEdited(v bool) *NoteUpdate {
+	_u.mutation.SetIsEdited(v)
+	return _u
+}
+
+// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableIsEdited(v *bool) *NoteUpdate {
+	if v != nil {
+		_u.SetIsEdited(*v)
+	}
+	return _u
+}
+
 // SetTaskID sets the "task" edge to the Task entity by ID.
 func (_u *NoteUpdate) SetTaskID(id string) *NoteUpdate {
 	_u.mutation.SetTaskID(id)
@@ -469,6 +523,21 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.NoteRef(); ok {
+		_spec.SetField(note.FieldNoteRef, field.TypeString, value)
+	}
+	if _u.mutation.NoteRefCleared() {
+		_spec.ClearField(note.FieldNoteRef, field.TypeString)
+	}
+	if value, ok := _u.mutation.DiscussionID(); ok {
+		_spec.SetField(note.FieldDiscussionID, field.TypeString, value)
+	}
+	if _u.mutation.DiscussionIDCleared() {
+		_spec.ClearField(note.FieldDiscussionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsEdited(); ok {
+		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
 	}
 	if _u.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -876,6 +945,60 @@ func (_u *NoteUpdateOne) SetNillableText(v *string) *NoteUpdateOne {
 	return _u
 }
 
+// SetNoteRef sets the "note_ref" field.
+func (_u *NoteUpdateOne) SetNoteRef(v string) *NoteUpdateOne {
+	_u.mutation.SetNoteRef(v)
+	return _u
+}
+
+// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableNoteRef(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetNoteRef(*v)
+	}
+	return _u
+}
+
+// ClearNoteRef clears the value of the "note_ref" field.
+func (_u *NoteUpdateOne) ClearNoteRef() *NoteUpdateOne {
+	_u.mutation.ClearNoteRef()
+	return _u
+}
+
+// SetDiscussionID sets the "discussion_id" field.
+func (_u *NoteUpdateOne) SetDiscussionID(v string) *NoteUpdateOne {
+	_u.mutation.SetDiscussionID(v)
+	return _u
+}
+
+// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableDiscussionID(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetDiscussionID(*v)
+	}
+	return _u
+}
+
+// ClearDiscussionID clears the value of the "discussion_id" field.
+func (_u *NoteUpdateOne) ClearDiscussionID() *NoteUpdateOne {
+	_u.mutation.ClearDiscussionID()
+	return _u
+}
+
+// SetIsEdited sets the "is_edited" field.
+func (_u *NoteUpdateOne) SetIsEdited(v bool) *NoteUpdateOne {
+	_u.mutation.SetIsEdited(v)
+	return _u
+}
+
+// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableIsEdited(v *bool) *NoteUpdateOne {
+	if v != nil {
+		_u.SetIsEdited(*v)
+	}
+	return _u
+}
+
 // SetTaskID sets the "task" edge to the Task entity by ID.
 func (_u *NoteUpdateOne) SetTaskID(id string) *NoteUpdateOne {
 	_u.mutation.SetTaskID(id)
@@ -1249,6 +1372,21 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.NoteRef(); ok {
+		_spec.SetField(note.FieldNoteRef, field.TypeString, value)
+	}
+	if _u.mutation.NoteRefCleared() {
+		_spec.ClearField(note.FieldNoteRef, field.TypeString)
+	}
+	if value, ok := _u.mutation.DiscussionID(); ok {
+		_spec.SetField(note.FieldDiscussionID, field.TypeString, value)
+	}
+	if _u.mutation.DiscussionIDCleared() {
+		_spec.ClearField(note.FieldDiscussionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsEdited(); ok {
+		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
 	}
 	if _u.mutation.TaskCleared() {
 		edge := &sqlgraph.EdgeSpec{

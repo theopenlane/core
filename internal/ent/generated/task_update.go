@@ -379,6 +379,26 @@ func (_u *TaskUpdate) ClearExternalReferenceURL() *TaskUpdate {
 	return _u
 }
 
+// SetParentTaskID sets the "parent_task_id" field.
+func (_u *TaskUpdate) SetParentTaskID(v string) *TaskUpdate {
+	_u.mutation.SetParentTaskID(v)
+	return _u
+}
+
+// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableParentTaskID(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetParentTaskID(*v)
+	}
+	return _u
+}
+
+// ClearParentTaskID clears the value of the "parent_task_id" field.
+func (_u *TaskUpdate) ClearParentTaskID() *TaskUpdate {
+	_u.mutation.ClearParentTaskID()
+	return _u
+}
+
 // SetTaskKind sets the "task_kind" edge to the CustomTypeEnum entity.
 func (_u *TaskUpdate) SetTaskKind(v *CustomTypeEnum) *TaskUpdate {
 	return _u.SetTaskKindID(v.ID)
@@ -587,6 +607,40 @@ func (_u *TaskUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *TaskUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
+// SetParentID sets the "parent" edge to the Task entity by ID.
+func (_u *TaskUpdate) SetParentID(id string) *TaskUpdate {
+	_u.mutation.SetParentID(id)
+	return _u
+}
+
+// SetNillableParentID sets the "parent" edge to the Task entity by ID if the given value is not nil.
+func (_u *TaskUpdate) SetNillableParentID(id *string) *TaskUpdate {
+	if id != nil {
+		_u = _u.SetParentID(*id)
+	}
+	return _u
+}
+
+// SetParent sets the "parent" edge to the Task entity.
+func (_u *TaskUpdate) SetParent(v *Task) *TaskUpdate {
+	return _u.SetParentID(v.ID)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *TaskUpdate) AddTaskIDs(ids ...string) *TaskUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *TaskUpdate) AddTasks(v ...*Task) *TaskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -883,6 +937,33 @@ func (_u *TaskUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *TaskUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearParent clears the "parent" edge to the Task entity.
+func (_u *TaskUpdate) ClearParent() *TaskUpdate {
+	_u.mutation.ClearParent()
+	return _u
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *TaskUpdate) ClearTasks() *TaskUpdate {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *TaskUpdate) RemoveTaskIDs(ids ...string) *TaskUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *TaskUpdate) RemoveTasks(v ...*Task) *TaskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1779,6 +1860,85 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ParentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.ParentTable,
+			Columns: []string{task.ParentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ParentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.ParentTable,
+			Columns: []string{task.ParentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Task
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2133,6 +2293,26 @@ func (_u *TaskUpdateOne) ClearExternalReferenceURL() *TaskUpdateOne {
 	return _u
 }
 
+// SetParentTaskID sets the "parent_task_id" field.
+func (_u *TaskUpdateOne) SetParentTaskID(v string) *TaskUpdateOne {
+	_u.mutation.SetParentTaskID(v)
+	return _u
+}
+
+// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableParentTaskID(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetParentTaskID(*v)
+	}
+	return _u
+}
+
+// ClearParentTaskID clears the value of the "parent_task_id" field.
+func (_u *TaskUpdateOne) ClearParentTaskID() *TaskUpdateOne {
+	_u.mutation.ClearParentTaskID()
+	return _u
+}
+
 // SetTaskKind sets the "task_kind" edge to the CustomTypeEnum entity.
 func (_u *TaskUpdateOne) SetTaskKind(v *CustomTypeEnum) *TaskUpdateOne {
 	return _u.SetTaskKindID(v.ID)
@@ -2341,6 +2521,40 @@ func (_u *TaskUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *TaskUpd
 		ids[i] = v[i].ID
 	}
 	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
+// SetParentID sets the "parent" edge to the Task entity by ID.
+func (_u *TaskUpdateOne) SetParentID(id string) *TaskUpdateOne {
+	_u.mutation.SetParentID(id)
+	return _u
+}
+
+// SetNillableParentID sets the "parent" edge to the Task entity by ID if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableParentID(id *string) *TaskUpdateOne {
+	if id != nil {
+		_u = _u.SetParentID(*id)
+	}
+	return _u
+}
+
+// SetParent sets the "parent" edge to the Task entity.
+func (_u *TaskUpdateOne) SetParent(v *Task) *TaskUpdateOne {
+	return _u.SetParentID(v.ID)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *TaskUpdateOne) AddTaskIDs(ids ...string) *TaskUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *TaskUpdateOne) AddTasks(v ...*Task) *TaskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
 }
 
 // Mutation returns the TaskMutation object of the builder.
@@ -2637,6 +2851,33 @@ func (_u *TaskUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *Task
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearParent clears the "parent" edge to the Task entity.
+func (_u *TaskUpdateOne) ClearParent() *TaskUpdateOne {
+	_u.mutation.ClearParent()
+	return _u
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *TaskUpdateOne) ClearTasks() *TaskUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *TaskUpdateOne) RemoveTaskIDs(ids ...string) *TaskUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *TaskUpdateOne) RemoveTasks(v ...*Task) *TaskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // Where appends a list predicates to the TaskUpdate builder.
@@ -3558,6 +3799,85 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ParentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.ParentTable,
+			Columns: []string{task.ParentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ParentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   task.ParentTable,
+			Columns: []string{task.ParentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   task.TasksTable,
+			Columns: []string{task.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -94,6 +94,8 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_idempotencyKey(ctx, field)
 			case "externalReferenceURL":
 				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
+			case "parentTaskID":
+				return ec.fieldContext_Task_parentTaskID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
@@ -128,6 +130,10 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "parent":
+				return ec.fieldContext_Task_parent(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Task_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -230,6 +236,8 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_idempotencyKey(ctx, field)
 			case "externalReferenceURL":
 				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
+			case "parentTaskID":
+				return ec.fieldContext_Task_parentTaskID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
@@ -264,6 +272,10 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "parent":
+				return ec.fieldContext_Task_parent(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Task_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -366,6 +378,8 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_idempotencyKey(ctx, field)
 			case "externalReferenceURL":
 				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
+			case "parentTaskID":
+				return ec.fieldContext_Task_parentTaskID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
@@ -400,6 +414,10 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "parent":
+				return ec.fieldContext_Task_parent(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Task_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -502,6 +520,8 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_idempotencyKey(ctx, field)
 			case "externalReferenceURL":
 				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
+			case "parentTaskID":
+				return ec.fieldContext_Task_parentTaskID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
@@ -536,6 +556,10 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_evidence(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
+			case "parent":
+				return ec.fieldContext_Task_parent(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Task_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},

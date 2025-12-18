@@ -57,7 +57,6 @@ Config contains the configuration for the core server
                 "openai": {}
             }
         },
-        "windmill": {},
         "modules": {},
         "emailvalidation": {
             "allowedemailtypes": {}
@@ -117,10 +116,7 @@ Config contains the configuration for the core server
             "s3": {
                 "credentials": {}
             },
-            "cloudflarer2": {
-                "credentials": {}
-            },
-            "gcs": {
+            "r2": {
                 "credentials": {}
             },
             "disk": {
@@ -422,7 +418,6 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entitytypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
-|[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
 |**maxpoolsize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 |**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
@@ -442,7 +437,6 @@ Config holds the configuration for the ent server
             "openai": {}
         }
     },
-    "windmill": {},
     "modules": {},
     "emailvalidation": {
         "allowedemailtypes": {}
@@ -558,26 +552,6 @@ OpenAIConfig contains OpenAI specific configuration
 |**apikey**|`string`|APIKey contains the authentication key for the service<br/>||
 |**url**|`string`|URL specifies the API endpoint<br/>||
 |**organizationid**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
-
-**Additional Properties:** not allowed  
-<a name="entconfigwindmill"></a>
-### entconfig\.windmill: object
-
-Windmill holds configuration for the Windmill workflow automation platform
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled specifies whether Windmill integration is enabled<br/>||
-|**baseurl**|`string`|BaseURL is the base URL of the Windmill instance<br/>||
-|**workspace**|`string`|Workspace is the Windmill workspace to use<br/>||
-|**token**|`string`|Token is the API token for authentication with Windmill<br/>||
-|**defaulttimeout**|`string`|DefaultTimeout is the default timeout for API requests<br/>||
-|**timezone**|`string`|Timezone for scheduled jobs<br/>||
-|**onfailurescript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
-|**onsuccessscript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfigmodules"></a>
@@ -1393,10 +1367,7 @@ ProviderConfig contains configuration for object storage providers
         "s3": {
             "credentials": {}
         },
-        "cloudflarer2": {
-            "credentials": {}
-        },
-        "gcs": {
+        "r2": {
             "credentials": {}
         },
         "disk": {
@@ -1423,8 +1394,7 @@ ProviderConfig contains configuration for object storage providers
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**cloudflarer2**](#objectstorageproviderscloudflarer2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**gcs**](#objectstorageprovidersgcs)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**r2**](#objectstorageprovidersr2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 |[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 |[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 
@@ -1436,10 +1406,7 @@ ProviderConfig contains configuration for object storage providers
     "s3": {
         "credentials": {}
     },
-    "cloudflarer2": {
-        "credentials": {}
-    },
-    "gcs": {
+    "r2": {
         "credentials": {}
     },
     "disk": {
@@ -1496,8 +1463,8 @@ ProviderCredentials contains credentials for a storage provider
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
 **Additional Properties:** not allowed  
-<a name="objectstorageproviderscloudflarer2"></a>
-#### objectstorage\.providers\.cloudflarer2: object
+<a name="objectstorageprovidersr2"></a>
+#### objectstorage\.providers\.r2: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1513,7 +1480,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageproviderscloudflarer2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageprovidersr2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1524,53 +1491,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectstorageproviderscloudflarer2credentials"></a>
-##### objectstorage\.providers\.cloudflarer2\.credentials: object
-
-ProviderCredentials contains credentials for a storage provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
-
-**Additional Properties:** not allowed  
-<a name="objectstorageprovidersgcs"></a>
-#### objectstorage\.providers\.gcs: object
-
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersgcscredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "credentials": {}
-}
-```
-
-<a name="objectstorageprovidersgcscredentials"></a>
-##### objectstorage\.providers\.gcs\.credentials: object
+<a name="objectstorageprovidersr2credentials"></a>
+##### objectstorage\.providers\.r2\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 

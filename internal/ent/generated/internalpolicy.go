@@ -89,6 +89,12 @@ type InternalPolicy struct {
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindID string `json:"internal_policy_kind_id,omitempty"`
+	// pending changes awaiting workflow approval
+	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
+	// user who proposed the changes
+	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
+	// when changes were proposed
+	ProposedAt *time.Time `json:"proposed_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges                              InternalPolicyEdges `json:"edges"`
@@ -132,13 +138,15 @@ type InternalPolicyEdges struct {
 	File *File `json:"file,omitempty"`
 	// conversations related to the policy
 	Comments []*Note `json:"comments,omitempty"`
+	// discussions related to the policy
+	Discussions []*Discussion `json:"discussions,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -152,6 +160,7 @@ type InternalPolicyEdges struct {
 	namedRisks                  map[string][]*Risk
 	namedPrograms               map[string][]*Program
 	namedComments               map[string][]*Note
+	namedDiscussions            map[string][]*Discussion
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
 
@@ -318,10 +327,19 @@ func (e InternalPolicyEdges) CommentsOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "comments"}
 }
 
+// DiscussionsOrErr returns the Discussions value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) DiscussionsOrErr() ([]*Discussion, error) {
+	if e.loadedTypes[17] {
+		return e.Discussions, nil
+	}
+	return nil, &NotLoadedError{edge: "discussions"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e InternalPolicyEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -332,13 +350,13 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicy.FieldTags, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions:
+		case internalpolicy.FieldTags, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions, internalpolicy.FieldProposedChanges:
 			values[i] = new([]byte)
 		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldProposedByUserID:
 			values[i] = new(sql.NullString)
-		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
+		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue, internalpolicy.FieldProposedAt:
 			values[i] = new(sql.NullTime)
 		case internalpolicy.ForeignKeys[0]: // custom_type_enum_internal_policies
 			values[i] = new(sql.NullString)
@@ -579,6 +597,27 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.InternalPolicyKindID = value.String
 			}
+		case internalpolicy.FieldProposedChanges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
+					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
+				}
+			}
+		case internalpolicy.FieldProposedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ProposedByUserID = value.String
+			}
+		case internalpolicy.FieldProposedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
+			} else if value.Valid {
+				_m.ProposedAt = new(time.Time)
+				*_m.ProposedAt = value.Time
+			}
 		case internalpolicy.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field custom_type_enum_internal_policies", values[i])
@@ -682,6 +721,11 @@ func (_m *InternalPolicy) QueryFile() *FileQuery {
 // QueryComments queries the "comments" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryComments() *NoteQuery {
 	return NewInternalPolicyClient(_m.config).QueryComments(_m)
+}
+
+// QueryDiscussions queries the "discussions" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryDiscussions() *DiscussionQuery {
+	return NewInternalPolicyClient(_m.config).QueryDiscussions(_m)
 }
 
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the InternalPolicy entity.
@@ -818,6 +862,17 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_policy_kind_id=")
 	builder.WriteString(_m.InternalPolicyKindID)
+	builder.WriteString(", ")
+	builder.WriteString("proposed_changes=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
+	builder.WriteString(", ")
+	builder.WriteString("proposed_by_user_id=")
+	builder.WriteString(_m.ProposedByUserID)
+	builder.WriteString(", ")
+	if v := _m.ProposedAt; v != nil {
+		builder.WriteString("proposed_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1107,6 +1162,30 @@ func (_m *InternalPolicy) appendNamedComments(name string, edges ...*Note) {
 		_m.Edges.namedComments[name] = []*Note{}
 	} else {
 		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
+	}
+}
+
+// NamedDiscussions returns the Discussions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedDiscussions(name string) ([]*Discussion, error) {
+	if _m.Edges.namedDiscussions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDiscussions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedDiscussions(name string, edges ...*Discussion) {
+	if _m.Edges.namedDiscussions == nil {
+		_m.Edges.namedDiscussions = make(map[string][]*Discussion)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDiscussions[name] = []*Discussion{}
+	} else {
+		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
 	}
 }
 

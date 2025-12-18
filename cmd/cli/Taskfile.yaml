@@ -29,37 +29,13 @@ tasks:
     desc: generates a new cli cmd
     interactive: true
     cmds:
-      - go run --tags cli ../../pkg/gencmd/generate/main.go generate
-
-  generate:ro:
-    desc: generates a new cli cmd with only the read cmds
-    interactive: true
-    cmds:
-      - go run --tags cli ../../pkg/gencmd/generate/main.go generate --read-only
+      - go run --tags cli,gencmd ../../pkg/gencmd/generate/main.go generate
 
   generate:enum:
     desc: generates a new enum
     interactive: true
     cmds:
-      - go run --tags cli ../../pkg/genenum/cmd/main.go
-
-  generate:all:history:
-    desc: generates a new cli cmd for all missing history commands from the query/ directory
-    vars:
-      SCHEMAS:
-        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
-    cmds:
-      - for: {var: SCHEMAS, as: SCHEMA}
-        cmd: go run --tags cli ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only
-
-  generate:all:history:force:
-    desc: regenerates the cli cmd for all history commands from the query/ directory, this will overwrite any changes made to the generated files
-    vars:
-      SCHEMAS:
-        sh: ls -d ../../query/* | cut -f1 |grep history | sed -e "s/query\///" |sed -e "s/.graphql//" | sed -e "s/history/History/" | sed -e "s/..\/..\///"
-    cmds:
-      - for: {var: SCHEMAS, as: SCHEMA}
-        cmd: go run --tags cli ../../pkg/gencmd/generate/main.go generate --name={{ .SCHEMA }} --read-only --force
+      - go run --tags genenum ../../pkg/genenum/cmd/main.go
 
   # === Organization Management ===
   org:create:

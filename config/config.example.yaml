@@ -151,15 +151,6 @@ entconfig:
             provider: none
         maximumsentences: 10
         type: lexrank
-    windmill:
-        baseurl: https://app.windmill.dev
-        defaulttimeout: 30s
-        enabled: false
-        onfailurescript: ""
-        onsuccessscript: ""
-        timezone: UTC
-        token: ""
-        workspace: ""
 integrationoauthprovider:
     enabled: false
     successredirecturl: ""
@@ -215,20 +206,6 @@ objectstorage:
     maxmemorymb: 0
     maxsizemb: 0
     providers:
-        cloudflarer2:
-            baseurl: http://localhost:17608/v1/files
-            bucket: ""
-            credentials:
-                accesskeyid: ""
-                accountid: ""
-                apitoken: ""
-                projectid: ""
-                secretaccesskey: ""
-            enabled: false
-            endpoint: ""
-            ensureavailable: false
-            proxypresignenabled: false
-            region: ""
         database:
             baseurl: http://localhost:17608/v1/files
             bucket: ""
@@ -257,7 +234,7 @@ objectstorage:
             ensureavailable: false
             proxypresignenabled: false
             region: ""
-        gcs:
+        r2:
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -397,12 +374,13 @@ subscription:
     privatestripekey: ""
     stripebillingportalsuccessurl: https://console.theopenlane.io/organization-settings/billing
     stripecancellationreturnurl: https://console.theopenlane.io/organization-settings/billing
-    stripewebhookapiversion: 2025_10_29_CLOVER
-    stripewebhookdiscardapiversion: ""
+    stripewebhookapiversion: 2025_11_17_CLOVER
+    stripewebhookdiscardapiversion: 2025_10_29_CLOVER
     stripewebhookevents: null
     stripewebhooksecret: ""
     stripewebhooksecrets:
         2025_10_29_CLOVER: ""
+        2025_11_17_CLOVER: ""
     stripewebhookurl: https://api.theopenlane.io/stripe/webhook
 totp:
     codelength: 6

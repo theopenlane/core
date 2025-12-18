@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -1509,4 +1510,239 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	})
+}
+
+func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
+
+	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
+		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
+		Only(allowCtx)
+	assert.NilError(t, err)
+
+	watermarkConfig, err = suite.client.db.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
+		SetIsEnabled(true).
+		Save(allowCtx)
+	assert.NilError(t, err)
+	assert.Assert(t, watermarkConfig.IsEnabled)
+
+	createPDFUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
+	testCases := []struct {
+		name                 string
+		watermarkingEnabled  *bool
+		expectedWatermarking bool
+	}{
+		{
+			name:                 "watermarkingEnabled explicitly set to false should check config",
+			watermarkingEnabled:  lo.ToPtr(false),
+			expectedWatermarking: true,
+		},
+		{
+			name:                 "watermarkingEnabled not set should check config",
+			watermarkingEnabled:  nil,
+			expectedWatermarking: true,
+		},
+		{
+			name:                 "watermarkingEnabled explicitly set to true should remain true",
+			watermarkingEnabled:  lo.ToPtr(true),
+			expectedWatermarking: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			file := createPDFUpload()
+			expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
+
+			input := testclient.CreateTrustCenterDocInput{
+				Title:         "Test Document",
+				Category:      "Policy",
+				TrustCenterID: &trustCenter.ID,
+			}
+
+			if tc.watermarkingEnabled != nil {
+				input.WatermarkingEnabled = tc.watermarkingEnabled
+			}
+
+			resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+			dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled))
+
+			(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+		})
+	}
+
+	_, err = suite.client.db.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
+		SetIsEnabled(false).
+		Save(allowCtx)
+	assert.NilError(t, err)
+
+	t.Run("watermarkingEnabled false with config disabled should remain false", func(t *testing.T) {
+		file := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
+
+		input := testclient.CreateTrustCenterDocInput{
+			Title:               "Test Document",
+			Category:            "Policy",
+			TrustCenterID:       &trustCenter.ID,
+			WatermarkingEnabled: lo.ToPtr(false),
+		}
+
+		resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(false, dbDoc.WatermarkingEnabled))
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: watermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	createPDFUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
+	file := createPDFUpload()
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
+
+	createInput := testclient.CreateTrustCenterDocInput{
+		Title:               "Test Document with Watermarking",
+		Category:            "Policy",
+		TrustCenterID:       &trustCenter.ID,
+		WatermarkingEnabled: lo.ToPtr(true),
+	}
+
+	createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *file)
+	assert.NilError(t, err)
+	assert.Assert(t, createResp != nil)
+
+	docID := createResp.CreateTrustCenterDoc.TrustCenterDoc.ID
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, docID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(true, dbDoc.WatermarkingEnabled))
+
+	t.Run("attempting to set watermarkingEnabled to false should be prevented", func(t *testing.T) {
+		updateInput := testclient.UpdateTrustCenterDocInput{
+			WatermarkingEnabled: lo.ToPtr(false),
+		}
+
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp != nil)
+
+		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, docID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(true, dbDoc.WatermarkingEnabled))
+	})
+
+	t.Run("updating other fields should not affect watermarkingEnabled", func(t *testing.T) {
+		updateInput := testclient.UpdateTrustCenterDocInput{
+			Title: lo.ToPtr("Updated Title"),
+		}
+
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp != nil)
+		assert.Check(t, is.Equal("Updated Title", updateResp.UpdateTrustCenterDoc.TrustCenterDoc.Title))
+
+		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, docID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(true, dbDoc.WatermarkingEnabled))
+	})
+
+	t.Run("document with watermarkingEnabled false can be updated to true", func(t *testing.T) {
+		allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
+		watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
+			Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
+			Only(allowCtx)
+		assert.NilError(t, err)
+
+		_, err = suite.client.db.TrustCenterWatermarkConfig.UpdateOne(watermarkConfig).
+			SetIsEnabled(false).
+			Save(allowCtx)
+		assert.NilError(t, err)
+
+		file2 := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file2})
+
+		createInput2 := testclient.CreateTrustCenterDocInput{
+			Title:               "Test Document without Watermarking",
+			Category:            "Policy",
+			TrustCenterID:       &trustCenter.ID,
+			WatermarkingEnabled: lo.ToPtr(false),
+		}
+
+		createResp2, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput2, *file2)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp2 != nil)
+
+		doc2ID := createResp2.CreateTrustCenterDoc.TrustCenterDoc.ID
+		dbDoc2, err := suite.client.db.TrustCenterDoc.Get(dbCtx, doc2ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(false, dbDoc2.WatermarkingEnabled))
+
+		updateInput := testclient.UpdateTrustCenterDocInput{
+			WatermarkingEnabled: lo.ToPtr(true),
+		}
+
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, doc2ID, updateInput, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp != nil)
+
+		dbDoc2, err = suite.client.db.TrustCenterDoc.Get(dbCtx, doc2ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(true, dbDoc2.WatermarkingEnabled))
+
+		updateInput2 := testclient.UpdateTrustCenterDocInput{
+			WatermarkingEnabled: lo.ToPtr(false),
+		}
+
+		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, doc2ID, updateInput2, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp2 != nil)
+
+		dbDoc2, err = suite.client.db.TrustCenterDoc.Get(dbCtx, doc2ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(true, dbDoc2.WatermarkingEnabled))
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc2ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: docID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

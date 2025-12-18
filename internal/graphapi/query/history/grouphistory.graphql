@@ -1,0 +1,75 @@
+
+
+query GetAllGroupHistories {
+  groupHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayID
+        displayName
+        gravatarLogoURL
+        historyTime
+        id
+        isManaged
+        logoURL
+        name
+        operation
+        ownerID
+        ref
+        scimActive
+        scimDisplayName
+        scimExternalID
+        scimGroupMailing
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetGroupHistories($first: Int, $last: Int, $where: GroupHistoryWhereInput) {
+  groupHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayID
+        displayName
+        gravatarLogoURL
+        historyTime
+        id
+        isManaged
+        logoURL
+        name
+        operation
+        ownerID
+        ref
+        scimActive
+        scimDisplayName
+        scimExternalID
+        scimGroupMailing
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

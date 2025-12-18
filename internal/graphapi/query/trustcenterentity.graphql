@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVTrustcenterEntity($input: Upload!) {
   createBulkCSVTrustcenterEntity(input: $input) {
     trustcenterEntities {
@@ -82,19 +81,6 @@ query GetAllTrustcenterEntities {
     }
   }
 }
-query GetTrustcenterEntityByID($trustcenterEntityId: ID!) {
-  trustcenterEntity(id: $trustcenterEntityId) {
-    createdAt
-    createdBy
-    id
-    name
-    trustCenterID
-    entityTypeID
-    updatedAt
-    updatedBy
-    url
-  }
-}
 
 query GetTrustcenterEntities($first: Int, $last: Int, $where: TrustcenterEntityWhereInput) {
   trustcenterEntities(first: $first, last: $last, where: $where) {
@@ -120,8 +106,27 @@ query GetTrustcenterEntities($first: Int, $last: Int, $where: TrustcenterEntityW
     }
   }
 }
+
+query GetTrustcenterEntityByID($trustcenterEntityId: ID!) {
+  trustcenterEntity(id: $trustcenterEntityId) {
+    createdAt
+    createdBy
+    id
+    name
+    trustCenterID
+    entityTypeID
+    updatedAt
+    updatedBy
+    url
+  }
+}
+
 mutation UpdateTrustcenterEntity($updateTrustcenterEntityId: ID!, $input: UpdateTrustcenterEntityInput!, $logoFile: Upload) {
-  updateTrustcenterEntity(id: $updateTrustcenterEntityId, input: $input, logoFile: $logoFile) {
+  updateTrustcenterEntity(
+    id: $updateTrustcenterEntityId
+    input: $input
+    logoFile: $logoFile
+  ) {
     trustcenterEntity {
       createdAt
       createdBy

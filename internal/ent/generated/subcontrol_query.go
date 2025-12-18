@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -52,6 +53,7 @@ type SubcontrolQuery struct {
 	withProcedures                  *ProcedureQuery
 	withInternalPolicies            *InternalPolicyQuery
 	withComments                    *NoteQuery
+	withDiscussions                 *DiscussionQuery
 	withControlOwner                *GroupQuery
 	withDelegate                    *GroupQuery
 	withResponsibleParty            *EntityQuery
@@ -74,6 +76,7 @@ type SubcontrolQuery struct {
 	withNamedProcedures             map[string]*ProcedureQuery
 	withNamedInternalPolicies       map[string]*InternalPolicyQuery
 	withNamedComments               map[string]*NoteQuery
+	withNamedDiscussions            map[string]*DiscussionQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToSubcontrols    map[string]*MappedControlQuery
@@ -333,6 +336,31 @@ func (_q *SubcontrolQuery) QueryComments() *NoteQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDiscussions chains the current query on the "discussions" edge.
+func (_q *SubcontrolQuery) QueryDiscussions() *DiscussionQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.DiscussionsTable, subcontrol.DiscussionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -790,6 +818,7 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withProcedures:             _q.withProcedures.Clone(),
 		withInternalPolicies:       _q.withInternalPolicies.Clone(),
 		withComments:               _q.withComments.Clone(),
+		withDiscussions:            _q.withDiscussions.Clone(),
 		withControlOwner:           _q.withControlOwner.Clone(),
 		withDelegate:               _q.withDelegate.Clone(),
 		withResponsibleParty:       _q.withResponsibleParty.Clone(),
@@ -903,6 +932,17 @@ func (_q *SubcontrolQuery) WithComments(opts ...func(*NoteQuery)) *SubcontrolQue
 		opt(query)
 	}
 	_q.withComments = query
+	return _q
+}
+
+// WithDiscussions tells the query-builder to eager-load the nodes that are connected to
+// the "discussions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithDiscussions(opts ...func(*DiscussionQuery)) *SubcontrolQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDiscussions = query
 	return _q
 }
 
@@ -1101,7 +1141,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [19]bool{
+		loadedTypes = [20]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1111,6 +1151,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withProcedures != nil,
 			_q.withInternalPolicies != nil,
 			_q.withComments != nil,
+			_q.withDiscussions != nil,
 			_q.withControlOwner != nil,
 			_q.withDelegate != nil,
 			_q.withResponsibleParty != nil,
@@ -1211,6 +1252,13 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Subcontrol) { n.Edges.Comments = []*Note{} },
 			func(n *Subcontrol, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDiscussions; query != nil {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.Discussions = []*Discussion{} },
+			func(n *Subcontrol, e *Discussion) { n.Edges.Discussions = append(n.Edges.Discussions, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1344,6 +1392,13 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedComments(name) },
 			func(n *Subcontrol, e *Note) { n.appendNamedComments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDiscussions {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedDiscussions(name) },
+			func(n *Subcontrol, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1843,6 +1898,37 @@ func (_q *SubcontrolQuery) loadComments(ctx context.Context, query *NoteQuery, n
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *SubcontrolQuery) loadDiscussions(ctx context.Context, query *DiscussionQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *Discussion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Discussion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.DiscussionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.subcontrol_discussions
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "subcontrol_discussions" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_discussions" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -2513,6 +2599,20 @@ func (_q *SubcontrolQuery) WithNamedComments(name string, opts ...func(*NoteQuer
 		_q.withNamedComments = make(map[string]*NoteQuery)
 	}
 	_q.withNamedComments[name] = query
+	return _q
+}
+
+// WithNamedDiscussions tells the query-builder to eager-load the nodes that are connected to the "discussions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedDiscussions(name string, opts ...func(*DiscussionQuery)) *SubcontrolQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDiscussions == nil {
+		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
+	}
+	_q.withNamedDiscussions[name] = query
 	return _q
 }
 

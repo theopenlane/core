@@ -140,6 +140,40 @@ func (_c *EvidenceCreate) SetNillableOwnerID(v *string) *EvidenceCreate {
 	return _c
 }
 
+// SetProposedChanges sets the "proposed_changes" field.
+func (_c *EvidenceCreate) SetProposedChanges(v map[string]interface{}) *EvidenceCreate {
+	_c.mutation.SetProposedChanges(v)
+	return _c
+}
+
+// SetProposedByUserID sets the "proposed_by_user_id" field.
+func (_c *EvidenceCreate) SetProposedByUserID(v string) *EvidenceCreate {
+	_c.mutation.SetProposedByUserID(v)
+	return _c
+}
+
+// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableProposedByUserID(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetProposedByUserID(*v)
+	}
+	return _c
+}
+
+// SetProposedAt sets the "proposed_at" field.
+func (_c *EvidenceCreate) SetProposedAt(v time.Time) *EvidenceCreate {
+	_c.mutation.SetProposedAt(v)
+	return _c
+}
+
+// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableProposedAt(v *time.Time) *EvidenceCreate {
+	if v != nil {
+		_c.SetProposedAt(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *EvidenceCreate) SetName(v string) *EvidenceCreate {
 	_c.mutation.SetName(v)
@@ -467,10 +501,6 @@ func (_c *EvidenceCreate) defaults() error {
 		v := evidence.DefaultIsAutomated
 		_c.mutation.SetIsAutomated(v)
 	}
-	if _, ok := _c.mutation.Status(); !ok {
-		v := evidence.DefaultStatus
-		_c.mutation.SetStatus(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if evidence.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized evidence.DefaultID (forgotten import generated/runtime?)")
@@ -584,6 +614,18 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(evidence.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.ProposedChanges(); ok {
+		_spec.SetField(evidence.FieldProposedChanges, field.TypeJSON, value)
+		_node.ProposedChanges = value
+	}
+	if value, ok := _c.mutation.ProposedByUserID(); ok {
+		_spec.SetField(evidence.FieldProposedByUserID, field.TypeString, value)
+		_node.ProposedByUserID = value
+	}
+	if value, ok := _c.mutation.ProposedAt(); ok {
+		_spec.SetField(evidence.FieldProposedAt, field.TypeTime, value)
+		_node.ProposedAt = &value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)

@@ -263,7 +263,7 @@ Provider implementations may return backend‑specific errors. The `ObjectServic
 The repository includes a strongly typed configuration model (see `pkg/objects/storage/types.go`) suitable for wiring up providers in servers. Key fields:
 
 - `ProviderConfig`: global flags (enabled, keys, size limits), plus a `Providers` section per backend
-- `Providers.S3|CloudflareR2|GCS|Disk|Database`: enable flags, credentials, bucket/region/endpoint, and an `ensureAvailable` boolean for strict startup checks
+- `Providers.S3|R2|Disk|Database`: enable flags, credentials, bucket/region/endpoint, and an `ensureAvailable` boolean for strict startup checks
 
 ## FAQ
 

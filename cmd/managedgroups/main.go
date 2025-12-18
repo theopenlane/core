@@ -1,3 +1,5 @@
+//go:build climanagedgroups
+
 package main
 
 import (

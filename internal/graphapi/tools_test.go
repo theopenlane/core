@@ -13,7 +13,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v83"
+	"github.com/stripe/stripe-go/v84"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gotest.tools/v3/assert"
 
@@ -46,6 +46,7 @@ import (
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
 )
 
 const (
@@ -191,6 +192,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		soiree.WithName("ent_client_pool"),
 	)
 
+	// setup history client
+	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
+	requireNoError(err)
+
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
 	requireNoError(err)
@@ -208,6 +213,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.PondPool(pool),
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),
+		ent.HistoryClient(hc),
 	}
 
 	// create database connection
@@ -467,7 +473,7 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// mock customer search
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v83.Customer]")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v84.Customer]")).Run(func(args mock.Arguments) {
 		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
 
 		// Build a payload that matches Stripe search response shape

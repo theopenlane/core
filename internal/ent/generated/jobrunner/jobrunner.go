@@ -134,6 +134,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
+	IPAddressValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

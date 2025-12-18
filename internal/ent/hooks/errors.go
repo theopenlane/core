@@ -32,6 +32,8 @@ var (
 	ErrEmailRequired = errors.New("email is required but not provided")
 	// ErrMaxAttempts is returned when a user has reached the max attempts to resend an invitation to an org
 	ErrMaxAttempts = errors.New("too many attempts to resend org invitation")
+	// ErrMaxAttemptsAssessments is returned when a user has reached the max attempts to resend an assessment
+	ErrMaxAttemptsAssessments = errors.New("too many attempts to resend assessment invitation")
 	// ErrMaxSubscriptionAttempts is returned when a user has reached the max attempts to subscribe to an org
 	ErrMaxSubscriptionAttempts = errors.New("too many attempts to resend org subscription email")
 	// ErrAssessmentInProgress is returned when attempting to resend an email for an assessment that is already in progress
@@ -102,6 +104,9 @@ var (
 	// ErrTrustCenterIDRequired is returned when the trustcenter id is not provided
 	// when creating a customer for the trust center
 	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
+	// ErrUnableToCreateContact is returned when a contact could not be created
+	// when adding a user to an assessment response or other schemas
+	ErrUnableToCreateContact = errors.New("unable to create a contact")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

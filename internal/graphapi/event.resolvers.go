@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
@@ -20,7 +21,7 @@ import (
 func (r *mutationResolver) CreateEvent(ctx context.Context, input generated.CreateEventInput) (*model.EventCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Event.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "event"})
 	}
 
 	return &model.EventCreatePayload{
@@ -39,11 +40,11 @@ func (r *mutationResolver) CreateBulkEvent(ctx context.Context, input []*generat
 
 // CreateBulkCSVEvent is the resolver for the createBulkCSVEvent field.
 func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql.Upload) (*model.EventBulkCreatePayload, error) {
-	data, err := unmarshalBulkData[generated.CreateEventInput](input)
+	data, err := common.UnmarshalBulkData[generated.CreateEventInput](input)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "event"})
 	}
 
 	if len(data) == 0 {
@@ -57,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVEvent(ctx context.Context, input graphql
 func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input generated.UpdateEventInput) (*model.EventUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Event.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "event"})
 	}
 
 	// setup update request
@@ -65,7 +66,7 @@ func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input gen
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "event"})
 	}
 
 	return &model.EventUpdatePayload{
@@ -76,11 +77,11 @@ func (r *mutationResolver) UpdateEvent(ctx context.Context, id string, input gen
 // DeleteEvent is the resolver for the deleteEvent field.
 func (r *mutationResolver) DeleteEvent(ctx context.Context, id string) (*model.EventDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Event.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "event"})
 	}
 
 	if err := generated.EventEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.EventDeletePayload{
@@ -101,12 +102,12 @@ func (r *mutationResolver) DeleteBulkEvent(ctx context.Context, ids []string) (*
 func (r *queryResolver) Event(ctx context.Context, id string) (*generated.Event, error) {
 	query, err := withTransactionalMutation(ctx).Event.Query().Where(event.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "event"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "event"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "event"})
 	}
 
 	return res, nil

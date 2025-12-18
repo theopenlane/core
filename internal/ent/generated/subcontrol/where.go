@@ -1603,6 +1603,26 @@ func ReferencesNotNil() predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldNotNull(FieldReferences))
 }
 
+// TestingProceduresIsNil applies the IsNil predicate on the "testing_procedures" field.
+func TestingProceduresIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldTestingProcedures))
+}
+
+// TestingProceduresNotNil applies the NotNil predicate on the "testing_procedures" field.
+func TestingProceduresNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldTestingProcedures))
+}
+
+// EvidenceRequestsIsNil applies the IsNil predicate on the "evidence_requests" field.
+func EvidenceRequestsIsNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldIsNull(FieldEvidenceRequests))
+}
+
+// EvidenceRequestsNotNil applies the NotNil predicate on the "evidence_requests" field.
+func EvidenceRequestsNotNil() predicate.Subcontrol {
+	return predicate.Subcontrol(sql.FieldNotNull(FieldEvidenceRequests))
+}
+
 // ControlOwnerIDEQ applies the EQ predicate on the "control_owner_id" field.
 func ControlOwnerIDEQ(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldControlOwnerID, v))
@@ -2531,6 +2551,35 @@ func HasCommentsWith(preds ...predicate.Note) predicate.Subcontrol {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDiscussions applies the HasEdge predicate on the "discussions" edge.
+func HasDiscussions() predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DiscussionsTable, DiscussionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDiscussionsWith applies the HasEdge predicate on the "discussions" edge with a given conditions (other predicates).
+func HasDiscussionsWith(preds ...predicate.Discussion) predicate.Subcontrol {
+	return predicate.Subcontrol(func(s *sql.Selector) {
+		step := newDiscussionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
