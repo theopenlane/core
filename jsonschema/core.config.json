@@ -1535,6 +1535,9 @@
         },
         "apitokens": {
           "$ref": "#/$defs/tokens.APITokenConfig"
+        },
+        "assessmentaccessduration": {
+          "type": "integer"
         }
       },
       "additionalProperties": false,
