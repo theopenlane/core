@@ -35,6 +35,9 @@ type Config struct {
 	RequestLatencyLimit time.Duration
 	// The level to log at if RequestLatencyLimit is exceeded
 	RequestLatencyLevel zerolog.Level
+	// AttachRequestMetadata controls whether stable request metadata (client origin IP, user agent, and forwarding headers)
+	// is attached to the request-scoped logger context so downstream log entries can include it.
+	AttachRequestMetadata bool
 }
 
 // Enricher is a function that can be used to enrich the logger with additional information
@@ -99,6 +102,10 @@ func LoggingMiddleware(config Config) echo.MiddlewareFunc {
 			id := getRequestID(c, config)
 			if id != "" {
 				logger = newLoggerFromExisting(logger.log.With().Str(config.RequestIDKey, id).Logger(), logger.out, logger.setters)
+			}
+
+			if config.AttachRequestMetadata {
+				logger = attachRequestMetadata(c, logger)
 			}
 
 			// The request context is retrieved and set to the logger's context
@@ -177,27 +184,35 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 		evt = mainEvt
 	}
 
-	evt.Str("remote_ip", c.RealIP())
+	// Only log request metadata in logEvent if it's NOT already in the logger context
+	shouldLogRequestMetadata := !config.AttachRequestMetadata || config.NestKey != ""
+	if shouldLogRequestMetadata {
+		evt.Str("remote_ip", c.RealIP())
+		evt.Str("user_agent", req.UserAgent())
+		evt.Str("request_protocol", req.Proto)
+
+		if trueClientIP := req.Header.Get("True-Client-IP"); trueClientIP != "" {
+			evt.Str("true_client_ip", trueClientIP)
+		}
+
+		if forwardedFor := req.Header.Get("X-Forwarded-For"); forwardedFor != "" {
+			evt.Str("x_forwarded_for", forwardedFor)
+		}
+
+		if realIP := req.Header.Get("X-Real-IP"); realIP != "" {
+			evt.Str("x_real_ip", realIP)
+		}
+	}
 	evt.Str("host", req.Host)
 	evt.Str("method", req.Method)
 	evt.Str("uri", req.RequestURI)
-	evt.Str("user_agent", req.UserAgent())
 	evt.Int("status", res.Status)
 	evt.Str("referer", req.Referer())
+	evt.Int64("latency_ms", latency.Milliseconds())
 	evt.Str("latency_human", latency.String())
-	evt.Str("client_ip", c.RealIP())
-	evt.Str("request_protocol", req.Proto)
 
-	if trueClientIP := req.Header.Get("True-Client-IP"); trueClientIP != "" {
-		evt.Str("true_client_ip", trueClientIP)
-	}
-
-	if forwardedFor := req.Header.Get("X-Forwarded-For"); forwardedFor != "" {
-		evt.Str("x_forwarded_for", forwardedFor)
-	}
-
-	if realIP := req.Header.Get("X-Real-IP"); realIP != "" {
-		evt.Str("x_real_ip", realIP)
+	if query := req.URL.RawQuery; query != "" {
+		evt.Str("query", query)
 	}
 
 	cl := req.Header.Get(echo.HeaderContentLength)
@@ -213,4 +228,29 @@ func logEvent(c echo.Context, logger *Logger, config Config, start time.Time, er
 	} else {
 		mainEvt.Msgf("request details for request to %s %s", req.Method, req.RequestURI)
 	}
+}
+
+// attachRequestMetadata attaches stable request metadata to the logger context
+func attachRequestMetadata(c echo.Context, logger *Logger) *Logger {
+	req := c.Request()
+	remoteIP := c.RealIP()
+
+	zctx := logger.log.With().
+		Str("remote_ip", remoteIP).
+		Str("user_agent", req.UserAgent()).
+		Str("request_protocol", req.Proto)
+
+	if trueClientIP := req.Header.Get("True-Client-IP"); trueClientIP != "" {
+		zctx = zctx.Str("true_client_ip", trueClientIP)
+	}
+
+	if forwardedFor := req.Header.Get("X-Forwarded-For"); forwardedFor != "" {
+		zctx = zctx.Str("x_forwarded_for", forwardedFor)
+	}
+
+	if realIP := req.Header.Get("X-Real-IP"); realIP != "" {
+		zctx = zctx.Str("x_real_ip", realIP)
+	}
+
+	return newLoggerFromExisting(zctx.Logger(), logger.out, logger.setters)
 }

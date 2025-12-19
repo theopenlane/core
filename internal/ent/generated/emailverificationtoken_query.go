@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -557,21 +558,20 @@ func (_q *EmailVerificationTokenQuery) Modify(modifiers ...func(s *sql.Selector)
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (evtq *EmailVerificationTokenQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "EmailVerificationToken").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, evtq.ctx, ent.OpQueryIDs)
-	if err := evtq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return evtq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, evtq, qr, evtq.inters)
+	ids, err := evtq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "EmailVerificationToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "EmailVerificationToken").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

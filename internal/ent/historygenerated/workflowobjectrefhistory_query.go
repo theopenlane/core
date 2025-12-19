@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowobjectrefhistory"
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
@@ -475,21 +476,20 @@ func (_q *WorkflowObjectRefHistoryQuery) Modify(modifiers ...func(s *sql.Selecto
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (worhq *WorkflowObjectRefHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowObjectRefHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, worhq.ctx, ent.OpQueryIDs)
-	if err := worhq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return worhq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, worhq, qr, worhq.inters)
+	ids, err := worhq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowObjectRefHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowObjectRefHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }
