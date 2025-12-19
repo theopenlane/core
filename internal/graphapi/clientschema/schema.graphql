@@ -38953,6 +38953,28 @@ type PageInfo {
 	endCursor: Cursor
 }
 """
+Pagination parameters used for list requests to be able to pull more than
+max results
+"""
+input Params {
+	"""
+	first is the number of records to pull when going forward through pagination
+	"""
+	first: Int
+	"""
+	last is the number of of records to pull when going backwards through pagination
+	"""
+	last: Int
+	"""
+	after is the cursor position to start at when paginating through results
+	"""
+	after: Cursor
+	"""
+	before is the cursor to start at when paginating in reverse through results
+	"""
+	before: Cursor
+}
+"""
 Permission is enum for the permissions types
 """
 enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {

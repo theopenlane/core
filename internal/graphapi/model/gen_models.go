@@ -1503,6 +1503,19 @@ type OrganizationUpdatePayload struct {
 	Organization *generated.Organization `json:"organization"`
 }
 
+// Pagination parameters used for list requests to be able to pull more than
+// max results
+type Params struct {
+	// first is the number of records to pull when going forward through pagination
+	First *int `json:"first,omitempty"`
+	// last is the number of of records to pull when going backwards through pagination
+	Last *int `json:"last,omitempty"`
+	// after is the cursor position to start at when paginating through results
+	After *entgql.Cursor[string] `json:"after,omitempty"`
+	// before is the cursor to start at when paginating in reverse through results
+	Before *entgql.Cursor[string] `json:"before,omitempty"`
+}
+
 // Return response for createBulkPersonalAccessToken mutation
 type PersonalAccessTokenBulkCreatePayload struct {
 	// Created personalAccessTokens
