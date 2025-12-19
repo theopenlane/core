@@ -149,7 +149,7 @@ func checkOrgAccess(ctx context.Context, relation, organizationID string, m ent.
 	}
 
 	// deny if it was a mutation is not allowed
-	logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", au.SubjectID).Str("email", au.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(au.AuthenticationType)).Msg("request denied by access for user in organization")
+	logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", au.SubjectID).Str("email", au.SubjectEmail).Str("organization_id", organizationID).Str("auth_type", string(au.AuthenticationType)).Str("entity_type", m.Type()).Str("operation", m.Op().String()).Msg("request denied by access for user in organization")
 
 	return generated.ErrPermissionDenied
 }
