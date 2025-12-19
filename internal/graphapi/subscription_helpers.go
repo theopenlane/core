@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -18,7 +17,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 	// Check if subscription manager is available
 	if r.subscriptionManager == nil {
 		logx.FromContext(ctx).Info().Msg("subscription manager is not initialized")
-		return nil, ErrInternalServerError
+		return nil, common.ErrInternalServerError
 	}
 
 	userID, err := auth.GetSubjectIDFromContext(ctx)
@@ -35,7 +34,6 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 
 	// Fetch existing notifications for the user so they see their old notifications
 	existingNotifications, err := r.db.Notification.Query().
-		Where(notification.UserIDEQ(userID)).
 		All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to fetch existing notifications")

@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/common"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 )
 

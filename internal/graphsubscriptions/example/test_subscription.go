@@ -1,3 +1,5 @@
+//go:build example
+
 package main
 
 import (
@@ -13,9 +15,9 @@ import (
 
 const (
 	serverURL = "ws://localhost:17608/query"
-	// Using personal access token - this belongs to user 01KCN5MWM1TREC96A6RZAF7VPC
-	token = "tolp_Y7Q25VrBZNvVnlfS4qHTdrIHCLZSiojQJNjqd3qftX0uG9hK7UqIgwWydzcEt3So"
 )
+
+var token = os.Getenv("API_TOKEN")
 
 // GraphQL WebSocket protocol messages
 type ConnectionInit struct {
@@ -116,7 +118,7 @@ func main() {
 			log.Printf("Received:\n%s", string(prettyJSON))
 
 			if response["type"] == "next" {
-				log.Println("🎉 NOTIFICATION RECEIVED!")
+				log.Println("NOTIFICATION RECEIVED!")
 			}
 		}
 	}()

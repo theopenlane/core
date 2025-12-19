@@ -82,13 +82,13 @@ func HookNotificationPublish() ent.Hook {
 				return val, nil
 			}
 
-			logx.FromContext(ctx).Info().Str("notification_id", notification.ID).Msg("notification hook: notification created, attempting to publish")
+			logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: notification created, attempting to publish")
 
 			// Get the global subscription manager
 			manager := graphsubscriptions.GetGlobalManager()
 			if manager == nil {
 				// No subscription manager configured, skip publishing
-				logx.FromContext(ctx).Warn().Msg("notification hook: subscription manager is nil, skipping publish")
+				logx.FromContext(ctx).Debug().Msg("notification hook: subscription manager is nil, skipping publish")
 				return val, nil
 			}
 
@@ -96,18 +96,15 @@ func HookNotificationPublish() ent.Hook {
 			userID := notification.UserID
 			if userID == "" {
 				// No specific user, skip publishing
-				logx.FromContext(ctx).Warn().Str("notification_id", notification.ID).Msg("notification hook: userID is empty, skipping publish")
+				logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: userID is empty, skipping publish")
 				return val, nil
 			}
 
-			logx.FromContext(ctx).Info().Str("user_id", userID).Str("notification_id", notification.ID).Msg("notification hook: publishing to subscription manager")
+			logx.FromContext(ctx).Debug().Str("user_id", userID).Str("notification_id", notification.ID).Msg("notification hook: publishing to subscription manager")
 
 			// Publish the notification to subscribers
 			if err := manager.Publish(userID, notification); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("user_id", userID).Msg("failed to publish notification to subscribers")
-				// Don't fail the mutation if publishing fails
-			} else {
-				logx.FromContext(ctx).Info().Str("user_id", userID).Str("notification_id", notification.ID).Msg("notification hook: successfully called Publish")
 			}
 
 			return val, nil

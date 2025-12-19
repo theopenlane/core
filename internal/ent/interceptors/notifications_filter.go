@@ -18,24 +18,18 @@ func NotificationQueryFilter() generated.Interceptor {
 		}
 
 		// Get user info from context
-		subjectID, err := auth.GetSubjectIDFromContext(ctx)
+		ac, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
-			// If no auth context, let it proceed (might be internal query)
-			return nil
-		}
-
-		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
-		if err != nil {
-			orgIDs = []string{} // Default to empty if org IDs not found
+		    return err
 		}
 
 		// Apply the filter by modifying the query in place
 		nq.Where(
 			notification.Or(
-				notification.UserID(subjectID),
+				notification.UserID(ac.SubjectID),
 				notification.And(
 					notification.UserIDIsNil(),
-					notification.OwnerIDIn(orgIDs...),
+					notification.OwnerIDIn(ac.OrganizationIDs...),
 				),
 			),
 		)
