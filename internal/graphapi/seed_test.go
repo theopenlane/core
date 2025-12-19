@@ -102,15 +102,11 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 		// create test users
 		testUserCreator = suite.userBuilder(ctx, t)
 
-		fmt.Println("user 1")
 		testUser1 = suite.userBuilder(ctx, t)
-		fmt.Println("user 2")
 		testUser2 = suite.userBuilder(ctx, t)
 
-		fmt.Println("user 3")
 		// setup two test users that are members of the organization
 		viewOnlyUser = suite.userBuilder(ctx, t)
-		fmt.Println("user 4")
 		viewOnlyUser2 = suite.userBuilder(ctx, t)
 
 		// add the user to the organization
@@ -118,7 +114,6 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 		suite.addUserToOrganization(testUser1.UserCtx, t, &viewOnlyUser2, enums.RoleAdmin, testUser1.OrganizationID)
 
 		// setup a test user that is an admin of an organization
-		fmt.Println("user 5")
 		adminUser = suite.userBuilder(ctx, t)
 		suite.addUserToOrganization(testUser1.UserCtx, t, &adminUser, enums.RoleAdmin, testUser1.OrganizationID)
 
