@@ -49,6 +49,8 @@ var (
 	skipModules = flag.Bool("skip-modules", false, "skip module per schema generation")
 
 	onlySchemas = flag.Bool("only-schemas", false, "only generate base schema, skip history, modules, and exportable validation")
+
+	buildFlags = "-tags=codegen"
 )
 
 const (
@@ -213,7 +215,7 @@ func getHistoryExtension() *history.Extension {
 		history.WithUpdatedByFromSchema(history.ValueTypeString, false),
 	)
 
-	if err := historyExt.GenerateSchemas(); err != nil {
+	if err := historyExt.GenerateSchemas(buildFlags); err != nil {
 		log.Fatal().Err(err).Msg("generating history schema")
 	}
 
@@ -225,7 +227,7 @@ func exportableSchema() {
 	exportableGen := entx.NewExportableGenerator(schemaPath, "internal/ent/hooks").
 		WithPackage("hooks")
 
-	if err := exportableGen.Generate(); err != nil {
+	if err := exportableGen.Generate(buildFlags); err != nil {
 		log.Fatal().Err(err).Msg("generating exportable validation")
 	}
 }
@@ -249,8 +251,9 @@ func schemaGenerate(extensions ...entc.Extension) {
 			accessMapExt.Hook(),
 			exportenums.New().Hook(),
 		},
-		Package:  "github.com/theopenlane/core/" + entGeneratedPath,
-		Features: enabledFeatures,
+		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
+		Features:   enabledFeatures,
+		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
 			entc.DependencyName("EntConfig"),
@@ -324,8 +327,9 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 			genhooks.GenSchema(graphHistorySchemaDir),
 			genhooks.GenQuery(graphHistoryQueryDir),
 		},
-		Package:  "github.com/theopenlane/core/" + entGeneratedHistoryPath,
-		Features: enabledFeatures,
+		Package:    "github.com/theopenlane/core/" + entGeneratedHistoryPath,
+		Features:   enabledFeatures,
+		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
 			entc.DependencyName("EntConfig"),

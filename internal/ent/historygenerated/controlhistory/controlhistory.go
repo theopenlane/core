@@ -44,6 +44,8 @@ const (
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
+	// FieldDescriptionJSON holds the string denoting the description_json field in the database.
+	FieldDescriptionJSON = "description_json"
 	// FieldAliases holds the string denoting the aliases field in the database.
 	FieldAliases = "aliases"
 	// FieldReferenceID holds the string denoting the reference_id field in the database.
@@ -132,6 +134,7 @@ var Columns = []string{
 	FieldTags,
 	FieldTitle,
 	FieldDescription,
+	FieldDescriptionJSON,
 	FieldAliases,
 	FieldReferenceID,
 	FieldAuditorReferenceID,

@@ -230,6 +230,24 @@ func (_u *ActionPlanUpdate) ClearDetails() *ActionPlanUpdate {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ActionPlanUpdate) SetDetailsJSON(v []interface{}) *ActionPlanUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ActionPlanUpdate) AppendDetailsJSON(v []interface{}) *ActionPlanUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ActionPlanUpdate) ClearDetailsJSON() *ActionPlanUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_u *ActionPlanUpdate) SetApprovalRequired(v bool) *ActionPlanUpdate {
 	_u.mutation.SetApprovalRequired(v)
@@ -1331,6 +1349,17 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeString)
 	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(actionplan.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(actionplan.FieldDetailsJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(actionplan.FieldApprovalRequired, field.TypeBool, value)
 	}
@@ -2297,6 +2326,24 @@ func (_u *ActionPlanUpdateOne) SetNillableDetails(v *string) *ActionPlanUpdateOn
 // ClearDetails clears the value of the "details" field.
 func (_u *ActionPlanUpdateOne) ClearDetails() *ActionPlanUpdateOne {
 	_u.mutation.ClearDetails()
+	return _u
+}
+
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ActionPlanUpdateOne) SetDetailsJSON(v []interface{}) *ActionPlanUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ActionPlanUpdateOne) AppendDetailsJSON(v []interface{}) *ActionPlanUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ActionPlanUpdateOne) ClearDetailsJSON() *ActionPlanUpdateOne {
+	_u.mutation.ClearDetailsJSON()
 	return _u
 }
 
@@ -3430,6 +3477,17 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(actionplan.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(actionplan.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, actionplan.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(actionplan.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(actionplan.FieldApprovalRequired, field.TypeBool, value)

@@ -1268,6 +1268,11 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldDetails)
 				fieldSeen[actionplan.FieldDetails] = struct{}{}
 			}
+		case "detailsJSON":
+			if _, ok := fieldSeen[actionplan.FieldDetailsJSON]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldDetailsJSON)
+				fieldSeen[actionplan.FieldDetailsJSON] = struct{}{}
+			}
 		case "approvalRequired":
 			if _, ok := fieldSeen[actionplan.FieldApprovalRequired]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldApprovalRequired)
@@ -5400,6 +5405,11 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldDescription)
 				fieldSeen[control.FieldDescription] = struct{}{}
 			}
+		case "descriptionJSON":
+			if _, ok := fieldSeen[control.FieldDescriptionJSON]; !ok {
+				selectedFields = append(selectedFields, control.FieldDescriptionJSON)
+				fieldSeen[control.FieldDescriptionJSON] = struct{}{}
+			}
 		case "aliases":
 			if _, ok := fieldSeen[control.FieldAliases]; !ok {
 				selectedFields = append(selectedFields, control.FieldAliases)
@@ -6302,6 +6312,11 @@ func (_q *ControlImplementationQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[controlimplementation.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, controlimplementation.FieldDetails)
 				fieldSeen[controlimplementation.FieldDetails] = struct{}{}
+			}
+		case "detailsJSON":
+			if _, ok := fieldSeen[controlimplementation.FieldDetailsJSON]; !ok {
+				selectedFields = append(selectedFields, controlimplementation.FieldDetailsJSON)
+				fieldSeen[controlimplementation.FieldDetailsJSON] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -7576,6 +7591,11 @@ func (_q *ControlObjectiveQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[controlobjective.FieldDesiredOutcome]; !ok {
 				selectedFields = append(selectedFields, controlobjective.FieldDesiredOutcome)
 				fieldSeen[controlobjective.FieldDesiredOutcome] = struct{}{}
+			}
+		case "desiredOutcomeJSON":
+			if _, ok := fieldSeen[controlobjective.FieldDesiredOutcomeJSON]; !ok {
+				selectedFields = append(selectedFields, controlobjective.FieldDesiredOutcomeJSON)
+				fieldSeen[controlobjective.FieldDesiredOutcomeJSON] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[controlobjective.FieldStatus]; !ok {
@@ -25744,6 +25764,11 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldDetails)
 				fieldSeen[internalpolicy.FieldDetails] = struct{}{}
 			}
+		case "detailsJSON":
+			if _, ok := fieldSeen[internalpolicy.FieldDetailsJSON]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldDetailsJSON)
+				fieldSeen[internalpolicy.FieldDetailsJSON] = struct{}{}
+			}
 		case "approvalRequired":
 			if _, ok := fieldSeen[internalpolicy.FieldApprovalRequired]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldApprovalRequired)
@@ -29449,6 +29474,11 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[note.FieldText]; !ok {
 				selectedFields = append(selectedFields, note.FieldText)
 				fieldSeen[note.FieldText] = struct{}{}
+			}
+		case "textJSON":
+			if _, ok := fieldSeen[note.FieldTextJSON]; !ok {
+				selectedFields = append(selectedFields, note.FieldTextJSON)
+				fieldSeen[note.FieldTextJSON] = struct{}{}
 			}
 		case "noteRef":
 			if _, ok := fieldSeen[note.FieldNoteRef]; !ok {
@@ -39819,6 +39849,11 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldDetails)
 				fieldSeen[procedure.FieldDetails] = struct{}{}
 			}
+		case "detailsJSON":
+			if _, ok := fieldSeen[procedure.FieldDetailsJSON]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldDetailsJSON)
+				fieldSeen[procedure.FieldDetailsJSON] = struct{}{}
+			}
 		case "approvalRequired":
 			if _, ok := fieldSeen[procedure.FieldApprovalRequired]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldApprovalRequired)
@@ -47070,15 +47105,30 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, risk.FieldMitigation)
 				fieldSeen[risk.FieldMitigation] = struct{}{}
 			}
+		case "mitigationJSON":
+			if _, ok := fieldSeen[risk.FieldMitigationJSON]; !ok {
+				selectedFields = append(selectedFields, risk.FieldMitigationJSON)
+				fieldSeen[risk.FieldMitigationJSON] = struct{}{}
+			}
 		case "details":
 			if _, ok := fieldSeen[risk.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, risk.FieldDetails)
 				fieldSeen[risk.FieldDetails] = struct{}{}
 			}
+		case "detailsJSON":
+			if _, ok := fieldSeen[risk.FieldDetailsJSON]; !ok {
+				selectedFields = append(selectedFields, risk.FieldDetailsJSON)
+				fieldSeen[risk.FieldDetailsJSON] = struct{}{}
+			}
 		case "businessCosts":
 			if _, ok := fieldSeen[risk.FieldBusinessCosts]; !ok {
 				selectedFields = append(selectedFields, risk.FieldBusinessCosts)
 				fieldSeen[risk.FieldBusinessCosts] = struct{}{}
+			}
+		case "businessCostsJSON":
+			if _, ok := fieldSeen[risk.FieldBusinessCostsJSON]; !ok {
+				selectedFields = append(selectedFields, risk.FieldBusinessCostsJSON)
+				fieldSeen[risk.FieldBusinessCostsJSON] = struct{}{}
 			}
 		case "stakeholderID":
 			if _, ok := fieldSeen[risk.FieldStakeholderID]; !ok {
@@ -50094,6 +50144,11 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldDescription)
 				fieldSeen[subcontrol.FieldDescription] = struct{}{}
 			}
+		case "descriptionJSON":
+			if _, ok := fieldSeen[subcontrol.FieldDescriptionJSON]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldDescriptionJSON)
+				fieldSeen[subcontrol.FieldDescriptionJSON] = struct{}{}
+			}
 		case "aliases":
 			if _, ok := fieldSeen[subcontrol.FieldAliases]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldAliases)
@@ -52524,6 +52579,11 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[task.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, task.FieldDetails)
 				fieldSeen[task.FieldDetails] = struct{}{}
+			}
+		case "detailsJSON":
+			if _, ok := fieldSeen[task.FieldDetailsJSON]; !ok {
+				selectedFields = append(selectedFields, task.FieldDetailsJSON)
+				fieldSeen[task.FieldDetailsJSON] = struct{}{}
 			}
 		case "status":
 			if _, ok := fieldSeen[task.FieldStatus]; !ok {

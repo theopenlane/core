@@ -156,6 +156,12 @@ var controlFields = []ent.Field{
 			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("description of what the control is supposed to accomplish"),
+	field.JSON("description_json", []any{}).
+		Optional().
+		Annotations(
+			entgql.Type("[Any!]"),
+		).
+		Comment("structured details of the control in JSON format"),
 	field.Strings("aliases").Optional().
 		Annotations(
 			entx.FieldSearchable(),

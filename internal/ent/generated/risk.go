@@ -64,10 +64,16 @@ type Risk struct {
 	Score int `json:"score,omitempty"`
 	// mitigation for the risk
 	Mitigation string `json:"mitigation,omitempty"`
+	// structured details of the mitigation in JSON format
+	MitigationJSON []interface{} `json:"mitigation_json,omitempty"`
 	// details of the risk
 	Details string `json:"details,omitempty"`
+	// structured details of the risk in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// business costs associated with the risk
 	BusinessCosts string `json:"business_costs,omitempty"`
+	// structured details of the business costs in JSON format
+	BusinessCostsJSON []interface{} `json:"business_costs_json,omitempty"`
 	// the id of the group responsible for risk oversight
 	StakeholderID string `json:"stakeholder_id,omitempty"`
 	// the id of the group responsible for risk oversight on behalf of the stakeholder
@@ -345,7 +351,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case risk.FieldTags:
+		case risk.FieldTags, risk.FieldMitigationJSON, risk.FieldDetailsJSON, risk.FieldBusinessCostsJSON:
 			values[i] = new([]byte)
 		case risk.FieldScore:
 			values[i] = new(sql.NullInt64)
@@ -516,17 +522,41 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Mitigation = value.String
 			}
+		case risk.FieldMitigationJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field mitigation_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.MitigationJSON); err != nil {
+					return fmt.Errorf("unmarshal field mitigation_json: %w", err)
+				}
+			}
 		case risk.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
 			}
+		case risk.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
+			}
 		case risk.FieldBusinessCosts:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field business_costs", values[i])
 			} else if value.Valid {
 				_m.BusinessCosts = value.String
+			}
+		case risk.FieldBusinessCostsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field business_costs_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.BusinessCostsJSON); err != nil {
+					return fmt.Errorf("unmarshal field business_costs_json: %w", err)
+				}
 			}
 		case risk.FieldStakeholderID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -788,11 +818,20 @@ func (_m *Risk) String() string {
 	builder.WriteString("mitigation=")
 	builder.WriteString(_m.Mitigation)
 	builder.WriteString(", ")
+	builder.WriteString("mitigation_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.MitigationJSON))
+	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
+	builder.WriteString(", ")
 	builder.WriteString("business_costs=")
 	builder.WriteString(_m.BusinessCosts)
+	builder.WriteString(", ")
+	builder.WriteString("business_costs_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.BusinessCostsJSON))
 	builder.WriteString(", ")
 	builder.WriteString("stakeholder_id=")
 	builder.WriteString(_m.StakeholderID)

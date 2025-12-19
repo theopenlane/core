@@ -48,6 +48,8 @@ const (
 	FieldActionPlanType = "action_plan_type"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// FieldApprovalRequired holds the string denoting the approval_required field in the database.
 	FieldApprovalRequired = "approval_required"
 	// FieldReviewDue holds the string denoting the review_due field in the database.
@@ -132,6 +134,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldActionPlanType,
 	FieldDetails,
+	FieldDetailsJSON,
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,

@@ -16,5 +16,5 @@ ignore-hex = true
 identifier-leading-digits = false
 locale = "en"
 extend-ignore-identifiers-re = []
-extend-ignore-words-re = ["(?i)requestor","(?i)indentity","(?i)encrypter","(?i)seeked","(?i)generater","(?i)policys", "typ", "vulnerabilitys"]
+extend-ignore-words-re = ["(?i)requestor","(?i)indentity","(?i)encrypter","(?i)seeked","(?i)generater","(?i)policys", "typ", "vulnerabilitys", "(?i)entitys", "eis"]
 extend-ignore-re = ["(?Rm)^.*//\\s*spellchecker:disable-line$"]

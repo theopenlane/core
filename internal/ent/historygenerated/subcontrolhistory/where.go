@@ -946,6 +946,16 @@ func DescriptionContainsFold(v string) predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldContainsFold(FieldDescription, v))
 }
 
+// DescriptionJSONIsNil applies the IsNil predicate on the "description_json" field.
+func DescriptionJSONIsNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldDescriptionJSON))
+}
+
+// DescriptionJSONNotNil applies the NotNil predicate on the "description_json" field.
+func DescriptionJSONNotNil() predicate.SubcontrolHistory {
+	return predicate.SubcontrolHistory(sql.FieldNotNull(FieldDescriptionJSON))
+}
+
 // AliasesIsNil applies the IsNil predicate on the "aliases" field.
 func AliasesIsNil() predicate.SubcontrolHistory {
 	return predicate.SubcontrolHistory(sql.FieldIsNull(FieldAliases))
