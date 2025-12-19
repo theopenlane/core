@@ -35,16 +35,16 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *MutationPay
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		shouldClearCache = true
 	case ent.OpCreate.String():
-		if visibility, ok := ctx.PropertyString("visibility"); ok {
-			if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible.String() ||
-				visibility == enums.TrustCenterDocumentVisibilityProtected.String() {
+		if visibility, ok := mut.Visibility(); ok {
+			if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
+				visibility == enums.TrustCenterDocumentVisibilityProtected {
 				shouldClearCache = true
 			}
 		}
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		if visibility, ok := ctx.PropertyString("visibility"); ok {
-			if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible.String() ||
-				visibility == enums.TrustCenterDocumentVisibilityProtected.String() {
+		if visibility, ok := mut.Visibility(); ok {
+			if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
+				visibility == enums.TrustCenterDocumentVisibilityProtected {
 				shouldClearCache = true
 			}
 		}
@@ -55,9 +55,7 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *MutationPay
 	}
 
 	var trustCenterID string
-	if tcID, ok := ctx.PropertyString("trust_center_id"); ok && tcID != "" {
-		trustCenterID = tcID
-	} else if tcID, exists := mut.TrustCenterID(); exists {
+	if tcID, exists := mut.TrustCenterID(); exists {
 		trustCenterID = tcID
 	}
 
@@ -105,9 +103,7 @@ func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *Mutation
 	}
 
 	var trustCenterID string
-	if tcID, ok := ctx.PropertyString("trust_center_id"); ok && tcID != "" {
-		trustCenterID = tcID
-	} else if tcID, exists := mut.TrustCenterID(); exists {
+	if tcID, exists := mut.TrustCenterID(); exists {
 		trustCenterID = tcID
 	}
 
@@ -130,9 +126,7 @@ func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *Mu
 	}
 
 	var trustCenterID string
-	if tcID, ok := ctx.PropertyString("trust_center_id"); ok && tcID != "" {
-		trustCenterID = tcID
-	} else if tcID, exists := mut.TrustCenterID(); exists {
+	if tcID, exists := mut.TrustCenterID(); exists {
 		trustCenterID = tcID
 	}
 
@@ -155,9 +149,7 @@ func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *Muta
 	}
 
 	var trustCenterID string
-	if tcID, ok := ctx.PropertyString("trust_center_id"); ok && tcID != "" {
-		trustCenterID = tcID
-	} else if tcID, exists := mut.TrustCenterID(); exists {
+	if tcID, exists := mut.TrustCenterID(); exists {
 		trustCenterID = tcID
 	}
 
@@ -179,7 +171,7 @@ func handleSubprocessorMutation(ctx *soiree.EventContext, payload *MutationPaylo
 		return nil
 	}
 
-	if !shouldInvalidateCacheForSubprocessor(ctx, payload.Operation) {
+	if !shouldInvalidateCacheForSubprocessor(mut, payload.Operation) {
 		return nil
 	}
 
@@ -231,7 +223,7 @@ func handleStandardMutation(ctx *soiree.EventContext, payload *MutationPayload) 
 		return nil
 	}
 
-	if !shouldInvalidateCacheForStandard(ctx, payload.Operation) {
+	if !shouldInvalidateCacheForStandard(mut, payload.Operation) {
 		return nil
 	}
 
@@ -273,36 +265,36 @@ func handleStandardMutation(ctx *soiree.EventContext, payload *MutationPayload) 
 }
 
 // shouldInvalidateCacheForSubprocessor determines if subprocessor changes warrant cache invalidation
-func shouldInvalidateCacheForSubprocessor(ctx *soiree.EventContext, operation string) bool {
+func shouldInvalidateCacheForSubprocessor(mut *entgen.SubprocessorMutation, operation string) bool {
 	switch operation {
 	case ent.OpCreate.String():
-		_, hasName := ctx.PropertyString("name")
-		_, hasLogoFileID := ctx.PropertyString("logo_file_id")
-		_, hasLogoRemoteURL := ctx.PropertyString("logo_remote_url")
+		_, hasName := mut.Name()
+		_, hasLogoFileID := mut.LogoFileID()
+		_, hasLogoRemoteURL := mut.LogoRemoteURL()
 		return hasName || hasLogoFileID || hasLogoRemoteURL
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		return true
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		_, hasName := ctx.PropertyString("name")
-		_, hasLogoFileID := ctx.PropertyString("logo_file_id")
-		_, hasLogoRemoteURL := ctx.PropertyString("logo_remote_url")
+		_, hasName := mut.Name()
+		_, hasLogoFileID := mut.LogoFileID()
+		_, hasLogoRemoteURL := mut.LogoRemoteURL()
 		return hasName || hasLogoFileID || hasLogoRemoteURL
 	}
 	return false
 }
 
 // shouldInvalidateCacheForStandard determines if standard changes warrant cache invalidation
-func shouldInvalidateCacheForStandard(ctx *soiree.EventContext, operation string) bool {
+func shouldInvalidateCacheForStandard(mut *entgen.StandardMutation, operation string) bool {
 	switch operation {
 	case ent.OpCreate.String():
-		_, hasName := ctx.PropertyString("name")
-		_, hasLogoFileID := ctx.PropertyString("logo_file_id")
+		_, hasName := mut.Name()
+		_, hasLogoFileID := mut.LogoFileID()
 		return hasName || hasLogoFileID
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
 		return true
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		_, hasName := ctx.PropertyString("name")
-		_, hasLogoFileID := ctx.PropertyString("logo_file_id")
+		_, hasName := mut.Name()
+		_, hasLogoFileID := mut.LogoFileID()
 		return hasName || hasLogoFileID
 	}
 	return false
