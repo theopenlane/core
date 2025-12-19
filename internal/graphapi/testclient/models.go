@@ -17810,6 +17810,19 @@ type PageInfo struct {
 	EndCursor *string `json:"endCursor,omitempty"`
 }
 
+// Pagination parameters used for list requests to be able to pull more than
+// max results
+type Params struct {
+	// first is the number of records to pull when going forward through pagination
+	First *int64 `json:"first,omitempty"`
+	// last is the number of of records to pull when going backwards through pagination
+	Last *int64 `json:"last,omitempty"`
+	// after is the cursor position to start at when paginating through results
+	After *string `json:"after,omitempty"`
+	// before is the cursor to start at when paginating in reverse through results
+	Before *string `json:"before,omitempty"`
+}
+
 type PersonalAccessToken struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
