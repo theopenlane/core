@@ -147,3 +147,6 @@ models:
   WorkflowEventPayload:
     model:
       - github.com/theopenlane/core/pkg/models.WorkflowEventPayload
+  Map:
+    model:
+      - github.com/99designs/gqlgen/graphql.Map

@@ -186,6 +186,12 @@ func (_c *ActionPlanCreate) SetNillableDetails(v *string) *ActionPlanCreate {
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *ActionPlanCreate) SetDetailsJSON(v []interface{}) *ActionPlanCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_c *ActionPlanCreate) SetApprovalRequired(v bool) *ActionPlanCreate {
 	_c.mutation.SetApprovalRequired(v)
@@ -970,6 +976,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(actionplan.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(actionplan.FieldApprovalRequired, field.TypeBool, value)

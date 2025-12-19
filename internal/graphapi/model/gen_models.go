@@ -2303,6 +2303,13 @@ type TrustcenterEntityUpdatePayload struct {
 	TrustcenterEntity *generated.TrustcenterEntity `json:"trustcenterEntity"`
 }
 
+// Update discussions related to an object
+type UpdateDiscussionsInput struct {
+	// id of the discussion to update
+	ID    string                           `json:"id"`
+	Input *generated.UpdateDiscussionInput `json:"input"`
+}
+
 // Return response for createBulkUser mutation
 type UserBulkCreatePayload struct {
 	// Created users

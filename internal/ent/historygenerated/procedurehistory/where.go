@@ -1186,6 +1186,16 @@ func DetailsContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldDetails, v))
 }
 
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldDetailsJSON))
+}
+
 // ApprovalRequiredEQ applies the EQ predicate on the "approval_required" field.
 func ApprovalRequiredEQ(v bool) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldApprovalRequired, v))

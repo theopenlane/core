@@ -3,6 +3,7 @@
 package historygenerated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -42,6 +43,8 @@ type NoteHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
 	Text string `json:"text,omitempty"`
+	// structured details of the note in JSON format
+	TextJSON []interface{} `json:"text_json,omitempty"`
 	// ref location of the note
 	NoteRef string `json:"note_ref,omitempty"`
 	// the external discussion id this note is associated with
@@ -56,6 +59,8 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case notehistory.FieldTextJSON:
+			values[i] = new([]byte)
 		case notehistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case notehistory.FieldIsEdited:
@@ -157,6 +162,14 @@ func (_m *NoteHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Text = value.String
 			}
+		case notehistory.FieldTextJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field text_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TextJSON); err != nil {
+					return fmt.Errorf("unmarshal field text_json: %w", err)
+				}
+			}
 		case notehistory.FieldNoteRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field note_ref", values[i])
@@ -246,6 +259,9 @@ func (_m *NoteHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("text=")
 	builder.WriteString(_m.Text)
+	builder.WriteString(", ")
+	builder.WriteString("text_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TextJSON))
 	builder.WriteString(", ")
 	builder.WriteString("note_ref=")
 	builder.WriteString(_m.NoteRef)

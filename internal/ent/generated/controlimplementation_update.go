@@ -267,6 +267,24 @@ func (_u *ControlImplementationUpdate) ClearDetails() *ControlImplementationUpda
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ControlImplementationUpdate) SetDetailsJSON(v []interface{}) *ControlImplementationUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ControlImplementationUpdate) AppendDetailsJSON(v []interface{}) *ControlImplementationUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ControlImplementationUpdate) ClearDetailsJSON() *ControlImplementationUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ControlImplementationUpdate) AddBlockedGroupIDs(ids ...string) *ControlImplementationUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -643,6 +661,17 @@ func (_u *ControlImplementationUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementation.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(controlimplementation.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlimplementation.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(controlimplementation.FieldDetailsJSON, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1186,6 +1215,24 @@ func (_u *ControlImplementationUpdateOne) ClearDetails() *ControlImplementationU
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ControlImplementationUpdateOne) SetDetailsJSON(v []interface{}) *ControlImplementationUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ControlImplementationUpdateOne) AppendDetailsJSON(v []interface{}) *ControlImplementationUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ControlImplementationUpdateOne) ClearDetailsJSON() *ControlImplementationUpdateOne {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *ControlImplementationUpdateOne) AddBlockedGroupIDs(ids ...string) *ControlImplementationUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1592,6 +1639,17 @@ func (_u *ControlImplementationUpdateOne) sqlSave(ctx context.Context) (_node *C
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementation.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(controlimplementation.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlimplementation.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(controlimplementation.FieldDetailsJSON, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

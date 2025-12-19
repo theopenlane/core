@@ -61,6 +61,12 @@ func (Task) Fields() []ent.Field {
 		field.Text("details").
 			Comment("the details of the task").
 			Optional(),
+		field.JSON("details_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the task in JSON format"),
 		field.Enum("status").
 			GoType(enums.TaskStatus("")).
 			Comment("the status of the task").

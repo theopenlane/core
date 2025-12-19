@@ -208,6 +208,12 @@ func (_c *ActionPlanHistoryCreate) SetNillableDetails(v *string) *ActionPlanHist
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *ActionPlanHistoryCreate) SetDetailsJSON(v []interface{}) *ActionPlanHistoryCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_c *ActionPlanHistoryCreate) SetApprovalRequired(v bool) *ActionPlanHistoryCreate {
 	_c.mutation.SetApprovalRequired(v)
@@ -847,6 +853,10 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(actionplanhistory.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(actionplanhistory.FieldApprovalRequired, field.TypeBool, value)

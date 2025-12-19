@@ -56,6 +56,8 @@ const (
 	FieldVerificationDate = "verification_date"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// Table holds the table name of the controlimplementationhistory in the database.
 	Table = "control_implementation_history"
 )
@@ -82,6 +84,7 @@ var Columns = []string{
 	FieldVerified,
 	FieldVerificationDate,
 	FieldDetails,
+	FieldDetailsJSON,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

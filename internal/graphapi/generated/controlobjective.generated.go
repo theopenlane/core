@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveBulkCreatePayload_contr
 				return ec.fieldContext_ControlObjective_name(ctx, field)
 			case "desiredOutcome":
 				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
+			case "desiredOutcomeJSON":
+				return ec.fieldContext_ControlObjective_desiredOutcomeJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
 			case "source":
@@ -204,6 +206,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveCreatePayload_controlOb
 				return ec.fieldContext_ControlObjective_name(ctx, field)
 			case "desiredOutcome":
 				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
+			case "desiredOutcomeJSON":
+				return ec.fieldContext_ControlObjective_desiredOutcomeJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
 			case "source":
@@ -328,6 +332,8 @@ func (ec *executionContext) fieldContext_ControlObjectiveUpdatePayload_controlOb
 				return ec.fieldContext_ControlObjective_name(ctx, field)
 			case "desiredOutcome":
 				return ec.fieldContext_ControlObjective_desiredOutcome(ctx, field)
+			case "desiredOutcomeJSON":
+				return ec.fieldContext_ControlObjective_desiredOutcomeJSON(ctx, field)
 			case "status":
 				return ec.fieldContext_ControlObjective_status(ctx, field)
 			case "source":

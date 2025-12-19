@@ -164,6 +164,24 @@ func (_u *SubcontrolHistoryUpdate) ClearDescription() *SubcontrolHistoryUpdate {
 	return _u
 }
 
+// SetDescriptionJSON sets the "description_json" field.
+func (_u *SubcontrolHistoryUpdate) SetDescriptionJSON(v []interface{}) *SubcontrolHistoryUpdate {
+	_u.mutation.SetDescriptionJSON(v)
+	return _u
+}
+
+// AppendDescriptionJSON appends value to the "description_json" field.
+func (_u *SubcontrolHistoryUpdate) AppendDescriptionJSON(v []interface{}) *SubcontrolHistoryUpdate {
+	_u.mutation.AppendDescriptionJSON(v)
+	return _u
+}
+
+// ClearDescriptionJSON clears the value of the "description_json" field.
+func (_u *SubcontrolHistoryUpdate) ClearDescriptionJSON() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearDescriptionJSON()
+	return _u
+}
+
 // SetAliases sets the "aliases" field.
 func (_u *SubcontrolHistoryUpdate) SetAliases(v []string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetAliases(v)
@@ -853,6 +871,17 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.DescriptionJSON(); ok {
+		_spec.SetField(subcontrolhistory.FieldDescriptionJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDescriptionJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrolhistory.FieldDescriptionJSON, value)
+		})
+	}
+	if _u.mutation.DescriptionJSONCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDescriptionJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(subcontrolhistory.FieldAliases, field.TypeJSON, value)
 	}
@@ -1228,6 +1257,24 @@ func (_u *SubcontrolHistoryUpdateOne) SetNillableDescription(v *string) *Subcont
 // ClearDescription clears the value of the "description" field.
 func (_u *SubcontrolHistoryUpdateOne) ClearDescription() *SubcontrolHistoryUpdateOne {
 	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetDescriptionJSON sets the "description_json" field.
+func (_u *SubcontrolHistoryUpdateOne) SetDescriptionJSON(v []interface{}) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetDescriptionJSON(v)
+	return _u
+}
+
+// AppendDescriptionJSON appends value to the "description_json" field.
+func (_u *SubcontrolHistoryUpdateOne) AppendDescriptionJSON(v []interface{}) *SubcontrolHistoryUpdateOne {
+	_u.mutation.AppendDescriptionJSON(v)
+	return _u
+}
+
+// ClearDescriptionJSON clears the value of the "description_json" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearDescriptionJSON() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearDescriptionJSON()
 	return _u
 }
 
@@ -1949,6 +1996,17 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.DescriptionJSON(); ok {
+		_spec.SetField(subcontrolhistory.FieldDescriptionJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDescriptionJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, subcontrolhistory.FieldDescriptionJSON, value)
+		})
+	}
+	if _u.mutation.DescriptionJSONCleared() {
+		_spec.ClearField(subcontrolhistory.FieldDescriptionJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(subcontrolhistory.FieldAliases, field.TypeJSON, value)

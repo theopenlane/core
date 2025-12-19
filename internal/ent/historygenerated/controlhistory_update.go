@@ -164,6 +164,24 @@ func (_u *ControlHistoryUpdate) ClearDescription() *ControlHistoryUpdate {
 	return _u
 }
 
+// SetDescriptionJSON sets the "description_json" field.
+func (_u *ControlHistoryUpdate) SetDescriptionJSON(v []interface{}) *ControlHistoryUpdate {
+	_u.mutation.SetDescriptionJSON(v)
+	return _u
+}
+
+// AppendDescriptionJSON appends value to the "description_json" field.
+func (_u *ControlHistoryUpdate) AppendDescriptionJSON(v []interface{}) *ControlHistoryUpdate {
+	_u.mutation.AppendDescriptionJSON(v)
+	return _u
+}
+
+// ClearDescriptionJSON clears the value of the "description_json" field.
+func (_u *ControlHistoryUpdate) ClearDescriptionJSON() *ControlHistoryUpdate {
+	_u.mutation.ClearDescriptionJSON()
+	return _u
+}
+
 // SetAliases sets the "aliases" field.
 func (_u *ControlHistoryUpdate) SetAliases(v []string) *ControlHistoryUpdate {
 	_u.mutation.SetAliases(v)
@@ -911,6 +929,17 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(controlhistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.DescriptionJSON(); ok {
+		_spec.SetField(controlhistory.FieldDescriptionJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDescriptionJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlhistory.FieldDescriptionJSON, value)
+		})
+	}
+	if _u.mutation.DescriptionJSONCleared() {
+		_spec.ClearField(controlhistory.FieldDescriptionJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(controlhistory.FieldAliases, field.TypeJSON, value)
 	}
@@ -1307,6 +1336,24 @@ func (_u *ControlHistoryUpdateOne) SetNillableDescription(v *string) *ControlHis
 // ClearDescription clears the value of the "description" field.
 func (_u *ControlHistoryUpdateOne) ClearDescription() *ControlHistoryUpdateOne {
 	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetDescriptionJSON sets the "description_json" field.
+func (_u *ControlHistoryUpdateOne) SetDescriptionJSON(v []interface{}) *ControlHistoryUpdateOne {
+	_u.mutation.SetDescriptionJSON(v)
+	return _u
+}
+
+// AppendDescriptionJSON appends value to the "description_json" field.
+func (_u *ControlHistoryUpdateOne) AppendDescriptionJSON(v []interface{}) *ControlHistoryUpdateOne {
+	_u.mutation.AppendDescriptionJSON(v)
+	return _u
+}
+
+// ClearDescriptionJSON clears the value of the "description_json" field.
+func (_u *ControlHistoryUpdateOne) ClearDescriptionJSON() *ControlHistoryUpdateOne {
+	_u.mutation.ClearDescriptionJSON()
 	return _u
 }
 
@@ -2086,6 +2133,17 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(controlhistory.FieldDescription, field.TypeString)
+	}
+	if value, ok := _u.mutation.DescriptionJSON(); ok {
+		_spec.SetField(controlhistory.FieldDescriptionJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDescriptionJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlhistory.FieldDescriptionJSON, value)
+		})
+	}
+	if _u.mutation.DescriptionJSONCleared() {
+		_spec.ClearField(controlhistory.FieldDescriptionJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(controlhistory.FieldAliases, field.TypeJSON, value)
