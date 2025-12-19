@@ -195,8 +195,6 @@ func addOrganizationOwnerEditorRelation(ctx context.Context, m ent.Mutation, id 
 // owned mixin
 var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		logx.FromContext(ctx).Debug().Str("query", q.Type()).Msg("defaultOrgInterceptorFunc")
-
 		if skip := o.orgInterceptorSkipper(ctx, q); skip {
 			return nil
 		}

@@ -270,6 +270,12 @@ func (_c *InternalPolicyHistoryCreate) SetNillableDetails(v *string) *InternalPo
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *InternalPolicyHistoryCreate) SetDetailsJSON(v []interface{}) *InternalPolicyHistoryCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_c *InternalPolicyHistoryCreate) SetApprovalRequired(v bool) *InternalPolicyHistoryCreate {
 	_c.mutation.SetApprovalRequired(v)
@@ -758,6 +764,10 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(internalpolicyhistory.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicyhistory.FieldApprovalRequired, field.TypeBool, value)

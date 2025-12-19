@@ -47,8 +47,6 @@ func HookTags() ent.Hook {
 			// organization context
 			orgID, err := auth.GetOrganizationIDFromContext(ctx)
 			if err != nil || orgID == "" {
-				logx.FromContext(ctx).Debug().Msg("no organization ID in context, skipping tag definition creation")
-
 				return next.Mutate(ctx, m)
 			}
 

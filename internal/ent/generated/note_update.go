@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -123,6 +124,24 @@ func (_u *NoteUpdate) SetNillableText(v *string) *NoteUpdate {
 	if v != nil {
 		_u.SetText(*v)
 	}
+	return _u
+}
+
+// SetTextJSON sets the "text_json" field.
+func (_u *NoteUpdate) SetTextJSON(v []interface{}) *NoteUpdate {
+	_u.mutation.SetTextJSON(v)
+	return _u
+}
+
+// AppendTextJSON appends value to the "text_json" field.
+func (_u *NoteUpdate) AppendTextJSON(v []interface{}) *NoteUpdate {
+	_u.mutation.AppendTextJSON(v)
+	return _u
+}
+
+// ClearTextJSON clears the value of the "text_json" field.
+func (_u *NoteUpdate) ClearTextJSON() *NoteUpdate {
+	_u.mutation.ClearTextJSON()
 	return _u
 }
 
@@ -523,6 +542,17 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TextJSON(); ok {
+		_spec.SetField(note.FieldTextJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTextJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, note.FieldTextJSON, value)
+		})
+	}
+	if _u.mutation.TextJSONCleared() {
+		_spec.ClearField(note.FieldTextJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.NoteRef(); ok {
 		_spec.SetField(note.FieldNoteRef, field.TypeString, value)
@@ -942,6 +972,24 @@ func (_u *NoteUpdateOne) SetNillableText(v *string) *NoteUpdateOne {
 	if v != nil {
 		_u.SetText(*v)
 	}
+	return _u
+}
+
+// SetTextJSON sets the "text_json" field.
+func (_u *NoteUpdateOne) SetTextJSON(v []interface{}) *NoteUpdateOne {
+	_u.mutation.SetTextJSON(v)
+	return _u
+}
+
+// AppendTextJSON appends value to the "text_json" field.
+func (_u *NoteUpdateOne) AppendTextJSON(v []interface{}) *NoteUpdateOne {
+	_u.mutation.AppendTextJSON(v)
+	return _u
+}
+
+// ClearTextJSON clears the value of the "text_json" field.
+func (_u *NoteUpdateOne) ClearTextJSON() *NoteUpdateOne {
+	_u.mutation.ClearTextJSON()
 	return _u
 }
 
@@ -1372,6 +1420,17 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TextJSON(); ok {
+		_spec.SetField(note.FieldTextJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedTextJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, note.FieldTextJSON, value)
+		})
+	}
+	if _u.mutation.TextJSONCleared() {
+		_spec.ClearField(note.FieldTextJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.NoteRef(); ok {
 		_spec.SetField(note.FieldNoteRef, field.TypeString, value)

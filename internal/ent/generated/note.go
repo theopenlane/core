@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -44,6 +45,8 @@ type Note struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the text of the note
 	Text string `json:"text,omitempty"`
+	// structured details of the note in JSON format
+	TextJSON []interface{} `json:"text_json,omitempty"`
 	// ref location of the note
 	NoteRef string `json:"note_ref,omitempty"`
 	// the external discussion id this note is associated with
@@ -215,6 +218,8 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case note.FieldTextJSON:
+			values[i] = new([]byte)
 		case note.FieldIsEdited:
 			values[i] = new(sql.NullBool)
 		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID:
@@ -325,6 +330,14 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field text", values[i])
 			} else if value.Valid {
 				_m.Text = value.String
+			}
+		case note.FieldTextJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field text_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.TextJSON); err != nil {
+					return fmt.Errorf("unmarshal field text_json: %w", err)
+				}
 			}
 		case note.FieldNoteRef:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -561,6 +574,9 @@ func (_m *Note) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("text=")
 	builder.WriteString(_m.Text)
+	builder.WriteString(", ")
+	builder.WriteString("text_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TextJSON))
 	builder.WriteString(", ")
 	builder.WriteString("note_ref=")
 	builder.WriteString(_m.NoteRef)

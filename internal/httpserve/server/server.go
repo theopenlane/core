@@ -60,10 +60,11 @@ func ConfigureEcho(c LogConfig) *echo.Echo {
 	}))
 
 	e.Use(logx.LoggingMiddleware(logx.Config{
-		Logger:          loggers.Echo,
-		RequestIDHeader: "X-Request-ID",
-		RequestIDKey:    "request_id",
-		HandleError:     true,
+		Logger:                loggers.Echo,
+		RequestIDHeader:       "X-Request-ID",
+		RequestIDKey:          "request_id",
+		HandleError:           true,
+		AttachRequestMetadata: true,
 	}))
 
 	return e

@@ -293,6 +293,24 @@ func (_u *InternalPolicyUpdate) ClearDetails() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *InternalPolicyUpdate) SetDetailsJSON(v []interface{}) *InternalPolicyUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *InternalPolicyUpdate) AppendDetailsJSON(v []interface{}) *InternalPolicyUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *InternalPolicyUpdate) ClearDetailsJSON() *InternalPolicyUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_u *InternalPolicyUpdate) SetApprovalRequired(v bool) *InternalPolicyUpdate {
 	_u.mutation.SetApprovalRequired(v)
@@ -1384,6 +1402,17 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(internalpolicy.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicy.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(internalpolicy.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)
@@ -2600,6 +2629,24 @@ func (_u *InternalPolicyUpdateOne) ClearDetails() *InternalPolicyUpdateOne {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *InternalPolicyUpdateOne) SetDetailsJSON(v []interface{}) *InternalPolicyUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *InternalPolicyUpdateOne) AppendDetailsJSON(v []interface{}) *InternalPolicyUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *InternalPolicyUpdateOne) ClearDetailsJSON() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_u *InternalPolicyUpdateOne) SetApprovalRequired(v bool) *InternalPolicyUpdateOne {
 	_u.mutation.SetApprovalRequired(v)
@@ -3721,6 +3768,17 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(internalpolicy.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(internalpolicy.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, internalpolicy.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(internalpolicy.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)

@@ -47,6 +47,8 @@ type ControlHistory struct {
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []interface{} `json:"description_json,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -123,7 +125,7 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlhistory.FieldTags, controlhistory.FieldAliases, controlhistory.FieldMappedCategories, controlhistory.FieldAssessmentObjectives, controlhistory.FieldAssessmentMethods, controlhistory.FieldControlQuestions, controlhistory.FieldImplementationGuidance, controlhistory.FieldExampleEvidence, controlhistory.FieldReferences, controlhistory.FieldTestingProcedures, controlhistory.FieldEvidenceRequests, controlhistory.FieldProposedChanges:
+		case controlhistory.FieldTags, controlhistory.FieldDescriptionJSON, controlhistory.FieldAliases, controlhistory.FieldMappedCategories, controlhistory.FieldAssessmentObjectives, controlhistory.FieldAssessmentMethods, controlhistory.FieldControlQuestions, controlhistory.FieldImplementationGuidance, controlhistory.FieldExampleEvidence, controlhistory.FieldReferences, controlhistory.FieldTestingProcedures, controlhistory.FieldEvidenceRequests, controlhistory.FieldProposedChanges:
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -233,6 +235,14 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				_m.Description = value.String
+			}
+		case controlhistory.FieldDescriptionJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field description_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DescriptionJSON); err != nil {
+					return fmt.Errorf("unmarshal field description_json: %w", err)
+				}
 			}
 		case controlhistory.FieldAliases:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -540,6 +550,9 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("description_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DescriptionJSON))
 	builder.WriteString(", ")
 	builder.WriteString("aliases=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Aliases))

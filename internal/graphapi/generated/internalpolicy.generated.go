@@ -84,6 +84,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -252,6 +254,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -420,6 +424,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -588,6 +594,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_InternalPolicy_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_InternalPolicy_approvalRequired(ctx, field)
 			case "reviewDue":

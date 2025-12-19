@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
@@ -102,6 +103,59 @@ func TestMiddleware(t *testing.T) {
 
 		str := b.String()
 		assert.Contains(t, str, `"test":"test"`)
+	})
+
+	t.Run("should attach request metadata to downstream logs", func(t *testing.T) {
+		e := echo.New()
+		req := httptest.NewRequest(http.MethodGet, "/", nil)
+		req.Header.Set("User-Agent", "ua-test")
+		req.Header.Set("X-Real-IP", "3.3.3.3")
+		rec := httptest.NewRecorder()
+		c := e.NewContext(req, rec)
+
+		b := &bytes.Buffer{}
+		l := logx.Configure(logx.LoggerConfig{
+			Writer:   b,
+			WithEcho: true,
+		}).Echo
+
+		m := logx.LoggingMiddleware(logx.Config{
+			Logger:                l,
+			AttachRequestMetadata: true,
+		})
+
+		handler := m(func(c echo.Context) error {
+			logx.FromContext(c.Request().Context()).Info().Msg("inside handler")
+			return nil
+		})
+		err := handler(c)
+		assert.NoError(t, err, "should not return error")
+
+		lines := strings.Split(strings.TrimSpace(b.String()), "\n")
+		assert.GreaterOrEqual(t, len(lines), 2, "should log handler + request details")
+
+		var insideLine, requestLine string
+		for _, line := range lines {
+			switch {
+			case strings.Contains(line, `"message":"inside handler"`):
+				insideLine = line
+			case strings.Contains(line, `"message":"request details for request to`):
+				requestLine = line
+			}
+		}
+
+		assert.NotEmpty(t, insideLine, "should capture handler log line")
+		assert.Contains(t, insideLine, `"remote_ip":`)
+		assert.Contains(t, insideLine, `"user_agent":"ua-test"`)
+		assert.Contains(t, insideLine, `"x_real_ip":"3.3.3.3"`)
+		assert.Equal(t, 1, strings.Count(insideLine, `"remote_ip"`))
+		assert.Equal(t, 1, strings.Count(insideLine, `"user_agent"`))
+		assert.Equal(t, 1, strings.Count(insideLine, `"x_real_ip"`))
+
+		assert.NotEmpty(t, requestLine, "should capture request details log line")
+		assert.Equal(t, 1, strings.Count(requestLine, `"remote_ip"`))
+		assert.Equal(t, 1, strings.Count(requestLine, `"user_agent"`))
+		assert.Equal(t, 1, strings.Count(requestLine, `"x_real_ip"`))
 	})
 
 	t.Run("should escalate log level for slow requests", func(t *testing.T) {

@@ -707,6 +707,16 @@ func TextContainsFold(v string) predicate.Note {
 	return predicate.Note(sql.FieldContainsFold(FieldText, v))
 }
 
+// TextJSONIsNil applies the IsNil predicate on the "text_json" field.
+func TextJSONIsNil() predicate.Note {
+	return predicate.Note(sql.FieldIsNull(FieldTextJSON))
+}
+
+// TextJSONNotNil applies the NotNil predicate on the "text_json" field.
+func TextJSONNotNil() predicate.Note {
+	return predicate.Note(sql.FieldNotNull(FieldTextJSON))
+}
+
 // NoteRefEQ applies the EQ predicate on the "note_ref" field.
 func NoteRefEQ(v string) predicate.Note {
 	return predicate.Note(sql.FieldEQ(FieldNoteRef, v))
