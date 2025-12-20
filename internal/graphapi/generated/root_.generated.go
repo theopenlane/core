@@ -102567,7 +102567,7 @@ input Params {
     after is the cursor position to start at when paginating through results
     """
     after: Cursor
-    """ 
+    """
     before is the cursor to start at when paginating in reverse through results
     """
     before: Cursor

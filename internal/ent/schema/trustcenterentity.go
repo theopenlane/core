@@ -128,7 +128,6 @@ func (TrustcenterEntity) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustcenterEntityCreate(),
 		hooks.HookTrustcenterEntityFiles(),
-		hooks.HookTrustcenterCacheInvalidation(),
 	}
 }
 

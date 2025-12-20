@@ -131,6 +131,14 @@ func registerDefaultMutationListeners(e *Eventer) {
 	e.AddMutationListener(entgen.TypeSubscriber, handleSubscriberMutation)
 	e.AddMutationListener(entgen.TypeUser, handleUserMutation)
 
+	e.AddMutationListener(entgen.TypeTrustCenterDoc, handleTrustCenterDocMutation)
+	e.AddMutationListener(entgen.TypeNote, handleNoteMutation)
+	e.AddMutationListener(entgen.TypeTrustcenterEntity, handleTrustcenterEntityMutation)
+	e.AddMutationListener(entgen.TypeTrustCenterSubprocessor, handleTrustCenterSubprocessorMutation)
+	e.AddMutationListener(entgen.TypeTrustCenterCompliance, handleTrustCenterComplianceMutation)
+	e.AddMutationListener(entgen.TypeSubprocessor, handleSubprocessorMutation)
+	e.AddMutationListener(entgen.TypeStandard, handleStandardMutation)
+
 	// Register notification listeners from notifications package
 	notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext, any) error) {
 		// Wrap the soiree-based handler to match the MutationHandler signature expected by AddMutationListener
