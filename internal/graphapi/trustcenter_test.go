@@ -225,7 +225,6 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 	resps, err := suite.client.api.GetAllTrustCenters(testUser1.UserCtx)
 	assert.NilError(t, err)
 
-	fmt.Println("TRUSTCENTERS", len(resps.TrustCenters.Edges))
 
 	testCases := []struct {
 		name        string
