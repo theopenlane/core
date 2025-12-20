@@ -222,10 +222,6 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 	// Create a trust center first to test the duplicate constraint
 	existingTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
-	resps, err := suite.client.api.GetAllTrustCenters(testUser1.UserCtx)
-	assert.NilError(t, err)
-
-
 	testCases := []struct {
 		name        string
 		request     testclient.CreateTrustCenterInput
