@@ -2,7 +2,6 @@ package graphapi_test
 
 import (
 	"context"
-	"fmt"
 	"sync"
 	"testing"
 
