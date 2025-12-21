@@ -39,6 +39,11 @@ For more information or to learn about how to use the system, visit our [docs pa
 
 ## Development
 
+> [!TIP]
+>   This repo takes heavy use of `go:build` flags to help with compile times, which can result in tooling like VSCode showing errors of unknown functions. It is suggested to add the following build flags to your settings:
+>
+> `-tags=cli,test,codegen`
+
 ### Dependencies
 
 The vast majority of behaviors of the system can be turned on or off by updating

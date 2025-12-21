@@ -7,49 +7,49 @@
 {{ $pkg := base $.Config.Package }}
 {{ template "header" $ }}
 
-    {{/* For each schema */}}
+	{{/* For each schema */}}
 	{{- range $node := $.Nodes }}
-            {{/* create an EdgeCleanup function accepting an ID */}}
+			{{/* create an EdgeCleanup function accepting an ID */}}
 			func {{ $node.Name }}EdgeCleanup(ctx context.Context, id string) error {
-	            ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")), entfga.DeleteTuplesFirstKey{})
+				ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup {{ $node.Name | lower }} edge")), entfga.DeleteTuplesFirstKey{})
 
-               {{/* For each edge */}}
-               {{- range $edge := $node.Edges }}
-                    {{/* if the edge has our custom annotation applied */}}
-                    {{- if $annotation := $edge.Annotations.OPENLANE_CASCADE }}
-                        {{/* use the client to delete records where the edge schema has a field (provided by the annotation) containing the ID provided by the func */}}
-                        {{/* special case for child fields */}}
-                        {{- if eq $annotation.Field "Child" }}
-                        if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where({{ $edge.Type.Name | lower }}.HasParentWith({{ $edge.Type.Name | lower }}.ID(id))).Exist(ctx); err == nil && exists {
-                            if organizationCount, err := FromContext(ctx).{{ $edge.Type.Name  }}.Delete().Where({{ $edge.Type.Name  | lower }}.HasParentWith({{ $edge.Type.Name  | lower }}.ID(id))).Exec(ctx); err != nil {
-                                logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting child {{ $edge.Type.Name | lower }}")
-                                return err
-                            }
-                        }
-                        {{- else }}
-                        if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where(({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
-                            if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
-                                logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting {{ $edge.Type.Name | lower }}")
-                                return err
-                            }
-                        }
-                        {{ end }}
-                    {{ end }}
-               {{- end }}
-               {{- if $annotation := $node.Annotations.OPENLANE_CASCADE_THROUGH }}
-               {{- range $schema := $annotation.Schemas }}
-                    {{- $field := $schema.Through }}
-                    {{/* use the client to delete records where the edge has a field and a through schema (provided by the annotation) containing the ID provided by the func */}}
-                    if exists, err := FromContext(ctx).{{ $field }}.Query().Where(({{ $field | lower }}.Has{{ $schema.Field }}With({{ $schema.Field | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
-                        if {{ $field | lower }}Count, err := FromContext(ctx).{{ $field }}.Delete().Where({{ $field | lower }}.Has{{ $schema.Field }}With({{ $schema.Field | lower }}.ID(id))).Exec(ctx); err != nil {
-                            logx.FromContext(ctx).Error().Err(err).Int("count", {{ $field | lower }}Count).Msg("error deleting {{ $field | lower }}")
-                            return err
-                        }
-                    }
-                    {{ end }}
-                {{ end }}
-               return nil
-            }
-    {{ end }}
+			   {{/* For each edge */}}
+			   {{- range $edge := $node.Edges }}
+					{{/* if the edge has our custom annotation applied */}}
+					{{- if $annotation := $edge.Annotations.OPENLANE_CASCADE }}
+						{{/* use the client to delete records where the edge schema has a field (provided by the annotation) containing the ID provided by the func */}}
+						{{/* special case for child fields */}}
+						{{- if eq $annotation.Field "Child" }}
+						if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where({{ $edge.Type.Name | lower }}.HasParentWith({{ $edge.Type.Name | lower }}.ID(id))).Exist(ctx); err == nil && exists {
+							if organizationCount, err := FromContext(ctx).{{ $edge.Type.Name  }}.Delete().Where({{ $edge.Type.Name  | lower }}.HasParentWith({{ $edge.Type.Name  | lower }}.ID(id))).Exec(ctx); err != nil {
+								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting child {{ $edge.Type.Name | lower }}")
+								return err
+							}
+						}
+						{{- else }}
+						if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where(({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
+							if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
+								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting {{ $edge.Type.Name | lower }}")
+								return err
+							}
+						}
+						{{ end }}
+					{{ end }}
+			   {{- end }}
+			   {{- if $annotation := $node.Annotations.OPENLANE_CASCADE_THROUGH }}
+			   {{- range $schema := $annotation.Schemas }}
+					{{- $field := $schema.Through }}
+					{{/* use the client to delete records where the edge has a field and a through schema (provided by the annotation) containing the ID provided by the func */}}
+					if exists, err := FromContext(ctx).{{ $field }}.Query().Where(({{ $field | lower }}.Has{{ $schema.Field }}With({{ $schema.Field | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
+						if {{ $field | lower }}Count, err := FromContext(ctx).{{ $field }}.Delete().Where({{ $field | lower }}.Has{{ $schema.Field }}With({{ $schema.Field | lower }}.ID(id))).Exec(ctx); err != nil {
+							logx.FromContext(ctx).Error().Err(err).Int("count", {{ $field | lower }}Count).Msg("error deleting {{ $field | lower }}")
+							return err
+						}
+					}
+					{{ end }}
+				{{ end }}
+			   return nil
+			}
+	{{ end }}
 {{ end }}
 

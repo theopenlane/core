@@ -1,10 +1,10 @@
 {{ define "model/fields/additional" }}
-    {{- if eq $.Name "OrgSubscription" }}
-        // ManagePaymentMethods is the URL to manage payment methods for the subscription
-        ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
-    {{- end }}
-    {{- if eq $.Name "File" }}
-        // PresignedURL is the presigned URL for the file when using s3 storage
-        PresignedURL string `json:"presignedURL,omitempty"`
-    {{- end }}
+	{{- if eq $.Name "OrgSubscription" }}
+		// ManagePaymentMethods is the URL to manage payment methods for the subscription
+		ManagePaymentMethods string `json:"managePaymentMethods,omitempty"`
+	{{- end }}
+	{{- if eq $.Name "File" }}
+		// PresignedURL is the presigned URL for the file when using s3 storage
+		PresignedURL string `json:"presignedURL,omitempty"`
+	{{- end }}
 {{ end }}

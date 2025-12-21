@@ -42,10 +42,10 @@ type (
 )
 
 func orderFunc(o OrderDirection, field string) func(*sql.Selector) {
-       if o == entgql.OrderDirectionDesc {
-               return Desc(field)
-       }
-       return Asc(field)
+		if o == entgql.OrderDirectionDesc {
+				return Desc(field)
+		}
+		return Asc(field)
 }
 
 const errInvalidPagination = "INVALID_PAGINATION"
@@ -128,15 +128,15 @@ type {{ $name }} = {{ $node.Name }}
 // {{ $edge }} is the edge representation of {{ $name }}.
 type {{ $edge }} struct {
 	Node *{{ $name }} `json:"node"`
-	Cursor Cursor     `json:"cursor"`
+	Cursor Cursor	 `json:"cursor"`
 }
 
 {{ $conn := $names.Connection }}
 // {{ $conn }} is the connection containing edges to {{ $name }}.
 type {{ $conn }} struct {
 	Edges []*{{ $edge }} `json:"edges"`
-	PageInfo PageInfo    `json:"pageInfo"`
-	TotalCount int       `json:"totalCount"`
+	PageInfo PageInfo	`json:"pageInfo"`
+	TotalCount int		`json:"totalCount"`
 }
 
 {{ $pager := print (camel $name) "Pager" }}
@@ -586,9 +586,9 @@ func ({{ $r }} *{{ $query }}) Paginate(
 // {{ $orderField }} defines the ordering field of {{ $node.Name }}.
 type {{ $orderField }} struct {
 	// Value extracts the ordering value from the given {{ $node.Name }}.
-	Value    func(*{{ $name }}) (ent.Value, error)
-	column   string // field or computed.
-	toTerm   func(...sql.OrderTermOption) {{ $node.Package }}.OrderOption
+	Value	func(*{{ $name }}) (ent.Value, error)
+	column	string // field or computed.
+	toTerm	func(...sql.OrderTermOption) {{ $node.Package }}.OrderOption
 	toCursor func(*{{ $name }}) Cursor
 }
 
@@ -620,7 +620,7 @@ func ({{ $r }} *{{ $name }}) ToEdge(order *{{ $order }}) *{{ $edge }} {
 		order = {{ $defaultOrder }}
 	}
 	return &{{ $edge }}{
-		Node:   {{ $r }},
+		Node:	{{ $r }},
 		Cursor: order.Field.toCursor({{ $r }}),
 	}
 }
