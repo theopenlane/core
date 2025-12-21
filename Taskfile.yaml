@@ -143,8 +143,8 @@ tasks:
       - rm -f internal/graphapi/checksum/.history_schema_checksum # gqlgen history schema checksum
       - rm -f internal/graphapi/clientschema/checksum/.schema_checksum # gqlgen client schema checksum
       - rm -f internal/graphapi/historyschema/checksum/.history_schema_checksum # gqlgen history schema checksum
-      - rm -f internal/graphapi/testclient/.client_checksum # gqlgen test client checksum
-      - rm -rf .task/checksum # all taskfile checksums
+      - rm -f internal/graphapi/testclient/checksum/.client_checksum # gqlgen test client checksum
+      - rm -rf .task/checksum/* # all taskfile checksums
       - echo "Removed all schema checksum files"
 
   # Buildkite automation tasks
