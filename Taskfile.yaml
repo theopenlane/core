@@ -134,6 +134,7 @@ tasks:
       - go generate internal/httpserve/specs/generate/generate.go
 
   generate:removechecksums:
+    silent: true
     desc: Remove all individual schema checksum files to force regeneration
     cmds:
       - rm -f internal/ent/checksum/.schema_checksum # ent schema checksum
