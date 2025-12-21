@@ -3,8 +3,6 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
-  build-tags:
-    - codegen
 linters:
   enable:
     - bodyclose
@@ -17,7 +15,7 @@ linters:
     - revive
   exclusions:
     generated: lax
-    warn-unused: false
+    warn-unused: true
     presets:
       - comments # undisable this after fixing all comments
       - common-false-positives
@@ -32,6 +30,7 @@ linters:
       - internal/ent/historygenerated
       - internal/ent/historyschema
       - internal/httpserve/handlers/test_webfinger
+      - internal/ent/hush/examples
       - pkg/corejobs/internal/cloudflare/mocks
       - pkg/corejobs/internal/olclient/mocks
       - pkg/corejobs/internal/pirsch/mocks
@@ -45,13 +44,18 @@ linters:
       - pkg/testutils
       - internal/graphapi/generated
       - internal/graphapi/historygenerated
-      - db
-      - jsonschema
-      - cmd
-      - pkg/middleware
       - internal/httpserve/handlers/internal
 formatters:
   enable:
     - gofmt
   exclusions:
     generated: lax
+    paths:
+      - internal/graphapi/generated/gen_models.go
+      - internal/graphapi/historygenerated/gen_models.go
+      - pkg/openlaneclient/graphclient.go
+      - pkg/testutils/*
+      - pkg/entitlements/test/*
+      - cmd/cli/cmd/*
+      - pkg/events/soiree/examples/*
+      - internal/ent/hush/examples/*
