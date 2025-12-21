@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -246,6 +247,10 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			return err
 		}
 
+		if err := markPendingInvitesAsAccepted(ctx, dbClient, user.Email, org.ID); err != nil {
+			return err
+		}
+
 		logx.FromContext(ctx).Debug().Str("user_id", user.ID).Str("org_id", org.ID).Str("domain", userDomain).Msg("user auto-joined organization based on email domain match")
 
 		lastOrgID = org.ID
@@ -261,6 +266,25 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 
 			return err
 		}
+	}
+
+	return nil
+}
+
+func markPendingInvitesAsAccepted(ctx context.Context, dbClient *generated.Client, email, orgID string) error {
+	_, err := dbClient.Invite.Update().
+		Where(
+			invite.Recipient(email),
+			invite.OwnerID(orgID),
+			invite.StatusIn(enums.InvitationSent, enums.ApprovalRequired),
+			invite.DeletedAtIsNil(),
+		).
+		SetStatus(enums.InvitationAccepted).
+		Save(ctx)
+
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to mark pending invites as accepted")
+		return err
 	}
 
 	return nil
