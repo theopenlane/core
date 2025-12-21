@@ -279,7 +279,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetBackupEligible(credential.Flags.BackupEligible).
 		SetUserPresent(credential.Flags.UserPresent).
 		SetUserVerified(credential.Flags.UserVerified).
-		SetSignCount(int32(credential.Authenticator.SignCount)). // nolint:gosec
+		SetSignCount(int32(credential.Authenticator.SignCount)). //nolint:gosec
 		Exec(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error creating passkey")

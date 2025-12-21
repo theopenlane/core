@@ -61,7 +61,7 @@ func WithFGAClient(client FGAClient) TupleCheckerOption {
 // NewTupleChecker creates a new TupleChecker with options
 func NewTupleChecker(opts ...TupleCheckerOption) *TupleChecker {
 	tc := &TupleChecker{
-		cacheTTL: 5 * time.Minute, // nolint:mnd
+		cacheTTL: 5 * time.Minute, //nolint:mnd
 	}
 	for _, opt := range opts {
 		opt(tc)

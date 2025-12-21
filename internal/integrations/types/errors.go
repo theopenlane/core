@@ -1,4 +1,4 @@
-package types // nolint:revive
+package types //nolint:revive
 
 import "errors"
 

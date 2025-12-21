@@ -246,7 +246,7 @@ func GracefulCloseWithFlag(ctx context.Context, c *ent.Client, interval time.Dur
 	// determines how frequently we re-check connection pool for active queries
 	// you can pass interval, but if not set or non-positive, default to 100ms
 	if interval <= 0 {
-		interval = 100 * time.Millisecond // nolint: mnd
+		interval = 100 * time.Millisecond //nolint:mnd
 	}
 
 	ticker := time.NewTicker(interval)

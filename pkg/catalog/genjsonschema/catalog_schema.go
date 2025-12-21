@@ -20,7 +20,7 @@ func main() {
 		log.Fatal("failed to marshal catalog schema:", err)
 	}
 
-	if err := os.WriteFile("genjsonschema/catalog.schema.json", data, 0600); err != nil { // nolint: mnd
+	if err := os.WriteFile("genjsonschema/catalog.schema.json", data, 0600); err != nil { //nolint:mnd
 		log.Fatal("failed to write catalog schema:", err)
 	}
 }

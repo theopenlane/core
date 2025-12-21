@@ -170,7 +170,7 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 
 		prices = append(prices, Price{
 			ID:          item.Price.ID,
-			Price:       float64(item.Price.UnitAmount) / 100, // nolint:mnd
+			Price:       float64(item.Price.UnitAmount) / 100, //nolint:mnd
 			ProductID:   productID,
 			ProductName: product.Name,
 			Interval:    interval,

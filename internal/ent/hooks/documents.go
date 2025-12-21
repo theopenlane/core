@@ -248,7 +248,7 @@ func importURLToSchema(m importSchemaMutation) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) // nolint:err113
+		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) //nolint:err113
 	}
 
 	// Read a bounded amount of data based on configured import size to prevent memory overuse
@@ -256,7 +256,7 @@ func importURLToSchema(m importSchemaMutation) error {
 
 	buf, err := io.ReadAll(reader)
 	if err != nil {
-		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
+		return fmt.Errorf("failed to read response body: %w", err) //nolint:err113
 	}
 
 	// Detect MIME using storage helper with fallback to header to handle servers with incorrect content type

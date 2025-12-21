@@ -66,7 +66,7 @@ func WithSecretManagerKeys(secretName string) ServerOption {
 
 			path := filepath.Join(os.TempDir(), fmt.Sprintf("%s.pem", kid))
 
-			if err := os.WriteFile(path, []byte(pemStr), 0o600); err != nil { // nolint: mnd
+			if err := os.WriteFile(path, []byte(pemStr), 0o600); err != nil { //nolint:mnd
 				log.Panic().Err(err).Msg("failed to write key from secret manager")
 			}
 

@@ -540,7 +540,7 @@ func (r *FileDownloadReply) ExampleResponse() any {
 	return FileDownloadReply{
 		Reply:   rout.Reply{Success: true},
 		Message: "Files uploaded successfully",
-		File:    File{OriginalName: "example1.pdf"}, // nolint:mnd
+		File:    File{OriginalName: "example1.pdf"}, //nolint:mnd
 	}
 }
 
@@ -746,7 +746,7 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 				ID:          []byte("user-id-12345"),
 			},
 			Challenge: protocol.URLEncodedBase64("cmFuZG9tLWNoYWxsZW5nZS1zdHJpbmc="),
-			Timeout:   60000, // nolint:mnd
+			Timeout:   60000, //nolint:mnd
 		}},
 	Session: "example-session-id",
 }
@@ -1294,10 +1294,10 @@ func (r *UploadFilesReply) ExampleResponse() any {
 	return UploadFilesReply{
 		Reply:     rout.Reply{Success: true},
 		Message:   "Files uploaded successfully",
-		FileCount: 2, // nolint:mnd
+		FileCount: 2, //nolint:mnd
 		Files: []File{
-			{OriginalName: "example1.pdf"}, // nolint:mnd
-			{OriginalName: "example2.jpg"}, // nolint:mnd
+			{OriginalName: "example1.pdf"}, //nolint:mnd
+			{OriginalName: "example2.jpg"}, //nolint:mnd
 		},
 	}
 }
@@ -1306,7 +1306,7 @@ func (r *UploadFilesReply) ExampleResponse() any {
 var ExampleUploadFileRequest = UploadFilesRequest{
 	UploadFile: multipart.FileHeader{
 		Filename: "file.txt",
-		Size:     1024, // nolint:mnd
+		Size:     1024, //nolint:mnd
 		Header: textproto.MIMEHeader{
 			"Content-Type": []string{"text/plain"},
 		},
@@ -1942,7 +1942,7 @@ type IntegrationTokenResponse struct {
 
 // ExampleResponse returns an example IntegrationTokenResponse for OpenAPI documentation
 func (r *IntegrationTokenResponse) ExampleResponse() any {
-	expiresAt := exampleTime(30 * 24 * time.Hour) // nolint:mnd
+	expiresAt := exampleTime(30 * 24 * time.Hour) //nolint:mnd
 
 	return IntegrationTokenResponse{
 		Reply:    rout.Reply{Success: true},

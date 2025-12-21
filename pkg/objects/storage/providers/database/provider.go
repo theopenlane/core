@@ -227,8 +227,8 @@ func extractFileIdentifier(opts *storagetypes.UploadFileOptions) string {
 		}
 	}
 
-	if opts.FileMetadata.ProviderHints != nil && opts.FileMetadata.ProviderHints.Metadata != nil { // nolint:staticcheck
-		if id, ok := opts.FileMetadata.ProviderHints.Metadata["file_id"]; ok && id != "" { // nolint:staticcheck
+	if opts.FileMetadata.ProviderHints != nil && opts.FileMetadata.ProviderHints.Metadata != nil { //nolint:staticcheck
+		if id, ok := opts.FileMetadata.ProviderHints.Metadata["file_id"]; ok && id != "" { //nolint:staticcheck
 			return id
 		}
 	}

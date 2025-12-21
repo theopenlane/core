@@ -114,7 +114,7 @@ func genyamlApp() *cli.Command {
 				return nil
 			}
 
-			if err := os.WriteFile(output, formatted, 0600); err != nil { // nolint: mnd
+			if err := os.WriteFile(output, formatted, 0600); err != nil { //nolint:mnd
 				return err
 			}
 

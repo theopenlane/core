@@ -54,7 +54,7 @@ func (CreateTaskArgs) Kind() string { return "create_task" }
 // InsertOpts configures job insertion options including retry behavior and scheduling
 func (a CreateTaskArgs) InsertOpts() river.InsertOpts {
 	opts := river.InsertOpts{
-		MaxAttempts: 3, // nolint:mnd
+		MaxAttempts: 3, //nolint:mnd
 	}
 
 	// If scheduled time is specified, set it in the options

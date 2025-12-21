@@ -189,7 +189,7 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 
 // emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(ctx context.Context, m entgen.Mutation) bool { // nolint:revive
+	return func(ctx context.Context, m entgen.Mutation) bool { //nolint:revive
 		if e == nil || m == nil {
 			return false
 		}

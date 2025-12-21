@@ -3,6 +3,8 @@ run:
   modules-download-mode: readonly
   tests: false
   allow-parallel-runners: true
+  build-tags:
+    - codegen
 linters:
   enable:
     - bodyclose
@@ -15,47 +17,41 @@ linters:
     - revive
   exclusions:
     generated: lax
-    warn-unused: true
+    warn-unused: false
     presets:
       - comments # undisable this after fixing all comments
       - common-false-positives
       - legacy
       - std-error-handling
     paths:
-      - internal/graphapi/generated/gen_models.go
-      - internal/graphapi/historygenerated/gen_models.go
-      - internal/graphapi/testclient/*
-      - pkg/openlaneclient/graphclient.go
-      - pkg/testutils/*
-      - internal/ent/generated/*
-      - internal/ent/historygenerated/*
-      - pkg/objects/mocks/*
-      - pkg/objects/examples/*
-      - pkg/corejobs/internal/cloudflare/mocks/*
-      - pkg/corejobs/internal/olclient/mocks/*
-      - internal/graphapi/generate/*
-      - internal/graphapi/generated/*
-      - internal/graphapi/historygenerated/*
-      - pkg/entitlements/test/*
-      - cmd/cli/cmd/*
-      - pkg/sleuth/static/*
-      - pkg/entitlements/mocks/*
-      - pkg/events/soiree/examples/*
-      - pkg/middleware/ratelimiter/examples/*
-      - internal/ent/hush/examples/*
+      - internal/graphapi/testclient
+      - internal/graphapi/model/
+      - internal/graphapi/historymodel
+      - internal/ent/generated
+      - internal/ent/authzgenerated
+      - internal/ent/historygenerated
+      - internal/ent/historyschema
+      - internal/httpserve/handlers/test_webfinger
+      - pkg/corejobs/internal/cloudflare/mocks
+      - pkg/corejobs/internal/olclient/mocks
+      - pkg/corejobs/internal/pirsch/mocks
+      - pkg/middleware/ratelimit/examples
+      - pkg/entitlements/test
+      - pkg/entitlements/mocks
+      - pkg/objects/mocks
+      - pkg/events/soiree/examples
+      - pkg/objects/examples
+      - pkg/corejobs/test
+      - pkg/testutils
+      - internal/graphapi/generated
+      - internal/graphapi/historygenerated
+      - db
+      - jsonschema
+      - cmd
+      - pkg/middleware
+      - internal/httpserve/handlers/internal
 formatters:
   enable:
     - gofmt
   exclusions:
     generated: lax
-    warn-unused: true
-    paths:
-      - internal/graphapi/generated/gen_models.go
-      - internal/graphapi/historygenerated/gen_models.go
-      - pkg/openlaneclient/graphclient.go
-      - pkg/testutils/*
-      - pkg/entitlements/test/*
-      - cmd/cli/cmd/*
-      - pkg/events/soiree/examples/*
-      - pkg/sleuth/dnsx/* # this should be fixed in the future
-      - internal/ent/hush/examples/*

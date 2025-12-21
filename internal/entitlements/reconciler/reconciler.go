@@ -395,7 +395,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 
 	// the catalog contains config for which things should be in a trial
 	if db.EntConfig == nil {
-		return nil, fmt.Errorf("ent config is nil") // nolint:err113
+		return nil, fmt.Errorf("ent config is nil") //nolint:err113
 	}
 
 	for moduleName, mod := range gencatalog.GetModules(db.EntConfig.Modules.UseSandbox) {

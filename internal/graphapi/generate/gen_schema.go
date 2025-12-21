@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/internal/genhelpers"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/generated"
 )
 
 const (

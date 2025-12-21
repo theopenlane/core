@@ -27,7 +27,7 @@ func HookQuestionnaireAssessment() ent.Hook {
 				// but at least the jsonconfig needs to be provided
 				_, ok := m.Jsonconfig()
 				if !ok {
-					return nil, fmt.Errorf("jsonconfig is required if you do not create an assessment from a template") // nolint:err113
+					return nil, fmt.Errorf("jsonconfig is required if you do not create an assessment from a template") //nolint:err113
 				}
 				return next.Mutate(ctx, m)
 			}

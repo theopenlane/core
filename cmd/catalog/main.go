@@ -151,8 +151,8 @@ func catalogApp() *cli.Command {
 					continue
 				}
 
-				parts := strings.SplitN(c.Feature, ":", 2) // nolint:mnd
-				if len(parts) != 2 {                       // nolint:mnd
+				parts := strings.SplitN(c.Feature, ":", 2) //nolint:mnd
+				if len(parts) != 2 {                       //nolint:mnd
 					continue
 				}
 

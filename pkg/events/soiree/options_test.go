@@ -38,7 +38,7 @@ func TestWithErrorHandler(t *testing.T) {
 	var handlerCalled bool
 
 	// Define a custom error to be returned by a listener
-	customError := errors.New("custom error") // nolint: err113
+	customError := errors.New("custom error") //nolint:err113
 
 	// Define a custom error handler that sets handlerCalled to true
 	customErrorHandler := func(event Event, err error) error {
@@ -79,7 +79,7 @@ func TestWithErrorHandlerAsync(t *testing.T) {
 	var handlerMutex sync.Mutex
 
 	// Define a custom error to be returned by a listener
-	customError := errors.New("custom error") // nolint: err113
+	customError := errors.New("custom error") //nolint:err113
 
 	// Define a custom error handler that sets handlerCalled to true
 	customErrorHandler := func(event Event, err error) error {
