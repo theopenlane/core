@@ -24,13 +24,13 @@ linters:
     paths:
       - internal/graphapi/generated/gen_models.go
       - internal/graphapi/historygenerated/gen_models.go
+      - internal/graphapi/testclient/*
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - internal/ent/generated/*
       - internal/ent/historygenerated/*
-      - internal/ent/templates/*
-      - jsonschema/templates/*
       - pkg/objects/mocks/*
+      - pkg/objects/examples/*
       - pkg/corejobs/internal/cloudflare/mocks/*
       - pkg/corejobs/internal/olclient/mocks/*
       - internal/graphapi/generate/*
@@ -43,7 +43,6 @@ linters:
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
       - internal/ent/hush/examples/*
-      - pkg/objects/examples/*
 formatters:
   enable:
     - gofmt

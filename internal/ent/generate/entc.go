@@ -77,14 +77,14 @@ var (
 		schemaPath,
 		mixinPath,
 		entTemplatesPath,
-		// entGenerateConfigDir,
+		entGenerateConfigDir,
 	}
 
 	// changes to these paths should trigger history schema generation
 	historySchemaInputPaths = []string{
 		schemaPath,
 		entGeneratedPath,
-		// entGenerateConfigDir,
+		entGenerateConfigDir,
 	}
 )
 

@@ -233,7 +233,7 @@ tasks:
           fi
         else
           echo "🧹 Linting all Go files..."
-          golangci-lint run --config=.golangci.yaml --verbose
+          golangci-lint run . --config=.golangci.yaml --verbose
         fi
 
   go:lint:ci:

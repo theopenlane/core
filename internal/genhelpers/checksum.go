@@ -8,6 +8,10 @@ import (
 	"path/filepath"
 )
 
+const (
+	defaultFilePermissions = 0644
+)
+
 // HasSchemaChanges checks if there have been changes to schema or generated files
 // by comparing checksums of the relevant directories
 func HasSchemaChanges(checksumFile string, directories ...string) (bool, error) {
@@ -22,7 +26,7 @@ func HasSchemaChanges(checksumFile string, directories ...string) (bool, error) 
 	if err != nil {
 		if os.IsNotExist(err) {
 			// First run, always generate
-			_ = os.WriteFile(checksumFile, []byte(currentChecksum), 0644)
+			_ = os.WriteFile(checksumFile, []byte(currentChecksum), defaultFilePermissions)
 			return true, nil
 		}
 		return false, err
@@ -31,7 +35,7 @@ func HasSchemaChanges(checksumFile string, directories ...string) (bool, error) 
 	// Compare checksums
 	if string(previousChecksum) != currentChecksum {
 		// Update checksum file
-		_ = os.WriteFile(checksumFile, []byte(currentChecksum), 0644)
+		_ = os.WriteFile(checksumFile, []byte(currentChecksum), defaultFilePermissions)
 		return true, nil
 	}
 
@@ -47,7 +51,7 @@ func SetSchemaChecksum(checksumFile string, paths ...string) error {
 	}
 
 	// Update checksum file
-	_ = os.WriteFile(checksumFile, []byte(currentChecksum), 0644)
+	_ = os.WriteFile(checksumFile, []byte(currentChecksum), defaultFilePermissions)
 	return nil
 }
 
