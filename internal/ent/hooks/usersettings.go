@@ -199,7 +199,6 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		WithSetting().All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to query organizations for auto-join")
-
 		return err
 	}
 
@@ -222,15 +221,7 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			continue
 		}
 
-		// add user as a member to the organization
-		defaultRole := enums.RoleMember
-		input := generated.CreateOrgMembershipInput{
-			OrganizationID: org.ID,
-			UserID:         user.ID,
-			Role:           &defaultRole,
-		}
-
-		// add organization to the context for auto-join
+		// add organization to the context for accepted invite hook
 		ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
 			SubjectID:       user.ID,
 			SubjectEmail:    user.Email,
@@ -238,16 +229,32 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			OrganizationIDs: []string{org.ID},
 		})
 
+		// this triggers the invitation hook which will add the user to the organization
+		accepted, err := markPendingInvitesAsAccepted(ctx, dbClient, user.Email, org.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to mark pending invites as accepted")
+			return err
+		}
+
+		if accepted > 0 {
+			lastOrgID = org.ID
+			continue
+		}
+
+		// add user as a member to the organization if no invites were found
+		defaultRole := enums.RoleMember
+		input := generated.CreateOrgMembershipInput{
+			OrganizationID: org.ID,
+			UserID:         user.ID,
+			Role:           &defaultRole,
+		}
+
 		if err := dbClient.OrgMembership.Create().
 			SetInput(input).
 			Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("unable to auto-join user to organization")
 
 			// swallowing this error means some transactions are not rolled back and you can end up in a partial membership state
-			return err
-		}
-
-		if err := markPendingInvitesAsAccepted(ctx, dbClient, user.Email, org.ID); err != nil {
 			return err
 		}
 
@@ -271,21 +278,28 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 	return nil
 }
 
-func markPendingInvitesAsAccepted(ctx context.Context, dbClient *generated.Client, email, orgID string) error {
-	_, err := dbClient.Invite.Update().
+func markPendingInvitesAsAccepted(ctx context.Context, dbClient *generated.Client, email, orgID string) (int, error) {
+	invites, err := dbClient.Invite.Query().
 		Where(
-			invite.Recipient(email),
+			invite.RecipientEqualFold(email),
 			invite.OwnerID(orgID),
 			invite.StatusIn(enums.InvitationSent, enums.ApprovalRequired),
 			invite.DeletedAtIsNil(),
 		).
-		SetStatus(enums.InvitationAccepted).
-		Save(ctx)
-
+		All(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to mark pending invites as accepted")
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to query pending invites")
+		return 0, err
 	}
 
-	return nil
+	for _, i := range invites {
+		if _, err := dbClient.Invite.UpdateOneID(i.ID).
+			SetStatus(enums.InvitationAccepted).
+			Save(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to mark pending invite as accepted")
+			return 0, err
+		}
+	}
+
+	return len(invites), nil
 }
