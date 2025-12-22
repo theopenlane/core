@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // ProgramMembershipQuery is the builder for querying ProgramMembership entities.

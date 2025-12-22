@@ -110,7 +110,7 @@ func (userOwned UserOwnedMixin) Fields() []ent.Field {
 // Edges of the UserOwnedMixin
 func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 	if userOwned.Ref == "" {
-		panic(errors.New("ref must be non-empty string")) // nolint:err113
+		panic(errors.New("ref must be non-empty string")) //nolint:err113
 	}
 
 	ownerEdge := edge.

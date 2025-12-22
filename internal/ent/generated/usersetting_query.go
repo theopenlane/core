@@ -16,9 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // UserSettingQuery is the builder for querying UserSetting entities.

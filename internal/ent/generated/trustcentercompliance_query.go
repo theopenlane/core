@@ -16,9 +16,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // TrustCenterComplianceQuery is the builder for querying TrustCenterCompliance entities.

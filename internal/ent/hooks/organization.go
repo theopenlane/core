@@ -305,7 +305,7 @@ func createEntityTypes(ctx context.Context, orgID string, m *generated.Organizat
 // postOrganizationCreation runs after an organization is created to perform additional setup
 func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organization, m *generated.OrganizationMutation) error {
 	// capture the original org id, ignore error as this will not be set in all cases
-	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) // nolint: errcheck
+	originalOrg, _ := auth.GetOrganizationIDFromContext(ctx) //nolint:errcheck
 
 	// set the new org id in the auth context to process the rest of the post creation steps
 	err := auth.SetOrganizationIDInAuthContext(ctx, orgCreated.ID)

@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // FindingControlQuery is the builder for querying FindingControl entities.

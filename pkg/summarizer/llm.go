@@ -47,7 +47,7 @@ func getClient(cfg Config) (llms.Model, error) {
 	case LLMProviderOpenai:
 		return newOpenAIClient(cfg)
 	default:
-		return nil, errors.New("unsupported llm model selected") // nolint:err113
+		return nil, errors.New("unsupported llm model selected") //nolint:err113
 	}
 }
 

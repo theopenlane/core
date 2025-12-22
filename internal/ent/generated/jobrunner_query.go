@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // JobRunnerQuery is the builder for querying JobRunner entities.

@@ -285,7 +285,7 @@ func updateMainImports(cmdName string) error {
 	// Insert the import in the right section
 	fileContent = strings.Replace(fileContent, "\n)", "\n"+newImport+"\n)", 1)
 
-	if err := os.WriteFile(mainPath, []byte(fileContent), 0600); err != nil { // nolint:mnd
+	if err := os.WriteFile(mainPath, []byte(fileContent), 0600); err != nil { //nolint:mnd
 		return fmt.Errorf("failed to write main.go: %w", err)
 	}
 
