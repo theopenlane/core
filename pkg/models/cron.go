@@ -40,7 +40,7 @@ func (c Cron) Validate() error {
 
 	cron, err := cronerParser.Parse(c.String())
 	if err != nil {
-		return fmt.Errorf("invalid cron syntax: %w", err) // nolint:err113
+		return fmt.Errorf("invalid cron syntax: %w", err) //nolint:err113
 	}
 
 	// compute the next 5 execution times to cover cases like
@@ -48,13 +48,13 @@ func (c Cron) Validate() error {
 	// that would break the 30 minute check
 	executions, err := nextExecutions(cron, nextNCronExecutions)
 	if err != nil {
-		return fmt.Errorf("failed to get next cron executions: %w", err) // nolint:err113
+		return fmt.Errorf("failed to get next cron executions: %w", err) //nolint:err113
 	}
 
 	for i := 1; i < len(executions); i++ {
 		interval := executions[i].Sub(executions[i-1])
 		if interval < MaxRunsInBetween {
-			return fmt.Errorf("cron runs too frequently: %s between runs, must be at least 30 minutes", interval) // nolint:err113
+			return fmt.Errorf("cron runs too frequently: %s between runs, must be at least 30 minutes", interval) //nolint:err113
 		}
 	}
 

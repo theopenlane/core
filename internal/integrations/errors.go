@@ -1,6 +1,8 @@
 package integrations
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
 	// ErrLoaderRequired indicates a loader dependency was omitted.

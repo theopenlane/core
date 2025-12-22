@@ -73,7 +73,7 @@ func (sc *StripeClient) GetPricesMapped(ctx context.Context) (prices []Price) {
 
 		prices = append(prices, Price{
 			ID:        priceData.ID,
-			Price:     float64(priceData.UnitAmount) / 100, // nolint:mnd
+			Price:     float64(priceData.UnitAmount) / 100, //nolint:mnd
 			ProductID: priceData.Product.ID,
 			Interval:  string(priceData.Recurring.Interval),
 		})

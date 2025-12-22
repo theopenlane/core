@@ -32,7 +32,7 @@ type EmailVerificationToken struct {
 }
 
 // SchemaEmailVerificationToken is the name of the EmailVerificationToken schema.
-const SchemaEmailVerificationToken = "email_verification_token" // nolint:gosec
+const SchemaEmailVerificationToken = "email_verification_token" //nolint:gosec
 
 // Name returns the name of the EmailVerificationToken schema.
 func (EmailVerificationToken) Name() string {

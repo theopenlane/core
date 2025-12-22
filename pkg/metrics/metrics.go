@@ -113,7 +113,7 @@ func (m *Metrics) Start(ctx context.Context) error {
 	logger := logx.FromContext(ctx)
 	logger.Info().Msg("starting metrics server")
 
-	srv := &http.Server{ // nolint:gosec
+	srv := &http.Server{ //nolint:gosec
 		Addr:    m.port,
 		Handler: m.e,
 	}
@@ -121,7 +121,7 @@ func (m *Metrics) Start(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
 
-		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second) // nolint: mnd
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second) //nolint:mnd
 
 		defer cancel()
 

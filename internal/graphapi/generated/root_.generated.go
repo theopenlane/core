@@ -36705,7 +36705,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputOrganizationSettingOrder,
 		ec.unmarshalInputOrganizationSettingWhereInput,
 		ec.unmarshalInputOrganizationWhereInput,
-		ec.unmarshalInputParams,
 		ec.unmarshalInputPersonalAccessTokenOrder,
 		ec.unmarshalInputPersonalAccessTokenWhereInput,
 		ec.unmarshalInputProcedureOrder,
@@ -102549,28 +102548,6 @@ extend input OrgMembershipWhereInput {
 `, BuiltIn: false},
 	{Name: "../schema/orgsubscriptionextended.graphql", Input: `extend type OrgSubscription {
     managePaymentMethods: String
-}`, BuiltIn: false},
-	{Name: "../schema/params.graphql", Input: `"""
-Pagination parameters used for list requests to be able to pull more than
-max results
-"""
-input Params {
-    """
-    first is the number of records to pull when going forward through pagination
-    """
-    first: Int
-    """
-    last is the number of of records to pull when going backwards through pagination
-    """
-    last: Int
-    """
-    after is the cursor position to start at when paginating through results
-    """
-    after: Cursor
-    """
-    before is the cursor to start at when paginating in reverse through results
-    """
-    before: Cursor
 }`, BuiltIn: false},
 	{Name: "../schema/personalaccesstoken.graphql", Input: `extend type Query {
     """

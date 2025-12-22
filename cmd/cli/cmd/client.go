@@ -20,7 +20,7 @@ import (
 const (
 	serviceName     = "openlane"
 	accessTokenKey  = "open_lane_token"
-	refreshTokenKey = "open_lane_refresh_token" // nolint:gosec
+	refreshTokenKey = "open_lane_refresh_token" //nolint:gosec
 	sessionKey      = "open_lane_session"
 )
 
