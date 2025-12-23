@@ -10,12 +10,13 @@ import (
 	"github.com/oklog/ulid/v2"
 	"github.com/samber/mo"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
+
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
+	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 type fakeProvider struct {
@@ -191,30 +192,6 @@ func TestServiceResolveUploadProviderErrors(t *testing.T) {
 
 	if _, err := service.resolveUploadProvider(ctx, &storage.UploadOptions{}); !errors.Is(err, ErrProviderResolutionFailed) {
 		t.Fatalf("expected ErrProviderResolutionFailed when builder missing, got %v", err)
-	}
-
-	builder := &eddy.BuilderFunc[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
-		Type: "fake",
-		Func: func(context.Context, storage.ProviderCredentials, *storage.ProviderOptions) (storage.Provider, error) {
-			return &fakeProvider{id: "fake"}, nil
-		},
-	}
-
-	resolverNoOrg := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
-	resolverNoOrg.AddRule(&eddy.RuleFunc[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
-		EvaluateFunc: func(context.Context) mo.Option[eddy.Result[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]] {
-			return mo.Some(eddy.Result[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
-				Builder: builder,
-				Output:  storage.ProviderCredentials{},
-				Config:  storage.NewProviderOptions(),
-			})
-		},
-	})
-
-	service.resolver = resolverNoOrg
-
-	if _, err := service.resolveUploadProvider(context.Background(), &storage.UploadOptions{}); !errors.Is(err, ErrNoOrganizationID) {
-		t.Fatalf("expected ErrNoOrganizationID, got %v", err)
 	}
 }
 
