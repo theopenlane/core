@@ -59,7 +59,7 @@ require (
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.14.0
 	github.com/labstack/gommon v0.4.2
-	github.com/lestrrat-go/httprc/v3 v3.0.2
+	github.com/lestrrat-go/httprc/v3 v3.0.3
 	github.com/lestrrat-go/jwx/v3 v3.0.12
 	github.com/lib/pq v1.10.9
 	github.com/manifoldco/promptui v0.9.0
