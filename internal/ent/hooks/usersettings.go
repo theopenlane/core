@@ -283,7 +283,6 @@ func markPendingInvitesAsAccepted(ctx context.Context, dbClient *generated.Clien
 		Where(
 			invite.RecipientEqualFold(email),
 			invite.OwnerID(orgID),
-			invite.StatusIn(enums.InvitationSent, enums.ApprovalRequired),
 			invite.DeletedAtIsNil(),
 		).
 		All(ctx)
