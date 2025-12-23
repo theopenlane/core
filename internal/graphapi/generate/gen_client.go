@@ -17,7 +17,7 @@ const (
 	graphapiGenDir = "internal/graphapi/generate/"
 
 	// checksum files to track schema changes
-	clientChecksumFile = "./internal/graphapi/testclient/.client_checksum"
+	clientChecksumFile = "./internal/graphapi/testclient/checksum/.client_checksum"
 )
 
 var (
