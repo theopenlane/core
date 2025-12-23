@@ -20,7 +20,7 @@ func NotificationQueryFilter() generated.Interceptor {
 		// Get user info from context
 		ac, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
-		    return err
+			return err
 		}
 
 		// Apply the filter by modifying the query in place

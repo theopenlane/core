@@ -1,0 +1,5 @@
+env:
+  GOFLAGS: "-tags=cli,test,gencmd,codegen"
+
+build:
+  buildFlags: ["-tags=cli,test,gencmd,codegen"]
