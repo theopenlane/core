@@ -18531,6 +18531,7 @@ type File implements Node {
 		where: TrustcenterEntityWhereInput
 	): TrustcenterEntityConnection!
 	presignedURL: String
+	base64: String
 }
 """
 A connection to a list of items.

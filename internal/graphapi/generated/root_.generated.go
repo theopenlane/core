@@ -1444,6 +1444,7 @@ type ComplexityRoot struct {
 	}
 
 	File struct {
+		Base64                func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -11910,6 +11911,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ExportUpdatePayload.Export(childComplexity), true
+
+	case "File.base64":
+		if e.complexity.File.Base64 == nil {
+			break
+		}
+
+		return e.complexity.File.Base64(childComplexity), true
 
 	case "File.categoryType":
 		if e.complexity.File.CategoryType == nil {
@@ -99777,7 +99785,9 @@ type FileDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/fileextended.graphql", Input: `extend type File {
     presignedURL: String
-}`, BuiltIn: false},
+    base64: String
+}
+`, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Query {
     """
     Look up finding by ID

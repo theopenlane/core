@@ -5,6 +5,7 @@ package config
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"github.com/knadh/koanf/parsers/yaml"
@@ -16,7 +17,14 @@ import (
 )
 
 var (
-	defaultConfigFilePath = "./config/.config.yaml"
+	defaultConfigFilePath      = "./config/.objects-examples.yaml"
+	_, callerFile, _, callerOK = runtime.Caller(0)
+	packageExamplesDir         = func() string {
+		if callerOK {
+			return filepath.Dir(filepath.Dir(callerFile))
+		}
+		return "."
+	}()
 )
 
 // Config contains the configuration for object storage examples
@@ -105,7 +113,7 @@ func Load(cfgFile *string) (*Config, error) {
 	conf := New()
 
 	if err := k.Load(file.Provider(configPath), yaml.Parser()); err != nil {
-		log.Warn().Err(err).Msg("failed to load config file - ensure the .config.yaml is present and valid or use environment variables to set the configuration")
+		log.Warn().Err(err).Msg("failed to load config file - ensure the examples config is present and valid or use environment variables to set the configuration")
 	}
 
 	if err := k.Unmarshal("", &conf); err != nil {
@@ -207,7 +215,7 @@ func DeleteConfig() error {
 func getExamplesDir() string {
 	cwd, err := os.Getwd()
 	if err != nil {
-		return "."
+		return packageExamplesDir
 	}
 
 	if strings.Contains(cwd, "pkg/objects/examples") {
@@ -217,5 +225,5 @@ func getExamplesDir() string {
 		}
 	}
 
-	return "."
+	return packageExamplesDir
 }
