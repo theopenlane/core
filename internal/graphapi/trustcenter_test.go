@@ -21,8 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/jobspec"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
@@ -1085,7 +1085,7 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 					[]rivertest.ExpectedJob{
 						{
-							Args: corejobs.CreatePirschDomainArgs{
+							Args: jobspec.CreatePirschDomainArgs{
 								TrustCenterID: resp.CreateTrustCenter.TrustCenter.ID,
 							},
 						},
@@ -1093,7 +1093,7 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 				assert.Assert(t, jobs != nil)
 				assert.Assert(t, is.Len(jobs, 1))
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.CreatePirschDomainArgs{}, nil)
 			}
 
 			// Clean up
@@ -1162,7 +1162,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 					[]rivertest.ExpectedJob{
 						{
-							Args: corejobs.CreatePirschDomainArgs{
+							Args: jobspec.CreatePirschDomainArgs{
 								TrustCenterID: tc.trustCenterID,
 							},
 						},
@@ -1170,7 +1170,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 				assert.Assert(t, jobs != nil)
 				assert.Assert(t, is.Len(jobs, 1))
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.CreatePirschDomainArgs{}, nil)
 			}
 		})
 	}
@@ -1247,7 +1247,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 					[]rivertest.ExpectedJob{
 						{
-							Args: corejobs.UpdatePirschDomainArgs{
+							Args: jobspec.UpdatePirschDomainArgs{
 								TrustCenterID: tc.trustCenterID,
 							},
 						},
@@ -1255,7 +1255,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 				assert.Assert(t, jobs != nil)
 				assert.Assert(t, is.Len(jobs, 1))
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.UpdatePirschDomainArgs{}, nil)
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.UpdatePirschDomainArgs{}, nil)
 			}
 		})
 	}
@@ -1328,7 +1328,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
 					[]rivertest.ExpectedJob{
 						{
-							Args: corejobs.DeletePirschDomainArgs{},
+							Args: jobspec.DeletePirschDomainArgs{},
 						},
 					})
 				assert.Assert(t, jobs != nil)
@@ -1336,7 +1336,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 				// Verify the job has encoded args (PirschDomainID should be set)
 				assert.Assert(t, jobs[0].EncodedArgs != nil)
 			} else {
-				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.DeletePirschDomainArgs{}, nil)
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.DeletePirschDomainArgs{}, nil)
 			}
 		})
 	}
