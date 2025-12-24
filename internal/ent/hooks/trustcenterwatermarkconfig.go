@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/pkg/corejobs"
+	"github.com/theopenlane/core/pkg/jobspec"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -53,7 +53,7 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 			}
 
 			for _, doc := range docs {
-				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+				if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
 					TrustCenterDocumentID: doc.ID,
 				}, nil); err != nil {
 					return nil, err
