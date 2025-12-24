@@ -3835,10 +3835,14 @@ func init() {
 	notification.Hooks[4] = notificationMixinHooks4[0]
 
 	notification.Hooks[5] = notificationHooks[0]
+
+	notification.Hooks[6] = notificationHooks[1]
 	notificationMixinInters1 := notificationMixin[1].Interceptors()
 	notificationMixinInters4 := notificationMixin[4].Interceptors()
+	notificationInters := schema.Notification{}.Interceptors()
 	notification.Interceptors[0] = notificationMixinInters1[0]
 	notification.Interceptors[1] = notificationMixinInters4[0]
+	notification.Interceptors[2] = notificationInters[0]
 	notificationMixinFields0 := notificationMixin[0].Fields()
 	_ = notificationMixinFields0
 	notificationMixinFields2 := notificationMixin[2].Fields()

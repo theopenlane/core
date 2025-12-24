@@ -9,6 +9,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -23,7 +24,7 @@ import (
 )
 
 // handleOrganizationMutation routes organization mutations to the correct entitlement handler
-func handleOrganizationMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleOrganizationMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil {
 		return nil
 	}
@@ -39,7 +40,7 @@ func handleOrganizationMutation(ctx *soiree.EventContext, payload *MutationPaylo
 }
 
 // handleOrganizationSettingMutation handles billing-related updates on organization settings
-func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil {
 		return nil
 	}
@@ -53,7 +54,7 @@ func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *Mutati
 }
 
 // handleOrganizationDelete deactivates an organization's customer subscription when it is deleted
-func handleOrganizationDelete(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleOrganizationDelete(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
 		return nil
@@ -83,7 +84,7 @@ func handleOrganizationDelete(ctx *soiree.EventContext, payload *MutationPayload
 }
 
 // handleOrganizationCreated reconciles entitlements after an organization is created
-func handleOrganizationCreated(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleOrganizationCreated(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
 	if !ok {
 		return nil
@@ -93,7 +94,7 @@ func handleOrganizationCreated(ctx *soiree.EventContext, payload *MutationPayloa
 }
 
 // handleOrganizationSettingsUpdateOne updates Stripe customer details when billing fields change
-func handleOrganizationSettingsUpdateOne(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleOrganizationSettingsUpdateOne(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if !mutationTouches(payload.Mutation, "billing_email", "billing_phone", "billing_address") {
 		return nil
 	}
@@ -147,7 +148,7 @@ var errMissingOrgCustomerPrereqs = errors.New("entitlement invocation missing pr
 // entitlementInvocation bundles the data required for entitlement listeners to perform their work
 type entitlementInvocation struct {
 	event    *soiree.EventContext
-	payload  *MutationPayload
+	payload  *events.MutationPayload
 	client   *entgen.Client
 	orgID    string
 	entityID string
@@ -184,7 +185,7 @@ func softDeleteAllowContext(ctx context.Context) context.Context {
 }
 
 // newEntitlementInvocation gathers the elements required to run entitlement logic for a mutation
-func newEntitlementInvocation(event *soiree.EventContext, payload *MutationPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
+func newEntitlementInvocation(event *soiree.EventContext, payload *events.MutationPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
 	client := mutationClient(event, payload)
 	if client == nil || client.EntitlementManager == nil {
 		return nil, false
@@ -226,7 +227,7 @@ func newEntitlementInvocation(event *soiree.EventContext, payload *MutationPaylo
 }
 
 // mutationEntityID derives the entity identifier from the payload or event properties
-func mutationEntityID(ctx *soiree.EventContext, payload *MutationPayload) (string, bool) {
+func mutationEntityID(ctx *soiree.EventContext, payload *events.MutationPayload) (string, bool) {
 	if payload != nil && payload.EntityID != "" {
 		return payload.EntityID, true
 	}
@@ -261,7 +262,7 @@ func mutationEntityID(ctx *soiree.EventContext, payload *MutationPayload) (strin
 }
 
 // mutationClient returns the ent client associated with the mutation
-func mutationClient(ctx *soiree.EventContext, payload *MutationPayload) *entgen.Client {
+func mutationClient(ctx *soiree.EventContext, payload *events.MutationPayload) *entgen.Client {
 	if payload != nil && payload.Client != nil {
 		return payload.Client
 	}

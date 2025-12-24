@@ -190,7 +190,8 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 	r := graphapi.NewResolver(c, u).
 		WithMaxResultLimit(MaxResultLimit).
 		WithTrustCenterCnameTarget(TrustCenterCnameTarget).
-		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain)
+		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
+		WithSubscriptions(true)
 
 	// add the pool to the resolver without a metrics collector
 	r.WithPool(100, false) //nolint:mnd

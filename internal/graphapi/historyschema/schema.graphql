@@ -53743,9 +53743,9 @@ input SubscriberWhereInput {
 }
 type Subscription {
 	"""
-	Subscribe to task creation events for the authenticated user
+	Subscribe to notification creation events for the authenticated user
 	"""
-	taskCreated: Task!
+	notificationCreated: Notification!
 }
 type TFASetting implements Node {
 	id: ID!

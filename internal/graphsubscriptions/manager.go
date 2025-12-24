@@ -5,40 +5,61 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // TaskChannelBufferSize is the buffer size for task subscription channels
 const TaskChannelBufferSize = 10
 
+var (
+	// globalManager is the singleton subscription manager instance
+	globalManager *Manager
+	globalMu      sync.RWMutex
+)
+
 // Manager manages all active subscriptions for real-time updates
 type Manager struct {
 	mu          sync.RWMutex
-	subscribers map[string][]chan *generated.Task // map of userID to list of task channels
+	subscribers map[string][]chan Notification // map of userID to list of notification channels
 }
 
 // NewManager creates a new subscription manager
 func NewManager() *Manager {
-	return &Manager{
-		subscribers: make(map[string][]chan *generated.Task),
+	m := &Manager{
+		subscribers: make(map[string][]chan Notification),
 	}
+
+	// Set as global manager
+	globalMu.Lock()
+	globalManager = m
+	globalMu.Unlock()
+
+	return m
 }
 
-// Subscribe adds a new subscriber for a user's task creations
-func (sm *Manager) Subscribe(userID string, ch chan *generated.Task) {
+// GetGlobalManager returns the global subscription manager instance
+func GetGlobalManager() *Manager {
+	globalMu.RLock()
+	defer globalMu.RUnlock()
+	return globalManager
+}
+
+// Subscribe adds a new subscriber for a user's notification creations
+func (sm *Manager) Subscribe(userID string, ch chan Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
 	sm.subscribers[userID] = append(sm.subscribers[userID], ch)
+	log.Debug().Str("user_id", userID).Int("subscriber_count", len(sm.subscribers[userID])).Msg("user subscribed to notifications")
 }
 
 // Unsubscribe removes a subscriber
-func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Task) {
+func (sm *Manager) Unsubscribe(userID string, ch chan Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
 	channels, ok := sm.subscribers[userID]
 	if !ok {
+		log.Info().Str("user_id", userID).Msg("attempted to unsubscribe but no subscribers found")
 		return
 	}
 
@@ -47,6 +68,7 @@ func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Task) {
 		if c == ch {
 			sm.subscribers[userID] = slices.Delete(channels, i, i+1)
 			close(ch)
+			log.Debug().Str("user_id", userID).Int("remaining_subscribers", len(sm.subscribers[userID])).Msg("user unsubscribed from notifications")
 			break
 		}
 	}
@@ -54,29 +76,35 @@ func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Task) {
 	// Clean up empty lists
 	if len(sm.subscribers[userID]) == 0 {
 		delete(sm.subscribers, userID)
+		log.Debug().Str("user_id", userID).Msg("no more subscribers for user, removed from map")
 	}
 }
 
-// Publish sends a task to all subscribers for that user
-func (sm *Manager) Publish(userID string, task *generated.Task) error {
+// Publish sends a notification to all subscribers for that user
+func (sm *Manager) Publish(userID string, notification Notification) error {
 	sm.mu.RLock()
 	defer sm.mu.RUnlock()
+
+	log.Debug().Str("user_id", userID).Int("total_subscribers", len(sm.subscribers)).Msg("Publish called")
 
 	channels, ok := sm.subscribers[userID]
 	if !ok {
 		// No subscribers for this user, which is fine
+		log.Debug().Str("user_id", userID).Msg("no subscribers found for user")
 		return nil
 	}
 
+	log.Debug().Str("user_id", userID).Int("subscriber_count", len(channels)).Msg("found subscribers for user, sending notification")
+
 	// Send to all subscribers
-	for _, ch := range channels {
+	for i, ch := range channels {
 		select {
-		case ch <- task:
+		case ch <- notification:
 			// Successfully sent
-			log.Debug().Str("user_id", userID).Msg("task successfully sent to subscriber")
+			log.Debug().Str("user_id", userID).Int("subscriber_index", i).Msg("notification successfully sent to subscriber")
 		default:
 			// Channel is full or closed, skip
-			log.Warn().Str("user_id", userID).Msg("channel closed, unable to send task to subscriber for user")
+			log.Info().Str("user_id", userID).Int("subscriber_index", i).Msg("channel closed or full, unable to send notification to subscriber for user")
 		}
 	}
 
