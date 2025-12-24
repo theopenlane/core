@@ -7,6 +7,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
+	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -19,7 +20,7 @@ import (
 )
 
 // handleTrustCenterDocMutation processes TrustCenterDoc mutations and invalidates cache when necessary
-func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}
@@ -67,7 +68,7 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *MutationPay
 }
 
 // handleNoteMutation processes Note mutations and invalidates cache
-func handleNoteMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}
@@ -92,7 +93,7 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *MutationPayload) erro
 }
 
 // handleTrustcenterEntityMutation processes TrustcenterEntity mutations and invalidates cache
-func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}
@@ -115,7 +116,7 @@ func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *Mutation
 }
 
 // handleTrustCenterSubprocessorMutation processes TrustCenterSubprocessor mutations and invalidates cache
-func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}
@@ -138,7 +139,7 @@ func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *Mu
 }
 
 // handleTrustCenterComplianceMutation processes TrustCenterCompliance mutations and invalidates cache
-func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}
@@ -161,7 +162,7 @@ func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *Muta
 }
 
 // handleSubprocessorMutation processes Subprocessor mutations and invalidates cache for related trust centers
-func handleSubprocessorMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleSubprocessorMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}
@@ -213,7 +214,7 @@ func handleSubprocessorMutation(ctx *soiree.EventContext, payload *MutationPaylo
 }
 
 // handleStandardMutation processes Standard mutations and invalidates cache for related trust centers
-func handleStandardMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleStandardMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload == nil || payload.Client == nil {
 		return nil
 	}

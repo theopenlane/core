@@ -75,31 +75,17 @@ func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ cont
 			case "objectType":
 				return ec.fieldContext_Notification_objectType(ctx, field)
 			case "title":
-				return ec.fieldContext_Task_title(ctx, field)
-			case "details":
-				return ec.fieldContext_Task_details(ctx, field)
-			case "detailsJSON":
-				return ec.fieldContext_Task_detailsJSON(ctx, field)
-			case "status":
-				return ec.fieldContext_Task_status(ctx, field)
-			case "category":
-				return ec.fieldContext_Task_category(ctx, field)
-			case "due":
-				return ec.fieldContext_Task_due(ctx, field)
-			case "completed":
-				return ec.fieldContext_Task_completed(ctx, field)
-			case "assigneeID":
-				return ec.fieldContext_Task_assigneeID(ctx, field)
-			case "assignerID":
-				return ec.fieldContext_Task_assignerID(ctx, field)
-			case "systemGenerated":
-				return ec.fieldContext_Task_systemGenerated(ctx, field)
-			case "idempotencyKey":
-				return ec.fieldContext_Task_idempotencyKey(ctx, field)
-			case "externalReferenceURL":
-				return ec.fieldContext_Task_externalReferenceURL(ctx, field)
-			case "parentTaskID":
-				return ec.fieldContext_Task_parentTaskID(ctx, field)
+				return ec.fieldContext_Notification_title(ctx, field)
+			case "body":
+				return ec.fieldContext_Notification_body(ctx, field)
+			case "data":
+				return ec.fieldContext_Notification_data(ctx, field)
+			case "readAt":
+				return ec.fieldContext_Notification_readAt(ctx, field)
+			case "channels":
+				return ec.fieldContext_Notification_channels(ctx, field)
+			case "topic":
+				return ec.fieldContext_Notification_topic(ctx, field)
 			case "owner":
 				return ec.fieldContext_Notification_owner(ctx, field)
 			}
