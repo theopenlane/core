@@ -78,6 +78,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -234,6 +236,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -390,6 +394,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
 			case "reviewDue":
@@ -546,6 +552,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
+			case "detailsJSON":
+				return ec.fieldContext_Procedure_detailsJSON(ctx, field)
 			case "approvalRequired":
 				return ec.fieldContext_Procedure_approvalRequired(ctx, field)
 			case "reviewDue":

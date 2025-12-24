@@ -70,6 +70,12 @@ models:
   WorkflowEventPayload:
     model:
       - github.com/theopenlane/core/pkg/models.WorkflowEventPayload
+  Map:
+    model:
+      - github.com/99designs/gqlgen/graphql.Map
+  Any:
+    model:
+      - github.com/99designs/gqlgen/graphql.Any
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

@@ -15,11 +15,15 @@ import (
 	"github.com/riverqueue/river/rivertest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
+	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"
@@ -192,4 +196,107 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			}
 		})
 	}
+}
+
+func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAccepted() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("VerifyEmail", "Verify email address")
+	suite.registerTestHandler("GET", "verify", operation, suite.h.VerifyEmail)
+
+	ec := echocontext.NewTestEchoContext().Request().Context()
+	ctx := privacy.DecisionContext(ec, privacy.Allow)
+
+	orgOwner := suite.userBuilderWithInput(ctx, &userInput{
+		password:      validPassword,
+		confirmedUser: true,
+	})
+	ownerCtx := privacy.DecisionContext(orgOwner.UserCtx, privacy.Allow)
+	ownerCtx = ent.NewContext(ownerCtx, suite.db)
+
+	allowedDomain := "autojoin-in-test.com"
+	userEmail := fmt.Sprintf("%s@%s", ulids.New().String(), allowedDomain)
+
+	org, err := suite.db.Organization.Get(ownerCtx, orgOwner.OrganizationID)
+	require.NoError(t, err)
+
+	orgSetting, err := org.Setting(ownerCtx)
+	require.NoError(t, err)
+
+	suite.db.OrganizationSetting.UpdateOneID(orgSetting.ID).
+		SetAllowedEmailDomains([]string{allowedDomain}).
+		SetAllowMatchingDomainsAutojoin(true).
+		ExecX(ownerCtx)
+
+	userSetting := suite.db.UserSetting.Create().
+		SetEmailConfirmed(false).
+		SaveX(ownerCtx)
+
+	u := suite.db.User.Create().
+		SetFirstName(gofakeit.FirstName()).
+		SetLastName(gofakeit.LastName()).
+		SetEmail(userEmail).
+		SetPassword(validPassword).
+		SetSetting(userSetting).
+		SetLastLoginProvider(enums.AuthProviderCredentials).
+		SetLastSeen(time.Now()).
+		SaveX(ownerCtx)
+
+	invitation := suite.db.Invite.Create().
+		SetRecipient(userEmail).
+		SetOwnerID(orgOwner.OrganizationID).
+		SetStatus(enums.InvitationSent).
+		SaveX(ownerCtx)
+
+	assert.Equal(t, enums.InvitationSent, invitation.Status)
+
+	user := handlers.User{
+		FirstName: u.FirstName,
+		LastName:  u.LastName,
+		Email:     u.Email,
+		ID:        u.ID,
+	}
+
+	require.NoError(t, user.CreateVerificationToken())
+
+	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
+	require.NoError(t, err)
+
+	et := suite.db.EmailVerificationToken.Create().
+		SetOwner(u).
+		SetToken(user.EmailVerificationToken.String).
+		SetEmail(user.Email).
+		SetSecret(user.EmailVerificationSecret).
+		SetTTL(ttl).
+		SaveX(ownerCtx)
+
+	target := fmt.Sprintf("/verify?token=%s", et.Token)
+	req := httptest.NewRequest(http.MethodGet, target, nil)
+	recorder := httptest.NewRecorder()
+
+	suite.e.ServeHTTP(recorder, req)
+
+	res := recorder.Result()
+	defer res.Body.Close()
+
+	assert.Equal(t, http.StatusOK, recorder.Code)
+
+	// the invite should be deleted after acceptance
+	_, err = suite.db.Invite.Query().
+		Where(
+			invite.ID(invitation.ID),
+		).
+		Only(ownerCtx)
+	require.Error(t, err)
+	assert.True(t, ent.IsNotFound(err))
+
+	// check if user is a member of the organization
+	exists, err := suite.db.OrgMembership.Query().
+		Where(
+			orgmembership.UserID(u.ID),
+			orgmembership.OrganizationID(orgOwner.OrganizationID),
+		).
+		Exist(ownerCtx)
+	require.NoError(t, err)
+	assert.True(t, exists)
 }

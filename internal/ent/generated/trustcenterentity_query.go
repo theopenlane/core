@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // TrustcenterEntityQuery is the builder for querying TrustcenterEntity entities.
@@ -721,21 +722,20 @@ func (_q *TrustcenterEntityQuery) Modify(modifiers ...func(s *sql.Selector)) *Tr
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (teq *TrustcenterEntityQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustcenterEntity").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryIDs)
-	if err := teq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return teq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, teq, qr, teq.inters)
+	ids, err := teq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustcenterEntity").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustcenterEntity").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

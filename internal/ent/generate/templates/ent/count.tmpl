@@ -1,21 +1,24 @@
+{{- define "import/additional/logx" }}
+	"github.com/theopenlane/core/pkg/logx"
+{{- end }}
+
 {{ define "query/additional/count" }}
 	{{ $receiver := receiver $.QueryName }}
 
-	// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+	// CountIDs returns the count of ids with FGA batch filtering applied
 	func ({{ $receiver }} *{{ $.QueryName }}) CountIDs(ctx context.Context) (int, error) {
-		ctx = setContextOp(ctx, {{ $receiver }} .ctx, ent.OpQueryIDs)
-		if err := {{ $receiver }} .prepareQuery(ctx); err != nil {
-			return 0, err
-		}
+		logx.FromContext(ctx).Debug().Str("query_type", "{{ $.Name }}").Str("operation", "count_ids").Msg("CountIDs: starting")
 
-		qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-			return {{ $receiver }}.IDs(ctx)
-		})
+		ctx = setContextOp(ctx, {{ $receiver }}.ctx, ent.OpQueryIDs)
 
-		ids, err := withInterceptors[[]string](ctx, {{ $receiver }} , qr, {{ $receiver }} .inters)
+		ids, err := {{ $receiver }}.IDs(ctx)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("query_type", "{{ $.Name }}").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 			return 0, err
 		}
+
+		logx.FromContext(ctx).Debug().Str("query_type", "{{ $.Name }}").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 		return len(ids), nil
 	}

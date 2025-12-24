@@ -159,6 +159,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldStatus:                          {Type: field.TypeEnum, Column: actionplan.FieldStatus},
 			actionplan.FieldActionPlanType:                  {Type: field.TypeString, Column: actionplan.FieldActionPlanType},
 			actionplan.FieldDetails:                         {Type: field.TypeString, Column: actionplan.FieldDetails},
+			actionplan.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: actionplan.FieldDetailsJSON},
 			actionplan.FieldApprovalRequired:                {Type: field.TypeBool, Column: actionplan.FieldApprovalRequired},
 			actionplan.FieldReviewDue:                       {Type: field.TypeTime, Column: actionplan.FieldReviewDue},
 			actionplan.FieldReviewFrequency:                 {Type: field.TypeEnum, Column: actionplan.FieldReviewFrequency},
@@ -328,6 +329,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldTags:                       {Type: field.TypeJSON, Column: control.FieldTags},
 			control.FieldTitle:                      {Type: field.TypeString, Column: control.FieldTitle},
 			control.FieldDescription:                {Type: field.TypeString, Column: control.FieldDescription},
+			control.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: control.FieldDescriptionJSON},
 			control.FieldAliases:                    {Type: field.TypeJSON, Column: control.FieldAliases},
 			control.FieldReferenceID:                {Type: field.TypeString, Column: control.FieldReferenceID},
 			control.FieldAuditorReferenceID:         {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
@@ -391,6 +393,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlimplementation.FieldVerified:           {Type: field.TypeBool, Column: controlimplementation.FieldVerified},
 			controlimplementation.FieldVerificationDate:   {Type: field.TypeTime, Column: controlimplementation.FieldVerificationDate},
 			controlimplementation.FieldDetails:            {Type: field.TypeString, Column: controlimplementation.FieldDetails},
+			controlimplementation.FieldDetailsJSON:        {Type: field.TypeJSON, Column: controlimplementation.FieldDetailsJSON},
 		},
 	}
 	graph.Nodes[8] = &sqlgraph.Node{
@@ -419,6 +422,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjective.FieldSystemInternalID:     {Type: field.TypeString, Column: controlobjective.FieldSystemInternalID},
 			controlobjective.FieldName:                 {Type: field.TypeString, Column: controlobjective.FieldName},
 			controlobjective.FieldDesiredOutcome:       {Type: field.TypeString, Column: controlobjective.FieldDesiredOutcome},
+			controlobjective.FieldDesiredOutcomeJSON:   {Type: field.TypeJSON, Column: controlobjective.FieldDesiredOutcomeJSON},
 			controlobjective.FieldStatus:               {Type: field.TypeEnum, Column: controlobjective.FieldStatus},
 			controlobjective.FieldSource:               {Type: field.TypeEnum, Column: controlobjective.FieldSource},
 			controlobjective.FieldControlObjectiveType: {Type: field.TypeString, Column: controlobjective.FieldControlObjectiveType},
@@ -1203,6 +1207,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldStatus:                          {Type: field.TypeEnum, Column: internalpolicy.FieldStatus},
 			internalpolicy.FieldPolicyType:                      {Type: field.TypeString, Column: internalpolicy.FieldPolicyType},
 			internalpolicy.FieldDetails:                         {Type: field.TypeString, Column: internalpolicy.FieldDetails},
+			internalpolicy.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: internalpolicy.FieldDetailsJSON},
 			internalpolicy.FieldApprovalRequired:                {Type: field.TypeBool, Column: internalpolicy.FieldApprovalRequired},
 			internalpolicy.FieldReviewDue:                       {Type: field.TypeTime, Column: internalpolicy.FieldReviewDue},
 			internalpolicy.FieldReviewFrequency:                 {Type: field.TypeEnum, Column: internalpolicy.FieldReviewFrequency},
@@ -1494,6 +1499,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			note.FieldDisplayID:    {Type: field.TypeString, Column: note.FieldDisplayID},
 			note.FieldOwnerID:      {Type: field.TypeString, Column: note.FieldOwnerID},
 			note.FieldText:         {Type: field.TypeString, Column: note.FieldText},
+			note.FieldTextJSON:     {Type: field.TypeJSON, Column: note.FieldTextJSON},
 			note.FieldNoteRef:      {Type: field.TypeString, Column: note.FieldNoteRef},
 			note.FieldDiscussionID: {Type: field.TypeString, Column: note.FieldDiscussionID},
 			note.FieldIsEdited:     {Type: field.TypeBool, Column: note.FieldIsEdited},
@@ -1835,6 +1841,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldStatus:                          {Type: field.TypeEnum, Column: procedure.FieldStatus},
 			procedure.FieldProcedureType:                   {Type: field.TypeString, Column: procedure.FieldProcedureType},
 			procedure.FieldDetails:                         {Type: field.TypeString, Column: procedure.FieldDetails},
+			procedure.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: procedure.FieldDetailsJSON},
 			procedure.FieldApprovalRequired:                {Type: field.TypeBool, Column: procedure.FieldApprovalRequired},
 			procedure.FieldReviewDue:                       {Type: field.TypeTime, Column: procedure.FieldReviewDue},
 			procedure.FieldReviewFrequency:                 {Type: field.TypeEnum, Column: procedure.FieldReviewFrequency},
@@ -2011,31 +2018,34 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Risk",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			risk.FieldCreatedAt:        {Type: field.TypeTime, Column: risk.FieldCreatedAt},
-			risk.FieldUpdatedAt:        {Type: field.TypeTime, Column: risk.FieldUpdatedAt},
-			risk.FieldCreatedBy:        {Type: field.TypeString, Column: risk.FieldCreatedBy},
-			risk.FieldUpdatedBy:        {Type: field.TypeString, Column: risk.FieldUpdatedBy},
-			risk.FieldDeletedAt:        {Type: field.TypeTime, Column: risk.FieldDeletedAt},
-			risk.FieldDeletedBy:        {Type: field.TypeString, Column: risk.FieldDeletedBy},
-			risk.FieldDisplayID:        {Type: field.TypeString, Column: risk.FieldDisplayID},
-			risk.FieldTags:             {Type: field.TypeJSON, Column: risk.FieldTags},
-			risk.FieldOwnerID:          {Type: field.TypeString, Column: risk.FieldOwnerID},
-			risk.FieldRiskKindName:     {Type: field.TypeString, Column: risk.FieldRiskKindName},
-			risk.FieldRiskKindID:       {Type: field.TypeString, Column: risk.FieldRiskKindID},
-			risk.FieldRiskCategoryName: {Type: field.TypeString, Column: risk.FieldRiskCategoryName},
-			risk.FieldRiskCategoryID:   {Type: field.TypeString, Column: risk.FieldRiskCategoryID},
-			risk.FieldName:             {Type: field.TypeString, Column: risk.FieldName},
-			risk.FieldStatus:           {Type: field.TypeEnum, Column: risk.FieldStatus},
-			risk.FieldRiskType:         {Type: field.TypeString, Column: risk.FieldRiskType},
-			risk.FieldCategory:         {Type: field.TypeString, Column: risk.FieldCategory},
-			risk.FieldImpact:           {Type: field.TypeEnum, Column: risk.FieldImpact},
-			risk.FieldLikelihood:       {Type: field.TypeEnum, Column: risk.FieldLikelihood},
-			risk.FieldScore:            {Type: field.TypeInt, Column: risk.FieldScore},
-			risk.FieldMitigation:       {Type: field.TypeString, Column: risk.FieldMitigation},
-			risk.FieldDetails:          {Type: field.TypeString, Column: risk.FieldDetails},
-			risk.FieldBusinessCosts:    {Type: field.TypeString, Column: risk.FieldBusinessCosts},
-			risk.FieldStakeholderID:    {Type: field.TypeString, Column: risk.FieldStakeholderID},
-			risk.FieldDelegateID:       {Type: field.TypeString, Column: risk.FieldDelegateID},
+			risk.FieldCreatedAt:         {Type: field.TypeTime, Column: risk.FieldCreatedAt},
+			risk.FieldUpdatedAt:         {Type: field.TypeTime, Column: risk.FieldUpdatedAt},
+			risk.FieldCreatedBy:         {Type: field.TypeString, Column: risk.FieldCreatedBy},
+			risk.FieldUpdatedBy:         {Type: field.TypeString, Column: risk.FieldUpdatedBy},
+			risk.FieldDeletedAt:         {Type: field.TypeTime, Column: risk.FieldDeletedAt},
+			risk.FieldDeletedBy:         {Type: field.TypeString, Column: risk.FieldDeletedBy},
+			risk.FieldDisplayID:         {Type: field.TypeString, Column: risk.FieldDisplayID},
+			risk.FieldTags:              {Type: field.TypeJSON, Column: risk.FieldTags},
+			risk.FieldOwnerID:           {Type: field.TypeString, Column: risk.FieldOwnerID},
+			risk.FieldRiskKindName:      {Type: field.TypeString, Column: risk.FieldRiskKindName},
+			risk.FieldRiskKindID:        {Type: field.TypeString, Column: risk.FieldRiskKindID},
+			risk.FieldRiskCategoryName:  {Type: field.TypeString, Column: risk.FieldRiskCategoryName},
+			risk.FieldRiskCategoryID:    {Type: field.TypeString, Column: risk.FieldRiskCategoryID},
+			risk.FieldName:              {Type: field.TypeString, Column: risk.FieldName},
+			risk.FieldStatus:            {Type: field.TypeEnum, Column: risk.FieldStatus},
+			risk.FieldRiskType:          {Type: field.TypeString, Column: risk.FieldRiskType},
+			risk.FieldCategory:          {Type: field.TypeString, Column: risk.FieldCategory},
+			risk.FieldImpact:            {Type: field.TypeEnum, Column: risk.FieldImpact},
+			risk.FieldLikelihood:        {Type: field.TypeEnum, Column: risk.FieldLikelihood},
+			risk.FieldScore:             {Type: field.TypeInt, Column: risk.FieldScore},
+			risk.FieldMitigation:        {Type: field.TypeString, Column: risk.FieldMitigation},
+			risk.FieldMitigationJSON:    {Type: field.TypeJSON, Column: risk.FieldMitigationJSON},
+			risk.FieldDetails:           {Type: field.TypeString, Column: risk.FieldDetails},
+			risk.FieldDetailsJSON:       {Type: field.TypeJSON, Column: risk.FieldDetailsJSON},
+			risk.FieldBusinessCosts:     {Type: field.TypeString, Column: risk.FieldBusinessCosts},
+			risk.FieldBusinessCostsJSON: {Type: field.TypeJSON, Column: risk.FieldBusinessCostsJSON},
+			risk.FieldStakeholderID:     {Type: field.TypeString, Column: risk.FieldStakeholderID},
+			risk.FieldDelegateID:        {Type: field.TypeString, Column: risk.FieldDelegateID},
 		},
 	}
 	graph.Nodes[62] = &sqlgraph.Node{
@@ -2174,6 +2184,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldTags:                       {Type: field.TypeJSON, Column: subcontrol.FieldTags},
 			subcontrol.FieldTitle:                      {Type: field.TypeString, Column: subcontrol.FieldTitle},
 			subcontrol.FieldDescription:                {Type: field.TypeString, Column: subcontrol.FieldDescription},
+			subcontrol.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: subcontrol.FieldDescriptionJSON},
 			subcontrol.FieldAliases:                    {Type: field.TypeJSON, Column: subcontrol.FieldAliases},
 			subcontrol.FieldReferenceID:                {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
 			subcontrol.FieldAuditorReferenceID:         {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
@@ -2344,6 +2355,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldTaskKindID:           {Type: field.TypeString, Column: task.FieldTaskKindID},
 			task.FieldTitle:                {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDetails:              {Type: field.TypeString, Column: task.FieldDetails},
+			task.FieldDetailsJSON:          {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
 			task.FieldStatus:               {Type: field.TypeEnum, Column: task.FieldStatus},
 			task.FieldCategory:             {Type: field.TypeString, Column: task.FieldCategory},
 			task.FieldDue:                  {Type: field.TypeTime, Column: task.FieldDue},
@@ -11879,6 +11891,11 @@ func (f *ActionPlanFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *ActionPlanFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(actionplan.FieldDetailsJSON))
+}
+
 // WhereApprovalRequired applies the entql bool predicate on the approval_required field.
 func (f *ActionPlanFilter) WhereApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(actionplan.FieldApprovalRequired))
@@ -13061,6 +13078,11 @@ func (f *ControlFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(control.FieldDescription))
 }
 
+// WhereDescriptionJSON applies the entql json.RawMessage predicate on the description_json field.
+func (f *ControlFilter) WhereDescriptionJSON(p entql.BytesP) {
+	f.Where(p.Field(control.FieldDescriptionJSON))
+}
+
 // WhereAliases applies the entql json.RawMessage predicate on the aliases field.
 func (f *ControlFilter) WhereAliases(p entql.BytesP) {
 	f.Where(p.Field(control.FieldAliases))
@@ -13757,6 +13779,11 @@ func (f *ControlImplementationFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(controlimplementation.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *ControlImplementationFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(controlimplementation.FieldDetailsJSON))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ControlImplementationFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -13968,6 +13995,11 @@ func (f *ControlObjectiveFilter) WhereName(p entql.StringP) {
 // WhereDesiredOutcome applies the entql string predicate on the desired_outcome field.
 func (f *ControlObjectiveFilter) WhereDesiredOutcome(p entql.StringP) {
 	f.Where(p.Field(controlobjective.FieldDesiredOutcome))
+}
+
+// WhereDesiredOutcomeJSON applies the entql json.RawMessage predicate on the desired_outcome_json field.
+func (f *ControlObjectiveFilter) WhereDesiredOutcomeJSON(p entql.BytesP) {
+	f.Where(p.Field(controlobjective.FieldDesiredOutcomeJSON))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -20096,6 +20128,11 @@ func (f *InternalPolicyFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *InternalPolicyFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(internalpolicy.FieldDetailsJSON))
+}
+
 // WhereApprovalRequired applies the entql bool predicate on the approval_required field.
 func (f *InternalPolicyFilter) WhereApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(internalpolicy.FieldApprovalRequired))
@@ -21985,6 +22022,11 @@ func (f *NoteFilter) WhereOwnerID(p entql.StringP) {
 // WhereText applies the entql string predicate on the text field.
 func (f *NoteFilter) WhereText(p entql.StringP) {
 	f.Where(p.Field(note.FieldText))
+}
+
+// WhereTextJSON applies the entql json.RawMessage predicate on the text_json field.
+func (f *NoteFilter) WhereTextJSON(p entql.BytesP) {
+	f.Where(p.Field(note.FieldTextJSON))
 }
 
 // WhereNoteRef applies the entql string predicate on the note_ref field.
@@ -25226,6 +25268,11 @@ func (f *ProcedureFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *ProcedureFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(procedure.FieldDetailsJSON))
+}
+
 // WhereApprovalRequired applies the entql bool predicate on the approval_required field.
 func (f *ProcedureFilter) WhereApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(procedure.FieldApprovalRequired))
@@ -27150,14 +27197,29 @@ func (f *RiskFilter) WhereMitigation(p entql.StringP) {
 	f.Where(p.Field(risk.FieldMitigation))
 }
 
+// WhereMitigationJSON applies the entql json.RawMessage predicate on the mitigation_json field.
+func (f *RiskFilter) WhereMitigationJSON(p entql.BytesP) {
+	f.Where(p.Field(risk.FieldMitigationJSON))
+}
+
 // WhereDetails applies the entql string predicate on the details field.
 func (f *RiskFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(risk.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *RiskFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(risk.FieldDetailsJSON))
+}
+
 // WhereBusinessCosts applies the entql string predicate on the business_costs field.
 func (f *RiskFilter) WhereBusinessCosts(p entql.StringP) {
 	f.Where(p.Field(risk.FieldBusinessCosts))
+}
+
+// WhereBusinessCostsJSON applies the entql json.RawMessage predicate on the business_costs_json field.
+func (f *RiskFilter) WhereBusinessCostsJSON(p entql.BytesP) {
+	f.Where(p.Field(risk.FieldBusinessCostsJSON))
 }
 
 // WhereStakeholderID applies the entql string predicate on the stakeholder_id field.
@@ -28281,6 +28343,11 @@ func (f *SubcontrolFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldDescription))
 }
 
+// WhereDescriptionJSON applies the entql json.RawMessage predicate on the description_json field.
+func (f *SubcontrolFilter) WhereDescriptionJSON(p entql.BytesP) {
+	f.Where(p.Field(subcontrol.FieldDescriptionJSON))
+}
+
 // WhereAliases applies the entql json.RawMessage predicate on the aliases field.
 func (f *SubcontrolFilter) WhereAliases(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldAliases))
@@ -29382,6 +29449,11 @@ func (f *TaskFilter) WhereTitle(p entql.StringP) {
 // WhereDetails applies the entql string predicate on the details field.
 func (f *TaskFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(task.FieldDetails))
+}
+
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *TaskFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(task.FieldDetailsJSON))
 }
 
 // WhereStatus applies the entql string predicate on the status field.

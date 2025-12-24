@@ -563,8 +563,8 @@ func (r *Router) AddGraphQLToOpenAPI() {
 	response := openapi3.NewResponse()
 	response.WithDescription("Successful GraphQL response")
 	response.WithJSONSchema(responseSchema)
-	operation.AddResponse(200, response)        // nolint:mnd
-	operationHistory.AddResponse(200, response) // nolint:mnd
+	operation.AddResponse(200, response)        //nolint:mnd
+	operationHistory.AddResponse(200, response) //nolint:mnd
 
 	// Add the operation to the OpenAPI spec
 	r.OAS.AddOperation("/query", "POST", operation)

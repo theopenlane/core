@@ -167,7 +167,7 @@ func buildLimiters(conf *Config) []*RateLimiter {
 
 		expiration := opt.Expiration
 		if expiration <= 0 {
-			expiration = 2 * window // nolint:mnd
+			expiration = 2 * window //nolint:mnd
 		}
 
 		flush := opt.FlushInterval

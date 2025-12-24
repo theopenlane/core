@@ -698,6 +698,7 @@ Auth settings including oauth2 providers and token configuration
 |**jwkscachettl**|`integer`||no|
 |[**redis**](#authtokenredis)|`object`||no|
 |[**apitokens**](#authtokenapitokens)|`object`||no|
+|**assessmentaccessduration**|`integer`||no|
 
 **Additional Properties:** not allowed  
 **Example**

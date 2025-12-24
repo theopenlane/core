@@ -90,14 +90,14 @@ func (s *Server) JWKS(w http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		w.Header().Add("Content-Type", "text/plain")
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error())) // nolint: errcheck
+		w.Write([]byte(err.Error())) //nolint:errcheck
 
 		return
 	}
 
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(keys) // nolint: errcheck
+	json.NewEncoder(w).Encode(keys) //nolint:errcheck
 }
 
 func (s *Server) KeysURL() string {

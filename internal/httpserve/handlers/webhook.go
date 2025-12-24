@@ -261,7 +261,8 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 
 	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
-		SetExpiresAt(time.Now().Add(-24 * time.Hour)). // nolint:mnd // set expiration to 24 hours ago
+		// set expiration to 24 hours
+		SetExpiresAt(time.Now().Add(-24 * time.Hour)). //nolint:mnd
 		SetRevokedAt(time.Now()).
 		SetRevokedReason("subscription paused or deleted").
 		SetRevokedBy("entitlements_engine").

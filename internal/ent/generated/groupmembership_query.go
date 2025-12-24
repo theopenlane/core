@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // GroupMembershipQuery is the builder for querying GroupMembership entities.
@@ -853,21 +854,20 @@ func (_q *GroupMembershipQuery) WithNamedEvents(name string, opts ...func(*Event
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (gmq *GroupMembershipQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "GroupMembership").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, gmq.ctx, ent.OpQueryIDs)
-	if err := gmq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return gmq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, gmq, qr, gmq.inters)
+	ids, err := gmq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "GroupMembership").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "GroupMembership").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

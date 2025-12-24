@@ -213,6 +213,24 @@ func (_u *TaskUpdate) ClearDetails() *TaskUpdate {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *TaskUpdate) SetDetailsJSON(v []interface{}) *TaskUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *TaskUpdate) AppendDetailsJSON(v []interface{}) *TaskUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *TaskUpdate) ClearDetailsJSON() *TaskUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *TaskUpdate) SetStatus(v enums.TaskStatus) *TaskUpdate {
 	_u.mutation.SetStatus(v)
@@ -1101,6 +1119,17 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(task.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(task.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, task.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(task.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
@@ -2127,6 +2156,24 @@ func (_u *TaskUpdateOne) ClearDetails() *TaskUpdateOne {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *TaskUpdateOne) SetDetailsJSON(v []interface{}) *TaskUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *TaskUpdateOne) AppendDetailsJSON(v []interface{}) *TaskUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *TaskUpdateOne) ClearDetailsJSON() *TaskUpdateOne {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *TaskUpdateOne) SetStatus(v enums.TaskStatus) *TaskUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -3045,6 +3092,17 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(task.FieldDetails, field.TypeString)
+	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(task.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, task.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(task.FieldDetailsJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)

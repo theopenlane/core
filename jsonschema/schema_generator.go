@@ -1414,8 +1414,6 @@ func hasSecretChildren(v reflect.Value, prefix string) bool {
 }
 
 // hasNonSecretChildren checks if a struct has any non-sensitive child fields
-//
-//nolint:unused // actually used but linter doesn't see it
 func hasNonSecretChildren(v reflect.Value, prefix string) bool {
 	if !v.IsValid() || v.Kind() != reflect.Struct {
 		return false

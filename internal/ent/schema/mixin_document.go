@@ -101,6 +101,12 @@ func getDocumentFields(documentType string) []ent.Field {
 				entx.FieldSearchable(),
 			).
 			Comment(fmt.Sprintf("details of the %s", documentType)),
+		field.JSON("details_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment(fmt.Sprintf("structured details of the %s in JSON format", documentType)),
 		field.Bool("approval_required").
 			Default(true).
 			Optional().

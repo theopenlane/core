@@ -1,4 +1,4 @@
-h1:o31JNtTL+cauRzsjYGfVhjaG6C4AWzojw1JfBZSZ5oE=
+h1:vH6+fKiMqG8CTYnBRk85SLPYS2r2E5rXVtsPRADeQHY=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -97,3 +97,7 @@ h1:o31JNtTL+cauRzsjYGfVhjaG6C4AWzojw1JfBZSZ5oE=
 20251209222810_task_edge_task.sql h1:OcnzO0nATMAs2DxaD4SH7nc4l15Wlm9yg08kgyAfrSQ=
 20251210195522_plate_discussions.sql h1:4l7E1AvMbJMtun86Xth1BcJDhIU+Cj3ezJ5v7qpV9hw=
 20251213220033_objectownedworkflows.sql h1:r5OBmC7cslSeU1xyyeaR8g5cVqWKKR+j4pwABLyblqM=
+20251218005250_watermark_status.sql h1:irLacIjUnTNhG+yEn5uVFR9CfAW6hXZ5FXE5gPHB/gk=
+20251218005253_watermark_status_history.sql h1:4cIfiTI+YstPFVzxLzgpheRwIdnbosj/4Rof0vDXrVY=
+20251218191509_plate_json.sql h1:/b1R7StxBM+0ldE370scNjQFWpF4OZZaly0fwASqZvM=
+20251218191513_plate_json_history.sql h1:2LpqqO8OG3Jy6xkSoMtvUCcEUsl08oF6wP/+2F767V0=

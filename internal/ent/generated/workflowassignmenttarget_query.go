@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // WorkflowAssignmentTargetQuery is the builder for querying WorkflowAssignmentTarget entities.
@@ -796,21 +797,20 @@ func (_q *WorkflowAssignmentTargetQuery) Modify(modifiers ...func(s *sql.Selecto
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (watq *WorkflowAssignmentTargetQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowAssignmentTarget").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, watq.ctx, ent.OpQueryIDs)
-	if err := watq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return watq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, watq, qr, watq.inters)
+	ids, err := watq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowAssignmentTarget").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowAssignmentTarget").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

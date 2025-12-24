@@ -56,6 +56,28 @@ func (ec *executionContext) marshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNAny2interface(ctx context.Context, v any) (any, error) {
+	res, err := graphql.UnmarshalAny(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNAny2interface(ctx context.Context, sel ast.SelectionSet, v any) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	_ = sel
+	res := graphql.MarshalAny(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx context.Context, v any) (models.AssessmentMethod, error) {
 	var res models.AssessmentMethod
 	err := res.UnmarshalGQL(v)
@@ -214,6 +236,42 @@ func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) unmarshalOAny2ᚕinterfaceᚄ(ctx context.Context, v any) ([]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNAny2interface(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOAny2ᚕinterfaceᚄ(ctx context.Context, sel ast.SelectionSet, v []any) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNAny2interface(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, v any) ([]models.AssessmentMethod, error) {

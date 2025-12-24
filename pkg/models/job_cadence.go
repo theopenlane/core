@@ -69,23 +69,23 @@ func (c *JobCadence) Validate() error {
 	}
 
 	if val := enums.ToJobCadenceFrequency(c.Frequency.String()); *val == enums.JobCadenceFrequencyInvalid {
-		return errors.New("invalid frequency") // nolint:err113
+		return errors.New("invalid frequency") //nolint:err113
 	}
 
 	// time of the day must be required
 	if c.Time == "" {
-		return errors.New("time is required for cadence configuration") // nolint:err113
+		return errors.New("time is required for cadence configuration") //nolint:err113
 	}
 
 	if c.Frequency.String() == enums.JobCadenceFrequencyWeekly.String() {
 		if len(c.Days) == 0 {
-			return errors.New("days must be specified for weekly cadence") // nolint:err113
+			return errors.New("days must be specified for weekly cadence") //nolint:err113
 		}
 
 		// make sure we cannot have days like ["sunday", "sunday"]
 		for _, day := range c.Days {
 			if _, ok := validWeekdaysSet[day.String()]; !ok {
-				return fmt.Errorf("invalid weekday: %s", day) // nolint:err113
+				return fmt.Errorf("invalid weekday: %s", day) //nolint:err113
 			}
 		}
 
@@ -102,23 +102,23 @@ func (c *JobCadence) Validate() error {
 			s := day.String()
 
 			if _, ok := validSet[s]; !ok {
-				return fmt.Errorf("invalid weekday: %s", s) // nolint:err113
+				return fmt.Errorf("invalid weekday: %s", s) //nolint:err113
 			}
 
 			if _, dup := seen[s]; dup {
-				return fmt.Errorf("duplicate weekday: %s", s) // nolint:err113
+				return fmt.Errorf("duplicate weekday: %s", s) //nolint:err113
 			}
 
 			seen[s] = struct{}{}
 		}
 
 		if len(c.Days) > len(validSet) {
-			return fmt.Errorf("too many weekdays: max allowed is %d", len(validSet)) // nolint:err113
+			return fmt.Errorf("too many weekdays: max allowed is %d", len(validSet)) //nolint:err113
 		}
 	}
 
 	if _, err := time.Parse("15:04", c.Time); err != nil {
-		return fmt.Errorf("invalid time format: %w", err) // nolint:err113
+		return fmt.Errorf("invalid time format: %w", err) //nolint:err113
 	}
 
 	return nil
@@ -186,6 +186,6 @@ func (c JobCadence) Next(from time.Time) (time.Time, error) {
 		return expectedNextRun, nil
 
 	default:
-		return time.Time{}, fmt.Errorf("unsupported cadence frequency: %s", c.Frequency) // nolint:err113
+		return time.Time{}, fmt.Errorf("unsupported cadence frequency: %s", c.Frequency) //nolint:err113
 	}
 }

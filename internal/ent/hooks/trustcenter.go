@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"entgo.io/ent/privacy"
 
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
@@ -92,7 +93,7 @@ func HookTrustCenter() ent.Hook {
 					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
 					SetOverview(defaultOverview).
 					SetEnvironment(enums.TrustCenterEnvironmentLive).
-					Save(ctx)
+					Save(privacy.DecisionContext(ctx, privacy.Allow))
 				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create live trust center setting")
 
@@ -128,7 +129,7 @@ func HookTrustCenter() ent.Hook {
 					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
 					SetOverview(defaultOverview).
 					SetEnvironment(enums.TrustCenterEnvironmentPreview).
-					Save(ctx)
+					Save(privacy.DecisionContext(ctx, privacy.Allow))
 				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create preview trust center setting")
 
@@ -164,7 +165,7 @@ func HookTrustCenter() ent.Hook {
 
 			if err := m.Client().TrustCenterWatermarkConfig.Create().
 				SetInput(input).
-				Exec(ctx); err != nil {
+				Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to create trust center watermark config")
 
 				return nil, err

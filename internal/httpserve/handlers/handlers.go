@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"reflect"
+	"sync"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-webauthn/webauthn/webauthn"
@@ -180,12 +181,19 @@ func BindAndValidateWithRequest[T any](ctx echo.Context, h *Handler, op *openapi
 	return BindAndValidate[T](ctx)
 }
 
+// opMutex protects OpenAPI registration operations
+var opMutex sync.Mutex
+
 // BindAndValidateWithAutoRegistry registers the request and response with the OpenAPI specification using dynamic schema registration
 // and then binds and validates the payload. This automatically detects response examples using the ExampleProvider interface.
 func BindAndValidateWithAutoRegistry[T any, R any](ctx echo.Context, _ *Handler, op *openapi3.Operation, requestExample T, responseExample R, registry interface {
 	GetOrRegister(any) (*openapi3.SchemaRef, error)
 }) (*T, error) {
 	if op != nil && registry != nil {
+		// lock to prevent concurrent map writes
+		opMutex.Lock()
+		defer opMutex.Unlock()
+
 		// Auto-detect and register path parameters from struct tags
 		registerPathParameters(requestExample, op)
 
@@ -353,6 +361,10 @@ func BindAndValidateQueryParams[T any](ctx echo.Context, op *openapi3.Operation,
 func BindAndValidateQueryParamsWithResponse[T any, R any](ctx echo.Context, op *openapi3.Operation, requestExample T, responseExample R, registry SchemaRegistry) (*T, error) {
 	// Register query parameters and response schema in OpenAPI schema during registration
 	if op != nil && registry != nil {
+		// lock to prevent concurrent map writes
+		opMutex.Lock()
+		defer opMutex.Unlock()
+
 		// Use reflection to extract query parameter information
 		typ := reflect.TypeOf(requestExample)
 

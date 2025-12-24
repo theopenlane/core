@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	features "github.com/theopenlane/core/internal/entitlements/features"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
+
+	features "github.com/theopenlane/core/internal/entitlements/features"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

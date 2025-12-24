@@ -45,7 +45,7 @@ omit_gqlgen_version_in_file_notice: true
 # nullable_input_omittable: true
 
 # Optional: set to speed up generation time by not performing a final validation pass.
-# skip_validation: true
+skip_validation: true
 
 # Optional: set to skip running `go mod tidy` when generating server code
 # skip_mod_tidy: true
@@ -147,3 +147,6 @@ models:
   WorkflowEventPayload:
     model:
       - github.com/theopenlane/core/pkg/models.WorkflowEventPayload
+  Map:
+    model:
+      - github.com/99designs/gqlgen/graphql.Map

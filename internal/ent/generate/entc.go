@@ -6,7 +6,6 @@ package main
 
 import (
 	"embed"
-	"flag"
 	"os"
 
 	"github.com/rs/zerolog/log"
@@ -44,11 +43,7 @@ var (
 	//go:embed templates/entgql/*.tmpl
 	_entqlTemplates embed.FS
 
-	// add flags for skipping parts of generation for simple dev runs
-	skipHistory = flag.Bool("skip-history", false, "skip history schema generation")
-	skipModules = flag.Bool("skip-modules", false, "skip module per schema generation")
-
-	onlySchemas = flag.Bool("only-schemas", false, "only generate base schema, skip history, modules, and exportable validation")
+	buildFlags = "-tags=codegen"
 )
 
 const (
@@ -59,8 +54,11 @@ const (
 	graphQueryDir         = graphDir + "query/"
 	graphHistoryQueryDir  = graphDir + "query/history/"
 
-	schemaPath        = "./internal/ent/schema"
-	historySchemaPath = "./internal/ent/historyschema"
+	schemaPath           = "./internal/ent/schema"
+	mixinPath            = "./internal/ent/mixin"
+	historySchemaPath    = "./internal/ent/historyschema"
+	entTemplatesPath     = "./internal/ent/generate/templates"
+	entGenerateConfigDir = "./internal/ent/generate"
 
 	templateDir   = "./internal/ent/generate/templates/ent"
 	featureMapDir = "./internal/entitlements/features/"
@@ -68,6 +66,26 @@ const (
 	entGeneratedPath        = "internal/ent/generated"
 	entGeneratedHistoryPath = "internal/ent/historygenerated"
 	entGeneratedAuthzPath   = "internal/ent/authzgenerated"
+
+	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
+	historyInputChecksumFile = "./internal/ent/checksum/.history_schema_checksum"
+)
+
+var (
+	// changes to these paths should trigger full schema generation
+	mainSchemaInputPaths = []string{
+		schemaPath,
+		mixinPath,
+		entTemplatesPath,
+		entGenerateConfigDir,
+	}
+
+	// changes to these paths should trigger history schema generation
+	historySchemaInputPaths = []string{
+		schemaPath,
+		entGeneratedPath,
+		entGenerateConfigDir,
+	}
 )
 
 var enabledFeatures = []gen.Feature{
@@ -93,31 +111,56 @@ func main() {
 		log.Fatal().Err(err).Msg("creating schema directory")
 	}
 
-	log.Info().Msg("running ent codegen with extensions")
+	log.Info().Msg("running ent codegen")
 
-	// add the history hook on the main schema because the auditing template has be
-	// based off of the main schema
-	schemaGenerate(getEntfgaExtension(), getEntGqlExtension(), getHistoryExtension())
-	if *onlySchemas {
-		// if only generating schemas, return now
-		log.Info().Msg("only-schemas flag set, skipping history and module generation")
-		return
+	// check if there were schema changes before running full codegen
+	hasChanges, err := genhelpers.HasSchemaChanges(schemaInputChecksumFile, mainSchemaInputPaths...)
+	if err != nil {
+		log.Warn().Err(err).Msg("failed to check for schema changes, running history generation anyway")
+		hasChanges = true
 	}
 
-	if !*skipHistory {
+	if hasChanges {
+		schemaGenerate(getEntfgaExtension(hasChanges), getEntGqlExtension(), getHistoryExtension(hasChanges))
+	} else {
+		log.Info().Msg("no schema changes detected, skipping main schema codegen")
+	}
+
+	// only run if there were changes to the internal/ent/generated or internal/ent/schema directories
+	hasChangesForHistory, err := genhelpers.HasSchemaChanges(historyInputChecksumFile, historySchemaInputPaths...)
+	if err != nil {
+		log.Warn().Err(err).Msg("failed to check for schema changes, running history generation anyway")
+		hasChangesForHistory = true
+	}
+
+	if hasChangesForHistory {
 		historySchemaGenerate(getEntHistoryGqlExtension())
 	} else {
-		log.Info().Msg("skipping history schema generation")
+		log.Info().Msg("no schema changes detected, skipping history generation")
 	}
 
 	log.Info().Msg("generating module per schema for entitlements")
-
-	if !*skipModules {
+	if hasChanges {
 		if err := genfeatures.GenerateModulePerSchema(schemaPath, featureMapDir); err != nil {
 			log.Fatal().Err(err).Msg("generating module per schema")
 		}
-	} else {
-		log.Info().Msg("skipping module per schema generation")
+	}
+
+	log.Info().Msg("ent codegen completed successfully, setting new schema checksums")
+
+	// set final schema checksum
+	if hasChanges {
+		err := genhelpers.SetSchemaChecksum(schemaInputChecksumFile, mainSchemaInputPaths...)
+		if err != nil {
+			log.Warn().Err(err).Msg("error setting schema checksum")
+		}
+	}
+
+	if hasChangesForHistory {
+		err := genhelpers.SetSchemaChecksum(historyInputChecksumFile, historySchemaInputPaths...)
+		if err != nil {
+			log.Warn().Err(err).Msg("error setting history schema checksum")
+		}
 	}
 }
 
@@ -125,22 +168,27 @@ func main() {
 // The only change to the template is the function used to get the totalCount field uses
 // CountIDs(ctx) instead of `Count(ctx)`. The rest is a direct copy of the default template from:
 // https://github.com/ent/contrib/tree/master/entgql/template
+// 12/18/2025 MKA - This was modified to remove the use of prepareQuery and withInterceptors to prevent duplicate query execution
 func WithGqlWithTemplates() entgql.ExtensionOption {
 	paginationTmpl := gen.MustParse(gen.NewTemplate("node").
 		Funcs(entgql.TemplateFuncs).ParseFS(_entqlTemplates, "templates/entgql/gql_where.tmpl", "templates/entgql/pagination.tmpl"))
 	return entgql.WithTemplates(append(entgql.AllTemplates, paginationTmpl)...)
 }
 
-func getEntfgaExtension() *entfga.AuthzExtension {
+func getEntfgaExtension(hasChanges bool) *entfga.AuthzExtension {
 	entfgaExt := entfga.New(
 		entfga.WithSoftDeletes(),
 		entfga.WithSchemaPath(schemaPath),
 	)
 
-	// generate authz checks, this needs to happen before we regenerate the schema
-	// because the authz checks are generated based on the schema
-	if err := entfgaExt.GenerateAuthzChecks(); err != nil {
-		log.Fatal().Err(err).Msg("generating authz checks")
+	if hasChanges {
+		// generate authz checks, this needs to happen before we regenerate the schema
+		// because the authz checks are generated based on the schema
+		if err := entfgaExt.GenerateAuthzChecks(); err != nil {
+			log.Fatal().Err(err).Msg("generating authz checks")
+		}
+	} else {
+		log.Info().Msg("no schema changes detected, skipping authz check generation")
 	}
 
 	return entfgaExt
@@ -195,9 +243,9 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 }
 
 // getHistoryExtension generates the history schemas and returns the history extension to be used in the ent codegen
-func getHistoryExtension() *history.Extension {
+func getHistoryExtension(hasChanges bool) *history.Extension {
 	// generate the history schemas
-	log.Info().Msg("generating the history schemas")
+	log.Info().Msg("creating history extension")
 
 	historyExt := history.New(
 		history.WithImmutableFields(),
@@ -213,8 +261,13 @@ func getHistoryExtension() *history.Extension {
 		history.WithUpdatedByFromSchema(history.ValueTypeString, false),
 	)
 
-	if err := historyExt.GenerateSchemas(); err != nil {
-		log.Fatal().Err(err).Msg("generating history schema")
+	if hasChanges {
+		log.Info().Msg("main schema changes detected, updating history schemas")
+		if err := historyExt.GenerateSchemas(buildFlags); err != nil {
+			log.Fatal().Err(err).Msg("generating history schemas")
+		}
+	} else {
+		log.Info().Msg("no schema changes detected, skipping history schema generation")
 	}
 
 	return historyExt
@@ -225,7 +278,7 @@ func exportableSchema() {
 	exportableGen := entx.NewExportableGenerator(schemaPath, "internal/ent/hooks").
 		WithPackage("hooks")
 
-	if err := exportableGen.Generate(); err != nil {
+	if err := exportableGen.Generate(buildFlags); err != nil {
 		log.Fatal().Err(err).Msg("generating exportable validation")
 	}
 }
@@ -239,6 +292,7 @@ func schemaGenerate(extensions ...entc.Extension) {
 
 	if err := entc.Generate(schemaPath, &gen.Config{
 		Target: "./" + entGeneratedPath,
+		Header: "// Code generated by ent, DO NOT EDIT.\n",
 		Hooks: []gen.Hook{
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
@@ -249,8 +303,9 @@ func schemaGenerate(extensions ...entc.Extension) {
 			accessMapExt.Hook(),
 			exportenums.New().Hook(),
 		},
-		Package:  "github.com/theopenlane/core/" + entGeneratedPath,
-		Features: enabledFeatures,
+		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
+		Features:   enabledFeatures,
+		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
 			entc.DependencyName("EntConfig"),
@@ -317,15 +372,17 @@ func schemaGenerate(extensions ...entc.Extension) {
 }
 
 func historySchemaGenerate(extensions ...entc.Extension) {
-	log.Info().Msg("generating history schemas")
+	log.Info().Msg("generating history schema codegen")
 	if err := entc.Generate(historySchemaPath, &gen.Config{
 		Target: "./" + entGeneratedHistoryPath,
+		Header: "//go:build !enthistorycodegen\n// Code generated by ent, DO NOT EDIT.\n",
 		Hooks: []gen.Hook{
 			genhooks.GenSchema(graphHistorySchemaDir),
 			genhooks.GenQuery(graphHistoryQueryDir),
 		},
-		Package:  "github.com/theopenlane/core/" + entGeneratedHistoryPath,
-		Features: enabledFeatures,
+		Package:    "github.com/theopenlane/core/" + entGeneratedHistoryPath,
+		Features:   enabledFeatures,
+		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
 			entc.DependencyName("EntConfig"),

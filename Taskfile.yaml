@@ -54,9 +54,15 @@ tasks:
       - go generate ./...
       - task: tidy
 
+  regenerate:
+    desc: regenerate all codegen artifacts from scratch, removing checksums to force regeneration
+    cmds:
+      - task: generate:removechecksums
+      - task: generate:checksums
+
   generate:checksums:
     desc: Generate with checksum tracking for CI optimization
-    aliases: [regenerate, generate]
+    aliases: [generate]
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
@@ -126,6 +132,20 @@ tasks:
       - go generate pkg/catalog/generate.go
       - go generate pkg/corejobs/internal/generate.go
       - go generate internal/httpserve/specs/generate/generate.go
+
+  generate:removechecksums:
+    silent: true
+    desc: Remove all individual schema checksum files to force regeneration
+    cmds:
+      - rm -f internal/ent/checksum/.schema_checksum # ent schema checksum
+      - rm -f internal/ent/checksum/.history_schema_checksum # ent history schema checksum
+      - rm -f internal/graphapi/checksum/.schema_checksum # gqlgen schema checksum
+      - rm -f internal/graphapi/checksum/.history_schema_checksum # gqlgen history schema checksum
+      - rm -f internal/graphapi/clientschema/checksum/.schema_checksum # gqlgen client schema checksum
+      - rm -f internal/graphapi/historyschema/checksum/.history_schema_checksum # gqlgen history schema checksum
+      - rm -f internal/graphapi/testclient/checksum/.client_checksum # gqlgen test client checksum
+      - rm -rf .task/checksum/* # all taskfile checksums
+      - echo "Removed all schema checksum files"
 
   # Buildkite automation tasks
   buildkite:draft-pr:
@@ -214,7 +234,7 @@ tasks:
           fi
         else
           echo "🧹 Linting all Go files..."
-          golangci-lint run --config=.golangci.yaml --verbose
+          golangci-lint run . --config=.golangci.yaml --verbose
         fi
 
   go:lint:ci:

@@ -251,6 +251,12 @@ func (_c *InternalPolicyCreate) SetNillableDetails(v *string) *InternalPolicyCre
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *InternalPolicyCreate) SetDetailsJSON(v []interface{}) *InternalPolicyCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_c *InternalPolicyCreate) SetApprovalRequired(v bool) *InternalPolicyCreate {
 	_c.mutation.SetApprovalRequired(v)
@@ -955,6 +961,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(internalpolicy.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)

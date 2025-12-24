@@ -19,7 +19,7 @@ import (
 
 const (
 	// cookieExpiryMinutes is the duration for which the cookies are valid
-	cookieExpiryMinutes = 10 * time.Minute // nolint:revive
+	cookieExpiryMinutes = 10 * time.Minute //nolint:revive
 )
 
 // OpenlaneClient wraps the Openlane API client methods to form a single client interface

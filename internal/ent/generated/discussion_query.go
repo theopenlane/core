@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // DiscussionQuery is the builder for querying Discussion entities.
@@ -1056,21 +1057,20 @@ func (_q *DiscussionQuery) WithNamedComments(name string, opts ...func(*NoteQuer
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (dq *DiscussionQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "Discussion").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, dq.ctx, ent.OpQueryIDs)
-	if err := dq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return dq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, dq, qr, dq.inters)
+	ids, err := dq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Discussion").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "Discussion").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

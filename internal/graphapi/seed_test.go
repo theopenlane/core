@@ -61,7 +61,7 @@ func (suite *GraphTestSuite) userBuilder(ctx context.Context, t *testing.T, feat
 
 	// get the personal org for the user
 	testPersonalOrg, err := testUser.UserInfo.Edges.Setting.DefaultOrg(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	testUser.PersonalOrgID = testPersonalOrg.ID
 
@@ -118,7 +118,7 @@ func (suite *GraphTestSuite) setupTestData(ctx context.Context, t *testing.T) {
 		suite.client.apiWithToken = suite.setupAPITokenClient(testUser1.UserCtx, t)
 	})
 
-	requireNoError(seedErr)
+	requireNoError(t, seedErr)
 }
 
 func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) *testclient.TestClient {
@@ -134,7 +134,7 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 		openlaneclient.WithInterceptors(
 			openlaneclient.WithOrganizationHeader(user.OrganizationID),
 		))
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return apiClientPat
 }
@@ -148,7 +148,7 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 	}
 
 	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
-	requireNoError(err)
+	requireNoError(t, err)
 
 	return apiClientToken
 }
@@ -178,7 +178,7 @@ func (suite *GraphTestSuite) systemAdminBuilder(ctx context.Context, t *testing.
 
 	// add system admin relation for user
 	_, err := suite.client.db.Authz.WriteTupleKeys(context.Background(), []fgax.TupleKey{fgax.GetTupleKey(req)}, nil)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	// set the user as a system admin
 	newUser.UserCtx = auth.NewTestContextForSystemAdmin(newUser.ID, newUser.OrganizationID)

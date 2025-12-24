@@ -125,7 +125,7 @@ func (e Extension) Hook() gen.Hook {
 			}
 
 			outputDir := e.config.OutputDir
-			if err := os.MkdirAll(outputDir, 0755); err != nil { //nolint: mnd
+			if err := os.MkdirAll(outputDir, 0755); err != nil { //nolint:mnd
 				return fmt.Errorf("creating output directory: %w", err)
 			}
 

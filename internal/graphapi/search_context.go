@@ -229,8 +229,6 @@ func (c *fieldMatchChecker) check(entity any, fieldNames []string) []string {
 
 // highlightSearchContext processes search results using type switches for better type safety
 // This is a non-magical alternative to processSearchResults that explicitly handles each type
-//
-//nolint:gocyclo
 func highlightSearchContext(_ context.Context, query string, results any, tracker *searchCtxTracker) {
 	if results == nil || tracker == nil {
 		return

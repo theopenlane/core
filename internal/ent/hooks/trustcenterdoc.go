@@ -64,7 +64,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			}
 
 			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
-			if !watermarkingEnabled {
+			if !watermarkingEnabledSet {
 				orgID, _ := auth.GetOrganizationIDFromContext(ctx)
 
 				if orgID != "" {
@@ -76,6 +76,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 						watermarkingEnabled = config.IsEnabled
 
 						m.SetWatermarkingEnabled(watermarkingEnabled)
+						watermarkingEnabledSet = true
 					}
 				}
 			}
@@ -140,7 +141,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 }
 
 // HookUpdateTrustCenterDoc is an ent hook that processes file uploads and sets appropriate fields and permissions on update
-func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
+func HookUpdateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
 			// Skip hook logic if this is an internal operation from the create hook
