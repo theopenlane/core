@@ -53,9 +53,8 @@ formatters:
     paths:
       - internal/graphapi/generated/gen_models.go
       - internal/graphapi/historygenerated/gen_models.go
-      - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - pkg/entitlements/test/*
-      - cmd/cli/cmd/*
+      - cli/cmd/*
       - pkg/events/soiree/examples/*
       - internal/ent/hush/examples/*

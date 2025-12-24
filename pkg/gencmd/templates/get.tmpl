@@ -7,7 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -59,7 +60,7 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("id")
 	if id != "" {
-		o, err := client.Get{{ .Name | ToUpperCamel | ToPlural }}(ctx, nil, nil, &openlaneclient.{{ .Name | ToUpperCamel }}WhereInput{
+		o, err := client.Get{{ .Name | ToUpperCamel | ToPlural }}(ctx, nil, nil, &graphclient.{{ .Name | ToUpperCamel }}WhereInput{
 			Ref: &id,
 		})
 		cobra.CheckErr(err)

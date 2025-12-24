@@ -457,7 +457,7 @@ steps:
         if_changed:
           - "**.go"
           - go.{mod,sum}
-          - cmd/cli/**
+          - cli/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"

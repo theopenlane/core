@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/cli/cmd"
+	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -31,16 +31,16 @@ func consoleOutput(e any) error {
 
 	// check the type of the {{ .Name | ToLowerCamel | ToPlural }} and print them in a table format
 	switch v := e.(type) {
-	case *openlaneclient.GetAll{{ .Name | ToUpperCamel | ToPlural }}:
-		var nodes []*openlaneclient.GetAll{{ .Name | ToUpperCamel | ToPlural }}_{{ .Name | ToUpperCamel | ToPlural }}_Edges_Node
+	case *openlane.GetAll{{ .Name | ToUpperCamel | ToPlural }}:
+		var nodes []*openlane.GetAll{{ .Name | ToUpperCamel | ToPlural }}_{{ .Name | ToUpperCamel | ToPlural }}_Edges_Node
 
 		for _, i := range v.{{ .Name | ToUpperCamel | ToPlural }}.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *openlaneclient.Get{{ .Name | ToUpperCamel | ToPlural }}:
-		var nodes []*openlaneclient.Get{{ .Name | ToUpperCamel | ToPlural }}_{{ .Name | ToUpperCamel | ToPlural }}_Edges_Node
+	case *openlane.Get{{ .Name | ToUpperCamel | ToPlural }}:
+		var nodes []*openlane.Get{{ .Name | ToUpperCamel | ToPlural }}_{{ .Name | ToUpperCamel | ToPlural }}_Edges_Node
 
 		for _, i := range v.{{ .Name | ToUpperCamel | ToPlural }}.Edges {
 			nodes = append(nodes, i.Node)
@@ -48,13 +48,13 @@ func consoleOutput(e any) error {
 
 		e = nodes
 	{{- if not .ListOnly }}
-	case *openlaneclient.Get{{ .Name | ToUpperCamel }}ByID:
+	case *openlane.Get{{ .Name | ToUpperCamel }}ByID:
 		e = v.{{ .Name | ToUpperCamel }}
-	case *openlaneclient.Create{{ .Name | ToUpperCamel }}:
+	case *openlane.Create{{ .Name | ToUpperCamel }}:
 		e = v.Create{{ .Name | ToUpperCamel }}.{{ .Name | ToUpperCamel }}
-	case *openlaneclient.Update{{ .Name | ToUpperCamel }}:
+	case *openlane.Update{{ .Name | ToUpperCamel }}:
 		e = v.Update{{ .Name | ToUpperCamel }}.{{ .Name | ToUpperCamel }}
-	case *openlaneclient.Delete{{ .Name | ToUpperCamel }}:
+	case *openlane.Delete{{ .Name | ToUpperCamel }}:
 		deletedTableOutput(v)
 		return nil
 	{{- end }}
@@ -63,11 +63,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlaneclient.{{ .Name | ToUpperCamel }}
+	var list []openlane.{{ .Name | ToUpperCamel }}
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlaneclient.{{ .Name | ToUpperCamel }}
+		var in openlane.{{ .Name | ToUpperCamel }}
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -88,7 +88,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlaneclient.{{ .Name | ToUpperCamel }}) {
+func tableOutput(out []openlane.{{ .Name | ToUpperCamel }}) {
 	// create a table writer
 	{{- if .HistoryCmd }}
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Ref", "Operation", "UpdatedAt", "UpdatedBy")
@@ -109,7 +109,7 @@ func tableOutput(out []openlaneclient.{{ .Name | ToUpperCamel }}) {
 
 {{- if not .ListOnly }}
 // deleteTableOutput prints the deleted id in a table format
-func deletedTableOutput(e *openlaneclient.Delete{{ .Name | ToUpperCamel }}) {
+func deletedTableOutput(e *openlane.Delete{{ .Name | ToUpperCamel }}) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "DeletedID")
 
 	writer.AddRow(e.Delete{{ .Name | ToUpperCamel }}.DeletedID)

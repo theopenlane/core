@@ -2,8 +2,8 @@ version: "3"
 
 includes:
   cli:
-    taskfile: ./cmd/cli/Taskfile.yaml
-    dir: ./cmd/cli
+    taskfile: ./cli/Taskfile.yaml
+    dir: ./cli
   docker:
     taskfile: ./docker/Taskfile.yaml
     dir: ./docker
@@ -103,9 +103,6 @@ tasks:
       - internal/graphapi/*.resolvers.go
       - internal/graphapi/testclient/graphqlclient.go
       - internal/graphapi/testclient/models.go
-      - pkg/openlaneclient/models.go
-      - pkg/openlaneclient/graphqlclient.go
-      - pkg/openlaneclient/models.go
       - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
     cmds:
@@ -386,12 +383,12 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: Runs go build for the openlane cli
     cmds:
-      - go build -tags cli -o openlane-cli ./cmd/cli
+      - go build -tags cli -o openlane-cli ./cli
 
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI
     cmds:
-      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cmd/cli
+      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cli
 
   go:all:
     aliases: [go]

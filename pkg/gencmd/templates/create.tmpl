@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/cli/cmd"
+	openlane "github.com/theopenlane/go-client"
 )
 
 var createCmd = &cobra.Command{
@@ -30,7 +30,7 @@ func init() {
 }
 
 // createValidation validates the required fields for the command
-func createValidation() (input openlaneclient.Create{{ .Name | ToUpperCamel }}Input, err error) {
+func createValidation() (input openlane.Create{{ .Name | ToUpperCamel }}Input, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
 
