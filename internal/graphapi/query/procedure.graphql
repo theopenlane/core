@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVProcedure($input: Upload!) {
   createBulkCSVProcedure(input: $input) {
     procedures {
@@ -61,38 +60,6 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
   }
 }
 
-mutation UpdateBulkProcedure($ids: [ID!]!, $input: UpdateProcedureInput!) {
-  updateBulkProcedure(ids: $ids, input: $input) {
-    procedures {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      procedureType
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-    updatedIDs
-  }
-}
-
 mutation CreateProcedure($input: CreateProcedureInput!) {
   createProcedure(input: $input) {
     procedure {
@@ -114,16 +81,16 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       updatedAt
       updatedBy
       editors {
-        edges{
-          node{
+        edges {
+          node {
             id
             name
           }
         }
       }
       blockedGroups {
-        edges{
-          node{
+        edges {
+          node {
             id
             name
           }
@@ -162,16 +129,16 @@ mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
       updatedAt
       updatedBy
       editors {
-        edges{
-          node{
+        edges {
+          node {
             id
             name
           }
         }
       }
       blockedGroups {
-        edges{
-          node{
+        edges {
+          node {
             id
             name
           }
@@ -186,6 +153,12 @@ mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
         name
       }
     }
+  }
+}
+
+mutation DeleteBulkProcedure($ids: [ID!]!) {
+  deleteBulkProcedure(ids: $ids) {
+    deletedIDs
   }
 }
 
@@ -217,16 +190,16 @@ query GetAllProcedures {
         updatedAt
         updatedBy
         editors {
-          edges{
-            node{
+          edges {
+            node {
               id
               name
             }
           }
         }
         blockedGroups {
-          edges{
-            node{
+          edges {
+            node {
               id
               name
             }
@@ -244,6 +217,7 @@ query GetAllProcedures {
     }
   }
 }
+
 query GetProcedureByID($procedureId: ID!) {
   procedure(id: $procedureId) {
     approvalRequired
@@ -264,16 +238,16 @@ query GetProcedureByID($procedureId: ID!) {
     updatedAt
     updatedBy
     editors {
-      edges{
-        node{
+      edges {
+        node {
           id
           name
         }
       }
     }
     blockedGroups {
-      edges{
-        node{
+      edges {
+        node {
           id
           name
         }
@@ -311,16 +285,16 @@ query GetProcedures($where: ProcedureWhereInput) {
         updatedAt
         updatedBy
         editors {
-          edges{
-            node{
+          edges {
+            node {
               id
               name
             }
           }
         }
         blockedGroups {
-          edges{
-            node{
+          edges {
+            node {
               id
               name
             }
@@ -338,6 +312,39 @@ query GetProcedures($where: ProcedureWhereInput) {
     }
   }
 }
+
+mutation UpdateBulkProcedure($ids: [ID!]!, $input: UpdateProcedureInput!) {
+  updateBulkProcedure(ids: $ids, input: $input) {
+    procedures {
+      approvalRequired
+      createdAt
+      createdBy
+      details
+      displayID
+      id
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      tags
+      updatedAt
+      updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
   updateProcedure(id: $updateProcedureId, input: $input) {
     procedure {
@@ -359,16 +366,16 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       updatedAt
       updatedBy
       editors {
-        edges{
-          node{
+        edges {
+          node {
             id
             name
           }
         }
       }
       blockedGroups {
-        edges{
-          node{
+        edges {
+          node {
             id
             name
           }
@@ -383,11 +390,5 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
         name
       }
     }
-  }
-}
-
-mutation DeleteBulkProcedure($ids: [ID!]!) {
-  deleteBulkProcedure(ids: $ids) {
-    deletedIDs
   }
 }

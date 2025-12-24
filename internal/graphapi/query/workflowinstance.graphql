@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVWorkflowInstance($input: Upload!) {
   createBulkCSVWorkflowInstance(input: $input) {
     workflowInstances {
@@ -93,6 +92,7 @@ query GetAllWorkflowInstances {
     }
   }
 }
+
 query GetWorkflowInstanceByID($workflowInstanceId: ID!) {
   workflowInstance(id: $workflowInstanceId) {
     context
@@ -139,6 +139,7 @@ query GetWorkflowInstances($first: Int, $last: Int, $where: WorkflowInstanceWher
     }
   }
 }
+
 mutation UpdateWorkflowInstance($updateWorkflowInstanceId: ID!, $input: UpdateWorkflowInstanceInput!) {
   updateWorkflowInstance(id: $updateWorkflowInstanceId, input: $input) {
     workflowInstance {
