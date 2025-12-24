@@ -1,5 +1,3 @@
-
-
 query GetAllSubcontrolHistories {
   subcontrolHistories {
     totalCount

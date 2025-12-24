@@ -60,38 +60,6 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
   }
 }
 
-mutation UpdateBulkInternalPolicy($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {
-  updateBulkInternalPolicy(ids: $ids, input: $input) {
-    internalPolicies {
-      approvalRequired
-      createdAt
-      createdBy
-      details
-      displayID
-      id
-      name
-      ownerID
-      policyType
-      reviewDue
-      reviewFrequency
-      revision
-      status
-      tags
-      updatedAt
-      updatedBy
-      approver {
-        id
-        name
-      }
-      delegate {
-        id
-        name
-      }
-    }
-    updatedIDs
-  }
-}
-
 mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
   createInternalPolicy(input: $input) {
     internalPolicy {
@@ -149,7 +117,10 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
 }
 
 mutation CreateUploadInternalPolicy($internalPolicyFile: Upload!, $ownerID: ID) {
-  createUploadInternalPolicy(internalPolicyFile: $internalPolicyFile, ownerID: $ownerID) {
+  createUploadInternalPolicy(
+    internalPolicyFile: $internalPolicyFile
+    ownerID: $ownerID
+  ) {
     internalPolicy {
       approvalRequired
       createdAt
@@ -211,7 +182,13 @@ mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
 }
 
 query GetAllInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [InternalPolicyOrder!]) {
-  internalPolicies(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+  internalPolicies(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -268,7 +245,14 @@ query GetAllInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: C
 }
 
 query GetInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: InternalPolicyWhereInput, $orderBy: [InternalPolicyOrder!]) {
-  internalPolicies(first: $first, last: $last, after: $after, before: $before, where: $where, orderBy: $orderBy) {
+  internalPolicies(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -365,6 +349,38 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
       id
       name
     }
+  }
+}
+
+mutation UpdateBulkInternalPolicy($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {
+  updateBulkInternalPolicy(ids: $ids, input: $input) {
+    internalPolicies {
+      approvalRequired
+      createdAt
+      createdBy
+      details
+      displayID
+      id
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      tags
+      updatedAt
+      updatedBy
+      approver {
+        id
+        name
+      }
+      delegate {
+        id
+        name
+      }
+    }
+    updatedIDs
   }
 }
 

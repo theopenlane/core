@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVDirectorySyncRun($input: Upload!) {
   createBulkCSVDirectorySyncRun(input: $input) {
     directorySyncRuns {
@@ -109,6 +108,7 @@ query GetAllDirectorySyncRuns {
     }
   }
 }
+
 query GetDirectorySyncRunByID($directorySyncRunId: ID!) {
   directorySyncRun(id: $directorySyncRunId) {
     completedAt
@@ -163,6 +163,7 @@ query GetDirectorySyncRuns($first: Int, $last: Int, $where: DirectorySyncRunWher
     }
   }
 }
+
 mutation UpdateDirectorySyncRun($updateDirectorySyncRunId: ID!, $input: UpdateDirectorySyncRunInput!) {
   updateDirectorySyncRun(id: $updateDirectorySyncRunId, input: $input) {
     directorySyncRun {

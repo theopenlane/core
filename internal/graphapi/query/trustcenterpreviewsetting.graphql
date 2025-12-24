@@ -23,4 +23,3 @@ mutation CreateTrustCenterPreviewSetting($input: CreateTrustCenterPreviewSetting
     }
   }
 }
-

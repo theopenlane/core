@@ -3,7 +3,6 @@
 package app
 
 import (
-	"os"
 	"path/filepath"
 	"runtime"
 )
@@ -17,13 +16,6 @@ var (
 		return "."
 	}()
 )
-
-func envOrDefault(key, fallback string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return fallback
-}
 
 func resolvePath(p string) string {
 	if filepath.IsAbs(p) {
