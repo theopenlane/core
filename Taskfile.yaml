@@ -130,7 +130,6 @@ tasks:
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
-      - go generate pkg/corejobs/internal/generate.go
       - go generate internal/httpserve/specs/generate/generate.go
 
   generate:removechecksums:
