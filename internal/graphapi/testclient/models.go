@@ -10312,6 +10312,7 @@ type File struct {
 	Secrets             *HushConnection              `json:"secrets"`
 	TrustcenterEntities *TrustcenterEntityConnection `json:"trustcenterEntities"`
 	PresignedURL        *string                      `json:"presignedURL,omitempty"`
+	Base64              *string                      `json:"base64,omitempty"`
 }
 
 func (File) IsNode() {}
