@@ -4431,7 +4431,7 @@ type ComplexityRoot struct {
 	}
 
 	Subscription struct {
-		TaskCreated func(childComplexity int) int
+		NotificationCreated func(childComplexity int) int
 	}
 
 	TFASetting struct {
@@ -31523,12 +31523,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubscriberUpdatePayload.Subscriber(childComplexity), true
 
-	case "Subscription.taskCreated":
-		if e.complexity.Subscription.TaskCreated == nil {
+	case "Subscription.notificationCreated":
+		if e.complexity.Subscription.NotificationCreated == nil {
 			break
 		}
 
-		return e.complexity.Subscription.TaskCreated(childComplexity), true
+		return e.complexity.Subscription.NotificationCreated(childComplexity), true
 
 	case "TFASetting.createdAt":
 		if e.complexity.TFASetting.CreatedAt == nil {
@@ -105290,9 +105290,9 @@ type SubscriberBulkCreatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/subscription.graphql", Input: `type Subscription {
   """
-  Subscribe to task creation events for the authenticated user
+  Subscribe to notification creation events for the authenticated user
   """
-  taskCreated: Task!
+  notificationCreated: Notification!
 }
 `, BuiltIn: false},
 	{Name: "../schema/tagdefinition.graphql", Input: `extend type Query {
