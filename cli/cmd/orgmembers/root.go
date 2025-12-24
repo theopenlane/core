@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base orgMembers command when called without any subcommands
@@ -33,8 +33,8 @@ func consoleOutput(e any) error {
 
 	// check the type of the output and print them in a table format
 	switch v := e.(type) {
-	case *graphclient.GeOrgMemberships:
-		var nodes []*graphclient.GeOrgMemberships_OrgMemberships_Edges_Node
+	case *graphclient.GetOrgMemberships:
+		var nodes []*graphclient.GetOrgMemberships_OrgMemberships_Edges_Node
 
 		for _, i := range v.OrgMemberships.Edges {
 			nodes = append(nodes, i.Node)
@@ -53,11 +53,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.OrgMembership
+	var list []graphclient.OrgMembership
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.OrgMembership
+		var in graphclient.OrgMembership
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -78,7 +78,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.OrgMembership) {
+func tableOutput(out []graphclient.OrgMembership) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
 
 	for _, i := range out {

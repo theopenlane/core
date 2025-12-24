@@ -4,11 +4,11 @@ package subcontrol
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -53,11 +53,19 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	order := &graphclient.SubcontrolOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.SubcontrolOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.SubcontrolOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// if a ref code is provided, filter on that control
 	if refCode != "" {
-		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, &openlane.SubcontrolWhereInput{
+		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &graphclient.SubcontrolWhereInput{
 			RefCode: &refCode,
-		})
+		}, []*graphclient.SubcontrolOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)
@@ -65,9 +73,9 @@ func get(ctx context.Context) error {
 
 	// if a control ID is provided, filter on that control
 	if controlID != "" {
-		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, &openlane.SubcontrolWhereInput{
+		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &graphclient.SubcontrolWhereInput{
 			ControlID: &controlID,
-		})
+		}, []*graphclient.SubcontrolOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)
@@ -79,16 +87,16 @@ func get(ctx context.Context) error {
 			RefCode: &controlRefCode,
 		}
 
-		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, &openlane.SubcontrolWhereInput{
+		o, err := client.GetSubcontrols(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &graphclient.SubcontrolWhereInput{
 			HasControlWith: []*graphclient.ControlWhereInput{where},
-		})
+		}, []*graphclient.SubcontrolOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)
 	}
 
 	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAllSubcontrols(ctx)
+	o, err := client.GetAllSubcontrols(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.SubcontrolOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

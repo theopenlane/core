@@ -4,10 +4,12 @@ package tokens
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -38,9 +40,16 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("id")
 
+	order := &graphclient.PersonalAccessTokenOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.PersonalAccessTokenOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.PersonalAccessTokenOrderField(*cmd.OrderBy),
+		}
+	}
 	// if an id is provided, filter on the id, otherwise get all
 	if id == "" {
-		o, err := client.GetAllPersonalAccessTokens(ctx)
+		o, err := client.GetAllPersonalAccessTokens(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.PersonalAccessTokenOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

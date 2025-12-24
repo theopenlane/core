@@ -4,10 +4,12 @@ package invite
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -46,7 +48,15 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
-	o, err := client.GetAllInvites(ctx)
+	order := &graphclient.InviteOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.InviteOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.InviteOrderField(*cmd.OrderBy),
+		}
+	}
+
+	o, err := client.GetAllInvites(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.InviteOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

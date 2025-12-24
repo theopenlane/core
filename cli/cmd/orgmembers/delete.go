@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var deleteCmd = &cobra.Command{
@@ -28,7 +28,7 @@ func init() {
 }
 
 // deleteValidation validates the required fields for the command
-func deleteValidation() (where openlane.OrgMembershipWhereInput, err error) {
+func deleteValidation() (where graphclient.OrgMembershipWhereInput, err error) {
 	uID := cmd.Config.String("user-id")
 	if uID == "" {
 		return where, cmd.NewRequiredFieldMissingError("user id")
@@ -52,7 +52,8 @@ func delete(ctx context.Context) error {
 	where, err := deleteValidation()
 	cobra.CheckErr(err)
 
-	orgMembers, err := client.GetOrgMemberships(ctx, cmd.First, cmd.Last, &where)
+	// no pagination needed since we expect only one result
+	orgMembers, err := client.GetOrgMemberships(ctx, nil, nil, nil, nil, &where, nil)
 	cobra.CheckErr(err)
 
 	if len(orgMembers.OrgMemberships.Edges) != 1 {

@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var deleteCmd = &cobra.Command{
@@ -29,7 +29,7 @@ func init() {
 }
 
 // deleteValidation validates the required fields for the command
-func deleteValidation() (where openlane.GroupMembershipWhereInput, err error) {
+func deleteValidation() (where graphclient.GroupMembershipWhereInput, err error) {
 	groupID := cmd.Config.String("group-id")
 	if groupID == "" {
 		return where, cmd.NewRequiredFieldMissingError("group id")
@@ -60,7 +60,8 @@ func delete(ctx context.Context) error {
 	where, err := deleteValidation()
 	cobra.CheckErr(err)
 
-	groupMembers, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, &where)
+	// no pagination needed, just get the single relation
+	groupMembers, err := client.GetGroupMemberships(ctx, nil, nil, nil, nil, &where, nil)
 	cobra.CheckErr(err)
 
 	if len(groupMembers.GroupMemberships.Edges) != 1 {

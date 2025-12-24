@@ -144,7 +144,7 @@ func update(ctx context.Context) error {
 	cobra.CheckErr(err)
 
 	if id == "" {
-		settings, err := client.GetAllOrganizationSettings(ctx)
+		settings, err := client.GetAllOrganizationSettings(ctx, nil, nil, nil, nil, nil)
 		cobra.CheckErr(err)
 
 		if len(settings.OrganizationSettings.Edges) == 1 {

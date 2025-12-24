@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -46,7 +46,7 @@ func consoleOutput(e any) error {
 			nodes = append(nodes, nodeMap)
 		}
 		e = nodes
-	case *graphclient.GeMappableDomains:
+	case *graphclient.GetMappableDomains:
 		for _, edge := range v.MappableDomains.Edges {
 			nodeMap := map[string]interface{}{
 				"ID":        edge.Node.ID,
@@ -57,7 +57,7 @@ func consoleOutput(e any) error {
 			nodes = append(nodes, nodeMap)
 		}
 		e = nodes
-	case *graphclient.GeMappableDomainByID:
+	case *graphclient.GetMappableDomainByID:
 		e = v.MappableDomain
 	case *graphclient.CreateMappableDomain:
 		e = v.CreateMappableDomain.MappableDomain
@@ -71,11 +71,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.MappableDomain
+	var list []graphclient.MappableDomain
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.MappableDomain
+		var in graphclient.MappableDomain
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -105,9 +105,9 @@ func tableOutput(out interface{}) {
 		for _, i := range v {
 			writer.AddRow(i["ID"], i["Name"], i["ZoneID"], i["CreatedAt"], i["CreatedBy"])
 		}
-	case openlane.MappableDomain:
+	case graphclient.MappableDomain:
 		writer.AddRow(v.ID, v.Name, v.ZoneID, v.CreatedAt, v.CreatedBy)
-	case []openlane.MappableDomain:
+	case []graphclient.MappableDomain:
 		for _, i := range v {
 			cb := ""
 			if i.CreatedBy != nil {

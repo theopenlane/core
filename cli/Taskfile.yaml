@@ -22,7 +22,7 @@ tasks:
       - :go:build-cli
       - login
     cmds:
-      - bash cmd/cli/test/testget.sh
+      - bash cli/test/testget.sh
 
   # === Generate Tasks ===
   generate:

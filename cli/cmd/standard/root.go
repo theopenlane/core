@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -40,15 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeStandards:
-		var nodes []*graphclient.GeStandards_Standards_Edges_Node
+	case *graphclient.GetStandards:
+		var nodes []*graphclient.GetStandards_Standards_Edges_Node
 
 		for _, i := range v.Standards.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeStandardByID:
+	case *graphclient.GetStandardByID:
 		e = v.Standard
 	case *graphclient.CreateStandard:
 		e = v.CreateStandard.Standard
@@ -62,11 +62,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Standard
+	var list []graphclient.Standard
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Standard
+		var in graphclient.Standard
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -87,9 +87,8 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Standard) {
+func tableOutput(out []graphclient.Standard) {
 	// create a table writer
-	// TODO: add additional columns to the table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Version", "Category", "GoverningBody", "Domain Count", "Control Count")
 	for _, i := range out {
 		writer.AddRow(i.ID, *i.ShortName,

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base entity type command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeEntityTypes:
-		var nodes []*graphclient.GeEntityTypes_EntityTypes_Edges_Node
+	case *graphclient.GetEntityTypes:
+		var nodes []*graphclient.GetEntityTypes_EntityTypes_Edges_Node
 
 		for _, i := range v.EntityTypes.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeEntityTypeByID:
+	case *graphclient.GetEntityTypeByID:
 		e = v.EntityType
 	case *graphclient.CreateEntityType:
 		e = v.CreateEntityType.EntityType
@@ -63,11 +63,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.EntityType
+	var list []graphclient.EntityType
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.EntityType
+		var in graphclient.EntityType
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -88,7 +88,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.EntityType) {
+func tableOutput(out []graphclient.EntityType) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name")
 	for _, i := range out {

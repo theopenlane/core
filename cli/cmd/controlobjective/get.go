@@ -4,10 +4,12 @@ package controlobjective
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -46,8 +48,16 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	order := &graphclient.ControlObjectiveOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.ControlObjectiveOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.ControlObjectiveOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAllControlObjectives(ctx)
+	o, err := client.GetAllControlObjectives(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.ControlObjectiveOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

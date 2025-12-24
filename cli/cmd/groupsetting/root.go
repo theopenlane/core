@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base group setting command when called without any subcommands
@@ -41,7 +41,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeGroupSettingByID:
+	case *graphclient.GetGroupSettingByID:
 		e = v.GroupSetting
 	case *graphclient.UpdateGroupSetting:
 		e = v.UpdateGroupSetting.GroupSetting
@@ -50,11 +50,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.GroupSetting
+	var list []graphclient.GroupSetting
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.GroupSetting
+		var in graphclient.GroupSetting
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -75,7 +75,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.GroupSetting) {
+func tableOutput(out []graphclient.GroupSetting) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "GroupName", "Visibility", "SyncToGithub", "SyncToSlack")
 	for _, i := range out {
 		groupName := ""

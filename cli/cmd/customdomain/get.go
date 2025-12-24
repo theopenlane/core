@@ -4,6 +4,7 @@ package customdomain
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -48,6 +49,14 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	order := &graphclient.CustomDomainOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.CustomDomainOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.CustomDomainOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// Build filter criteria
 	where := &graphclient.CustomDomainWhereInput{}
 
@@ -61,14 +70,14 @@ func get(ctx context.Context) error {
 
 	// If any filters are set, use GetCustomDomains with filters
 	if where.CnameRecord != nil || where.OwnerID != nil {
-		o, err := client.GetCustomDomains(ctx, cmd.First, cmd.Last, where)
+		o, err := client.GetCustomDomains(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, where, []*graphclient.CustomDomainOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)
 	}
 
 	// Otherwise get all custom domains
-	o, err := client.GetAllCustomDomains(ctx)
+	o, err := client.GetAllCustomDomains(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.CustomDomainOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

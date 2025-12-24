@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base cmd command when called without any subcommands
@@ -41,7 +41,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GePersonalAccessTokenByID:
+	case *graphclient.GetPersonalAccessTokenByID:
 		e = v.PersonalAccessToken
 	case *graphclient.CreatePersonalAccessToken:
 		e = v.CreatePersonalAccessToken.PersonalAccessToken
@@ -55,11 +55,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.PersonalAccessToken
+	var list []graphclient.PersonalAccessToken
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.PersonalAccessToken
+		var in graphclient.PersonalAccessToken
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -80,7 +80,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.PersonalAccessToken) {
+func tableOutput(out []graphclient.PersonalAccessToken) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Token", "Authorized Organizations", "LastUsedAt", "ExpiresAt")
 
 	for _, i := range out {

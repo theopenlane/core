@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base integration command when called without any subcommands
@@ -41,7 +41,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeIntegrationByID:
+	case *graphclient.GetIntegrationByID:
 		e = v.Integration
 	case *graphclient.DeleteIntegration:
 		deletedTableOutput(v)
@@ -51,11 +51,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Integration
+	var list []graphclient.Integration
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Integration
+		var in graphclient.Integration
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -76,7 +76,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Integration) {
+func tableOutput(out []graphclient.Integration) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Kind")
 	for _, i := range out {
 		writer.AddRow(i.ID, i.Name, *i.Description, i.Kind)

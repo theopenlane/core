@@ -4,11 +4,12 @@ package programmembers
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -37,19 +38,26 @@ func get(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
+	order := &graphclient.ProgramMembershipOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.ProgramMembershipOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.ProgramMembershipOrderField(*cmd.OrderBy),
+		}
+	}
 	// filter options
 	id := cmd.Config.String("program-id")
 	if id == "" {
-		o, err := client.GetAllProgramMemberships(ctx)
+		o, err := client.GetAllProgramMemberships(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.ProgramMembershipOrder{order})
 		cobra.CheckErr(err)
 		return consoleOutput(o)
 	}
 
-	where := openlane.ProgramMembershipWhereInput{
+	where := graphclient.ProgramMembershipWhereInput{
 		ProgramID: &id,
 	}
 
-	o, err := client.GetProgramMemberships(ctx, cmd.First, cmd.Last, &where)
+	o, err := client.GetProgramMemberships(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &where, []*graphclient.ProgramMembershipOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

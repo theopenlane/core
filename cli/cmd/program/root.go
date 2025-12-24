@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base program command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GePrograms:
-		var nodes []*graphclient.GePrograms_Programs_Edges_Node
+	case *graphclient.GetPrograms:
+		var nodes []*graphclient.GetPrograms_Programs_Edges_Node
 
 		for _, i := range v.Programs.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeProgramByID:
+	case *graphclient.GetProgramByID:
 		e = v.Program
 	case *graphclient.CreateProgram:
 		e = v.CreateProgram.Program
@@ -63,11 +63,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Program
+	var list []graphclient.Program
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Program
+		var in graphclient.Program
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -88,7 +88,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Program) {
+func tableOutput(out []graphclient.Program) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Description", "Status", "AuditorReady", "AuditorWriteComments", "AuditorReadComments", "StartDate", "EndDate")
 	for _, i := range out {

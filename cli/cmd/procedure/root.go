@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base procedure command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeProcedures:
-		var nodes []*graphclient.GeProcedures_Procedures_Edges_Node
+	case *graphclient.GetProcedures:
+		var nodes []*graphclient.GetProcedures_Procedures_Edges_Node
 
 		for _, i := range v.Procedures.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeProcedureByID:
+	case *graphclient.GetProcedureByID:
 		e = v.Procedure
 	case *graphclient.CreateProcedure:
 		e = v.CreateProcedure.Procedure
@@ -65,11 +65,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Procedure
+	var list []graphclient.Procedure
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Procedure
+		var in graphclient.Procedure
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -90,7 +90,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Procedure) {
+func tableOutput(out []graphclient.Procedure) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Details", "Status", "Type", "Revision", "ReviewDue", "ReviewFrequency", "ApprovalRequired")
 	for _, i := range out {

@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -31,7 +30,7 @@ func init() {
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (where openlane.GroupMembershipWhereInput, input graphclient.UpdateGroupMembershipInput, err error) {
+func updateValidation() (where graphclient.GroupMembershipWhereInput, input graphclient.UpdateGroupMembershipInput, err error) {
 	groupID := cmd.Config.String("group-id")
 	if groupID == "" {
 		return where, input, cmd.NewRequiredFieldMissingError("group id")
@@ -50,7 +49,7 @@ func updateValidation() (where openlane.GroupMembershipWhereInput, input graphcl
 	r, err := cmd.GetRoleEnum(role)
 	cobra.CheckErr(err)
 
-	where = openlane.GroupMembershipWhereInput{
+	where = graphclient.GroupMembershipWhereInput{
 		GroupID: &groupID,
 		UserID:  &userID,
 	}
@@ -76,7 +75,8 @@ func update(ctx context.Context) error {
 	where, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	groupMembers, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, &where)
+	// no pagination needed, just get the single relation
+	groupMembers, err := client.GetGroupMemberships(ctx, nil, nil, nil, nil, &where, nil)
 	cobra.CheckErr(err)
 
 	if len(groupMembers.GroupMemberships.Edges) != 1 {

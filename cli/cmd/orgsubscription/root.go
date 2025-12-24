@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -41,26 +41,26 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeOrgSubscriptions:
-		var nodes []*graphclient.GeOrgSubscriptions_OrgSubscriptions_Edges_Node
+	case *graphclient.GetOrgSubscriptions:
+		var nodes []*graphclient.GetOrgSubscriptions_OrgSubscriptions_Edges_Node
 
 		for _, i := range v.OrgSubscriptions.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeOrgSubscriptionByID:
+	case *graphclient.GetOrgSubscriptionByID:
 		e = v.OrgSubscription
 	}
 
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.OrgSubscription
+	var list []graphclient.OrgSubscription
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.OrgSubscription
+		var in graphclient.OrgSubscription
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -81,7 +81,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.OrgSubscription) {
+func tableOutput(out []graphclient.OrgSubscription) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Active", "StripeSubscriptionStatus", "ExpiresAt")
 	for _, i := range out {

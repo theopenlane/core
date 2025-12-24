@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeMappedControls:
-		var nodes []*graphclient.GeMappedControls_MappedControls_Edges_Node
+	case *graphclient.GetMappedControls:
+		var nodes []*graphclient.GetMappedControls_MappedControls_Edges_Node
 
 		for _, i := range v.MappedControls.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeMappedControlByID:
+	case *graphclient.GetMappedControlByID:
 		e = v.MappedControl
 	case *graphclient.CreateMappedControl:
 		e = v.CreateMappedControl.MappedControl
@@ -63,11 +63,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.MappedControl
+	var list []graphclient.MappedControl
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.MappedControl
+		var in graphclient.MappedControl
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -88,7 +88,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.MappedControl) {
+func tableOutput(out []graphclient.MappedControl) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "ToControls", "FromControls", "Relation", "Confidence", "MappingType", "Source")
 	for _, i := range out {

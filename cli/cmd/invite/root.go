@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base invite command when called without any subcommands
@@ -41,7 +41,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeInviteByID:
+	case *graphclient.GetInviteByID:
 		e = v.Invite
 	case *graphclient.CreateInvite:
 		e = v.CreateInvite.Invite
@@ -53,11 +53,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Invite
+	var list []graphclient.Invite
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Invite
+		var in graphclient.Invite
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -78,7 +78,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Invite) {
+func tableOutput(out []graphclient.Invite) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Recipient", "Role", "Status")
 	for _, i := range out {
 		writer.AddRow(i.ID, i.Recipient, i.Role, i.Status)

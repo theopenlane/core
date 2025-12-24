@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base file command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeFiles:
-		var nodes []*graphclient.GeFiles_Files_Edges_Node
+	case *graphclient.GetFiles:
+		var nodes []*graphclient.GetFiles_Files_Edges_Node
 
 		for _, i := range v.Files.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeFileByID:
+	case *graphclient.GetFileByID:
 		e = v.File
 	case *graphclient.DeleteFile:
 		deletedTableOutput(v)
@@ -59,11 +59,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.File
+	var list []graphclient.File
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.File
+		var in graphclient.File
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -84,7 +84,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.File) {
+func tableOutput(out []graphclient.File) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "URI", "ProvidedFileName", "CategoryType", "DetectedMimeType", "FileExtension", "StoragePath")
 	for _, i := range out {

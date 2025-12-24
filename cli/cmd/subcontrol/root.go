@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -40,15 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeSubcontrols:
-		var nodes []*graphclient.GeSubcontrols_Subcontrols_Edges_Node
+	case *graphclient.GetSubcontrols:
+		var nodes []*graphclient.GetSubcontrols_Subcontrols_Edges_Node
 
 		for _, i := range v.Subcontrols.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeSubcontrolByID:
+	case *graphclient.GetSubcontrolByID:
 		e = v.Subcontrol
 	case *graphclient.CreateSubcontrol:
 		e = v.CreateSubcontrol.Subcontrol
@@ -62,11 +62,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Subcontrol
+	var list []graphclient.Subcontrol
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Subcontrol
+		var in graphclient.Subcontrol
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -87,7 +87,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Subcontrol) {
+func tableOutput(out []graphclient.Subcontrol) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Status", "Parent Control")
 

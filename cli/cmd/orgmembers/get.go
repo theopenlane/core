@@ -4,11 +4,12 @@ package orgmembers
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -36,7 +37,15 @@ func get(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	where := openlane.OrgMembershipWhereInput{}
+	order := &graphclient.OrgMembershipOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.OrgMembershipOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.OrgMembershipOrderField(*cmd.OrderBy),
+		}
+	}
+
+	where := graphclient.OrgMembershipWhereInput{}
 
 	// filter options
 	id := cmd.Config.String("id")
@@ -45,7 +54,7 @@ func get(ctx context.Context) error {
 		where.OrganizationID = &id
 	}
 
-	o, err := client.GetOrgMemberships(ctx, cmd.First, cmd.Last, &where)
+	o, err := client.GetOrgMemberships(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &where, []*graphclient.OrgMembershipOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

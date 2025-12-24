@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base group command when called without any subcommands
@@ -41,7 +41,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeGroupByID:
+	case *graphclient.GetGroupByID:
 		e = v.Group
 	case *graphclient.CreateGroup:
 		e = v.CreateGroup.Group
@@ -55,11 +55,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Group
+	var list []graphclient.Group
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Group
+		var in graphclient.Group
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -80,7 +80,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Group) {
+func tableOutput(out []graphclient.Group) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Display Name", "Description", "Visibility", "Managed")
 	for _, i := range out {
 		isManaged := false

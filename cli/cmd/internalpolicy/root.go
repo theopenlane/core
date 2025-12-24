@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base internal policy command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeInternalPolicies:
-		var nodes []*graphclient.GeInternalPolicies_InternalPolicies_Edges_Node
+	case *graphclient.GetInternalPolicies:
+		var nodes []*graphclient.GetInternalPolicies_InternalPolicies_Edges_Node
 
 		for _, i := range v.InternalPolicies.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeInternalPolicyByID:
+	case *graphclient.GetInternalPolicyByID:
 		e = v.InternalPolicy
 	case *graphclient.CreateInternalPolicy:
 		e = v.CreateInternalPolicy.InternalPolicy
@@ -67,11 +67,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.InternalPolicy
+	var list []graphclient.InternalPolicy
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.InternalPolicy
+		var in graphclient.InternalPolicy
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -92,7 +92,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.InternalPolicy) {
+func tableOutput(out []graphclient.InternalPolicy) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Details", "Status", "Type", "Revision", "ReviewDue", "ReviewFrequency", "ApprovalRequired")
 	for _, i := range out {

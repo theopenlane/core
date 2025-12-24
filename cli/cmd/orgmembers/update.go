@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -31,7 +30,7 @@ func init() {
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (where openlane.OrgMembershipWhereInput, input graphclient.UpdateOrgMembershipInput, err error) {
+func updateValidation() (where graphclient.OrgMembershipWhereInput, input graphclient.UpdateOrgMembershipInput, err error) {
 	userID := cmd.Config.String("user-id")
 	if userID == "" {
 		return where, input, cmd.NewRequiredFieldMissingError("user id")
@@ -70,7 +69,8 @@ func update(ctx context.Context) error {
 	where, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	orgMembers, err := client.GetOrgMemberships(ctx, cmd.First, cmd.Last, &where)
+	// no pagination needed since we expect only one result
+	orgMembers, err := client.GetOrgMemberships(ctx, nil, nil, nil, nil, &where, nil)
 	cobra.CheckErr(err)
 
 	if len(orgMembers.OrgMemberships.Edges) != 1 {

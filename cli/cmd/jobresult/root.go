@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -40,15 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeJobResults:
-		var nodes []*graphclient.GeJobResults_JobResults_Edges_Node
+	case *graphclient.GetJobResults:
+		var nodes []*graphclient.GetJobResults_JobResults_Edges_Node
 
 		for _, i := range v.JobResults.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeJobResultByID:
+	case *graphclient.GetJobResultByID:
 		e = v.JobResult
 	case *graphclient.CreateJobResult:
 		e = v.CreateJobResult.JobResult
@@ -62,11 +62,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.JobResult
+	var list []graphclient.JobResult
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.JobResult
+		var in graphclient.JobResult
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -87,7 +87,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.JobResult) {
+func tableOutput(out []graphclient.JobResult) {
 	// create a table writer
 	// TODO: add additional columns to the table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID")

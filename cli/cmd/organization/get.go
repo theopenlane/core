@@ -4,12 +4,13 @@ package org
 
 import (
 	"context"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/iam/tokens"
 )
 
@@ -71,21 +72,29 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	order := &graphclient.OrganizationOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.OrganizationOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.OrganizationOrderField(*cmd.OrderBy),
+		}
+	}
+
 	includePersonalOrgs := cmd.Config.Bool("include-personal-orgs")
 
 	if includePersonalOrgs {
-		o, err := client.GetAllOrganizations(ctx)
+		o, err := client.GetAllOrganizations(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.OrganizationOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)
 	}
 
 	// don't include personal orgs
-	where := &openlane.OrganizationWhereInput{
+	where := &graphclient.OrganizationWhereInput{
 		PersonalOrg: &includePersonalOrgs,
 	}
 
-	o, err := client.GetOrganizations(ctx, cmd.First, cmd.Last, where)
+	o, err := client.GetOrganizations(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, where, []*graphclient.OrganizationOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base org setting command when called without any subcommands
@@ -34,8 +34,8 @@ func consoleOutput(e any) error {
 
 	// check the type of the output and print them in a table format
 	switch v := e.(type) {
-	case *graphclient.GeOrganizationSettings:
-		var nodes []*graphclient.GeOrganizationSettings_OrganizationSettings_Edges_Node
+	case *graphclient.GetOrganizationSettings:
+		var nodes []*graphclient.GetOrganizationSettings_OrganizationSettings_Edges_Node
 
 		for _, i := range v.OrganizationSettings.Edges {
 			nodes = append(nodes, i.Node)
@@ -50,7 +50,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeOrganizationSettingByID:
+	case *graphclient.GetOrganizationSettingByID:
 		e = v.OrganizationSetting
 	case *graphclient.UpdateOrganizationSetting:
 		e = v.UpdateOrganizationSetting.OrganizationSetting
@@ -59,11 +59,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.OrganizationSetting
+	var list []graphclient.OrganizationSetting
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.OrganizationSetting
+		var in graphclient.OrganizationSetting
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -84,7 +84,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.OrganizationSetting) {
+func tableOutput(out []graphclient.OrganizationSetting) {
 	writer := tables.NewTableWriter(command.OutOrStdout(),
 		"ID",
 		"OrganizationName",

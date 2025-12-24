@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -40,15 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeEvidences:
-		var nodes []*graphclient.GeEvidences_Evidences_Edges_Node
+	case *graphclient.GetEvidences:
+		var nodes []*graphclient.GetEvidences_Evidences_Edges_Node
 
 		for _, i := range v.Evidences.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeEvidenceByID:
+	case *graphclient.GetEvidenceByID:
 		e = v.Evidence
 	case *graphclient.CreateEvidence:
 		e = v.CreateEvidence.Evidence
@@ -62,11 +62,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Evidence
+	var list []graphclient.Evidence
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Evidence
+		var in graphclient.Evidence
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -87,7 +87,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Evidence) {
+func tableOutput(out []graphclient.Evidence) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Description", "CollectionProcedure", "Source", "IsAutomated", "URL", "NumOfFiles", "Controls", "CreatedAt", "UpdatedAt")
 	for _, i := range out {

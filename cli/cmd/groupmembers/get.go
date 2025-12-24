@@ -4,11 +4,12 @@ package groupmembers
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -37,19 +38,27 @@ func get(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
+	order := &graphclient.GroupMembershipOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.GroupMembershipOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.GroupMembershipOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// filter options
 	id := cmd.Config.String("group-id")
 	if id == "" {
-		o, err := client.GetAllGroupMemberships(ctx)
+		o, err := client.GetAllGroupMemberships(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.GroupMembershipOrder{order})
 		cobra.CheckErr(err)
 		return consoleOutput(o)
 	}
 
-	where := openlane.GroupMembershipWhereInput{
+	where := graphclient.GroupMembershipWhereInput{
 		GroupID: &id,
 	}
 
-	o, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, &where)
+	o, err := client.GetGroupMemberships(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &where, []*graphclient.GroupMembershipOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

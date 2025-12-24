@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -119,11 +118,11 @@ func getEntityTypeID(ctx context.Context, name string) (string, error) {
 	client, err := cmd.SetupClientWithAuth(ctx)
 	cobra.CheckErr(err)
 
-	where := &openlane.EntityTypeWhereInput{
+	where := &graphclient.EntityTypeWhereInput{
 		Name: &name,
 	}
 
-	o, err := client.GetEntityTypes(ctx, cmd.First, cmd.Last, where)
+	o, err := client.GetEntityTypes(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, where, nil)
 	cobra.CheckErr(err)
 
 	if len(o.EntityTypes.Edges) == 0 || len(o.EntityTypes.Edges) > 1 {

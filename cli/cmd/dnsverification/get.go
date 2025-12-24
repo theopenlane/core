@@ -4,6 +4,7 @@ package dnsverification
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -48,6 +49,14 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	order := &graphclient.DNSVerificationOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.DNSVerificationOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.DNSVerificationOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// Build filter criteria
 	where := &graphclient.DNSVerificationWhereInput{}
 
@@ -68,7 +77,7 @@ func get(ctx context.Context) error {
 	}
 
 	// Otherwise get all DNS verification records
-	o, err := client.GetAllDNSVerifications(ctx)
+	o, err := client.GetAllDNSVerifications(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.DNSVerificationOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

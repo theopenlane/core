@@ -85,7 +85,7 @@ func login(ctx context.Context) (*oauth2.Token, error) {
 	return tokens, nil
 }
 
-func passwordAuth(ctx context.Context, client *openlane.OpenlaneClient, username string) (*oauth2.Token, error) {
+func passwordAuth(ctx context.Context, client *openlane.Client, username string) (*oauth2.Token, error) {
 	// read password from terminal if not set in environment variable
 	password := cmd.Config.String("password")
 
@@ -135,7 +135,7 @@ func passwordAuth(ctx context.Context, client *openlane.OpenlaneClient, username
 }
 
 // handle2FAVerification prompts the user for their 2FA code and validates it
-func handle2FAVerification(ctx context.Context, client *openlane.OpenlaneClient) error {
+func handle2FAVerification(ctx context.Context, client *openlane.Client) error {
 	const maxAttempts = 3
 
 	for attempt := 1; attempt <= maxAttempts; attempt++ {

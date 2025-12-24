@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -40,15 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeJobRunnerTokens:
-		var nodes []*graphclient.GeJobRunnerTokens_JobRunnerTokens_Edges_Node
+	case *graphclient.GetJobRunnerTokens:
+		var nodes []*graphclient.GetJobRunnerTokens_JobRunnerTokens_Edges_Node
 
 		for _, i := range v.JobRunnerTokens.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeJobRunnerTokenByID:
+	case *graphclient.GetJobRunnerTokenByID:
 		e = v.JobRunnerToken
 	case *graphclient.CreateJobRunnerToken:
 		e = v.CreateJobRunnerToken.JobRunnerToken
@@ -60,11 +60,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.JobRunnerToken
+	var list []graphclient.JobRunnerToken
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.JobRunnerToken
+		var in graphclient.JobRunnerToken
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -85,7 +85,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.JobRunnerToken) {
+func tableOutput(out []graphclient.JobRunnerToken) {
 	// create a table writer
 	// TODO: add additional columns to the table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID")

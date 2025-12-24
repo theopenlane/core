@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base groupMembers command when called without any subcommands
@@ -41,8 +41,8 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeGroupMemberships:
-		var nodes []*graphclient.GeGroupMemberships_GroupMemberships_Edges_Node
+	case *graphclient.GetGroupMemberships:
+		var nodes []*graphclient.GetGroupMemberships_GroupMemberships_Edges_Node
 
 		for _, i := range v.GroupMemberships.Edges {
 			nodes = append(nodes, i.Node)
@@ -61,11 +61,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.GroupMembership
+	var list []graphclient.GroupMembership
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.GroupMembership
+		var in graphclient.GroupMembership
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -86,7 +86,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.GroupMembership) {
+func tableOutput(out []graphclient.GroupMembership) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "GroupID", "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
 	for _, i := range out {
 		writer.AddRow(i.GroupID, i.User.ID, i.User.DisplayName, *i.User.FirstName, *i.User.LastName, i.User.Email, i.Role)

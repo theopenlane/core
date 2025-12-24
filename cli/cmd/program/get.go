@@ -4,10 +4,12 @@ package program
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -46,8 +48,16 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	order := &graphclient.ProgramOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.ProgramOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.ProgramOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAllPrograms(ctx)
+	o, err := client.GetAllPrograms(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.ProgramOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

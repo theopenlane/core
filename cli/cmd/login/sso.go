@@ -61,7 +61,7 @@ func newSSOConfig(opts ...SSOOption) *ssoConfig {
 }
 
 // fetchSSOStatus queries the webfinger endpoint for SSO enforcement status
-func fetchSSOStatus(ctx context.Context, client *openlane.OpenlaneClient, email string) (models.SSOStatusReply, error) {
+func fetchSSOStatus(ctx context.Context, client *openlane.Client, email string) (models.SSOStatusReply, error) {
 	var out models.SSOStatusReply
 	resp, err := client.HTTPSlingRequester().ReceiveWithContext(ctx, &out,
 		httpsling.Get("/.well-known/webfinger"),
@@ -83,7 +83,7 @@ func fetchSSOStatus(ctx context.Context, client *openlane.OpenlaneClient, email 
 }
 
 // ssoAuth handles SSO login by opening the browser and capturing the callback
-func ssoAuth(ctx context.Context, client *openlane.OpenlaneClient, orgID string, opts ...SSOOption) (*oauth2.Token, error) {
+func ssoAuth(ctx context.Context, client *openlane.Client, orgID string, opts ...SSOOption) (*oauth2.Token, error) {
 	cfg := newSSOConfig(opts...)
 
 	l, err := net.Listen("tcp", cfg.listenAddr)

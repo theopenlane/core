@@ -44,7 +44,7 @@ func init() {
 }
 
 // createValidation validates the required fields for the command
-func createValidation(ctx context.Context, client *openlane.OpenlaneClient) (input graphclient.CreateEvidenceInput, uploads []*graphql.Upload, err error) {
+func createValidation(ctx context.Context, client *openlane.Client) (input graphclient.CreateEvidenceInput, uploads []*graphql.Upload, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
 	input.Name = cmd.Config.String("name")
@@ -82,17 +82,28 @@ func createValidation(ctx context.Context, client *openlane.OpenlaneClient) (inp
 				cmd.NewInvalidFieldError("control ref", ref)
 			}
 
-			control, err := client.GetControls(ctx, nil, nil, &graphclient.ControlWhereInput{
-				ReferenceFramework: &parts[0],
-				RefCode:            &parts[1],
-			})
-			cobra.CheckErr(err)
+			pageSize := int64(100)
+			var after *string
 
-			if len(control.Controls.Edges) == 0 {
-				return input, nil, cmd.NewInvalidFieldError("control ref", ref)
+			for {
+				control, err := client.GetControls(ctx, &pageSize, nil, after, nil, &graphclient.ControlWhereInput{
+					ReferenceFramework: &parts[0],
+					RefCode:            &parts[1],
+				}, nil)
+				cobra.CheckErr(err)
+
+				if len(control.Controls.Edges) == 0 {
+					return input, nil, cmd.NewInvalidFieldError("control ref", ref)
+				}
+
+				input.ControlIDs = append(input.ControlIDs, control.Controls.Edges[0].Node.ID)
+
+				if !control.Controls.PageInfo.HasNextPage {
+					break
+				}
+
+				after = control.Controls.PageInfo.EndCursor
 			}
-
-			input.ControlIDs = append(input.ControlIDs, control.Controls.Edges[0].Node.ID)
 		}
 	}
 
@@ -105,17 +116,28 @@ func createValidation(ctx context.Context, client *openlane.OpenlaneClient) (inp
 				cmd.NewInvalidFieldError("subcontrol ref", ref)
 			}
 
-			control, err := client.GetSubcontrols(ctx, nil, nil, &openlane.SubcontrolWhereInput{
-				ReferenceFramework: &parts[0],
-				RefCode:            &parts[1],
-			})
-			cobra.CheckErr(err)
+			pageSize := int64(100)
+			var after *string
 
-			if len(control.Subcontrols.Edges) == 0 {
-				return input, nil, cmd.NewInvalidFieldError("control ref", ref)
+			for {
+				control, err := client.GetSubcontrols(ctx, &pageSize, nil, after, nil, &graphclient.SubcontrolWhereInput{
+					ReferenceFramework: &parts[0],
+					RefCode:            &parts[1],
+				}, nil)
+				cobra.CheckErr(err)
+
+				if len(control.Subcontrols.Edges) == 0 {
+					return input, nil, cmd.NewInvalidFieldError("control ref", ref)
+				}
+
+				input.SubcontrolIDs = append(input.SubcontrolIDs, control.Subcontrols.Edges[0].Node.ID)
+
+				if !control.Subcontrols.PageInfo.HasNextPage {
+					break
+				}
+
+				after = control.Subcontrols.PageInfo.EndCursor
 			}
-
-			input.SubcontrolIDs = append(input.SubcontrolIDs, control.Subcontrols.Edges[0].Node.ID)
 		}
 	}
 

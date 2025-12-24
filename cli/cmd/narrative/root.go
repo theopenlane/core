@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base narrative command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeNarratives:
-		var nodes []*graphclient.GeNarratives_Narratives_Edges_Node
+	case *graphclient.GetNarratives:
+		var nodes []*graphclient.GetNarratives_Narratives_Edges_Node
 
 		for _, i := range v.Narratives.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeNarrativeByID:
+	case *graphclient.GetNarrativeByID:
 		e = v.Narrative
 	case *graphclient.CreateNarrative:
 		e = v.CreateNarrative.Narrative
@@ -63,11 +63,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Narrative
+	var list []graphclient.Narrative
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Narrative
+		var in graphclient.Narrative
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -88,7 +88,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Narrative) {
+func tableOutput(out []graphclient.Narrative) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Details")
 

@@ -4,10 +4,12 @@ package groupsetting
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -39,9 +41,17 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("id")
 
+	order := &graphclient.GroupSettingOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.GroupSettingOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.GroupSettingOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// if setting ID is not provided, get settings which will automatically filter by group id
 	if id == "" {
-		o, err := client.GetAllGroupSettings(ctx)
+		o, err := client.GetAllGroupSettings(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.GroupSettingOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)

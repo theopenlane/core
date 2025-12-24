@@ -4,10 +4,12 @@ package integrations
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -45,7 +47,15 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
-	o, err := client.GetAllIntegrations(ctx)
+	order := &graphclient.IntegrationOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.IntegrationOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.IntegrationOrderField(*cmd.OrderBy),
+		}
+	}
+
+	o, err := client.GetAllIntegrations(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.IntegrationOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

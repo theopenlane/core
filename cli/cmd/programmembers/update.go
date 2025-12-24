@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -31,7 +30,7 @@ func init() {
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (where openlane.ProgramMembershipWhereInput, input graphclient.UpdateProgramMembershipInput, err error) {
+func updateValidation() (where graphclient.ProgramMembershipWhereInput, input graphclient.UpdateProgramMembershipInput, err error) {
 	programID := cmd.Config.String("program-id")
 	if programID == "" {
 		return where, input, cmd.NewRequiredFieldMissingError("program id")
@@ -50,7 +49,7 @@ func updateValidation() (where openlane.ProgramMembershipWhereInput, input graph
 	r, err := cmd.GetRoleEnum(role)
 	cobra.CheckErr(err)
 
-	where = openlane.ProgramMembershipWhereInput{
+	where = graphclient.ProgramMembershipWhereInput{
 		ProgramID: &programID,
 		UserID:    &userID,
 	}
@@ -76,7 +75,8 @@ func update(ctx context.Context) error {
 	where, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	programMembers, err := client.GetProgramMemberships(ctx, cmd.First, cmd.Last, &where)
+	// no pagination needed since we are expecting only one result
+	programMembers, err := client.GetProgramMemberships(ctx, nil, nil, nil, nil, &where, nil)
 	cobra.CheckErr(err)
 
 	if len(programMembers.ProgramMemberships.Edges) != 1 {

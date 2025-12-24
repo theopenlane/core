@@ -4,10 +4,12 @@ package orgsetting
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -39,15 +41,23 @@ func get(ctx context.Context) error {
 	// filter options
 	id := cmd.Config.String("id")
 
+	order := &graphclient.OrganizationSettingOrder{}
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.OrganizationSettingOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.OrganizationSettingOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// if setting ID is not provided, get settings which will automatically filter by org id
 	if id == "" {
-		o, err := client.GetAllOrganizationSettings(ctx)
+		o, err := client.GetAllOrganizationSettings(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.OrganizationSettingOrder{order})
 		cobra.CheckErr(err)
 
 		return consoleOutput(o)
 	}
 
-	o, err := client.GetAllOrganizationSettings(ctx)
+	o, err := client.GetOrganizationSettingByID(ctx, id)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)
