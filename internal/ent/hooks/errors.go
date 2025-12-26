@@ -105,8 +105,17 @@ var (
 	// when creating a customer for the trust center
 	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
 	// ErrUnableToCreateContact is returned when a contact could not be created
-	// when adding a user to an assessment response or other schemas
 	ErrUnableToCreateContact = errors.New("unable to create a contact")
+	// ErrTooManyLogoFiles is returned when a user attempts to upload more than one logo file
+	ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
+	// ErrTooManyFaviconFiles is returned when a user attempts to upload more than one favicon file
+	ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
+	// ErrMissingTrustCenterID is returned when a trust center id is required but not provided
+	ErrMissingTrustCenterID = errors.New("trust center id is required")
+	// ErrMissingFileID is returned when a file id is required but not provided
+	ErrMissingFileID = errors.New("missing file id")
+	// ErrCannotSetFileOnCreate is returned when trying to set a file id on create mutations
+	ErrCannotSetFileOnCreate = errors.New("cannot set file id on create")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

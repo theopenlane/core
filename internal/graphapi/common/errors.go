@@ -57,6 +57,9 @@ var (
 
 	// ErrTrustCenterDomainAlreadyExists is returned when the domain already exists for the trust center
 	ErrTrustCenterDomainAlreadyExists = errors.New("domain already exists for this trust center")
+
+	// ErrMappableDomainNotConfigured is returned when the mappable domain for the trust center cname target is not found
+	ErrMappableDomainNotConfigured = errors.New("mappable domain not configured for trust center cname target")
 )
 
 func NewCascadeDeleteError(ctx context.Context, err error) error {

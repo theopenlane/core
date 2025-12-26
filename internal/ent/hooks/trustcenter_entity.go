@@ -22,14 +22,13 @@ const (
 func HookTrustcenterEntityCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustcenterEntityFunc(func(ctx context.Context, m *generated.TrustcenterEntityMutation) (generated.Value, error) {
-
 			trustcenterID, err := m.Client().TrustCenter.Query().OnlyID(ctx)
 			if generated.IsNotFound(err) {
 				return nil, err
 			}
-
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to fetch trustcenter")
+
 				return nil, ErrTrustCenterIDRequired
 			}
 
@@ -43,11 +42,13 @@ func HookTrustcenterEntityCreate() ent.Hook {
 
 			if err == nil {
 				m.SetEntityTypeID(existingEntityType.ID)
+
 				return next.Mutate(ctx, m)
 			}
 
 			if !generated.IsNotFound(err) {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to query for customer entity type")
+
 				return nil, err
 			}
 
@@ -56,6 +57,7 @@ func HookTrustcenterEntityCreate() ent.Hook {
 				Save(ctx)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to create customer entity type")
+
 				return nil, err
 			}
 
@@ -86,6 +88,7 @@ func HookTrustcenterEntityFiles() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
+// checkTrustcenterEntityFiles checks for logo files in the context
 func checkTrustcenterEntityFiles(ctx context.Context, m *generated.TrustcenterEntityMutation) (context.Context, error) {
 	key := "logoFile"
 

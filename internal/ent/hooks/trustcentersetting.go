@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -12,10 +11,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
-
-var ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
-var ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
-var ErrMissingTrustCenterID = errors.New("trust center id is required")
 
 var trustCenterConfig TrustCenterConfig
 
@@ -30,6 +25,7 @@ type TrustCenterConfig struct {
 	CnameTarget   string
 }
 
+// HookTrustCenterSetting process files for trust center settings
 func HookTrustCenterSetting() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
@@ -51,6 +47,8 @@ func HookTrustCenterSetting() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
+// HookTrustCenterSettingCreatePreview is a hook that runs on trust center setting create
+// to enqueue a job to create the preview domain
 func HookTrustCenterSettingCreatePreview() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
@@ -71,6 +69,11 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 				return nil, ErrMissingTrustCenterID
 			}
 
+			if m.Job == nil {
+				logx.FromContext(ctx).Warn().Msg("job client is nil, skipping preview domain creation job")
+				return v, nil
+			}
+
 			// Insert job to create preview domain with config values
 			if _, err = m.Job.Insert(ctx, jobspec.CreatePreviewDomainArgs{
 				TrustCenterID:            trustCenterID,
@@ -86,6 +89,8 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 	}, ent.OpCreate)
 }
 
+// checkTrustCenterFiles checks for logo and favicon files in the context
+// and processes them for the trust center setting mutation
 func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingMutation) (context.Context, error) {
 	logoKey := "logoFile"
 	faviconKey := "faviconFile"
@@ -94,6 +99,7 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	if len(logoFiles) > 1 {
 		return ctx, ErrTooManyLogoFiles
 	}
+
 	if len(logoFiles) == 1 {
 		m.SetLogoLocalFileID(logoFiles[0].ID)
 
@@ -102,13 +108,19 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 			func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
 		)
 
-		ctx, _ = objects.ProcessFilesForMutation(ctx, adapter, logoKey, "trust_center_setting")
+		var err error
+
+		ctx, err = objects.ProcessFilesForMutation(ctx, adapter, logoKey, "trust_center_setting")
+		if err != nil {
+			return ctx, err
+		}
 	}
 
 	faviconFiles, _ := objects.FilesFromContextWithKey(ctx, faviconKey)
 	if len(faviconFiles) > 1 {
 		return ctx, ErrTooManyFaviconFiles
 	}
+
 	if len(faviconFiles) == 1 {
 		m.SetFaviconLocalFileID(faviconFiles[0].ID)
 
@@ -117,7 +129,12 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 			func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
 		)
 
-		ctx, _ = objects.ProcessFilesForMutation(ctx, adapter, faviconKey, "trust_center_setting")
+		var err error
+
+		ctx, err = objects.ProcessFilesForMutation(ctx, adapter, faviconKey, "trust_center_setting")
+		if err != nil {
+			return ctx, err
+		}
 	}
 
 	return ctx, nil
