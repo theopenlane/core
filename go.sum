@@ -642,6 +642,8 @@ github.com/testcontainers/testcontainers-go/modules/openfga v0.40.0 h1:7zHXSbw8T
 github.com/testcontainers/testcontainers-go/modules/openfga v0.40.0/go.mod h1:zwLB9Af9gw2ViufG7oZT/DpmubgKhnpleOWItgcnLVY=
 github.com/theopenlane/beacon v0.3.0 h1:lGY2SWRMRVqvbtwDzVsAGtWcgf0ca9n+I49Kyp6Y45Q=
 github.com/theopenlane/beacon v0.3.0/go.mod h1:2A6SqD6PuOlLp3X3jS9yMpfhVmDXqx9whbR6D2tN+Dg=
+github.com/theopenlane/core/common v0.0.0-20251226231451-1392578dd846 h1:QgyWQzGYzG1LFzlb2qrsDI+zJSPVE8uLfw3h+Wh/OdE=
+github.com/theopenlane/core/common v0.0.0-20251226231451-1392578dd846/go.mod h1:wcbAMEWDVu3FSIE0EzcmEcDuK7tX/IYFttSgJmxtI90=
 github.com/theopenlane/dbx v0.1.3 h1:6zncXgqnvRyz5OuCDPM07xmOiBXS7q7U9GSMOWu3vNc=
 github.com/theopenlane/dbx v0.1.3/go.mod h1:/bcz8oKFK3qrakLw0yHCAFY6fGnTOC3CntM0jMj3GDk=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
@@ -654,6 +656,8 @@ github.com/theopenlane/emailtemplates v0.3.0 h1:vuU5AlSzG3hog7QoBSKuKKfIixOe9yxb
 github.com/theopenlane/emailtemplates v0.3.0/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
 github.com/theopenlane/entx v0.20.2 h1:BHdEWiHVbgKHTnepxMbd5E5/DiQnjN3qo8z0B/0unGE=
 github.com/theopenlane/entx v0.20.2/go.mod h1:QXHK1vJlnxEHC6TMRoTr4lznJrbp6Gf9yBVeNobCI3E=
+github.com/theopenlane/go-client v0.2.2-0.20251226231720-de0f705eb060 h1:IGFQl3LC/bK+tE6IDAGMDP080BM2+HbXaBECo214OV0=
+github.com/theopenlane/go-client v0.2.2-0.20251226231720-de0f705eb060/go.mod h1:hM/8b4Ymc9rvvHN038eZb7SBlcqZN+m+5xgKydsBTNo=
 github.com/theopenlane/gqlgen-plugins v0.13.0 h1:GCmzUpC39VVIDUNAlB+zjBc+kgB+GJJb4ixpkg4ml4M=
 github.com/theopenlane/gqlgen-plugins v0.13.0/go.mod h1:dUjGeXPU3g7EB0XkSsd4hGkMrkh77VE9w48CPj/j2as=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
