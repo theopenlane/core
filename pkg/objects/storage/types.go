@@ -121,7 +121,7 @@ type ProviderConfigs struct {
 	// Bucket name for cloud providers
 	Bucket string `json:"bucket" koanf:"bucket"`
 	// Endpoint for custom endpoints
-	Endpoint string `json:"endpoint" koanf:"endpoint" default:"http://localhost:17608/v1/files"`
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
 	// ProxyPresignEnabled toggles proxy-signed download URL generation
 	ProxyPresignEnabled bool `json:"proxypresignenabled" koanf:"proxypresignenabled" default:"false"`
 	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
