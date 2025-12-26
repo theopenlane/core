@@ -23,17 +23,18 @@ var FieldsToCheck = []string{
 	"task.Details",
 }
 
-// checkForMentions parses the Slate formatted text and extracts all user mentions
+var (
+	// mentionRegex matches Slate mention elements with standard attribute order
+	mentionRegex = regexp.MustCompile(`<div[^>]*data-slate-node="element"[^>]*data-slate-inline="true"[^>]*data-slate-void="true"[^>]*data-slate-key="([^"]*)"[^>]*data-slate-id="([^"]*)"[^>]*data-slate-value="([^"]*)"[^>]*>`)
+
+	// altMentionRegex handles alternative attribute order for Slate mention elements
+	altMentionRegex = regexp.MustCompile(`<div[^>]*data-slate-key="([^"]*)"[^>]*data-slate-id="([^"]*)"[^>]*data-slate-value="([^"]*)"[^>]*data-slate-node="element"[^>]*>`)
+)
+
+// CheckForMentions parses the Slate formatted text and extracts all user mentions
 // Returns a map where the key is the data-slate-id and the value is the Mention struct
 func CheckForMentions(text string, objectType string, objectID string, objectName string) map[string]Mention {
 	mentions := make(map[string]Mention)
-
-	// Regular expression to match Slate mention elements
-	// Looks for: <div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="..." data-slate-id="..." data-slate-value="...">
-	mentionRegex := regexp.MustCompile(`<div[^>]*data-slate-node="element"[^>]*data-slate-inline="true"[^>]*data-slate-void="true"[^>]*data-slate-key="([^"]*)"[^>]*data-slate-id="([^"]*)"[^>]*data-slate-value="([^"]*)"[^>]*>`)
-
-	// Also handle alternative attribute order
-	altMentionRegex := regexp.MustCompile(`<div[^>]*data-slate-key="([^"]*)"[^>]*data-slate-id="([^"]*)"[^>]*data-slate-value="([^"]*)"[^>]*data-slate-node="element"[^>]*>`)
 
 	// Find all matches
 	matches := mentionRegex.FindAllStringSubmatch(text, -1)
