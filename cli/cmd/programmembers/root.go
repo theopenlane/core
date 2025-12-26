@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // cmd represents the base programMembers command when called without any subcommands
@@ -33,8 +33,8 @@ func consoleOutput(e any) error {
 
 	// check the type of the output and print them in a table format
 	switch v := e.(type) {
-	case *graphclient.GeProgramMemberships:
-		var nodes []*graphclient.GeProgramMemberships_ProgramMemberships_Edges_Node
+	case *graphclient.GetProgramMemberships:
+		var nodes []*graphclient.GetProgramMemberships_ProgramMemberships_Edges_Node
 
 		for _, i := range v.ProgramMemberships.Edges {
 			nodes = append(nodes, i.Node)
@@ -61,11 +61,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.ProgramMembership
+	var list []graphclient.ProgramMembership
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.ProgramMembership
+		var in graphclient.ProgramMembership
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -86,7 +86,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.ProgramMembership) {
+func tableOutput(out []graphclient.ProgramMembership) {
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ProgramID", "UserID", "DisplayName", "FirstName", "LastName", "Email", "Role")
 	for _, i := range out {
 		firstName := ""

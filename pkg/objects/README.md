@@ -26,7 +26,7 @@ import (
     "strings"
 
     "github.com/theopenlane/core/pkg/objects"
-    storage "github.com/theopenlane/core/pkg/objects/storage"
+    "github.com/theopenlane/core/pkg/objects/storage"
     disk "github.com/theopenlane/core/pkg/objects/storage/providers/disk"
 )
 

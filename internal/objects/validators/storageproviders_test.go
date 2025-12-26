@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 
+	"github.com/theopenlane/common/storagetypes"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {

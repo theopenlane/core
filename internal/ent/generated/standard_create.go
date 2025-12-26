@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 )
 
 // StandardCreate is the builder for creating a Standard entity.

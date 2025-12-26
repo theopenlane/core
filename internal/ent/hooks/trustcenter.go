@@ -11,11 +11,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/jobspec"
 	"github.com/theopenlane/core/pkg/logx"
 )
 

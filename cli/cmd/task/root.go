@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base task command when called without any subcommands
@@ -43,8 +43,8 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeTasks:
-		var nodes []*graphclient.GeTasks_Tasks_Edges_Node
+	case *graphclient.GetTasks:
+		var nodes []*graphclient.GetTasks_Tasks_Edges_Node
 
 		if v != nil {
 			for _, i := range v.Tasks.Edges {
@@ -53,7 +53,7 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeTaskByID:
+	case *graphclient.GetTaskByID:
 		e = v.Task
 	case *graphclient.CreateBulkCSVTask:
 		e = v.CreateBulkCSVTask.Tasks
@@ -69,11 +69,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Task
+	var list []graphclient.Task
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Task
+		var in graphclient.Task
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -94,7 +94,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Task) {
+func tableOutput(out []graphclient.Task) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Title", "Details", "Category", "Assignee", "Assigner", "Status", "Due")
 

@@ -31,7 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )

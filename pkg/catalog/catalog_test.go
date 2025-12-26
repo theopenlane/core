@@ -62,15 +62,14 @@ func TestLoadCatalogMissing(t *testing.T) {
 
 func TestVisible(t *testing.T) {
 	t.Parallel()
-	c := &catalog.Catalog{
-		Modules: catalog.FeatureSet{
-			"m1": {Audience: "public"},
-			"m2": {Audience: "beta"},
-		},
-		Addons: catalog.FeatureSet{
-			"a1": {Audience: "private"},
-			"a2": {Audience: "public"},
-		},
+	c := catalog.New()
+	c.Modules = catalog.FeatureSet{
+		"m1": {Audience: "public"},
+		"m2": {Audience: "beta"},
+	}
+	c.Addons = catalog.FeatureSet{
+		"a1": {Audience: "private"},
+		"a2": {Audience: "public"},
 	}
 
 	pub := c.Visible("public")

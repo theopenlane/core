@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var sendEmailCmd = &cobra.Command{
@@ -28,8 +28,8 @@ func init() {
 	sendEmailCmd.Flags().StringP("email", "e", "", "email to send the NDA to")
 }
 
-func sendEmailValidation() (openlane.SendTrustCenterNDAInput, error) {
-	input := openlane.SendTrustCenterNDAInput{}
+func sendEmailValidation() (graphclient.SendTrustCenterNDAInput, error) {
+	input := graphclient.SendTrustCenterNDAInput{}
 
 	trustCenterID := cmd.Config.String("trust-center-id")
 	if trustCenterID != "" {

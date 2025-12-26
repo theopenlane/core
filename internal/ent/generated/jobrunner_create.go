@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 )
 
 // JobRunnerCreate is the builder for creating a JobRunner entity.

@@ -4,10 +4,12 @@ package trustcentersubprocessors
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -45,8 +47,16 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	var order *graphclient.TrustCenterSubprocessorOrder
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.TrustCenterSubprocessorOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.TrustCenterSubprocessorOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAllTrustCenterSubprocessors(ctx)
+	o, err := client.GetAllTrustCenterSubprocessors(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.TrustCenterSubprocessorOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

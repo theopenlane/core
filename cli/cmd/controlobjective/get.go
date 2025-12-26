@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -48,7 +48,7 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
-	order := &graphclient.ControlObjectiveOrder{}
+	var order *graphclient.ControlObjectiveOrder
 	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
 		order = &graphclient.ControlObjectiveOrder{
 			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),

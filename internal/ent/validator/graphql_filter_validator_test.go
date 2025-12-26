@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 )
 
 func TestValidateFilter(t *testing.T) {

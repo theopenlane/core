@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/common/models"
 )
 
 type APIToken struct {

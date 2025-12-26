@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/common/integrations/types"
 )
 
 type fakeCredentialSource struct {

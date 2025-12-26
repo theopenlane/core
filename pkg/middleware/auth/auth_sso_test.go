@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 

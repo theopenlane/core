@@ -16,11 +16,11 @@ import (
 
 	"github.com/urfave/cli/v3"
 
+	"github.com/theopenlane/common/storagetypes"
 	"github.com/theopenlane/core/pkg/objects/examples/common"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/objects/storage/providers/disk"
 	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/eddy"
 )
 

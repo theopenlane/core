@@ -8,8 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -40,15 +40,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeSubprocessors:
-		var nodes []*graphclient.GeSubprocessors_Subprocessors_Edges_Node
+	case *graphclient.GetSubprocessors:
+		var nodes []*graphclient.GetSubprocessors_Subprocessors_Edges_Node
 
 		for _, i := range v.Subprocessors.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeSubprocessorByID:
+	case *graphclient.GetSubprocessorByID:
 		e = v.Subprocessor
 	case *graphclient.CreateSubprocessor:
 		e = v.CreateSubprocessor.Subprocessor
@@ -62,11 +62,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.Subprocessor
+	var list []graphclient.Subprocessor
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.Subprocessor
+		var in graphclient.Subprocessor
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -87,7 +87,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.Subprocessor) {
+func tableOutput(out []graphclient.Subprocessor) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Logo Remote URL", "Owner ID")
 	for _, i := range out {

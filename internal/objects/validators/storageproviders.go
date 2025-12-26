@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/common/storagetypes"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
@@ -18,7 +19,6 @@ import (
 	disk "github.com/theopenlane/core/pkg/objects/storage/providers/disk"
 	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
 	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 const (

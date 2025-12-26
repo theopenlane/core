@@ -14,7 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
 

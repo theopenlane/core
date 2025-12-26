@@ -28,7 +28,7 @@ func main() {
 
 const (
 	repoPath       = "github.com/theopenlane/core/pkg/catalog"
-	modelsPath     = "github.com/theopenlane/core/pkg/models"
+	modelsPath     = "github.com/theopenlane/common/models"
 	sandboxCatalog = "catalog_sandbox.yaml"
 	sandboxOutput  = "./gencatalog/gencatalog_sandbox.go"
 )

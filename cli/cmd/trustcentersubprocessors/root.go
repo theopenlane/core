@@ -8,8 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
+
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base trustcentersubprocessors command when called without any subcommands
@@ -39,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeTrustCenterSubprocessors:
-		var nodes []*graphclient.GeTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node
+	case *graphclient.GetTrustCenterSubprocessors:
+		var nodes []*graphclient.GetTrustCenterSubprocessors_TrustCenterSubprocessors_Edges_Node
 
 		for _, i := range v.TrustCenterSubprocessors.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeTrustCenterSubprocessorByID:
+	case *graphclient.GetTrustCenterSubprocessorByID:
 		e = v.TrustCenterSubprocessor
 	case *graphclient.CreateTrustCenterSubprocessor:
 		e = v.CreateTrustCenterSubprocessor.TrustCenterSubprocessor

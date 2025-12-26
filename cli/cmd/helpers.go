@@ -2,7 +2,7 @@
 
 package cmd
 
-import "github.com/theopenlane/core/pkg/enums"
+import "github.com/theopenlane/common/enums"
 
 // GetRoleEnum returns the Role if valid, otherwise returns an error
 func GetRoleEnum(role string) (enums.Role, error) {

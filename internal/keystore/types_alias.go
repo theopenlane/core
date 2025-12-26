@@ -1,8 +1,8 @@
 package keystore
 
 import (
-	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/common/integrations/config"
+	"github.com/theopenlane/common/integrations/types"
 )
 
 type (

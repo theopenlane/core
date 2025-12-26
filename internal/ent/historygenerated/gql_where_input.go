@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
@@ -75,8 +77,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/workfloweventhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowinstancehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowobjectrefhistory"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 )
 

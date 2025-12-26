@@ -8,9 +8,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/go-client/graphclient"
 )

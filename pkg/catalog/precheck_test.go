@@ -45,13 +45,13 @@ func (f *fakeLookup) ListProducts(ctx context.Context) ([]*stripe.Product, error
 
 func TestLookupKeyConflicts(t *testing.T) {
 	t.Parallel()
-	cat := &catalog.Catalog{
-		Modules: catalog.FeatureSet{
-			"m1": {
-				LookupKey: "dup_feat",
-				Billing:   catalog.Billing{Prices: []catalog.Price{{LookupKey: "dup"}}},
-				ProductID: "m1",
-			},
+	cat := catalog.New()
+
+	cat.Modules = catalog.FeatureSet{
+		"m1": {
+			LookupKey: "dup_feat",
+			Billing:   catalog.Billing{Prices: []catalog.Price{{LookupKey: "dup"}}},
+			ProductID: "m1",
 		},
 	}
 
@@ -66,12 +66,12 @@ func TestLookupKeyConflicts(t *testing.T) {
 
 func TestLookupKeyConflictsByName(t *testing.T) {
 	t.Parallel()
-	cat := &catalog.Catalog{
-		Modules: catalog.FeatureSet{
-			"m2": {
-				DisplayName: "mod2",
-				Billing:     catalog.Billing{},
-			},
+	cat := catalog.New()
+
+	cat.Modules = catalog.FeatureSet{
+		"m2": {
+			DisplayName: "mod2",
+			Billing:     catalog.Billing{},
 		},
 	}
 

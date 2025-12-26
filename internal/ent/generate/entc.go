@@ -24,7 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/enums/exportenums"
+	"github.com/theopenlane/common/enums/exportenums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"

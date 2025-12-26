@@ -4,11 +4,12 @@ package subscribers
 
 import (
 	"context"
+	"strings"
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -47,15 +48,23 @@ func get(ctx context.Context) error {
 		return consoleOutput(o)
 	}
 
+	var order *graphclient.SubscriberOrder
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.SubscriberOrder{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.SubscriberOrderField(*cmd.OrderBy),
+		}
+	}
+
 	// filter options
-	where := openlane.SubscriberWhereInput{}
+	where := graphclient.SubscriberWhereInput{}
 
 	active := cmd.Config.Bool("active")
 	if active {
 		where.Active = &active
 	}
 
-	o, err := client.GetSubscribers(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &where, nil)
+	o, err := client.GetSubscribers(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, &where, []*graphclient.SubscriberOrder{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

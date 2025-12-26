@@ -21,13 +21,13 @@ import (
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
+	"github.com/theopenlane/common/enums"
+	models "github.com/theopenlane/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 func (suite *HandlerTestSuite) TestVerifyHandler() {

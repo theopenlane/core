@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base trustcenter command when called without any subcommands
@@ -41,15 +41,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeTrustCenters:
-		var nodes []*graphclient.GeTrustCenters_TrustCenters_Edges_Node
+	case *graphclient.GetTrustCenters:
+		var nodes []*graphclient.GetTrustCenters_TrustCenters_Edges_Node
 
 		for _, i := range v.TrustCenters.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeTrustCenterByID:
+	case *graphclient.GetTrustCenterByID:
 		e = v.TrustCenter
 	case *graphclient.CreateTrustCenter:
 		e = v.CreateTrustCenter.TrustCenter
@@ -57,7 +57,7 @@ func consoleOutput(e any) error {
 		e = v.UpdateTrustCenter.TrustCenter
 	case *graphclient.UpdateTrustCenterSetting:
 		e = v.UpdateTrustCenterSetting.TrustCenterSetting
-	case *graphclient.GeTrustCenterSettingByID:
+	case *graphclient.GetTrustCenterSettingByID:
 		e = v.TrustCenterSetting
 	case *graphclient.DeleteTrustCenter:
 		deletedTableOutput(v)
@@ -68,7 +68,7 @@ func consoleOutput(e any) error {
 	cobra.CheckErr(err)
 
 	// Try to unmarshal as trust center settings first
-	var setting openlane.GetTrustCenterSettingByID_TrustCenterSetting
+	var setting graphclient.GetTrustCenterSettingByID_TrustCenterSetting
 	err = json.Unmarshal(s, &setting)
 	if err == nil && setting.ID != "" {
 		// This is a trust center setting
@@ -142,7 +142,7 @@ func deletedTableOutput(e *graphclient.DeleteTrustCenter) {
 }
 
 // tableSettingsOutputFromGeneric prints the trust center settings in a table format from generic setting type
-func tableSettingsOutputFromGeneric(setting openlane.GetTrustCenterSettingByID_TrustCenterSetting) {
+func tableSettingsOutputFromGeneric(setting graphclient.GetTrustCenterSettingByID_TrustCenterSetting) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "TrustCenterID", "Title", "Overview", "PrimaryColor", "CreatedAt", "UpdatedAt")
 

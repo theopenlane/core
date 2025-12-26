@@ -8,9 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
 
-	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base trustcenterdoc command when called without any subcommands
@@ -41,15 +42,15 @@ func consoleOutput(e any) error {
 		}
 
 		e = nodes
-	case *graphclient.GeTrustCenterDocs:
-		var nodes []*graphclient.GeTrustCenterDocs_TrustCenterDocs_Edges_Node
+	case *graphclient.GetTrustCenterDocs:
+		var nodes []*graphclient.GetTrustCenterDocs_TrustCenterDocs_Edges_Node
 
 		for _, i := range v.TrustCenterDocs.Edges {
 			nodes = append(nodes, i.Node)
 		}
 
 		e = nodes
-	case *graphclient.GeTrustCenterDocByID:
+	case *graphclient.GetTrustCenterDocByID:
 		e = v.TrustCenterDoc
 	case *graphclient.CreateTrustCenterDoc:
 		e = v.CreateTrustCenterDoc.TrustCenterDoc

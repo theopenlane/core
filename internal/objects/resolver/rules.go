@@ -3,8 +3,8 @@ package resolver
 import (
 	"context"
 
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"

@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/lib/pq"
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 const (

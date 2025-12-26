@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/theopenlane/common/storagetypes"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/objects"
@@ -15,7 +16,6 @@ import (
 	"github.com/theopenlane/core/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // HandleUploads persists metadata, uploads files to storage, and enriches the request context with uploaded file details.

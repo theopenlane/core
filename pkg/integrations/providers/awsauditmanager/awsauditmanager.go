@@ -1,0 +1,15 @@
+package awsauditmanager
+
+import (
+	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/pkg/integrations/providers"
+	"github.com/theopenlane/core/pkg/integrations/providers/awssts"
+)
+
+// TypeAWSAuditManager identifies the AWS Audit Manager provider
+const TypeAWSAuditManager = types.ProviderType("aws_audit_manager")
+
+// Builder returns the AWS Audit Manager provider builder
+func Builder() providers.Builder {
+	return awssts.Builder(TypeAWSAuditManager, awssts.WithOperations(awsAuditOperations()))
+}

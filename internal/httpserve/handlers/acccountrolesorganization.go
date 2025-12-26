@@ -8,10 +8,10 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	models "github.com/theopenlane/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // AccountRolesOrganizationHandler lists roles a subject has in relation to an organization

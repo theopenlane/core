@@ -12,11 +12,11 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
+	"github.com/theopenlane/common/enums"
+	models "github.com/theopenlane/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
-	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 

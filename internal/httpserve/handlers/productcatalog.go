@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	models "github.com/theopenlane/common/openapi"
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 )
@@ -24,9 +24,11 @@ func (h *Handler) ProductCatalogHandler(ctx echo.Context, openapi *OpenAPIContex
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	cat := h.filterCatalog(in)
+
 	out := &models.ProductCatalogReply{
 		Reply:   rout.Reply{Success: true},
-		Catalog: h.filterCatalog(in),
+		Catalog: cat.Catalog,
 	}
 
 	return h.Success(ctx, out, openapi)

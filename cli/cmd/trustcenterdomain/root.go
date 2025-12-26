@@ -8,11 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
-
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
 )
 
 // command represents the base trustcenterdomain command when called without any subcommands
@@ -46,11 +44,11 @@ func consoleOutput(e any) error {
 	s, err := json.Marshal(e)
 	cobra.CheckErr(err)
 
-	var list []openlane.CustomDomain
+	var list []graphclient.CustomDomain
 
 	err = json.Unmarshal(s, &list)
 	if err != nil {
-		var in openlane.CustomDomain
+		var in graphclient.CustomDomain
 		err = json.Unmarshal(s, &in)
 		cobra.CheckErr(err)
 
@@ -71,7 +69,7 @@ func jsonOutput(out any) error {
 }
 
 // tableOutput prints the output in a table format
-func tableOutput(out []openlane.CustomDomain) {
+func tableOutput(out []graphclient.CustomDomain) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "CNAME", "Trust Center ID", "Verification ID", "Created At")
 	for _, i := range out {

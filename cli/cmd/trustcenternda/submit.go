@@ -9,8 +9,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
-	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var submitCmd = &cobra.Command{
@@ -31,7 +31,7 @@ func init() {
 }
 
 // submitValidation validates the required fields for the command
-func submitValidation() (input openlane.SubmitTrustCenterNDAResponseInput, err error) {
+func submitValidation() (input graphclient.SubmitTrustCenterNDAResponseInput, err error) {
 	templateID := cmd.Config.String("template-id")
 	if templateID == "" {
 		return input, cmd.NewRequiredFieldMissingError("template id")

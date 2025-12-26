@@ -7,9 +7,9 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	models "github.com/theopenlane/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // ForgotPassword will send an forgot password email if the provided email exists

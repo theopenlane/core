@@ -8,8 +8,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/cli/cmd"
+	models "github.com/theopenlane/common/openapi"
 )
 
 var command = &cobra.Command{

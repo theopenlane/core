@@ -12,13 +12,13 @@ import (
 
 	features "github.com/theopenlane/core/internal/entitlements/features"
 
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
 

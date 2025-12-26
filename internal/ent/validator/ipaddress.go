@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/utils/rout"
 )
 

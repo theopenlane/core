@@ -20,7 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -85,6 +85,9 @@ func HookImportDocument() ent.Hook {
 
 				return next.Mutate(ctx, m)
 			}
+
+			mut2 := generated.InternalPolicyMutation{}
+			mut2.Name()
 
 			_, exists := mut.URL()
 

@@ -1,4 +1,4 @@
-module github.com/theopenlane/core/cli
+module github.com/theopenlane/cli
 
 go 1.25.5
 
@@ -17,7 +17,6 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v0.50.1
 	github.com/theopenlane/go-client v0.2.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.1

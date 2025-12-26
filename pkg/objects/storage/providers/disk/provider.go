@@ -12,11 +12,11 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/common/storagetypes"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/objects"
-	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 const (

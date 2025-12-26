@@ -8,9 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
 
-	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 // command represents the base trustcentercompliance command when called without any subcommands
@@ -42,7 +43,7 @@ func consoleOutput(e any) error {
 	}
 
 	// check if the output is a single trust center compliance
-	if trustCenterCompliance, ok := e.(*graphclient.GeTrustCenterComplianceByID); ok {
+	if trustCenterCompliance, ok := e.(*graphclient.GetTrustCenterComplianceByID); ok {
 		e = trustCenterCompliance.TrustCenterCompliance
 	}
 

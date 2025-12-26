@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // TestDefaultCatalogTypedModules ensures the default catalog contains

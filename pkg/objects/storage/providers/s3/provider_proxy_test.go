@@ -10,9 +10,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/iam/tokens"
 )
 

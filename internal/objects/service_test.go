@@ -10,9 +10,9 @@ import (
 	"github.com/oklog/ulid/v2"
 	"github.com/samber/mo"
 
+	"github.com/theopenlane/common/storagetypes"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"

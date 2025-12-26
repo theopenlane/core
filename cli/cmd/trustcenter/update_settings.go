@@ -12,10 +12,11 @@ import (
 
 	"github.com/theopenlane/utils/cli/tables"
 
-	"github.com/theopenlane/core/cli/cmd"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/common/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var updateSettingsCmd = &cobra.Command{
@@ -137,7 +138,7 @@ func updateSettingsValidation() (id string, input graphclient.UpdateTrustCenterS
 }
 
 // findSettingIDByTrustCenter finds the setting ID for a given trust center ID
-func findSettingIDByTrustCenter(ctx context.Context, client *openlane.OpenlaneClient, trustCenterID string) (string, error) {
+func findSettingIDByTrustCenter(ctx context.Context, client *openlane.Client, trustCenterID string) (string, error) {
 	// Get the trust center to find its setting
 	trustCenter, err := client.GetTrustCenterByID(ctx, trustCenterID)
 	if err != nil {
@@ -189,7 +190,7 @@ func consoleSettingsOutput(e any) error {
 	switch v := e.(type) {
 	case *graphclient.UpdateTrustCenterSetting:
 		e = v.UpdateTrustCenterSetting.TrustCenterSetting
-	case *graphclient.GeTrustCenterSettingByID:
+	case *graphclient.GetTrustCenterSettingByID:
 		e = v.TrustCenterSetting
 	case *graphclient.CreateTrustCenterSetting:
 		e = v.CreateTrustCenterSetting.TrustCenterSetting

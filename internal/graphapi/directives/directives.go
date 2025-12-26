@@ -14,7 +14,7 @@ import (
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"

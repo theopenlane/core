@@ -11,8 +11,8 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/term"
 
-	"github.com/theopenlane/core/cli/cmd"
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/cli/cmd"
+	models "github.com/theopenlane/common/openapi"
 	openlane "github.com/theopenlane/go-client"
 )
 

@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
 )
 
 // DirectoryMembership associates a DirectoryAccount with a DirectoryGroup snapshot

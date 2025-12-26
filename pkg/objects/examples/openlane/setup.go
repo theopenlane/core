@@ -12,9 +12,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/common/enums"
+	models "github.com/theopenlane/common/openapi"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	models "github.com/theopenlane/core/pkg/openapi"
 
 	openlane "github.com/theopenlane/go-client"
 )

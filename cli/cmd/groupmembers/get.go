@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/cli/cmd"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -38,7 +38,7 @@ func get(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	order := &graphclient.GroupMembershipOrder{}
+	var order *graphclient.GroupMembershipOrder
 	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
 		order = &graphclient.GroupMembershipOrder{
 			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),

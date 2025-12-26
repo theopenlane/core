@@ -5,10 +5,10 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // MutationWithRevision is an interface that defines the methods

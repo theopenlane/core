@@ -9,9 +9,9 @@ import (
 
 	"github.com/theopenlane/eddy"
 
-	"github.com/theopenlane/core/internal/integrations/helpers"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/common/helpers"
+	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/common/models"
 )
 
 const (

@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/models"
-	apimodels "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/common/models"
+	apimodels "github.com/theopenlane/common/openapi"
 	"github.com/theopenlane/httpsling"
 )
 

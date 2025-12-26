@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/jobspec"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )

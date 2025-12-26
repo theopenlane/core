@@ -10,6 +10,11 @@ tool (
 	gotest.tools/gotestsum
 )
 
+replace (
+	github.com/theopenlane/common => ./common
+	github.com/theopenlane/go-client => ../go-client
+)
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
@@ -24,7 +29,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.0
 	github.com/aws/aws-sdk-go-v2/config v1.32.6
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.6
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.18
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.3
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.95.0
 	github.com/brianvoe/gofakeit/v7 v7.12.1
 	github.com/cenkalti/backoff/v5 v5.0.3
@@ -75,7 +80,6 @@ require (
 	github.com/redis/go-redis/v9 v9.17.2
 	github.com/riverqueue/river v0.29.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.29.0
-	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
@@ -83,6 +87,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.1.0
 	github.com/theopenlane/beacon v0.3.0
+	github.com/theopenlane/common v0.0.0-00010101000000-000000000000
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.3.0
@@ -90,7 +95,7 @@ require (
 	github.com/theopenlane/go-client v0.2.1
 	github.com/theopenlane/gqlgen-plugins v0.13.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.1
+	github.com/theopenlane/iam v0.23.2
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.6.3
 	github.com/theopenlane/utils v0.6.2
@@ -119,8 +124,9 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
-	github.com/google/go-github/v79 v79.0.0 // indirect
+	github.com/google/go-github/v80 v80.0.0 // indirect
 	github.com/riverqueue/river/rivertype v0.29.0 // indirect
+	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
@@ -212,7 +218,6 @@ require (
 	github.com/onsi/gomega v1.38.2 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.8 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
-	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.25.9 // indirect
 	github.com/testcontainers/testcontainers-go v0.40.0
 	github.com/testcontainers/testcontainers-go/modules/openfga v0.40.0 // indirect
@@ -302,7 +307,7 @@ require (
 	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20251105142303-feed3db3d69d // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c // indirect
-	github.com/openfga/openfga v1.11.1 // indirect
+	github.com/openfga/openfga v1.11.2 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
