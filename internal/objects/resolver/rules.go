@@ -108,10 +108,11 @@ func devModeOptions() *storage.ProviderOptions {
 		storage.WithBucket(objects.DefaultDevStorageBucket),
 		storage.WithBasePath(objects.DefaultDevStorageBucket),
 		storage.WithProxyPresignEnabled(true),
-		storage.WithEndpoint("http://localhost:17608/v1/files"),
+		storage.WithEndpoint(objects.DefaultLocalDiskURL),
 		storage.WithProxyPresignConfig(&storage.ProxyPresignConfig{
-			BaseURL: "http://localhost:17608/v1/files",
+			BaseURL: objects.DefaultLocalDiskURL,
 		}),
+		storage.WithLocalURL(objects.DefaultLocalDiskURL),
 		storage.WithExtra("dev_mode", true),
 	)
 }
