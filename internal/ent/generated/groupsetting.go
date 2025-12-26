@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 // GroupSetting is the model entity for the GroupSetting schema.

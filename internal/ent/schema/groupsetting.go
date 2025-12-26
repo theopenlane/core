@@ -6,10 +6,10 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 )

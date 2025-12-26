@@ -20,9 +20,9 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/common/enums"
-	models "github.com/theopenlane/common/models"
-	apimodels "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/models"
+	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"

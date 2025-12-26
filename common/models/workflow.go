@@ -7,7 +7,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 // WorkflowDefinitionDocument represents the stored workflow definition with typed fields.

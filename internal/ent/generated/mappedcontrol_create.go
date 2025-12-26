@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 // MappedControlCreate is the builder for creating a MappedControl entity.

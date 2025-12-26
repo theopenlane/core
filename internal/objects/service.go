@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"

@@ -3,7 +3,7 @@ package models_test
 import (
 	"testing"
 
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 	"gotest.tools/v3/assert"
 )
 

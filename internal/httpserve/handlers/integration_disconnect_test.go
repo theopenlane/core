@@ -14,9 +14,9 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/common/integrations/types"
-	credentialmodels "github.com/theopenlane/common/models"
-	models "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/integrations/types"
+	credentialmodels "github.com/theopenlane/core/common/models"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 )
 

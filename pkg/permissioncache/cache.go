@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 )
 
 const (

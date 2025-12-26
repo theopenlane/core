@@ -1,4 +1,4 @@
-module github.com/theopenlane/cli
+module github.com/theopenlane/core/cli
 
 go 1.25.5
 
@@ -17,9 +17,10 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
+	github.com/theopenlane/core v0.50.0
 	github.com/theopenlane/go-client v0.2.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.1
+	github.com/theopenlane/iam v0.23.2
 	github.com/theopenlane/utils v0.6.2
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/term v0.38.0
@@ -114,7 +115,7 @@ require (
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
-	github.com/lestrrat-go/httprc/v3 v3.0.2 // indirect
+	github.com/lestrrat-go/httprc/v3 v3.0.3 // indirect
 	github.com/lestrrat-go/jwx/v3 v3.0.12 // indirect
 	github.com/lestrrat-go/option/v2 v2.0.0 // indirect
 	github.com/mailru/easyjson v0.9.1 // indirect
@@ -139,7 +140,7 @@ require (
 	github.com/openfga/api/proto v0.0.0-20251105142303-feed3db3d69d // indirect
 	github.com/openfga/go-sdk v0.7.3 // indirect
 	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c // indirect
-	github.com/openfga/openfga v1.11.1 // indirect
+	github.com/openfga/openfga v1.11.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.8 // indirect
@@ -218,7 +219,7 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	gocloud.dev v0.44.0 // indirect
 	golang.org/x/crypto v0.46.0 // indirect
-	golang.org/x/exp v0.0.0-20251209150349-8475f28825e9 // indirect
+	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/mod v0.31.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect

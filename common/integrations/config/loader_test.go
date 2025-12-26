@@ -5,7 +5,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 func TestFSLoader_LoadSupportsYAML(t *testing.T) {

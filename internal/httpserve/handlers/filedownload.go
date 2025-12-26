@@ -11,8 +11,8 @@ import (
 	"github.com/oklog/ulid/v2"
 	echo "github.com/theopenlane/echox"
 
-	models "github.com/theopenlane/common/openapi"
-	"github.com/theopenlane/common/storagetypes"
+	models "github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/logx"

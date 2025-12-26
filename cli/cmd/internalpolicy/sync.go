@@ -12,7 +12,7 @@ import (
 	"github.com/goccy/go-yaml"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/go-client/graphclient"
 )

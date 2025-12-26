@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/iam/providers/github"
 	"github.com/theopenlane/iam/providers/google"
 
-	"github.com/theopenlane/common/enums"
-	models "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/logx"

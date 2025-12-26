@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/common/jobspec"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"

@@ -19,7 +19,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/httpsling"
 )
 

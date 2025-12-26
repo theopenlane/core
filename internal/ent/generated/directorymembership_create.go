@@ -18,7 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 // DirectoryMembershipCreate is the builder for creating a DirectoryMembership entity.

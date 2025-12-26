@@ -27,7 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.

@@ -8,7 +8,7 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // OperationManager executes provider-published operations using stored credentials and optional client pools

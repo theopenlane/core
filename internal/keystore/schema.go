@@ -3,7 +3,7 @@ package keystore
 import (
 	"github.com/invopop/jsonschema"
 
-	"github.com/theopenlane/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/config"
 )
 
 // Schema returns the JSON schema for integration provider specifications.

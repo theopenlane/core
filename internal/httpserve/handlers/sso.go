@@ -17,9 +17,9 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/models"
-	apimodels "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"

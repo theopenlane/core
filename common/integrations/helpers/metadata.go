@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // StringValue extracts a string value from a map and returns it trimmed

@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	apimodels "github.com/theopenlane/common/openapi"
+	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/httpsling"
 )

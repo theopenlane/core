@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/contextx"
 
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

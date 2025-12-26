@@ -12,7 +12,7 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // FSLoader reads provider specs from an fs.FS rooted at the configured path

@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 const defaultHTTPTimeout = 10 * time.Second

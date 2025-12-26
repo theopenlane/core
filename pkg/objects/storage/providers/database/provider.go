@@ -6,7 +6,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

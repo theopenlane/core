@@ -18,7 +18,7 @@ import (
 	"github.com/stripe/stripe-go/v84"
 	"github.com/xeipuuv/gojsonschema"
 
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/entitlements"
 )
 

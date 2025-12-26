@@ -23,7 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/emailtemplates"

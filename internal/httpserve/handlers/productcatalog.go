@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	echo "github.com/theopenlane/echox"

@@ -21,7 +21,7 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"

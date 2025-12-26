@@ -3,7 +3,7 @@ package config
 import (
 	"time"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // ProviderSpec mirrors the declarative provider definition files rendered in the UI

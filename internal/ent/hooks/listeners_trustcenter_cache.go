@@ -7,8 +7,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/jobspec"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"

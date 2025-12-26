@@ -8,8 +8,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/common/enums"
-	models "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"

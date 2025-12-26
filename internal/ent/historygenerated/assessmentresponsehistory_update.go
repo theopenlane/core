@@ -15,7 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )

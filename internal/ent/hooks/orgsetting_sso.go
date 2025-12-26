@@ -8,7 +8,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 // HookValidateIdentityProviderConfig ensures identity provider configuration is present when SSO login is enforced

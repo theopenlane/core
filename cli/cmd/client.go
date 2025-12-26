@@ -15,7 +15,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/keyring"
 
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	openlane "github.com/theopenlane/go-client"
 )
 

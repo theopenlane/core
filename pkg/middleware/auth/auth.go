@@ -18,9 +18,9 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/models"
-	api "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	api "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"

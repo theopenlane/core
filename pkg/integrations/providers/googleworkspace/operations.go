@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/theopenlane/common/integrations/helpers"
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 const (

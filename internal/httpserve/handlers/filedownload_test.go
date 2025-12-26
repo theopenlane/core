@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"

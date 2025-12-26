@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"

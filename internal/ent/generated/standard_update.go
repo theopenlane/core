@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )

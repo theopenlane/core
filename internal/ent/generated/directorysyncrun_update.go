@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )

@@ -23,7 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
 

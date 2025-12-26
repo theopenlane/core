@@ -6,8 +6,8 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/common/models"
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/entitlements/features"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"

@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"

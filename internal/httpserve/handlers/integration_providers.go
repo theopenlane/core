@@ -6,8 +6,8 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/common/integrations/types"
-	"github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/utils/rout"
 )

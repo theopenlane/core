@@ -9,7 +9,7 @@ import (
 	"io"
 
 	mock "github.com/stretchr/testify/mock"
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 )
 
 // NewMockProvider creates a new instance of MockProvider. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.

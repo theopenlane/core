@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	"github.com/stoewer/go-strcase"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 

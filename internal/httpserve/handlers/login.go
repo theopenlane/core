@@ -12,8 +12,8 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
-	"github.com/theopenlane/common/enums"
-	models "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"

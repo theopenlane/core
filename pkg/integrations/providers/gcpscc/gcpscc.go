@@ -18,9 +18,9 @@ import (
 	"google.golang.org/api/option"
 	stsv1 "google.golang.org/api/sts/v1"
 
-	"github.com/theopenlane/common/integrations/config"
-	"github.com/theopenlane/common/integrations/types"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/integrations/providers"
 	"github.com/theopenlane/core/pkg/logx"
 )

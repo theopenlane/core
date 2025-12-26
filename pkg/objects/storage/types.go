@@ -5,7 +5,7 @@ import (
 	"maps"
 	"net/http"
 
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 
 	"github.com/theopenlane/iam/tokens"
 )

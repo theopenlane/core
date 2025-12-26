@@ -28,7 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )

@@ -1,7 +1,7 @@
 package cloudflare
 
 import (
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/pkg/integrations/providers"
 	"github.com/theopenlane/core/pkg/integrations/providers/apikey"
 )

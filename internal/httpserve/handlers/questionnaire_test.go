@@ -22,8 +22,8 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/common/enums"
-	models "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 )
 

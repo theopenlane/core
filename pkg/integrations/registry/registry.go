@@ -8,9 +8,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/common/integrations/config"
-	"github.com/theopenlane/common/integrations/helpers"
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/pkg/integrations/providers"
 	"github.com/theopenlane/core/pkg/integrations/providers/catalog"
 )

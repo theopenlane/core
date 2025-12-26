@@ -17,8 +17,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 
-	corecmd "github.com/theopenlane/cli/cmd"
-	models "github.com/theopenlane/common/openapi"
+	corecmd "github.com/theopenlane/core/cli/cmd"
+	models "github.com/theopenlane/core/common/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 	openlane "github.com/theopenlane/go-client"
 )

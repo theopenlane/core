@@ -32,8 +32,8 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/common/integrations/config"
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/entdb"

@@ -15,61 +15,61 @@ models:
       - github.com/theopenlane/entx.RawMessage
   Address:
     model:
-      - github.com/theopenlane/common/models.Address
+      - github.com/theopenlane/core/common /models.Address
   Price:
     model:
-      - github.com/theopenlane/common/models.Price
+      - github.com/theopenlane/core/common /models.Price
   AssessmentObjective:
     model:
-      - github.com/theopenlane/common/models.AssessmentObjective
+      - github.com/theopenlane/core/common /models.AssessmentObjective
   AssessmentMethod:
     model:
-      - github.com/theopenlane/common/models.AssessmentMethod
+      - github.com/theopenlane/core/common /models.AssessmentMethod
   Reference:
     model:
-      - github.com/theopenlane/common/models.Reference
+      - github.com/theopenlane/core/common /models.Reference
   ImplementationGuidance:
     model:
-      - github.com/theopenlane/common/models.ImplementationGuidance
+      - github.com/theopenlane/core/common /models.ImplementationGuidance
   ExampleEvidence:
     model:
-      - github.com/theopenlane/common/models.ExampleEvidence
+      - github.com/theopenlane/core/common /models.ExampleEvidence
   TestingProcedures:
     model:
-      - github.com/theopenlane/common/models.TestingProcedures
+      - github.com/theopenlane/core/common /models.TestingProcedures
   EvidenceRequests:
     model:
-      - github.com/theopenlane/common/models.EvidenceRequests
+      - github.com/theopenlane/core/common /models.EvidenceRequests
   VersionBump:
     model:
-      - github.com/theopenlane/common/models.VersionBump
+      - github.com/theopenlane/core/common /models.VersionBump
   DateTime:
-    model: github.com/theopenlane/common/models.DateTime
+    model: github.com/theopenlane/core/common /models.DateTime
   AAGUID:
-    model: github.com/theopenlane/common/models.AAGUID
+    model: github.com/theopenlane/core/common /models.AAGUID
   JobConfiguration:
-    model: github.com/theopenlane/common/models.JobConfiguration
+    model: github.com/theopenlane/core/common /models.JobConfiguration
   JobCadence:
-    model: github.com/theopenlane/common/models.JobCadence
+    model: github.com/theopenlane/core/common /models.JobCadence
   Change:
-    model: github.com/theopenlane/common/models.Change
+    model: github.com/theopenlane/core/common /models.Change
   AuditLogOrderField:
-    model: github.com/theopenlane/common/models.AuditLogOrderField
+    model: github.com/theopenlane/core/common /models.AuditLogOrderField
   CredentialSet:
     model:
-      - github.com/theopenlane/common/models.CredentialSet
+      - github.com/theopenlane/core/common /models.CredentialSet
   WorkflowDefinitionDocument:
     model:
-      - github.com/theopenlane/common/models.WorkflowDefinitionDocument
+      - github.com/theopenlane/core/common /models.WorkflowDefinitionDocument
   WorkflowDefinitionSchema:
     model:
-      - github.com/theopenlane/common/models.WorkflowDefinitionSchema
+      - github.com/theopenlane/core/common /models.WorkflowDefinitionSchema
   WorkflowInstanceContext:
     model:
-      - github.com/theopenlane/common/models.WorkflowInstanceContext
+      - github.com/theopenlane/core/common /models.WorkflowInstanceContext
   WorkflowEventPayload:
     model:
-      - github.com/theopenlane/common/models.WorkflowEventPayload
+      - github.com/theopenlane/core/common /models.WorkflowEventPayload
   Map:
     model:
       - github.com/99designs/gqlgen/graphql.Map

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 )
 
 func TestDateTime_Scan_Valid(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 func TestGetTupleKeyFromRole(t *testing.T) {

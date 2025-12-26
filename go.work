@@ -3,9 +3,9 @@ go 1.25.5
 use (
 	// core is the main module containing the API and business logic, nothing in pkg or internal should be imported by other modules
 	.
+	// cli contains the command-line interface for the core api, using go-client
+	./cli
 	// common contains shared code between core and other components, anything that needs to be imported by other modules should
 	// be placed here to prevent circular dependencies.
 	./common
-	// cli contains the command-line interface for the core api, using go-client
-	./cli
 )

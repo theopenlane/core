@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/models"
-	apimodels "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 )

@@ -11,8 +11,8 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/common/integrations/types"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"

@@ -3,7 +3,7 @@ package jobspec
 import (
 	"time"
 
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 )
 
 // CreateTaskArgs for the worker to process

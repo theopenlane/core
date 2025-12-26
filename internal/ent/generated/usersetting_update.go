@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )

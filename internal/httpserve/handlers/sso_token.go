@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/theopenlane/common/models"
-	apimodels "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/models"
+	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"

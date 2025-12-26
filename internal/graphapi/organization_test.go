@@ -15,8 +15,8 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"

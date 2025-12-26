@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/common/integrations/types"
-	openapi "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/common/integrations/types"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/keystore"
 )
 

@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/common/models"
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/storagetypes"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/utils/contextx"
 )

@@ -9,8 +9,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/cli/cmd"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/go-client/graphclient"
 )
 

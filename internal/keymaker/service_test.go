@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/common/integrations/types"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/integrations"
 	"github.com/theopenlane/core/pkg/integrations/providers"
 )

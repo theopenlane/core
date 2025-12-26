@@ -25,7 +25,7 @@ import (
 	hushpkg "github.com/theopenlane/core/internal/ent/hush"
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 

@@ -6,10 +6,10 @@ import (
 	"maps"
 	"strings"
 
-	"github.com/theopenlane/common/integrations/config"
-	"github.com/theopenlane/common/integrations/helpers"
-	"github.com/theopenlane/common/integrations/types"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/helpers"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/integrations/providers"
 )
 

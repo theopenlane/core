@@ -3,8 +3,8 @@ package providers
 import (
 	"context"
 
-	"github.com/theopenlane/common/integrations/config"
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // Provider ensures all concrete providers satisfy the shared contract

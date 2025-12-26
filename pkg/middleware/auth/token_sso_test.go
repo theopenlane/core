@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 )
 

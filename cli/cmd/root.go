@@ -105,7 +105,7 @@ func init() {
 	RootCmd.PersistentFlags().Int64Var(&last, "last", 0, "last number of items to return in a paginated response, max of 100")
 	RootCmd.PersistentFlags().StringVar(&after, "after", "", "cursor to start after in a paginated response")
 	RootCmd.PersistentFlags().StringVar(&before, "before", "", "cursor to end before in a paginated response")
-	RootCmd.PersistentFlags().StringVar(&orderBy, "order-by", "", "order by field (due, created_at, updated_at)")
+	RootCmd.PersistentFlags().StringVar(&orderBy, "order-by", "created_at", "order by field (due, created_at, updated_at)")
 	RootCmd.PersistentFlags().StringVar(&orderDirection, "order-direction", "DESC", "order direction (ASC, DESC)")
 }
 

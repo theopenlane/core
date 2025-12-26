@@ -10,7 +10,7 @@ import (
 	securitycenterpb "cloud.google.com/go/securitycenter/apiv2/securitycenterpb"
 	"google.golang.org/api/iterator"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // Operation names published by the GCP SCC provider.

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/samber/mo"
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 

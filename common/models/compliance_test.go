@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/models"
 )
 
 func TestSort(t *testing.T) {

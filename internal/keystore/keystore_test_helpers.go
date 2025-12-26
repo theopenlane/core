@@ -3,7 +3,7 @@ package keystore
 import (
 	"context"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 )
 
 // credentialSourceStub implements CredentialSource for tests

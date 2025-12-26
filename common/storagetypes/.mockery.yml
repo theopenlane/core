@@ -8,6 +8,6 @@ pkgname: mocks
 recursive: false
 template: testify
 packages:
-  github.com/theopenlane/common/storagetypes:
+  github.com/theopenlane/core/common /storagetypes:
     config:
       all: true

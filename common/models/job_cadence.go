@@ -8,7 +8,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/theopenlane/common/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 var (

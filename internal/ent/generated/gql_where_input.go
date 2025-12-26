@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/models"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"

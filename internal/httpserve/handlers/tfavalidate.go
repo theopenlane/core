@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"slices"
 
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"

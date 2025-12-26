@@ -9,8 +9,8 @@ import (
 	"github.com/spf13/cobra"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/cli/cmd"
-	models "github.com/theopenlane/common/openapi"
+	"github.com/theopenlane/core/cli/cmd"
+	models "github.com/theopenlane/core/common/openapi"
 )
 
 var acceptCmd = &cobra.Command{

@@ -6,7 +6,7 @@ import (
 	"context"
 
 	"github.com/spf13/cobra"
-	"github.com/theopenlane/cli/cmd"
+	"github.com/theopenlane/core/cli/cmd"
 )
 
 var getSettingsCmd = &cobra.Command{

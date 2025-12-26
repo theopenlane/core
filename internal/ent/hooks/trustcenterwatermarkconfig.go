@@ -5,7 +5,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/common/jobspec"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"

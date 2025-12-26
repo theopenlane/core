@@ -13,7 +13,7 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/metrics"
 )

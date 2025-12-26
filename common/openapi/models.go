@@ -15,11 +15,11 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/common/enums"
-	"github.com/theopenlane/common/integrations/config"
-	"github.com/theopenlane/common/integrations/types"
-	"github.com/theopenlane/common/models"
-	"github.com/theopenlane/common/storagetypes"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/storagetypes"
 
 	"github.com/theopenlane/utils/passwd"
 )

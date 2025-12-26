@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	models "github.com/theopenlane/common/openapi"
+	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/utils/rout"

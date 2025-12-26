@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/common/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
 	"github.com/theopenlane/core/pkg/integrations"
 )
 

@@ -3,7 +3,7 @@
 package gencatalog
 
 import (
-	models "github.com/theopenlane/common/models"
+	models "github.com/theopenlane/core/common/models"
 	catalog "github.com/theopenlane/core/pkg/catalog"
 )
 
