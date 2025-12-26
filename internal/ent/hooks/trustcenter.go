@@ -266,6 +266,12 @@ func HookTrustCenterDelete() ent.Hook {
 				}
 			}
 
+			if tc.CustomDomainID != nil {
+				if err := m.Client().CustomDomain.DeleteOneID(*tc.CustomDomainID).Exec(ctx); err != nil {
+					return nil, err
+				}
+			}
+
 			return retVal, nil
 		})
 	}
