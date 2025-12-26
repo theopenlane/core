@@ -96,7 +96,7 @@ func (m *GroupMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) er
 		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil && !!IsNotFound(err) {
+	if err != nil && !IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for update")
 
 		return err
@@ -164,7 +164,7 @@ func (m *GroupMembershipMutation) CreateTuplesFromDelete(ctx context.Context) er
 		members, err = m.Client().GroupMembership.Query().Where(groupmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil && !!IsNotFound(err) {
+	if err != nil && !IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for delete")
 
 		return err
@@ -277,7 +277,7 @@ func (m *OrgMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) erro
 		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil && !!IsNotFound(err) {
+	if err != nil && !IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for update")
 
 		return err
@@ -345,7 +345,7 @@ func (m *OrgMembershipMutation) CreateTuplesFromDelete(ctx context.Context) erro
 		members, err = m.Client().OrgMembership.Query().Where(orgmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil && !!IsNotFound(err) {
+	if err != nil && !IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for delete")
 
 		return err
@@ -458,7 +458,7 @@ func (m *ProgramMembershipMutation) CreateTuplesFromUpdate(ctx context.Context) 
 		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil && !!IsNotFound(err) {
+	if err != nil && !IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for update")
 
 		return err
@@ -526,7 +526,7 @@ func (m *ProgramMembershipMutation) CreateTuplesFromDelete(ctx context.Context) 
 		members, err = m.Client().ProgramMembership.Query().Where(programmembership.IDIn(ids...)).All(ctx)
 	}
 
-	if err != nil && !!IsNotFound(err) {
+	if err != nil && !IsNotFound(err) {
 		log.Error().Err(err).Msg("failed to get members for delete")
 
 		return err

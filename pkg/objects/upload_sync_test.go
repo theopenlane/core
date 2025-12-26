@@ -18,7 +18,7 @@ func TestAddUpload(t *testing.T) {
 
 	AddUpload()
 
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	go func() {
 		uploadWaitGroup.Wait()
 		done <- true
@@ -31,6 +31,8 @@ func TestAddUpload(t *testing.T) {
 	}
 
 	uploadWaitGroup.Done()
+
+	<-done
 }
 
 func TestDoneUpload(t *testing.T) {
@@ -42,7 +44,7 @@ func TestDoneUpload(t *testing.T) {
 	uploadWaitGroup.Add(1)
 	DoneUpload()
 
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	go func() {
 		uploadWaitGroup.Wait()
 		done <- true
@@ -63,7 +65,7 @@ func TestWaitForUploads(t *testing.T) {
 
 	uploadWaitGroup.Add(1)
 
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	go func() {
 		WaitForUploads()
 		done <- true
@@ -72,7 +74,7 @@ func TestWaitForUploads(t *testing.T) {
 	select {
 	case <-done:
 		t.Fatal("WaitForUploads should still be waiting")
-	case <-time.After(3 * time.Second):
+	case <-time.After(100 * time.Millisecond):
 	}
 
 	uploadWaitGroup.Done()
@@ -96,7 +98,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 		AddUpload()
 	}
 
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	go func() {
 		WaitForUploads()
 		done <- true
@@ -105,7 +107,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 	select {
 	case <-done:
 		t.Fatal("WaitForUploads should still be waiting")
-	case <-time.After(3 * time.Second):
+	case <-time.After(100 * time.Millisecond):
 	}
 
 	for i := 0; i < numGoroutines; i++ {
@@ -127,8 +129,8 @@ func TestUploadSync_MultipleWaiters(t *testing.T) {
 
 	AddUpload()
 
-	waiter1Done := make(chan bool)
-	waiter2Done := make(chan bool)
+	waiter1Done := make(chan bool, 1)
+	waiter2Done := make(chan bool, 1)
 
 	go func() {
 		WaitForUploads()
@@ -145,7 +147,7 @@ func TestUploadSync_MultipleWaiters(t *testing.T) {
 		t.Fatal("waiter1 should still be waiting")
 	case <-waiter2Done:
 		t.Fatal("waiter2 should still be waiting")
-	case <-time.After(3 * time.Second):
+	case <-time.After(100 * time.Millisecond):
 	}
 
 	DoneUpload()
@@ -175,7 +177,7 @@ func TestUploadSync_NoUploads(t *testing.T) {
 
 	uploadWaitGroup = sync.WaitGroup{}
 
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	go func() {
 		WaitForUploads()
 		done <- true
@@ -197,7 +199,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	AddUpload()
 	DoneUpload()
 
-	done := make(chan bool)
+	done := make(chan bool, 1)
 	go func() {
 		WaitForUploads()
 		done <- true
@@ -212,7 +214,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	AddUpload()
 	AddUpload()
 
-	done2 := make(chan bool)
+	done2 := make(chan bool, 1)
 	go func() {
 		WaitForUploads()
 		done2 <- true
@@ -221,7 +223,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	select {
 	case <-done2:
 		t.Fatal("WaitForUploads should be waiting for new uploads")
-	case <-time.After(1 * time.Second):
+	case <-time.After(100 * time.Millisecond):
 	}
 
 	DoneUpload()

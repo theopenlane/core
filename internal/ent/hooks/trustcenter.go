@@ -79,7 +79,10 @@ func HookTrustCenter() ent.Hook {
 				return retVal, nil
 			}
 
-			trustCenter := retVal.(*generated.TrustCenter)
+			trustCenter, ok := retVal.(*generated.TrustCenter)
+			if !ok {
+				return retVal, nil
+			}
 
 			// If settings were not created, create default settings
 			id, err := GetObjectIDFromEntValue(retVal)
@@ -268,6 +271,7 @@ func HookTrustCenterDelete() ent.Hook {
 	}
 }
 
+// HookTrustCenterUpdate runs on trust center update mutations
 func HookTrustCenterUpdate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
