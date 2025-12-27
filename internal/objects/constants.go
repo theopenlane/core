@@ -9,4 +9,6 @@ const (
 	DefaultDevStorageBucket = "/tmp/dev-storage"
 	// DefaultS3Region is used when no region is specified for S3-compatible providers.
 	DefaultS3Region = "us-east-1"
+	// DefaultLocalDiskURL is the default local URL for disk storage providers.
+	DefaultLocalDiskURL = "http://localhost:17608/v1/files"
 )

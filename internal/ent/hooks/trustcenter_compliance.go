@@ -18,7 +18,7 @@ func HookTrustCenterComplianceAuthz() ent.Hook {
 			retValue, err := next.Mutate(ctx, m)
 			if err != nil {
 				// if we error, do not attempt to create the relationships
-				return retValue, err
+				return nil, err
 			}
 
 			if m.Op().Is(ent.OpCreate) {
@@ -63,6 +63,7 @@ func trustCenterComplianceCreateHook(ctx context.Context, m *generated.TrustCent
 	return nil
 }
 
+// trustCenterComplianceDeleteHook deletes relationship tuples on trust center compliance deletion
 func trustCenterComplianceDeleteHook(ctx context.Context, m *generated.TrustCenterComplianceMutation) error {
 	trustCenterID, trustCenterExists := m.TrustCenterID()
 

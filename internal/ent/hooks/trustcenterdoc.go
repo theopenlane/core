@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"errors"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
@@ -17,12 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-)
-
-var (
-	errMissingFileID         = errors.New("missing file id")
-	errCannotSetFileOnCreate = errors.New("cannot set file id on create")
-	errNotSingularUpload     = errors.New("expected a single file upload")
 )
 
 // internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
@@ -40,7 +33,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			_, mutationSetsOriginalFileID := m.OriginalFileID()
 
 			if mutationSetsFileID || len(fileIDs) > 0 {
-				return nil, errCannotSetFileOnCreate
+				return nil, ErrCannotSetFileOnCreate
 			}
 
 			// Process trust center doc file
@@ -57,7 +50,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 				// we should only have one file
 				if len(docFiles) > 1 {
-					return nil, errNotSingularUpload
+					return nil, ErrNotSingularUpload
 				}
 
 				m.SetOriginalFileID(docFiles[0].ID)
@@ -85,7 +78,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			if !mutationSetsOriginalFileID && len(docFiles) == 0 {
 				// check if watermarking is enabled because if it is a file must be present
 				if watermarkingEnabledSet && watermarkingEnabled {
-					return nil, errMissingFileID
+					return nil, ErrMissingFileID
 				}
 
 				// otherwise set the visibility to NOT_VISIBLE
@@ -93,7 +86,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			} else if !watermarkingEnabledSet || !watermarkingEnabled {
 				origFileID, origFileIDSet := m.OriginalFileID()
 				if !origFileIDSet {
-					return nil, errMissingFileID
+					return nil, ErrMissingFileID
 				}
 				m.SetFileID(origFileID)
 			}

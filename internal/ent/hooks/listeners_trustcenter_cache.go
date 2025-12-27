@@ -43,11 +43,9 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *events.Muta
 			}
 		}
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		if visibility, ok := mut.Visibility(); ok {
-			if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
-				visibility == enums.TrustCenterDocumentVisibilityProtected {
-				shouldClearCache = true
-			}
+		if _, ok := mut.Visibility(); ok {
+			// any visibility change should clear cache to ensure consistency
+			shouldClearCache = true
 		}
 	}
 
@@ -58,6 +56,22 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *events.Muta
 	var trustCenterID string
 	if tcID, exists := mut.TrustCenterID(); exists {
 		trustCenterID = tcID
+	}
+
+	if trustCenterID == "" {
+		docID := payload.EntityID
+		if docID == "" {
+			if id, ok := mut.ID(); ok {
+				docID = id
+			}
+		}
+
+		if docID != "" {
+			doc, err := payload.Client.TrustCenterDoc.Query().Where(trustcenterdoc.ID(docID)).Select(trustcenterdoc.FieldTrustCenterID).Only(ctx.Context())
+			if err == nil && doc != nil {
+				trustCenterID = doc.TrustCenterID
+			}
+		}
 	}
 
 	if trustCenterID == "" {
@@ -109,6 +123,22 @@ func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *events.M
 	}
 
 	if trustCenterID == "" {
+		entityID := payload.EntityID
+		if entityID == "" {
+			if id, ok := mut.ID(); ok {
+				entityID = id
+			}
+		}
+
+		if entityID != "" {
+			entity, err := payload.Client.TrustcenterEntity.Get(ctx.Context(), entityID)
+			if err == nil && entity != nil {
+				trustCenterID = entity.TrustCenterID
+			}
+		}
+	}
+
+	if trustCenterID == "" {
 		return nil
 	}
 
@@ -132,6 +162,22 @@ func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *ev
 	}
 
 	if trustCenterID == "" {
+		entityID := payload.EntityID
+		if entityID == "" {
+			if id, ok := mut.ID(); ok {
+				entityID = id
+			}
+		}
+
+		if entityID != "" {
+			entity, err := payload.Client.TrustCenterSubprocessor.Get(ctx.Context(), entityID)
+			if err == nil && entity != nil {
+				trustCenterID = entity.TrustCenterID
+			}
+		}
+	}
+
+	if trustCenterID == "" {
 		return nil
 	}
 
@@ -152,6 +198,22 @@ func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *even
 	var trustCenterID string
 	if tcID, exists := mut.TrustCenterID(); exists {
 		trustCenterID = tcID
+	}
+
+	if trustCenterID == "" {
+		entityID := payload.EntityID
+		if entityID == "" {
+			if id, ok := mut.ID(); ok {
+				entityID = id
+			}
+		}
+
+		if entityID != "" {
+			entity, err := payload.Client.TrustCenterCompliance.Get(ctx.Context(), entityID)
+			if err == nil && entity != nil {
+				trustCenterID = entity.TrustCenterID
+			}
+		}
 	}
 
 	if trustCenterID == "" {
@@ -279,8 +341,11 @@ func shouldInvalidateCacheForSubprocessor(mut *entgen.SubprocessorMutation, oper
 		_, hasName := mut.Name()
 		_, hasLogoFileID := mut.LogoFileID()
 		_, hasLogoRemoteURL := mut.LogoRemoteURL()
-		return hasName || hasLogoFileID || hasLogoRemoteURL
+		logoFileCleared := mut.LogoFileIDCleared()
+		logoRemoteURLCleared := mut.LogoRemoteURLCleared()
+		return hasName || hasLogoFileID || hasLogoRemoteURL || logoFileCleared || logoRemoteURLCleared
 	}
+
 	return false
 }
 
@@ -296,11 +361,13 @@ func shouldInvalidateCacheForStandard(mut *entgen.StandardMutation, operation st
 	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
 		_, hasName := mut.Name()
 		_, hasLogoFileID := mut.LogoFileID()
-		return hasName || hasLogoFileID
+		logoFileCleared := mut.LogoFileIDCleared()
+		return hasName || hasLogoFileID || logoFileCleared
 	}
 	return false
 }
 
+// enqueueCacheInvalidation enqueues a job to invalidate the trust center cache
 func enqueueCacheInvalidation(ctx context.Context, client *entgen.Client, jobClient riverqueue.JobClient, trustCenterID string) error {
 	if trustCenterID == "" {
 		return nil
