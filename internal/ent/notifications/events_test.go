@@ -192,7 +192,10 @@ func TestRegisterListeners(t *testing.T) {
 
 	assert.True(t, registered[generated.TypeTask], "Task listener should be registered")
 	assert.True(t, registered[generated.TypeInternalPolicy], "InternalPolicy listener should be registered")
-	assert.Len(t, registered, 2, "Should register exactly 2 listeners")
+	assert.True(t, registered[generated.TypeRisk], "Risk listener should be registered")
+	assert.True(t, registered[generated.TypeProcedure], "Procedure listener should be registered")
+	assert.True(t, registered[generated.TypeNote], "Note listener should be registered")
+	assert.Len(t, registered, 5, "Should register exactly 5 listeners")
 }
 
 func TestTaskNotificationInput(t *testing.T) {
