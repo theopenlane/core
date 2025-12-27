@@ -19,7 +19,7 @@ the heart of the [Openlane](https://www.theopenlane.io) cloud service. [Sign up 
 - Automated Task assignments and configurable workflows with task reminders and escalation
 - Evidence upload, approval processes, and other configurable automation to get you through your audits
 - Robust user and group management with a myriad of RBAC controls / toggles to ensure individuals in your company see what they are supposed to see
-- Multiple authentication methods and organization-level controls for authorized domains (with organization-wide SSO coming soon!)
+- Multiple authentication methods and organization-level controls for authorized domains including organization-wide SSO
 - Automated domain scanning with assets and other resources created automatically for your approval
 - Questionnaire creation, customization, and automation for easier internal and external interactions with your staff, auditors, and vendors
 - Notification customizations, channel definitions, comments and histories on all your objects
@@ -162,11 +162,7 @@ The CLI has been updated to call `ClientWithCSRFToken` automatically, but other 
 
 ### Creating Queries in GraphQL
 
-The best method of forming / testing queries against the server is to run
-`task docker:rover` which will launch an interactive query UI.
-
-If you are running the queries against your local repo, you will have CORS
-issues using the local running apollo. Instead, its recommended to use the
+It's recommended to use the
 [apollo sandbox](https://studio.apollographql.com/sandbox/explorer) and ensure
 the following origin is allowed in your `config/.config.yaml`
 
@@ -213,7 +209,7 @@ NOTE: you still have to make intelligent decisions around things like the
 presence / integration of hooks, interceptors, policies, etc. This is saving you
 about 10 seconds of copy-paste, so don't over estimate the automation, here.
 
-To generate a new schema, you can run `task newschema -- [yourschemaname]` where
+To generate a new schema, you can run `task db:newschema -- [yourschemaname]` where
 you replace the name within `[]`. Please be sure to note that this isn't a
 command line flag so there's a space between `--` and the name.
 
@@ -222,15 +218,14 @@ command line flag so there's a space between `--` and the name.
 We use [atlas](https://atlasgo.io/) and
 [goose](https://github.com/pressly/goose) to create and manage our DB
 migrations - you can trigger one via `task atlas:create` and that will generate
-the necessary migrations. There should be a new migration file created in
-`db/migrations` and `db/migrations-goose-postgres`. On every PR, the Atlas
-integration also creates comments with any issues related to the schema changes
+the necessary migrations. There should be two migration files created in
+`db/migrations` and `db/migrations-goose-postgres`, one for the base schema and one for the history schema.
+On every PR, the Atlas integration also creates comments with any issues related to the schema changes
 / migrations.
 
 ## Deploying
 
-The only "supported" method of deploying today is locally, but we have a WIP
-Helm chart which can be found [here](https://github.com/theopenlane/openlane-infra/charts/openlane)
+The only "supported" method of deploying today is locally, but all required docker containers are available in the GitHub container registry for deployment in Kubernetes.
 
 ## Contributing
 
@@ -255,7 +250,7 @@ framework which allows us to:
 On top of this powerful core we also have an incredible amount of pluggable,
 extensible services:
 
-- Authentication: we today support password, OAuth2 / Social login providers
+- Authentication: we today support password, Single Sign-On (SSO), OAuth2 / Social login providers
   (Github, Google), Passkeys as well as standard OIDC Discovery flows (NOTE: you will need to create your own github or google client secrets and leverage them to take advantage of this capability)
 - Multi-factor: built-in 2FA mechanisms, TOTP
 - Authorization: extensible and flexible permissions constructs via openFGA
