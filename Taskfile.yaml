@@ -465,7 +465,7 @@ tasks:
   pr:
     desc: runs the comprehensive roll-up tasks required to ensure all files are being committed / pushed as a part of opening a PR
     cmds:
-      - task: regenerate
+      - task: generate
       - task: config:generate
       - task: atlas:create
       - task: go

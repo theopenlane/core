@@ -62,7 +62,6 @@ import (
 	_ "github.com/theopenlane/core/cli/cmd/user"
 	_ "github.com/theopenlane/core/cli/cmd/usersetting"
 	_ "github.com/theopenlane/core/cli/cmd/version"
-	_ "github.com/theopenlane/core/cli/cmd/actionplan"
 )
 
 func main() {
