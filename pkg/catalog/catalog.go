@@ -132,13 +132,13 @@ func LoadCatalog(path string) (*Catalog, error) {
 		return nil, ErrCatalogValidationFailed
 	}
 
-	var c Catalog
+	var c models.Catalog
 
 	if err := yaml.Unmarshal(data, &c); err != nil {
 		return nil, err
 	}
 
-	return &c, nil
+	return &Catalog{Catalog: c}, nil
 }
 
 // ValidatePrices ensures every feature's price attributes match a Stripe price.

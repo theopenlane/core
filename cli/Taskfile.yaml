@@ -35,7 +35,7 @@ tasks:
     desc: generates a new enum
     interactive: true
     cmds:
-      - go run --tags genenum ../../pkg/genenum/cmd/main.go
+      - go run --tags genenum ../pkg/genenum/cmd/main.go
 
   # === Organization Management ===
   org:create:

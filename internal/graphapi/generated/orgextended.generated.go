@@ -312,7 +312,7 @@ func (ec *executionContext) unmarshalInputOrgMembersInput(ctx context.Context, o
 		switch k {
 		case "role":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			data, err := ec.unmarshalOOrgMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐRole(ctx, v)
+			data, err := ec.unmarshalOOrgMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐRole(ctx, v)
 			if err != nil {
 				return it, err
 			}
