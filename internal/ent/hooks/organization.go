@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -26,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )

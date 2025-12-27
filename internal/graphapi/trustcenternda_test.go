@@ -7,10 +7,10 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"

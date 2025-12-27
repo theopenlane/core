@@ -14,8 +14,8 @@ import (
 
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // DirectoryGroup mirrors group metadata from an external directory provider

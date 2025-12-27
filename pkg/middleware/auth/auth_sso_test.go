@@ -13,8 +13,8 @@ import (
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/common/enums"
+	generated "github.com/theopenlane/core/internal/ent/generated"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 

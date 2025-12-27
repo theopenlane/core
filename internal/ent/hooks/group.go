@@ -11,12 +11,12 @@ import (
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 )
 

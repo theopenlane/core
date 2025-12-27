@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // DirectoryAccount captures one normalized identity fetched from an external directory provider

@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -23,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
