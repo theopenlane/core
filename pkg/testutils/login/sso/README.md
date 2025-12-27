@@ -25,7 +25,7 @@ the page and the email address is shown.
 After starting Dex, configure the organization settings using the CLI:
 
 ```sh
-task -d cmd/cli orgsetting:enforce-sso
+task -d cli orgsetting:enforce-sso
 ```
 
 This task applies the static client credentials from `docker/files/dex.yaml` so

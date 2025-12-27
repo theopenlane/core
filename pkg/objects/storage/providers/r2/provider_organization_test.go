@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // TestR2Provider_OrganizationFolderStructure verifies that files are stored under organization-specific directories

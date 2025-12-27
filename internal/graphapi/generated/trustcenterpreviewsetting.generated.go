@@ -182,7 +182,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 			it.FaviconFileID = data
 		case "themeMode":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("themeMode"))
-			data, err := ec.unmarshalOTrustCenterSettingTrustCenterThemeMode2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐTrustCenterThemeMode(ctx, v)
+			data, err := ec.unmarshalOTrustCenterSettingTrustCenterThemeMode2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTrustCenterThemeMode(ctx, v)
 			if err != nil {
 				return it, err
 			}

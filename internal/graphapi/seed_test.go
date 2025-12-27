@@ -9,12 +9,11 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
 
@@ -125,14 +124,14 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 	// setup client with a personal access token
 	pat := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{user.OrganizationID, user.PersonalOrgID}}).MustNew(user.UserCtx, t)
 
-	authHeaderPAT := openlaneclient.Authorization{
+	authHeaderPAT := testclient.Authorization{
 		BearerToken: pat.Token,
 	}
 
 	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore,
-		openlaneclient.WithCredentials(authHeaderPAT),
-		openlaneclient.WithInterceptors(
-			openlaneclient.WithOrganizationHeader(user.OrganizationID),
+		testclient.WithCredentials(authHeaderPAT),
+		testclient.WithInterceptors(
+			testclient.WithOrganizationHeader(user.OrganizationID),
 		))
 	requireNoError(t, err)
 
@@ -143,11 +142,11 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 	// setup client with an API token
 	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(ctx, t)
 
-	authHeaderAPIToken := openlaneclient.Authorization{
+	authHeaderAPIToken := testclient.Authorization{
 		BearerToken: apiToken.Token,
 	}
 
-	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
+	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, testclient.WithCredentials(authHeaderAPIToken))
 	requireNoError(t, err)
 
 	return apiClientToken

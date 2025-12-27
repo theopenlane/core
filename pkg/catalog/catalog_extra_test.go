@@ -22,7 +22,9 @@ func TestIsCurrent(t *testing.T) {
 	if (*Catalog)(nil).IsCurrent() != true {
 		t.Fatal("nil catalog should be current")
 	}
-	c := &Catalog{Version: "v0.0.1"}
+
+	c := New()
+	c.Version = "v0.0.1"
 	c.SHA = computeSHA(c.Version)
 	if !c.IsCurrent() {
 		t.Fatal("catalog should be current when SHA matches")
@@ -35,7 +37,12 @@ func TestIsCurrent(t *testing.T) {
 
 func TestSaveCatalogVersionBump(t *testing.T) {
 	t.Parallel()
-	c := &Catalog{Version: "v0.0.1", Modules: FeatureSet{"m1": {Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 1}}}}}}
+	c := New()
+	c.Version = "v0.0.1"
+	c.Modules = FeatureSet{
+		"m1": {Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 1}}}},
+	}
+
 	dir := t.TempDir()
 	path := filepath.Join(dir, "catalog.yaml")
 	if _, err := c.SaveCatalog(path); err != nil {

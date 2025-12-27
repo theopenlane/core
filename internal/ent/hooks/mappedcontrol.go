@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/iam/auth"
 )
 

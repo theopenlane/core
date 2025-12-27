@@ -5,11 +5,11 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 var (

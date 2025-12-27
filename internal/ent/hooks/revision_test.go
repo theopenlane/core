@@ -8,9 +8,9 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 )
 

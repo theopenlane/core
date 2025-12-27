@@ -46,7 +46,7 @@ extend type Mutation{
 """
 Permission is enum for the permissions types
 """
-enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {
+enum Permission @goModel(model: "github.com/theopenlane/core/common/enums.Permission") {
   EDITOR
   VIEWER
   CREATOR

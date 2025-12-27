@@ -45,7 +45,7 @@ Flags:
     ```
 1. This will create a set of cobra command files:
     ```
-    ls -l cmd/cli/cmd/contact/
+    ls -l cli/cmd/contact/
     total 48
     -rw-r--r--  1 sarahfunkhouser  staff  1261 Jun 27 13:30 create.go
     -rw-r--r--  1 sarahfunkhouser  staff  1086 Jun 27 13:30 delete.go
@@ -54,16 +54,16 @@ Flags:
     -rw-r--r--  1 sarahfunkhouser  staff  2570 Jun 27 13:30 root.go
     -rw-r--r--  1 sarahfunkhouser  staff  1511 Jun 27 13:30 update.go
     ```
-1. Add the new package to `cmd/cli/main.go`, in this case it would be:
+1. Add the new package to `cli/main.go`, in this case it would be:
     ```go
-    	_ "github.com/theopenlane/core/cmd/cli/cmd/contact"
+    	_ "github.com/theopenlane/core/cli/cmd/contact"
     ```
 1. Add flags for the `Create` and `Update` commands for input
 1. Add validation to the `createValidation()` and `updateValidation()` functions for the required input
 1. Add fields for the table output in `root.go` in `tableOutput()` function, by default it only includes `ID`.
     ```go
     // tableOutput prints the plans in a table format
-    func tableOutput(plans []openlaneclient.Contact) {
+    func tableOutput(plans []graphclient.Contact) {
         writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Email", "PhoneNumber")
 
         for _, p := range plans {

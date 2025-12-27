@@ -8,8 +8,8 @@ import (
 	"io"
 	"time"
 
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // lifecycleConfig configures the standard upload/download lifecycle.

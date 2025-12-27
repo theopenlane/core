@@ -10,11 +10,11 @@ import (
 )
 
 func TestComputeSHAAndSaveCatalog(t *testing.T) {
-	c := &Catalog{
-		Version: "v0.0.1",
-		Modules: FeatureSet{
-			"m1": {DisplayName: "M1", Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 100}}}},
-		},
+	c := New()
+
+	c.Version = "v0.0.1"
+	c.Modules = FeatureSet{
+		"m1": {DisplayName: "M1", Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 100}}}},
 	}
 
 	dir := t.TempDir()
@@ -35,12 +35,13 @@ func TestComputeSHAAndSaveCatalog(t *testing.T) {
 }
 
 func TestSaveCatalogNoChanges(t *testing.T) {
-	c := &Catalog{
-		Version: "v0.0.1",
-		Modules: FeatureSet{
-			"m1": {DisplayName: "M1", Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 100}}}},
-		},
+	c := New()
+	c.Version = "v0.0.1"
+
+	c.Modules = FeatureSet{
+		"m1": {DisplayName: "M1", Billing: Billing{Prices: []Price{{Interval: "month", UnitAmount: 100}}}},
 	}
+
 	dir := t.TempDir()
 	path := filepath.Join(dir, "catalog.yaml")
 

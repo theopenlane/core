@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (

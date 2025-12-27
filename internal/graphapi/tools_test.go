@@ -40,7 +40,6 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/summarizer"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
@@ -357,14 +356,14 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 func assertErrorCode(t *testing.T, err *gqlerror.Error, code string) {
 	t.Helper()
 
-	assert.Equal(t, code, openlaneclient.GetErrorCode(err))
+	assert.Equal(t, code, testclient.GetErrorCode(err))
 }
 
 // assertErrorMessage checks if the error message matches the expected message
 func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 	t.Helper()
 
-	assert.Equal(t, msg, openlaneclient.GetErrorMessage(err))
+	assert.Equal(t, msg, testclient.GetErrorMessage(err))
 }
 
 func requireNoError(t *testing.T, err error) {

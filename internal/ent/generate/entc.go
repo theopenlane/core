@@ -16,6 +16,7 @@ import (
 	_ "github.com/jackc/pgx/v5"
 	"gocloud.dev/secrets"
 
+	"github.com/theopenlane/core/common/enums/exportenums"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -24,7 +25,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/enums/exportenums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"

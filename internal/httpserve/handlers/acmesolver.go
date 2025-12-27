@@ -3,10 +3,10 @@ package handlers
 import (
 	"net/http"
 
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"

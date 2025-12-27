@@ -1,9 +1,10 @@
 package handlers
 
 import (
+	commonmodels "github.com/theopenlane/core/common/models"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 )
@@ -33,7 +34,7 @@ func (h *Handler) ProductCatalogHandler(ctx echo.Context, openapi *OpenAPIContex
 }
 
 // filterCatalog filters the catalog based on the request parameters
-func (h *Handler) filterCatalog(in *models.ProductCatalogRequest) catalog.Catalog {
+func (h *Handler) filterCatalog(in *models.ProductCatalogRequest) commonmodels.Catalog {
 	cat := gencatalog.DefaultCatalog
 
 	if h.DBClient.EntConfig.Modules.UseSandbox {
@@ -48,7 +49,7 @@ func (h *Handler) filterCatalog(in *models.ProductCatalogRequest) catalog.Catalo
 }
 
 // doFilter filters loops through the modules and addons and filters them based on the audience
-func doFilter(includeBeta, includePrivate bool, cat catalog.Catalog) catalog.Catalog {
+func doFilter(includeBeta, includePrivate bool, cat commonmodels.Catalog) commonmodels.Catalog {
 	filtered := cat
 
 	modules := catalog.FeatureSet{}

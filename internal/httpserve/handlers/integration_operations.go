@@ -10,9 +10,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/keystore"
-	openapi "github.com/theopenlane/core/pkg/openapi"
 )
 
 // RunIntegrationOperation executes a provider-published operation using stored credentials

@@ -5,11 +5,12 @@ import (
 	"maps"
 	"net/http"
 
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	"github.com/theopenlane/core/common/storagetypes"
+
 	"github.com/theopenlane/iam/tokens"
 )
 
-// Alias types from storage/types to maintain clean imports
+// Alias types from common/storagetypes to maintain clean imports
 // having a bunch of smaller subpackages seemed to just complicate things
 type (
 	Provider           = storagetypes.Provider

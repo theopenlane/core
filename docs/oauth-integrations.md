@@ -851,7 +851,7 @@ Features:
 go test ./internal/httpserve/handlers/ -run TestOAuth
 
 # Run OAuth model validation tests
-go test ./pkg/models/ -run TestOAuth
+go test ./common/models/ -run TestOAuth
 
 # Run OpenAPI binding tests
 go test ./internal/httpserve/handlers/ -run TestBind.*OAuth

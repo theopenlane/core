@@ -35,7 +35,7 @@ func run() error {
 
 	outputDir, err := specsOutputDir()
 	if err != nil {
-		return err
+		return fmt.Errorf("determine specs output directory: %w", err)
 	}
 
 	jsonOutputPath := filepath.Join(outputDir, jsonFilename)

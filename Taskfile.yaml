@@ -2,8 +2,8 @@ version: "3"
 
 includes:
   cli:
-    taskfile: ./cmd/cli/Taskfile.yaml
-    dir: ./cmd/cli
+    taskfile: ./cli/Taskfile.yaml
+    dir: ./cli
   docker:
     taskfile: ./docker/Taskfile.yaml
     dir: ./docker
@@ -103,9 +103,6 @@ tasks:
       - internal/graphapi/*.resolvers.go
       - internal/graphapi/testclient/graphqlclient.go
       - internal/graphapi/testclient/models.go
-      - pkg/openlaneclient/models.go
-      - pkg/openlaneclient/graphqlclient.go
-      - pkg/openlaneclient/models.go
       - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
     cmds:
@@ -117,14 +114,13 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
-      - pkg/corejobs/internal/**/*.go
+      - common/models/catalog.go
       - .mockery.yml
       - internal/httpserve/**/*.go
-      - pkg/openapi/*.go
+      - common/openapi/*.go
     generates:
       - pkg/catalog/**/*.yaml
       - pkg/catalog/**/*.json
-      - pkg/corejobs/internal/cloudflare/mocks/mocks.go
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
     method: checksum
@@ -362,11 +358,12 @@ tasks:
     cmds:
       - go fmt ./...
 
-  go:tidy:
-    desc: Runs go mod tidy on the backend
-    aliases: [tidy]
+  go:work:sync:
+    silent: true
+    desc: Runs go work sync to ensure all modules are in sync, replaces go mod tidy for workspaces
+    aliases: [tidy, 'go:tidy']
     cmds:
-      - go mod tidy
+      - go work sync
 
   go:build:
     desc: Runs go build for the core server
@@ -386,12 +383,12 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: Runs go build for the openlane cli
     cmds:
-      - go build -tags cli -o openlane-cli ./cmd/cli
+      - go build -tags cli -o openlane-cli ./cli
 
   go:build-cli:ci:
     desc: Runs go build for the openlane cli in CI
     cmds:
-      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cmd/cli
+      - go build -tags cli -mod=readonly -a -o bin/openlane-cli ./cli
 
   go:all:
     aliases: [go]
@@ -468,7 +465,7 @@ tasks:
   pr:
     desc: runs the comprehensive roll-up tasks required to ensure all files are being committed / pushed as a part of opening a PR
     cmds:
-      - task: regenerate
+      - task: generate
       - task: config:generate
       - task: atlas:create
       - task: go

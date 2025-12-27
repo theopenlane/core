@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 func TestNewObjectService(t *testing.T) {

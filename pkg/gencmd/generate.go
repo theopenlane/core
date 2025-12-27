@@ -261,7 +261,7 @@ func getNewCmdDirName(dir, cmdName string) string {
 func updateMainImports(cmdName string) error {
 	mainPath := "main.go"
 	if _, err := os.Stat(mainPath); err != nil {
-		mainPath = "cmd/cli/main.go"
+		mainPath = "cli/main.go"
 		if _, err := os.Stat(mainPath); err != nil {
 			return ErrMainGoNotFound
 		}
@@ -274,7 +274,7 @@ func updateMainImports(cmdName string) error {
 
 	fileContent := string(content)
 	packageName := strings.ToLower(cmdName)
-	newImport := fmt.Sprintf("\t_ \"github.com/theopenlane/core/cmd/cli/cmd/%s\"", packageName)
+	newImport := fmt.Sprintf("\t_ \"github.com/theopenlane/core/cli/cmd/%s\"", packageName)
 
 	// Check if import already exists
 	if strings.Contains(fileContent, newImport) {

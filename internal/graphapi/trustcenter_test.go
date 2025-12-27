@@ -17,12 +17,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/jobspec"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 

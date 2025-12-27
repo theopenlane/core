@@ -13,10 +13,10 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
+	"github.com/theopenlane/core/common/integrations/config"
+	"github.com/theopenlane/core/common/integrations/types"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/types"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {

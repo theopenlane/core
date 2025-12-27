@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/pkg/integrations/registry"
 )
 
 // cacheSkew defines how far before token expiry the cache entry should be invalidated

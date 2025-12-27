@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 

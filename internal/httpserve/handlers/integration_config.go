@@ -12,11 +12,11 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/integrations/types"
+	credentialmodels "github.com/theopenlane/core/common/models"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
-	credentialmodels "github.com/theopenlane/core/pkg/models"
-	openapi "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 

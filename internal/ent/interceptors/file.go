@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 
@@ -17,7 +18,6 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // InterceptorFile is an ent interceptor that filters the file query on the organization id
