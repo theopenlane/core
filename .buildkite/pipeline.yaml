@@ -52,7 +52,7 @@ steps:
           - go.{mod,sum}
           - internal/**
           - pkg/**
-          - config/**
+          - config/config.go
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -95,7 +95,7 @@ steps:
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -118,7 +118,7 @@ steps:
         depends_on: "generate_config"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -143,7 +143,7 @@ steps:
         depends_on: "helm_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -168,7 +168,7 @@ steps:
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
