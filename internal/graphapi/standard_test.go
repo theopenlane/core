@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
 

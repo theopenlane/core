@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func TestQueryControl(t *testing.T) {

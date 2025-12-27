@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/permissioncache"
-	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func TestCacheSetGet(t *testing.T) {

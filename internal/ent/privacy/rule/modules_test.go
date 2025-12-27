@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/permissioncache"
-	"github.com/theopenlane/core/pkg/testutils"
 )
 
 func createExportMutation(t *testing.T) ent.Mutation {

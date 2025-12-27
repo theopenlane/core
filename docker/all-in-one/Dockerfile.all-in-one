@@ -14,11 +14,8 @@ WORKDIR /home/nonroot
 # Copy the binary built above
 COPY --from=builder /go/bin/core /bin/core
 
-# Copy the dbx binary
-COPY --from=ghcr.io/theopenlane/dbx:145-c77867be /bin/dbx /bin/dbx
-
 # Copy the riverboat binary
-COPY --from=ghcr.io/theopenlane/riverboat:amd64-86-3eaa899d /bin/riverboat /bin/riverboat
+COPY --from=ghcr.io/theopenlane/riverboat:amd64-latest /bin/riverboat /bin/riverboat
 
 # Copy redis binary
 COPY --from=redis:7.4.7 /usr/local/bin/redis-server /bin/redis-server

@@ -24,7 +24,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/core/internal/testutils"
 )
 
 func (suite *HandlerTestSuite) TestRefreshHandler() {
