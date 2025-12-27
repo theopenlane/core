@@ -12,10 +12,10 @@ import (
 
 	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // WorkflowInstance tracks execution of a workflow definition for a specific object

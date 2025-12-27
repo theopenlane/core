@@ -7,7 +7,7 @@
       "properties": {
         "prices": {
           "items": {
-            "$ref": "#/$defs/Price"
+            "$ref": "#/$defs/ItemPrice"
           },
           "type": "array",
           "description": "List of price options for this feature"
@@ -129,7 +129,7 @@
       },
       "type": "object"
     },
-    "Price": {
+    "ItemPrice": {
       "properties": {
         "interval": {
           "type": "string",

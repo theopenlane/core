@@ -6,11 +6,11 @@ import (
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/internal/entitlements/features"
-	"github.com/theopenlane/core/pkg/models"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/utils/contextx"
 )
 

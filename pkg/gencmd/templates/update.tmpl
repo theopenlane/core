@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/core/cli"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var updateCmd = &cobra.Command{
@@ -32,7 +32,7 @@ func init() {
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (id string, input openlaneclient.Update{{ .Name | ToUpperCamel }}Input, err error) {
+func updateValidation() (id string, input graphclient.Update{{ .Name | ToUpperCamel }}Input, err error) {
 	id = cmd.Config.String("id")
 	if id == "" {
 		return id, input, cmd.NewRequiredFieldMissingError("{{ .Name | ToLowerCamel }} id")

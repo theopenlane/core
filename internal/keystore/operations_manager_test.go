@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/integrations/types"
+	"github.com/theopenlane/core/common/models"
 )
 
 func TestOperationManagerRunUsesStoredCredential(t *testing.T) {

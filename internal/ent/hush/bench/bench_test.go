@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
@@ -25,7 +26,6 @@ import (
 	hushpkg "github.com/theopenlane/core/internal/ent/hush"
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 

@@ -39,7 +39,7 @@ local-development:
       - any-glob-to-any-file: docker/**
 cli:
   - changed-files:
-      - any-glob-to-any-file: cmd/cli/**
+      - any-glob-to-any-file: cli/**
 authorization:
   - changed-files:
       - any-glob-to-any-file: fga/**

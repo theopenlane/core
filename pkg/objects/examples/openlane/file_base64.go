@@ -4,9 +4,8 @@ package openlane
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlane "github.com/theopenlane/go-client"
 )
 
 // FileBase64Response captures the GraphQL response for a file base64 lookup.
@@ -23,12 +22,7 @@ type FileBase64Payload struct {
 }
 
 // FetchFileBase64 queries the Openlane API for the base64 contents of a file.
-func FetchFileBase64(ctx context.Context, client *openlaneclient.OpenlaneClient, fileID string) (*FileBase64Response, error) {
-	graphClient, ok := client.OpenlaneGraphClient.(*openlaneclient.Client)
-	if !ok {
-		return nil, fmt.Errorf("unexpected graph client type %T", client.OpenlaneGraphClient)
-	}
-
+func FetchFileBase64(ctx context.Context, client *openlane.Client, fileID string) (*FileBase64Response, error) {
 	vars := map[string]any{
 		"fileId": fileID,
 	}
@@ -44,7 +38,7 @@ func FetchFileBase64(ctx context.Context, client *openlaneclient.OpenlaneClient,
 `
 
 	var res FileBase64Response
-	if err := graphClient.Client.Post(ctx, "GetFileBase64", query, &res, vars); err != nil {
+	if err := client.Client.Post(ctx, "GetFileBase64", query, &res, vars); err != nil {
 		return nil, err
 	}
 

@@ -25,6 +25,7 @@ var (
 	inputPaths = []string{
 		"internal/graphapi/clientschema",
 		"internal/graphapi/historyschema",
+		"internal/graphapi/query",
 		graphapiGenDir,
 	}
 )

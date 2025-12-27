@@ -25,7 +25,6 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/eddy"
@@ -56,7 +55,7 @@ func (l localRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) 
 }
 
 // TestClient creates a new OpenlaneClient for testing
-func TestClient(c *ent.Client, objectStore *objects.Service, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
+func TestClient(c *ent.Client, objectStore *objects.Service, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
 	var service *objects.Service
 	var err error
 
@@ -73,18 +72,18 @@ func TestClient(c *ent.Client, objectStore *objects.Service, opts ...openlanecli
 
 	// setup interceptors
 	if opts == nil {
-		opts = []openlaneclient.ClientOption{}
+		opts = []testclient.ClientOption{}
 	}
 
-	opts = append(opts, openlaneclient.WithTransport(localRoundTripper{server: e}))
+	opts = append(opts, testclient.WithTransport(localRoundTripper{server: e}))
 
-	config := openlaneclient.NewDefaultConfig()
+	config := testclient.NewDefaultConfig()
 
 	return testclient.New(config, opts...)
 }
 
 // TestRestClient creates a new OpenlaneClient for testing
-func TestRestClient(c *ent.Client, opts ...openlaneclient.ClientOption) (*openlaneclient.OpenlaneClient, error) {
+func TestRestClient(c *ent.Client, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
 	service, err := MockStorageService(nil, nil)
 	if err != nil {
 		return nil, err
@@ -93,18 +92,18 @@ func TestRestClient(c *ent.Client, opts ...openlaneclient.ClientOption) (*openla
 
 	// setup interceptors
 	if opts == nil {
-		opts = []openlaneclient.ClientOption{}
+		opts = []testclient.ClientOption{}
 	}
 
-	opts = append(opts, openlaneclient.WithTransport(localRoundTripper{server: e}))
+	opts = append(opts, testclient.WithTransport(localRoundTripper{server: e}))
 
-	config := openlaneclient.NewDefaultConfig()
+	config := testclient.NewDefaultConfig()
 
-	return openlaneclient.New(config, opts...)
+	return testclient.New(config, opts...)
 }
 
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
-func TestClientWithAuth(c *ent.Client, objectStore *objects.Service, opts ...openlaneclient.ClientOption) (*testclient.TestClient, error) {
+func TestClientWithAuth(c *ent.Client, objectStore *objects.Service, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
 	var service *objects.Service
 	var err error
 
@@ -121,12 +120,12 @@ func TestClientWithAuth(c *ent.Client, objectStore *objects.Service, opts ...ope
 
 	// setup interceptors
 	if opts == nil {
-		opts = []openlaneclient.ClientOption{}
+		opts = []testclient.ClientOption{}
 	}
 
-	opts = append(opts, openlaneclient.WithTransport(localRoundTripper{server: e}))
+	opts = append(opts, testclient.WithTransport(localRoundTripper{server: e}))
 
-	config := openlaneclient.NewDefaultConfig()
+	config := testclient.NewDefaultConfig()
 
 	return testclient.New(config, opts...)
 }

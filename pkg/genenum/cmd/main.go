@@ -72,7 +72,7 @@ func generateEnum(name string, values []string) error {
 		"lowerToSentence": lowerToSentence,
 	}
 
-	tmplBytes, err := os.ReadFile("../../pkg/genenum/cmd/templates/enums.tmpl")
+	tmplBytes, err := os.ReadFile("../pkg/genenum/cmd/templates/enums.tmpl")
 	if err != nil {
 		return err
 	}
@@ -84,7 +84,7 @@ func generateEnum(name string, values []string) error {
 
 	outputFile := strcase.SnakeCase(strings.ToLower(name)) + ".go"
 
-	file, err := os.Create("../../pkg/enums/" + outputFile)
+	file, err := os.Create("../common/enums/" + outputFile)
 	if err != nil {
 		return err
 	}

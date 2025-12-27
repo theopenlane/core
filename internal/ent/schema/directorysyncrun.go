@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )

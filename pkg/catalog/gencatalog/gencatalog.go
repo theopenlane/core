@@ -3,11 +3,11 @@
 package gencatalog
 
 import (
+	models "github.com/theopenlane/core/common/models"
 	catalog "github.com/theopenlane/core/pkg/catalog"
-	models "github.com/theopenlane/core/pkg/models"
 )
 
-var DefaultCatalog = catalog.Catalog{
+var DefaultCatalog = models.Catalog{
 	Addons: map[string]catalog.Feature{
 		string(models.CatalogDomainScanningAddon): catalog.Feature{
 			Audience: "private",

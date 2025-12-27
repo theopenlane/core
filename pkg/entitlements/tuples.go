@@ -3,7 +3,7 @@ package entitlements
 import (
 	"context"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/iam/fgax"
 )
 

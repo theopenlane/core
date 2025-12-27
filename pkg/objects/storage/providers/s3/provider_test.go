@@ -21,10 +21,10 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 
-	storage "github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	"github.com/theopenlane/iam/tokens"
 )
 

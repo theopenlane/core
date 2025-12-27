@@ -1,0 +1,310 @@
+version: "3"
+
+env:
+  DEFAULT_USER_EMAIL: "mitb@theopenlane.io"
+  ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
+  SECOND_USER_EMAIL: "funk@theopenlane.io"
+  DEFAULT_ORG_NAME: "meowmeow"
+  OPENLANE_API_HOST: "http://localhost:17608"
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  # === Test Commands ===
+  test:get:
+    silent: true
+    desc: runs get for all the cli commands, use this if you think you might have broken something. It assumes you already have a user registered and the server running
+    dir: ../..
+    deps:
+      - :go:build-cli
+      - login
+    cmds:
+      - bash cli/test/testget.sh
+
+  # === Generate Tasks ===
+  generate:
+    desc: generates a new cli cmd
+    interactive: true
+    cmds:
+      - go run --tags cli,gencmd ../pkg/gencmd/generate/main.go generate
+
+  generate:enum:
+    desc: generates a new enum
+    interactive: true
+    cmds:
+      - go run --tags genenum ../pkg/genenum/cmd/main.go
+
+  # === Organization Management ===
+  org:create:
+    desc: creates an organization against a running local instance of the server - see the CLI help commands for other variables
+    aliases: [createorg]
+    cmds:
+      - go run -tags cli main.go org create -n {{ .ORG_NAME | default .DEFAULT_ORG_NAME }} -d "my meow org"
+
+  org:get:
+    output: true
+    silent: true
+    desc: a task to get the current organization
+    cmds:
+      - go run -tags cli main.go org get -c -z json | jq -r '.organization.id'
+
+  # === User Management ===
+  user:verify:
+    desc: a task to register a user, parse out the token response, and submit it to the verify endpoint
+    aliases: [verifyuser]
+    cmds:
+      - curl http://localhost:17608/v1/verify?token={{.VERIFY_TOKEN}}
+    vars:
+      VERIFY_TOKEN:
+        sh: go run -tags cli main.go register --email="{{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}" --first-name="matt" --last-name="anderson" --password="mattisthebest1234" | jq -r .token
+
+  user:all:another:
+    desc: a task to register, verify, and login another user
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+
+  user:setup:
+    desc: complete user setup with default privileges
+    cmds:
+      - task: verifyuser
+      - task: login
+      - task: org:create
+      - task: token:create
+
+  user:all:
+    desc: a task to register, verify, and login a new user
+    cmds:
+      - task: verifyuser
+      - task: login
+      - task: createorg
+      - task: program:create
+      - task: token:create
+      - task: pat:create
+      - task: orgsub:get
+
+  user:all:admin:
+    desc: a task to register, verify, and login a new user as as system admin
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+      - task: login:admin
+      - task: :fga:add:admin
+      - task: createorg
+        vars:
+          ORG_NAME: admin-org
+      - task: token:create
+      - task: pat:create
+
+  # === Login ===
+  login:creds:
+    desc: a task to login the verified user
+    aliases: [login]
+    env:
+      CORE_PASSWORD: mattisthebest1234
+    cmds:
+      - go run -tags cli main.go login -u {{ .EMAIL_ADDRESS | default .DEFAULT_USER_EMAIL }}
+
+  login:another:
+    desc: a task to login another user
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .SECOND_USER_EMAIL }}"
+
+  login:admin:
+    desc: a task to login as the system admin
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+
+  login:google:
+    desc: a task to login with google oauth
+    aliases: [google]
+    cmds:
+      - go run -tags cli main.go login -o google
+
+  login:github:
+    desc: a task to login with google oauth
+    aliases: [github]
+    cmds:
+      - go run -tags cli main.go login -o github
+
+  # === Token Management ===
+  token:create:
+    desc: create api token for the user
+    cmds:
+      - go run -tags cli main.go token create -n "generated-api-token"
+
+  pat:create:
+    desc: create PAT for the user
+    cmds:
+      - go run -tags cli main.go pat create -n "generated-personal-token" -o {{.ORG_ID}}
+    vars:
+      ORG_ID:
+        sh: task org:get
+
+  admin:grant:fga:
+    desc: grant system admin FGA privileges
+    internal: true
+    vars:
+      FGA_API_TOKEN: '{{ .FGA_API_TOKEN | default "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg" }}'
+      STORE_ID:
+        sh: fga store list --api-token={{ .FGA_API_TOKEN }} | jq -r '.stores.[].id'
+      USER_ID:
+        sh: go run -tags cli main.go user get -z json --host {{ .OPENLANE_API_HOST }} | jq -r '.self.id'
+    cmds:
+      - fga tuple write --store-id={{ .STORE_ID }} user:{{ .USER_ID }} system_admin system:openlane_core --api-token={{ .FGA_API_TOKEN }}
+
+  admin:token:get:
+    desc: get the admin token for use in demos
+    aliases: [admin-token]
+    env:
+      CORE_PASSWORD: mattisthebest1234
+    cmds:
+      - go run -tags cli main.go login -u {{ .ADMIN_USER_EMAIL }}
+      - go run -tags cli main.go pat get -z json | jq -r '.personalAccessTokens.edges[-1].node.token'
+
+  admin:token:store:
+    desc: store admin token in environment file for demos
+    env:
+      CORE_PASSWORD: mattisthebest1234
+    cmds:
+      - go run -tags cli main.go login -u {{ .ADMIN_USER_EMAIL }}
+      - echo "OPENLANE_SYSTEM_ADMIN_TOKEN=$(go run -tags cli main.go pat get -z json | jq -r '.personalAccessTokens.edges[-1].node.token')" > .env-admin-token
+
+  # === Target User Setup (for Impersonation Testing) ===
+  impersonation:target:setup:
+    desc: create target users for impersonation testing
+    cmds:
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "target1@example.com"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "target1@example.com"
+      - task: org:create
+        vars:
+          ORG_NAME: "target1-org"
+      - task: verifyuser
+        vars:
+          EMAIL_ADDRESS: "target2@example.com"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "target2@example.com"
+      - task: org:create
+        vars:
+          ORG_NAME: "target2-org"
+
+  impersonation:target:list:
+    desc: list available target users for impersonation
+    env:
+      CORE_PASSWORD: mattisthebest1234
+    cmds:
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{ .ADMIN_USER_EMAIL }}"
+      - go run -tags cli main.go user get -s=false -z json | jq -r '.users.edges[] | "  " + .node.id + " - " + .node.email'
+
+  # === Testing Utilities ===
+  test:connection:
+    desc: test API connection
+    cmds:
+      - curl -f {{ .OPENLANE_API_HOST }}/livez || echo "Server not running on {{ .OPENLANE_API_HOST }}"
+
+  test:admin:token:
+    desc: test admin token validity
+    vars:
+      ADMIN_TOKEN:
+        sh: task admin:token:get
+    cmds:
+      - 'curl -H "Authorization: Bearer {{ .ADMIN_TOKEN }}" {{ .OPENLANE_API_HOST }}/v1/users/me | jq .'
+
+  # === Cleanup ===
+  clean:
+    desc: clean up demo files and tokens
+    cmds:
+      - rm -f .env-admin-token
+
+
+  # === Template Generation ===
+  template:create:
+    desc: create root templates for all models
+    internal: true
+    vars:
+      MODELS:
+        sh: ls -d ../../jsonschema/models/* | cut -f5 -d'/'
+    cmds:
+      - for: {var: MODELS, as: MODEL}
+        cmd: go run -tags cli main.go template create -n {{ .MODEL }} -t ROOTTEMPLATE --jsonconfig="../../jsonschema/models/{{ .MODEL }}/generate/{{ .MODEL }}.json"
+
+  # === Organization Settings ===
+  orgsetting:get:
+    desc: gets the org setting
+    aliases: [getorgsetting]
+    cmds:
+      - go run -tags cli main.go organization-setting get
+
+  orgsub:get:
+    desc: gets the org subscription
+    aliases: [getorgsub]
+    cmds:
+      - go run -tags cli main.go org-subscription get
+
+  orgsetting:enforce-sso:
+    desc: update the default organization to enforce SSO using the local OIDC server
+    vars:
+      CLIENT_ID: local-client
+      CLIENT_SECRET: local-client-secret
+      DISCOVERY_URL: http://localhost:5556/dex/.well-known/openid-configuration
+      SETTING_ID:
+        sh: go run -tags cli main.go organization-setting get -z json | jq -r '.organizationSettings.edges[0].node.id'
+    cmds:
+      - go run -tags cli main.go organization-setting update --id {{.SETTING_ID}} --client-id {{.CLIENT_ID}} --client-secret {{.CLIENT_SECRET}} --discovery-url {{.DISCOVERY_URL}} --identity-provider OKTA --enforce-sso
+
+  orgsetting:enable-autojoin:
+    desc: enable auto-join for users with matching email domains
+    vars:
+      AUTOJOIN_DOMAINS: '{{ .AUTOJOIN_DOMAINS | default "example.com,theopenlane.io" }}'
+      SETTING_ID:
+        sh: go run -tags cli main.go organization-setting get -z json | jq -r '.organizationSettings.edges[0].node.id'
+    cmds:
+      - go run -tags cli main.go organization-setting update --id {{.SETTING_ID}} --allow-matching-domains-autojoin --append-allowed-domains {{.AUTOJOIN_DOMAINS}}
+
+  user:all:sso:
+    desc: run user:all and enforce SSO for the organization
+    cmds:
+      - task: user:all
+      - task: orgsetting:enforce-sso
+
+  user:all:autojoin:
+    desc: setup user, enable auto-join, and test with matching domain user
+    vars:
+      TEST_USER_EMAIL: '{{ .TEST_USER_EMAIL | default "newuser@theopenlane.io" }}'
+      TEST_USER_DOMAIN: '{{ .TEST_USER_DOMAIN | default "theopenlane.io" }}'
+    cmds:
+      - task: user:all
+      - task: orgsetting:enable-autojoin
+        vars:
+          AUTOJOIN_DOMAINS: "{{.TEST_USER_DOMAIN}}"
+      - task: user:verify
+        vars:
+          EMAIL_ADDRESS: "{{.TEST_USER_EMAIL}}"
+      - task: login
+        vars:
+          EMAIL_ADDRESS: "{{.TEST_USER_EMAIL}}"
+
+  # === Programs ===
+  program:create:
+    desc: creates an program against a running local instance of the server
+    cmds:
+      - go run -tags cli main.go program create -n "mitb program" -d "program for mitb"

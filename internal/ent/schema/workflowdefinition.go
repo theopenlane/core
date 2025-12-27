@@ -10,11 +10,11 @@ import (
 
 	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // WorkflowDefinition stores workflow configurations, both system-provided templates and organization-specific instances

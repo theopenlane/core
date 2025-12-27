@@ -6,7 +6,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -40,7 +40,7 @@ import (
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalOControlControlSource2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐControlSource(ctx context.Context, v any) (*enums.ControlSource, error) {
+func (ec *executionContext) unmarshalOControlControlSource2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐControlSource(ctx context.Context, v any) (*enums.ControlSource, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -49,7 +49,7 @@ func (ec *executionContext) unmarshalOControlControlSource2ᚖgithubᚗcomᚋthe
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOControlControlSource2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐControlSource(ctx context.Context, sel ast.SelectionSet, v *enums.ControlSource) graphql.Marshaler {
+func (ec *executionContext) marshalOControlControlSource2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐControlSource(ctx context.Context, sel ast.SelectionSet, v *enums.ControlSource) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
