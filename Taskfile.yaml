@@ -114,6 +114,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
+      - common/models/catalog.go
       - .mockery.yml
       - internal/httpserve/**/*.go
       - common/openapi/*.go

@@ -274,7 +274,7 @@ func updateMainImports(cmdName string) error {
 
 	fileContent := string(content)
 	packageName := strings.ToLower(cmdName)
-	newImport := fmt.Sprintf("\t_ \"github.com/theopenlane/core/cli/%s\"", packageName)
+	newImport := fmt.Sprintf("\t_ \"github.com/theopenlane/core/cli/cmd/%s\"", packageName)
 
 	// Check if import already exists
 	if strings.Contains(fileContent, newImport) {

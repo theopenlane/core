@@ -29,7 +29,7 @@ tasks:
     desc: generates a new cli cmd
     interactive: true
     cmds:
-      - go run --tags cli,gencmd ../../pkg/gencmd/generate/main.go generate
+      - go run --tags cli,gencmd ../pkg/gencmd/generate/main.go generate
 
   generate:enum:
     desc: generates a new enum
