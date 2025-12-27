@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	coreutils "github.com/theopenlane/core/internal/testutils"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
 )
 
 var (

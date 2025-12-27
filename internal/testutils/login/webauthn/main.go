@@ -14,7 +14,7 @@ func main() {
 
 	l.Printf("[INFO] register routes")
 	// Serve the web files
-	http.Handle("/", http.FileServer(http.Dir("./pkg/testutils/login/webauthn/")))
+	http.Handle("/", http.FileServer(http.Dir("./internal/testutils/login/webauthn/")))
 
 	l.Printf("[INFO] start server at %s", origin)
 	if err := http.ListenAndServe(":5500", nil); err != nil {

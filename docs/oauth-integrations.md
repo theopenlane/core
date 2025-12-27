@@ -820,7 +820,7 @@ task run-dev
 
 #### OAuth Testing Interface
 
-Navigate to: `http://localhost:17608/pkg/testutils/integrations/index.html`
+Navigate to: `http://localhost:17608/internal/testutils/integrations/index.html`
 
 **Important**: The testing interface does NOT contain OAuth credentials. It works by:
 

@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 
-	"github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/core/internal/testutils"
 )
 
 func TestQueryPersonalAccessToken(t *testing.T) {

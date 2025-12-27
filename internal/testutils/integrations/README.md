@@ -66,7 +66,7 @@ open http://localhost:3004/
 ```
 
 **Option B - Direct from server:**
-Navigate to: `http://localhost:17608/pkg/testutils/integrations/index.html`
+Navigate to: `http://localhost:17608/internal/testutils/integrations/index.html`
 
 **🔒 Security Note**: This HTML file contains NO OAuth credentials. It works by:
 1. Making API calls to your local server (`localhost:17608`)

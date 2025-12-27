@@ -26,8 +26,8 @@ import (
 	hushpkg "github.com/theopenlane/core/internal/ent/hush"
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/entdb"
+	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"

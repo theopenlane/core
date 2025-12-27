@@ -14,11 +14,6 @@ done
 
 /bin/redis-server --save 20 1 --loglevel warning --daemonize yes
 
-# run the dbx service in the background if enabled
-if [ $CORE_DBX_ENABLED = "true" ]; then
-	/bin/dbx serve --debug --pretty &!
-fi
-
 # run the riverboat service in the background
 /bin/riverboat serve --debug --pretty &!
 
