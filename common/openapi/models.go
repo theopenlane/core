@@ -2263,6 +2263,9 @@ var ExampleProductCatalogRequest = ProductCatalogRequest{
 var ExampleProductCatalogReply = ProductCatalogReply{
 	Reply: rout.Reply{Success: true},
 	Catalog: models.Catalog{
+		Addons:  map[string]models.Feature{},
+		Version: "v0.0.1",
+		SHA:     "12a4a1212888e9316a16826ba074b37230b4b7ba903cd8d7e627e4a8d03a6211",
 		Modules: map[string]models.Feature{
 			string(models.CatalogComplianceModule): models.Feature{
 				Audience: "public",

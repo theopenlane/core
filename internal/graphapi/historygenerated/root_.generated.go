@@ -11,8 +11,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/historygenerated"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )

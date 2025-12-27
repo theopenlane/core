@@ -4295,101 +4295,8 @@ paths:
                             examples:
                                 success:
                                     value:
-                                        addons:
-                                            domain_scanning_addon:
-                                                audience: private
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: domain_scan_monthly
-                                                          nickname: domain_scan_monthly
-                                                          price_id: price_1S3qXLJIzM4Pa2ZcYRPuLSoJ
-                                                          unit_amount: 10000
-                                                        - interval: year
-                                                          lookup_key: domain_scan_annually
-                                                          nickname: domain_scan_annually
-                                                          price_id: price_1S3qXLJIzM4Pa2Zc8Y6fRo5x
-                                                          unit_amount: 100000
-                                                description: Domain and Vulnerability Scanning
-                                                display_name: Domain and Vulnerability Scanning
-                                                lookup_key: domain_scanning_addon
-                                                marketing_description: Proactive security scanning for domains and infrastructure. Detect vulnerabilities before they become threats.
-                                                product_id: prod_SzqDWb1fSmvyXC
-                                            extra_evidence_storage_addon:
-                                                audience: public
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: extra_evidence_storage_100gb
-                                                          metadata:
-                                                            increment_gb: "100"
-                                                          nickname: extra_evidence_storage_100gb
-                                                          price_id: price_1S3qXFJIzM4Pa2ZcUKyDYErM
-                                                          unit_amount: 1000
-                                                description: Additional Evidence Storage for Compliance Evidence and Documents (100GB)
-                                                display_name: Additional Evidence Storage (100GB)
-                                                lookup_key: extra_evidence_storage_addon
-                                                marketing_description: Expand your secure storage capacity for compliance evidence. Keep your documentation organized and accessible.
-                                                product_id: prod_SzqDCzuPVc6Lrn
-                                            policy_management_addon:
-                                                audience: beta
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: price_policy_mgmt_monthly
-                                                          nickname: price_policy_mgmt_monthly
-                                                          price_id: price_1S3qXHJIzM4Pa2ZcWKG6pb5z
-                                                          unit_amount: 1000
-                                                        - interval: month
-                                                          lookup_key: price_policy_mgmt_annually
-                                                          nickname: price_policy_mgmt_annually
-                                                          price_id: price_1S3qXHJIzM4Pa2Zcjl8y3TWX
-                                                          unit_amount: 10000
-                                                description: Policy and Procedure Management
-                                                display_name: Policy and Procedure Management
-                                                lookup_key: policy_management_addon
-                                                marketing_description: Create and maintain your security policies with version control. Keep your documentation audit-ready
-                                                product_id: prod_SzqDMmZeWJiUDm
-                                            risk_management_addon:
-                                                audience: beta
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: price_risk_mgmt_monthly
-                                                          nickname: price_risk_mgmt_monthly
-                                                          price_id: price_1S3qXJJIzM4Pa2Zcl4Vn7Gc6
-                                                          unit_amount: 1000
-                                                        - interval: year
-                                                          lookup_key: price_risk_mgmt_annually
-                                                          nickname: price_risk_mgmt_annually
-                                                          price_id: price_1S3qXJJIzM4Pa2Zc0V7TvS0A
-                                                          unit_amount: 10000
-                                                description: Risk Management
-                                                display_name: Risk Management
-                                                lookup_key: risk_management_addon
-                                                marketing_description: Comprehensive risk assessment and monitoring solution. Make data-driven decisions about your security posture.
-                                                product_id: prod_SzqDvmryWdfvr7
+                                        addons: {}
                                         modules:
-                                            base_module:
-                                                audience: public
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: base_module_monthly
-                                                          nickname: base_module_monthly
-                                                          price_id: price_1S3qXEJIzM4Pa2Zc3bZXrIC8
-                                                          unit_amount: 0
-                                                        - interval: year
-                                                          lookup_key: base_module_free
-                                                          nickname: base_module_free
-                                                          price_id: price_1S3qXEJIzM4Pa2ZcYaKVbHkk
-                                                          unit_amount: 0
-                                                description: Core System Access
-                                                display_name: Base Module
-                                                include_with_trial: true
-                                                lookup_key: base_module
-                                                personal_org: true
-                                                product_id: prod_Szq52Y33Hzvxc6
                                             compliance_module:
                                                 audience: public
                                                 billing:
@@ -4412,66 +4319,9 @@ paths:
                                                 product_id: prod_SzqDyAvxP2D7fA
                                                 usage:
                                                     evidence_storage_gb: 25000
-                                            entity_management_module:
-                                                audience: private
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: price_entity_monthly
-                                                          nickname: price_entity_monthly
-                                                          price_id: price_1S3qX8JIzM4Pa2ZcQNF64Nta
-                                                          unit_amount: 20000
-                                                        - interval: year
-                                                          lookup_key: price_vendor_annually
-                                                          nickname: price_vendor_annually
-                                                          price_id: price_1S3qX9JIzM4Pa2ZcNFO9ciiV
-                                                          unit_amount: 200000
-                                                description: Vendor Risk Management
-                                                display_name: Vendor Risk Management
-                                                lookup_key: entity_management_module
-                                                marketing_description: Confidently assess vendor risk and enforce security standards across your third-party ecosystem
-                                                product_id: prod_SzqDiFERRVzRmP
-                                            trust_center_module:
-                                                audience: beta
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: price_trustcenter_monthly
-                                                          nickname: price_trustcenter_monthly
-                                                          price_id: price_1S3qXAJIzM4Pa2Zc61jfLMe9
-                                                          unit_amount: 30000
-                                                        - interval: year
-                                                          lookup_key: price_trustcenter_annually
-                                                          nickname: price_trustcenter_annually
-                                                          price_id: price_1S3qXBJIzM4Pa2Zcq3Y0vzDa
-                                                          unit_amount: 300000
-                                                description: Public Security Portal
-                                                display_name: Trust Center
-                                                lookup_key: trust_center_module
-                                                marketing_description: Build customer trust with a professional security portal. Share compliance documentation securely with stakeholders
-                                                product_id: prod_SzqDywr83XkXk5
-                                            vulnerability_management_module:
-                                                audience: private
-                                                billing:
-                                                    prices:
-                                                        - interval: month
-                                                          lookup_key: price_vulnerability_mgmt_monthly
-                                                          nickname: price_vulnerability_mgmt_monthly
-                                                          price_id: price_1S3qXCJIzM4Pa2ZcYODHbvop
-                                                          unit_amount: 10000
-                                                        - interval: year
-                                                          lookup_key: price_vulnerability_mgmt_annually
-                                                          nickname: price_vulnerability_mgmt_annually
-                                                          price_id: price_1S3qXCJIzM4Pa2ZcViTlqrmK
-                                                          unit_amount: 100000
-                                                description: Vulnerability Tracking and Management
-                                                display_name: Vulnerability Tracking and Management
-                                                lookup_key: vulnerability_management_module
-                                                marketing_description: Identify and track security vulnerabilities across your systems. Stay ahead of potential threats with continuous monitoring
-                                                product_id: prod_SzpzB3d9rAjrb3
                                         sha: 12a4a1212888e9316a16826ba074b37230b4b7ba903cd8d7e627e4a8d03a6211
                                         success: true
-                                        version: v0.0.10
+                                        version: v0.0.1
                             schema:
                                 $ref: '#/components/schemas/ProductCatalogReply'
                     description: Success

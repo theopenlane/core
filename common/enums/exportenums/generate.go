@@ -28,7 +28,7 @@ func New(opts ...ExtensionOption) *Extension {
 	extension := &Extension{
 		// Set configuration defaults that can get overridden with ExtensionOption
 		config: &Config{
-			OutputDir:   "./pkg/enums",
+			OutputDir:   "./common/enums",
 			PackageName: "enums",
 		},
 	}
@@ -47,7 +47,7 @@ type Extension struct {
 }
 
 // WithGeneratedDir allows you to set an alternative output directory
-// Defaults to "./pkg/enums"
+// Defaults to "./common/enums"
 func WithGeneratedDir(outputDir string) ExtensionOption {
 	return func(h *Extension) {
 		h.config.OutputDir = outputDir

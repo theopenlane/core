@@ -114,14 +114,12 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
-      - pkg/corejobs/internal/**/*.go
       - .mockery.yml
       - internal/httpserve/**/*.go
-      - pkg/openapi/*.go
+      - common/openapi/*.go
     generates:
       - pkg/catalog/**/*.yaml
       - pkg/catalog/**/*.json
-      - pkg/corejobs/internal/cloudflare/mocks/mocks.go
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
     method: checksum

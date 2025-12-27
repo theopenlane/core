@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 )
 
-// Alias types from storage/types to maintain clean imports
+// Alias types from common/storagetypes to maintain clean imports
 // having a bunch of smaller subpackages seemed to just complicate things
 type (
 	Provider           = storagetypes.Provider
