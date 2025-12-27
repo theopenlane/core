@@ -238,8 +238,11 @@ steps:
         key: "go_test_graph"
         cancel_on_build_failing: true
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude: # do not run tests if only cli files changed
+            - cli/**
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
         matrix:
@@ -266,8 +269,11 @@ steps:
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - all except graphapi"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude: # do not run tests if only cli files changed
+            - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -318,8 +324,11 @@ steps:
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude:
+            - cli/**
         depends_on: ["go_test_graph", "go_test_no_graph"]
         commands: |
           #!/bin/bash
@@ -353,8 +362,11 @@ steps:
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude:
+            - cli/**
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
@@ -387,8 +399,11 @@ steps:
       - label: ":github: upload reports"
         key: "scan-upload"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude:
+            - cli/**
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_graph"]
@@ -426,10 +441,13 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
-          - cmd/**
-          - docker/Dockerfile
+          include:
+            - "**.go"
+            - go.{mod,sum}
+            - cmd/**
+            - docker/Dockerfile
+          exclude:
+            - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -455,9 +473,10 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
-          - cli/**
+          include:
+            - go.{mod,sum}
+            - cli/**
+            - common/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -592,9 +611,12 @@ steps:
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
-          - docker/Dockerfile
+          include:
+            - "**.go"
+            - go.{mod,sum}
+            - docker/Dockerfile
+          exclude:
+            - cli/**
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
