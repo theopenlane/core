@@ -70,7 +70,7 @@ steps:
         depends_on: "generate_config"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
