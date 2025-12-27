@@ -191,7 +191,7 @@ github.com/theopenlane/core v0.50.0/go.mod h1:0t8xOjZlvwJb6SB7CpNO8FQIpFKjH99Bv5
 github.com/theopenlane/core/common v0.0.0-20251226231451-1392578dd846 h1:QgyWQzGYzG1LFzlb2qrsDI+zJSPVE8uLfw3h+Wh/OdE=
 github.com/theopenlane/echox v0.2.4 h1:bocz1Dfs7d2fkNa8foQqdmeTtkMTQNwe1v20bIGIDps=
 github.com/theopenlane/echox v0.2.4/go.mod h1:0cPOHe4SSQHmqP0/n2LsIEzRSogkxSX653bE+PIOVZ8=
-github.com/theopenlane/go-client v0.2.2-0.20251226231720-de0f705eb060 h1:IGFQl3LC/bK+tE6IDAGMDP080BM2+HbXaBECo214OV0=
+github.com/theopenlane/go-client v0.3.0 h1:r8OKPjNxR+p28B9ng2irh6B10QCO4RWQ+s6r5O9VkC0=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.23.2 h1:Hhsk1o3tCqOozXGHduxZs2aFsJP3DXjcGcqJEBmNMCA=
