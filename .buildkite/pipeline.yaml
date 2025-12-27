@@ -14,7 +14,7 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
-  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
+  HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
 steps:
