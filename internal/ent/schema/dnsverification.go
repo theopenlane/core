@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -114,11 +115,14 @@ func (DNSVerification) Indexes() []ent.Index {
 	}
 }
 
+// Hooks of the DNSVerification
 func (DNSVerification) Hooks() []ent.Hook {
-	// TODO(acookin): delete hook to remove the record from cloudflare
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookDNSVerificationDelete(),
+	}
 }
 
+// Modules of the DNSVerification
 func (DNSVerification) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogTrustCenterModule,

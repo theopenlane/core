@@ -20,10 +20,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/emailtemplates"
@@ -161,7 +163,9 @@ func updateTrustCenterNDA(ctx context.Context, id string) (*model.TrustCenterNDA
 	// Execute the template, writing the output to the buffer
 	err = tmpl.Execute(&buf, data)
 	if err != nil {
-		panic(err)
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to execute nda template")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenternda"})
 	}
 
 	// Get the output as a string from the buffer
@@ -211,7 +215,10 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 
 	txnCtx := withTransactionalMutation(ctx)
 
-	trustCenter, err := txnCtx.TrustCenter.Get(ctx, input.TrustCenterID)
+	trustCenter, err := txnCtx.TrustCenter.Query().
+		Where(trustcenter.IDEQ(input.TrustCenterID)).
+		WithCustomDomain().
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterndaemail"})
 	}
@@ -250,9 +257,17 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		Scheme: "https",
 	}
 	if trustCenter.Edges.CustomDomain != nil {
-		trustCenterURL.Host = trustCenter.Edges.CustomDomain.CnameRecord
+		customHost := trustCenter.Edges.CustomDomain.CnameRecord
+		if normalized, err := domain.NormalizeHostname(customHost); err == nil {
+			customHost = normalized
+		}
+		trustCenterURL.Host = customHost
 	} else {
-		trustCenterURL.Host = r.defaultTrustCenterDomain
+		defaultHost := r.defaultTrustCenterDomain
+		if normalized, err := domain.NormalizeHostname(defaultHost); err == nil {
+			defaultHost = normalized
+		}
+		trustCenterURL.Host = defaultHost
 		trustCenterURL.Path = "/" + trustCenter.Slug
 	}
 

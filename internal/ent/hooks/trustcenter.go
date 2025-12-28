@@ -53,14 +53,38 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
+			trustCenter, ok := retVal.(*generated.TrustCenter)
+			if !ok {
+				return retVal, nil
+			}
+
+			id := trustCenter.ID
+
 			// create trust center settings automatically unless setting IDs were provided
 			settingIDs := m.SettingIDs()
+			previewSettingIDs := m.PreviewSettingIDs()
+
+			if len(settingIDs) > 0 || len(previewSettingIDs) > 0 {
+				for _, settingID := range append(settingIDs, previewSettingIDs...) {
+					if settingID == "" {
+						continue
+					}
+
+					if err := m.Client().TrustCenterSetting.UpdateOneID(settingID).
+						SetTrustCenterID(id).
+						Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+						return nil, err
+					}
+				}
+			}
 
 			createLive, createPreview := false, false
-			switch len(settingIDs) {
-			case 0:
+			switch {
+			case len(settingIDs) == 0 && len(previewSettingIDs) == 0:
 				createLive, createPreview = true, true
-			case 1:
+			case len(settingIDs) > 1 || len(previewSettingIDs) > 1:
+				logx.FromContext(ctx).Debug().Msg("trust center setting IDs provided, skipping default setting creation")
+			case len(settingIDs) == 1 && len(previewSettingIDs) == 0:
 				setting, err := m.Client().TrustCenterSetting.Get(ctx, settingIDs[0])
 				if err != nil {
 					return nil, err
@@ -72,22 +96,18 @@ func HookTrustCenter() ent.Hook {
 				case enums.TrustCenterEnvironmentPreview:
 					createLive = true
 				}
+			case len(settingIDs) == 0 && len(previewSettingIDs) == 1:
+				setting, err := m.Client().TrustCenterSetting.Get(ctx, previewSettingIDs[0])
+				if err != nil {
+					return nil, err
+				}
 
-			default:
-				logx.FromContext(ctx).Debug().Msg("trust center setting IDs provided, skipping default setting creation")
-
-				return retVal, nil
-			}
-
-			trustCenter, ok := retVal.(*generated.TrustCenter)
-			if !ok {
-				return retVal, nil
-			}
-
-			// If settings were not created, create default settings
-			id, err := GetObjectIDFromEntValue(retVal)
-			if err != nil {
-				return retVal, err
+				switch setting.Environment {
+				case enums.TrustCenterEnvironmentLive:
+					createPreview = true
+				case enums.TrustCenterEnvironmentPreview:
+					createLive = true
+				}
 			}
 
 			if createLive {
@@ -115,8 +135,7 @@ func HookTrustCenter() ent.Hook {
 			if createPreview {
 				if trustCenter.PreviewDomainID != "" {
 					// delete the old preview if it exists
-					if _, err = m.Job.Insert(
-						ctx,
+					if err = enqueueJob(ctx, m.Job,
 						jobspec.DeletePreviewDomainArgs{
 							CustomDomainID:           trustCenter.PreviewDomainID,
 							TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
@@ -190,7 +209,7 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			if trustCenter.CustomDomainID != nil {
-				if _, err = m.Job.Insert(ctx, jobspec.CreatePirschDomainArgs{
+				if err = enqueueJob(ctx, m.Job, jobspec.CreatePirschDomainArgs{
 					TrustCenterID: trustCenter.ID,
 				}, nil); err != nil {
 					return nil, err
@@ -239,7 +258,7 @@ func HookTrustCenterDelete() ent.Hook {
 
 			// If the trust center has a Pirsch domain ID, kick off the DeletePirschDomain job
 			if tc.PirschDomainID != "" {
-				_, err := m.Job.Insert(ctx, jobspec.DeletePirschDomainArgs{
+				err := enqueueJob(ctx, m.Job, jobspec.DeletePirschDomainArgs{
 					PirschDomainID: tc.PirschDomainID,
 				}, nil)
 				if err != nil {
@@ -258,11 +277,39 @@ func HookTrustCenterDelete() ent.Hook {
 
 			// If preview domain is set, kick off the delete preview job
 			if previewDomainID != "" {
-				if _, err := m.Job.Insert(ctx, jobspec.DeletePreviewDomainArgs{
+				if err := enqueueJob(ctx, m.Job, jobspec.DeletePreviewDomainArgs{
 					CustomDomainID:           previewDomainID,
 					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
 				}, nil); err != nil {
 					return nil, err
+				}
+			}
+
+			if m.Job != nil {
+				cacheArgs := jobspec.ClearTrustCenterCacheArgs{
+					TrustCenterSlug: tc.Slug,
+				}
+
+				if tc.CustomDomainID != nil {
+					if cd, err := m.Client().CustomDomain.Get(ctx, *tc.CustomDomainID); err == nil && cd.CnameRecord != "" {
+						cacheArgs.CustomDomain = cd.CnameRecord
+					}
+				}
+
+				if cacheArgs.CustomDomain != "" || cacheArgs.TrustCenterSlug != "" {
+					if err := enqueueJob(ctx, m.Job, cacheArgs, nil); err != nil {
+						return nil, err
+					}
+				}
+
+				if tc.PreviewDomainID != "" {
+					if cd, err := m.Client().CustomDomain.Get(ctx, tc.PreviewDomainID); err == nil && cd.CnameRecord != "" {
+						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
+							CustomDomain: cd.CnameRecord,
+						}, nil); err != nil {
+							return nil, err
+						}
+					}
 				}
 			}
 
@@ -282,6 +329,12 @@ func HookTrustCenterUpdate() ent.Hook {
 				return nil, err
 			}
 
+			previousPirschDomainID, err := m.OldPirschDomainID(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			customDomainCleared := m.CustomDomainIDCleared()
 			mutationCustomDomainID, mutationCustomDomainIDExists := m.CustomDomainID()
 
 			v, err := next.Mutate(ctx, m)
@@ -294,21 +347,53 @@ func HookTrustCenterUpdate() ent.Hook {
 				return v, err
 			}
 
+			if customDomainCleared || (mutationCustomDomainIDExists && mutationCustomDomainID == "") {
+				if previousCustomDomainID != nil && previousPirschDomainID != "" {
+					if err := enqueueJob(ctx, m.Job, jobspec.DeletePirschDomainArgs{
+						PirschDomainID: previousPirschDomainID,
+					}, nil); err != nil {
+						return nil, err
+					}
+				}
+
+				if previousCustomDomainID != nil && m.Job != nil {
+					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
+						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
+							CustomDomain: cd.CnameRecord,
+						}, nil); err != nil {
+							return nil, err
+						}
+					}
+				}
+
+				return v, nil
+			}
+
 			if mutationCustomDomainIDExists && previousCustomDomainID == nil && mutationCustomDomainID != "" {
-				if _, err := m.Job.Insert(ctx, jobspec.CreatePirschDomainArgs{
+				if err := enqueueJob(ctx, m.Job, jobspec.CreatePirschDomainArgs{
 					TrustCenterID: tcID,
 				}, nil); err != nil {
 					return nil, err
 				}
-			} else if mutationCustomDomainIDExists && previousCustomDomainID != nil && mutationCustomDomainID != *previousCustomDomainID {
-				if _, err := m.Job.Insert(ctx, jobspec.UpdatePirschDomainArgs{
+			} else if mutationCustomDomainIDExists && previousCustomDomainID != nil && mutationCustomDomainID != "" && mutationCustomDomainID != *previousCustomDomainID {
+				if err := enqueueJob(ctx, m.Job, jobspec.UpdatePirschDomainArgs{
 					TrustCenterID: tcID,
 				}, nil); err != nil {
 					return nil, err
+				}
+
+				if m.Job != nil {
+					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
+						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
+							CustomDomain: cd.CnameRecord,
+						}, nil); err != nil {
+							return nil, err
+						}
+					}
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			return v, nil
 		})
 	}, ent.OpUpdateOne)
 }

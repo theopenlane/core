@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
@@ -28,7 +29,11 @@ func (r *createTrustCenterInputResolver) CreateTrustCenterSetting(ctx context.Co
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenter"})
 	}
 
-	obj.SettingID = &groupSettings.ID
+	if data.Environment != nil && *data.Environment == enums.TrustCenterEnvironmentPreview {
+		obj.PreviewSettingID = &groupSettings.ID
+	} else {
+		obj.SettingID = &groupSettings.ID
+	}
 
 	return nil
 }

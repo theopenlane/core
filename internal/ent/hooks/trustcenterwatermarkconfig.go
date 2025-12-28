@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects"
 )
 
 // HookTrustCenterWatermarkConfig process files for trust center watermark config
@@ -50,7 +49,7 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 			}
 
 			for _, doc := range docs {
-				if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
+				if err := enqueueJob(ctx, m.Job, jobspec.WatermarkDocArgs{
 					TrustCenterDocumentID: doc.ID,
 				}, nil); err != nil {
 					return nil, err
@@ -62,25 +61,19 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
-// checkTrustCenterWatermarkConfigFiles checks for logo files in the context
+// checkTrustCenterWatermarkConfigFiles checks for watermark config files in the context
 func checkTrustCenterWatermarkConfigFiles(ctx context.Context, m *generated.TrustCenterWatermarkConfigMutation) (context.Context, error) {
-	key := "logoFile"
-
-	logoFiles, _ := objects.FilesFromContextWithKey(ctx, key)
-	if len(logoFiles) > 1 {
-		return ctx, ErrNotSingularUpload
-	}
-
-	if len(logoFiles) == 1 {
-		m.SetFileID(logoFiles[0].ID)
-		m.ClearText()
-
-		adapter := objects.NewGenericMutationAdapter(m,
-			func(mut *generated.TrustCenterWatermarkConfigMutation) (string, bool) { return mut.ID() },
-			func(mut *generated.TrustCenterWatermarkConfigMutation) string { return mut.Type() },
-		)
-
-		return objects.ProcessFilesForMutation(ctx, adapter, key, "trust_center_watermark_config")
+	key := "watermarkConfig"
+	ctx, err := processSingleMutationFile(ctx, m, key, "trust_center_watermark_config", ErrNotSingularUpload,
+		func(mut *generated.TrustCenterWatermarkConfigMutation, id string) {
+			mut.SetFileID(id)
+			mut.ClearText()
+		},
+		func(mut *generated.TrustCenterWatermarkConfigMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.TrustCenterWatermarkConfigMutation) string { return mut.Type() },
+	)
+	if err != nil {
+		return ctx, err
 	}
 
 	return ctx, nil

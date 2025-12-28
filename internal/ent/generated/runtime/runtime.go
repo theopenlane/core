@@ -1099,7 +1099,9 @@ func init() {
 	dnsverificationMixinHooks0 := dnsverificationMixin[0].Hooks()
 	dnsverificationMixinHooks1 := dnsverificationMixin[1].Hooks()
 	dnsverificationMixinHooks3 := dnsverificationMixin[3].Hooks()
-	dnsverificationMixinHooks5 := dnsverificationMixin[5].Hooks()
+	dnsverificationMixinHooks4 := dnsverificationMixin[4].Hooks()
+	dnsverificationMixinHooks6 := dnsverificationMixin[6].Hooks()
+	dnsverificationHooks := schema.DNSVerification{}.Hooks()
 
 	dnsverification.Hooks[1] = dnsverificationMixinHooks0[0]
 
@@ -1107,7 +1109,11 @@ func init() {
 
 	dnsverification.Hooks[3] = dnsverificationMixinHooks3[0]
 
-	dnsverification.Hooks[4] = dnsverificationMixinHooks5[0]
+	dnsverification.Hooks[4] = dnsverificationMixinHooks4[0]
+
+	dnsverification.Hooks[5] = dnsverificationMixinHooks6[0]
+
+	dnsverification.Hooks[6] = dnsverificationHooks[0]
 	dnsverificationMixinInters1 := dnsverificationMixin[1].Interceptors()
 	dnsverificationMixinInters5 := dnsverificationMixin[5].Interceptors()
 	dnsverification.Interceptors[0] = dnsverificationMixinInters1[0]
