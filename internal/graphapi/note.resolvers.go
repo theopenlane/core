@@ -337,12 +337,9 @@ func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *genera
 		return common.NewNotFoundError("control")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -479,12 +476,9 @@ func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj 
 		return common.NewNotFoundError("internalpolicy")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -583,12 +577,9 @@ func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *gene
 		return common.NewNotFoundError("procedure")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -687,12 +678,9 @@ func (r *updateRiskInputResolver) AddComment(ctx context.Context, obj *generated
 		return common.NewNotFoundError("risk")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -791,12 +779,9 @@ func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *gen
 		return common.NewNotFoundError("subcontrol")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
