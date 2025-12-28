@@ -21,13 +21,14 @@ func HookTrustCenterComplianceAuthz() ent.Hook {
 				return nil, err
 			}
 
-			if m.Op().Is(ent.OpCreate) {
+			switch {
+			case m.Op().Is(ent.OpCreate):
 				// create the trust member admin and relationship tuple for parent org
 				err = trustCenterComplianceCreateHook(ctx, m)
-			} else if isDeleteOp(ctx, m) {
+			case isDeleteOp(ctx, m):
 				// delete all relationship tuples on delete, or soft delete (Update Op)
 				err = trustCenterComplianceDeleteHook(ctx, m)
-			} else if m.Op().Is(ent.OpUpdate | ent.OpUpdateOne) {
+			case m.Op().Is(ent.OpUpdate | ent.OpUpdateOne):
 				err = trustCenterComplianceUpdateHook(ctx, m)
 			}
 
