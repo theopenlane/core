@@ -204,12 +204,6 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.defaulttrustcenterdomain }}
       defaulttrustcenterdomain: {{ .Values.openlane.coreConfiguration.server.defaulttrustcenterdomain | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.server.fieldlevelencryption }}
-      fieldlevelencryption:
-        {{- if .Values.openlane.coreConfiguration.server.fieldlevelencryption.enabled }}
-        enabled: {{ .Values.openlane.coreConfiguration.server.fieldlevelencryption.enabled }}
-        {{- end }}
-      {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget }}
       trustcentercnametarget: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget | quote }}
       {{- end }}

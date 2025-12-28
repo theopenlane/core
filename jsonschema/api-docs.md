@@ -46,8 +46,7 @@ Config contains the configuration for the core server
         },
         "mime": {},
         "graphpool": {},
-        "csrfprotection": {},
-        "fieldlevelencryption": {}
+        "csrfprotection": {}
     },
     "entconfig": {
         "summarizer": {
@@ -168,7 +167,6 @@ Server settings for the echo server
 |[**csrfprotection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
 |**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
-|[**fieldlevelencryption**](#serverfieldlevelencryption)|`object`||no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
 |**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain<br/>|no|
 
@@ -190,8 +188,7 @@ Server settings for the echo server
     },
     "mime": {},
     "graphpool": {},
-    "csrfprotection": {},
-    "fieldlevelencryption": {}
+    "csrfprotection": {}
 }
 ```
 
@@ -393,17 +390,6 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookiehttponly**|`boolean`|CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.<br/>||
 |**cookiedomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
 |**cookiepath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
-
-**Additional Properties:** not allowed  
-<a name="serverfieldlevelencryption"></a>
-### server\.fieldlevelencryption: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether Tink encryption is enabled<br/>||
-|**keyset**|`string`|Keyset is the base64-encoded Tink keyset used for encryption<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
