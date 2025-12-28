@@ -11746,31 +11746,6 @@ func (_q *WorkflowDefinitionHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldActive)
 				fieldSeen[workflowdefinitionhistory.FieldActive] = struct{}{}
 			}
-		case "triggerOperations":
-			if _, ok := fieldSeen[workflowdefinitionhistory.FieldTriggerOperations]; !ok {
-				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldTriggerOperations)
-				fieldSeen[workflowdefinitionhistory.FieldTriggerOperations] = struct{}{}
-			}
-		case "triggerFields":
-			if _, ok := fieldSeen[workflowdefinitionhistory.FieldTriggerFields]; !ok {
-				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldTriggerFields)
-				fieldSeen[workflowdefinitionhistory.FieldTriggerFields] = struct{}{}
-			}
-		case "approvalFields":
-			if _, ok := fieldSeen[workflowdefinitionhistory.FieldApprovalFields]; !ok {
-				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldApprovalFields)
-				fieldSeen[workflowdefinitionhistory.FieldApprovalFields] = struct{}{}
-			}
-		case "approvalEdges":
-			if _, ok := fieldSeen[workflowdefinitionhistory.FieldApprovalEdges]; !ok {
-				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldApprovalEdges)
-				fieldSeen[workflowdefinitionhistory.FieldApprovalEdges] = struct{}{}
-			}
-		case "approvalSubmissionMode":
-			if _, ok := fieldSeen[workflowdefinitionhistory.FieldApprovalSubmissionMode]; !ok {
-				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldApprovalSubmissionMode)
-				fieldSeen[workflowdefinitionhistory.FieldApprovalSubmissionMode] = struct{}{}
-			}
 		case "definitionJSON":
 			if _, ok := fieldSeen[workflowdefinitionhistory.FieldDefinitionJSON]; !ok {
 				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldDefinitionJSON)

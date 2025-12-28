@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,6 +17,16 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *controlResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Control) (bool, error) {
+	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+}
+
+// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
+func (r *controlResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Control) (*generated.WorkflowInstance, error) {
+	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
+}
 
 // CreateControl is the resolver for the createControl field.
 func (r *mutationResolver) CreateControl(ctx context.Context, input generated.CreateControlInput) (*model.ControlCreatePayload, error) {

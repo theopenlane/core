@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/utils/cache"
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -138,8 +137,6 @@ type Server struct {
 	SecretManagerSecret string `json:"secretmanager" koanf:"secretmanager" default:"" sensitive:"true"`
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string `json:"defaulttrustcenterdomain" koanf:"defaulttrustcenterdomain" default:""`
-	// FieldLevelEncryption contains the configuration for field level encryption
-	FieldLevelEncryption crypto.Config `json:"fieldlevelencryption" koanf:"fieldlevelencryption"`
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`

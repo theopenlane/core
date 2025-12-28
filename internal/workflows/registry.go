@@ -56,3 +56,8 @@ var assignmentContextBuilder AssignmentContextBuilder
 func RegisterAssignmentContextBuilder(builder AssignmentContextBuilder) {
 	assignmentContextBuilder = builder
 }
+
+// GetAssignmentContextBuilder returns the registered assignment context builder, if any.
+func GetAssignmentContextBuilder() AssignmentContextBuilder {
+	return assignmentContextBuilder
+}

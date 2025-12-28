@@ -19935,29 +19935,24 @@ func (c *WorkflowAssignmentTargetUpdateOne) SetInput(i UpdateWorkflowAssignmentT
 
 // CreateWorkflowDefinitionInput represents a mutation input for creating workflowdefinitions.
 type CreateWorkflowDefinitionInput struct {
-	Tags                   []string
-	InternalNotes          *string
-	SystemInternalID       *string
-	Name                   string
-	Description            *string
-	WorkflowKind           enums.WorkflowKind
-	SchemaType             string
-	Revision               *int
-	Draft                  *bool
-	PublishedAt            *time.Time
-	CooldownSeconds        *int
-	IsDefault              *bool
-	Active                 *bool
-	TriggerOperations      []string
-	TriggerFields          []string
-	ApprovalFields         []string
-	ApprovalEdges          []string
-	ApprovalSubmissionMode *enums.WorkflowApprovalSubmissionMode
-	DefinitionJSON         *models.WorkflowDefinitionDocument
-	TrackedFields          []string
-	OwnerID                *string
-	TagDefinitionIDs       []string
-	GroupIDs               []string
+	Tags             []string
+	InternalNotes    *string
+	SystemInternalID *string
+	Name             string
+	Description      *string
+	WorkflowKind     enums.WorkflowKind
+	SchemaType       string
+	Revision         *int
+	Draft            *bool
+	PublishedAt      *time.Time
+	CooldownSeconds  *int
+	IsDefault        *bool
+	Active           *bool
+	DefinitionJSON   *models.WorkflowDefinitionDocument
+	TrackedFields    []string
+	OwnerID          *string
+	TagDefinitionIDs []string
+	GroupIDs         []string
 }
 
 // Mutate applies the CreateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
@@ -19995,21 +19990,6 @@ func (i *CreateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	if v := i.Active; v != nil {
 		m.SetActive(*v)
 	}
-	if v := i.TriggerOperations; v != nil {
-		m.SetTriggerOperations(v)
-	}
-	if v := i.TriggerFields; v != nil {
-		m.SetTriggerFields(v)
-	}
-	if v := i.ApprovalFields; v != nil {
-		m.SetApprovalFields(v)
-	}
-	if v := i.ApprovalEdges; v != nil {
-		m.SetApprovalEdges(v)
-	}
-	if v := i.ApprovalSubmissionMode; v != nil {
-		m.SetApprovalSubmissionMode(*v)
-	}
 	if v := i.DefinitionJSON; v != nil {
 		m.SetDefinitionJSON(*v)
 	}
@@ -20035,50 +20015,36 @@ func (c *WorkflowDefinitionCreate) SetInput(i CreateWorkflowDefinitionInput) *Wo
 
 // UpdateWorkflowDefinitionInput represents a mutation input for updating workflowdefinitions.
 type UpdateWorkflowDefinitionInput struct {
-	ClearTags                   bool
-	Tags                        []string
-	AppendTags                  []string
-	ClearInternalNotes          bool
-	InternalNotes               *string
-	ClearSystemInternalID       bool
-	SystemInternalID            *string
-	Name                        *string
-	ClearDescription            bool
-	Description                 *string
-	WorkflowKind                *enums.WorkflowKind
-	SchemaType                  *string
-	Revision                    *int
-	Draft                       *bool
-	ClearPublishedAt            bool
-	PublishedAt                 *time.Time
-	CooldownSeconds             *int
-	IsDefault                   *bool
-	Active                      *bool
-	ClearTriggerOperations      bool
-	TriggerOperations           []string
-	AppendTriggerOperations     []string
-	ClearTriggerFields          bool
-	TriggerFields               []string
-	AppendTriggerFields         []string
-	ClearApprovalFields         bool
-	ApprovalFields              []string
-	AppendApprovalFields        []string
-	ClearApprovalEdges          bool
-	ApprovalEdges               []string
-	AppendApprovalEdges         []string
-	ClearApprovalSubmissionMode bool
-	ApprovalSubmissionMode      *enums.WorkflowApprovalSubmissionMode
-	ClearDefinitionJSON         bool
-	DefinitionJSON              *models.WorkflowDefinitionDocument
-	ClearTrackedFields          bool
-	TrackedFields               []string
-	AppendTrackedFields         []string
-	ClearTagDefinitions         bool
-	AddTagDefinitionIDs         []string
-	RemoveTagDefinitionIDs      []string
-	ClearGroups                 bool
-	AddGroupIDs                 []string
-	RemoveGroupIDs              []string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	ClearInternalNotes     bool
+	InternalNotes          *string
+	ClearSystemInternalID  bool
+	SystemInternalID       *string
+	Name                   *string
+	ClearDescription       bool
+	Description            *string
+	WorkflowKind           *enums.WorkflowKind
+	SchemaType             *string
+	Revision               *int
+	Draft                  *bool
+	ClearPublishedAt       bool
+	PublishedAt            *time.Time
+	CooldownSeconds        *int
+	IsDefault              *bool
+	Active                 *bool
+	ClearDefinitionJSON    bool
+	DefinitionJSON         *models.WorkflowDefinitionDocument
+	ClearTrackedFields     bool
+	TrackedFields          []string
+	AppendTrackedFields    []string
+	ClearTagDefinitions    bool
+	AddTagDefinitionIDs    []string
+	RemoveTagDefinitionIDs []string
+	ClearGroups            bool
+	AddGroupIDs            []string
+	RemoveGroupIDs         []string
 }
 
 // Mutate applies the UpdateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
@@ -20139,48 +20105,6 @@ func (i *UpdateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
 	}
 	if v := i.Active; v != nil {
 		m.SetActive(*v)
-	}
-	if i.ClearTriggerOperations {
-		m.ClearTriggerOperations()
-	}
-	if v := i.TriggerOperations; v != nil {
-		m.SetTriggerOperations(v)
-	}
-	if i.AppendTriggerOperations != nil {
-		m.AppendTriggerOperations(i.TriggerOperations)
-	}
-	if i.ClearTriggerFields {
-		m.ClearTriggerFields()
-	}
-	if v := i.TriggerFields; v != nil {
-		m.SetTriggerFields(v)
-	}
-	if i.AppendTriggerFields != nil {
-		m.AppendTriggerFields(i.TriggerFields)
-	}
-	if i.ClearApprovalFields {
-		m.ClearApprovalFields()
-	}
-	if v := i.ApprovalFields; v != nil {
-		m.SetApprovalFields(v)
-	}
-	if i.AppendApprovalFields != nil {
-		m.AppendApprovalFields(i.ApprovalFields)
-	}
-	if i.ClearApprovalEdges {
-		m.ClearApprovalEdges()
-	}
-	if v := i.ApprovalEdges; v != nil {
-		m.SetApprovalEdges(v)
-	}
-	if i.AppendApprovalEdges != nil {
-		m.AppendApprovalEdges(i.ApprovalEdges)
-	}
-	if i.ClearApprovalSubmissionMode {
-		m.ClearApprovalSubmissionMode()
-	}
-	if v := i.ApprovalSubmissionMode; v != nil {
-		m.SetApprovalSubmissionMode(*v)
 	}
 	if i.ClearDefinitionJSON {
 		m.ClearDefinitionJSON()

@@ -1,3 +1,14 @@
+extend type InternalPolicy {
+    """
+    Indicates if this internalPolicy has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this internalPolicy if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
 extend type Query {
     """
     Look up internalPolicy by ID

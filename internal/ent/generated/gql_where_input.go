@@ -81400,14 +81400,6 @@ type WorkflowDefinitionWhereInput struct {
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
 
-	// "approval_submission_mode" field predicates.
-	ApprovalSubmissionMode       *enums.WorkflowApprovalSubmissionMode  `json:"approvalSubmissionMode,omitempty"`
-	ApprovalSubmissionModeNEQ    *enums.WorkflowApprovalSubmissionMode  `json:"approvalSubmissionModeNEQ,omitempty"`
-	ApprovalSubmissionModeIn     []enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionModeIn,omitempty"`
-	ApprovalSubmissionModeNotIn  []enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionModeNotIn,omitempty"`
-	ApprovalSubmissionModeIsNil  bool                                   `json:"approvalSubmissionModeIsNil,omitempty"`
-	ApprovalSubmissionModeNotNil bool                                   `json:"approvalSubmissionModeNotNil,omitempty"`
-
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -82088,24 +82080,6 @@ func (i *WorkflowDefinitionWhereInput) P() (predicate.WorkflowDefinition, error)
 	}
 	if i.ActiveNEQ != nil {
 		predicates = append(predicates, workflowdefinition.ActiveNEQ(*i.ActiveNEQ))
-	}
-	if i.ApprovalSubmissionMode != nil {
-		predicates = append(predicates, workflowdefinition.ApprovalSubmissionModeEQ(*i.ApprovalSubmissionMode))
-	}
-	if i.ApprovalSubmissionModeNEQ != nil {
-		predicates = append(predicates, workflowdefinition.ApprovalSubmissionModeNEQ(*i.ApprovalSubmissionModeNEQ))
-	}
-	if len(i.ApprovalSubmissionModeIn) > 0 {
-		predicates = append(predicates, workflowdefinition.ApprovalSubmissionModeIn(i.ApprovalSubmissionModeIn...))
-	}
-	if len(i.ApprovalSubmissionModeNotIn) > 0 {
-		predicates = append(predicates, workflowdefinition.ApprovalSubmissionModeNotIn(i.ApprovalSubmissionModeNotIn...))
-	}
-	if i.ApprovalSubmissionModeIsNil {
-		predicates = append(predicates, workflowdefinition.ApprovalSubmissionModeIsNil())
-	}
-	if i.ApprovalSubmissionModeNotNil {
-		predicates = append(predicates, workflowdefinition.ApprovalSubmissionModeNotNil())
 	}
 
 	if i.HasOwner != nil {

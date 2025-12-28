@@ -64,17 +64,15 @@ var baseDefaultMixins = []ent.Mixin{
 // getMixins returns the mixins based on the configuration provided
 // by default it will include :
 // - AuditMixin
-// - AutoHushEncryptionMixin (automatically detects hush.EncryptField() annotations)
 // - SoftDeleteMixin
 // - AnnotationMixin (set excludeAnnotations to true to disable)
 // - IDMixin (with or without prefix)
 // - TagMixin (set excludeTags to true to disable)
 // - RevisionMixin (set includeRevision to true to enable)
 // - any additional mixins can  be appended using the additionalMixins field
-func (m mixinConfig) getMixins(schema ent.Interface) []ent.Mixin {
+func (m mixinConfig) getMixins(_ ent.Interface) []ent.Mixin {
 	// Start with base mixins and add auto-encryption using the passed schema
 	mixins := append([]ent.Mixin{}, baseDefaultMixins...)
-	mixins = append(mixins, NewAutoHushEncryptionMixin(schema))
 
 	if !m.excludeSoftDelete {
 		mixins = append(mixins, mixin.SoftDeleteMixin{})

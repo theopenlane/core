@@ -29,8 +29,8 @@ func (WorkflowApprovalMixin) Fields() []ent.Field {
 }
 
 // Interceptors of the WorkflowApprovalMixin
-//func (WorkflowApprovalMixin) Interceptors() []ent.Interceptor {
-//	return []ent.Interceptor{
-//		interceptors.WorkflowApprovalInterceptor(),
-//	}
-//}
+// func (WorkflowApprovalMixin) Interceptors() []ent.Interceptor {
+// 	return []ent.Interceptor{
+// 		interceptors.WorkflowApprovalInterceptor(),
+// 	}
+// }

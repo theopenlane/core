@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -159,6 +160,16 @@ func (r *mutationResolver) DeleteBulkProcedure(ctx context.Context, ids []string
 	}
 
 	return r.bulkDeleteProcedure(ctx, ids)
+}
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *procedureResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Procedure) (bool, error) {
+	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+}
+
+// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
+func (r *procedureResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Procedure) (*generated.WorkflowInstance, error) {
+	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
 }
 
 // Procedure is the resolver for the procedure field.

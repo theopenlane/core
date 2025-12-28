@@ -36,10 +36,16 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	ActionPlan() ActionPlanResolver
+	Control() ControlResolver
+	Evidence() EvidenceResolver
 	Group() GroupResolver
+	InternalPolicy() InternalPolicyResolver
 	Mutation() MutationResolver
 	Notification() NotificationResolver
+	Procedure() ProcedureResolver
 	Query() QueryResolver
+	Subcontrol() SubcontrolResolver
 	Subscription() SubscriptionResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
@@ -133,6 +139,7 @@ type ComplexityRoot struct {
 		ActionPlanKindID                func(childComplexity int) int
 		ActionPlanKindName              func(childComplexity int) int
 		ActionPlanType                  func(childComplexity int) int
+		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -155,6 +162,7 @@ type ComplexityRoot struct {
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		HasPendingWorkflow              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
@@ -431,6 +439,7 @@ type ComplexityRoot struct {
 
 	Control struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		ActiveWorkflowInstance     func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -463,6 +472,7 @@ type ComplexityRoot struct {
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		HasPendingWorkflow         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -1335,6 +1345,7 @@ type ComplexityRoot struct {
 	}
 
 	Evidence struct {
+		ActiveWorkflowInstance func(childComplexity int) int
 		CollectionProcedure    func(childComplexity int) int
 		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -1346,6 +1357,7 @@ type ComplexityRoot struct {
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Files                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		HasPendingWorkflow     func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IsAutomated            func(childComplexity int) int
 		Name                   func(childComplexity int) int
@@ -1955,6 +1967,7 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicy struct {
+		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -1978,6 +1991,7 @@ type ComplexityRoot struct {
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
+		HasPendingWorkflow              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -3311,6 +3325,7 @@ type ComplexityRoot struct {
 	}
 
 	Procedure struct {
+		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -3332,6 +3347,7 @@ type ComplexityRoot struct {
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
+		HasPendingWorkflow              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -4233,6 +4249,7 @@ type ComplexityRoot struct {
 
 	Subcontrol struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		ActiveWorkflowInstance     func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -4259,6 +4276,7 @@ type ComplexityRoot struct {
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		HasPendingWorkflow         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -5353,37 +5371,32 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowDefinition struct {
-		Active                 func(childComplexity int) int
-		ApprovalEdges          func(childComplexity int) int
-		ApprovalFields         func(childComplexity int) int
-		ApprovalSubmissionMode func(childComplexity int) int
-		CooldownSeconds        func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		DefinitionJSON         func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Draft                  func(childComplexity int) int
-		Groups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                     func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		IsDefault              func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Owner                  func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		PublishedAt            func(childComplexity int) int
-		Revision               func(childComplexity int) int
-		SchemaType             func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		TagDefinitions         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
-		Tags                   func(childComplexity int) int
-		TrackedFields          func(childComplexity int) int
-		TriggerFields          func(childComplexity int) int
-		TriggerOperations      func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		WorkflowKind           func(childComplexity int) int
+		Active           func(childComplexity int) int
+		CooldownSeconds  func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DefinitionJSON   func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		Draft            func(childComplexity int) int
+		Groups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		IsDefault        func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		Revision         func(childComplexity int) int
+		SchemaType       func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		TagDefinitions   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
+		Tags             func(childComplexity int) int
+		TrackedFields    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		WorkflowKind     func(childComplexity int) int
 	}
 
 	WorkflowDefinitionBulkCreatePayload struct {
@@ -5827,6 +5840,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ActionPlanType(childComplexity), true
 
+	case "ActionPlan.activeWorkflowInstance":
+		if e.complexity.ActionPlan.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.ActiveWorkflowInstance(childComplexity), true
+
 	case "ActionPlan.approvalRequired":
 		if e.complexity.ActionPlan.ApprovalRequired == nil {
 			break
@@ -5990,6 +6010,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "ActionPlan.hasPendingWorkflow":
+		if e.complexity.ActionPlan.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.HasPendingWorkflow(childComplexity), true
 
 	case "ActionPlan.id":
 		if e.complexity.ActionPlan.ID == nil {
@@ -7230,6 +7257,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Control.activeWorkflowInstance":
+		if e.complexity.Control.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Control.ActiveWorkflowInstance(childComplexity), true
+
 	case "Control.aliases":
 		if e.complexity.Control.Aliases == nil {
 			break
@@ -7503,6 +7537,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "Control.hasPendingWorkflow":
+		if e.complexity.Control.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Control.HasPendingWorkflow(childComplexity), true
 
 	case "Control.id":
 		if e.complexity.Control.ID == nil {
@@ -11437,6 +11478,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EventUpdatePayload.Event(childComplexity), true
 
+	case "Evidence.activeWorkflowInstance":
+		if e.complexity.Evidence.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Evidence.ActiveWorkflowInstance(childComplexity), true
+
 	case "Evidence.collectionProcedure":
 		if e.complexity.Evidence.CollectionProcedure == nil {
 			break
@@ -11538,6 +11586,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+
+	case "Evidence.hasPendingWorkflow":
+		if e.complexity.Evidence.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Evidence.HasPendingWorkflow(childComplexity), true
 
 	case "Evidence.id":
 		if e.complexity.Evidence.ID == nil {
@@ -14689,6 +14744,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IntegrationEdge.Node(childComplexity), true
 
+	case "InternalPolicy.activeWorkflowInstance":
+		if e.complexity.InternalPolicy.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ActiveWorkflowInstance(childComplexity), true
+
 	case "InternalPolicy.approvalRequired":
 		if e.complexity.InternalPolicy.ApprovalRequired == nil {
 			break
@@ -14884,6 +14946,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.FileID(childComplexity), true
+
+	case "InternalPolicy.hasPendingWorkflow":
+		if e.complexity.InternalPolicy.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.HasPendingWorkflow(childComplexity), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -24475,6 +24544,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PersonalAccessTokenUpdatePayload.PersonalAccessToken(childComplexity), true
 
+	case "Procedure.activeWorkflowInstance":
+		if e.complexity.Procedure.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ActiveWorkflowInstance(childComplexity), true
+
 	case "Procedure.approvalRequired":
 		if e.complexity.Procedure.ApprovalRequired == nil {
 			break
@@ -24646,6 +24722,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.FileID(childComplexity), true
+
+	case "Procedure.hasPendingWorkflow":
+		if e.complexity.Procedure.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Procedure.HasPendingWorkflow(childComplexity), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -30631,6 +30714,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Subcontrol.activeWorkflowInstance":
+		if e.complexity.Subcontrol.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ActiveWorkflowInstance(childComplexity), true
+
 	case "Subcontrol.aliases":
 		if e.complexity.Subcontrol.Aliases == nil {
 			break
@@ -30837,6 +30927,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.ExampleEvidence(childComplexity), true
+
+	case "Subcontrol.hasPendingWorkflow":
+		if e.complexity.Subcontrol.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.HasPendingWorkflow(childComplexity), true
 
 	case "Subcontrol.id":
 		if e.complexity.Subcontrol.ID == nil {
@@ -35662,27 +35759,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowDefinition.Active(childComplexity), true
 
-	case "WorkflowDefinition.approvalEdges":
-		if e.complexity.WorkflowDefinition.ApprovalEdges == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.ApprovalEdges(childComplexity), true
-
-	case "WorkflowDefinition.approvalFields":
-		if e.complexity.WorkflowDefinition.ApprovalFields == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.ApprovalFields(childComplexity), true
-
-	case "WorkflowDefinition.approvalSubmissionMode":
-		if e.complexity.WorkflowDefinition.ApprovalSubmissionMode == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.ApprovalSubmissionMode(childComplexity), true
-
 	case "WorkflowDefinition.cooldownSeconds":
 		if e.complexity.WorkflowDefinition.CooldownSeconds == nil {
 			break
@@ -35846,20 +35922,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowDefinition.TrackedFields(childComplexity), true
-
-	case "WorkflowDefinition.triggerFields":
-		if e.complexity.WorkflowDefinition.TriggerFields == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.TriggerFields(childComplexity), true
-
-	case "WorkflowDefinition.triggerOperations":
-		if e.complexity.WorkflowDefinition.TriggerOperations == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.TriggerOperations(childComplexity), true
 
 	case "WorkflowDefinition.updatedAt":
 		if e.complexity.WorkflowDefinition.UpdatedAt == nil {
@@ -37260,7 +37322,18 @@ Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
 scalar Any`, BuiltIn: false},
-	{Name: "../schema/actionplan.graphql", Input: `extend type Query {
+	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
+    """
+    Indicates if this actionPlan has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this actionPlan if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up actionPlan by ID
     """
@@ -37957,7 +38030,18 @@ type ContactBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
-	{Name: "../schema/control.graphql", Input: `extend type Query {
+	{Name: "../schema/control.graphql", Input: `extend type Control {
+    """
+    Indicates if this control has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this control if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up control by ID
     """
@@ -49715,26 +49799,6 @@ input CreateWorkflowDefinitionInput {
   Whether the workflow definition is active
   """
   active: Boolean
-  """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
   """
   Typed document describing triggers, conditions, and actions
   """
@@ -94035,35 +94099,6 @@ input UpdateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  appendTriggerOperations: [String!]
-  clearTriggerOperations: Boolean
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  appendTriggerFields: [String!]
-  clearTriggerFields: Boolean
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  appendApprovalFields: [String!]
-  clearApprovalFields: Boolean
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  appendApprovalEdges: [String!]
-  clearApprovalEdges: Boolean
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  clearApprovalSubmissionMode: Boolean
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -97864,26 +97899,6 @@ type WorkflowDefinition implements Node {
   """
   active: Boolean!
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -98273,15 +98288,6 @@ input WorkflowDefinitionWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  approval_submission_mode field predicates
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  approvalSubmissionModeNEQ: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  approvalSubmissionModeIn: [WorkflowDefinitionWorkflowApprovalSubmissionMode!]
-  approvalSubmissionModeNotIn: [WorkflowDefinitionWorkflowApprovalSubmissionMode!]
-  approvalSubmissionModeIsNil: Boolean
-  approvalSubmissionModeNotNil: Boolean
-  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -98296,13 +98302,6 @@ input WorkflowDefinitionWhereInput {
   """
   hasGroups: Boolean
   hasGroupsWith: [GroupWhereInput!]
-}
-"""
-WorkflowDefinitionWorkflowApprovalSubmissionMode is enum for the field approval_submission_mode
-"""
-enum WorkflowDefinitionWorkflowApprovalSubmissionMode @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowApprovalSubmissionMode") {
-  MANUAL_SUBMIT
-  AUTO_SUBMIT
 }
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
@@ -100098,7 +100097,18 @@ type EventBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
-	{Name: "../schema/evidence.graphql", Input: `extend type Query {
+	{Name: "../schema/evidence.graphql", Input: `extend type Evidence {
+    """
+    Indicates if this evidence has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this evidence if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up evidence by ID
     """
@@ -101341,7 +101351,18 @@ type IntegrationDeletePayload {
     deletedID: ID!
 }
 `, BuiltIn: false},
-	{Name: "../schema/internalpolicy.graphql", Input: `extend type Query {
+	{Name: "../schema/internalpolicy.graphql", Input: `extend type InternalPolicy {
+    """
+    Indicates if this internalPolicy has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this internalPolicy if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up internalPolicy by ID
     """
@@ -103190,7 +103211,18 @@ type PersonalAccessTokenBulkCreatePayload {
     """
     personalAccessTokens: [PersonalAccessToken!]
 }`, BuiltIn: false},
-	{Name: "../schema/procedure.graphql", Input: `extend type Query {
+	{Name: "../schema/procedure.graphql", Input: `extend type Procedure {
+    """
+    Indicates if this procedure has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this procedure if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up procedure by ID
     """
@@ -105456,7 +105488,18 @@ type StandardBulkCreatePayload {
     """
     standards: [Standard!]
 }`, BuiltIn: false},
-	{Name: "../schema/subcontrol.graphql", Input: `extend type Query {
+	{Name: "../schema/subcontrol.graphql", Input: `extend type Subcontrol {
+    """
+    Indicates if this subcontrol has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this subcontrol if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up subcontrol by ID
     """

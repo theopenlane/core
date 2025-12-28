@@ -10114,26 +10114,6 @@ input CreateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -54433,35 +54413,6 @@ input UpdateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  appendTriggerOperations: [String!]
-  clearTriggerOperations: Boolean
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  appendTriggerFields: [String!]
-  clearTriggerFields: Boolean
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  appendApprovalFields: [String!]
-  clearApprovalFields: Boolean
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  appendApprovalEdges: [String!]
-  clearApprovalEdges: Boolean
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  clearApprovalSubmissionMode: Boolean
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -58262,26 +58213,6 @@ type WorkflowDefinition implements Node {
   """
   active: Boolean!
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -58671,15 +58602,6 @@ input WorkflowDefinitionWhereInput {
   active: Boolean
   activeNEQ: Boolean
   """
-  approval_submission_mode field predicates
-  """
-  approvalSubmissionMode: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  approvalSubmissionModeNEQ: WorkflowDefinitionWorkflowApprovalSubmissionMode
-  approvalSubmissionModeIn: [WorkflowDefinitionWorkflowApprovalSubmissionMode!]
-  approvalSubmissionModeNotIn: [WorkflowDefinitionWorkflowApprovalSubmissionMode!]
-  approvalSubmissionModeIsNil: Boolean
-  approvalSubmissionModeNotNil: Boolean
-  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -58694,13 +58616,6 @@ input WorkflowDefinitionWhereInput {
   """
   hasGroups: Boolean
   hasGroupsWith: [GroupWhereInput!]
-}
-"""
-WorkflowDefinitionWorkflowApprovalSubmissionMode is enum for the field approval_submission_mode
-"""
-enum WorkflowDefinitionWorkflowApprovalSubmissionMode @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowApprovalSubmissionMode") {
-  MANUAL_SUBMIT
-  AUTO_SUBMIT
 }
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind

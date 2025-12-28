@@ -1,3 +1,14 @@
+extend type Procedure {
+    """
+    Indicates if this procedure has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this procedure if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
 extend type Query {
     """
     Look up procedure by ID

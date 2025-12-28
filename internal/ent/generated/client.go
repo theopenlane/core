@@ -8965,8 +8965,7 @@ func (c *FindingControlClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *FindingControlClient) Interceptors() []Interceptor {
-	inters := c.inters.FindingControl
-	return append(inters[:len(inters):len(inters)], findingcontrol.Interceptors[:]...)
+	return c.inters.FindingControl
 }
 
 func (c *FindingControlClient) mutate(ctx context.Context, m *FindingControlMutation) (Value, error) {

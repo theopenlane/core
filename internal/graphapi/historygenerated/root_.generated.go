@@ -2321,37 +2321,32 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowDefinitionHistory struct {
-		Active                 func(childComplexity int) int
-		ApprovalEdges          func(childComplexity int) int
-		ApprovalFields         func(childComplexity int) int
-		ApprovalSubmissionMode func(childComplexity int) int
-		CooldownSeconds        func(childComplexity int) int
-		CreatedAt              func(childComplexity int) int
-		CreatedBy              func(childComplexity int) int
-		DefinitionJSON         func(childComplexity int) int
-		Description            func(childComplexity int) int
-		DisplayID              func(childComplexity int) int
-		Draft                  func(childComplexity int) int
-		HistoryTime            func(childComplexity int) int
-		ID                     func(childComplexity int) int
-		InternalNotes          func(childComplexity int) int
-		IsDefault              func(childComplexity int) int
-		Name                   func(childComplexity int) int
-		Operation              func(childComplexity int) int
-		OwnerID                func(childComplexity int) int
-		PublishedAt            func(childComplexity int) int
-		Ref                    func(childComplexity int) int
-		Revision               func(childComplexity int) int
-		SchemaType             func(childComplexity int) int
-		SystemInternalID       func(childComplexity int) int
-		SystemOwned            func(childComplexity int) int
-		Tags                   func(childComplexity int) int
-		TrackedFields          func(childComplexity int) int
-		TriggerFields          func(childComplexity int) int
-		TriggerOperations      func(childComplexity int) int
-		UpdatedAt              func(childComplexity int) int
-		UpdatedBy              func(childComplexity int) int
-		WorkflowKind           func(childComplexity int) int
+		Active           func(childComplexity int) int
+		CooldownSeconds  func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DefinitionJSON   func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		Draft            func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		IsDefault        func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Revision         func(childComplexity int) int
+		SchemaType       func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TrackedFields    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		WorkflowKind     func(childComplexity int) int
 	}
 
 	WorkflowDefinitionHistoryConnection struct {
@@ -14862,27 +14857,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowDefinitionHistory.Active(childComplexity), true
 
-	case "WorkflowDefinitionHistory.approvalEdges":
-		if e.complexity.WorkflowDefinitionHistory.ApprovalEdges == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.ApprovalEdges(childComplexity), true
-
-	case "WorkflowDefinitionHistory.approvalFields":
-		if e.complexity.WorkflowDefinitionHistory.ApprovalFields == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.ApprovalFields(childComplexity), true
-
-	case "WorkflowDefinitionHistory.approvalSubmissionMode":
-		if e.complexity.WorkflowDefinitionHistory.ApprovalSubmissionMode == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.ApprovalSubmissionMode(childComplexity), true
-
 	case "WorkflowDefinitionHistory.cooldownSeconds":
 		if e.complexity.WorkflowDefinitionHistory.CooldownSeconds == nil {
 			break
@@ -15036,20 +15010,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowDefinitionHistory.TrackedFields(childComplexity), true
-
-	case "WorkflowDefinitionHistory.triggerFields":
-		if e.complexity.WorkflowDefinitionHistory.TriggerFields == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.TriggerFields(childComplexity), true
-
-	case "WorkflowDefinitionHistory.triggerOperations":
-		if e.complexity.WorkflowDefinitionHistory.TriggerOperations == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.TriggerOperations(childComplexity), true
 
 	case "WorkflowDefinitionHistory.updatedAt":
 		if e.complexity.WorkflowDefinitionHistory.UpdatedAt == nil {
@@ -44245,26 +44205,6 @@ type WorkflowDefinitionHistory implements Node {
   """
   active: Boolean!
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
-  Derived: fields that are approval-gated for this definition; not user editable
-  """
-  approvalFields: [String!]
-  """
-  Derived: edges that are approval-gated for this definition; not user editable
-  """
-  approvalEdges: [String!]
-  """
-  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-  """
-  approvalSubmissionMode: WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -44635,22 +44575,6 @@ input WorkflowDefinitionHistoryWhereInput {
   """
   active: Boolean
   activeNEQ: Boolean
-  """
-  approval_submission_mode field predicates
-  """
-  approvalSubmissionMode: WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode
-  approvalSubmissionModeNEQ: WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode
-  approvalSubmissionModeIn: [WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode!]
-  approvalSubmissionModeNotIn: [WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode!]
-  approvalSubmissionModeIsNil: Boolean
-  approvalSubmissionModeNotNil: Boolean
-}
-"""
-WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode is enum for the field approval_submission_mode
-"""
-enum WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowApprovalSubmissionMode") {
-  MANUAL_SUBMIT
-  AUTO_SUBMIT
 }
 """
 WorkflowDefinitionHistoryWorkflowKind is enum for the field workflow_kind

@@ -21,8 +21,6 @@ mutation CreateBulkCSVWorkflowDefinition($input: Upload!) {
       systemOwned
       tags
       trackedFields
-      triggerFields
-      triggerOperations
       updatedAt
       updatedBy
       workflowKind
@@ -53,8 +51,6 @@ mutation CreateBulkWorkflowDefinition($input: [CreateWorkflowDefinitionInput!]) 
       systemOwned
       tags
       trackedFields
-      triggerFields
-      triggerOperations
       updatedAt
       updatedBy
       workflowKind
@@ -85,8 +81,6 @@ mutation CreateWorkflowDefinition($input: CreateWorkflowDefinitionInput!) {
       systemOwned
       tags
       trackedFields
-      triggerFields
-      triggerOperations
       updatedAt
       updatedBy
       workflowKind
@@ -131,8 +125,6 @@ query GetAllWorkflowDefinitions {
         systemOwned
         tags
         trackedFields
-        triggerFields
-        triggerOperations
         updatedAt
         updatedBy
         workflowKind
@@ -163,8 +155,6 @@ query GetWorkflowDefinitionByID($workflowDefinitionId: ID!) {
     systemOwned
     tags
     trackedFields
-    triggerFields
-    triggerOperations
     updatedAt
     updatedBy
     workflowKind
@@ -202,8 +192,6 @@ query GetWorkflowDefinitions($first: Int, $last: Int, $where: WorkflowDefinition
         systemOwned
         tags
         trackedFields
-        triggerFields
-        triggerOperations
         updatedAt
         updatedBy
         workflowKind
@@ -235,8 +223,6 @@ mutation UpdateWorkflowDefinition($updateWorkflowDefinitionId: ID!, $input: Upda
       systemOwned
       tags
       trackedFields
-      triggerFields
-      triggerOperations
       updatedAt
       updatedBy
       workflowKind

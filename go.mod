@@ -26,7 +26,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.6
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.15
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.95.0
-	github.com/brianvoe/gofakeit/v7 v7.12.1
+	github.com/brianvoe/gofakeit/v7 v7.14.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20240320110924-172bf2aee9c8
@@ -86,7 +86,7 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.3.0
-	github.com/theopenlane/entx v0.20.2
+	github.com/theopenlane/entx v0.20.3
 	github.com/theopenlane/go-client v0.3.0
 	github.com/theopenlane/gqlgen-plugins v0.13.0
 	github.com/theopenlane/httpsling v0.3.0
@@ -94,7 +94,6 @@ require (
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.6.3
 	github.com/theopenlane/utils v0.6.2
-	github.com/tink-crypto/tink-go/v2 v2.6.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.1
 	github.com/vektah/gqlparser/v2 v2.5.31

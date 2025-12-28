@@ -379,6 +379,10 @@ type ActionPlan struct {
 	Integrations       *IntegrationConnection       `json:"integrations"`
 	File               *File                        `json:"file,omitempty"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this actionPlan has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this actionPlan if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -2164,6 +2168,10 @@ type Control struct {
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
 	ControlMappings        *FindingControlConnection        `json:"controlMappings"`
+	// Indicates if this control has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this control if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -6057,16 +6065,6 @@ type CreateWorkflowDefinitionInput struct {
 	IsDefault *bool `json:"isDefault,omitempty"`
 	// Whether the workflow definition is active
 	Active *bool `json:"active,omitempty"`
-	// Derived: normalized operations from definition for prefiltering; not user editable
-	TriggerOperations []string `json:"triggerOperations,omitempty"`
-	// Derived: normalized fields from definition for prefiltering; not user editable
-	TriggerFields []string `json:"triggerFields,omitempty"`
-	// Derived: fields that are approval-gated for this definition; not user editable
-	ApprovalFields []string `json:"approvalFields,omitempty"`
-	// Derived: edges that are approval-gated for this definition; not user editable
-	ApprovalEdges []string `json:"approvalEdges,omitempty"`
-	// Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-	ApprovalSubmissionMode *enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionMode,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
@@ -9678,6 +9676,10 @@ type Evidence struct {
 	Tasks                  *TaskConnection                  `json:"tasks"`
 	Comments               *NoteConnection                  `json:"comments"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	// Indicates if this evidence has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this evidence if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Evidence) IsNode() {}
@@ -13252,6 +13254,10 @@ type InternalPolicy struct {
 	Comments               *NoteConnection                  `json:"comments"`
 	Discussions            *DiscussionConnection            `json:"discussions"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	// Indicates if this internalPolicy has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this internalPolicy if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -18092,6 +18098,10 @@ type Procedure struct {
 	Discussions        *DiscussionConnection        `json:"discussions"`
 	File               *File                        `json:"file,omitempty"`
 	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this procedure has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this procedure if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Procedure) IsNode() {}
@@ -22120,6 +22130,10 @@ type Subcontrol struct {
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	// Indicates if this subcontrol has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this subcontrol if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -30424,25 +30438,6 @@ type UpdateWorkflowDefinitionInput struct {
 	IsDefault *bool `json:"isDefault,omitempty"`
 	// Whether the workflow definition is active
 	Active *bool `json:"active,omitempty"`
-	// Derived: normalized operations from definition for prefiltering; not user editable
-	TriggerOperations       []string `json:"triggerOperations,omitempty"`
-	AppendTriggerOperations []string `json:"appendTriggerOperations,omitempty"`
-	ClearTriggerOperations  *bool    `json:"clearTriggerOperations,omitempty"`
-	// Derived: normalized fields from definition for prefiltering; not user editable
-	TriggerFields       []string `json:"triggerFields,omitempty"`
-	AppendTriggerFields []string `json:"appendTriggerFields,omitempty"`
-	ClearTriggerFields  *bool    `json:"clearTriggerFields,omitempty"`
-	// Derived: fields that are approval-gated for this definition; not user editable
-	ApprovalFields       []string `json:"approvalFields,omitempty"`
-	AppendApprovalFields []string `json:"appendApprovalFields,omitempty"`
-	ClearApprovalFields  *bool    `json:"clearApprovalFields,omitempty"`
-	// Derived: edges that are approval-gated for this definition; not user editable
-	ApprovalEdges       []string `json:"approvalEdges,omitempty"`
-	AppendApprovalEdges []string `json:"appendApprovalEdges,omitempty"`
-	ClearApprovalEdges  *bool    `json:"clearApprovalEdges,omitempty"`
-	// Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-	ApprovalSubmissionMode      *enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionMode,omitempty"`
-	ClearApprovalSubmissionMode *bool                                 `json:"clearApprovalSubmissionMode,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON      *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	ClearDefinitionJSON *bool                              `json:"clearDefinitionJSON,omitempty"`
@@ -32621,16 +32616,6 @@ type WorkflowDefinition struct {
 	IsDefault bool `json:"isDefault"`
 	// Whether the workflow definition is active
 	Active bool `json:"active"`
-	// Derived: normalized operations from definition for prefiltering; not user editable
-	TriggerOperations []string `json:"triggerOperations,omitempty"`
-	// Derived: normalized fields from definition for prefiltering; not user editable
-	TriggerFields []string `json:"triggerFields,omitempty"`
-	// Derived: fields that are approval-gated for this definition; not user editable
-	ApprovalFields []string `json:"approvalFields,omitempty"`
-	// Derived: edges that are approval-gated for this definition; not user editable
-	ApprovalEdges []string `json:"approvalEdges,omitempty"`
-	// Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
-	ApprovalSubmissionMode *enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionMode,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
@@ -32917,13 +32902,6 @@ type WorkflowDefinitionWhereInput struct {
 	// active field predicates
 	Active    *bool `json:"active,omitempty"`
 	ActiveNeq *bool `json:"activeNEQ,omitempty"`
-	// approval_submission_mode field predicates
-	ApprovalSubmissionMode       *enums.WorkflowApprovalSubmissionMode  `json:"approvalSubmissionMode,omitempty"`
-	ApprovalSubmissionModeNeq    *enums.WorkflowApprovalSubmissionMode  `json:"approvalSubmissionModeNEQ,omitempty"`
-	ApprovalSubmissionModeIn     []enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionModeIn,omitempty"`
-	ApprovalSubmissionModeNotIn  []enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionModeNotIn,omitempty"`
-	ApprovalSubmissionModeIsNil  *bool                                  `json:"approvalSubmissionModeIsNil,omitempty"`
-	ApprovalSubmissionModeNotNil *bool                                  `json:"approvalSubmissionModeNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

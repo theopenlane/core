@@ -63062,14 +63062,6 @@ type WorkflowDefinitionHistoryWhereInput struct {
 	// "active" field predicates.
 	Active    *bool `json:"active,omitempty"`
 	ActiveNEQ *bool `json:"activeNEQ,omitempty"`
-
-	// "approval_submission_mode" field predicates.
-	ApprovalSubmissionMode       *enums.WorkflowApprovalSubmissionMode  `json:"approvalSubmissionMode,omitempty"`
-	ApprovalSubmissionModeNEQ    *enums.WorkflowApprovalSubmissionMode  `json:"approvalSubmissionModeNEQ,omitempty"`
-	ApprovalSubmissionModeIn     []enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionModeIn,omitempty"`
-	ApprovalSubmissionModeNotIn  []enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionModeNotIn,omitempty"`
-	ApprovalSubmissionModeIsNil  bool                                   `json:"approvalSubmissionModeIsNil,omitempty"`
-	ApprovalSubmissionModeNotNil bool                                   `json:"approvalSubmissionModeNotNil,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -63820,24 +63812,6 @@ func (i *WorkflowDefinitionHistoryWhereInput) P() (predicate.WorkflowDefinitionH
 	}
 	if i.ActiveNEQ != nil {
 		predicates = append(predicates, workflowdefinitionhistory.ActiveNEQ(*i.ActiveNEQ))
-	}
-	if i.ApprovalSubmissionMode != nil {
-		predicates = append(predicates, workflowdefinitionhistory.ApprovalSubmissionModeEQ(*i.ApprovalSubmissionMode))
-	}
-	if i.ApprovalSubmissionModeNEQ != nil {
-		predicates = append(predicates, workflowdefinitionhistory.ApprovalSubmissionModeNEQ(*i.ApprovalSubmissionModeNEQ))
-	}
-	if len(i.ApprovalSubmissionModeIn) > 0 {
-		predicates = append(predicates, workflowdefinitionhistory.ApprovalSubmissionModeIn(i.ApprovalSubmissionModeIn...))
-	}
-	if len(i.ApprovalSubmissionModeNotIn) > 0 {
-		predicates = append(predicates, workflowdefinitionhistory.ApprovalSubmissionModeNotIn(i.ApprovalSubmissionModeNotIn...))
-	}
-	if i.ApprovalSubmissionModeIsNil {
-		predicates = append(predicates, workflowdefinitionhistory.ApprovalSubmissionModeIsNil())
-	}
-	if i.ApprovalSubmissionModeNotNil {
-		predicates = append(predicates, workflowdefinitionhistory.ApprovalSubmissionModeNotNil())
 	}
 
 	switch len(predicates) {

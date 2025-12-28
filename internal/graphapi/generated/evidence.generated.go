@@ -108,6 +108,10 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -195,6 +199,10 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -311,6 +319,10 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_comments(ctx, field)
 			case "workflowObjectRefs":
 				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
