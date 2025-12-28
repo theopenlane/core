@@ -14,7 +14,7 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
-  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
+  HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
 steps:
@@ -70,7 +70,8 @@ steps:
         depends_on: "generate_config"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -95,7 +96,8 @@ steps:
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -118,7 +120,8 @@ steps:
         depends_on: "generate_config"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -143,7 +146,8 @@ steps:
         depends_on: "helm_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -168,7 +172,8 @@ steps:
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
