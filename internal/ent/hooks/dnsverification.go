@@ -5,11 +5,11 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/jobspec"
 )
 
 // HookDNSVerificationDelete cleans up preview domain DNS records when a verification record is deleted
