@@ -44,12 +44,8 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
-	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
-	FieldProposedChanges = "proposed_changes"
-	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
-	FieldProposedByUserID = "proposed_by_user_id"
-	// FieldProposedAt holds the string denoting the proposed_at field in the database.
-	FieldProposedAt = "proposed_at"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -87,9 +83,7 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
-	FieldProposedChanges,
-	FieldProposedByUserID,
-	FieldProposedAt,
+	FieldWorkflowEligibleMarker,
 	FieldName,
 	FieldDescription,
 	FieldCollectionProcedure,
@@ -130,6 +124,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultCreationDate holds the default value on creation for the "creation_date" field.
 	DefaultCreationDate func() time.Time
 	// DefaultRenewalDate holds the default value on creation for the "renewal_date" field.
@@ -223,14 +219,9 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
-// ByProposedByUserID orders the results by the proposed_by_user_id field.
-func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
-}
-
-// ByProposedAt orders the results by the proposed_at field.
-func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

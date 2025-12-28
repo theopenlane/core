@@ -99,6 +99,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -2587,6 +2588,33 @@ func (f TraverseWorkflowObjectRef) Traverse(ctx context.Context, q generated.Que
 	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowObjectRefQuery", q)
 }
 
+// The WorkflowProposalFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowProposalFunc func(context.Context, *generated.WorkflowProposalQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowProposalFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowProposalQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowProposalQuery", q)
+}
+
+// The TraverseWorkflowProposal type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowProposal func(context.Context, *generated.WorkflowProposalQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowProposal) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowProposal) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowProposalQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowProposalQuery", q)
+}
+
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q generated.Query) (Query, error) {
 	switch q := q.(type) {
@@ -2770,6 +2798,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.WorkflowInstanceQuery, predicate.WorkflowInstance, workflowinstance.OrderOption]{typ: generated.TypeWorkflowInstance, tq: q}, nil
 	case *generated.WorkflowObjectRefQuery:
 		return &query[*generated.WorkflowObjectRefQuery, predicate.WorkflowObjectRef, workflowobjectref.OrderOption]{typ: generated.TypeWorkflowObjectRef, tq: q}, nil
+	case *generated.WorkflowProposalQuery:
+		return &query[*generated.WorkflowProposalQuery, predicate.WorkflowProposal, workflowproposal.OrderOption]{typ: generated.TypeWorkflowProposal, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

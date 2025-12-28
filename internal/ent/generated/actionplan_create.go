@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // ActionPlanCreate is the builder for creating a ActionPlan entity.
@@ -424,6 +425,20 @@ func (_c *ActionPlanCreate) SetNillableActionPlanKindID(v *string) *ActionPlanCr
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *ActionPlanCreate) SetWorkflowEligibleMarker(v bool) *ActionPlanCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableWorkflowEligibleMarker(v *bool) *ActionPlanCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ActionPlanCreate) SetTitle(v string) *ActionPlanCreate {
 	_c.mutation.SetTitle(v)
@@ -728,6 +743,21 @@ func (_c *ActionPlanCreate) SetFile(v *File) *ActionPlanCreate {
 	return _c.SetFileID(v.ID)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *ActionPlanCreate) AddWorkflowObjectRefIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *ActionPlanCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_c *ActionPlanCreate) Mutation() *ActionPlanMutation {
 	return _c.mutation
@@ -830,6 +860,10 @@ func (_c *ActionPlanCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := actionplan.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := actionplan.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.RequiresApproval(); !ok {
 		v := actionplan.DefaultRequiresApproval
@@ -1040,6 +1074,10 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ActionPlanKindName(); ok {
 		_spec.SetField(actionplan.FieldActionPlanKindName, field.TypeString, value)
 		_node.ActionPlanKindName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
@@ -1326,6 +1364,23 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.FileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -198,6 +198,11 @@ func ProcedureKindID(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldProcedureKindID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -2061,6 +2066,26 @@ func ProcedureKindIDEqualFold(v string) predicate.ProcedureHistory {
 // ProcedureKindIDContainsFold applies the ContainsFold predicate on the "procedure_kind_id" field.
 func ProcedureKindIDContainsFold(v string) predicate.ProcedureHistory {
 	return predicate.ProcedureHistory(sql.FieldContainsFold(FieldProcedureKindID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.ProcedureHistory {
+	return predicate.ProcedureHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // And groups predicates with the AND operator between them.

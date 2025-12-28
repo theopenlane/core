@@ -1218,6 +1218,95 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldFileID)
 				fieldSeen[actionplan.FieldFileID] = struct{}{}
 			}
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*ActionPlan) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"action_plan_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(actionplan.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(actionplan.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*ActionPlan) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[14] == nil {
+								nodes[i].Edges.totalCount[14] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[14][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(actionplan.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[actionplan.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldCreatedAt)
@@ -1372,6 +1461,11 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[actionplan.FieldActionPlanKindID]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldActionPlanKindID)
 				fieldSeen[actionplan.FieldActionPlanKindID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[actionplan.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, actionplan.FieldWorkflowEligibleMarker)
+				fieldSeen[actionplan.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "title":
 			if _, ok := fieldSeen[actionplan.FieldTitle]; !ok {
@@ -5555,20 +5649,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, control.FieldControlKindID)
 				fieldSeen[control.FieldControlKindID] = struct{}{}
 			}
-		case "proposedChanges":
-			if _, ok := fieldSeen[control.FieldProposedChanges]; !ok {
-				selectedFields = append(selectedFields, control.FieldProposedChanges)
-				fieldSeen[control.FieldProposedChanges] = struct{}{}
-			}
-		case "proposedByUserID":
-			if _, ok := fieldSeen[control.FieldProposedByUserID]; !ok {
-				selectedFields = append(selectedFields, control.FieldProposedByUserID)
-				fieldSeen[control.FieldProposedByUserID] = struct{}{}
-			}
-		case "proposedAt":
-			if _, ok := fieldSeen[control.FieldProposedAt]; !ok {
-				selectedFields = append(selectedFields, control.FieldProposedAt)
-				fieldSeen[control.FieldProposedAt] = struct{}{}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[control.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, control.FieldWorkflowEligibleMarker)
+				fieldSeen[control.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "refCode":
 			if _, ok := fieldSeen[control.FieldRefCode]; !ok {
@@ -15009,6 +15093,95 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			_q.WithNamedComments(alias, func(wq *NoteQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Evidence) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"evidence_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(evidence.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(evidence.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[9][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Evidence) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[9][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(evidence.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[evidence.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, evidence.FieldCreatedAt)
@@ -15044,20 +15217,10 @@ func (_q *EvidenceQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, evidence.FieldOwnerID)
 				fieldSeen[evidence.FieldOwnerID] = struct{}{}
 			}
-		case "proposedChanges":
-			if _, ok := fieldSeen[evidence.FieldProposedChanges]; !ok {
-				selectedFields = append(selectedFields, evidence.FieldProposedChanges)
-				fieldSeen[evidence.FieldProposedChanges] = struct{}{}
-			}
-		case "proposedByUserID":
-			if _, ok := fieldSeen[evidence.FieldProposedByUserID]; !ok {
-				selectedFields = append(selectedFields, evidence.FieldProposedByUserID)
-				fieldSeen[evidence.FieldProposedByUserID] = struct{}{}
-			}
-		case "proposedAt":
-			if _, ok := fieldSeen[evidence.FieldProposedAt]; !ok {
-				selectedFields = append(selectedFields, evidence.FieldProposedAt)
-				fieldSeen[evidence.FieldProposedAt] = struct{}{}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[evidence.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, evidence.FieldWorkflowEligibleMarker)
+				fieldSeen[evidence.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "name":
 			if _, ok := fieldSeen[evidence.FieldName]; !ok {
@@ -25849,20 +26012,10 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldInternalPolicyKindID)
 				fieldSeen[internalpolicy.FieldInternalPolicyKindID] = struct{}{}
 			}
-		case "proposedChanges":
-			if _, ok := fieldSeen[internalpolicy.FieldProposedChanges]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldProposedChanges)
-				fieldSeen[internalpolicy.FieldProposedChanges] = struct{}{}
-			}
-		case "proposedByUserID":
-			if _, ok := fieldSeen[internalpolicy.FieldProposedByUserID]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldProposedByUserID)
-				fieldSeen[internalpolicy.FieldProposedByUserID] = struct{}{}
-			}
-		case "proposedAt":
-			if _, ok := fieldSeen[internalpolicy.FieldProposedAt]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldProposedAt)
-				fieldSeen[internalpolicy.FieldProposedAt] = struct{}{}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[internalpolicy.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, internalpolicy.FieldWorkflowEligibleMarker)
+				fieldSeen[internalpolicy.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -39789,6 +39942,95 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldFileID)
 				fieldSeen[procedure.FieldFileID] = struct{}{}
 			}
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Procedure) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"procedure_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(procedure.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(procedure.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[16] == nil {
+								nodes[i].Edges.totalCount[16] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[16][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Procedure) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[16] == nil {
+								nodes[i].Edges.totalCount[16] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[16][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(procedure.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[procedure.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldCreatedAt)
@@ -39948,6 +40190,11 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 			if _, ok := fieldSeen[procedure.FieldProcedureKindID]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldProcedureKindID)
 				fieldSeen[procedure.FieldProcedureKindID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[procedure.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, procedure.FieldWorkflowEligibleMarker)
+				fieldSeen[procedure.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -50104,6 +50351,95 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			_q.WithNamedScheduledJobs(alias, func(wq *ScheduledJobQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Subcontrol) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"subcontrol_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(subcontrol.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(subcontrol.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[18] == nil {
+								nodes[i].Edges.totalCount[18] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[18][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Subcontrol) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[18] == nil {
+								nodes[i].Edges.totalCount[18] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[18][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(subcontrol.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[subcontrol.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldCreatedAt)
@@ -50293,6 +50629,11 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 			if _, ok := fieldSeen[subcontrol.FieldSubcontrolKindID]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldSubcontrolKindID)
 				fieldSeen[subcontrol.FieldSubcontrolKindID] = struct{}{}
+			}
+		case "workflowEligibleMarker":
+			if _, ok := fieldSeen[subcontrol.FieldWorkflowEligibleMarker]; !ok {
+				selectedFields = append(selectedFields, subcontrol.FieldWorkflowEligibleMarker)
+				fieldSeen[subcontrol.FieldWorkflowEligibleMarker] = struct{}{}
 			}
 		case "refCode":
 			if _, ok := fieldSeen[subcontrol.FieldRefCode]; !ok {
@@ -59843,6 +60184,21 @@ func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, workflowdefinition.FieldTriggerFields)
 				fieldSeen[workflowdefinition.FieldTriggerFields] = struct{}{}
 			}
+		case "approvalFields":
+			if _, ok := fieldSeen[workflowdefinition.FieldApprovalFields]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldApprovalFields)
+				fieldSeen[workflowdefinition.FieldApprovalFields] = struct{}{}
+			}
+		case "approvalEdges":
+			if _, ok := fieldSeen[workflowdefinition.FieldApprovalEdges]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldApprovalEdges)
+				fieldSeen[workflowdefinition.FieldApprovalEdges] = struct{}{}
+			}
+		case "approvalSubmissionMode":
+			if _, ok := fieldSeen[workflowdefinition.FieldApprovalSubmissionMode]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldApprovalSubmissionMode)
+				fieldSeen[workflowdefinition.FieldApprovalSubmissionMode] = struct{}{}
+			}
 		case "definitionJSON":
 			if _, ok := fieldSeen[workflowdefinition.FieldDefinitionJSON]; !ok {
 				selectedFields = append(selectedFields, workflowdefinition.FieldDefinitionJSON)
@@ -60189,6 +60545,51 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				fieldSeen[workflowinstance.FieldEvidenceID] = struct{}{}
 			}
 
+		case "subcontrol":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			_q.withSubcontrol = query
+			if _, ok := fieldSeen[workflowinstance.FieldSubcontrolID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldSubcontrolID)
+				fieldSeen[workflowinstance.FieldSubcontrolID] = struct{}{}
+			}
+
+		case "actionPlan":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ActionPlanClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
+				return err
+			}
+			_q.withActionPlan = query
+			if _, ok := fieldSeen[workflowinstance.FieldActionPlanID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldActionPlanID)
+				fieldSeen[workflowinstance.FieldActionPlanID] = struct{}{}
+			}
+
+		case "procedure":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			_q.withProcedure = query
+			if _, ok := fieldSeen[workflowinstance.FieldProcedureID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldProcedureID)
+				fieldSeen[workflowinstance.FieldProcedureID] = struct{}{}
+			}
+
 		case "workflowAssignments":
 			var (
 				alias = field.Alias
@@ -60232,10 +60633,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[5] == nil {
-								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[5][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -60243,10 +60644,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowAssignments)
-							if nodes[i].Edges.totalCount[5] == nil {
-								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[5][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -60321,10 +60722,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[6] == nil {
-								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[6][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -60332,10 +60733,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowEvents)
-							if nodes[i].Edges.totalCount[6] == nil {
-								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[6][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -60410,10 +60811,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[7] == nil {
-								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[7][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -60421,10 +60822,10 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.WorkflowObjectRefs)
-							if nodes[i].Edges.totalCount[7] == nil {
-								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[7][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -60495,6 +60896,11 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, workflowinstance.FieldWorkflowDefinitionID)
 				fieldSeen[workflowinstance.FieldWorkflowDefinitionID] = struct{}{}
 			}
+		case "workflowProposalID":
+			if _, ok := fieldSeen[workflowinstance.FieldWorkflowProposalID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldWorkflowProposalID)
+				fieldSeen[workflowinstance.FieldWorkflowProposalID] = struct{}{}
+			}
 		case "state":
 			if _, ok := fieldSeen[workflowinstance.FieldState]; !ok {
 				selectedFields = append(selectedFields, workflowinstance.FieldState)
@@ -60515,6 +60921,11 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, workflowinstance.FieldDefinitionSnapshot)
 				fieldSeen[workflowinstance.FieldDefinitionSnapshot] = struct{}{}
 			}
+		case "currentActionIndex":
+			if _, ok := fieldSeen[workflowinstance.FieldCurrentActionIndex]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldCurrentActionIndex)
+				fieldSeen[workflowinstance.FieldCurrentActionIndex] = struct{}{}
+			}
 		case "controlID":
 			if _, ok := fieldSeen[workflowinstance.FieldControlID]; !ok {
 				selectedFields = append(selectedFields, workflowinstance.FieldControlID)
@@ -60529,6 +60940,21 @@ func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool,
 			if _, ok := fieldSeen[workflowinstance.FieldEvidenceID]; !ok {
 				selectedFields = append(selectedFields, workflowinstance.FieldEvidenceID)
 				fieldSeen[workflowinstance.FieldEvidenceID] = struct{}{}
+			}
+		case "subcontrolID":
+			if _, ok := fieldSeen[workflowinstance.FieldSubcontrolID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldSubcontrolID)
+				fieldSeen[workflowinstance.FieldSubcontrolID] = struct{}{}
+			}
+		case "actionPlanID":
+			if _, ok := fieldSeen[workflowinstance.FieldActionPlanID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldActionPlanID)
+				fieldSeen[workflowinstance.FieldActionPlanID] = struct{}{}
+			}
+		case "procedureID":
+			if _, ok := fieldSeen[workflowinstance.FieldProcedureID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldProcedureID)
+				fieldSeen[workflowinstance.FieldProcedureID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -60770,6 +61196,51 @@ func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, workflowobjectref.FieldEvidenceID)
 				fieldSeen[workflowobjectref.FieldEvidenceID] = struct{}{}
 			}
+
+		case "subcontrol":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&SubcontrolClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, subcontrolImplementors)...); err != nil {
+				return err
+			}
+			_q.withSubcontrol = query
+			if _, ok := fieldSeen[workflowobjectref.FieldSubcontrolID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldSubcontrolID)
+				fieldSeen[workflowobjectref.FieldSubcontrolID] = struct{}{}
+			}
+
+		case "actionPlan":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ActionPlanClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, actionplanImplementors)...); err != nil {
+				return err
+			}
+			_q.withActionPlan = query
+			if _, ok := fieldSeen[workflowobjectref.FieldActionPlanID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldActionPlanID)
+				fieldSeen[workflowobjectref.FieldActionPlanID] = struct{}{}
+			}
+
+		case "procedure":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ProcedureClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, procedureImplementors)...); err != nil {
+				return err
+			}
+			_q.withProcedure = query
+			if _, ok := fieldSeen[workflowobjectref.FieldProcedureID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldProcedureID)
+				fieldSeen[workflowobjectref.FieldProcedureID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[workflowobjectref.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, workflowobjectref.FieldCreatedAt)
@@ -60844,6 +61315,21 @@ func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[workflowobjectref.FieldEvidenceID]; !ok {
 				selectedFields = append(selectedFields, workflowobjectref.FieldEvidenceID)
 				fieldSeen[workflowobjectref.FieldEvidenceID] = struct{}{}
+			}
+		case "subcontrolID":
+			if _, ok := fieldSeen[workflowobjectref.FieldSubcontrolID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldSubcontrolID)
+				fieldSeen[workflowobjectref.FieldSubcontrolID] = struct{}{}
+			}
+		case "actionPlanID":
+			if _, ok := fieldSeen[workflowobjectref.FieldActionPlanID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldActionPlanID)
+				fieldSeen[workflowobjectref.FieldActionPlanID] = struct{}{}
+			}
+		case "procedureID":
+			if _, ok := fieldSeen[workflowobjectref.FieldProcedureID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldProcedureID)
+				fieldSeen[workflowobjectref.FieldProcedureID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

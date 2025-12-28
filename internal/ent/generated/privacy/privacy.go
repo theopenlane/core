@@ -2271,6 +2271,30 @@ func (f WorkflowObjectRefMutationRuleFunc) EvalMutation(ctx context.Context, m g
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.WorkflowObjectRefMutation", m)
 }
 
+// The WorkflowProposalQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type WorkflowProposalQueryRuleFunc func(context.Context, *generated.WorkflowProposalQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f WorkflowProposalQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowProposalQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.WorkflowProposalQuery", q)
+}
+
+// The WorkflowProposalMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type WorkflowProposalMutationRuleFunc func(context.Context, *generated.WorkflowProposalMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f WorkflowProposalMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.WorkflowProposalMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.WorkflowProposalMutation", m)
+}
+
 type (
 	// Filter is the interface that wraps the Where function
 	// for filtering nodes in queries and mutations.
@@ -2486,6 +2510,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.WorkflowObjectRefQuery:
 		return q.Filter(), nil
+	case *generated.WorkflowProposalQuery:
+		return q.Filter(), nil
 	default:
 		return nil, Denyf("generated/privacy: unexpected query type %T for query filter", q)
 	}
@@ -2672,6 +2698,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.WorkflowInstanceMutation:
 		return m.Filter(), nil
 	case *generated.WorkflowObjectRefMutation:
+		return m.Filter(), nil
+	case *generated.WorkflowProposalMutation:
 		return m.Filter(), nil
 	default:
 		return nil, Denyf("generated/privacy: unexpected mutation type %T for mutation filter", m)

@@ -154,12 +154,16 @@ func init() {
 	actionplanhistoryDescSystemOwned := actionplanhistoryFields[32].Descriptor()
 	// actionplanhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplanhistory.DefaultSystemOwned = actionplanhistoryDescSystemOwned.Default.(bool)
+	// actionplanhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	actionplanhistoryDescWorkflowEligibleMarker := actionplanhistoryFields[37].Descriptor()
+	// actionplanhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	actionplanhistory.DefaultWorkflowEligibleMarker = actionplanhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanhistoryDescRequiresApproval is the schema descriptor for requires_approval field.
-	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[42].Descriptor()
+	actionplanhistoryDescRequiresApproval := actionplanhistoryFields[43].Descriptor()
 	// actionplanhistory.DefaultRequiresApproval holds the default value on creation for the requires_approval field.
 	actionplanhistory.DefaultRequiresApproval = actionplanhistoryDescRequiresApproval.Default.(bool)
 	// actionplanhistoryDescBlocked is the schema descriptor for blocked field.
-	actionplanhistoryDescBlocked := actionplanhistoryFields[43].Descriptor()
+	actionplanhistoryDescBlocked := actionplanhistoryFields[44].Descriptor()
 	// actionplanhistory.DefaultBlocked holds the default value on creation for the blocked field.
 	actionplanhistory.DefaultBlocked = actionplanhistoryDescBlocked.Default.(bool)
 	// actionplanhistoryDescID is the schema descriptor for id field.
@@ -353,6 +357,10 @@ func init() {
 	controlhistoryDescSystemOwned := controlhistoryFields[39].Descriptor()
 	// controlhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	controlhistory.DefaultSystemOwned = controlhistoryDescSystemOwned.Default.(bool)
+	// controlhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	controlhistoryDescWorkflowEligibleMarker := controlhistoryFields[44].Descriptor()
+	// controlhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	controlhistory.DefaultWorkflowEligibleMarker = controlhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// controlhistoryDescID is the schema descriptor for id field.
 	controlhistoryDescID := controlhistoryFields[9].Descriptor()
 	// controlhistory.DefaultID holds the default value on creation for the id field.
@@ -821,16 +829,20 @@ func init() {
 	evidencehistoryDescTags := evidencehistoryFields[11].Descriptor()
 	// evidencehistory.DefaultTags holds the default value on creation for the tags field.
 	evidencehistory.DefaultTags = evidencehistoryDescTags.Default.([]string)
+	// evidencehistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	evidencehistoryDescWorkflowEligibleMarker := evidencehistoryFields[13].Descriptor()
+	// evidencehistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	evidencehistory.DefaultWorkflowEligibleMarker = evidencehistoryDescWorkflowEligibleMarker.Default.(bool)
 	// evidencehistoryDescCreationDate is the schema descriptor for creation_date field.
-	evidencehistoryDescCreationDate := evidencehistoryFields[19].Descriptor()
+	evidencehistoryDescCreationDate := evidencehistoryFields[17].Descriptor()
 	// evidencehistory.DefaultCreationDate holds the default value on creation for the creation_date field.
 	evidencehistory.DefaultCreationDate = evidencehistoryDescCreationDate.Default.(func() time.Time)
 	// evidencehistoryDescRenewalDate is the schema descriptor for renewal_date field.
-	evidencehistoryDescRenewalDate := evidencehistoryFields[20].Descriptor()
+	evidencehistoryDescRenewalDate := evidencehistoryFields[18].Descriptor()
 	// evidencehistory.DefaultRenewalDate holds the default value on creation for the renewal_date field.
 	evidencehistory.DefaultRenewalDate = evidencehistoryDescRenewalDate.Default.(time.Time)
 	// evidencehistoryDescIsAutomated is the schema descriptor for is_automated field.
-	evidencehistoryDescIsAutomated := evidencehistoryFields[22].Descriptor()
+	evidencehistoryDescIsAutomated := evidencehistoryFields[20].Descriptor()
 	// evidencehistory.DefaultIsAutomated holds the default value on creation for the is_automated field.
 	evidencehistory.DefaultIsAutomated = evidencehistoryDescIsAutomated.Default.(bool)
 	// evidencehistoryDescID is the schema descriptor for id field.
@@ -1228,6 +1240,10 @@ func init() {
 	internalpolicyhistoryDescDismissedImprovementSuggestions := internalpolicyhistoryFields[33].Descriptor()
 	// internalpolicyhistory.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	internalpolicyhistory.DefaultDismissedImprovementSuggestions = internalpolicyhistoryDescDismissedImprovementSuggestions.Default.([]string)
+	// internalpolicyhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	internalpolicyhistoryDescWorkflowEligibleMarker := internalpolicyhistoryFields[38].Descriptor()
+	// internalpolicyhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	internalpolicyhistory.DefaultWorkflowEligibleMarker = internalpolicyhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// internalpolicyhistoryDescID is the schema descriptor for id field.
 	internalpolicyhistoryDescID := internalpolicyhistoryFields[9].Descriptor()
 	// internalpolicyhistory.DefaultID holds the default value on creation for the id field.
@@ -1665,6 +1681,10 @@ func init() {
 	procedurehistoryDescSystemOwned := procedurehistoryFields[33].Descriptor()
 	// procedurehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	procedurehistory.DefaultSystemOwned = procedurehistoryDescSystemOwned.Default.(bool)
+	// procedurehistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	procedurehistoryDescWorkflowEligibleMarker := procedurehistoryFields[38].Descriptor()
+	// procedurehistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	procedurehistory.DefaultWorkflowEligibleMarker = procedurehistoryDescWorkflowEligibleMarker.Default.(bool)
 	// procedurehistoryDescID is the schema descriptor for id field.
 	procedurehistoryDescID := procedurehistoryFields[9].Descriptor()
 	// procedurehistory.DefaultID holds the default value on creation for the id field.
@@ -2020,6 +2040,10 @@ func init() {
 	subcontrolhistoryDescSystemOwned := subcontrolhistoryFields[39].Descriptor()
 	// subcontrolhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrolhistory.DefaultSystemOwned = subcontrolhistoryDescSystemOwned.Default.(bool)
+	// subcontrolhistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	subcontrolhistoryDescWorkflowEligibleMarker := subcontrolhistoryFields[44].Descriptor()
+	// subcontrolhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	subcontrolhistory.DefaultWorkflowEligibleMarker = subcontrolhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolhistoryDescID is the schema descriptor for id field.
 	subcontrolhistoryDescID := subcontrolhistoryFields[9].Descriptor()
 	// subcontrolhistory.DefaultID holds the default value on creation for the id field.
@@ -2686,6 +2710,14 @@ func init() {
 	workflowdefinitionhistoryDescTriggerFields := workflowdefinitionhistoryFields[27].Descriptor()
 	// workflowdefinitionhistory.DefaultTriggerFields holds the default value on creation for the trigger_fields field.
 	workflowdefinitionhistory.DefaultTriggerFields = workflowdefinitionhistoryDescTriggerFields.Default.([]string)
+	// workflowdefinitionhistoryDescApprovalFields is the schema descriptor for approval_fields field.
+	workflowdefinitionhistoryDescApprovalFields := workflowdefinitionhistoryFields[28].Descriptor()
+	// workflowdefinitionhistory.DefaultApprovalFields holds the default value on creation for the approval_fields field.
+	workflowdefinitionhistory.DefaultApprovalFields = workflowdefinitionhistoryDescApprovalFields.Default.([]string)
+	// workflowdefinitionhistoryDescApprovalEdges is the schema descriptor for approval_edges field.
+	workflowdefinitionhistoryDescApprovalEdges := workflowdefinitionhistoryFields[29].Descriptor()
+	// workflowdefinitionhistory.DefaultApprovalEdges holds the default value on creation for the approval_edges field.
+	workflowdefinitionhistory.DefaultApprovalEdges = workflowdefinitionhistoryDescApprovalEdges.Default.([]string)
 	// workflowdefinitionhistoryDescID is the schema descriptor for id field.
 	workflowdefinitionhistoryDescID := workflowdefinitionhistoryFields[9].Descriptor()
 	// workflowdefinitionhistory.DefaultID holds the default value on creation for the id field.
@@ -2756,6 +2788,10 @@ func init() {
 	workflowinstancehistoryDescTags := workflowinstancehistoryFields[11].Descriptor()
 	// workflowinstancehistory.DefaultTags holds the default value on creation for the tags field.
 	workflowinstancehistory.DefaultTags = workflowinstancehistoryDescTags.Default.([]string)
+	// workflowinstancehistoryDescCurrentActionIndex is the schema descriptor for current_action_index field.
+	workflowinstancehistoryDescCurrentActionIndex := workflowinstancehistoryFields[19].Descriptor()
+	// workflowinstancehistory.DefaultCurrentActionIndex holds the default value on creation for the current_action_index field.
+	workflowinstancehistory.DefaultCurrentActionIndex = workflowinstancehistoryDescCurrentActionIndex.Default.(int)
 	// workflowinstancehistoryDescID is the schema descriptor for id field.
 	workflowinstancehistoryDescID := workflowinstancehistoryFields[9].Descriptor()
 	// workflowinstancehistory.DefaultID holds the default value on creation for the id field.

@@ -339,6 +339,32 @@ func (_c *WorkflowDefinitionHistoryCreate) SetTriggerFields(v []string) *Workflo
 	return _c
 }
 
+// SetApprovalFields sets the "approval_fields" field.
+func (_c *WorkflowDefinitionHistoryCreate) SetApprovalFields(v []string) *WorkflowDefinitionHistoryCreate {
+	_c.mutation.SetApprovalFields(v)
+	return _c
+}
+
+// SetApprovalEdges sets the "approval_edges" field.
+func (_c *WorkflowDefinitionHistoryCreate) SetApprovalEdges(v []string) *WorkflowDefinitionHistoryCreate {
+	_c.mutation.SetApprovalEdges(v)
+	return _c
+}
+
+// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
+func (_c *WorkflowDefinitionHistoryCreate) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryCreate {
+	_c.mutation.SetApprovalSubmissionMode(v)
+	return _c
+}
+
+// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
+func (_c *WorkflowDefinitionHistoryCreate) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryCreate {
+	if v != nil {
+		_c.SetApprovalSubmissionMode(*v)
+	}
+	return _c
+}
+
 // SetDefinitionJSON sets the "definition_json" field.
 func (_c *WorkflowDefinitionHistoryCreate) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryCreate {
 	_c.mutation.SetDefinitionJSON(v)
@@ -467,6 +493,18 @@ func (_c *WorkflowDefinitionHistoryCreate) defaults() error {
 		v := workflowdefinitionhistory.DefaultTriggerFields
 		_c.mutation.SetTriggerFields(v)
 	}
+	if _, ok := _c.mutation.ApprovalFields(); !ok {
+		v := workflowdefinitionhistory.DefaultApprovalFields
+		_c.mutation.SetApprovalFields(v)
+	}
+	if _, ok := _c.mutation.ApprovalEdges(); !ok {
+		v := workflowdefinitionhistory.DefaultApprovalEdges
+		_c.mutation.SetApprovalEdges(v)
+	}
+	if _, ok := _c.mutation.ApprovalSubmissionMode(); !ok {
+		v := workflowdefinitionhistory.DefaultApprovalSubmissionMode
+		_c.mutation.SetApprovalSubmissionMode(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if workflowdefinitionhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized workflowdefinitionhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -521,6 +559,11 @@ func (_c *WorkflowDefinitionHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`historygenerated: missing required field "WorkflowDefinitionHistory.active"`)}
+	}
+	if v, ok := _c.mutation.ApprovalSubmissionMode(); ok {
+		if err := workflowdefinitionhistory.ApprovalSubmissionModeValidator(v); err != nil {
+			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.approval_submission_mode": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -665,6 +708,18 @@ func (_c *WorkflowDefinitionHistoryCreate) createSpec() (*WorkflowDefinitionHist
 	if value, ok := _c.mutation.TriggerFields(); ok {
 		_spec.SetField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON, value)
 		_node.TriggerFields = value
+	}
+	if value, ok := _c.mutation.ApprovalFields(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON, value)
+		_node.ApprovalFields = value
+	}
+	if value, ok := _c.mutation.ApprovalEdges(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON, value)
+		_node.ApprovalEdges = value
+	}
+	if value, ok := _c.mutation.ApprovalSubmissionMode(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum, value)
+		_node.ApprovalSubmissionMode = value
 	}
 	if value, ok := _c.mutation.DefinitionJSON(); ok {
 		_spec.SetField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON, value)

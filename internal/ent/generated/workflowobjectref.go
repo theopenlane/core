@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -17,6 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -57,6 +60,12 @@ type WorkflowObjectRef struct {
 	DirectoryMembershipID string `json:"directory_membership_id,omitempty"`
 	// Evidence referenced by this workflow instance
 	EvidenceID string `json:"evidence_id,omitempty"`
+	// Subcontrol referenced by this workflow instance
+	SubcontrolID string `json:"subcontrol_id,omitempty"`
+	// ActionPlan referenced by this workflow instance
+	ActionPlanID string `json:"action_plan_id,omitempty"`
+	// Procedure referenced by this workflow instance
+	ProcedureID string `json:"procedure_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowObjectRefQuery when eager-loading is set.
 	Edges                                  WorkflowObjectRefEdges `json:"edges"`
@@ -70,6 +79,8 @@ type WorkflowObjectRefEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Workflow instance this object is associated with
 	WorkflowInstance *WorkflowInstance `json:"workflow_instance,omitempty"`
+	// Workflow proposals targeting this object reference
+	WorkflowProposals []*WorkflowProposal `json:"workflow_proposals,omitempty"`
 	// Control referenced by this workflow instance
 	Control *Control `json:"control,omitempty"`
 	// Task referenced by this workflow instance
@@ -86,11 +97,19 @@ type WorkflowObjectRefEdges struct {
 	DirectoryMembership *DirectoryMembership `json:"directory_membership,omitempty"`
 	// Evidence referenced by this workflow instance
 	Evidence *Evidence `json:"evidence,omitempty"`
+	// Subcontrol referenced by this workflow instance
+	Subcontrol *Subcontrol `json:"subcontrol,omitempty"`
+	// ActionPlan referenced by this workflow instance
+	ActionPlan *ActionPlan `json:"action_plan,omitempty"`
+	// Procedure referenced by this workflow instance
+	Procedure *Procedure `json:"procedure,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [13]map[string]int
+
+	namedWorkflowProposals map[string][]*WorkflowProposal
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -115,12 +134,21 @@ func (e WorkflowObjectRefEdges) WorkflowInstanceOrErr() (*WorkflowInstance, erro
 	return nil, &NotLoadedError{edge: "workflow_instance"}
 }
 
+// WorkflowProposalsOrErr returns the WorkflowProposals value or an error if the edge
+// was not loaded in eager-loading.
+func (e WorkflowObjectRefEdges) WorkflowProposalsOrErr() ([]*WorkflowProposal, error) {
+	if e.loadedTypes[2] {
+		return e.WorkflowProposals, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_proposals"}
+}
+
 // ControlOrErr returns the Control value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e WorkflowObjectRefEdges) ControlOrErr() (*Control, error) {
 	if e.Control != nil {
 		return e.Control, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: control.Label}
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -131,7 +159,7 @@ func (e WorkflowObjectRefEdges) ControlOrErr() (*Control, error) {
 func (e WorkflowObjectRefEdges) TaskOrErr() (*Task, error) {
 	if e.Task != nil {
 		return e.Task, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: task.Label}
 	}
 	return nil, &NotLoadedError{edge: "task"}
@@ -142,7 +170,7 @@ func (e WorkflowObjectRefEdges) TaskOrErr() (*Task, error) {
 func (e WorkflowObjectRefEdges) InternalPolicyOrErr() (*InternalPolicy, error) {
 	if e.InternalPolicy != nil {
 		return e.InternalPolicy, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: internalpolicy.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_policy"}
@@ -153,7 +181,7 @@ func (e WorkflowObjectRefEdges) InternalPolicyOrErr() (*InternalPolicy, error) {
 func (e WorkflowObjectRefEdges) FindingOrErr() (*Finding, error) {
 	if e.Finding != nil {
 		return e.Finding, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: finding.Label}
 	}
 	return nil, &NotLoadedError{edge: "finding"}
@@ -164,7 +192,7 @@ func (e WorkflowObjectRefEdges) FindingOrErr() (*Finding, error) {
 func (e WorkflowObjectRefEdges) DirectoryAccountOrErr() (*DirectoryAccount, error) {
 	if e.DirectoryAccount != nil {
 		return e.DirectoryAccount, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: directoryaccount.Label}
 	}
 	return nil, &NotLoadedError{edge: "directory_account"}
@@ -175,7 +203,7 @@ func (e WorkflowObjectRefEdges) DirectoryAccountOrErr() (*DirectoryAccount, erro
 func (e WorkflowObjectRefEdges) DirectoryGroupOrErr() (*DirectoryGroup, error) {
 	if e.DirectoryGroup != nil {
 		return e.DirectoryGroup, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: directorygroup.Label}
 	}
 	return nil, &NotLoadedError{edge: "directory_group"}
@@ -186,7 +214,7 @@ func (e WorkflowObjectRefEdges) DirectoryGroupOrErr() (*DirectoryGroup, error) {
 func (e WorkflowObjectRefEdges) DirectoryMembershipOrErr() (*DirectoryMembership, error) {
 	if e.DirectoryMembership != nil {
 		return e.DirectoryMembership, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: directorymembership.Label}
 	}
 	return nil, &NotLoadedError{edge: "directory_membership"}
@@ -197,10 +225,43 @@ func (e WorkflowObjectRefEdges) DirectoryMembershipOrErr() (*DirectoryMembership
 func (e WorkflowObjectRefEdges) EvidenceOrErr() (*Evidence, error) {
 	if e.Evidence != nil {
 		return e.Evidence, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: evidence.Label}
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// SubcontrolOrErr returns the Subcontrol value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) SubcontrolOrErr() (*Subcontrol, error) {
+	if e.Subcontrol != nil {
+		return e.Subcontrol, nil
+	} else if e.loadedTypes[11] {
+		return nil, &NotFoundError{label: subcontrol.Label}
+	}
+	return nil, &NotLoadedError{edge: "subcontrol"}
+}
+
+// ActionPlanOrErr returns the ActionPlan value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) ActionPlanOrErr() (*ActionPlan, error) {
+	if e.ActionPlan != nil {
+		return e.ActionPlan, nil
+	} else if e.loadedTypes[12] {
+		return nil, &NotFoundError{label: actionplan.Label}
+	}
+	return nil, &NotLoadedError{edge: "action_plan"}
+}
+
+// ProcedureOrErr returns the Procedure value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) ProcedureOrErr() (*Procedure, error) {
+	if e.Procedure != nil {
+		return e.Procedure, nil
+	} else if e.loadedTypes[13] {
+		return nil, &NotFoundError{label: procedure.Label}
+	}
+	return nil, &NotLoadedError{edge: "procedure"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -208,7 +269,7 @@ func (*WorkflowObjectRef) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID:
+		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID, workflowobjectref.FieldSubcontrolID, workflowobjectref.FieldActionPlanID, workflowobjectref.FieldProcedureID:
 			values[i] = new(sql.NullString)
 		case workflowobjectref.FieldCreatedAt, workflowobjectref.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -325,6 +386,24 @@ func (_m *WorkflowObjectRef) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.EvidenceID = value.String
 			}
+		case workflowobjectref.FieldSubcontrolID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_id", values[i])
+			} else if value.Valid {
+				_m.SubcontrolID = value.String
+			}
+		case workflowobjectref.FieldActionPlanID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_id", values[i])
+			} else if value.Valid {
+				_m.ActionPlanID = value.String
+			}
+		case workflowobjectref.FieldProcedureID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_id", values[i])
+			} else if value.Valid {
+				_m.ProcedureID = value.String
+			}
 		case workflowobjectref.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_instance_workflow_object_refs", values[i])
@@ -353,6 +432,11 @@ func (_m *WorkflowObjectRef) QueryOwner() *OrganizationQuery {
 // QueryWorkflowInstance queries the "workflow_instance" edge of the WorkflowObjectRef entity.
 func (_m *WorkflowObjectRef) QueryWorkflowInstance() *WorkflowInstanceQuery {
 	return NewWorkflowObjectRefClient(_m.config).QueryWorkflowInstance(_m)
+}
+
+// QueryWorkflowProposals queries the "workflow_proposals" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryWorkflowProposals() *WorkflowProposalQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryWorkflowProposals(_m)
 }
 
 // QueryControl queries the "control" edge of the WorkflowObjectRef entity.
@@ -393,6 +477,21 @@ func (_m *WorkflowObjectRef) QueryDirectoryMembership() *DirectoryMembershipQuer
 // QueryEvidence queries the "evidence" edge of the WorkflowObjectRef entity.
 func (_m *WorkflowObjectRef) QueryEvidence() *EvidenceQuery {
 	return NewWorkflowObjectRefClient(_m.config).QueryEvidence(_m)
+}
+
+// QuerySubcontrol queries the "subcontrol" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QuerySubcontrol() *SubcontrolQuery {
+	return NewWorkflowObjectRefClient(_m.config).QuerySubcontrol(_m)
+}
+
+// QueryActionPlan queries the "action_plan" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryActionPlan() *ActionPlanQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryActionPlan(_m)
+}
+
+// QueryProcedure queries the "procedure" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryProcedure() *ProcedureQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryProcedure(_m)
 }
 
 // Update returns a builder for updating this WorkflowObjectRef.
@@ -462,8 +561,41 @@ func (_m *WorkflowObjectRef) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("evidence_id=")
 	builder.WriteString(_m.EvidenceID)
+	builder.WriteString(", ")
+	builder.WriteString("subcontrol_id=")
+	builder.WriteString(_m.SubcontrolID)
+	builder.WriteString(", ")
+	builder.WriteString("action_plan_id=")
+	builder.WriteString(_m.ActionPlanID)
+	builder.WriteString(", ")
+	builder.WriteString("procedure_id=")
+	builder.WriteString(_m.ProcedureID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedWorkflowProposals returns the WorkflowProposals named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *WorkflowObjectRef) NamedWorkflowProposals(name string) ([]*WorkflowProposal, error) {
+	if _m.Edges.namedWorkflowProposals == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowProposals[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *WorkflowObjectRef) appendNamedWorkflowProposals(name string, edges ...*WorkflowProposal) {
+	if _m.Edges.namedWorkflowProposals == nil {
+		_m.Edges.namedWorkflowProposals = make(map[string][]*WorkflowProposal)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowProposals[name] = []*WorkflowProposal{}
+	} else {
+		_m.Edges.namedWorkflowProposals[name] = append(_m.Edges.namedWorkflowProposals[name], edges...)
+	}
 }
 
 // WorkflowObjectRefs is a parsable slice of WorkflowObjectRef.

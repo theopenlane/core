@@ -98,6 +98,12 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionBulkCreatePayload_wor
 				return ec.fieldContext_WorkflowDefinition_triggerOperations(ctx, field)
 			case "triggerFields":
 				return ec.fieldContext_WorkflowDefinition_triggerFields(ctx, field)
+			case "approvalFields":
+				return ec.fieldContext_WorkflowDefinition_approvalFields(ctx, field)
+			case "approvalEdges":
+				return ec.fieldContext_WorkflowDefinition_approvalEdges(ctx, field)
+			case "approvalSubmissionMode":
+				return ec.fieldContext_WorkflowDefinition_approvalSubmissionMode(ctx, field)
 			case "definitionJSON":
 				return ec.fieldContext_WorkflowDefinition_definitionJSON(ctx, field)
 			case "trackedFields":
@@ -185,6 +191,12 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionCreatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_triggerOperations(ctx, field)
 			case "triggerFields":
 				return ec.fieldContext_WorkflowDefinition_triggerFields(ctx, field)
+			case "approvalFields":
+				return ec.fieldContext_WorkflowDefinition_approvalFields(ctx, field)
+			case "approvalEdges":
+				return ec.fieldContext_WorkflowDefinition_approvalEdges(ctx, field)
+			case "approvalSubmissionMode":
+				return ec.fieldContext_WorkflowDefinition_approvalSubmissionMode(ctx, field)
 			case "definitionJSON":
 				return ec.fieldContext_WorkflowDefinition_definitionJSON(ctx, field)
 			case "trackedFields":
@@ -301,6 +313,12 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionUpdatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_triggerOperations(ctx, field)
 			case "triggerFields":
 				return ec.fieldContext_WorkflowDefinition_triggerFields(ctx, field)
+			case "approvalFields":
+				return ec.fieldContext_WorkflowDefinition_approvalFields(ctx, field)
+			case "approvalEdges":
+				return ec.fieldContext_WorkflowDefinition_approvalEdges(ctx, field)
+			case "approvalSubmissionMode":
+				return ec.fieldContext_WorkflowDefinition_approvalSubmissionMode(ctx, field)
 			case "definitionJSON":
 				return ec.fieldContext_WorkflowDefinition_definitionJSON(ctx, field)
 			case "trackedFields":

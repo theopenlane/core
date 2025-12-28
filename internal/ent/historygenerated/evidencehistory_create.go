@@ -168,36 +168,16 @@ func (_c *EvidenceHistoryCreate) SetNillableOwnerID(v *string) *EvidenceHistoryC
 	return _c
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_c *EvidenceHistoryCreate) SetProposedChanges(v map[string]interface{}) *EvidenceHistoryCreate {
-	_c.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *EvidenceHistoryCreate) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
 	return _c
 }
 
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_c *EvidenceHistoryCreate) SetProposedByUserID(v string) *EvidenceHistoryCreate {
-	_c.mutation.SetProposedByUserID(v)
-	return _c
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_c *EvidenceHistoryCreate) SetNillableProposedByUserID(v *string) *EvidenceHistoryCreate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceHistoryCreate {
 	if v != nil {
-		_c.SetProposedByUserID(*v)
-	}
-	return _c
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_c *EvidenceHistoryCreate) SetProposedAt(v time.Time) *EvidenceHistoryCreate {
-	_c.mutation.SetProposedAt(v)
-	return _c
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_c *EvidenceHistoryCreate) SetNillableProposedAt(v *time.Time) *EvidenceHistoryCreate {
-	if v != nil {
-		_c.SetProposedAt(*v)
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -396,6 +376,10 @@ func (_c *EvidenceHistoryCreate) defaults() error {
 		v := evidencehistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := evidencehistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.CreationDate(); !ok {
 		if evidencehistory.DefaultCreationDate == nil {
 			return fmt.Errorf("historygenerated: uninitialized evidencehistory.DefaultCreationDate (forgotten import historygenerated/runtime?)")
@@ -532,17 +516,9 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 		_spec.SetField(evidencehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
-	if value, ok := _c.mutation.ProposedChanges(); ok {
-		_spec.SetField(evidencehistory.FieldProposedChanges, field.TypeJSON, value)
-		_node.ProposedChanges = value
-	}
-	if value, ok := _c.mutation.ProposedByUserID(); ok {
-		_spec.SetField(evidencehistory.FieldProposedByUserID, field.TypeString, value)
-		_node.ProposedByUserID = value
-	}
-	if value, ok := _c.mutation.ProposedAt(); ok {
-		_spec.SetField(evidencehistory.FieldProposedAt, field.TypeTime, value)
-		_node.ProposedAt = &value
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)

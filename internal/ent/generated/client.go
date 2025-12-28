@@ -109,6 +109,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/objects"
@@ -314,6 +315,8 @@ type Client struct {
 	WorkflowInstance *WorkflowInstanceClient
 	// WorkflowObjectRef is the client for interacting with the WorkflowObjectRef builders.
 	WorkflowObjectRef *WorkflowObjectRefClient
+	// WorkflowProposal is the client for interacting with the WorkflowProposal builders.
+	WorkflowProposal *WorkflowProposalClient
 
 	// authzActivated determines if the authz hooks have already been activated
 	authzActivated bool
@@ -424,6 +427,7 @@ func (c *Client) init() {
 	c.WorkflowEvent = NewWorkflowEventClient(c.config)
 	c.WorkflowInstance = NewWorkflowInstanceClient(c.config)
 	c.WorkflowObjectRef = NewWorkflowObjectRefClient(c.config)
+	c.WorkflowProposal = NewWorkflowProposalClient(c.config)
 }
 
 type (
@@ -715,6 +719,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		WorkflowEvent:              NewWorkflowEventClient(cfg),
 		WorkflowInstance:           NewWorkflowInstanceClient(cfg),
 		WorkflowObjectRef:          NewWorkflowObjectRefClient(cfg),
+		WorkflowProposal:           NewWorkflowProposalClient(cfg),
 	}, nil
 }
 
@@ -824,6 +829,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		WorkflowEvent:              NewWorkflowEventClient(cfg),
 		WorkflowInstance:           NewWorkflowInstanceClient(cfg),
 		WorkflowObjectRef:          NewWorkflowObjectRefClient(cfg),
+		WorkflowProposal:           NewWorkflowProposalClient(cfg),
 	}, nil
 }
 
@@ -873,6 +879,7 @@ func (c *Client) Use(hooks ...Hook) {
 		c.TrustCenterWatermarkConfig, c.TrustcenterEntity, c.User, c.UserSetting,
 		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
 		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -902,6 +909,7 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.TrustCenterWatermarkConfig, c.TrustcenterEntity, c.User, c.UserSetting,
 		c.Vulnerability, c.Webauthn, c.WorkflowAssignment, c.WorkflowAssignmentTarget,
 		c.WorkflowDefinition, c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef,
+		c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1162,6 +1170,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.WorkflowInstance.mutate(ctx, m)
 	case *WorkflowObjectRefMutation:
 		return c.WorkflowObjectRef.mutate(ctx, m)
+	case *WorkflowProposalMutation:
+		return c.WorkflowProposal.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("generated: unknown mutation type %T", m)
 	}
@@ -1689,6 +1699,25 @@ func (c *ActionPlanClient) QueryFile(_m *ActionPlan) *FileQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.ActionPlan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a ActionPlan.
+func (c *ActionPlanClient) QueryWorkflowObjectRefs(_m *ActionPlan) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, actionplan.WorkflowObjectRefsTable, actionplan.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -7430,6 +7459,25 @@ func (c *EvidenceClient) QueryComments(_m *Evidence) *NoteQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Evidence.
+func (c *EvidenceClient) QueryWorkflowObjectRefs(_m *Evidence) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, evidence.WorkflowObjectRefsTable, evidence.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -16692,6 +16740,25 @@ func (c *OrganizationClient) QueryWorkflowObjectRefs(_m *Organization) *Workflow
 	return query
 }
 
+// QueryWorkflowProposals queries the workflow_proposals edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowProposals(_m *Organization) *WorkflowProposalQuery {
+	query := (&WorkflowProposalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowproposal.Table, workflowproposal.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowProposalsTable, organization.WorkflowProposalsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowProposal
+		step.Edge.Schema = schemaConfig.WorkflowProposal
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryDirectoryAccounts queries the directory_accounts edge of a Organization.
 func (c *OrganizationClient) QueryDirectoryAccounts(_m *Organization) *DirectoryAccountQuery {
 	query := (&DirectoryAccountClient{config: c.config}).Query()
@@ -17758,6 +17825,25 @@ func (c *ProcedureClient) QueryFile(_m *Procedure) *FileQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Procedure
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Procedure.
+func (c *ProcedureClient) QueryWorkflowObjectRefs(_m *Procedure) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, procedure.WorkflowObjectRefsTable, procedure.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -21369,6 +21455,25 @@ func (c *SubcontrolClient) QueryMappedFromSubcontrols(_m *Subcontrol) *MappedCon
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.MappedControl
 		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Subcontrol.
+func (c *SubcontrolClient) QueryWorkflowObjectRefs(_m *Subcontrol) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, subcontrol.WorkflowObjectRefsTable, subcontrol.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -26701,6 +26806,82 @@ func (c *WorkflowInstanceClient) QueryEvidence(_m *WorkflowInstance) *EvidenceQu
 	return query
 }
 
+// QuerySubcontrol queries the subcontrol edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QuerySubcontrol(_m *WorkflowInstance) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.SubcontrolTable, workflowinstance.SubcontrolColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlan queries the action_plan edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryActionPlan(_m *WorkflowInstance) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.ActionPlanTable, workflowinstance.ActionPlanColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedure queries the procedure edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryProcedure(_m *WorkflowInstance) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.ProcedureTable, workflowinstance.ProcedureColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowProposal queries the workflow_proposal edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryWorkflowProposal(_m *WorkflowInstance) *WorkflowProposalQuery {
+	query := (&WorkflowProposalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(workflowproposal.Table, workflowproposal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.WorkflowProposalTable, workflowinstance.WorkflowProposalColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowProposal
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryWorkflowAssignments queries the workflow_assignments edge of a WorkflowInstance.
 func (c *WorkflowInstanceClient) QueryWorkflowAssignments(_m *WorkflowInstance) *WorkflowAssignmentQuery {
 	query := (&WorkflowAssignmentClient{config: c.config}).Query()
@@ -26931,6 +27112,25 @@ func (c *WorkflowObjectRefClient) QueryWorkflowInstance(_m *WorkflowObjectRef) *
 	return query
 }
 
+// QueryWorkflowProposals queries the workflow_proposals edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryWorkflowProposals(_m *WorkflowObjectRef) *WorkflowProposalQuery {
+	query := (&WorkflowProposalClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(workflowproposal.Table, workflowproposal.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, workflowobjectref.WorkflowProposalsTable, workflowobjectref.WorkflowProposalsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowProposal
+		step.Edge.Schema = schemaConfig.WorkflowProposal
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControl queries the control edge of a WorkflowObjectRef.
 func (c *WorkflowObjectRefClient) QueryControl(_m *WorkflowObjectRef) *ControlQuery {
 	query := (&ControlClient{config: c.config}).Query()
@@ -27083,6 +27283,63 @@ func (c *WorkflowObjectRefClient) QueryEvidence(_m *WorkflowObjectRef) *Evidence
 	return query
 }
 
+// QuerySubcontrol queries the subcontrol edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QuerySubcontrol(_m *WorkflowObjectRef) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.SubcontrolTable, workflowobjectref.SubcontrolColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlan queries the action_plan edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryActionPlan(_m *WorkflowObjectRef) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.ActionPlanTable, workflowobjectref.ActionPlanColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedure queries the procedure edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryProcedure(_m *WorkflowObjectRef) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.ProcedureTable, workflowobjectref.ProcedureColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *WorkflowObjectRefClient) Hooks() []Hook {
 	hooks := c.hooks.WorkflowObjectRef
@@ -27110,6 +27367,217 @@ func (c *WorkflowObjectRefClient) mutate(ctx context.Context, m *WorkflowObjectR
 	}
 }
 
+// WorkflowProposalClient is a client for the WorkflowProposal schema.
+type WorkflowProposalClient struct {
+	config
+}
+
+// NewWorkflowProposalClient returns a client for the WorkflowProposal from the given config.
+func NewWorkflowProposalClient(c config) *WorkflowProposalClient {
+	return &WorkflowProposalClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowproposal.Hooks(f(g(h())))`.
+func (c *WorkflowProposalClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowProposal = append(c.hooks.WorkflowProposal, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowproposal.Intercept(f(g(h())))`.
+func (c *WorkflowProposalClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowProposal = append(c.inters.WorkflowProposal, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowProposal entity.
+func (c *WorkflowProposalClient) Create() *WorkflowProposalCreate {
+	mutation := newWorkflowProposalMutation(c.config, OpCreate)
+	return &WorkflowProposalCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowProposal entities.
+func (c *WorkflowProposalClient) CreateBulk(builders ...*WorkflowProposalCreate) *WorkflowProposalCreateBulk {
+	return &WorkflowProposalCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowProposalClient) MapCreateBulk(slice any, setFunc func(*WorkflowProposalCreate, int)) *WorkflowProposalCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowProposalCreateBulk{err: fmt.Errorf("calling to WorkflowProposalClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowProposalCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowProposalCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowProposal.
+func (c *WorkflowProposalClient) Update() *WorkflowProposalUpdate {
+	mutation := newWorkflowProposalMutation(c.config, OpUpdate)
+	return &WorkflowProposalUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowProposalClient) UpdateOne(_m *WorkflowProposal) *WorkflowProposalUpdateOne {
+	mutation := newWorkflowProposalMutation(c.config, OpUpdateOne, withWorkflowProposal(_m))
+	return &WorkflowProposalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowProposalClient) UpdateOneID(id string) *WorkflowProposalUpdateOne {
+	mutation := newWorkflowProposalMutation(c.config, OpUpdateOne, withWorkflowProposalID(id))
+	return &WorkflowProposalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowProposal.
+func (c *WorkflowProposalClient) Delete() *WorkflowProposalDelete {
+	mutation := newWorkflowProposalMutation(c.config, OpDelete)
+	return &WorkflowProposalDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowProposalClient) DeleteOne(_m *WorkflowProposal) *WorkflowProposalDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowProposalClient) DeleteOneID(id string) *WorkflowProposalDeleteOne {
+	builder := c.Delete().Where(workflowproposal.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowProposalDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowProposal.
+func (c *WorkflowProposalClient) Query() *WorkflowProposalQuery {
+	return &WorkflowProposalQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowProposal},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowProposal entity by its id.
+func (c *WorkflowProposalClient) Get(ctx context.Context, id string) (*WorkflowProposal, error) {
+	return c.Query().Where(workflowproposal.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowProposalClient) GetX(ctx context.Context, id string) *WorkflowProposal {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowProposal.
+func (c *WorkflowProposalClient) QueryOwner(_m *WorkflowProposal) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowproposal.Table, workflowproposal.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowproposal.OwnerTable, workflowproposal.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowProposal
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRef queries the workflow_object_ref edge of a WorkflowProposal.
+func (c *WorkflowProposalClient) QueryWorkflowObjectRef(_m *WorkflowProposal) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowproposal.Table, workflowproposal.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowproposal.WorkflowObjectRefTable, workflowproposal.WorkflowObjectRefColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowProposal
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a WorkflowProposal.
+func (c *WorkflowProposalClient) QueryUser(_m *WorkflowProposal) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowproposal.Table, workflowproposal.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowproposal.UserTable, workflowproposal.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.WorkflowProposal
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstances queries the workflow_instances edge of a WorkflowProposal.
+func (c *WorkflowProposalClient) QueryWorkflowInstances(_m *WorkflowProposal) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowproposal.Table, workflowproposal.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, workflowproposal.WorkflowInstancesTable, workflowproposal.WorkflowInstancesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowProposalClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowProposal
+	return append(hooks[:len(hooks):len(hooks)], workflowproposal.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowProposalClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowProposal
+	return append(inters[:len(inters):len(inters)], workflowproposal.Interceptors[:]...)
+}
+
+func (c *WorkflowProposalClient) mutate(ctx context.Context, m *WorkflowProposalMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowProposalCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowProposalUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowProposalUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowProposalDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowProposal mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
@@ -27130,8 +27598,8 @@ type (
 		TrustCenterDoc, TrustCenterSetting, TrustCenterSubprocessor,
 		TrustCenterWatermarkConfig, TrustcenterEntity, User, UserSetting,
 		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
-		WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef []ent.Hook
+		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Contact, Control,
@@ -27151,8 +27619,8 @@ type (
 		TrustCenterDoc, TrustCenterSetting, TrustCenterSubprocessor,
 		TrustCenterWatermarkConfig, TrustcenterEntity, User, UserSetting,
 		Vulnerability, Webauthn, WorkflowAssignment, WorkflowAssignmentTarget,
-		WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef []ent.Interceptor
+		WorkflowDefinition, WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Interceptor
 	}
 )
 

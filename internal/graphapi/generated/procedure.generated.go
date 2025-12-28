@@ -118,6 +118,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -150,6 +152,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -276,6 +280,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -308,6 +314,8 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -434,6 +442,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -466,6 +476,8 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},
@@ -592,6 +604,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_procedureKindName(ctx, field)
 			case "procedureKindID":
 				return ec.fieldContext_Procedure_procedureKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Procedure_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_Procedure_owner(ctx, field)
 			case "blockedGroups":
@@ -624,6 +638,8 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_discussions(ctx, field)
 			case "file":
 				return ec.fieldContext_Procedure_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Procedure_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Procedure", field.Name)
 		},

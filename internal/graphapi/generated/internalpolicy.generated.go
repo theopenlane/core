@@ -118,12 +118,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_InternalPolicy_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_InternalPolicy_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_InternalPolicy_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -288,12 +284,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_InternalPolicy_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_InternalPolicy_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_InternalPolicy_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -458,12 +450,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_InternalPolicy_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_InternalPolicy_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_InternalPolicy_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":
@@ -628,12 +616,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_internalPolicyKindName(ctx, field)
 			case "internalPolicyKindID":
 				return ec.fieldContext_InternalPolicy_internalPolicyKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_InternalPolicy_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_InternalPolicy_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_InternalPolicy_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_InternalPolicy_workflowEligibleMarker(ctx, field)
 			case "owner":
 				return ec.fieldContext_InternalPolicy_owner(ctx, field)
 			case "blockedGroups":

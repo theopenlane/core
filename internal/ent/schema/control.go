@@ -128,6 +128,9 @@ func (c Control) Edges() []ent.Edge {
 			fromSchema: c,
 			edgeSchema: WorkflowObjectRef{},
 			ref:        "control",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
 		}),
 	}
 }
@@ -173,12 +176,13 @@ func (c Control) Mixin() []ent.Mixin {
 				// exceptions are based on group based access so we can safely
 				// skip the interceptor
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
+				withWorkflowOwnedEdges(),
 			),
 			mixin.NewSystemOwnedMixin(),
 			// add groups permissions with editor, and blocked groups
 			// skip view because controls are automatically viewable by all users in the organization
-			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
-			newCustomEnumMixin(c),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
+			newCustomEnumMixin(c, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(c)

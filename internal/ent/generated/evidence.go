@@ -38,12 +38,8 @@ type Evidence struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposed_at,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the evidence
 	Name string `json:"name,omitempty"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -88,11 +84,13 @@ type EvidenceEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// conversations related to the evidence
 	Comments []*Note `json:"comments,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 
 	namedControls               map[string][]*Control
 	namedSubcontrols            map[string][]*Subcontrol
@@ -102,6 +100,7 @@ type EvidenceEdges struct {
 	namedPrograms               map[string][]*Program
 	namedTasks                  map[string][]*Task
 	namedComments               map[string][]*Note
+	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -187,18 +186,27 @@ func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "comments"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[9] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Evidence) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case evidence.FieldTags, evidence.FieldProposedChanges:
+		case evidence.FieldTags:
 			values[i] = new([]byte)
-		case evidence.FieldIsAutomated:
+		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldProposedByUserID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus:
 			values[i] = new(sql.NullString)
-		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldProposedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
+		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -277,26 +285,11 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
-		case evidence.FieldProposedChanges:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
-					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
-				}
-			}
-		case evidence.FieldProposedByUserID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+		case evidence.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
-				_m.ProposedByUserID = value.String
-			}
-		case evidence.FieldProposedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
-			} else if value.Valid {
-				_m.ProposedAt = new(time.Time)
-				*_m.ProposedAt = value.Time
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case evidence.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -410,6 +403,11 @@ func (_m *Evidence) QueryComments() *NoteQuery {
 	return NewEvidenceClient(_m.config).QueryComments(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Evidence entity.
+func (_m *Evidence) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewEvidenceClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this Evidence.
 // Note that you need to call Evidence.Unwrap() before calling this method if this Evidence
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -460,16 +458,8 @@ func (_m *Evidence) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
-	builder.WriteString("proposed_changes=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
-	builder.WriteString(", ")
-	builder.WriteString("proposed_by_user_id=")
-	builder.WriteString(_m.ProposedByUserID)
-	builder.WriteString(", ")
-	if v := _m.ProposedAt; v != nil {
-		builder.WriteString("proposed_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
@@ -690,6 +680,30 @@ func (_m *Evidence) appendNamedComments(name string, edges ...*Note) {
 		_m.Edges.namedComments[name] = []*Note{}
 	} else {
 		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

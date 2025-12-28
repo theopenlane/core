@@ -178,6 +178,10 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetActionPlanKindID(actionPlanKindID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
 	}
@@ -451,6 +455,12 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetActionPlanKindID(actionplan.ActionPlanKindID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(actionplan.WorkflowEligibleMarker)
+		}
+
 		if title, exists := m.Title(); exists {
 			create = create.SetTitle(title)
 		} else {
@@ -585,6 +595,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetNillableSystemInternalID(actionplan.SystemInternalID).
 			SetActionPlanKindName(actionplan.ActionPlanKindName).
 			SetActionPlanKindID(actionplan.ActionPlanKindID).
+			SetWorkflowEligibleMarker(actionplan.WorkflowEligibleMarker).
 			SetTitle(actionplan.Title).
 			SetDescription(actionplan.Description).
 			SetDueDate(actionplan.DueDate).
@@ -1838,16 +1849,8 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetControlKindID(controlKindID)
 	}
 
-	if proposedChanges, exists := m.ProposedChanges(); exists {
-		create = create.SetProposedChanges(proposedChanges)
-	}
-
-	if proposedByUserID, exists := m.ProposedByUserID(); exists {
-		create = create.SetProposedByUserID(proposedByUserID)
-	}
-
-	if proposedAt, exists := m.ProposedAt(); exists {
-		create = create.SetNillableProposedAt(&proposedAt)
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
 	if refCode, exists := m.RefCode(); exists {
@@ -2129,22 +2132,10 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetControlKindID(control.ControlKindID)
 		}
 
-		if proposedChanges, exists := m.ProposedChanges(); exists {
-			create = create.SetProposedChanges(proposedChanges)
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
-			create = create.SetProposedChanges(control.ProposedChanges)
-		}
-
-		if proposedByUserID, exists := m.ProposedByUserID(); exists {
-			create = create.SetProposedByUserID(proposedByUserID)
-		} else {
-			create = create.SetProposedByUserID(control.ProposedByUserID)
-		}
-
-		if proposedAt, exists := m.ProposedAt(); exists {
-			create = create.SetNillableProposedAt(&proposedAt)
-		} else {
-			create = create.SetNillableProposedAt(control.ProposedAt)
+			create = create.SetWorkflowEligibleMarker(control.WorkflowEligibleMarker)
 		}
 
 		if refCode, exists := m.RefCode(); exists {
@@ -2234,9 +2225,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableSystemInternalID(control.SystemInternalID).
 			SetControlKindName(control.ControlKindName).
 			SetControlKindID(control.ControlKindID).
-			SetProposedChanges(control.ProposedChanges).
-			SetProposedByUserID(control.ProposedByUserID).
-			SetNillableProposedAt(control.ProposedAt).
+			SetWorkflowEligibleMarker(control.WorkflowEligibleMarker).
 			SetRefCode(control.RefCode).
 			SetStandardID(control.StandardID).
 			Save(ctx)
@@ -5325,16 +5314,8 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if proposedChanges, exists := m.ProposedChanges(); exists {
-		create = create.SetProposedChanges(proposedChanges)
-	}
-
-	if proposedByUserID, exists := m.ProposedByUserID(); exists {
-		create = create.SetProposedByUserID(proposedByUserID)
-	}
-
-	if proposedAt, exists := m.ProposedAt(); exists {
-		create = create.SetNillableProposedAt(&proposedAt)
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
 	if name, exists := m.Name(); exists {
@@ -5458,22 +5439,10 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(evidence.OwnerID)
 		}
 
-		if proposedChanges, exists := m.ProposedChanges(); exists {
-			create = create.SetProposedChanges(proposedChanges)
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
-			create = create.SetProposedChanges(evidence.ProposedChanges)
-		}
-
-		if proposedByUserID, exists := m.ProposedByUserID(); exists {
-			create = create.SetProposedByUserID(proposedByUserID)
-		} else {
-			create = create.SetProposedByUserID(evidence.ProposedByUserID)
-		}
-
-		if proposedAt, exists := m.ProposedAt(); exists {
-			create = create.SetNillableProposedAt(&proposedAt)
-		} else {
-			create = create.SetNillableProposedAt(evidence.ProposedAt)
+			create = create.SetWorkflowEligibleMarker(evidence.WorkflowEligibleMarker)
 		}
 
 		if name, exists := m.Name(); exists {
@@ -5574,9 +5543,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(evidence.DisplayID).
 			SetTags(evidence.Tags).
 			SetOwnerID(evidence.OwnerID).
-			SetProposedChanges(evidence.ProposedChanges).
-			SetProposedByUserID(evidence.ProposedByUserID).
-			SetNillableProposedAt(evidence.ProposedAt).
+			SetWorkflowEligibleMarker(evidence.WorkflowEligibleMarker).
 			SetName(evidence.Name).
 			SetDescription(evidence.Description).
 			SetCollectionProcedure(evidence.CollectionProcedure).
@@ -8257,16 +8224,8 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetInternalPolicyKindID(internalPolicyKindID)
 	}
 
-	if proposedChanges, exists := m.ProposedChanges(); exists {
-		create = create.SetProposedChanges(proposedChanges)
-	}
-
-	if proposedByUserID, exists := m.ProposedByUserID(); exists {
-		create = create.SetProposedByUserID(proposedByUserID)
-	}
-
-	if proposedAt, exists := m.ProposedAt(); exists {
-		create = create.SetNillableProposedAt(&proposedAt)
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
 	_, err := create.Save(ctx)
@@ -8504,22 +8463,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID)
 		}
 
-		if proposedChanges, exists := m.ProposedChanges(); exists {
-			create = create.SetProposedChanges(proposedChanges)
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 		} else {
-			create = create.SetProposedChanges(internalpolicy.ProposedChanges)
-		}
-
-		if proposedByUserID, exists := m.ProposedByUserID(); exists {
-			create = create.SetProposedByUserID(proposedByUserID)
-		} else {
-			create = create.SetProposedByUserID(internalpolicy.ProposedByUserID)
-		}
-
-		if proposedAt, exists := m.ProposedAt(); exists {
-			create = create.SetNillableProposedAt(&proposedAt)
-		} else {
-			create = create.SetNillableProposedAt(internalpolicy.ProposedAt)
+			create = create.SetWorkflowEligibleMarker(internalpolicy.WorkflowEligibleMarker)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -8591,9 +8538,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetNillableFileID(internalpolicy.FileID).
 			SetInternalPolicyKindName(internalpolicy.InternalPolicyKindName).
 			SetInternalPolicyKindID(internalpolicy.InternalPolicyKindID).
-			SetProposedChanges(internalpolicy.ProposedChanges).
-			SetProposedByUserID(internalpolicy.ProposedByUserID).
-			SetNillableProposedAt(internalpolicy.ProposedAt).
+			SetWorkflowEligibleMarker(internalpolicy.WorkflowEligibleMarker).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -11125,6 +11070,10 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetProcedureKindID(procedureKindID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -11360,6 +11309,12 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetProcedureKindID(procedure.ProcedureKindID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(procedure.WorkflowEligibleMarker)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -11429,6 +11384,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNillableSystemInternalID(procedure.SystemInternalID).
 			SetProcedureKindName(procedure.ProcedureKindName).
 			SetProcedureKindID(procedure.ProcedureKindID).
+			SetWorkflowEligibleMarker(procedure.WorkflowEligibleMarker).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -14223,6 +14179,10 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetSubcontrolKindID(subcontrolKindID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	if refCode, exists := m.RefCode(); exists {
 		create = create.SetRefCode(refCode)
 	}
@@ -14502,6 +14462,12 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetSubcontrolKindID(subcontrol.SubcontrolKindID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(subcontrol.WorkflowEligibleMarker)
+		}
+
 		if refCode, exists := m.RefCode(); exists {
 			create = create.SetRefCode(refCode)
 		} else {
@@ -14589,6 +14555,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetNillableSystemInternalID(subcontrol.SystemInternalID).
 			SetSubcontrolKindName(subcontrol.SubcontrolKindName).
 			SetSubcontrolKindID(subcontrol.SubcontrolKindID).
+			SetWorkflowEligibleMarker(subcontrol.WorkflowEligibleMarker).
 			SetRefCode(subcontrol.RefCode).
 			SetControlID(subcontrol.ControlID).
 			Save(ctx)
@@ -19069,6 +19036,18 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetTriggerFields(triggerFields)
 	}
 
+	if approvalFields, exists := m.ApprovalFields(); exists {
+		create = create.SetApprovalFields(approvalFields)
+	}
+
+	if approvalEdges, exists := m.ApprovalEdges(); exists {
+		create = create.SetApprovalEdges(approvalEdges)
+	}
+
+	if approvalSubmissionMode, exists := m.ApprovalSubmissionMode(); exists {
+		create = create.SetApprovalSubmissionMode(approvalSubmissionMode)
+	}
+
 	if definitionJSON, exists := m.DefinitionJSON(); exists {
 		create = create.SetDefinitionJSON(definitionJSON)
 	}
@@ -19252,6 +19231,24 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetTriggerFields(workflowdefinition.TriggerFields)
 		}
 
+		if approvalFields, exists := m.ApprovalFields(); exists {
+			create = create.SetApprovalFields(approvalFields)
+		} else {
+			create = create.SetApprovalFields(workflowdefinition.ApprovalFields)
+		}
+
+		if approvalEdges, exists := m.ApprovalEdges(); exists {
+			create = create.SetApprovalEdges(approvalEdges)
+		} else {
+			create = create.SetApprovalEdges(workflowdefinition.ApprovalEdges)
+		}
+
+		if approvalSubmissionMode, exists := m.ApprovalSubmissionMode(); exists {
+			create = create.SetApprovalSubmissionMode(approvalSubmissionMode)
+		} else {
+			create = create.SetApprovalSubmissionMode(workflowdefinition.ApprovalSubmissionMode)
+		}
+
 		if definitionJSON, exists := m.DefinitionJSON(); exists {
 			create = create.SetDefinitionJSON(definitionJSON)
 		} else {
@@ -19323,6 +19320,9 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context
 			SetActive(workflowdefinition.Active).
 			SetTriggerOperations(workflowdefinition.TriggerOperations).
 			SetTriggerFields(workflowdefinition.TriggerFields).
+			SetApprovalFields(workflowdefinition.ApprovalFields).
+			SetApprovalEdges(workflowdefinition.ApprovalEdges).
+			SetApprovalSubmissionMode(workflowdefinition.ApprovalSubmissionMode).
 			SetDefinitionJSON(workflowdefinition.DefinitionJSON).
 			SetTrackedFields(workflowdefinition.TrackedFields).
 			Save(ctx)
@@ -19613,6 +19613,10 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetWorkflowDefinitionID(workflowDefinitionID)
 	}
 
+	if workflowProposalID, exists := m.WorkflowProposalID(); exists {
+		create = create.SetWorkflowProposalID(workflowProposalID)
+	}
+
 	if state, exists := m.State(); exists {
 		create = create.SetState(state)
 	}
@@ -19629,6 +19633,10 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetDefinitionSnapshot(definitionSnapshot)
 	}
 
+	if currentActionIndex, exists := m.CurrentActionIndex(); exists {
+		create = create.SetCurrentActionIndex(currentActionIndex)
+	}
+
 	if controlID, exists := m.ControlID(); exists {
 		create = create.SetControlID(controlID)
 	}
@@ -19639,6 +19647,18 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 	if evidenceID, exists := m.EvidenceID(); exists {
 		create = create.SetEvidenceID(evidenceID)
+	}
+
+	if subcontrolID, exists := m.SubcontrolID(); exists {
+		create = create.SetSubcontrolID(subcontrolID)
+	}
+
+	if actionPlanID, exists := m.ActionPlanID(); exists {
+		create = create.SetActionPlanID(actionPlanID)
+	}
+
+	if procedureID, exists := m.ProcedureID(); exists {
+		create = create.SetProcedureID(procedureID)
 	}
 
 	_, err := create.Save(ctx)
@@ -19732,6 +19752,12 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetWorkflowDefinitionID(workflowinstance.WorkflowDefinitionID)
 		}
 
+		if workflowProposalID, exists := m.WorkflowProposalID(); exists {
+			create = create.SetWorkflowProposalID(workflowProposalID)
+		} else {
+			create = create.SetWorkflowProposalID(workflowinstance.WorkflowProposalID)
+		}
+
 		if state, exists := m.State(); exists {
 			create = create.SetState(state)
 		} else {
@@ -19756,6 +19782,12 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot)
 		}
 
+		if currentActionIndex, exists := m.CurrentActionIndex(); exists {
+			create = create.SetCurrentActionIndex(currentActionIndex)
+		} else {
+			create = create.SetCurrentActionIndex(workflowinstance.CurrentActionIndex)
+		}
+
 		if controlID, exists := m.ControlID(); exists {
 			create = create.SetControlID(controlID)
 		} else {
@@ -19772,6 +19804,24 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetEvidenceID(evidenceID)
 		} else {
 			create = create.SetEvidenceID(workflowinstance.EvidenceID)
+		}
+
+		if subcontrolID, exists := m.SubcontrolID(); exists {
+			create = create.SetSubcontrolID(subcontrolID)
+		} else {
+			create = create.SetSubcontrolID(workflowinstance.SubcontrolID)
+		}
+
+		if actionPlanID, exists := m.ActionPlanID(); exists {
+			create = create.SetActionPlanID(actionPlanID)
+		} else {
+			create = create.SetActionPlanID(workflowinstance.ActionPlanID)
+		}
+
+		if procedureID, exists := m.ProcedureID(); exists {
+			create = create.SetProcedureID(procedureID)
+		} else {
+			create = create.SetProcedureID(workflowinstance.ProcedureID)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -19819,13 +19869,18 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetTags(workflowinstance.Tags).
 			SetOwnerID(workflowinstance.OwnerID).
 			SetWorkflowDefinitionID(workflowinstance.WorkflowDefinitionID).
+			SetWorkflowProposalID(workflowinstance.WorkflowProposalID).
 			SetState(workflowinstance.State).
 			SetContext(workflowinstance.Context).
 			SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt).
 			SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot).
+			SetCurrentActionIndex(workflowinstance.CurrentActionIndex).
 			SetControlID(workflowinstance.ControlID).
 			SetInternalPolicyID(workflowinstance.InternalPolicyID).
 			SetEvidenceID(workflowinstance.EvidenceID).
+			SetSubcontrolID(workflowinstance.SubcontrolID).
+			SetActionPlanID(workflowinstance.ActionPlanID).
+			SetProcedureID(workflowinstance.ProcedureID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -19909,6 +19964,18 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if evidenceID, exists := m.EvidenceID(); exists {
 		create = create.SetEvidenceID(evidenceID)
+	}
+
+	if subcontrolID, exists := m.SubcontrolID(); exists {
+		create = create.SetSubcontrolID(subcontrolID)
+	}
+
+	if actionPlanID, exists := m.ActionPlanID(); exists {
+		create = create.SetActionPlanID(actionPlanID)
+	}
+
+	if procedureID, exists := m.ProcedureID(); exists {
+		create = create.SetProcedureID(procedureID)
 	}
 
 	_, err := create.Save(ctx)
@@ -20032,6 +20099,24 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetEvidenceID(workflowobjectref.EvidenceID)
 		}
 
+		if subcontrolID, exists := m.SubcontrolID(); exists {
+			create = create.SetSubcontrolID(subcontrolID)
+		} else {
+			create = create.SetSubcontrolID(workflowobjectref.SubcontrolID)
+		}
+
+		if actionPlanID, exists := m.ActionPlanID(); exists {
+			create = create.SetActionPlanID(actionPlanID)
+		} else {
+			create = create.SetActionPlanID(workflowobjectref.ActionPlanID)
+		}
+
+		if procedureID, exists := m.ProcedureID(); exists {
+			create = create.SetProcedureID(procedureID)
+		} else {
+			create = create.SetProcedureID(workflowobjectref.ProcedureID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -20082,6 +20167,9 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetDirectoryGroupID(workflowobjectref.DirectoryGroupID).
 			SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID).
 			SetEvidenceID(workflowobjectref.EvidenceID).
+			SetSubcontrolID(workflowobjectref.SubcontrolID).
+			SetActionPlanID(workflowobjectref.ActionPlanID).
+			SetProcedureID(workflowobjectref.ProcedureID).
 			Save(ctx)
 		if err != nil {
 			return err

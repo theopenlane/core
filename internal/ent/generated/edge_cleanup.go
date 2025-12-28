@@ -90,6 +90,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/contextx"
@@ -907,6 +908,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).WorkflowProposal.Query().Where((workflowproposal.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workflowproposalCount, err := FromContext(ctx).WorkflowProposal.Delete().Where(workflowproposal.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowproposalCount).Msg("error deleting workflowproposal")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).DirectoryAccount.Query().Where((directoryaccount.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if directoryaccountCount, err := FromContext(ctx).DirectoryAccount.Delete().Where(directoryaccount.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", directoryaccountCount).Msg("error deleting directoryaccount")
@@ -1296,6 +1304,12 @@ func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
 
 func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowProposalEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowproposal edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

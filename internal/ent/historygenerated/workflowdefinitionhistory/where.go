@@ -1423,6 +1423,66 @@ func TriggerFieldsNotNil() predicate.WorkflowDefinitionHistory {
 	return predicate.WorkflowDefinitionHistory(sql.FieldNotNull(FieldTriggerFields))
 }
 
+// ApprovalFieldsIsNil applies the IsNil predicate on the "approval_fields" field.
+func ApprovalFieldsIsNil() predicate.WorkflowDefinitionHistory {
+	return predicate.WorkflowDefinitionHistory(sql.FieldIsNull(FieldApprovalFields))
+}
+
+// ApprovalFieldsNotNil applies the NotNil predicate on the "approval_fields" field.
+func ApprovalFieldsNotNil() predicate.WorkflowDefinitionHistory {
+	return predicate.WorkflowDefinitionHistory(sql.FieldNotNull(FieldApprovalFields))
+}
+
+// ApprovalEdgesIsNil applies the IsNil predicate on the "approval_edges" field.
+func ApprovalEdgesIsNil() predicate.WorkflowDefinitionHistory {
+	return predicate.WorkflowDefinitionHistory(sql.FieldIsNull(FieldApprovalEdges))
+}
+
+// ApprovalEdgesNotNil applies the NotNil predicate on the "approval_edges" field.
+func ApprovalEdgesNotNil() predicate.WorkflowDefinitionHistory {
+	return predicate.WorkflowDefinitionHistory(sql.FieldNotNull(FieldApprovalEdges))
+}
+
+// ApprovalSubmissionModeEQ applies the EQ predicate on the "approval_submission_mode" field.
+func ApprovalSubmissionModeEQ(v enums.WorkflowApprovalSubmissionMode) predicate.WorkflowDefinitionHistory {
+	vc := v
+	return predicate.WorkflowDefinitionHistory(sql.FieldEQ(FieldApprovalSubmissionMode, vc))
+}
+
+// ApprovalSubmissionModeNEQ applies the NEQ predicate on the "approval_submission_mode" field.
+func ApprovalSubmissionModeNEQ(v enums.WorkflowApprovalSubmissionMode) predicate.WorkflowDefinitionHistory {
+	vc := v
+	return predicate.WorkflowDefinitionHistory(sql.FieldNEQ(FieldApprovalSubmissionMode, vc))
+}
+
+// ApprovalSubmissionModeIn applies the In predicate on the "approval_submission_mode" field.
+func ApprovalSubmissionModeIn(vs ...enums.WorkflowApprovalSubmissionMode) predicate.WorkflowDefinitionHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.WorkflowDefinitionHistory(sql.FieldIn(FieldApprovalSubmissionMode, v...))
+}
+
+// ApprovalSubmissionModeNotIn applies the NotIn predicate on the "approval_submission_mode" field.
+func ApprovalSubmissionModeNotIn(vs ...enums.WorkflowApprovalSubmissionMode) predicate.WorkflowDefinitionHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.WorkflowDefinitionHistory(sql.FieldNotIn(FieldApprovalSubmissionMode, v...))
+}
+
+// ApprovalSubmissionModeIsNil applies the IsNil predicate on the "approval_submission_mode" field.
+func ApprovalSubmissionModeIsNil() predicate.WorkflowDefinitionHistory {
+	return predicate.WorkflowDefinitionHistory(sql.FieldIsNull(FieldApprovalSubmissionMode))
+}
+
+// ApprovalSubmissionModeNotNil applies the NotNil predicate on the "approval_submission_mode" field.
+func ApprovalSubmissionModeNotNil() predicate.WorkflowDefinitionHistory {
+	return predicate.WorkflowDefinitionHistory(sql.FieldNotNull(FieldApprovalSubmissionMode))
+}
+
 // DefinitionJSONIsNil applies the IsNil predicate on the "definition_json" field.
 func DefinitionJSONIsNil() predicate.WorkflowDefinitionHistory {
 	return predicate.WorkflowDefinitionHistory(sql.FieldIsNull(FieldDefinitionJSON))

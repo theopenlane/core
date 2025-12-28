@@ -1,0 +1,143 @@
+{{/* Generate workflow helper methods for schemas with WorkflowApprovalMixin */}}
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "workflow_helpers" }}
+
+{{/* Add the base header for the generated file */}}
+{{ $pkg := base $.Config.Package }}
+{{ template "header" $ }}
+
+{{- range $n := $.Nodes }}
+{{- $hasWorkflowFields := false }}
+{{- $isHistory := false }}
+{{- range $f := $n.Fields }}
+	{{- if $f.Annotations.OPENLANE_WORKFLOW_ELIGIBLE }}
+		{{- $hasWorkflowFields = true }}
+	{{- end }}
+{{- end }}
+{{- if $n.Annotations.History }}
+    {{- if $n.Annotations.History.isHistory }}
+        {{- $isHistory = true }}
+    {{- end }}
+{{- end }}
+
+{{- if and $hasWorkflowFields (not $isHistory) }}
+
+// ApplyFieldUpdates applies field updates from a map to a {{ $n.Name }} entity
+// This is a type-safe helper for workflow field updates
+func (c *{{ $n.Name }}Client) ApplyFieldUpdates(ctx context.Context, id string, updates map[string]any) error {
+	update := c.UpdateOneID(id)
+	applied := 0
+
+	{{- $hasWorkflowFields := false }}
+	{{- range $f := $n.Fields }}
+	{{- if $f.Annotations.OPENLANE_WORKFLOW_ELIGIBLE }}
+	{{- $hasWorkflowFields = true }}
+	{{- end }}
+	{{- end }}
+	{{- if $hasWorkflowFields }}
+	for field, value := range updates {
+		switch field {
+		{{- range $f := $n.Fields }}
+		{{- if $f.Annotations.OPENLANE_WORKFLOW_ELIGIBLE }}
+		case "{{ $f.Name }}":
+			{{- if or $f.Optional $f.Nillable }}
+			if value == nil {
+				update.Clear{{ pascal $f.Name }}()
+				applied++
+				continue
+			}
+			{{- end }}
+			v, err := coerceWorkflowValue[{{ $f.Type.String }}](value)
+			if err != nil {
+				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
+			}
+			update.Set{{ pascal $f.Name }}(v)
+			applied++
+		{{- end }}
+		{{- end }}
+		default:
+			return fmt.Errorf("workflow: field update not eligible: %s", field)
+		}
+	}
+	{{- else }}
+	for field := range updates {
+		return fmt.Errorf("workflow: field update not eligible: %s", field)
+	}
+	{{- end }}
+
+	if applied == 0 {
+		return nil
+	}
+
+	return update.Exec(ctx)
+}
+
+{{- end }}
+{{- end }}
+
+var workflowTimeType = reflect.TypeOf(time.Time{})
+
+func coerceWorkflowValue[T any](value any) (T, error) {
+	var zero T
+
+	if value == nil {
+		return zero, fmt.Errorf("nil value")
+	}
+
+	if v, ok := value.(T); ok {
+		return v, nil
+	}
+
+	targetType := reflect.TypeOf(zero)
+	if targetType == nil {
+		return zero, fmt.Errorf("unsupported target type")
+	}
+
+	if targetType == workflowTimeType {
+		switch v := value.(type) {
+		case string:
+			parsed, err := time.Parse(time.RFC3339Nano, v)
+			if err != nil {
+				parsed, err = time.Parse(time.RFC3339, v)
+			}
+			if err != nil {
+				return zero, err
+			}
+			return any(parsed).(T), nil
+		case []byte:
+			parsed, err := time.Parse(time.RFC3339Nano, string(v))
+			if err != nil {
+				parsed, err = time.Parse(time.RFC3339, string(v))
+			}
+			if err != nil {
+				return zero, err
+			}
+			return any(parsed).(T), nil
+		default:
+			return zero, fmt.Errorf("cannot coerce %T to time.Time", value)
+		}
+	}
+
+	if targetType.Kind() == reflect.String {
+		switch v := value.(type) {
+		case string:
+			return reflect.ValueOf(v).Convert(targetType).Interface().(T), nil
+		case []byte:
+			return reflect.ValueOf(string(v)).Convert(targetType).Interface().(T), nil
+		case fmt.Stringer:
+			return reflect.ValueOf(v.String()).Convert(targetType).Interface().(T), nil
+		default:
+			return zero, fmt.Errorf("cannot coerce %T to %s", value, targetType)
+		}
+	}
+
+	rv := reflect.ValueOf(value)
+	if rv.IsValid() && rv.Type().ConvertibleTo(targetType) {
+		return rv.Convert(targetType).Interface().(T), nil
+	}
+
+	return zero, fmt.Errorf("unsupported conversion from %T to %s", value, targetType)
+}
+
+{{ end }}

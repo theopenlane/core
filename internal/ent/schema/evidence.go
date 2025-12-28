@@ -147,6 +147,14 @@ func (e Evidence) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: WorkflowObjectRef{},
+			ref:        "evidence",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
 	}
 }
 

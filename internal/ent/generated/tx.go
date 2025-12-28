@@ -192,6 +192,8 @@ type Tx struct {
 	WorkflowInstance *WorkflowInstanceClient
 	// WorkflowObjectRef is the client for interacting with the WorkflowObjectRef builders.
 	WorkflowObjectRef *WorkflowObjectRefClient
+	// WorkflowProposal is the client for interacting with the WorkflowProposal builders.
+	WorkflowProposal *WorkflowProposalClient
 
 	// lazily loaded.
 	client     *Client
@@ -413,6 +415,7 @@ func (tx *Tx) init() {
 	tx.WorkflowEvent = NewWorkflowEventClient(tx.config)
 	tx.WorkflowInstance = NewWorkflowInstanceClient(tx.config)
 	tx.WorkflowObjectRef = NewWorkflowObjectRefClient(tx.config)
+	tx.WorkflowProposal = NewWorkflowProposalClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

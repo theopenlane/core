@@ -68,9 +68,10 @@ type ObjectOwnedMixin struct {
 	UseListObjectsFilter bool
 	// OwnerFieldName is the field name for the owner, defaults to "owner_id"
 	OwnerFieldName string
-
 	// SkipDeletedAt indicates if the schema has not included the soft delete mixin
 	SkipDeletedAt bool
+	// WorkflowEdgeEligible marks owner edges as workflow-eligible for trigger detection.
+	WorkflowEdgeEligible bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -147,6 +148,13 @@ func withSkipperFunc(skipper func(ctx context.Context) bool) objectOwnedOption {
 func withAllowAnonymousTrustCenterAccess(allow bool) objectOwnedOption {
 	return func(o *ObjectOwnedMixin) {
 		o.AllowAnonymousTrustCenterAccess = allow
+	}
+}
+
+// withWorkflowOwnedEdges marks object owner edges as workflow-eligible.
+func withWorkflowOwnedEdges() objectOwnedOption {
+	return func(o *ObjectOwnedMixin) {
+		o.WorkflowEdgeEligible = true
 	}
 }
 

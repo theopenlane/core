@@ -115,6 +115,10 @@ type ActionPlanHistory implements Node {
   """
   actionPlanKindID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   short title describing the action plan
   """
   title: String!
@@ -651,6 +655,13 @@ input ActionPlanHistoryWhereInput {
   actionPlanKindIDNotNil: Boolean
   actionPlanKindIDEqualFold: String
   actionPlanKindIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   title field predicates
   """
@@ -2330,17 +2341,9 @@ type ControlHistory implements Node {
   """
   controlKindID: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -2923,36 +2926,12 @@ input ControlHistoryWhereInput {
   controlKindIDEqualFold: String
   controlKindIDContainsFold: String
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   ref_code field predicates
   """
@@ -7310,17 +7289,9 @@ type EvidenceHistory implements Node {
   """
   ownerID: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -7587,36 +7558,12 @@ input EvidenceHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   name field predicates
   """
@@ -11299,17 +11246,9 @@ type InternalPolicyHistory implements Node {
   """
   internalPolicyKindID: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
 }
 """
 A connection to a list of items.
@@ -11807,36 +11746,12 @@ input InternalPolicyHistoryWhereInput {
   internalPolicyKindIDEqualFold: String
   internalPolicyKindIDContainsFold: String
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
 }
 type JobTemplateHistory implements Node {
   id: ID!
@@ -15122,6 +15037,10 @@ type ProcedureHistory implements Node {
   the kind of the procedure
   """
   procedureKindID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
 }
 """
 A connection to a list of items.
@@ -15618,6 +15537,13 @@ input ProcedureHistoryWhereInput {
   procedureKindIDNotNil: Boolean
   procedureKindIDEqualFold: String
   procedureKindIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
 }
 type ProgramHistory implements Node {
   id: ID!
@@ -21603,6 +21529,10 @@ type SubcontrolHistory implements Node {
   """
   subcontrolKindID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String! @externalSource(source: FRAMEWORK)
@@ -22183,6 +22113,13 @@ input SubcontrolHistoryWhereInput {
   subcontrolKindIDNotNil: Boolean
   subcontrolKindIDEqualFold: String
   subcontrolKindIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   ref_code field predicates
   """
@@ -28342,6 +28279,18 @@ type WorkflowDefinitionHistory implements Node {
   """
   triggerFields: [String!]
   """
+  Derived: fields that are approval-gated for this definition; not user editable
+  """
+  approvalFields: [String!]
+  """
+  Derived: edges that are approval-gated for this definition; not user editable
+  """
+  approvalEdges: [String!]
+  """
+  Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
+  """
+  approvalSubmissionMode: WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode
+  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -28712,6 +28661,22 @@ input WorkflowDefinitionHistoryWhereInput {
   """
   active: Boolean
   activeNEQ: Boolean
+  """
+  approval_submission_mode field predicates
+  """
+  approvalSubmissionMode: WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode
+  approvalSubmissionModeNEQ: WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode
+  approvalSubmissionModeIn: [WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode!]
+  approvalSubmissionModeNotIn: [WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode!]
+  approvalSubmissionModeIsNil: Boolean
+  approvalSubmissionModeNotNil: Boolean
+}
+"""
+WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode is enum for the field approval_submission_mode
+"""
+enum WorkflowDefinitionHistoryWorkflowApprovalSubmissionMode @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowApprovalSubmissionMode") {
+  MANUAL_SUBMIT
+  AUTO_SUBMIT
 }
 """
 WorkflowDefinitionHistoryWorkflowKind is enum for the field workflow_kind
@@ -28998,6 +28963,18 @@ enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenla
   ACTION
   TRIGGER
   DECISION
+  INSTANCE_TRIGGERED
+  ACTION_STARTED
+  ACTION_COMPLETED
+  ACTION_FAILED
+  ACTION_SKIPPED
+  CONDITION_EVALUATED
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_INVALIDATED
+  INSTANCE_PAUSED
+  INSTANCE_RESUMED
+  INSTANCE_COMPLETED
 }
 type WorkflowInstanceHistory implements Node {
   id: ID!
@@ -29025,6 +29002,10 @@ type WorkflowInstanceHistory implements Node {
   """
   workflowDefinitionID: String!
   """
+  ID of the workflow proposal this instance is associated with (when approval-before-commit is used)
+  """
+  workflowProposalID: String
+  """
   Current state of the workflow instance
   """
   state: WorkflowInstanceHistoryWorkflowInstanceState!
@@ -29041,6 +29022,10 @@ type WorkflowInstanceHistory implements Node {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int!
+  """
   ID of the control this workflow instance is associated with
   """
   controlID: String
@@ -29052,6 +29037,18 @@ type WorkflowInstanceHistory implements Node {
   ID of the evidence this workflow instance is associated with
   """
   evidenceID: String
+  """
+  ID of the subcontrol this workflow instance is associated with
+  """
+  subcontrolID: String
+  """
+  ID of the actionplan this workflow instance is associated with
+  """
+  actionPlanID: String
+  """
+  ID of the procedure this workflow instance is associated with
+  """
+  procedureID: String
 }
 """
 A connection to a list of items.
@@ -29282,6 +29279,24 @@ input WorkflowInstanceHistoryWhereInput {
   workflowDefinitionIDEqualFold: String
   workflowDefinitionIDContainsFold: String
   """
+  workflow_proposal_id field predicates
+  """
+  workflowProposalID: String
+  workflowProposalIDNEQ: String
+  workflowProposalIDIn: [String!]
+  workflowProposalIDNotIn: [String!]
+  workflowProposalIDGT: String
+  workflowProposalIDGTE: String
+  workflowProposalIDLT: String
+  workflowProposalIDLTE: String
+  workflowProposalIDContains: String
+  workflowProposalIDHasPrefix: String
+  workflowProposalIDHasSuffix: String
+  workflowProposalIDIsNil: Boolean
+  workflowProposalIDNotNil: Boolean
+  workflowProposalIDEqualFold: String
+  workflowProposalIDContainsFold: String
+  """
   state field predicates
   """
   state: WorkflowInstanceHistoryWorkflowInstanceState
@@ -29301,6 +29316,17 @@ input WorkflowInstanceHistoryWhereInput {
   lastEvaluatedAtLTE: Time
   lastEvaluatedAtIsNil: Boolean
   lastEvaluatedAtNotNil: Boolean
+  """
+  current_action_index field predicates
+  """
+  currentActionIndex: Int
+  currentActionIndexNEQ: Int
+  currentActionIndexIn: [Int!]
+  currentActionIndexNotIn: [Int!]
+  currentActionIndexGT: Int
+  currentActionIndexGTE: Int
+  currentActionIndexLT: Int
+  currentActionIndexLTE: Int
   """
   control_id field predicates
   """
@@ -29355,6 +29381,60 @@ input WorkflowInstanceHistoryWhereInput {
   evidenceIDNotNil: Boolean
   evidenceIDEqualFold: String
   evidenceIDContainsFold: String
+  """
+  subcontrol_id field predicates
+  """
+  subcontrolID: String
+  subcontrolIDNEQ: String
+  subcontrolIDIn: [String!]
+  subcontrolIDNotIn: [String!]
+  subcontrolIDGT: String
+  subcontrolIDGTE: String
+  subcontrolIDLT: String
+  subcontrolIDLTE: String
+  subcontrolIDContains: String
+  subcontrolIDHasPrefix: String
+  subcontrolIDHasSuffix: String
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: String
+  subcontrolIDContainsFold: String
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: String
+  actionPlanIDNEQ: String
+  actionPlanIDIn: [String!]
+  actionPlanIDNotIn: [String!]
+  actionPlanIDGT: String
+  actionPlanIDGTE: String
+  actionPlanIDLT: String
+  actionPlanIDLTE: String
+  actionPlanIDContains: String
+  actionPlanIDHasPrefix: String
+  actionPlanIDHasSuffix: String
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: String
+  actionPlanIDContainsFold: String
+  """
+  procedure_id field predicates
+  """
+  procedureID: String
+  procedureIDNEQ: String
+  procedureIDIn: [String!]
+  procedureIDNotIn: [String!]
+  procedureIDGT: String
+  procedureIDGTE: String
+  procedureIDLT: String
+  procedureIDLTE: String
+  procedureIDContains: String
+  procedureIDHasPrefix: String
+  procedureIDHasSuffix: String
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: String
+  procedureIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
@@ -29418,6 +29498,18 @@ type WorkflowObjectRefHistory implements Node {
   Evidence referenced by this workflow instance
   """
   evidenceID: String
+  """
+  Subcontrol referenced by this workflow instance
+  """
+  subcontrolID: String
+  """
+  ActionPlan referenced by this workflow instance
+  """
+  actionPlanID: String
+  """
+  Procedure referenced by this workflow instance
+  """
+  procedureID: String
 }
 """
 A connection to a list of items.
@@ -29791,4 +29883,58 @@ input WorkflowObjectRefHistoryWhereInput {
   evidenceIDNotNil: Boolean
   evidenceIDEqualFold: String
   evidenceIDContainsFold: String
+  """
+  subcontrol_id field predicates
+  """
+  subcontrolID: String
+  subcontrolIDNEQ: String
+  subcontrolIDIn: [String!]
+  subcontrolIDNotIn: [String!]
+  subcontrolIDGT: String
+  subcontrolIDGTE: String
+  subcontrolIDLT: String
+  subcontrolIDLTE: String
+  subcontrolIDContains: String
+  subcontrolIDHasPrefix: String
+  subcontrolIDHasSuffix: String
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: String
+  subcontrolIDContainsFold: String
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: String
+  actionPlanIDNEQ: String
+  actionPlanIDIn: [String!]
+  actionPlanIDNotIn: [String!]
+  actionPlanIDGT: String
+  actionPlanIDGTE: String
+  actionPlanIDLT: String
+  actionPlanIDLTE: String
+  actionPlanIDContains: String
+  actionPlanIDHasPrefix: String
+  actionPlanIDHasSuffix: String
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: String
+  actionPlanIDContainsFold: String
+  """
+  procedure_id field predicates
+  """
+  procedureID: String
+  procedureIDNEQ: String
+  procedureIDIn: [String!]
+  procedureIDNotIn: [String!]
+  procedureIDGT: String
+  procedureIDGTE: String
+  procedureIDLT: String
+  procedureIDLTE: String
+  procedureIDContains: String
+  procedureIDHasPrefix: String
+  procedureIDHasSuffix: String
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: String
+  procedureIDContainsFold: String
 }

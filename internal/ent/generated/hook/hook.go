@@ -1089,6 +1089,18 @@ func (f WorkflowObjectRefFunc) Mutate(ctx context.Context, m generated.Mutation)
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowObjectRefMutation", m)
 }
 
+// The WorkflowProposalFunc type is an adapter to allow the use of ordinary
+// function as WorkflowProposal mutator.
+type WorkflowProposalFunc func(context.Context, *generated.WorkflowProposalMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowProposalFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowProposalMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowProposalMutation", m)
+}
+
 // Condition is a hook condition function.
 type Condition func(context.Context, generated.Mutation) bool
 

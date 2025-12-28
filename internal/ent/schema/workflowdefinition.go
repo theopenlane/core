@@ -83,6 +83,19 @@ func (WorkflowDefinition) Fields() []ent.Field {
 			Comment("Derived: normalized fields from definition for prefiltering; not user editable").
 			Optional().
 			Default([]string{}),
+		field.Strings("approval_fields").
+			Comment("Derived: fields that are approval-gated for this definition; not user editable").
+			Optional().
+			Default([]string{}),
+		field.Strings("approval_edges").
+			Comment("Derived: edges that are approval-gated for this definition; not user editable").
+			Optional().
+			Default([]string{}),
+		field.Enum("approval_submission_mode").
+			Comment("Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable").
+			GoType(enums.WorkflowApprovalSubmissionMode("")).
+			Optional().
+			Default(string(enums.WorkflowApprovalSubmissionModeManualSubmit)),
 		field.JSON("definition_json", models.WorkflowDefinitionDocument{}).
 			Comment("Typed document describing triggers, conditions, and actions").
 			Optional(),

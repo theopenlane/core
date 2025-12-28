@@ -7,6 +7,7 @@ package main
 import (
 	"embed"
 	"os"
+	"strings"
 
 	"github.com/rs/zerolog/log"
 
@@ -302,6 +303,8 @@ func schemaGenerate(extensions ...entc.Extension) {
 				genhooks.WithIncludeAdminSearch(false)),
 			accessMapExt.Hook(),
 			exportenums.New().Hook(),
+			moveWorkflowRegistry(),
+			moveWorkflowObjectTypeEnum(),
 		},
 		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
 		Features:   enabledFeatures,
@@ -397,5 +400,89 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 			extensions...,
 		)); err != nil {
 		log.Fatal().Err(err).Msg("running ent codegen")
+	}
+}
+
+// moveWorkflowRegistry creates a hook that moves the generated workflow_registry.go file
+// from the generated package to the hooks package to avoid import cycles
+func moveWorkflowRegistry() gen.Hook {
+	return func(next gen.Generator) gen.Generator {
+		return gen.GenerateFunc(func(g *gen.Graph) error {
+			if err := next.Generate(g); err != nil {
+				return err
+			}
+
+			filesToMove := []string{
+				"workflow_registry.go",
+				"workflow_registry_test.go",
+				"workflow_edge_extractor.go",
+			}
+
+			for _, filename := range filesToMove {
+				sourcePath := "./internal/ent/generated/" + filename
+				destPath := "./internal/ent/hooks/" + filename
+
+				data, err := os.ReadFile(sourcePath)
+				if err != nil {
+					if os.IsNotExist(err) {
+						log.Warn().Str("source", sourcePath).Msg("file not found, skipping move")
+						continue
+					}
+					return err
+				}
+
+				if err := os.WriteFile(destPath, data, 0644); err != nil {
+					return err
+				}
+
+				if err := os.Remove(sourcePath); err != nil {
+					return err
+				}
+
+				log.Info().Str("from", sourcePath).Str("to", destPath).Msg("moved workflow registry file")
+			}
+
+			return nil
+		})
+	}
+}
+
+// moveWorkflowObjectTypeEnum creates a hook that moves the generated workflow_object_type_enum.go file
+// from the generated package to the pkg/enums package to keep enum definitions centralized
+func moveWorkflowObjectTypeEnum() gen.Hook {
+	return func(next gen.Generator) gen.Generator {
+		return gen.GenerateFunc(func(g *gen.Graph) error {
+			if err := next.Generate(g); err != nil {
+				return err
+			}
+
+			sourcePath := "./internal/ent/generated/workflow_object_type_enum.go"
+			destPath := "./common/enums/workflow_object_type.go"
+
+			data, err := os.ReadFile(sourcePath)
+			if err != nil {
+				if os.IsNotExist(err) {
+					log.Warn().Str("source", sourcePath).Msg("workflow object type enum file not found, skipping move")
+					return nil
+				}
+				return err
+			}
+
+			// Replace package declaration from generated to enums
+			content := string(data)
+			content = strings.Replace(content, "package generated", "package enums", 1)
+
+			if err := os.WriteFile(destPath, []byte(content), 0644); err != nil {
+				return err
+			}
+
+			if err := os.Remove(sourcePath); err != nil {
+				return err
+			}
+
+			log.Info().Str("from", sourcePath).Str("to", destPath).Msg("moved workflow object type enum file")
+
+			return nil
+		})
 	}
 }

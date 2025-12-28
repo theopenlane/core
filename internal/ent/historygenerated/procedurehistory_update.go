@@ -605,6 +605,26 @@ func (_u *ProcedureHistoryUpdate) ClearProcedureKindID() *ProcedureHistoryUpdate
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ProcedureHistoryUpdate) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ProcedureHistoryUpdate) ClearWorkflowEligibleMarker() *ProcedureHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (_u *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 	return _u.mutation
@@ -913,6 +933,12 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.ProcedureKindIDCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1508,6 +1534,26 @@ func (_u *ProcedureHistoryUpdateOne) ClearProcedureKindID() *ProcedureHistoryUpd
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ProcedureHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ProcedureHistoryUpdateOne) ClearWorkflowEligibleMarker() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // Mutation returns the ProcedureHistoryMutation object of the builder.
 func (_u *ProcedureHistoryUpdateOne) Mutation() *ProcedureHistoryMutation {
 	return _u.mutation
@@ -1846,6 +1892,12 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.ProcedureKindIDCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

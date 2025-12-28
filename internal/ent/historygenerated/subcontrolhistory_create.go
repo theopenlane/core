@@ -515,6 +515,20 @@ func (_c *SubcontrolHistoryCreate) SetNillableSubcontrolKindID(v *string) *Subco
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *SubcontrolHistoryCreate) SetWorkflowEligibleMarker(v bool) *SubcontrolHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *SubcontrolHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *SubcontrolHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *SubcontrolHistoryCreate) SetRefCode(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetRefCode(v)
@@ -618,6 +632,10 @@ func (_c *SubcontrolHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subcontrolhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := subcontrolhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if subcontrolhistory.DefaultID == nil {
@@ -873,6 +891,10 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.SubcontrolKindID(); ok {
 		_spec.SetField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString, value)
 		_node.SubcontrolKindID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

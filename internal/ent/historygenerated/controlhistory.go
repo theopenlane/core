@@ -109,12 +109,8 @@ type ControlHistory struct {
 	ControlKindName string `json:"control_kind_name,omitempty"`
 	// the kind of the control
 	ControlKindID string `json:"control_kind_id,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposed_at,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the standard that the control belongs to, if applicable
@@ -127,15 +123,15 @@ func (*ControlHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlhistory.FieldTags, controlhistory.FieldDescriptionJSON, controlhistory.FieldAliases, controlhistory.FieldMappedCategories, controlhistory.FieldAssessmentObjectives, controlhistory.FieldAssessmentMethods, controlhistory.FieldControlQuestions, controlhistory.FieldImplementationGuidance, controlhistory.FieldExampleEvidence, controlhistory.FieldReferences, controlhistory.FieldTestingProcedures, controlhistory.FieldEvidenceRequests, controlhistory.FieldProposedChanges:
+		case controlhistory.FieldTags, controlhistory.FieldDescriptionJSON, controlhistory.FieldAliases, controlhistory.FieldMappedCategories, controlhistory.FieldAssessmentObjectives, controlhistory.FieldAssessmentMethods, controlhistory.FieldControlQuestions, controlhistory.FieldImplementationGuidance, controlhistory.FieldExampleEvidence, controlhistory.FieldReferences, controlhistory.FieldTestingProcedures, controlhistory.FieldEvidenceRequests:
 			values[i] = new([]byte)
 		case controlhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case controlhistory.FieldSystemOwned:
+		case controlhistory.FieldSystemOwned, controlhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldProposedByUserID, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
+		case controlhistory.FieldID, controlhistory.FieldRef, controlhistory.FieldCreatedBy, controlhistory.FieldUpdatedBy, controlhistory.FieldDeletedBy, controlhistory.FieldDisplayID, controlhistory.FieldTitle, controlhistory.FieldDescription, controlhistory.FieldReferenceID, controlhistory.FieldAuditorReferenceID, controlhistory.FieldResponsiblePartyID, controlhistory.FieldStatus, controlhistory.FieldSource, controlhistory.FieldReferenceFramework, controlhistory.FieldReferenceFrameworkRevision, controlhistory.FieldControlType, controlhistory.FieldCategory, controlhistory.FieldCategoryID, controlhistory.FieldSubcategory, controlhistory.FieldControlOwnerID, controlhistory.FieldDelegateID, controlhistory.FieldOwnerID, controlhistory.FieldInternalNotes, controlhistory.FieldSystemInternalID, controlhistory.FieldControlKindName, controlhistory.FieldControlKindID, controlhistory.FieldRefCode, controlhistory.FieldStandardID:
 			values[i] = new(sql.NullString)
-		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt, controlhistory.FieldProposedAt:
+		case controlhistory.FieldHistoryTime, controlhistory.FieldCreatedAt, controlhistory.FieldUpdatedAt, controlhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -445,26 +441,11 @@ func (_m *ControlHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ControlKindID = value.String
 			}
-		case controlhistory.FieldProposedChanges:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
-					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
-				}
-			}
-		case controlhistory.FieldProposedByUserID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+		case controlhistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
-				_m.ProposedByUserID = value.String
-			}
-		case controlhistory.FieldProposedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
-			} else if value.Valid {
-				_m.ProposedAt = new(time.Time)
-				*_m.ProposedAt = value.Time
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case controlhistory.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -653,16 +634,8 @@ func (_m *ControlHistory) String() string {
 	builder.WriteString("control_kind_id=")
 	builder.WriteString(_m.ControlKindID)
 	builder.WriteString(", ")
-	builder.WriteString("proposed_changes=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
-	builder.WriteString(", ")
-	builder.WriteString("proposed_by_user_id=")
-	builder.WriteString(_m.ProposedByUserID)
-	builder.WriteString(", ")
-	if v := _m.ProposedAt; v != nil {
-		builder.WriteString("proposed_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
 	builder.WriteString(_m.RefCode)

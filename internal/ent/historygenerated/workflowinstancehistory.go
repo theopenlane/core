@@ -49,6 +49,8 @@ type WorkflowInstanceHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the workflow definition this instance is based on
 	WorkflowDefinitionID string `json:"workflow_definition_id,omitempty"`
+	// ID of the workflow proposal this instance is associated with (when approval-before-commit is used)
+	WorkflowProposalID string `json:"workflow_proposal_id,omitempty"`
 	// Current state of the workflow instance
 	State enums.WorkflowInstanceState `json:"state,omitempty"`
 	// Optional context for the workflow instance
@@ -57,12 +59,20 @@ type WorkflowInstanceHistory struct {
 	LastEvaluatedAt *time.Time `json:"last_evaluated_at,omitempty"`
 	// Copy of definition JSON used for this instance
 	DefinitionSnapshot models.WorkflowDefinitionDocument `json:"definition_snapshot,omitempty"`
+	// Index of the current action being executed (used for recovery and resumption)
+	CurrentActionIndex int `json:"current_action_index,omitempty"`
 	// ID of the control this workflow instance is associated with
 	ControlID string `json:"control_id,omitempty"`
 	// ID of the internal policy this workflow instance is associated with
 	InternalPolicyID string `json:"internal_policy_id,omitempty"`
 	// ID of the evidence this workflow instance is associated with
-	EvidenceID   string `json:"evidence_id,omitempty"`
+	EvidenceID string `json:"evidence_id,omitempty"`
+	// ID of the subcontrol this workflow instance is associated with
+	SubcontrolID string `json:"subcontrol_id,omitempty"`
+	// ID of the actionplan this workflow instance is associated with
+	ActionPlanID string `json:"action_plan_id,omitempty"`
+	// ID of the procedure this workflow instance is associated with
+	ProcedureID  string `json:"procedure_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -75,7 +85,9 @@ func (*WorkflowInstanceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case workflowinstancehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case workflowinstancehistory.FieldID, workflowinstancehistory.FieldRef, workflowinstancehistory.FieldCreatedBy, workflowinstancehistory.FieldUpdatedBy, workflowinstancehistory.FieldDeletedBy, workflowinstancehistory.FieldDisplayID, workflowinstancehistory.FieldOwnerID, workflowinstancehistory.FieldWorkflowDefinitionID, workflowinstancehistory.FieldState, workflowinstancehistory.FieldControlID, workflowinstancehistory.FieldInternalPolicyID, workflowinstancehistory.FieldEvidenceID:
+		case workflowinstancehistory.FieldCurrentActionIndex:
+			values[i] = new(sql.NullInt64)
+		case workflowinstancehistory.FieldID, workflowinstancehistory.FieldRef, workflowinstancehistory.FieldCreatedBy, workflowinstancehistory.FieldUpdatedBy, workflowinstancehistory.FieldDeletedBy, workflowinstancehistory.FieldDisplayID, workflowinstancehistory.FieldOwnerID, workflowinstancehistory.FieldWorkflowDefinitionID, workflowinstancehistory.FieldWorkflowProposalID, workflowinstancehistory.FieldState, workflowinstancehistory.FieldControlID, workflowinstancehistory.FieldInternalPolicyID, workflowinstancehistory.FieldEvidenceID, workflowinstancehistory.FieldSubcontrolID, workflowinstancehistory.FieldActionPlanID, workflowinstancehistory.FieldProcedureID:
 			values[i] = new(sql.NullString)
 		case workflowinstancehistory.FieldHistoryTime, workflowinstancehistory.FieldCreatedAt, workflowinstancehistory.FieldUpdatedAt, workflowinstancehistory.FieldDeletedAt, workflowinstancehistory.FieldLastEvaluatedAt:
 			values[i] = new(sql.NullTime)
@@ -180,6 +192,12 @@ func (_m *WorkflowInstanceHistory) assignValues(columns []string, values []any) 
 			} else if value.Valid {
 				_m.WorkflowDefinitionID = value.String
 			}
+		case workflowinstancehistory.FieldWorkflowProposalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_proposal_id", values[i])
+			} else if value.Valid {
+				_m.WorkflowProposalID = value.String
+			}
 		case workflowinstancehistory.FieldState:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field state", values[i])
@@ -209,6 +227,12 @@ func (_m *WorkflowInstanceHistory) assignValues(columns []string, values []any) 
 					return fmt.Errorf("unmarshal field definition_snapshot: %w", err)
 				}
 			}
+		case workflowinstancehistory.FieldCurrentActionIndex:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field current_action_index", values[i])
+			} else if value.Valid {
+				_m.CurrentActionIndex = int(value.Int64)
+			}
 		case workflowinstancehistory.FieldControlID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_id", values[i])
@@ -226,6 +250,24 @@ func (_m *WorkflowInstanceHistory) assignValues(columns []string, values []any) 
 				return fmt.Errorf("unexpected type %T for field evidence_id", values[i])
 			} else if value.Valid {
 				_m.EvidenceID = value.String
+			}
+		case workflowinstancehistory.FieldSubcontrolID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subcontrol_id", values[i])
+			} else if value.Valid {
+				_m.SubcontrolID = value.String
+			}
+		case workflowinstancehistory.FieldActionPlanID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field action_plan_id", values[i])
+			} else if value.Valid {
+				_m.ActionPlanID = value.String
+			}
+		case workflowinstancehistory.FieldProcedureID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field procedure_id", values[i])
+			} else if value.Valid {
+				_m.ProcedureID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -302,6 +344,9 @@ func (_m *WorkflowInstanceHistory) String() string {
 	builder.WriteString("workflow_definition_id=")
 	builder.WriteString(_m.WorkflowDefinitionID)
 	builder.WriteString(", ")
+	builder.WriteString("workflow_proposal_id=")
+	builder.WriteString(_m.WorkflowProposalID)
+	builder.WriteString(", ")
 	builder.WriteString("state=")
 	builder.WriteString(fmt.Sprintf("%v", _m.State))
 	builder.WriteString(", ")
@@ -316,6 +361,9 @@ func (_m *WorkflowInstanceHistory) String() string {
 	builder.WriteString("definition_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DefinitionSnapshot))
 	builder.WriteString(", ")
+	builder.WriteString("current_action_index=")
+	builder.WriteString(fmt.Sprintf("%v", _m.CurrentActionIndex))
+	builder.WriteString(", ")
 	builder.WriteString("control_id=")
 	builder.WriteString(_m.ControlID)
 	builder.WriteString(", ")
@@ -324,6 +372,15 @@ func (_m *WorkflowInstanceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("evidence_id=")
 	builder.WriteString(_m.EvidenceID)
+	builder.WriteString(", ")
+	builder.WriteString("subcontrol_id=")
+	builder.WriteString(_m.SubcontrolID)
+	builder.WriteString(", ")
+	builder.WriteString("action_plan_id=")
+	builder.WriteString(_m.ActionPlanID)
+	builder.WriteString(", ")
+	builder.WriteString("procedure_id=")
+	builder.WriteString(_m.ProcedureID)
 	builder.WriteByte(')')
 	return builder.String()
 }

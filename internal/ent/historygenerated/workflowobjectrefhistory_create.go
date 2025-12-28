@@ -251,6 +251,48 @@ func (_c *WorkflowObjectRefHistoryCreate) SetNillableEvidenceID(v *string) *Work
 	return _c
 }
 
+// SetSubcontrolID sets the "subcontrol_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetSubcontrolID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetSubcontrolID(v)
+	return _c
+}
+
+// SetNillableSubcontrolID sets the "subcontrol_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableSubcontrolID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetSubcontrolID(*v)
+	}
+	return _c
+}
+
+// SetActionPlanID sets the "action_plan_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetActionPlanID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetActionPlanID(v)
+	return _c
+}
+
+// SetNillableActionPlanID sets the "action_plan_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableActionPlanID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetActionPlanID(*v)
+	}
+	return _c
+}
+
+// SetProcedureID sets the "procedure_id" field.
+func (_c *WorkflowObjectRefHistoryCreate) SetProcedureID(v string) *WorkflowObjectRefHistoryCreate {
+	_c.mutation.SetProcedureID(v)
+	return _c
+}
+
+// SetNillableProcedureID sets the "procedure_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefHistoryCreate) SetNillableProcedureID(v *string) *WorkflowObjectRefHistoryCreate {
+	if v != nil {
+		_c.SetProcedureID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefHistoryCreate) SetID(v string) *WorkflowObjectRefHistoryCreate {
 	_c.mutation.SetID(v)
@@ -459,6 +501,18 @@ func (_c *WorkflowObjectRefHistoryCreate) createSpec() (*WorkflowObjectRefHistor
 	if value, ok := _c.mutation.EvidenceID(); ok {
 		_spec.SetField(workflowobjectrefhistory.FieldEvidenceID, field.TypeString, value)
 		_node.EvidenceID = value
+	}
+	if value, ok := _c.mutation.SubcontrolID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldSubcontrolID, field.TypeString, value)
+		_node.SubcontrolID = value
+	}
+	if value, ok := _c.mutation.ActionPlanID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldActionPlanID, field.TypeString, value)
+		_node.ActionPlanID = value
+	}
+	if value, ok := _c.mutation.ProcedureID(); ok {
+		_spec.SetField(workflowobjectrefhistory.FieldProcedureID, field.TypeString, value)
+		_node.ProcedureID = value
 	}
 	return _node, _spec
 }

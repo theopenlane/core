@@ -98,6 +98,8 @@ const (
 	FieldSubcontrolKindName = "subcontrol_kind_name"
 	// FieldSubcontrolKindID holds the string denoting the subcontrol_kind_id field in the database.
 	FieldSubcontrolKindID = "subcontrol_kind_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldControlID holds the string denoting the control_id field in the database.
@@ -142,6 +144,8 @@ const (
 	EdgeMappedToSubcontrols = "mapped_to_subcontrols"
 	// EdgeMappedFromSubcontrols holds the string denoting the mapped_from_subcontrols edge name in mutations.
 	EdgeMappedFromSubcontrols = "mapped_from_subcontrols"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the subcontrol in the database.
 	Table = "subcontrols"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
@@ -264,6 +268,13 @@ const (
 	// MappedFromSubcontrolsInverseTable is the table name for the MappedControl entity.
 	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
 	MappedFromSubcontrolsInverseTable = "mapped_controls"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "subcontrol_id"
 )
 
 // Columns holds all SQL columns for subcontrol fields.
@@ -309,6 +320,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldSubcontrolKindName,
 	FieldSubcontrolKindID,
+	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldControlID,
 }
@@ -396,6 +408,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
 	RefCodeValidator func(string) error
 	// ControlIDValidator is a validator for the "control_id" field. It is called by the builders before save.
@@ -586,6 +600,11 @@ func BySubcontrolKindName(opts ...sql.OrderTermOption) OrderOption {
 // BySubcontrolKindID orders the results by the subcontrol_kind_id field.
 func BySubcontrolKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSubcontrolKindID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByRefCode orders the results by the ref_code field.
@@ -835,6 +854,20 @@ func ByMappedFromSubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOp
 		sqlgraph.OrderByNeighborTerms(s, newMappedFromSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newEvidenceStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -973,6 +1006,13 @@ func newMappedFromSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MappedFromSubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, MappedFromSubcontrolsTable, MappedFromSubcontrolsPrimaryKey...),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 

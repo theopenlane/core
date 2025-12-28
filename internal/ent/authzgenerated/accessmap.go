@@ -72,6 +72,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "assessment": {"owner": {
 	ObjectType:      "owner",
@@ -703,6 +707,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "comments": {
 	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -1831,6 +1839,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "workflow_proposals": {
+	ObjectType:      "workflow_proposal",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "directory_accounts": {
 	ObjectType:      "directory_account",
 	SkipEditCheck:   false,
@@ -1945,6 +1957,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "file": {
 	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -2431,6 +2447,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "mapped_from_subcontrols": {
 	ObjectType:      "mapped_from_subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -2951,6 +2971,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "evidence",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "subcontrol": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "action_plan": {
+	ObjectType:      "action_plan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "procedure": {
+	ObjectType:      "procedure",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_proposal": {
+	ObjectType:      "workflow_proposal",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "workflow_assignments": {
 	ObjectType:      "workflow_assignment",
 	SkipEditCheck:   false,
@@ -2970,6 +3006,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "workflow_instance": {
 	ObjectType:      "workflow_instance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_proposals": {
+	ObjectType:      "workflow_proposal",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "control": {
@@ -3002,6 +3042,35 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "evidence": {
 	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "subcontrol": {
+	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "action_plan": {
+	ObjectType:      "action_plan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "procedure": {
+	ObjectType:      "procedure",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "workflow_proposal": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_object_ref": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_instances": {
+	ObjectType:      "workflow_instance",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },

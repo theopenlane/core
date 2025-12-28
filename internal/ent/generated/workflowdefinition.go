@@ -69,6 +69,12 @@ type WorkflowDefinition struct {
 	TriggerOperations []string `json:"trigger_operations,omitempty"`
 	// Derived: normalized fields from definition for prefiltering; not user editable
 	TriggerFields []string `json:"trigger_fields,omitempty"`
+	// Derived: fields that are approval-gated for this definition; not user editable
+	ApprovalFields []string `json:"approval_fields,omitempty"`
+	// Derived: edges that are approval-gated for this definition; not user editable
+	ApprovalEdges []string `json:"approval_edges,omitempty"`
+	// Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable
+	ApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode `json:"approval_submission_mode,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON models.WorkflowDefinitionDocument `json:"definition_json,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
@@ -131,13 +137,13 @@ func (*WorkflowDefinition) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowdefinition.FieldTags, workflowdefinition.FieldTriggerOperations, workflowdefinition.FieldTriggerFields, workflowdefinition.FieldDefinitionJSON, workflowdefinition.FieldTrackedFields:
+		case workflowdefinition.FieldTags, workflowdefinition.FieldTriggerOperations, workflowdefinition.FieldTriggerFields, workflowdefinition.FieldApprovalFields, workflowdefinition.FieldApprovalEdges, workflowdefinition.FieldDefinitionJSON, workflowdefinition.FieldTrackedFields:
 			values[i] = new([]byte)
 		case workflowdefinition.FieldSystemOwned, workflowdefinition.FieldDraft, workflowdefinition.FieldIsDefault, workflowdefinition.FieldActive:
 			values[i] = new(sql.NullBool)
 		case workflowdefinition.FieldRevision, workflowdefinition.FieldCooldownSeconds:
 			values[i] = new(sql.NullInt64)
-		case workflowdefinition.FieldID, workflowdefinition.FieldCreatedBy, workflowdefinition.FieldUpdatedBy, workflowdefinition.FieldDeletedBy, workflowdefinition.FieldDisplayID, workflowdefinition.FieldOwnerID, workflowdefinition.FieldInternalNotes, workflowdefinition.FieldSystemInternalID, workflowdefinition.FieldName, workflowdefinition.FieldDescription, workflowdefinition.FieldWorkflowKind, workflowdefinition.FieldSchemaType:
+		case workflowdefinition.FieldID, workflowdefinition.FieldCreatedBy, workflowdefinition.FieldUpdatedBy, workflowdefinition.FieldDeletedBy, workflowdefinition.FieldDisplayID, workflowdefinition.FieldOwnerID, workflowdefinition.FieldInternalNotes, workflowdefinition.FieldSystemInternalID, workflowdefinition.FieldName, workflowdefinition.FieldDescription, workflowdefinition.FieldWorkflowKind, workflowdefinition.FieldSchemaType, workflowdefinition.FieldApprovalSubmissionMode:
 			values[i] = new(sql.NullString)
 		case workflowdefinition.FieldCreatedAt, workflowdefinition.FieldUpdatedAt, workflowdefinition.FieldDeletedAt, workflowdefinition.FieldPublishedAt:
 			values[i] = new(sql.NullTime)
@@ -315,6 +321,28 @@ func (_m *WorkflowDefinition) assignValues(columns []string, values []any) error
 					return fmt.Errorf("unmarshal field trigger_fields: %w", err)
 				}
 			}
+		case workflowdefinition.FieldApprovalFields:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_fields", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ApprovalFields); err != nil {
+					return fmt.Errorf("unmarshal field approval_fields: %w", err)
+				}
+			}
+		case workflowdefinition.FieldApprovalEdges:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_edges", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ApprovalEdges); err != nil {
+					return fmt.Errorf("unmarshal field approval_edges: %w", err)
+				}
+			}
+		case workflowdefinition.FieldApprovalSubmissionMode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_submission_mode", values[i])
+			} else if value.Valid {
+				_m.ApprovalSubmissionMode = enums.WorkflowApprovalSubmissionMode(value.String)
+			}
 		case workflowdefinition.FieldDefinitionJSON:
 			if value, ok := values[i].(*[]byte); !ok {
 				return fmt.Errorf("unexpected type %T for field definition_json", values[i])
@@ -459,6 +487,15 @@ func (_m *WorkflowDefinition) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trigger_fields=")
 	builder.WriteString(fmt.Sprintf("%v", _m.TriggerFields))
+	builder.WriteString(", ")
+	builder.WriteString("approval_fields=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalFields))
+	builder.WriteString(", ")
+	builder.WriteString("approval_edges=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalEdges))
+	builder.WriteString(", ")
+	builder.WriteString("approval_submission_mode=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalSubmissionMode))
 	builder.WriteString(", ")
 	builder.WriteString("definition_json=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DefinitionJSON))

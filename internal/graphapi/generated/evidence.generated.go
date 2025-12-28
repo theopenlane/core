@@ -68,12 +68,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Evidence_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Evidence_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Evidence_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -110,6 +106,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -157,12 +155,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Evidence_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Evidence_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Evidence_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -199,6 +193,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -275,12 +271,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_tags(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Evidence_ownerID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Evidence_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Evidence_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Evidence_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
 			case "name":
 				return ec.fieldContext_Evidence_name(ctx, field)
 			case "description":
@@ -317,6 +309,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_tasks(ctx, field)
 			case "comments":
 				return ec.fieldContext_Evidence_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},

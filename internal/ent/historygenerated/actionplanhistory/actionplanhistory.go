@@ -92,6 +92,8 @@ const (
 	FieldActionPlanKindName = "action_plan_kind_name"
 	// FieldActionPlanKindID holds the string denoting the action_plan_kind_id field in the database.
 	FieldActionPlanKindID = "action_plan_kind_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -157,6 +159,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldActionPlanKindName,
 	FieldActionPlanKindID,
+	FieldWorkflowEligibleMarker,
 	FieldTitle,
 	FieldDescription,
 	FieldDueDate,
@@ -219,6 +222,8 @@ var (
 	DefaultDismissedImprovementSuggestions []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultRequiresApproval holds the default value on creation for the "requires_approval" field.
 	DefaultRequiresApproval bool
 	// DefaultBlocked holds the default value on creation for the "blocked" field.
@@ -417,6 +422,11 @@ func ByActionPlanKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByActionPlanKindID orders the results by the action_plan_kind_id field.
 func ByActionPlanKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActionPlanKindID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.

@@ -45,10 +45,18 @@ const (
 	FieldDirectoryMembershipID = "directory_membership_id"
 	// FieldEvidenceID holds the string denoting the evidence_id field in the database.
 	FieldEvidenceID = "evidence_id"
+	// FieldSubcontrolID holds the string denoting the subcontrol_id field in the database.
+	FieldSubcontrolID = "subcontrol_id"
+	// FieldActionPlanID holds the string denoting the action_plan_id field in the database.
+	FieldActionPlanID = "action_plan_id"
+	// FieldProcedureID holds the string denoting the procedure_id field in the database.
+	FieldProcedureID = "procedure_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeWorkflowInstance holds the string denoting the workflow_instance edge name in mutations.
 	EdgeWorkflowInstance = "workflow_instance"
+	// EdgeWorkflowProposals holds the string denoting the workflow_proposals edge name in mutations.
+	EdgeWorkflowProposals = "workflow_proposals"
 	// EdgeControl holds the string denoting the control edge name in mutations.
 	EdgeControl = "control"
 	// EdgeTask holds the string denoting the task edge name in mutations.
@@ -65,6 +73,12 @@ const (
 	EdgeDirectoryMembership = "directory_membership"
 	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
 	EdgeEvidence = "evidence"
+	// EdgeSubcontrol holds the string denoting the subcontrol edge name in mutations.
+	EdgeSubcontrol = "subcontrol"
+	// EdgeActionPlan holds the string denoting the action_plan edge name in mutations.
+	EdgeActionPlan = "action_plan"
+	// EdgeProcedure holds the string denoting the procedure edge name in mutations.
+	EdgeProcedure = "procedure"
 	// Table holds the table name of the workflowobjectref in the database.
 	Table = "workflow_object_refs"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -81,6 +95,13 @@ const (
 	WorkflowInstanceInverseTable = "workflow_instances"
 	// WorkflowInstanceColumn is the table column denoting the workflow_instance relation/edge.
 	WorkflowInstanceColumn = "workflow_instance_id"
+	// WorkflowProposalsTable is the table that holds the workflow_proposals relation/edge.
+	WorkflowProposalsTable = "workflow_proposals"
+	// WorkflowProposalsInverseTable is the table name for the WorkflowProposal entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowproposal" package.
+	WorkflowProposalsInverseTable = "workflow_proposals"
+	// WorkflowProposalsColumn is the table column denoting the workflow_proposals relation/edge.
+	WorkflowProposalsColumn = "workflow_object_ref_id"
 	// ControlTable is the table that holds the control relation/edge.
 	ControlTable = "workflow_object_refs"
 	// ControlInverseTable is the table name for the Control entity.
@@ -137,6 +158,27 @@ const (
 	EvidenceInverseTable = "evidences"
 	// EvidenceColumn is the table column denoting the evidence relation/edge.
 	EvidenceColumn = "evidence_id"
+	// SubcontrolTable is the table that holds the subcontrol relation/edge.
+	SubcontrolTable = "workflow_object_refs"
+	// SubcontrolInverseTable is the table name for the Subcontrol entity.
+	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
+	SubcontrolInverseTable = "subcontrols"
+	// SubcontrolColumn is the table column denoting the subcontrol relation/edge.
+	SubcontrolColumn = "subcontrol_id"
+	// ActionPlanTable is the table that holds the action_plan relation/edge.
+	ActionPlanTable = "workflow_object_refs"
+	// ActionPlanInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlanInverseTable = "action_plans"
+	// ActionPlanColumn is the table column denoting the action_plan relation/edge.
+	ActionPlanColumn = "action_plan_id"
+	// ProcedureTable is the table that holds the procedure relation/edge.
+	ProcedureTable = "workflow_object_refs"
+	// ProcedureInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProcedureInverseTable = "procedures"
+	// ProcedureColumn is the table column denoting the procedure relation/edge.
+	ProcedureColumn = "procedure_id"
 )
 
 // Columns holds all SQL columns for workflowobjectref fields.
@@ -157,6 +199,9 @@ var Columns = []string{
 	FieldDirectoryGroupID,
 	FieldDirectoryMembershipID,
 	FieldEvidenceID,
+	FieldSubcontrolID,
+	FieldActionPlanID,
+	FieldProcedureID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "workflow_object_refs"
@@ -288,6 +333,21 @@ func ByEvidenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEvidenceID, opts...).ToFunc()
 }
 
+// BySubcontrolID orders the results by the subcontrol_id field.
+func BySubcontrolID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcontrolID, opts...).ToFunc()
+}
+
+// ByActionPlanID orders the results by the action_plan_id field.
+func ByActionPlanID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActionPlanID, opts...).ToFunc()
+}
+
+// ByProcedureID orders the results by the procedure_id field.
+func ByProcedureID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -299,6 +359,20 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 func ByWorkflowInstanceField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newWorkflowInstanceStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByWorkflowProposalsCount orders the results by workflow_proposals count.
+func ByWorkflowProposalsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowProposalsStep(), opts...)
+	}
+}
+
+// ByWorkflowProposals orders the results by workflow_proposals terms.
+func ByWorkflowProposals(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowProposalsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -357,6 +431,27 @@ func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// BySubcontrolField orders the results by subcontrol field.
+func BySubcontrolField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubcontrolStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByActionPlanField orders the results by action_plan field.
+func ByActionPlanField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlanStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByProcedureField orders the results by procedure field.
+func ByProcedureField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProcedureStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -369,6 +464,13 @@ func newWorkflowInstanceStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowInstanceInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, WorkflowInstanceTable, WorkflowInstanceColumn),
+	)
+}
+func newWorkflowProposalsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowProposalsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowProposalsTable, WorkflowProposalsColumn),
 	)
 }
 func newControlStep() *sqlgraph.Step {
@@ -425,5 +527,26 @@ func newEvidenceStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EvidenceInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, EvidenceTable, EvidenceColumn),
+	)
+}
+func newSubcontrolStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubcontrolInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolTable, SubcontrolColumn),
+	)
+}
+func newActionPlanStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlanInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ActionPlanTable, ActionPlanColumn),
+	)
+}
+func newProcedureStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProcedureInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ProcedureTable, ProcedureColumn),
 	)
 }

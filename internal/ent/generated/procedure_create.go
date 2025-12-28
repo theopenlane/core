@@ -25,6 +25,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // ProcedureCreate is the builder for creating a Procedure entity.
@@ -430,6 +431,20 @@ func (_c *ProcedureCreate) SetNillableProcedureKindID(v *string) *ProcedureCreat
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *ProcedureCreate) SetWorkflowEligibleMarker(v bool) *ProcedureCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *ProcedureCreate) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProcedureCreate) SetID(v string) *ProcedureCreate {
 	_c.mutation.SetID(v)
@@ -634,6 +649,21 @@ func (_c *ProcedureCreate) SetFile(v *File) *ProcedureCreate {
 	return _c.SetFileID(v.ID)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *ProcedureCreate) AddWorkflowObjectRefIDs(ids ...string) *ProcedureCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *ProcedureCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *ProcedureCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the ProcedureMutation object of the builder.
 func (_c *ProcedureCreate) Mutation() *ProcedureMutation {
 	return _c.mutation
@@ -736,6 +766,10 @@ func (_c *ProcedureCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := procedure.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := procedure.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if procedure.DefaultID == nil {
@@ -931,6 +965,10 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ProcedureKindName(); ok {
 		_spec.SetField(procedure.FieldProcedureKindName, field.TypeString, value)
 		_node.ProcedureKindName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -1207,6 +1245,23 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.FileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

@@ -605,6 +605,26 @@ func (_u *ActionPlanHistoryUpdate) ClearActionPlanKindID() *ActionPlanHistoryUpd
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ActionPlanHistoryUpdate) SetWorkflowEligibleMarker(v bool) *ActionPlanHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ActionPlanHistoryUpdate) ClearWorkflowEligibleMarker() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ActionPlanHistoryUpdate) SetTitle(v string) *ActionPlanHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -1104,6 +1124,12 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.ActionPlanKindIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldActionPlanKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)
@@ -1756,6 +1782,26 @@ func (_u *ActionPlanHistoryUpdateOne) ClearActionPlanKindID() *ActionPlanHistory
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ActionPlanHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearWorkflowEligibleMarker() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ActionPlanHistoryUpdateOne) SetTitle(v string) *ActionPlanHistoryUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -2285,6 +2331,12 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.ActionPlanKindIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldActionPlanKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)

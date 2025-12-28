@@ -96,6 +96,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/ent/schema"
 
 	"entgo.io/ent"
@@ -251,6 +252,8 @@ func init() {
 	_ = actionplanMixinFields7
 	actionplanMixinFields9 := actionplanMixin[9].Fields()
 	_ = actionplanMixinFields9
+	actionplanMixinFields11 := actionplanMixin[11].Fields()
+	_ = actionplanMixinFields11
 	actionplanFields := schema.ActionPlan{}.Fields()
 	_ = actionplanFields
 	// actionplanDescCreatedAt is the schema descriptor for created_at field.
@@ -313,6 +316,10 @@ func init() {
 	actionplanDescSystemOwned := actionplanMixinFields9[0].Descriptor()
 	// actionplan.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplan.DefaultSystemOwned = actionplanDescSystemOwned.Default.(bool)
+	// actionplanDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	actionplanDescWorkflowEligibleMarker := actionplanMixinFields11[0].Descriptor()
+	// actionplan.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	actionplan.DefaultWorkflowEligibleMarker = actionplanDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanDescTitle is the schema descriptor for title field.
 	actionplanDescTitle := actionplanFields[0].Descriptor()
 	// actionplan.TitleValidator is a validator for the "title" field. It is called by the builders before save.
@@ -717,6 +724,8 @@ func init() {
 	_ = controlMixinFields7
 	controlMixinFields8 := controlMixin[8].Fields()
 	_ = controlMixinFields8
+	controlMixinFields11 := controlMixin[11].Fields()
+	_ = controlMixinFields11
 	controlFields := schema.Control{}.Fields()
 	_ = controlFields
 	// controlDescCreatedAt is the schema descriptor for created_at field.
@@ -745,6 +754,10 @@ func init() {
 	controlDescSystemOwned := controlMixinFields8[0].Descriptor()
 	// control.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	control.DefaultSystemOwned = controlDescSystemOwned.Default.(bool)
+	// controlDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	controlDescWorkflowEligibleMarker := controlMixinFields11[0].Descriptor()
+	// control.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	control.DefaultWorkflowEligibleMarker = controlDescWorkflowEligibleMarker.Default.(bool)
 	// controlDescRefCode is the schema descriptor for ref_code field.
 	controlDescRefCode := controlFields[0].Descriptor()
 	// control.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
@@ -2069,6 +2082,8 @@ func init() {
 	_ = evidenceMixinFields4
 	evidenceMixinFields6 := evidenceMixin[6].Fields()
 	_ = evidenceMixinFields6
+	evidenceMixinFields7 := evidenceMixin[7].Fields()
+	_ = evidenceMixinFields7
 	evidenceFields := schema.Evidence{}.Fields()
 	_ = evidenceFields
 	// evidenceDescCreatedAt is the schema descriptor for created_at field.
@@ -2093,6 +2108,10 @@ func init() {
 	evidenceDescOwnerID := evidenceMixinFields6[0].Descriptor()
 	// evidence.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	evidence.OwnerIDValidator = evidenceDescOwnerID.Validators[0].(func(string) error)
+	// evidenceDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	evidenceDescWorkflowEligibleMarker := evidenceMixinFields7[0].Descriptor()
+	// evidence.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	evidence.DefaultWorkflowEligibleMarker = evidenceDescWorkflowEligibleMarker.Default.(bool)
 	// evidenceDescName is the schema descriptor for name field.
 	evidenceDescName := evidenceFields[0].Descriptor()
 	// evidence.NameValidator is a validator for the "name" field. It is called by the builders before save.
@@ -2910,6 +2929,8 @@ func init() {
 	_ = internalpolicyMixinFields8
 	internalpolicyMixinFields10 := internalpolicyMixin[10].Fields()
 	_ = internalpolicyMixinFields10
+	internalpolicyMixinFields12 := internalpolicyMixin[12].Fields()
+	_ = internalpolicyMixinFields12
 	internalpolicyFields := schema.InternalPolicy{}.Fields()
 	_ = internalpolicyFields
 	// internalpolicyDescCreatedAt is the schema descriptor for created_at field.
@@ -2976,6 +2997,10 @@ func init() {
 	internalpolicyDescDismissedImprovementSuggestions := internalpolicyMixinFields10[16].Descriptor()
 	// internalpolicy.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	internalpolicy.DefaultDismissedImprovementSuggestions = internalpolicyDescDismissedImprovementSuggestions.Default.([]string)
+	// internalpolicyDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	internalpolicyDescWorkflowEligibleMarker := internalpolicyMixinFields12[0].Descriptor()
+	// internalpolicy.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	internalpolicy.DefaultWorkflowEligibleMarker = internalpolicyDescWorkflowEligibleMarker.Default.(bool)
 	// internalpolicyDescID is the schema descriptor for id field.
 	internalpolicyDescID := internalpolicyMixinFields3[0].Descriptor()
 	// internalpolicy.DefaultID holds the default value on creation for the id field.
@@ -4674,6 +4699,8 @@ func init() {
 	_ = procedureMixinFields9
 	procedureMixinFields10 := procedureMixin[10].Fields()
 	_ = procedureMixinFields10
+	procedureMixinFields12 := procedureMixin[12].Fields()
+	_ = procedureMixinFields12
 	procedureFields := schema.Procedure{}.Fields()
 	_ = procedureFields
 	// procedureDescCreatedAt is the schema descriptor for created_at field.
@@ -4740,6 +4767,10 @@ func init() {
 	procedureDescSystemOwned := procedureMixinFields10[0].Descriptor()
 	// procedure.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	procedure.DefaultSystemOwned = procedureDescSystemOwned.Default.(bool)
+	// procedureDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	procedureDescWorkflowEligibleMarker := procedureMixinFields12[0].Descriptor()
+	// procedure.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	procedure.DefaultWorkflowEligibleMarker = procedureDescWorkflowEligibleMarker.Default.(bool)
 	// procedureDescID is the schema descriptor for id field.
 	procedureDescID := procedureMixinFields3[0].Descriptor()
 	// procedure.DefaultID holds the default value on creation for the id field.
@@ -5580,6 +5611,8 @@ func init() {
 	_ = subcontrolMixinFields7
 	subcontrolMixinFields8 := subcontrolMixin[8].Fields()
 	_ = subcontrolMixinFields8
+	subcontrolMixinFields10 := subcontrolMixin[10].Fields()
+	_ = subcontrolMixinFields10
 	subcontrolFields := schema.Subcontrol{}.Fields()
 	_ = subcontrolFields
 	// subcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -5608,6 +5641,10 @@ func init() {
 	subcontrolDescSystemOwned := subcontrolMixinFields8[0].Descriptor()
 	// subcontrol.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	subcontrol.DefaultSystemOwned = subcontrolDescSystemOwned.Default.(bool)
+	// subcontrolDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
+	subcontrolDescWorkflowEligibleMarker := subcontrolMixinFields10[0].Descriptor()
+	// subcontrol.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
+	subcontrol.DefaultWorkflowEligibleMarker = subcontrolDescWorkflowEligibleMarker.Default.(bool)
 	// subcontrolDescRefCode is the schema descriptor for ref_code field.
 	subcontrolDescRefCode := subcontrolFields[0].Descriptor()
 	// subcontrol.RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
@@ -7416,6 +7453,14 @@ func init() {
 	workflowdefinitionDescTriggerFields := workflowdefinitionFields[11].Descriptor()
 	// workflowdefinition.DefaultTriggerFields holds the default value on creation for the trigger_fields field.
 	workflowdefinition.DefaultTriggerFields = workflowdefinitionDescTriggerFields.Default.([]string)
+	// workflowdefinitionDescApprovalFields is the schema descriptor for approval_fields field.
+	workflowdefinitionDescApprovalFields := workflowdefinitionFields[12].Descriptor()
+	// workflowdefinition.DefaultApprovalFields holds the default value on creation for the approval_fields field.
+	workflowdefinition.DefaultApprovalFields = workflowdefinitionDescApprovalFields.Default.([]string)
+	// workflowdefinitionDescApprovalEdges is the schema descriptor for approval_edges field.
+	workflowdefinitionDescApprovalEdges := workflowdefinitionFields[13].Descriptor()
+	// workflowdefinition.DefaultApprovalEdges holds the default value on creation for the approval_edges field.
+	workflowdefinition.DefaultApprovalEdges = workflowdefinitionDescApprovalEdges.Default.([]string)
 	// workflowdefinitionDescID is the schema descriptor for id field.
 	workflowdefinitionDescID := workflowdefinitionMixinFields3[0].Descriptor()
 	// workflowdefinition.DefaultID holds the default value on creation for the id field.
@@ -7570,6 +7615,12 @@ func init() {
 	workflowinstanceDescWorkflowDefinitionID := workflowinstanceFields[0].Descriptor()
 	// workflowinstance.WorkflowDefinitionIDValidator is a validator for the "workflow_definition_id" field. It is called by the builders before save.
 	workflowinstance.WorkflowDefinitionIDValidator = workflowinstanceDescWorkflowDefinitionID.Validators[0].(func(string) error)
+	// workflowinstanceDescCurrentActionIndex is the schema descriptor for current_action_index field.
+	workflowinstanceDescCurrentActionIndex := workflowinstanceFields[6].Descriptor()
+	// workflowinstance.DefaultCurrentActionIndex holds the default value on creation for the current_action_index field.
+	workflowinstance.DefaultCurrentActionIndex = workflowinstanceDescCurrentActionIndex.Default.(int)
+	// workflowinstance.CurrentActionIndexValidator is a validator for the "current_action_index" field. It is called by the builders before save.
+	workflowinstance.CurrentActionIndexValidator = workflowinstanceDescCurrentActionIndex.Validators[0].(func(int) error)
 	// workflowinstanceDescID is the schema descriptor for id field.
 	workflowinstanceDescID := workflowinstanceMixinFields3[0].Descriptor()
 	// workflowinstance.DefaultID holds the default value on creation for the id field.
@@ -7637,6 +7688,65 @@ func init() {
 	workflowobjectrefDescID := workflowobjectrefMixinFields2[0].Descriptor()
 	// workflowobjectref.DefaultID holds the default value on creation for the id field.
 	workflowobjectref.DefaultID = workflowobjectrefDescID.Default.(func() string)
+	workflowproposalMixin := schema.WorkflowProposal{}.Mixin()
+	workflowproposalMixinHooks0 := workflowproposalMixin[0].Hooks()
+	workflowproposalMixinHooks1 := workflowproposalMixin[1].Hooks()
+	workflowproposalMixinHooks3 := workflowproposalMixin[3].Hooks()
+	workflowproposalMixinHooks4 := workflowproposalMixin[4].Hooks()
+	workflowproposal.Hooks[0] = workflowproposalMixinHooks0[0]
+	workflowproposal.Hooks[1] = workflowproposalMixinHooks1[0]
+	workflowproposal.Hooks[2] = workflowproposalMixinHooks3[0]
+	workflowproposal.Hooks[3] = workflowproposalMixinHooks4[0]
+	workflowproposal.Hooks[4] = workflowproposalMixinHooks4[1]
+	workflowproposalMixinInters1 := workflowproposalMixin[1].Interceptors()
+	workflowproposalMixinInters4 := workflowproposalMixin[4].Interceptors()
+	workflowproposal.Interceptors[0] = workflowproposalMixinInters1[0]
+	workflowproposal.Interceptors[1] = workflowproposalMixinInters4[0]
+	workflowproposal.Interceptors[2] = workflowproposalMixinInters4[1]
+	workflowproposalMixinFields0 := workflowproposalMixin[0].Fields()
+	_ = workflowproposalMixinFields0
+	workflowproposalMixinFields2 := workflowproposalMixin[2].Fields()
+	_ = workflowproposalMixinFields2
+	workflowproposalMixinFields3 := workflowproposalMixin[3].Fields()
+	_ = workflowproposalMixinFields3
+	workflowproposalMixinFields4 := workflowproposalMixin[4].Fields()
+	_ = workflowproposalMixinFields4
+	workflowproposalFields := schema.WorkflowProposal{}.Fields()
+	_ = workflowproposalFields
+	// workflowproposalDescCreatedAt is the schema descriptor for created_at field.
+	workflowproposalDescCreatedAt := workflowproposalMixinFields0[0].Descriptor()
+	// workflowproposal.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowproposal.DefaultCreatedAt = workflowproposalDescCreatedAt.Default.(func() time.Time)
+	// workflowproposalDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowproposalDescUpdatedAt := workflowproposalMixinFields0[1].Descriptor()
+	// workflowproposal.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowproposal.DefaultUpdatedAt = workflowproposalDescUpdatedAt.Default.(func() time.Time)
+	// workflowproposal.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowproposal.UpdateDefaultUpdatedAt = workflowproposalDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowproposalDescTags is the schema descriptor for tags field.
+	workflowproposalDescTags := workflowproposalMixinFields3[0].Descriptor()
+	// workflowproposal.DefaultTags holds the default value on creation for the tags field.
+	workflowproposal.DefaultTags = workflowproposalDescTags.Default.([]string)
+	// workflowproposalDescOwnerID is the schema descriptor for owner_id field.
+	workflowproposalDescOwnerID := workflowproposalMixinFields4[0].Descriptor()
+	// workflowproposal.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowproposal.OwnerIDValidator = workflowproposalDescOwnerID.Validators[0].(func(string) error)
+	// workflowproposalDescWorkflowObjectRefID is the schema descriptor for workflow_object_ref_id field.
+	workflowproposalDescWorkflowObjectRefID := workflowproposalFields[0].Descriptor()
+	// workflowproposal.WorkflowObjectRefIDValidator is a validator for the "workflow_object_ref_id" field. It is called by the builders before save.
+	workflowproposal.WorkflowObjectRefIDValidator = workflowproposalDescWorkflowObjectRefID.Validators[0].(func(string) error)
+	// workflowproposalDescDomainKey is the schema descriptor for domain_key field.
+	workflowproposalDescDomainKey := workflowproposalFields[1].Descriptor()
+	// workflowproposal.DomainKeyValidator is a validator for the "domain_key" field. It is called by the builders before save.
+	workflowproposal.DomainKeyValidator = workflowproposalDescDomainKey.Validators[0].(func(string) error)
+	// workflowproposalDescRevision is the schema descriptor for revision field.
+	workflowproposalDescRevision := workflowproposalFields[3].Descriptor()
+	// workflowproposal.DefaultRevision holds the default value on creation for the revision field.
+	workflowproposal.DefaultRevision = workflowproposalDescRevision.Default.(int)
+	// workflowproposalDescID is the schema descriptor for id field.
+	workflowproposalDescID := workflowproposalMixinFields2[0].Descriptor()
+	// workflowproposal.DefaultID holds the default value on creation for the id field.
+	workflowproposal.DefaultID = workflowproposalDescID.Default.(func() string)
 }
 
 const (

@@ -98,12 +98,8 @@ const (
 	FieldControlKindName = "control_kind_name"
 	// FieldControlKindID holds the string denoting the control_kind_id field in the database.
 	FieldControlKindID = "control_kind_id"
-	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
-	FieldProposedChanges = "proposed_changes"
-	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
-	FieldProposedByUserID = "proposed_by_user_id"
-	// FieldProposedAt holds the string denoting the proposed_at field in the database.
-	FieldProposedAt = "proposed_at"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldRefCode holds the string denoting the ref_code field in the database.
 	FieldRefCode = "ref_code"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
@@ -382,9 +378,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldControlKindName,
 	FieldControlKindID,
-	FieldProposedChanges,
-	FieldProposedByUserID,
-	FieldProposedAt,
+	FieldWorkflowEligibleMarker,
 	FieldRefCode,
 	FieldStandardID,
 }
@@ -490,6 +484,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// RefCodeValidator is a validator for the "ref_code" field. It is called by the builders before save.
 	RefCodeValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -680,14 +676,9 @@ func ByControlKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldControlKindID, opts...).ToFunc()
 }
 
-// ByProposedByUserID orders the results by the proposed_by_user_id field.
-func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
-}
-
-// ByProposedAt orders the results by the proposed_at field.
-func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByRefCode orders the results by the ref_code field.

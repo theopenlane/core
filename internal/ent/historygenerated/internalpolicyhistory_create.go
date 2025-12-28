@@ -454,36 +454,16 @@ func (_c *InternalPolicyHistoryCreate) SetNillableInternalPolicyKindID(v *string
 	return _c
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_c *InternalPolicyHistoryCreate) SetProposedChanges(v map[string]interface{}) *InternalPolicyHistoryCreate {
-	_c.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *InternalPolicyHistoryCreate) SetWorkflowEligibleMarker(v bool) *InternalPolicyHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
 	return _c
 }
 
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_c *InternalPolicyHistoryCreate) SetProposedByUserID(v string) *InternalPolicyHistoryCreate {
-	_c.mutation.SetProposedByUserID(v)
-	return _c
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_c *InternalPolicyHistoryCreate) SetNillableProposedByUserID(v *string) *InternalPolicyHistoryCreate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *InternalPolicyHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *InternalPolicyHistoryCreate {
 	if v != nil {
-		_c.SetProposedByUserID(*v)
-	}
-	return _c
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_c *InternalPolicyHistoryCreate) SetProposedAt(v time.Time) *InternalPolicyHistoryCreate {
-	_c.mutation.SetProposedAt(v)
-	return _c
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_c *InternalPolicyHistoryCreate) SetNillableProposedAt(v *time.Time) *InternalPolicyHistoryCreate {
-	if v != nil {
-		_c.SetProposedAt(*v)
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -611,6 +591,10 @@ func (_c *InternalPolicyHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.DismissedImprovementSuggestions(); !ok {
 		v := internalpolicyhistory.DefaultDismissedImprovementSuggestions
 		_c.mutation.SetDismissedImprovementSuggestions(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := internalpolicyhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if internalpolicyhistory.DefaultID == nil {
@@ -835,17 +819,9 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 		_spec.SetField(internalpolicyhistory.FieldInternalPolicyKindID, field.TypeString, value)
 		_node.InternalPolicyKindID = value
 	}
-	if value, ok := _c.mutation.ProposedChanges(); ok {
-		_spec.SetField(internalpolicyhistory.FieldProposedChanges, field.TypeJSON, value)
-		_node.ProposedChanges = value
-	}
-	if value, ok := _c.mutation.ProposedByUserID(); ok {
-		_spec.SetField(internalpolicyhistory.FieldProposedByUserID, field.TypeString, value)
-		_node.ProposedByUserID = value
-	}
-	if value, ok := _c.mutation.ProposedAt(); ok {
-		_spec.SetField(internalpolicyhistory.FieldProposedAt, field.TypeTime, value)
-		_node.ProposedAt = &value
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(internalpolicyhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	return _node, _spec
 }

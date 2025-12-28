@@ -515,36 +515,16 @@ func (_c *ControlHistoryCreate) SetNillableControlKindID(v *string) *ControlHist
 	return _c
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_c *ControlHistoryCreate) SetProposedChanges(v map[string]interface{}) *ControlHistoryCreate {
-	_c.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *ControlHistoryCreate) SetWorkflowEligibleMarker(v bool) *ControlHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
 	return _c
 }
 
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_c *ControlHistoryCreate) SetProposedByUserID(v string) *ControlHistoryCreate {
-	_c.mutation.SetProposedByUserID(v)
-	return _c
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_c *ControlHistoryCreate) SetNillableProposedByUserID(v *string) *ControlHistoryCreate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *ControlHistoryCreate {
 	if v != nil {
-		_c.SetProposedByUserID(*v)
-	}
-	return _c
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_c *ControlHistoryCreate) SetProposedAt(v time.Time) *ControlHistoryCreate {
-	_c.mutation.SetProposedAt(v)
-	return _c
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_c *ControlHistoryCreate) SetNillableProposedAt(v *time.Time) *ControlHistoryCreate {
-	if v != nil {
-		_c.SetProposedAt(*v)
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -660,6 +640,10 @@ func (_c *ControlHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := controlhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := controlhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if controlhistory.DefaultID == nil {
@@ -913,17 +897,9 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
 		_node.ControlKindID = value
 	}
-	if value, ok := _c.mutation.ProposedChanges(); ok {
-		_spec.SetField(controlhistory.FieldProposedChanges, field.TypeJSON, value)
-		_node.ProposedChanges = value
-	}
-	if value, ok := _c.mutation.ProposedByUserID(); ok {
-		_spec.SetField(controlhistory.FieldProposedByUserID, field.TypeString, value)
-		_node.ProposedByUserID = value
-	}
-	if value, ok := _c.mutation.ProposedAt(); ok {
-		_spec.SetField(controlhistory.FieldProposedAt, field.TypeTime, value)
-		_node.ProposedAt = &value
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

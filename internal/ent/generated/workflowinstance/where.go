@@ -113,9 +113,19 @@ func WorkflowDefinitionID(v string) predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(sql.FieldEQ(FieldWorkflowDefinitionID, v))
 }
 
+// WorkflowProposalID applies equality check predicate on the "workflow_proposal_id" field. It's identical to WorkflowProposalIDEQ.
+func WorkflowProposalID(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldWorkflowProposalID, v))
+}
+
 // LastEvaluatedAt applies equality check predicate on the "last_evaluated_at" field. It's identical to LastEvaluatedAtEQ.
 func LastEvaluatedAt(v time.Time) predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(sql.FieldEQ(FieldLastEvaluatedAt, v))
+}
+
+// CurrentActionIndex applies equality check predicate on the "current_action_index" field. It's identical to CurrentActionIndexEQ.
+func CurrentActionIndex(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldCurrentActionIndex, v))
 }
 
 // ControlID applies equality check predicate on the "control_id" field. It's identical to ControlIDEQ.
@@ -131,6 +141,21 @@ func InternalPolicyID(v string) predicate.WorkflowInstance {
 // EvidenceID applies equality check predicate on the "evidence_id" field. It's identical to EvidenceIDEQ.
 func EvidenceID(v string) predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(sql.FieldEQ(FieldEvidenceID, v))
+}
+
+// SubcontrolID applies equality check predicate on the "subcontrol_id" field. It's identical to SubcontrolIDEQ.
+func SubcontrolID(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldSubcontrolID, v))
+}
+
+// ActionPlanID applies equality check predicate on the "action_plan_id" field. It's identical to ActionPlanIDEQ.
+func ActionPlanID(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldActionPlanID, v))
+}
+
+// ProcedureID applies equality check predicate on the "procedure_id" field. It's identical to ProcedureIDEQ.
+func ProcedureID(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldProcedureID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -723,6 +748,81 @@ func WorkflowDefinitionIDContainsFold(v string) predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(sql.FieldContainsFold(FieldWorkflowDefinitionID, v))
 }
 
+// WorkflowProposalIDEQ applies the EQ predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDNEQ applies the NEQ predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDNEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNEQ(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDIn applies the In predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIn(FieldWorkflowProposalID, vs...))
+}
+
+// WorkflowProposalIDNotIn applies the NotIn predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDNotIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotIn(FieldWorkflowProposalID, vs...))
+}
+
+// WorkflowProposalIDGT applies the GT predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDGT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGT(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDGTE applies the GTE predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDGTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGTE(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDLT applies the LT predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDLT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLT(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDLTE applies the LTE predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDLTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLTE(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDContains applies the Contains predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDContains(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContains(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDHasPrefix applies the HasPrefix predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDHasPrefix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasPrefix(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDHasSuffix applies the HasSuffix predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDHasSuffix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasSuffix(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDIsNil applies the IsNil predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDIsNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIsNull(FieldWorkflowProposalID))
+}
+
+// WorkflowProposalIDNotNil applies the NotNil predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDNotNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotNull(FieldWorkflowProposalID))
+}
+
+// WorkflowProposalIDEqualFold applies the EqualFold predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDEqualFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEqualFold(FieldWorkflowProposalID, v))
+}
+
+// WorkflowProposalIDContainsFold applies the ContainsFold predicate on the "workflow_proposal_id" field.
+func WorkflowProposalIDContainsFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContainsFold(FieldWorkflowProposalID, v))
+}
+
 // StateEQ applies the EQ predicate on the "state" field.
 func StateEQ(v enums.WorkflowInstanceState) predicate.WorkflowInstance {
 	vc := v
@@ -821,6 +921,46 @@ func DefinitionSnapshotIsNil() predicate.WorkflowInstance {
 // DefinitionSnapshotNotNil applies the NotNil predicate on the "definition_snapshot" field.
 func DefinitionSnapshotNotNil() predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(sql.FieldNotNull(FieldDefinitionSnapshot))
+}
+
+// CurrentActionIndexEQ applies the EQ predicate on the "current_action_index" field.
+func CurrentActionIndexEQ(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldCurrentActionIndex, v))
+}
+
+// CurrentActionIndexNEQ applies the NEQ predicate on the "current_action_index" field.
+func CurrentActionIndexNEQ(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNEQ(FieldCurrentActionIndex, v))
+}
+
+// CurrentActionIndexIn applies the In predicate on the "current_action_index" field.
+func CurrentActionIndexIn(vs ...int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIn(FieldCurrentActionIndex, vs...))
+}
+
+// CurrentActionIndexNotIn applies the NotIn predicate on the "current_action_index" field.
+func CurrentActionIndexNotIn(vs ...int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotIn(FieldCurrentActionIndex, vs...))
+}
+
+// CurrentActionIndexGT applies the GT predicate on the "current_action_index" field.
+func CurrentActionIndexGT(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGT(FieldCurrentActionIndex, v))
+}
+
+// CurrentActionIndexGTE applies the GTE predicate on the "current_action_index" field.
+func CurrentActionIndexGTE(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGTE(FieldCurrentActionIndex, v))
+}
+
+// CurrentActionIndexLT applies the LT predicate on the "current_action_index" field.
+func CurrentActionIndexLT(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLT(FieldCurrentActionIndex, v))
+}
+
+// CurrentActionIndexLTE applies the LTE predicate on the "current_action_index" field.
+func CurrentActionIndexLTE(v int) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLTE(FieldCurrentActionIndex, v))
 }
 
 // ControlIDEQ applies the EQ predicate on the "control_id" field.
@@ -1048,6 +1188,231 @@ func EvidenceIDContainsFold(v string) predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(sql.FieldContainsFold(FieldEvidenceID, v))
 }
 
+// SubcontrolIDEQ applies the EQ predicate on the "subcontrol_id" field.
+func SubcontrolIDEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDNEQ applies the NEQ predicate on the "subcontrol_id" field.
+func SubcontrolIDNEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNEQ(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDIn applies the In predicate on the "subcontrol_id" field.
+func SubcontrolIDIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIn(FieldSubcontrolID, vs...))
+}
+
+// SubcontrolIDNotIn applies the NotIn predicate on the "subcontrol_id" field.
+func SubcontrolIDNotIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotIn(FieldSubcontrolID, vs...))
+}
+
+// SubcontrolIDGT applies the GT predicate on the "subcontrol_id" field.
+func SubcontrolIDGT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGT(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDGTE applies the GTE predicate on the "subcontrol_id" field.
+func SubcontrolIDGTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGTE(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDLT applies the LT predicate on the "subcontrol_id" field.
+func SubcontrolIDLT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLT(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDLTE applies the LTE predicate on the "subcontrol_id" field.
+func SubcontrolIDLTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLTE(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDContains applies the Contains predicate on the "subcontrol_id" field.
+func SubcontrolIDContains(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContains(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDHasPrefix applies the HasPrefix predicate on the "subcontrol_id" field.
+func SubcontrolIDHasPrefix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasPrefix(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDHasSuffix applies the HasSuffix predicate on the "subcontrol_id" field.
+func SubcontrolIDHasSuffix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasSuffix(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDIsNil applies the IsNil predicate on the "subcontrol_id" field.
+func SubcontrolIDIsNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIsNull(FieldSubcontrolID))
+}
+
+// SubcontrolIDNotNil applies the NotNil predicate on the "subcontrol_id" field.
+func SubcontrolIDNotNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotNull(FieldSubcontrolID))
+}
+
+// SubcontrolIDEqualFold applies the EqualFold predicate on the "subcontrol_id" field.
+func SubcontrolIDEqualFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEqualFold(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDContainsFold applies the ContainsFold predicate on the "subcontrol_id" field.
+func SubcontrolIDContainsFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContainsFold(FieldSubcontrolID, v))
+}
+
+// ActionPlanIDEQ applies the EQ predicate on the "action_plan_id" field.
+func ActionPlanIDEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldActionPlanID, v))
+}
+
+// ActionPlanIDNEQ applies the NEQ predicate on the "action_plan_id" field.
+func ActionPlanIDNEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNEQ(FieldActionPlanID, v))
+}
+
+// ActionPlanIDIn applies the In predicate on the "action_plan_id" field.
+func ActionPlanIDIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIn(FieldActionPlanID, vs...))
+}
+
+// ActionPlanIDNotIn applies the NotIn predicate on the "action_plan_id" field.
+func ActionPlanIDNotIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotIn(FieldActionPlanID, vs...))
+}
+
+// ActionPlanIDGT applies the GT predicate on the "action_plan_id" field.
+func ActionPlanIDGT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGT(FieldActionPlanID, v))
+}
+
+// ActionPlanIDGTE applies the GTE predicate on the "action_plan_id" field.
+func ActionPlanIDGTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGTE(FieldActionPlanID, v))
+}
+
+// ActionPlanIDLT applies the LT predicate on the "action_plan_id" field.
+func ActionPlanIDLT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLT(FieldActionPlanID, v))
+}
+
+// ActionPlanIDLTE applies the LTE predicate on the "action_plan_id" field.
+func ActionPlanIDLTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLTE(FieldActionPlanID, v))
+}
+
+// ActionPlanIDContains applies the Contains predicate on the "action_plan_id" field.
+func ActionPlanIDContains(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContains(FieldActionPlanID, v))
+}
+
+// ActionPlanIDHasPrefix applies the HasPrefix predicate on the "action_plan_id" field.
+func ActionPlanIDHasPrefix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasPrefix(FieldActionPlanID, v))
+}
+
+// ActionPlanIDHasSuffix applies the HasSuffix predicate on the "action_plan_id" field.
+func ActionPlanIDHasSuffix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasSuffix(FieldActionPlanID, v))
+}
+
+// ActionPlanIDIsNil applies the IsNil predicate on the "action_plan_id" field.
+func ActionPlanIDIsNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIsNull(FieldActionPlanID))
+}
+
+// ActionPlanIDNotNil applies the NotNil predicate on the "action_plan_id" field.
+func ActionPlanIDNotNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotNull(FieldActionPlanID))
+}
+
+// ActionPlanIDEqualFold applies the EqualFold predicate on the "action_plan_id" field.
+func ActionPlanIDEqualFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEqualFold(FieldActionPlanID, v))
+}
+
+// ActionPlanIDContainsFold applies the ContainsFold predicate on the "action_plan_id" field.
+func ActionPlanIDContainsFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContainsFold(FieldActionPlanID, v))
+}
+
+// ProcedureIDEQ applies the EQ predicate on the "procedure_id" field.
+func ProcedureIDEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEQ(FieldProcedureID, v))
+}
+
+// ProcedureIDNEQ applies the NEQ predicate on the "procedure_id" field.
+func ProcedureIDNEQ(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNEQ(FieldProcedureID, v))
+}
+
+// ProcedureIDIn applies the In predicate on the "procedure_id" field.
+func ProcedureIDIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIn(FieldProcedureID, vs...))
+}
+
+// ProcedureIDNotIn applies the NotIn predicate on the "procedure_id" field.
+func ProcedureIDNotIn(vs ...string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotIn(FieldProcedureID, vs...))
+}
+
+// ProcedureIDGT applies the GT predicate on the "procedure_id" field.
+func ProcedureIDGT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGT(FieldProcedureID, v))
+}
+
+// ProcedureIDGTE applies the GTE predicate on the "procedure_id" field.
+func ProcedureIDGTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldGTE(FieldProcedureID, v))
+}
+
+// ProcedureIDLT applies the LT predicate on the "procedure_id" field.
+func ProcedureIDLT(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLT(FieldProcedureID, v))
+}
+
+// ProcedureIDLTE applies the LTE predicate on the "procedure_id" field.
+func ProcedureIDLTE(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldLTE(FieldProcedureID, v))
+}
+
+// ProcedureIDContains applies the Contains predicate on the "procedure_id" field.
+func ProcedureIDContains(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContains(FieldProcedureID, v))
+}
+
+// ProcedureIDHasPrefix applies the HasPrefix predicate on the "procedure_id" field.
+func ProcedureIDHasPrefix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasPrefix(FieldProcedureID, v))
+}
+
+// ProcedureIDHasSuffix applies the HasSuffix predicate on the "procedure_id" field.
+func ProcedureIDHasSuffix(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldHasSuffix(FieldProcedureID, v))
+}
+
+// ProcedureIDIsNil applies the IsNil predicate on the "procedure_id" field.
+func ProcedureIDIsNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldIsNull(FieldProcedureID))
+}
+
+// ProcedureIDNotNil applies the NotNil predicate on the "procedure_id" field.
+func ProcedureIDNotNil() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldNotNull(FieldProcedureID))
+}
+
+// ProcedureIDEqualFold applies the EqualFold predicate on the "procedure_id" field.
+func ProcedureIDEqualFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldEqualFold(FieldProcedureID, v))
+}
+
+// ProcedureIDContainsFold applies the ContainsFold predicate on the "procedure_id" field.
+func ProcedureIDContainsFold(v string) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(sql.FieldContainsFold(FieldProcedureID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.WorkflowInstance {
 	return predicate.WorkflowInstance(func(s *sql.Selector) {
@@ -1184,6 +1549,122 @@ func HasEvidenceWith(preds ...predicate.Evidence) predicate.WorkflowInstance {
 		step := newEvidenceStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSubcontrol applies the HasEdge predicate on the "subcontrol" edge.
+func HasSubcontrol() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, SubcontrolTable, SubcontrolColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubcontrolWith applies the HasEdge predicate on the "subcontrol" edge with a given conditions (other predicates).
+func HasSubcontrolWith(preds ...predicate.Subcontrol) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := newSubcontrolStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasActionPlan applies the HasEdge predicate on the "action_plan" edge.
+func HasActionPlan() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ActionPlanTable, ActionPlanColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlanWith applies the HasEdge predicate on the "action_plan" edge with a given conditions (other predicates).
+func HasActionPlanWith(preds ...predicate.ActionPlan) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := newActionPlanStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasProcedure applies the HasEdge predicate on the "procedure" edge.
+func HasProcedure() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ProcedureTable, ProcedureColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasProcedureWith applies the HasEdge predicate on the "procedure" edge with a given conditions (other predicates).
+func HasProcedureWith(preds ...predicate.Procedure) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := newProcedureStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowProposal applies the HasEdge predicate on the "workflow_proposal" edge.
+func HasWorkflowProposal() predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, WorkflowProposalTable, WorkflowProposalColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowProposal
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowProposalWith applies the HasEdge predicate on the "workflow_proposal" edge with a given conditions (other predicates).
+func HasWorkflowProposalWith(preds ...predicate.WorkflowProposal) predicate.WorkflowInstance {
+	return predicate.WorkflowInstance(func(s *sql.Selector) {
+		step := newWorkflowProposalStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowProposal
 		step.Edge.Schema = schemaConfig.WorkflowInstance
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
