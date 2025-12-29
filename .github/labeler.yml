@@ -40,6 +40,9 @@ local-development:
 cli:
   - changed-files:
       - any-glob-to-any-file: cli/**
+common:
+  - changed-files:
+      - any-glob-to-any-file: common/**
 authorization:
   - changed-files:
       - any-glob-to-any-file: fga/**
