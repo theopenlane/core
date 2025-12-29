@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -131,55 +132,23 @@ func (_u *EvidenceUpdate) ClearTags() *EvidenceUpdate {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *EvidenceUpdate) SetProposedChanges(v map[string]interface{}) *EvidenceUpdate {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *EvidenceUpdate) SetWorkflowEligibleMarker(v bool) *EvidenceUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *EvidenceUpdate) ClearProposedChanges() *EvidenceUpdate {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *EvidenceUpdate) SetProposedByUserID(v string) *EvidenceUpdate {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *EvidenceUpdate) SetNillableProposedByUserID(v *string) *EvidenceUpdate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceUpdate {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *EvidenceUpdate) ClearProposedByUserID() *EvidenceUpdate {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *EvidenceUpdate) SetProposedAt(v time.Time) *EvidenceUpdate {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *EvidenceUpdate) SetNillableProposedAt(v *time.Time) *EvidenceUpdate {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *EvidenceUpdate) ClearProposedAt() *EvidenceUpdate {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *EvidenceUpdate) ClearWorkflowEligibleMarker() *EvidenceUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -471,6 +440,21 @@ func (_u *EvidenceUpdate) AddComments(v ...*Note) *EvidenceUpdate {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *EvidenceUpdate) AddWorkflowObjectRefIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *EvidenceUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the EvidenceMutation object of the builder.
 func (_u *EvidenceUpdate) Mutation() *EvidenceMutation {
 	return _u.mutation
@@ -644,6 +628,27 @@ func (_u *EvidenceUpdate) RemoveComments(v ...*Note) *EvidenceUpdate {
 	return _u.RemoveCommentIDs(ids...)
 }
 
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *EvidenceUpdate) ClearWorkflowObjectRefs() *EvidenceUpdate {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *EvidenceUpdate) RemoveWorkflowObjectRefIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *EvidenceUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *EvidenceUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -765,23 +770,11 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(evidence.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(evidence.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(evidence.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(evidence.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(evidence.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(evidence.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(evidence.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(evidence.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
@@ -1215,6 +1208,54 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Evidence
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1329,55 +1370,23 @@ func (_u *EvidenceUpdateOne) ClearTags() *EvidenceUpdateOne {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *EvidenceUpdateOne) SetProposedChanges(v map[string]interface{}) *EvidenceUpdateOne {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *EvidenceUpdateOne) SetWorkflowEligibleMarker(v bool) *EvidenceUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *EvidenceUpdateOne) ClearProposedChanges() *EvidenceUpdateOne {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *EvidenceUpdateOne) SetProposedByUserID(v string) *EvidenceUpdateOne {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *EvidenceUpdateOne) SetNillableProposedByUserID(v *string) *EvidenceUpdateOne {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceUpdateOne {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *EvidenceUpdateOne) ClearProposedByUserID() *EvidenceUpdateOne {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *EvidenceUpdateOne) SetProposedAt(v time.Time) *EvidenceUpdateOne {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *EvidenceUpdateOne) SetNillableProposedAt(v *time.Time) *EvidenceUpdateOne {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *EvidenceUpdateOne) ClearProposedAt() *EvidenceUpdateOne {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *EvidenceUpdateOne) ClearWorkflowEligibleMarker() *EvidenceUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1669,6 +1678,21 @@ func (_u *EvidenceUpdateOne) AddComments(v ...*Note) *EvidenceUpdateOne {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *EvidenceUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *EvidenceUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the EvidenceMutation object of the builder.
 func (_u *EvidenceUpdateOne) Mutation() *EvidenceMutation {
 	return _u.mutation
@@ -1842,6 +1866,27 @@ func (_u *EvidenceUpdateOne) RemoveComments(v ...*Note) *EvidenceUpdateOne {
 	return _u.RemoveCommentIDs(ids...)
 }
 
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *EvidenceUpdateOne) ClearWorkflowObjectRefs() *EvidenceUpdateOne {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveWorkflowObjectRefIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *EvidenceUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
 // Where appends a list predicates to the EvidenceUpdate builder.
 func (_u *EvidenceUpdateOne) Where(ps ...predicate.Evidence) *EvidenceUpdateOne {
 	_u.mutation.Where(ps...)
@@ -1993,23 +2038,11 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidence.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(evidence.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(evidence.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(evidence.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(evidence.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(evidence.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(evidence.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(evidence.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(evidence.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
@@ -2438,6 +2471,54 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

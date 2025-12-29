@@ -127,10 +127,6 @@ coreConfiguration:
       cookiepath: "/"  # @schema type:string; default:/
     # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
     defaulttrustcenterdomain: ""  # @schema type:string
-    # -- FieldLevelEncryption contains the configuration for field level encryption
-    fieldlevelencryption:
-      # -- Enabled indicates whether Tink encryption is enabled
-      enabled: false  # @schema type:boolean; default:false
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: ""  # @schema type:string
@@ -571,14 +567,6 @@ externalSecrets:
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
-    # -- core-server-fieldlevelencryption-keyset secret configuration
-    core-server-fieldlevelencryption-keyset:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for server.fieldlevelencryption.keyset
-      secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
     # -- core-auth-providers-github-clientsecret secret configuration
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret

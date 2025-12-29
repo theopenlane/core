@@ -185,6 +185,7 @@ func getApproverEdges(documentType string) []ent.Edge {
 			Field("approver_id").
 			Annotations(
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment(fmt.Sprintf("the group of users who are responsible for approving the %s", documentType)),
 		edge.To("delegate", Group.Type).
@@ -192,6 +193,7 @@ func getApproverEdges(documentType string) []ent.Edge {
 			Field("delegate_id").
 			Annotations(
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment(fmt.Sprintf("temporary delegates for the %s, used for temporary approval", documentType)),
 	}

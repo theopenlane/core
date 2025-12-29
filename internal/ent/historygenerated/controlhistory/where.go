@@ -203,14 +203,9 @@ func ControlKindID(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldControlKindID, v))
 }
 
-// ProposedByUserID applies equality check predicate on the "proposed_by_user_id" field. It's identical to ProposedByUserIDEQ.
-func ProposedByUserID(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldProposedByUserID, v))
-}
-
-// ProposedAt applies equality check predicate on the "proposed_at" field. It's identical to ProposedAtEQ.
-func ProposedAt(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldProposedAt, v))
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
 // RefCode applies equality check predicate on the "ref_code" field. It's identical to RefCodeEQ.
@@ -2333,139 +2328,24 @@ func ControlKindIDContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldControlKindID, v))
 }
 
-// ProposedChangesIsNil applies the IsNil predicate on the "proposed_changes" field.
-func ProposedChangesIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldProposedChanges))
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
-// ProposedChangesNotNil applies the NotNil predicate on the "proposed_changes" field.
-func ProposedChangesNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldProposedChanges))
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
 }
 
-// ProposedByUserIDEQ applies the EQ predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldProposedByUserID, v))
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldIsNull(FieldWorkflowEligibleMarker))
 }
 
-// ProposedByUserIDNEQ applies the NEQ predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDNEQ(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNEQ(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDIn applies the In predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIn(FieldProposedByUserID, vs...))
-}
-
-// ProposedByUserIDNotIn applies the NotIn predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDNotIn(vs ...string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotIn(FieldProposedByUserID, vs...))
-}
-
-// ProposedByUserIDGT applies the GT predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDGT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGT(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDGTE applies the GTE predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDGTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGTE(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDLT applies the LT predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDLT(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLT(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDLTE applies the LTE predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDLTE(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLTE(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDContains applies the Contains predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDContains(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContains(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDHasPrefix applies the HasPrefix predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDHasPrefix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasPrefix(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDHasSuffix applies the HasSuffix predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDHasSuffix(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldHasSuffix(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDIsNil applies the IsNil predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldProposedByUserID))
-}
-
-// ProposedByUserIDNotNil applies the NotNil predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldProposedByUserID))
-}
-
-// ProposedByUserIDEqualFold applies the EqualFold predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDEqualFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEqualFold(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDContainsFold applies the ContainsFold predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDContainsFold(v string) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldContainsFold(FieldProposedByUserID, v))
-}
-
-// ProposedAtEQ applies the EQ predicate on the "proposed_at" field.
-func ProposedAtEQ(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldEQ(FieldProposedAt, v))
-}
-
-// ProposedAtNEQ applies the NEQ predicate on the "proposed_at" field.
-func ProposedAtNEQ(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNEQ(FieldProposedAt, v))
-}
-
-// ProposedAtIn applies the In predicate on the "proposed_at" field.
-func ProposedAtIn(vs ...time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIn(FieldProposedAt, vs...))
-}
-
-// ProposedAtNotIn applies the NotIn predicate on the "proposed_at" field.
-func ProposedAtNotIn(vs ...time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotIn(FieldProposedAt, vs...))
-}
-
-// ProposedAtGT applies the GT predicate on the "proposed_at" field.
-func ProposedAtGT(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGT(FieldProposedAt, v))
-}
-
-// ProposedAtGTE applies the GTE predicate on the "proposed_at" field.
-func ProposedAtGTE(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldGTE(FieldProposedAt, v))
-}
-
-// ProposedAtLT applies the LT predicate on the "proposed_at" field.
-func ProposedAtLT(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLT(FieldProposedAt, v))
-}
-
-// ProposedAtLTE applies the LTE predicate on the "proposed_at" field.
-func ProposedAtLTE(v time.Time) predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldLTE(FieldProposedAt, v))
-}
-
-// ProposedAtIsNil applies the IsNil predicate on the "proposed_at" field.
-func ProposedAtIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldProposedAt))
-}
-
-// ProposedAtNotNil applies the NotNil predicate on the "proposed_at" field.
-func ProposedAtNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldProposedAt))
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.ControlHistory {
+	return predicate.ControlHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // RefCodeEQ applies the EQ predicate on the "ref_code" field.

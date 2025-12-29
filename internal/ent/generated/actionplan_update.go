@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -616,6 +617,26 @@ func (_u *ActionPlanUpdate) ClearActionPlanKindID() *ActionPlanUpdate {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ActionPlanUpdate) SetWorkflowEligibleMarker(v bool) *ActionPlanUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ActionPlanUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ActionPlanUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ActionPlanUpdate) ClearWorkflowEligibleMarker() *ActionPlanUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ActionPlanUpdate) SetTitle(v string) *ActionPlanUpdate {
 	_u.mutation.SetTitle(v)
@@ -962,6 +983,21 @@ func (_u *ActionPlanUpdate) SetFile(v *File) *ActionPlanUpdate {
 	return _u.SetFileID(v.ID)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *ActionPlanUpdate) AddWorkflowObjectRefIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ActionPlanUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_u *ActionPlanUpdate) Mutation() *ActionPlanMutation {
 	return _u.mutation
@@ -1184,6 +1220,27 @@ func (_u *ActionPlanUpdate) RemoveIntegrations(v ...*Integration) *ActionPlanUpd
 func (_u *ActionPlanUpdate) ClearFile() *ActionPlanUpdate {
 	_u.mutation.ClearFile()
 	return _u
+}
+
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ActionPlanUpdate) ClearWorkflowObjectRefs() *ActionPlanUpdate {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *ActionPlanUpdate) RemoveWorkflowObjectRefIDs(ids ...string) *ActionPlanUpdate {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *ActionPlanUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *ActionPlanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1476,6 +1533,12 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.ActionPlanKindNameCleared() {
 		_spec.ClearField(actionplan.FieldActionPlanKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
@@ -2116,6 +2179,54 @@ func (_u *ActionPlanUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			},
 		}
 		edge.Schema = _u.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2715,6 +2826,26 @@ func (_u *ActionPlanUpdateOne) ClearActionPlanKindID() *ActionPlanUpdateOne {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ActionPlanUpdateOne) SetWorkflowEligibleMarker(v bool) *ActionPlanUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ActionPlanUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ActionPlanUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ActionPlanUpdateOne) ClearWorkflowEligibleMarker() *ActionPlanUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *ActionPlanUpdateOne) SetTitle(v string) *ActionPlanUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -3061,6 +3192,21 @@ func (_u *ActionPlanUpdateOne) SetFile(v *File) *ActionPlanUpdateOne {
 	return _u.SetFileID(v.ID)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *ActionPlanUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ActionPlanUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the ActionPlanMutation object of the builder.
 func (_u *ActionPlanUpdateOne) Mutation() *ActionPlanMutation {
 	return _u.mutation
@@ -3283,6 +3429,27 @@ func (_u *ActionPlanUpdateOne) RemoveIntegrations(v ...*Integration) *ActionPlan
 func (_u *ActionPlanUpdateOne) ClearFile() *ActionPlanUpdateOne {
 	_u.mutation.ClearFile()
 	return _u
+}
+
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ActionPlanUpdateOne) ClearWorkflowObjectRefs() *ActionPlanUpdateOne {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *ActionPlanUpdateOne) RemoveWorkflowObjectRefIDs(ids ...string) *ActionPlanUpdateOne {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *ActionPlanUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *ActionPlanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
 }
 
 // Where appends a list predicates to the ActionPlanUpdate builder.
@@ -3605,6 +3772,12 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 	}
 	if _u.mutation.ActionPlanKindNameCleared() {
 		_spec.ClearField(actionplan.FieldActionPlanKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(actionplan.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
@@ -4245,6 +4418,54 @@ func (_u *ActionPlanUpdateOne) sqlSave(ctx context.Context) (_node *ActionPlan, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.ActionPlan
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

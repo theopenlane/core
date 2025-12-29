@@ -74,6 +74,12 @@ const (
 	FieldTriggerOperations = "trigger_operations"
 	// FieldTriggerFields holds the string denoting the trigger_fields field in the database.
 	FieldTriggerFields = "trigger_fields"
+	// FieldApprovalFields holds the string denoting the approval_fields field in the database.
+	FieldApprovalFields = "approval_fields"
+	// FieldApprovalEdges holds the string denoting the approval_edges field in the database.
+	FieldApprovalEdges = "approval_edges"
+	// FieldApprovalSubmissionMode holds the string denoting the approval_submission_mode field in the database.
+	FieldApprovalSubmissionMode = "approval_submission_mode"
 	// FieldDefinitionJSON holds the string denoting the definition_json field in the database.
 	FieldDefinitionJSON = "definition_json"
 	// FieldTrackedFields holds the string denoting the tracked_fields field in the database.
@@ -112,6 +118,9 @@ var Columns = []string{
 	FieldActive,
 	FieldTriggerOperations,
 	FieldTriggerFields,
+	FieldApprovalFields,
+	FieldApprovalEdges,
+	FieldApprovalSubmissionMode,
 	FieldDefinitionJSON,
 	FieldTrackedFields,
 }
@@ -161,6 +170,10 @@ var (
 	DefaultTriggerOperations []string
 	// DefaultTriggerFields holds the default value on creation for the "trigger_fields" field.
 	DefaultTriggerFields []string
+	// DefaultApprovalFields holds the default value on creation for the "approval_fields" field.
+	DefaultApprovalFields []string
+	// DefaultApprovalEdges holds the default value on creation for the "approval_edges" field.
+	DefaultApprovalEdges []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -182,6 +195,18 @@ func WorkflowKindValidator(wk enums.WorkflowKind) error {
 		return nil
 	default:
 		return fmt.Errorf("workflowdefinitionhistory: invalid enum value for workflow_kind field: %q", wk)
+	}
+}
+
+const DefaultApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode = "MANUAL_SUBMIT"
+
+// ApprovalSubmissionModeValidator is a validator for the "approval_submission_mode" field enum values. It is called by the builders before save.
+func ApprovalSubmissionModeValidator(asm enums.WorkflowApprovalSubmissionMode) error {
+	switch asm.String() {
+	case "MANUAL_SUBMIT", "AUTO_SUBMIT":
+		return nil
+	default:
+		return fmt.Errorf("workflowdefinitionhistory: invalid enum value for approval_submission_mode field: %q", asm)
 	}
 }
 
@@ -313,6 +338,11 @@ func ByActive(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActive, opts...).ToFunc()
 }
 
+// ByApprovalSubmissionMode orders the results by the approval_submission_mode field.
+func ByApprovalSubmissionMode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovalSubmissionMode, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -325,4 +355,11 @@ var (
 	_ graphql.Marshaler = (*enums.WorkflowKind)(nil)
 	// enums.WorkflowKind must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.WorkflowKind)(nil)
+)
+
+var (
+	// enums.WorkflowApprovalSubmissionMode must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.WorkflowApprovalSubmissionMode)(nil)
+	// enums.WorkflowApprovalSubmissionMode must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.WorkflowApprovalSubmissionMode)(nil)
 )

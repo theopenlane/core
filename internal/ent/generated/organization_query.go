@@ -87,6 +87,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -185,6 +186,7 @@ type OrganizationQuery struct {
 	withWorkflowAssignments                  *WorkflowAssignmentQuery
 	withWorkflowAssignmentTargets            *WorkflowAssignmentTargetQuery
 	withWorkflowObjectRefs                   *WorkflowObjectRefQuery
+	withWorkflowProposals                    *WorkflowProposalQuery
 	withDirectoryAccounts                    *DirectoryAccountQuery
 	withDirectoryGroups                      *DirectoryGroupQuery
 	withDirectoryMemberships                 *DirectoryMembershipQuery
@@ -276,6 +278,7 @@ type OrganizationQuery struct {
 	withNamedWorkflowAssignments             map[string]*WorkflowAssignmentQuery
 	withNamedWorkflowAssignmentTargets       map[string]*WorkflowAssignmentTargetQuery
 	withNamedWorkflowObjectRefs              map[string]*WorkflowObjectRefQuery
+	withNamedWorkflowProposals               map[string]*WorkflowProposalQuery
 	withNamedDirectoryAccounts               map[string]*DirectoryAccountQuery
 	withNamedDirectoryGroups                 map[string]*DirectoryGroupQuery
 	withNamedDirectoryMemberships            map[string]*DirectoryMembershipQuery
@@ -2468,6 +2471,31 @@ func (_q *OrganizationQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	return query
 }
 
+// QueryWorkflowProposals chains the current query on the "workflow_proposals" edge.
+func (_q *OrganizationQuery) QueryWorkflowProposals() *WorkflowProposalQuery {
+	query := (&WorkflowProposalClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowproposal.Table, workflowproposal.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowProposalsTable, organization.WorkflowProposalsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowProposal
+		step.Edge.Schema = schemaConfig.WorkflowProposal
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
 func (_q *OrganizationQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 	query := (&DirectoryAccountClient{config: _q.config}).Query()
@@ -2896,6 +2924,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withWorkflowAssignments:             _q.withWorkflowAssignments.Clone(),
 		withWorkflowAssignmentTargets:       _q.withWorkflowAssignmentTargets.Clone(),
 		withWorkflowObjectRefs:              _q.withWorkflowObjectRefs.Clone(),
+		withWorkflowProposals:               _q.withWorkflowProposals.Clone(),
 		withDirectoryAccounts:               _q.withDirectoryAccounts.Clone(),
 		withDirectoryGroups:                 _q.withDirectoryGroups.Clone(),
 		withDirectoryMemberships:            _q.withDirectoryMemberships.Clone(),
@@ -3855,6 +3884,17 @@ func (_q *OrganizationQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObject
 	return _q
 }
 
+// WithWorkflowProposals tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_proposals" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowProposals(opts ...func(*WorkflowProposalQuery)) *OrganizationQuery {
+	query := (&WorkflowProposalClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowProposals = query
+	return _q
+}
+
 // WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
 // the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *OrganizationQuery {
@@ -4005,7 +4045,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [92]bool{
+		loadedTypes = [93]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -4092,6 +4132,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withWorkflowAssignments != nil,
 			_q.withWorkflowAssignmentTargets != nil,
 			_q.withWorkflowObjectRefs != nil,
+			_q.withWorkflowProposals != nil,
 			_q.withDirectoryAccounts != nil,
 			_q.withDirectoryGroups != nil,
 			_q.withDirectoryMemberships != nil,
@@ -4770,6 +4811,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowProposals; query != nil {
+		if err := _q.loadWorkflowProposals(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowProposals = []*WorkflowProposal{} },
+			func(n *Organization, e *WorkflowProposal) {
+				n.Edges.WorkflowProposals = append(n.Edges.WorkflowProposals, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withDirectoryAccounts; query != nil {
 		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
 			func(n *Organization) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
@@ -5400,6 +5450,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedWorkflowObjectRefs(name) },
 			func(n *Organization, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowProposals {
+		if err := _q.loadWorkflowProposals(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowProposals(name) },
+			func(n *Organization, e *WorkflowProposal) { n.appendNamedWorkflowProposals(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8205,6 +8262,36 @@ func (_q *OrganizationQuery) loadWorkflowObjectRefs(ctx context.Context, query *
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadWorkflowProposals(ctx context.Context, query *WorkflowProposalQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowProposal)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowproposal.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowProposal(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowProposalsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DirectoryAccount)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -9654,6 +9741,20 @@ func (_q *OrganizationQuery) WithNamedWorkflowObjectRefs(name string, opts ...fu
 		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
 	}
 	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedWorkflowProposals tells the query-builder to eager-load the nodes that are connected to the "workflow_proposals"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowProposals(name string, opts ...func(*WorkflowProposalQuery)) *OrganizationQuery {
+	query := (&WorkflowProposalClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowProposals == nil {
+		_q.withNamedWorkflowProposals = make(map[string]*WorkflowProposalQuery)
+	}
+	_q.withNamedWorkflowProposals[name] = query
 	return _q
 }
 

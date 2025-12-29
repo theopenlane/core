@@ -96,7 +96,9 @@ type ProcedureHistory struct {
 	ProcedureKindName string `json:"procedure_kind_name,omitempty"`
 	// the kind of the procedure
 	ProcedureKindID string `json:"procedure_kind_id,omitempty"`
-	selectValues    sql.SelectValues
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
+	selectValues           sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -108,7 +110,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case procedurehistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case procedurehistory.FieldApprovalRequired, procedurehistory.FieldSystemOwned:
+		case procedurehistory.FieldApprovalRequired, procedurehistory.FieldSystemOwned, procedurehistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldURL, procedurehistory.FieldFileID, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID, procedurehistory.FieldProcedureKindName, procedurehistory.FieldProcedureKindID:
 			values[i] = new(sql.NullString)
@@ -377,6 +379,12 @@ func (_m *ProcedureHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ProcedureKindID = value.String
 			}
+		case procedurehistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -531,6 +539,9 @@ func (_m *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_kind_id=")
 	builder.WriteString(_m.ProcedureKindID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteByte(')')
 	return builder.String()
 }

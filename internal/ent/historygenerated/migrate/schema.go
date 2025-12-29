@@ -50,6 +50,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
@@ -264,9 +265,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "control_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "control_kind_id", Type: field.TypeString, Nullable: true},
-		{Name: "proposed_changes", Type: field.TypeJSON, Nullable: true},
-		{Name: "proposed_by_user_id", Type: field.TypeString, Nullable: true},
-		{Name: "proposed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
@@ -702,9 +701,7 @@ var (
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "proposed_changes", Type: field.TypeJSON, Nullable: true},
-		{Name: "proposed_by_user_id", Type: field.TypeString, Nullable: true},
-		{Name: "proposed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "collection_procedure", Type: field.TypeString, Nullable: true, Size: 2147483647},
@@ -1090,9 +1087,7 @@ var (
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_kind_id", Type: field.TypeString, Nullable: true},
-		{Name: "proposed_changes", Type: field.TypeJSON, Nullable: true},
-		{Name: "proposed_by_user_id", Type: field.TypeString, Nullable: true},
-		{Name: "proposed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 	}
 	// InternalPolicyHistoryTable holds the schema information for the "internal_policy_history" table.
 	InternalPolicyHistoryTable = &schema.Table{
@@ -1468,6 +1463,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "procedure_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "procedure_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 	}
 	// ProcedureHistoryTable holds the schema information for the "procedure_history" table.
 	ProcedureHistoryTable = &schema.Table{
@@ -1859,6 +1855,7 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
 	}
@@ -2477,6 +2474,9 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "trigger_operations", Type: field.TypeJSON, Nullable: true},
 		{Name: "trigger_fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "approval_fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "approval_edges", Type: field.TypeJSON, Nullable: true},
+		{Name: "approval_submission_mode", Type: field.TypeEnum, Nullable: true, Enums: []string{"MANUAL_SUBMIT", "AUTO_SUBMIT"}, Default: "MANUAL_SUBMIT"},
 		{Name: "definition_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "tracked_fields", Type: field.TypeJSON, Nullable: true},
 	}
@@ -2509,7 +2509,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_instance_id", Type: field.TypeString},
-		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION"}},
+		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION", "INSTANCE_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_RESOLVED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "INSTANCE_COMPLETED"}},
 		{Name: "payload", Type: field.TypeJSON, Nullable: true},
 	}
 	// WorkflowEventHistoryTable holds the schema information for the "workflow_event_history" table.
@@ -2541,13 +2541,18 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_definition_id", Type: field.TypeString},
+		{Name: "workflow_proposal_id", Type: field.TypeString, Nullable: true},
 		{Name: "state", Type: field.TypeEnum, Enums: []string{"RUNNING", "COMPLETED", "FAILED", "PAUSED"}, Default: "RUNNING"},
 		{Name: "context", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_evaluated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "definition_snapshot", Type: field.TypeJSON, Nullable: true},
+		{Name: "current_action_index", Type: field.TypeInt, Default: 0},
 		{Name: "control_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_id", Type: field.TypeString, Nullable: true},
 		{Name: "evidence_id", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_id", Type: field.TypeString, Nullable: true},
+		{Name: "action_plan_id", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_id", Type: field.TypeString, Nullable: true},
 	}
 	// WorkflowInstanceHistoryTable holds the schema information for the "workflow_instance_history" table.
 	WorkflowInstanceHistoryTable = &schema.Table{
@@ -2583,6 +2588,9 @@ var (
 		{Name: "directory_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "directory_membership_id", Type: field.TypeString, Nullable: true},
 		{Name: "evidence_id", Type: field.TypeString, Nullable: true},
+		{Name: "subcontrol_id", Type: field.TypeString, Nullable: true},
+		{Name: "action_plan_id", Type: field.TypeString, Nullable: true},
+		{Name: "procedure_id", Type: field.TypeString, Nullable: true},
 	}
 	// WorkflowObjectRefHistoryTable holds the schema information for the "workflow_object_ref_history" table.
 	WorkflowObjectRefHistoryTable = &schema.Table{

@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -36,40 +37,42 @@ import (
 // ProcedureQuery is the builder for querying Procedure entities.
 type ProcedureQuery struct {
 	config
-	ctx                       *QueryContext
-	order                     []procedure.OrderOption
-	inters                    []Interceptor
-	predicates                []predicate.Procedure
-	withOwner                 *OrganizationQuery
-	withBlockedGroups         *GroupQuery
-	withEditors               *GroupQuery
-	withApprover              *GroupQuery
-	withDelegate              *GroupQuery
-	withProcedureKind         *CustomTypeEnumQuery
-	withControls              *ControlQuery
-	withSubcontrols           *SubcontrolQuery
-	withInternalPolicies      *InternalPolicyQuery
-	withPrograms              *ProgramQuery
-	withNarratives            *NarrativeQuery
-	withRisks                 *RiskQuery
-	withTasks                 *TaskQuery
-	withComments              *NoteQuery
-	withDiscussions           *DiscussionQuery
-	withFile                  *FileQuery
-	withFKs                   bool
-	loadTotal                 []func(context.Context, []*Procedure) error
-	modifiers                 []func(*sql.Selector)
-	withNamedBlockedGroups    map[string]*GroupQuery
-	withNamedEditors          map[string]*GroupQuery
-	withNamedControls         map[string]*ControlQuery
-	withNamedSubcontrols      map[string]*SubcontrolQuery
-	withNamedInternalPolicies map[string]*InternalPolicyQuery
-	withNamedPrograms         map[string]*ProgramQuery
-	withNamedNarratives       map[string]*NarrativeQuery
-	withNamedRisks            map[string]*RiskQuery
-	withNamedTasks            map[string]*TaskQuery
-	withNamedComments         map[string]*NoteQuery
-	withNamedDiscussions      map[string]*DiscussionQuery
+	ctx                         *QueryContext
+	order                       []procedure.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Procedure
+	withOwner                   *OrganizationQuery
+	withBlockedGroups           *GroupQuery
+	withEditors                 *GroupQuery
+	withApprover                *GroupQuery
+	withDelegate                *GroupQuery
+	withProcedureKind           *CustomTypeEnumQuery
+	withControls                *ControlQuery
+	withSubcontrols             *SubcontrolQuery
+	withInternalPolicies        *InternalPolicyQuery
+	withPrograms                *ProgramQuery
+	withNarratives              *NarrativeQuery
+	withRisks                   *RiskQuery
+	withTasks                   *TaskQuery
+	withComments                *NoteQuery
+	withDiscussions             *DiscussionQuery
+	withFile                    *FileQuery
+	withWorkflowObjectRefs      *WorkflowObjectRefQuery
+	withFKs                     bool
+	loadTotal                   []func(context.Context, []*Procedure) error
+	modifiers                   []func(*sql.Selector)
+	withNamedBlockedGroups      map[string]*GroupQuery
+	withNamedEditors            map[string]*GroupQuery
+	withNamedControls           map[string]*ControlQuery
+	withNamedSubcontrols        map[string]*SubcontrolQuery
+	withNamedInternalPolicies   map[string]*InternalPolicyQuery
+	withNamedPrograms           map[string]*ProgramQuery
+	withNamedNarratives         map[string]*NarrativeQuery
+	withNamedRisks              map[string]*RiskQuery
+	withNamedTasks              map[string]*TaskQuery
+	withNamedComments           map[string]*NoteQuery
+	withNamedDiscussions        map[string]*DiscussionQuery
+	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -506,6 +509,31 @@ func (_q *ProcedureQuery) QueryFile() *FileQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *ProcedureQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, procedure.WorkflowObjectRefsTable, procedure.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Procedure entity from the query.
 // Returns a *NotFoundError when no Procedure was found.
 func (_q *ProcedureQuery) First(ctx context.Context) (*Procedure, error) {
@@ -693,27 +721,28 @@ func (_q *ProcedureQuery) Clone() *ProcedureQuery {
 		return nil
 	}
 	return &ProcedureQuery{
-		config:               _q.config,
-		ctx:                  _q.ctx.Clone(),
-		order:                append([]procedure.OrderOption{}, _q.order...),
-		inters:               append([]Interceptor{}, _q.inters...),
-		predicates:           append([]predicate.Procedure{}, _q.predicates...),
-		withOwner:            _q.withOwner.Clone(),
-		withBlockedGroups:    _q.withBlockedGroups.Clone(),
-		withEditors:          _q.withEditors.Clone(),
-		withApprover:         _q.withApprover.Clone(),
-		withDelegate:         _q.withDelegate.Clone(),
-		withProcedureKind:    _q.withProcedureKind.Clone(),
-		withControls:         _q.withControls.Clone(),
-		withSubcontrols:      _q.withSubcontrols.Clone(),
-		withInternalPolicies: _q.withInternalPolicies.Clone(),
-		withPrograms:         _q.withPrograms.Clone(),
-		withNarratives:       _q.withNarratives.Clone(),
-		withRisks:            _q.withRisks.Clone(),
-		withTasks:            _q.withTasks.Clone(),
-		withComments:         _q.withComments.Clone(),
-		withDiscussions:      _q.withDiscussions.Clone(),
-		withFile:             _q.withFile.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]procedure.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.Procedure{}, _q.predicates...),
+		withOwner:              _q.withOwner.Clone(),
+		withBlockedGroups:      _q.withBlockedGroups.Clone(),
+		withEditors:            _q.withEditors.Clone(),
+		withApprover:           _q.withApprover.Clone(),
+		withDelegate:           _q.withDelegate.Clone(),
+		withProcedureKind:      _q.withProcedureKind.Clone(),
+		withControls:           _q.withControls.Clone(),
+		withSubcontrols:        _q.withSubcontrols.Clone(),
+		withInternalPolicies:   _q.withInternalPolicies.Clone(),
+		withPrograms:           _q.withPrograms.Clone(),
+		withNarratives:         _q.withNarratives.Clone(),
+		withRisks:              _q.withRisks.Clone(),
+		withTasks:              _q.withTasks.Clone(),
+		withComments:           _q.withComments.Clone(),
+		withDiscussions:        _q.withDiscussions.Clone(),
+		withFile:               _q.withFile.Clone(),
+		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -897,6 +926,17 @@ func (_q *ProcedureQuery) WithFile(opts ...func(*FileQuery)) *ProcedureQuery {
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *ProcedureQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -982,7 +1022,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [16]bool{
+		loadedTypes = [17]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -999,6 +1039,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			_q.withComments != nil,
 			_q.withDiscussions != nil,
 			_q.withFile != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	if withFKs {
@@ -1134,6 +1175,15 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Procedure, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedBlockedGroups(name) },
@@ -1208,6 +1258,13 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := _q.loadDiscussions(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedDiscussions(name) },
 			func(n *Procedure, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Procedure, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1987,6 +2044,37 @@ func (_q *ProcedureQuery) loadFile(ctx context.Context, query *FileQuery, nodes 
 	}
 	return nil
 }
+func (_q *ProcedureQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Procedure)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldProcedureID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(procedure.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ProcedureID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "procedure_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2252,6 +2340,20 @@ func (_q *ProcedureQuery) WithNamedDiscussions(name string, opts ...func(*Discus
 		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
 	}
 	_q.withNamedDiscussions[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *ProcedureQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

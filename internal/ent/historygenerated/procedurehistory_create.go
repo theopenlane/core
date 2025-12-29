@@ -454,6 +454,20 @@ func (_c *ProcedureHistoryCreate) SetNillableProcedureKindID(v *string) *Procedu
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *ProcedureHistoryCreate) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *ProcedureHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ProcedureHistoryCreate) SetID(v string) *ProcedureHistoryCreate {
 	_c.mutation.SetID(v)
@@ -577,6 +591,10 @@ func (_c *ProcedureHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := procedurehistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := procedurehistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if procedurehistory.DefaultID == nil {
@@ -800,6 +818,10 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 	if value, ok := _c.mutation.ProcedureKindID(); ok {
 		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
 		_node.ProcedureKindID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	return _node, _spec
 }

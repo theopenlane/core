@@ -67,6 +67,9 @@ func (i InternalPolicy) Edges() []ent.Edge {
 			fromSchema: i,
 			edgeSchema: File{},
 			field:      "file_id",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
 		}),
 
 		edgeToWithPagination(&edgeDefinition{
@@ -76,6 +79,7 @@ func (i InternalPolicy) Edges() []ent.Edge {
 			comment:    "conversations related to the policy",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -84,14 +88,17 @@ func (i InternalPolicy) Edges() []ent.Edge {
 			comment:    "discussions related to the policy",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
-
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: i,
 			edgeSchema: WorkflowObjectRef{},
 			name:       "workflow_object_refs",
 			ref:        "internal_policy",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
 		}),
 	}
 }
@@ -107,10 +114,10 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(i),
 			mixin.NewSystemOwnedMixin(),
 			// add group edit permissions to the procedure
-			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			// policies are documents
 			DocumentMixin{DocumentType: "policy"}, // use short name for the document type
-			newCustomEnumMixin(i),
+			newCustomEnumMixin(i, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(i)

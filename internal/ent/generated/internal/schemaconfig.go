@@ -221,6 +221,7 @@ type SchemaConfig struct {
 	WorkflowEvent                      string // WorkflowEvent table.
 	WorkflowInstance                   string // WorkflowInstance table.
 	WorkflowObjectRef                  string // WorkflowObjectRef table.
+	WorkflowProposal                   string // WorkflowProposal table.
 }
 
 type schemaCtxKey struct{}

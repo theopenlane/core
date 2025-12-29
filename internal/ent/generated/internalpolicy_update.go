@@ -619,55 +619,23 @@ func (_u *InternalPolicyUpdate) ClearInternalPolicyKindID() *InternalPolicyUpdat
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *InternalPolicyUpdate) SetProposedChanges(v map[string]interface{}) *InternalPolicyUpdate {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *InternalPolicyUpdate) SetWorkflowEligibleMarker(v bool) *InternalPolicyUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *InternalPolicyUpdate) ClearProposedChanges() *InternalPolicyUpdate {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *InternalPolicyUpdate) SetProposedByUserID(v string) *InternalPolicyUpdate {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *InternalPolicyUpdate) SetNillableProposedByUserID(v *string) *InternalPolicyUpdate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableWorkflowEligibleMarker(v *bool) *InternalPolicyUpdate {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *InternalPolicyUpdate) ClearProposedByUserID() *InternalPolicyUpdate {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *InternalPolicyUpdate) SetProposedAt(v time.Time) *InternalPolicyUpdate {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *InternalPolicyUpdate) SetNillableProposedAt(v *time.Time) *InternalPolicyUpdate {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *InternalPolicyUpdate) ClearProposedAt() *InternalPolicyUpdate {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *InternalPolicyUpdate) ClearWorkflowEligibleMarker() *InternalPolicyUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1516,23 +1484,11 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.InternalPolicyKindNameCleared() {
 		_spec.ClearField(internalpolicy.FieldInternalPolicyKindName, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(internalpolicy.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(internalpolicy.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(internalpolicy.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(internalpolicy.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(internalpolicy.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(internalpolicy.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2955,55 +2911,23 @@ func (_u *InternalPolicyUpdateOne) ClearInternalPolicyKindID() *InternalPolicyUp
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *InternalPolicyUpdateOne) SetProposedChanges(v map[string]interface{}) *InternalPolicyUpdateOne {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *InternalPolicyUpdateOne) SetWorkflowEligibleMarker(v bool) *InternalPolicyUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *InternalPolicyUpdateOne) ClearProposedChanges() *InternalPolicyUpdateOne {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *InternalPolicyUpdateOne) SetProposedByUserID(v string) *InternalPolicyUpdateOne {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *InternalPolicyUpdateOne) SetNillableProposedByUserID(v *string) *InternalPolicyUpdateOne {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *InternalPolicyUpdateOne {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *InternalPolicyUpdateOne) ClearProposedByUserID() *InternalPolicyUpdateOne {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *InternalPolicyUpdateOne) SetProposedAt(v time.Time) *InternalPolicyUpdateOne {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *InternalPolicyUpdateOne) SetNillableProposedAt(v *time.Time) *InternalPolicyUpdateOne {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *InternalPolicyUpdateOne) ClearProposedAt() *InternalPolicyUpdateOne {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *InternalPolicyUpdateOne) ClearWorkflowEligibleMarker() *InternalPolicyUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -3882,23 +3806,11 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	if _u.mutation.InternalPolicyKindNameCleared() {
 		_spec.ClearField(internalpolicy.FieldInternalPolicyKindName, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(internalpolicy.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(internalpolicy.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(internalpolicy.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(internalpolicy.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(internalpolicy.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(internalpolicy.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

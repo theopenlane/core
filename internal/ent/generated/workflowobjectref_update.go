@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -63,9 +64,45 @@ func (_u *WorkflowObjectRefUpdate) ClearUpdatedBy() *WorkflowObjectRefUpdate {
 	return _u
 }
 
+// AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
+func (_u *WorkflowObjectRefUpdate) AddWorkflowProposalIDs(ids ...string) *WorkflowObjectRefUpdate {
+	_u.mutation.AddWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// AddWorkflowProposals adds the "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *WorkflowObjectRefUpdate) AddWorkflowProposals(v ...*WorkflowProposal) *WorkflowObjectRefUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowProposalIDs(ids...)
+}
+
 // Mutation returns the WorkflowObjectRefMutation object of the builder.
 func (_u *WorkflowObjectRefUpdate) Mutation() *WorkflowObjectRefMutation {
 	return _u.mutation
+}
+
+// ClearWorkflowProposals clears all "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *WorkflowObjectRefUpdate) ClearWorkflowProposals() *WorkflowObjectRefUpdate {
+	_u.mutation.ClearWorkflowProposals()
+	return _u
+}
+
+// RemoveWorkflowProposalIDs removes the "workflow_proposals" edge to WorkflowProposal entities by IDs.
+func (_u *WorkflowObjectRefUpdate) RemoveWorkflowProposalIDs(ids ...string) *WorkflowObjectRefUpdate {
+	_u.mutation.RemoveWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowProposals removes "workflow_proposals" edges to WorkflowProposal entities.
+func (_u *WorkflowObjectRefUpdate) RemoveWorkflowProposals(v ...*WorkflowProposal) *WorkflowObjectRefUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowProposalIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -154,6 +191,54 @@ func (_u *WorkflowObjectRefUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectref.FieldUpdatedBy, field.TypeString)
 	}
+	if _u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowProposalsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowProposalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRef
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -210,9 +295,45 @@ func (_u *WorkflowObjectRefUpdateOne) ClearUpdatedBy() *WorkflowObjectRefUpdateO
 	return _u
 }
 
+// AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
+func (_u *WorkflowObjectRefUpdateOne) AddWorkflowProposalIDs(ids ...string) *WorkflowObjectRefUpdateOne {
+	_u.mutation.AddWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// AddWorkflowProposals adds the "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *WorkflowObjectRefUpdateOne) AddWorkflowProposals(v ...*WorkflowProposal) *WorkflowObjectRefUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowProposalIDs(ids...)
+}
+
 // Mutation returns the WorkflowObjectRefMutation object of the builder.
 func (_u *WorkflowObjectRefUpdateOne) Mutation() *WorkflowObjectRefMutation {
 	return _u.mutation
+}
+
+// ClearWorkflowProposals clears all "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *WorkflowObjectRefUpdateOne) ClearWorkflowProposals() *WorkflowObjectRefUpdateOne {
+	_u.mutation.ClearWorkflowProposals()
+	return _u
+}
+
+// RemoveWorkflowProposalIDs removes the "workflow_proposals" edge to WorkflowProposal entities by IDs.
+func (_u *WorkflowObjectRefUpdateOne) RemoveWorkflowProposalIDs(ids ...string) *WorkflowObjectRefUpdateOne {
+	_u.mutation.RemoveWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowProposals removes "workflow_proposals" edges to WorkflowProposal entities.
+func (_u *WorkflowObjectRefUpdateOne) RemoveWorkflowProposals(v ...*WorkflowProposal) *WorkflowObjectRefUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowProposalIDs(ids...)
 }
 
 // Where appends a list predicates to the WorkflowObjectRefUpdate builder.
@@ -330,6 +451,54 @@ func (_u *WorkflowObjectRefUpdateOne) sqlSave(ctx context.Context) (_node *Workf
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowobjectref.FieldUpdatedBy, field.TypeString)
+	}
+	if _u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowProposalsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowProposalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRef
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

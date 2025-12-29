@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
@@ -18,9 +19,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // WorkflowObjectRefCreate is the builder for creating a WorkflowObjectRef entity.
@@ -224,6 +228,48 @@ func (_c *WorkflowObjectRefCreate) SetNillableEvidenceID(v *string) *WorkflowObj
 	return _c
 }
 
+// SetSubcontrolID sets the "subcontrol_id" field.
+func (_c *WorkflowObjectRefCreate) SetSubcontrolID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetSubcontrolID(v)
+	return _c
+}
+
+// SetNillableSubcontrolID sets the "subcontrol_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableSubcontrolID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetSubcontrolID(*v)
+	}
+	return _c
+}
+
+// SetActionPlanID sets the "action_plan_id" field.
+func (_c *WorkflowObjectRefCreate) SetActionPlanID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetActionPlanID(v)
+	return _c
+}
+
+// SetNillableActionPlanID sets the "action_plan_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableActionPlanID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetActionPlanID(*v)
+	}
+	return _c
+}
+
+// SetProcedureID sets the "procedure_id" field.
+func (_c *WorkflowObjectRefCreate) SetProcedureID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetProcedureID(v)
+	return _c
+}
+
+// SetNillableProcedureID sets the "procedure_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableProcedureID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetProcedureID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefCreate) SetID(v string) *WorkflowObjectRefCreate {
 	_c.mutation.SetID(v)
@@ -246,6 +292,21 @@ func (_c *WorkflowObjectRefCreate) SetOwner(v *Organization) *WorkflowObjectRefC
 // SetWorkflowInstance sets the "workflow_instance" edge to the WorkflowInstance entity.
 func (_c *WorkflowObjectRefCreate) SetWorkflowInstance(v *WorkflowInstance) *WorkflowObjectRefCreate {
 	return _c.SetWorkflowInstanceID(v.ID)
+}
+
+// AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
+func (_c *WorkflowObjectRefCreate) AddWorkflowProposalIDs(ids ...string) *WorkflowObjectRefCreate {
+	_c.mutation.AddWorkflowProposalIDs(ids...)
+	return _c
+}
+
+// AddWorkflowProposals adds the "workflow_proposals" edges to the WorkflowProposal entity.
+func (_c *WorkflowObjectRefCreate) AddWorkflowProposals(v ...*WorkflowProposal) *WorkflowObjectRefCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowProposalIDs(ids...)
 }
 
 // SetControl sets the "control" edge to the Control entity.
@@ -286,6 +347,21 @@ func (_c *WorkflowObjectRefCreate) SetDirectoryMembership(v *DirectoryMembership
 // SetEvidence sets the "evidence" edge to the Evidence entity.
 func (_c *WorkflowObjectRefCreate) SetEvidence(v *Evidence) *WorkflowObjectRefCreate {
 	return _c.SetEvidenceID(v.ID)
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_c *WorkflowObjectRefCreate) SetSubcontrol(v *Subcontrol) *WorkflowObjectRefCreate {
+	return _c.SetSubcontrolID(v.ID)
+}
+
+// SetActionPlan sets the "action_plan" edge to the ActionPlan entity.
+func (_c *WorkflowObjectRefCreate) SetActionPlan(v *ActionPlan) *WorkflowObjectRefCreate {
+	return _c.SetActionPlanID(v.ID)
+}
+
+// SetProcedure sets the "procedure" edge to the Procedure entity.
+func (_c *WorkflowObjectRefCreate) SetProcedure(v *Procedure) *WorkflowObjectRefCreate {
+	return _c.SetProcedureID(v.ID)
 }
 
 // Mutation returns the WorkflowObjectRefMutation object of the builder.
@@ -467,6 +543,23 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 		_node.WorkflowInstanceID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.WorkflowProposalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ControlIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -609,6 +702,60 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.EvidenceID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.SubcontrolTable,
+			Columns: []string{workflowobjectref.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SubcontrolID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlanIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.ActionPlanTable,
+			Columns: []string{workflowobjectref.ActionPlanColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ActionPlanID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.ProcedureTable,
+			Columns: []string{workflowobjectref.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ProcedureID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

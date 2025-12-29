@@ -193,6 +193,11 @@ func ActionPlanKindID(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldActionPlanKindID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldEQ(FieldTitle, v))
@@ -2031,6 +2036,26 @@ func ActionPlanKindIDEqualFold(v string) predicate.ActionPlanHistory {
 // ActionPlanKindIDContainsFold applies the ContainsFold predicate on the "action_plan_kind_id" field.
 func ActionPlanKindIDContainsFold(v string) predicate.ActionPlanHistory {
 	return predicate.ActionPlanHistory(sql.FieldContainsFold(FieldActionPlanKindID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.ActionPlanHistory {
+	return predicate.ActionPlanHistory(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // TitleEQ applies the EQ predicate on the "title" field.

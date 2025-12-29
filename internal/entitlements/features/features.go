@@ -79,4 +79,5 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"WorkflowEvent":              {models.CatalogBaseModule},
 	"WorkflowInstance":           {models.CatalogBaseModule},
 	"WorkflowObjectRef":          {models.CatalogBaseModule},
+	"WorkflowProposal":           {models.CatalogBaseModule},
 }

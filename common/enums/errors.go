@@ -29,4 +29,10 @@ var (
 	ErrWrongTypeWorkflowObjectType = errors.New("wrong type for WorkflowObjectType")
 	// ErrWrongTypeWorkflowEventType indicates the value type for WorkflowEventType is incorrect.
 	ErrWrongTypeWorkflowEventType = errors.New("wrong type for WorkflowEventType")
+	// ErrWrongTypeWorkflowProposalState indicates the value type for WorkflowProposalState is incorrect.
+	ErrWrongTypeWorkflowProposalState = errors.New("wrong type for WorkflowProposalState")
+	// ErrWrongTypeWorkflowApprovalSubmissionMode indicates the value type for WorkflowApprovalSubmissionMode is incorrect.
+	ErrWrongTypeWorkflowApprovalSubmissionMode = errors.New("wrong type for WorkflowApprovalSubmissionMode")
+	// ErrWrongTypeWorkflowActionType indicates the value type for WorkflowActionType is incorrect.
+	ErrWrongTypeWorkflowActionType = errors.New("wrong type for WorkflowActionType")
 )

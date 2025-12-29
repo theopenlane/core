@@ -1,3 +1,14 @@
+extend type Evidence {
+    """
+    Indicates if this evidence has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this evidence if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
 extend type Query {
     """
     Look up evidence by ID

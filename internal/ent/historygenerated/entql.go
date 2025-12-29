@@ -127,6 +127,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldSystemInternalID:                {Type: field.TypeString, Column: actionplanhistory.FieldSystemInternalID},
 			actionplanhistory.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindName},
 			actionplanhistory.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindID},
+			actionplanhistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: actionplanhistory.FieldWorkflowEligibleMarker},
 			actionplanhistory.FieldTitle:                           {Type: field.TypeString, Column: actionplanhistory.FieldTitle},
 			actionplanhistory.FieldDescription:                     {Type: field.TypeString, Column: actionplanhistory.FieldDescription},
 			actionplanhistory.FieldDueDate:                         {Type: field.TypeTime, Column: actionplanhistory.FieldDueDate},
@@ -321,9 +322,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldSystemInternalID:           {Type: field.TypeString, Column: controlhistory.FieldSystemInternalID},
 			controlhistory.FieldControlKindName:            {Type: field.TypeString, Column: controlhistory.FieldControlKindName},
 			controlhistory.FieldControlKindID:              {Type: field.TypeString, Column: controlhistory.FieldControlKindID},
-			controlhistory.FieldProposedChanges:            {Type: field.TypeJSON, Column: controlhistory.FieldProposedChanges},
-			controlhistory.FieldProposedByUserID:           {Type: field.TypeString, Column: controlhistory.FieldProposedByUserID},
-			controlhistory.FieldProposedAt:                 {Type: field.TypeTime, Column: controlhistory.FieldProposedAt},
+			controlhistory.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: controlhistory.FieldWorkflowEligibleMarker},
 			controlhistory.FieldRefCode:                    {Type: field.TypeString, Column: controlhistory.FieldRefCode},
 			controlhistory.FieldStandardID:                 {Type: field.TypeString, Column: controlhistory.FieldStandardID},
 		},
@@ -699,30 +698,28 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "EvidenceHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			evidencehistory.FieldHistoryTime:         {Type: field.TypeTime, Column: evidencehistory.FieldHistoryTime},
-			evidencehistory.FieldRef:                 {Type: field.TypeString, Column: evidencehistory.FieldRef},
-			evidencehistory.FieldOperation:           {Type: field.TypeEnum, Column: evidencehistory.FieldOperation},
-			evidencehistory.FieldCreatedAt:           {Type: field.TypeTime, Column: evidencehistory.FieldCreatedAt},
-			evidencehistory.FieldUpdatedAt:           {Type: field.TypeTime, Column: evidencehistory.FieldUpdatedAt},
-			evidencehistory.FieldCreatedBy:           {Type: field.TypeString, Column: evidencehistory.FieldCreatedBy},
-			evidencehistory.FieldUpdatedBy:           {Type: field.TypeString, Column: evidencehistory.FieldUpdatedBy},
-			evidencehistory.FieldDeletedAt:           {Type: field.TypeTime, Column: evidencehistory.FieldDeletedAt},
-			evidencehistory.FieldDeletedBy:           {Type: field.TypeString, Column: evidencehistory.FieldDeletedBy},
-			evidencehistory.FieldDisplayID:           {Type: field.TypeString, Column: evidencehistory.FieldDisplayID},
-			evidencehistory.FieldTags:                {Type: field.TypeJSON, Column: evidencehistory.FieldTags},
-			evidencehistory.FieldOwnerID:             {Type: field.TypeString, Column: evidencehistory.FieldOwnerID},
-			evidencehistory.FieldProposedChanges:     {Type: field.TypeJSON, Column: evidencehistory.FieldProposedChanges},
-			evidencehistory.FieldProposedByUserID:    {Type: field.TypeString, Column: evidencehistory.FieldProposedByUserID},
-			evidencehistory.FieldProposedAt:          {Type: field.TypeTime, Column: evidencehistory.FieldProposedAt},
-			evidencehistory.FieldName:                {Type: field.TypeString, Column: evidencehistory.FieldName},
-			evidencehistory.FieldDescription:         {Type: field.TypeString, Column: evidencehistory.FieldDescription},
-			evidencehistory.FieldCollectionProcedure: {Type: field.TypeString, Column: evidencehistory.FieldCollectionProcedure},
-			evidencehistory.FieldCreationDate:        {Type: field.TypeTime, Column: evidencehistory.FieldCreationDate},
-			evidencehistory.FieldRenewalDate:         {Type: field.TypeTime, Column: evidencehistory.FieldRenewalDate},
-			evidencehistory.FieldSource:              {Type: field.TypeString, Column: evidencehistory.FieldSource},
-			evidencehistory.FieldIsAutomated:         {Type: field.TypeBool, Column: evidencehistory.FieldIsAutomated},
-			evidencehistory.FieldURL:                 {Type: field.TypeString, Column: evidencehistory.FieldURL},
-			evidencehistory.FieldStatus:              {Type: field.TypeEnum, Column: evidencehistory.FieldStatus},
+			evidencehistory.FieldHistoryTime:            {Type: field.TypeTime, Column: evidencehistory.FieldHistoryTime},
+			evidencehistory.FieldRef:                    {Type: field.TypeString, Column: evidencehistory.FieldRef},
+			evidencehistory.FieldOperation:              {Type: field.TypeEnum, Column: evidencehistory.FieldOperation},
+			evidencehistory.FieldCreatedAt:              {Type: field.TypeTime, Column: evidencehistory.FieldCreatedAt},
+			evidencehistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: evidencehistory.FieldUpdatedAt},
+			evidencehistory.FieldCreatedBy:              {Type: field.TypeString, Column: evidencehistory.FieldCreatedBy},
+			evidencehistory.FieldUpdatedBy:              {Type: field.TypeString, Column: evidencehistory.FieldUpdatedBy},
+			evidencehistory.FieldDeletedAt:              {Type: field.TypeTime, Column: evidencehistory.FieldDeletedAt},
+			evidencehistory.FieldDeletedBy:              {Type: field.TypeString, Column: evidencehistory.FieldDeletedBy},
+			evidencehistory.FieldDisplayID:              {Type: field.TypeString, Column: evidencehistory.FieldDisplayID},
+			evidencehistory.FieldTags:                   {Type: field.TypeJSON, Column: evidencehistory.FieldTags},
+			evidencehistory.FieldOwnerID:                {Type: field.TypeString, Column: evidencehistory.FieldOwnerID},
+			evidencehistory.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: evidencehistory.FieldWorkflowEligibleMarker},
+			evidencehistory.FieldName:                   {Type: field.TypeString, Column: evidencehistory.FieldName},
+			evidencehistory.FieldDescription:            {Type: field.TypeString, Column: evidencehistory.FieldDescription},
+			evidencehistory.FieldCollectionProcedure:    {Type: field.TypeString, Column: evidencehistory.FieldCollectionProcedure},
+			evidencehistory.FieldCreationDate:           {Type: field.TypeTime, Column: evidencehistory.FieldCreationDate},
+			evidencehistory.FieldRenewalDate:            {Type: field.TypeTime, Column: evidencehistory.FieldRenewalDate},
+			evidencehistory.FieldSource:                 {Type: field.TypeString, Column: evidencehistory.FieldSource},
+			evidencehistory.FieldIsAutomated:            {Type: field.TypeBool, Column: evidencehistory.FieldIsAutomated},
+			evidencehistory.FieldURL:                    {Type: field.TypeString, Column: evidencehistory.FieldURL},
+			evidencehistory.FieldStatus:                 {Type: field.TypeEnum, Column: evidencehistory.FieldStatus},
 		},
 	}
 	graph.Nodes[18] = &sqlgraph.Node{
@@ -1063,9 +1060,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldFileID:                          {Type: field.TypeString, Column: internalpolicyhistory.FieldFileID},
 			internalpolicyhistory.FieldInternalPolicyKindName:          {Type: field.TypeString, Column: internalpolicyhistory.FieldInternalPolicyKindName},
 			internalpolicyhistory.FieldInternalPolicyKindID:            {Type: field.TypeString, Column: internalpolicyhistory.FieldInternalPolicyKindID},
-			internalpolicyhistory.FieldProposedChanges:                 {Type: field.TypeJSON, Column: internalpolicyhistory.FieldProposedChanges},
-			internalpolicyhistory.FieldProposedByUserID:                {Type: field.TypeString, Column: internalpolicyhistory.FieldProposedByUserID},
-			internalpolicyhistory.FieldProposedAt:                      {Type: field.TypeTime, Column: internalpolicyhistory.FieldProposedAt},
+			internalpolicyhistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: internalpolicyhistory.FieldWorkflowEligibleMarker},
 		},
 	}
 	graph.Nodes[27] = &sqlgraph.Node{
@@ -1401,6 +1396,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldSystemInternalID:                {Type: field.TypeString, Column: procedurehistory.FieldSystemInternalID},
 			procedurehistory.FieldProcedureKindName:               {Type: field.TypeString, Column: procedurehistory.FieldProcedureKindName},
 			procedurehistory.FieldProcedureKindID:                 {Type: field.TypeString, Column: procedurehistory.FieldProcedureKindID},
+			procedurehistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: procedurehistory.FieldWorkflowEligibleMarker},
 		},
 	}
 	graph.Nodes[37] = &sqlgraph.Node{
@@ -1756,6 +1752,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldSystemInternalID:           {Type: field.TypeString, Column: subcontrolhistory.FieldSystemInternalID},
 			subcontrolhistory.FieldSubcontrolKindName:         {Type: field.TypeString, Column: subcontrolhistory.FieldSubcontrolKindName},
 			subcontrolhistory.FieldSubcontrolKindID:           {Type: field.TypeString, Column: subcontrolhistory.FieldSubcontrolKindID},
+			subcontrolhistory.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: subcontrolhistory.FieldWorkflowEligibleMarker},
 			subcontrolhistory.FieldRefCode:                    {Type: field.TypeString, Column: subcontrolhistory.FieldRefCode},
 			subcontrolhistory.FieldControlID:                  {Type: field.TypeString, Column: subcontrolhistory.FieldControlID},
 		},
@@ -2283,35 +2280,38 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "WorkflowDefinitionHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			workflowdefinitionhistory.FieldHistoryTime:       {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldHistoryTime},
-			workflowdefinitionhistory.FieldRef:               {Type: field.TypeString, Column: workflowdefinitionhistory.FieldRef},
-			workflowdefinitionhistory.FieldOperation:         {Type: field.TypeEnum, Column: workflowdefinitionhistory.FieldOperation},
-			workflowdefinitionhistory.FieldCreatedAt:         {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldCreatedAt},
-			workflowdefinitionhistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldUpdatedAt},
-			workflowdefinitionhistory.FieldCreatedBy:         {Type: field.TypeString, Column: workflowdefinitionhistory.FieldCreatedBy},
-			workflowdefinitionhistory.FieldUpdatedBy:         {Type: field.TypeString, Column: workflowdefinitionhistory.FieldUpdatedBy},
-			workflowdefinitionhistory.FieldDeletedAt:         {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldDeletedAt},
-			workflowdefinitionhistory.FieldDeletedBy:         {Type: field.TypeString, Column: workflowdefinitionhistory.FieldDeletedBy},
-			workflowdefinitionhistory.FieldDisplayID:         {Type: field.TypeString, Column: workflowdefinitionhistory.FieldDisplayID},
-			workflowdefinitionhistory.FieldTags:              {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTags},
-			workflowdefinitionhistory.FieldOwnerID:           {Type: field.TypeString, Column: workflowdefinitionhistory.FieldOwnerID},
-			workflowdefinitionhistory.FieldSystemOwned:       {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldSystemOwned},
-			workflowdefinitionhistory.FieldInternalNotes:     {Type: field.TypeString, Column: workflowdefinitionhistory.FieldInternalNotes},
-			workflowdefinitionhistory.FieldSystemInternalID:  {Type: field.TypeString, Column: workflowdefinitionhistory.FieldSystemInternalID},
-			workflowdefinitionhistory.FieldName:              {Type: field.TypeString, Column: workflowdefinitionhistory.FieldName},
-			workflowdefinitionhistory.FieldDescription:       {Type: field.TypeString, Column: workflowdefinitionhistory.FieldDescription},
-			workflowdefinitionhistory.FieldWorkflowKind:      {Type: field.TypeEnum, Column: workflowdefinitionhistory.FieldWorkflowKind},
-			workflowdefinitionhistory.FieldSchemaType:        {Type: field.TypeString, Column: workflowdefinitionhistory.FieldSchemaType},
-			workflowdefinitionhistory.FieldRevision:          {Type: field.TypeInt, Column: workflowdefinitionhistory.FieldRevision},
-			workflowdefinitionhistory.FieldDraft:             {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldDraft},
-			workflowdefinitionhistory.FieldPublishedAt:       {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldPublishedAt},
-			workflowdefinitionhistory.FieldCooldownSeconds:   {Type: field.TypeInt, Column: workflowdefinitionhistory.FieldCooldownSeconds},
-			workflowdefinitionhistory.FieldIsDefault:         {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldIsDefault},
-			workflowdefinitionhistory.FieldActive:            {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldActive},
-			workflowdefinitionhistory.FieldTriggerOperations: {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTriggerOperations},
-			workflowdefinitionhistory.FieldTriggerFields:     {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTriggerFields},
-			workflowdefinitionhistory.FieldDefinitionJSON:    {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldDefinitionJSON},
-			workflowdefinitionhistory.FieldTrackedFields:     {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTrackedFields},
+			workflowdefinitionhistory.FieldHistoryTime:            {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldHistoryTime},
+			workflowdefinitionhistory.FieldRef:                    {Type: field.TypeString, Column: workflowdefinitionhistory.FieldRef},
+			workflowdefinitionhistory.FieldOperation:              {Type: field.TypeEnum, Column: workflowdefinitionhistory.FieldOperation},
+			workflowdefinitionhistory.FieldCreatedAt:              {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldCreatedAt},
+			workflowdefinitionhistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldUpdatedAt},
+			workflowdefinitionhistory.FieldCreatedBy:              {Type: field.TypeString, Column: workflowdefinitionhistory.FieldCreatedBy},
+			workflowdefinitionhistory.FieldUpdatedBy:              {Type: field.TypeString, Column: workflowdefinitionhistory.FieldUpdatedBy},
+			workflowdefinitionhistory.FieldDeletedAt:              {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldDeletedAt},
+			workflowdefinitionhistory.FieldDeletedBy:              {Type: field.TypeString, Column: workflowdefinitionhistory.FieldDeletedBy},
+			workflowdefinitionhistory.FieldDisplayID:              {Type: field.TypeString, Column: workflowdefinitionhistory.FieldDisplayID},
+			workflowdefinitionhistory.FieldTags:                   {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTags},
+			workflowdefinitionhistory.FieldOwnerID:                {Type: field.TypeString, Column: workflowdefinitionhistory.FieldOwnerID},
+			workflowdefinitionhistory.FieldSystemOwned:            {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldSystemOwned},
+			workflowdefinitionhistory.FieldInternalNotes:          {Type: field.TypeString, Column: workflowdefinitionhistory.FieldInternalNotes},
+			workflowdefinitionhistory.FieldSystemInternalID:       {Type: field.TypeString, Column: workflowdefinitionhistory.FieldSystemInternalID},
+			workflowdefinitionhistory.FieldName:                   {Type: field.TypeString, Column: workflowdefinitionhistory.FieldName},
+			workflowdefinitionhistory.FieldDescription:            {Type: field.TypeString, Column: workflowdefinitionhistory.FieldDescription},
+			workflowdefinitionhistory.FieldWorkflowKind:           {Type: field.TypeEnum, Column: workflowdefinitionhistory.FieldWorkflowKind},
+			workflowdefinitionhistory.FieldSchemaType:             {Type: field.TypeString, Column: workflowdefinitionhistory.FieldSchemaType},
+			workflowdefinitionhistory.FieldRevision:               {Type: field.TypeInt, Column: workflowdefinitionhistory.FieldRevision},
+			workflowdefinitionhistory.FieldDraft:                  {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldDraft},
+			workflowdefinitionhistory.FieldPublishedAt:            {Type: field.TypeTime, Column: workflowdefinitionhistory.FieldPublishedAt},
+			workflowdefinitionhistory.FieldCooldownSeconds:        {Type: field.TypeInt, Column: workflowdefinitionhistory.FieldCooldownSeconds},
+			workflowdefinitionhistory.FieldIsDefault:              {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldIsDefault},
+			workflowdefinitionhistory.FieldActive:                 {Type: field.TypeBool, Column: workflowdefinitionhistory.FieldActive},
+			workflowdefinitionhistory.FieldTriggerOperations:      {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTriggerOperations},
+			workflowdefinitionhistory.FieldTriggerFields:          {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTriggerFields},
+			workflowdefinitionhistory.FieldApprovalFields:         {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldApprovalFields},
+			workflowdefinitionhistory.FieldApprovalEdges:          {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldApprovalEdges},
+			workflowdefinitionhistory.FieldApprovalSubmissionMode: {Type: field.TypeEnum, Column: workflowdefinitionhistory.FieldApprovalSubmissionMode},
+			workflowdefinitionhistory.FieldDefinitionJSON:         {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldDefinitionJSON},
+			workflowdefinitionhistory.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTrackedFields},
 		},
 	}
 	graph.Nodes[62] = &sqlgraph.Node{
@@ -2366,13 +2366,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstancehistory.FieldTags:                 {Type: field.TypeJSON, Column: workflowinstancehistory.FieldTags},
 			workflowinstancehistory.FieldOwnerID:              {Type: field.TypeString, Column: workflowinstancehistory.FieldOwnerID},
 			workflowinstancehistory.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: workflowinstancehistory.FieldWorkflowDefinitionID},
+			workflowinstancehistory.FieldWorkflowProposalID:   {Type: field.TypeString, Column: workflowinstancehistory.FieldWorkflowProposalID},
 			workflowinstancehistory.FieldState:                {Type: field.TypeEnum, Column: workflowinstancehistory.FieldState},
 			workflowinstancehistory.FieldContext:              {Type: field.TypeJSON, Column: workflowinstancehistory.FieldContext},
 			workflowinstancehistory.FieldLastEvaluatedAt:      {Type: field.TypeTime, Column: workflowinstancehistory.FieldLastEvaluatedAt},
 			workflowinstancehistory.FieldDefinitionSnapshot:   {Type: field.TypeJSON, Column: workflowinstancehistory.FieldDefinitionSnapshot},
+			workflowinstancehistory.FieldCurrentActionIndex:   {Type: field.TypeInt, Column: workflowinstancehistory.FieldCurrentActionIndex},
 			workflowinstancehistory.FieldControlID:            {Type: field.TypeString, Column: workflowinstancehistory.FieldControlID},
 			workflowinstancehistory.FieldInternalPolicyID:     {Type: field.TypeString, Column: workflowinstancehistory.FieldInternalPolicyID},
 			workflowinstancehistory.FieldEvidenceID:           {Type: field.TypeString, Column: workflowinstancehistory.FieldEvidenceID},
+			workflowinstancehistory.FieldSubcontrolID:         {Type: field.TypeString, Column: workflowinstancehistory.FieldSubcontrolID},
+			workflowinstancehistory.FieldActionPlanID:         {Type: field.TypeString, Column: workflowinstancehistory.FieldActionPlanID},
+			workflowinstancehistory.FieldProcedureID:          {Type: field.TypeString, Column: workflowinstancehistory.FieldProcedureID},
 		},
 	}
 	graph.Nodes[64] = &sqlgraph.Node{
@@ -2404,6 +2409,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectrefhistory.FieldDirectoryGroupID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldDirectoryGroupID},
 			workflowobjectrefhistory.FieldDirectoryMembershipID: {Type: field.TypeString, Column: workflowobjectrefhistory.FieldDirectoryMembershipID},
 			workflowobjectrefhistory.FieldEvidenceID:            {Type: field.TypeString, Column: workflowobjectrefhistory.FieldEvidenceID},
+			workflowobjectrefhistory.FieldSubcontrolID:          {Type: field.TypeString, Column: workflowobjectrefhistory.FieldSubcontrolID},
+			workflowobjectrefhistory.FieldActionPlanID:          {Type: field.TypeString, Column: workflowobjectrefhistory.FieldActionPlanID},
+			workflowobjectrefhistory.FieldProcedureID:           {Type: field.TypeString, Column: workflowobjectrefhistory.FieldProcedureID},
 		},
 	}
 	return graph
@@ -2633,6 +2641,11 @@ func (f *ActionPlanHistoryFilter) WhereActionPlanKindName(p entql.StringP) {
 // WhereActionPlanKindID applies the entql string predicate on the action_plan_kind_id field.
 func (f *ActionPlanHistoryFilter) WhereActionPlanKindID(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldActionPlanKindID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *ActionPlanHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(actionplanhistory.FieldWorkflowEligibleMarker))
 }
 
 // WhereTitle applies the entql string predicate on the title field.
@@ -3480,19 +3493,9 @@ func (f *ControlHistoryFilter) WhereControlKindID(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldControlKindID))
 }
 
-// WhereProposedChanges applies the entql json.RawMessage predicate on the proposed_changes field.
-func (f *ControlHistoryFilter) WhereProposedChanges(p entql.BytesP) {
-	f.Where(p.Field(controlhistory.FieldProposedChanges))
-}
-
-// WhereProposedByUserID applies the entql string predicate on the proposed_by_user_id field.
-func (f *ControlHistoryFilter) WhereProposedByUserID(p entql.StringP) {
-	f.Where(p.Field(controlhistory.FieldProposedByUserID))
-}
-
-// WhereProposedAt applies the entql time.Time predicate on the proposed_at field.
-func (f *ControlHistoryFilter) WhereProposedAt(p entql.TimeP) {
-	f.Where(p.Field(controlhistory.FieldProposedAt))
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *ControlHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(controlhistory.FieldWorkflowEligibleMarker))
 }
 
 // WhereRefCode applies the entql string predicate on the ref_code field.
@@ -5130,19 +5133,9 @@ func (f *EvidenceHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(evidencehistory.FieldOwnerID))
 }
 
-// WhereProposedChanges applies the entql json.RawMessage predicate on the proposed_changes field.
-func (f *EvidenceHistoryFilter) WhereProposedChanges(p entql.BytesP) {
-	f.Where(p.Field(evidencehistory.FieldProposedChanges))
-}
-
-// WhereProposedByUserID applies the entql string predicate on the proposed_by_user_id field.
-func (f *EvidenceHistoryFilter) WhereProposedByUserID(p entql.StringP) {
-	f.Where(p.Field(evidencehistory.FieldProposedByUserID))
-}
-
-// WhereProposedAt applies the entql time.Time predicate on the proposed_at field.
-func (f *EvidenceHistoryFilter) WhereProposedAt(p entql.TimeP) {
-	f.Where(p.Field(evidencehistory.FieldProposedAt))
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *EvidenceHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(evidencehistory.FieldWorkflowEligibleMarker))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -6665,19 +6658,9 @@ func (f *InternalPolicyHistoryFilter) WhereInternalPolicyKindID(p entql.StringP)
 	f.Where(p.Field(internalpolicyhistory.FieldInternalPolicyKindID))
 }
 
-// WhereProposedChanges applies the entql json.RawMessage predicate on the proposed_changes field.
-func (f *InternalPolicyHistoryFilter) WhereProposedChanges(p entql.BytesP) {
-	f.Where(p.Field(internalpolicyhistory.FieldProposedChanges))
-}
-
-// WhereProposedByUserID applies the entql string predicate on the proposed_by_user_id field.
-func (f *InternalPolicyHistoryFilter) WhereProposedByUserID(p entql.StringP) {
-	f.Where(p.Field(internalpolicyhistory.FieldProposedByUserID))
-}
-
-// WhereProposedAt applies the entql time.Time predicate on the proposed_at field.
-func (f *InternalPolicyHistoryFilter) WhereProposedAt(p entql.TimeP) {
-	f.Where(p.Field(internalpolicyhistory.FieldProposedAt))
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *InternalPolicyHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(internalpolicyhistory.FieldWorkflowEligibleMarker))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -8103,6 +8086,11 @@ func (f *ProcedureHistoryFilter) WhereProcedureKindName(p entql.StringP) {
 // WhereProcedureKindID applies the entql string predicate on the procedure_kind_id field.
 func (f *ProcedureHistoryFilter) WhereProcedureKindID(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldProcedureKindID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *ProcedureHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(procedurehistory.FieldWorkflowEligibleMarker))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -9653,6 +9641,11 @@ func (f *SubcontrolHistoryFilter) WhereSubcontrolKindName(p entql.StringP) {
 // WhereSubcontrolKindID applies the entql string predicate on the subcontrol_kind_id field.
 func (f *SubcontrolHistoryFilter) WhereSubcontrolKindID(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldSubcontrolKindID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *SubcontrolHistoryFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(subcontrolhistory.FieldWorkflowEligibleMarker))
 }
 
 // WhereRefCode applies the entql string predicate on the ref_code field.
@@ -12025,6 +12018,21 @@ func (f *WorkflowDefinitionHistoryFilter) WhereTriggerFields(p entql.BytesP) {
 	f.Where(p.Field(workflowdefinitionhistory.FieldTriggerFields))
 }
 
+// WhereApprovalFields applies the entql json.RawMessage predicate on the approval_fields field.
+func (f *WorkflowDefinitionHistoryFilter) WhereApprovalFields(p entql.BytesP) {
+	f.Where(p.Field(workflowdefinitionhistory.FieldApprovalFields))
+}
+
+// WhereApprovalEdges applies the entql json.RawMessage predicate on the approval_edges field.
+func (f *WorkflowDefinitionHistoryFilter) WhereApprovalEdges(p entql.BytesP) {
+	f.Where(p.Field(workflowdefinitionhistory.FieldApprovalEdges))
+}
+
+// WhereApprovalSubmissionMode applies the entql string predicate on the approval_submission_mode field.
+func (f *WorkflowDefinitionHistoryFilter) WhereApprovalSubmissionMode(p entql.StringP) {
+	f.Where(p.Field(workflowdefinitionhistory.FieldApprovalSubmissionMode))
+}
+
 // WhereDefinitionJSON applies the entql json.RawMessage predicate on the definition_json field.
 func (f *WorkflowDefinitionHistoryFilter) WhereDefinitionJSON(p entql.BytesP) {
 	f.Where(p.Field(workflowdefinitionhistory.FieldDefinitionJSON))
@@ -12255,6 +12263,11 @@ func (f *WorkflowInstanceHistoryFilter) WhereWorkflowDefinitionID(p entql.String
 	f.Where(p.Field(workflowinstancehistory.FieldWorkflowDefinitionID))
 }
 
+// WhereWorkflowProposalID applies the entql string predicate on the workflow_proposal_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereWorkflowProposalID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldWorkflowProposalID))
+}
+
 // WhereState applies the entql string predicate on the state field.
 func (f *WorkflowInstanceHistoryFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(workflowinstancehistory.FieldState))
@@ -12275,6 +12288,11 @@ func (f *WorkflowInstanceHistoryFilter) WhereDefinitionSnapshot(p entql.BytesP) 
 	f.Where(p.Field(workflowinstancehistory.FieldDefinitionSnapshot))
 }
 
+// WhereCurrentActionIndex applies the entql int predicate on the current_action_index field.
+func (f *WorkflowInstanceHistoryFilter) WhereCurrentActionIndex(p entql.IntP) {
+	f.Where(p.Field(workflowinstancehistory.FieldCurrentActionIndex))
+}
+
 // WhereControlID applies the entql string predicate on the control_id field.
 func (f *WorkflowInstanceHistoryFilter) WhereControlID(p entql.StringP) {
 	f.Where(p.Field(workflowinstancehistory.FieldControlID))
@@ -12288,6 +12306,21 @@ func (f *WorkflowInstanceHistoryFilter) WhereInternalPolicyID(p entql.StringP) {
 // WhereEvidenceID applies the entql string predicate on the evidence_id field.
 func (f *WorkflowInstanceHistoryFilter) WhereEvidenceID(p entql.StringP) {
 	f.Where(p.Field(workflowinstancehistory.FieldEvidenceID))
+}
+
+// WhereSubcontrolID applies the entql string predicate on the subcontrol_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereSubcontrolID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldSubcontrolID))
+}
+
+// WhereActionPlanID applies the entql string predicate on the action_plan_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereActionPlanID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldActionPlanID))
+}
+
+// WhereProcedureID applies the entql string predicate on the procedure_id field.
+func (f *WorkflowInstanceHistoryFilter) WhereProcedureID(p entql.StringP) {
+	f.Where(p.Field(workflowinstancehistory.FieldProcedureID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -12418,4 +12451,19 @@ func (f *WorkflowObjectRefHistoryFilter) WhereDirectoryMembershipID(p entql.Stri
 // WhereEvidenceID applies the entql string predicate on the evidence_id field.
 func (f *WorkflowObjectRefHistoryFilter) WhereEvidenceID(p entql.StringP) {
 	f.Where(p.Field(workflowobjectrefhistory.FieldEvidenceID))
+}
+
+// WhereSubcontrolID applies the entql string predicate on the subcontrol_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereSubcontrolID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldSubcontrolID))
+}
+
+// WhereActionPlanID applies the entql string predicate on the action_plan_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereActionPlanID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldActionPlanID))
+}
+
+// WhereProcedureID applies the entql string predicate on the procedure_id field.
+func (f *WorkflowObjectRefHistoryFilter) WhereProcedureID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectrefhistory.FieldProcedureID))
 }

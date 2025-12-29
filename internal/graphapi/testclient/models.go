@@ -338,6 +338,8 @@ type ActionPlan struct {
 	ActionPlanKindName *string `json:"actionPlanKindName,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID *string `json:"actionPlanKindID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// short title describing the action plan
 	Title string `json:"title"`
 	// detailed description of remediation steps and objectives
@@ -363,19 +365,24 @@ type ActionPlan struct {
 	// the group of users who are responsible for approving the action_plan
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the action_plan, used for temporary approval
-	Delegate        *Group                   `json:"delegate,omitempty"`
-	Owner           *Organization            `json:"owner,omitempty"`
-	ActionPlanKind  *CustomTypeEnum          `json:"actionPlanKind,omitempty"`
-	Risks           *RiskConnection          `json:"risks"`
-	Controls        *ControlConnection       `json:"controls"`
-	Programs        *ProgramConnection       `json:"programs"`
-	Findings        *FindingConnection       `json:"findings"`
-	Vulnerabilities *VulnerabilityConnection `json:"vulnerabilities"`
-	Reviews         *ReviewConnection        `json:"reviews"`
-	Remediations    *RemediationConnection   `json:"remediations"`
-	Tasks           *TaskConnection          `json:"tasks"`
-	Integrations    *IntegrationConnection   `json:"integrations"`
-	File            *File                    `json:"file,omitempty"`
+	Delegate           *Group                       `json:"delegate,omitempty"`
+	Owner              *Organization                `json:"owner,omitempty"`
+	ActionPlanKind     *CustomTypeEnum              `json:"actionPlanKind,omitempty"`
+	Risks              *RiskConnection              `json:"risks"`
+	Controls           *ControlConnection           `json:"controls"`
+	Programs           *ProgramConnection           `json:"programs"`
+	Findings           *FindingConnection           `json:"findings"`
+	Vulnerabilities    *VulnerabilityConnection     `json:"vulnerabilities"`
+	Reviews            *ReviewConnection            `json:"reviews"`
+	Remediations       *RemediationConnection       `json:"remediations"`
+	Tasks              *TaskConnection              `json:"tasks"`
+	Integrations       *IntegrationConnection       `json:"integrations"`
+	File               *File                        `json:"file,omitempty"`
+	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this actionPlan has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this actionPlan if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (ActionPlan) IsNode() {}
@@ -756,6 +763,11 @@ type ActionPlanWhereInput struct {
 	ActionPlanKindIDNotNil       *bool    `json:"actionPlanKindIDNotNil,omitempty"`
 	ActionPlanKindIDEqualFold    *string  `json:"actionPlanKindIDEqualFold,omitempty"`
 	ActionPlanKindIDContainsFold *string  `json:"actionPlanKindIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// title field predicates
 	Title             *string  `json:"title,omitempty"`
 	TitleNeq          *string  `json:"titleNEQ,omitempty"`
@@ -895,6 +907,9 @@ type ActionPlanWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 // AddProgramMembershipInput is used for create ProgramMembership object under an existing program
@@ -2117,12 +2132,8 @@ type Control struct {
 	ControlKindName *string `json:"controlKindName,omitempty"`
 	// the kind of the control
 	ControlKindID *string `json:"controlKindID,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID *string `json:"proposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the standard that the control belongs to, if applicable
@@ -2157,6 +2168,10 @@ type Control struct {
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
 	ControlMappings        *FindingControlConnection        `json:"controlMappings"`
+	// Indicates if this control has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this control if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Control) IsNode() {}
@@ -3339,33 +3354,11 @@ type ControlWhereInput struct {
 	ControlKindIDNotNil       *bool    `json:"controlKindIDNotNil,omitempty"`
 	ControlKindIDEqualFold    *string  `json:"controlKindIDEqualFold,omitempty"`
 	ControlKindIDContainsFold *string  `json:"controlKindIDContainsFold,omitempty"`
-	// proposed_by_user_id field predicates
-	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
-	ProposedByUserIdneq          *string  `json:"proposedByUserIDNEQ,omitempty"`
-	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
-	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
-	ProposedByUserIdgt           *string  `json:"proposedByUserIDGT,omitempty"`
-	ProposedByUserIdgte          *string  `json:"proposedByUserIDGTE,omitempty"`
-	ProposedByUserIdlt           *string  `json:"proposedByUserIDLT,omitempty"`
-	ProposedByUserIdlte          *string  `json:"proposedByUserIDLTE,omitempty"`
-	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
-	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
-	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
-	ProposedByUserIDIsNil        *bool    `json:"proposedByUserIDIsNil,omitempty"`
-	ProposedByUserIDNotNil       *bool    `json:"proposedByUserIDNotNil,omitempty"`
-	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
-	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
-	// proposed_at field predicates
-	ProposedAt       *time.Time   `json:"proposedAt,omitempty"`
-	ProposedAtNeq    *time.Time   `json:"proposedAtNEQ,omitempty"`
-	ProposedAtIn     []*time.Time `json:"proposedAtIn,omitempty"`
-	ProposedAtNotIn  []*time.Time `json:"proposedAtNotIn,omitempty"`
-	ProposedAtGt     *time.Time   `json:"proposedAtGT,omitempty"`
-	ProposedAtGte    *time.Time   `json:"proposedAtGTE,omitempty"`
-	ProposedAtLt     *time.Time   `json:"proposedAtLT,omitempty"`
-	ProposedAtLte    *time.Time   `json:"proposedAtLTE,omitempty"`
-	ProposedAtIsNil  *bool        `json:"proposedAtIsNil,omitempty"`
-	ProposedAtNotNil *bool        `json:"proposedAtNotNil,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// ref_code field predicates
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNeq          *string  `json:"refCodeNEQ,omitempty"`
@@ -3546,6 +3539,8 @@ type CreateActionPlanInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindName *string `json:"actionPlanKindName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// short title describing the action plan
 	Title string `json:"title"`
 	// detailed description of remediation steps and objectives
@@ -3567,21 +3562,22 @@ type CreateActionPlanInput struct {
 	// raw payload received from the integration for auditing and troubleshooting
 	RawPayload map[string]any `json:"rawPayload,omitempty"`
 	// source of the action plan
-	Source           *string  `json:"source,omitempty"`
-	ApproverID       *string  `json:"approverID,omitempty"`
-	DelegateID       *string  `json:"delegateID,omitempty"`
-	OwnerID          *string  `json:"ownerID,omitempty"`
-	ActionPlanKindID *string  `json:"actionPlanKindID,omitempty"`
-	RiskIDs          []string `json:"riskIDs,omitempty"`
-	ControlIDs       []string `json:"controlIDs,omitempty"`
-	ProgramIDs       []string `json:"programIDs,omitempty"`
-	FindingIDs       []string `json:"findingIDs,omitempty"`
-	VulnerabilityIDs []string `json:"vulnerabilityIDs,omitempty"`
-	ReviewIDs        []string `json:"reviewIDs,omitempty"`
-	RemediationIDs   []string `json:"remediationIDs,omitempty"`
-	TaskIDs          []string `json:"taskIDs,omitempty"`
-	IntegrationIDs   []string `json:"integrationIDs,omitempty"`
-	FileID           *string  `json:"fileID,omitempty"`
+	Source               *string  `json:"source,omitempty"`
+	ApproverID           *string  `json:"approverID,omitempty"`
+	DelegateID           *string  `json:"delegateID,omitempty"`
+	OwnerID              *string  `json:"ownerID,omitempty"`
+	ActionPlanKindID     *string  `json:"actionPlanKindID,omitempty"`
+	RiskIDs              []string `json:"riskIDs,omitempty"`
+	ControlIDs           []string `json:"controlIDs,omitempty"`
+	ProgramIDs           []string `json:"programIDs,omitempty"`
+	FindingIDs           []string `json:"findingIDs,omitempty"`
+	VulnerabilityIDs     []string `json:"vulnerabilityIDs,omitempty"`
+	ReviewIDs            []string `json:"reviewIDs,omitempty"`
+	RemediationIDs       []string `json:"remediationIDs,omitempty"`
+	TaskIDs              []string `json:"taskIDs,omitempty"`
+	IntegrationIDs       []string `json:"integrationIDs,omitempty"`
+	FileID               *string  `json:"fileID,omitempty"`
+	WorkflowObjectRefIDs []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateAssessmentInput is used for create Assessment object.
@@ -3760,12 +3756,8 @@ type CreateControlInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the control
 	ControlKindName *string `json:"controlKindName,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID *string `json:"proposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
 	RefCode                  string   `json:"refCode"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
@@ -4155,12 +4147,8 @@ type CreateEventInput struct {
 type CreateEvidenceInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID *string `json:"proposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the name of the evidence
 	Name string `json:"name"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -4188,6 +4176,7 @@ type CreateEvidenceInput struct {
 	ProgramIDs               []string              `json:"programIDs,omitempty"`
 	TaskIDs                  []string              `json:"taskIDs,omitempty"`
 	CommentIDs               []string              `json:"commentIDs,omitempty"`
+	WorkflowObjectRefIDs     []string              `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateExportInput is used for create Export object.
@@ -4553,31 +4542,27 @@ type CreateInternalPolicyInput struct {
 	URL *string `json:"url,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindName *string `json:"internalPolicyKindName,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID *string `json:"proposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt               *time.Time `json:"proposedAt,omitempty"`
-	OwnerID                  *string    `json:"ownerID,omitempty"`
-	BlockedGroupIDs          []string   `json:"blockedGroupIDs,omitempty"`
-	EditorIDs                []string   `json:"editorIDs,omitempty"`
-	ApproverID               *string    `json:"approverID,omitempty"`
-	DelegateID               *string    `json:"delegateID,omitempty"`
-	InternalPolicyKindID     *string    `json:"internalPolicyKindID,omitempty"`
-	ControlObjectiveIDs      []string   `json:"controlObjectiveIDs,omitempty"`
-	ControlImplementationIDs []string   `json:"controlImplementationIDs,omitempty"`
-	ControlIDs               []string   `json:"controlIDs,omitempty"`
-	SubcontrolIDs            []string   `json:"subcontrolIDs,omitempty"`
-	ProcedureIDs             []string   `json:"procedureIDs,omitempty"`
-	NarrativeIDs             []string   `json:"narrativeIDs,omitempty"`
-	TaskIDs                  []string   `json:"taskIDs,omitempty"`
-	RiskIDs                  []string   `json:"riskIDs,omitempty"`
-	ProgramIDs               []string   `json:"programIDs,omitempty"`
-	FileID                   *string    `json:"fileID,omitempty"`
-	CommentIDs               []string   `json:"commentIDs,omitempty"`
-	DiscussionIDs            []string   `json:"discussionIDs,omitempty"`
-	WorkflowObjectRefIDs     []string   `json:"workflowObjectRefIDs,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker   *bool    `json:"workflowEligibleMarker,omitempty"`
+	OwnerID                  *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs          []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                []string `json:"editorIDs,omitempty"`
+	ApproverID               *string  `json:"approverID,omitempty"`
+	DelegateID               *string  `json:"delegateID,omitempty"`
+	InternalPolicyKindID     *string  `json:"internalPolicyKindID,omitempty"`
+	ControlObjectiveIDs      []string `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	ControlIDs               []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
+	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
+	NarrativeIDs             []string `json:"narrativeIDs,omitempty"`
+	TaskIDs                  []string `json:"taskIDs,omitempty"`
+	RiskIDs                  []string `json:"riskIDs,omitempty"`
+	ProgramIDs               []string `json:"programIDs,omitempty"`
+	FileID                   *string  `json:"fileID,omitempty"`
+	CommentIDs               []string `json:"commentIDs,omitempty"`
+	DiscussionIDs            []string `json:"discussionIDs,omitempty"`
+	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateInviteInput is used for create Invite object.
@@ -5066,23 +5051,26 @@ type CreateProcedureInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the procedure
-	ProcedureKindName *string  `json:"procedureKindName,omitempty"`
-	OwnerID           *string  `json:"ownerID,omitempty"`
-	BlockedGroupIDs   []string `json:"blockedGroupIDs,omitempty"`
-	EditorIDs         []string `json:"editorIDs,omitempty"`
-	ApproverID        *string  `json:"approverID,omitempty"`
-	DelegateID        *string  `json:"delegateID,omitempty"`
-	ProcedureKindID   *string  `json:"procedureKindID,omitempty"`
-	ControlIDs        []string `json:"controlIDs,omitempty"`
-	SubcontrolIDs     []string `json:"subcontrolIDs,omitempty"`
-	InternalPolicyIDs []string `json:"internalPolicyIDs,omitempty"`
-	ProgramIDs        []string `json:"programIDs,omitempty"`
-	NarrativeIDs      []string `json:"narrativeIDs,omitempty"`
-	RiskIDs           []string `json:"riskIDs,omitempty"`
-	TaskIDs           []string `json:"taskIDs,omitempty"`
-	CommentIDs        []string `json:"commentIDs,omitempty"`
-	DiscussionIDs     []string `json:"discussionIDs,omitempty"`
-	FileID            *string  `json:"fileID,omitempty"`
+	ProcedureKindName *string `json:"procedureKindName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool    `json:"workflowEligibleMarker,omitempty"`
+	OwnerID                *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs        []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs              []string `json:"editorIDs,omitempty"`
+	ApproverID             *string  `json:"approverID,omitempty"`
+	DelegateID             *string  `json:"delegateID,omitempty"`
+	ProcedureKindID        *string  `json:"procedureKindID,omitempty"`
+	ControlIDs             []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs          []string `json:"subcontrolIDs,omitempty"`
+	InternalPolicyIDs      []string `json:"internalPolicyIDs,omitempty"`
+	ProgramIDs             []string `json:"programIDs,omitempty"`
+	NarrativeIDs           []string `json:"narrativeIDs,omitempty"`
+	RiskIDs                []string `json:"riskIDs,omitempty"`
+	TaskIDs                []string `json:"taskIDs,omitempty"`
+	CommentIDs             []string `json:"commentIDs,omitempty"`
+	DiscussionIDs          []string `json:"discussionIDs,omitempty"`
+	FileID                 *string  `json:"fileID,omitempty"`
+	WorkflowObjectRefIDs   []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateProgramInput is used for create Program object.
@@ -5503,6 +5491,8 @@ type CreateSubcontrolInput struct {
 	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindName *string `json:"subcontrolKindName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
 	RefCode                  string   `json:"refCode"`
 	EvidenceIDs              []string `json:"evidenceIDs,omitempty"`
@@ -5523,6 +5513,7 @@ type CreateSubcontrolInput struct {
 	ControlID                string   `json:"controlID"`
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
 	ScheduledJobIDs          []string `json:"scheduledJobIDs,omitempty"`
+	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateSubprocessorInput is used for create Subprocessor object.
@@ -6074,10 +6065,6 @@ type CreateWorkflowDefinitionInput struct {
 	IsDefault *bool `json:"isDefault,omitempty"`
 	// Whether the workflow definition is active
 	Active *bool `json:"active,omitempty"`
-	// Derived: normalized operations from definition for prefiltering; not user editable
-	TriggerOperations []string `json:"triggerOperations,omitempty"`
-	// Derived: normalized fields from definition for prefiltering; not user editable
-	TriggerFields []string `json:"triggerFields,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
@@ -6112,15 +6099,20 @@ type CreateWorkflowInstanceInput struct {
 	// Timestamp when the workflow was last evaluated
 	LastEvaluatedAt *time.Time `json:"lastEvaluatedAt,omitempty"`
 	// Copy of definition JSON used for this instance
-	DefinitionSnapshot    *models.WorkflowDefinitionDocument `json:"definitionSnapshot,omitempty"`
-	OwnerID               *string                            `json:"ownerID,omitempty"`
-	WorkflowDefinitionID  string                             `json:"workflowDefinitionID"`
-	ControlID             *string                            `json:"controlID,omitempty"`
-	InternalPolicyID      *string                            `json:"internalPolicyID,omitempty"`
-	EvidenceID            *string                            `json:"evidenceID,omitempty"`
-	WorkflowAssignmentIDs []string                           `json:"workflowAssignmentIDs,omitempty"`
-	WorkflowEventIDs      []string                           `json:"workflowEventIDs,omitempty"`
-	WorkflowObjectRefIDs  []string                           `json:"workflowObjectRefIDs,omitempty"`
+	DefinitionSnapshot *models.WorkflowDefinitionDocument `json:"definitionSnapshot,omitempty"`
+	// Index of the current action being executed (used for recovery and resumption)
+	CurrentActionIndex    *int64   `json:"currentActionIndex,omitempty"`
+	OwnerID               *string  `json:"ownerID,omitempty"`
+	WorkflowDefinitionID  string   `json:"workflowDefinitionID"`
+	ControlID             *string  `json:"controlID,omitempty"`
+	InternalPolicyID      *string  `json:"internalPolicyID,omitempty"`
+	EvidenceID            *string  `json:"evidenceID,omitempty"`
+	SubcontrolID          *string  `json:"subcontrolID,omitempty"`
+	ActionPlanID          *string  `json:"actionPlanID,omitempty"`
+	ProcedureID           *string  `json:"procedureID,omitempty"`
+	WorkflowAssignmentIDs []string `json:"workflowAssignmentIDs,omitempty"`
+	WorkflowEventIDs      []string `json:"workflowEventIDs,omitempty"`
+	WorkflowObjectRefIDs  []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateWorkflowObjectRefInput is used for create WorkflowObjectRef object.
@@ -6135,6 +6127,9 @@ type CreateWorkflowObjectRefInput struct {
 	DirectoryAccountID *string `json:"directoryAccountID,omitempty"`
 	DirectoryGroupID   *string `json:"directoryGroupID,omitempty"`
 	EvidenceID         *string `json:"evidenceID,omitempty"`
+	SubcontrolID       *string `json:"subcontrolID,omitempty"`
+	ActionPlanID       *string `json:"actionPlanID,omitempty"`
+	ProcedureID        *string `json:"procedureID,omitempty"`
 }
 
 type CustomDomain struct {
@@ -9651,12 +9646,8 @@ type Evidence struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID *string `json:"proposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the name of the evidence
 	Name string `json:"name"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -9684,6 +9675,11 @@ type Evidence struct {
 	Programs               *ProgramConnection               `json:"programs"`
 	Tasks                  *TaskConnection                  `json:"tasks"`
 	Comments               *NoteConnection                  `json:"comments"`
+	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	// Indicates if this evidence has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this evidence if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Evidence) IsNode() {}
@@ -9839,33 +9835,11 @@ type EvidenceWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
-	// proposed_by_user_id field predicates
-	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
-	ProposedByUserIdneq          *string  `json:"proposedByUserIDNEQ,omitempty"`
-	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
-	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
-	ProposedByUserIdgt           *string  `json:"proposedByUserIDGT,omitempty"`
-	ProposedByUserIdgte          *string  `json:"proposedByUserIDGTE,omitempty"`
-	ProposedByUserIdlt           *string  `json:"proposedByUserIDLT,omitempty"`
-	ProposedByUserIdlte          *string  `json:"proposedByUserIDLTE,omitempty"`
-	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
-	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
-	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
-	ProposedByUserIDIsNil        *bool    `json:"proposedByUserIDIsNil,omitempty"`
-	ProposedByUserIDNotNil       *bool    `json:"proposedByUserIDNotNil,omitempty"`
-	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
-	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
-	// proposed_at field predicates
-	ProposedAt       *time.Time   `json:"proposedAt,omitempty"`
-	ProposedAtNeq    *time.Time   `json:"proposedAtNEQ,omitempty"`
-	ProposedAtIn     []*time.Time `json:"proposedAtIn,omitempty"`
-	ProposedAtNotIn  []*time.Time `json:"proposedAtNotIn,omitempty"`
-	ProposedAtGt     *time.Time   `json:"proposedAtGT,omitempty"`
-	ProposedAtGte    *time.Time   `json:"proposedAtGTE,omitempty"`
-	ProposedAtLt     *time.Time   `json:"proposedAtLT,omitempty"`
-	ProposedAtLte    *time.Time   `json:"proposedAtLTE,omitempty"`
-	ProposedAtIsNil  *bool        `json:"proposedAtIsNil,omitempty"`
-	ProposedAtNotNil *bool        `json:"proposedAtNotNil,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -10003,6 +9977,9 @@ type EvidenceWhereInput struct {
 	// comments edge predicates
 	HasComments     *bool             `json:"hasComments,omitempty"`
 	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 type Export struct {
@@ -13254,15 +13231,11 @@ type InternalPolicy struct {
 	InternalPolicyKindName *string `json:"internalPolicyKindName,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindID *string `json:"internalPolicyKindID,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]any `json:"proposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID *string `json:"proposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt    *time.Time       `json:"proposedAt,omitempty"`
-	Owner         *Organization    `json:"owner,omitempty"`
-	BlockedGroups *GroupConnection `json:"blockedGroups"`
-	Editors       *GroupConnection `json:"editors"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool            `json:"workflowEligibleMarker,omitempty"`
+	Owner                  *Organization    `json:"owner,omitempty"`
+	BlockedGroups          *GroupConnection `json:"blockedGroups"`
+	Editors                *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the policy
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the policy, used for temporary approval
@@ -13281,6 +13254,10 @@ type InternalPolicy struct {
 	Comments               *NoteConnection                  `json:"comments"`
 	Discussions            *DiscussionConnection            `json:"discussions"`
 	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	// Indicates if this internalPolicy has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this internalPolicy if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (InternalPolicy) IsNode() {}
@@ -13675,33 +13652,11 @@ type InternalPolicyWhereInput struct {
 	InternalPolicyKindIDNotNil       *bool    `json:"internalPolicyKindIDNotNil,omitempty"`
 	InternalPolicyKindIDEqualFold    *string  `json:"internalPolicyKindIDEqualFold,omitempty"`
 	InternalPolicyKindIDContainsFold *string  `json:"internalPolicyKindIDContainsFold,omitempty"`
-	// proposed_by_user_id field predicates
-	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
-	ProposedByUserIdneq          *string  `json:"proposedByUserIDNEQ,omitempty"`
-	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
-	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
-	ProposedByUserIdgt           *string  `json:"proposedByUserIDGT,omitempty"`
-	ProposedByUserIdgte          *string  `json:"proposedByUserIDGTE,omitempty"`
-	ProposedByUserIdlt           *string  `json:"proposedByUserIDLT,omitempty"`
-	ProposedByUserIdlte          *string  `json:"proposedByUserIDLTE,omitempty"`
-	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
-	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
-	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
-	ProposedByUserIDIsNil        *bool    `json:"proposedByUserIDIsNil,omitempty"`
-	ProposedByUserIDNotNil       *bool    `json:"proposedByUserIDNotNil,omitempty"`
-	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
-	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
-	// proposed_at field predicates
-	ProposedAt       *time.Time   `json:"proposedAt,omitempty"`
-	ProposedAtNeq    *time.Time   `json:"proposedAtNEQ,omitempty"`
-	ProposedAtIn     []*time.Time `json:"proposedAtIn,omitempty"`
-	ProposedAtNotIn  []*time.Time `json:"proposedAtNotIn,omitempty"`
-	ProposedAtGt     *time.Time   `json:"proposedAtGT,omitempty"`
-	ProposedAtGte    *time.Time   `json:"proposedAtGTE,omitempty"`
-	ProposedAtLt     *time.Time   `json:"proposedAtLT,omitempty"`
-	ProposedAtLte    *time.Time   `json:"proposedAtLTE,omitempty"`
-	ProposedAtIsNil  *bool        `json:"proposedAtIsNil,omitempty"`
-	ProposedAtNotNil *bool        `json:"proposedAtNotNil,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -18121,25 +18076,32 @@ type Procedure struct {
 	// the kind of the procedure
 	ProcedureKindName *string `json:"procedureKindName,omitempty"`
 	// the kind of the procedure
-	ProcedureKindID *string          `json:"procedureKindID,omitempty"`
-	Owner           *Organization    `json:"owner,omitempty"`
-	BlockedGroups   *GroupConnection `json:"blockedGroups"`
-	Editors         *GroupConnection `json:"editors"`
+	ProcedureKindID *string `json:"procedureKindID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool            `json:"workflowEligibleMarker,omitempty"`
+	Owner                  *Organization    `json:"owner,omitempty"`
+	BlockedGroups          *GroupConnection `json:"blockedGroups"`
+	Editors                *GroupConnection `json:"editors"`
 	// the group of users who are responsible for approving the procedure
 	Approver *Group `json:"approver,omitempty"`
 	// temporary delegates for the procedure, used for temporary approval
-	Delegate         *Group                    `json:"delegate,omitempty"`
-	ProcedureKind    *CustomTypeEnum           `json:"procedureKind,omitempty"`
-	Controls         *ControlConnection        `json:"controls"`
-	Subcontrols      *SubcontrolConnection     `json:"subcontrols"`
-	InternalPolicies *InternalPolicyConnection `json:"internalPolicies"`
-	Programs         *ProgramConnection        `json:"programs"`
-	Narratives       *NarrativeConnection      `json:"narratives"`
-	Risks            *RiskConnection           `json:"risks"`
-	Tasks            *TaskConnection           `json:"tasks"`
-	Comments         *NoteConnection           `json:"comments"`
-	Discussions      *DiscussionConnection     `json:"discussions"`
-	File             *File                     `json:"file,omitempty"`
+	Delegate           *Group                       `json:"delegate,omitempty"`
+	ProcedureKind      *CustomTypeEnum              `json:"procedureKind,omitempty"`
+	Controls           *ControlConnection           `json:"controls"`
+	Subcontrols        *SubcontrolConnection        `json:"subcontrols"`
+	InternalPolicies   *InternalPolicyConnection    `json:"internalPolicies"`
+	Programs           *ProgramConnection           `json:"programs"`
+	Narratives         *NarrativeConnection         `json:"narratives"`
+	Risks              *RiskConnection              `json:"risks"`
+	Tasks              *TaskConnection              `json:"tasks"`
+	Comments           *NoteConnection              `json:"comments"`
+	Discussions        *DiscussionConnection        `json:"discussions"`
+	File               *File                        `json:"file,omitempty"`
+	WorkflowObjectRefs *WorkflowObjectRefConnection `json:"workflowObjectRefs"`
+	// Indicates if this procedure has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this procedure if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Procedure) IsNode() {}
@@ -18534,6 +18496,11 @@ type ProcedureWhereInput struct {
 	ProcedureKindIDNotNil       *bool    `json:"procedureKindIDNotNil,omitempty"`
 	ProcedureKindIDEqualFold    *string  `json:"procedureKindIDEqualFold,omitempty"`
 	ProcedureKindIDContainsFold *string  `json:"procedureKindIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -18582,6 +18549,9 @@ type ProcedureWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 type Program struct {
@@ -22132,6 +22102,8 @@ type Subcontrol struct {
 	SubcontrolKindName *string `json:"subcontrolKindName,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindID *string `json:"subcontrolKindID,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker *bool `json:"workflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
 	RefCode string `json:"refCode"`
 	// the id of the parent control
@@ -22157,6 +22129,11 @@ type Subcontrol struct {
 	Control                *Control                         `json:"control"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
 	ScheduledJobs          *ScheduledJobConnection          `json:"scheduledJobs"`
+	WorkflowObjectRefs     *WorkflowObjectRefConnection     `json:"workflowObjectRefs"`
+	// Indicates if this subcontrol has pending changes awaiting workflow approval
+	HasPendingWorkflow bool `json:"hasPendingWorkflow"`
+	// Returns the active workflow instance for this subcontrol if one is running
+	ActiveWorkflowInstance *WorkflowInstance `json:"activeWorkflowInstance,omitempty"`
 }
 
 func (Subcontrol) IsNode() {}
@@ -22600,6 +22577,11 @@ type SubcontrolWhereInput struct {
 	SubcontrolKindIDNotNil       *bool    `json:"subcontrolKindIDNotNil,omitempty"`
 	SubcontrolKindIDEqualFold    *string  `json:"subcontrolKindIDEqualFold,omitempty"`
 	SubcontrolKindIDContainsFold *string  `json:"subcontrolKindIDContainsFold,omitempty"`
+	// workflow_eligible_marker field predicates
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNeq    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  *bool `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil *bool `json:"workflowEligibleMarkerNotNil,omitempty"`
 	// ref_code field predicates
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNeq          *string  `json:"refCodeNEQ,omitempty"`
@@ -22682,6 +22664,9 @@ type SubcontrolWhereInput struct {
 	// scheduled_jobs edge predicates
 	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+	// workflow_object_refs edge predicates
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 type SubmitTrustCenterNDAResponseInput struct {
@@ -26395,6 +26380,9 @@ type UpdateActionPlanInput struct {
 	// the kind of the action_plan
 	ActionPlanKindName      *string `json:"actionPlanKindName,omitempty"`
 	ClearActionPlanKindName *bool   `json:"clearActionPlanKindName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// short title describing the action plan
 	Title *string `json:"title,omitempty"`
 	// detailed description of remediation steps and objectives
@@ -26423,46 +26411,49 @@ type UpdateActionPlanInput struct {
 	RawPayload      map[string]any `json:"rawPayload,omitempty"`
 	ClearRawPayload *bool          `json:"clearRawPayload,omitempty"`
 	// source of the action plan
-	Source                 *string             `json:"source,omitempty"`
-	ClearSource            *bool               `json:"clearSource,omitempty"`
-	ApproverID             *string             `json:"approverID,omitempty"`
-	ClearApprover          *bool               `json:"clearApprover,omitempty"`
-	DelegateID             *string             `json:"delegateID,omitempty"`
-	ClearDelegate          *bool               `json:"clearDelegate,omitempty"`
-	OwnerID                *string             `json:"ownerID,omitempty"`
-	ClearOwner             *bool               `json:"clearOwner,omitempty"`
-	ActionPlanKindID       *string             `json:"actionPlanKindID,omitempty"`
-	ClearActionPlanKind    *bool               `json:"clearActionPlanKind,omitempty"`
-	AddRiskIDs             []string            `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs          []string            `json:"removeRiskIDs,omitempty"`
-	ClearRisks             *bool               `json:"clearRisks,omitempty"`
-	AddControlIDs          []string            `json:"addControlIDs,omitempty"`
-	RemoveControlIDs       []string            `json:"removeControlIDs,omitempty"`
-	ClearControls          *bool               `json:"clearControls,omitempty"`
-	AddProgramIDs          []string            `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs       []string            `json:"removeProgramIDs,omitempty"`
-	ClearPrograms          *bool               `json:"clearPrograms,omitempty"`
-	AddFindingIDs          []string            `json:"addFindingIDs,omitempty"`
-	RemoveFindingIDs       []string            `json:"removeFindingIDs,omitempty"`
-	ClearFindings          *bool               `json:"clearFindings,omitempty"`
-	AddVulnerabilityIDs    []string            `json:"addVulnerabilityIDs,omitempty"`
-	RemoveVulnerabilityIDs []string            `json:"removeVulnerabilityIDs,omitempty"`
-	ClearVulnerabilities   *bool               `json:"clearVulnerabilities,omitempty"`
-	AddReviewIDs           []string            `json:"addReviewIDs,omitempty"`
-	RemoveReviewIDs        []string            `json:"removeReviewIDs,omitempty"`
-	ClearReviews           *bool               `json:"clearReviews,omitempty"`
-	AddRemediationIDs      []string            `json:"addRemediationIDs,omitempty"`
-	RemoveRemediationIDs   []string            `json:"removeRemediationIDs,omitempty"`
-	ClearRemediations      *bool               `json:"clearRemediations,omitempty"`
-	AddTaskIDs             []string            `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs          []string            `json:"removeTaskIDs,omitempty"`
-	ClearTasks             *bool               `json:"clearTasks,omitempty"`
-	AddIntegrationIDs      []string            `json:"addIntegrationIDs,omitempty"`
-	RemoveIntegrationIDs   []string            `json:"removeIntegrationIDs,omitempty"`
-	ClearIntegrations      *bool               `json:"clearIntegrations,omitempty"`
-	FileID                 *string             `json:"fileID,omitempty"`
-	ClearFile              *bool               `json:"clearFile,omitempty"`
-	RevisionBump           *models.VersionBump `json:"RevisionBump,omitempty"`
+	Source                     *string             `json:"source,omitempty"`
+	ClearSource                *bool               `json:"clearSource,omitempty"`
+	ApproverID                 *string             `json:"approverID,omitempty"`
+	ClearApprover              *bool               `json:"clearApprover,omitempty"`
+	DelegateID                 *string             `json:"delegateID,omitempty"`
+	ClearDelegate              *bool               `json:"clearDelegate,omitempty"`
+	OwnerID                    *string             `json:"ownerID,omitempty"`
+	ClearOwner                 *bool               `json:"clearOwner,omitempty"`
+	ActionPlanKindID           *string             `json:"actionPlanKindID,omitempty"`
+	ClearActionPlanKind        *bool               `json:"clearActionPlanKind,omitempty"`
+	AddRiskIDs                 []string            `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs              []string            `json:"removeRiskIDs,omitempty"`
+	ClearRisks                 *bool               `json:"clearRisks,omitempty"`
+	AddControlIDs              []string            `json:"addControlIDs,omitempty"`
+	RemoveControlIDs           []string            `json:"removeControlIDs,omitempty"`
+	ClearControls              *bool               `json:"clearControls,omitempty"`
+	AddProgramIDs              []string            `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs           []string            `json:"removeProgramIDs,omitempty"`
+	ClearPrograms              *bool               `json:"clearPrograms,omitempty"`
+	AddFindingIDs              []string            `json:"addFindingIDs,omitempty"`
+	RemoveFindingIDs           []string            `json:"removeFindingIDs,omitempty"`
+	ClearFindings              *bool               `json:"clearFindings,omitempty"`
+	AddVulnerabilityIDs        []string            `json:"addVulnerabilityIDs,omitempty"`
+	RemoveVulnerabilityIDs     []string            `json:"removeVulnerabilityIDs,omitempty"`
+	ClearVulnerabilities       *bool               `json:"clearVulnerabilities,omitempty"`
+	AddReviewIDs               []string            `json:"addReviewIDs,omitempty"`
+	RemoveReviewIDs            []string            `json:"removeReviewIDs,omitempty"`
+	ClearReviews               *bool               `json:"clearReviews,omitempty"`
+	AddRemediationIDs          []string            `json:"addRemediationIDs,omitempty"`
+	RemoveRemediationIDs       []string            `json:"removeRemediationIDs,omitempty"`
+	ClearRemediations          *bool               `json:"clearRemediations,omitempty"`
+	AddTaskIDs                 []string            `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs              []string            `json:"removeTaskIDs,omitempty"`
+	ClearTasks                 *bool               `json:"clearTasks,omitempty"`
+	AddIntegrationIDs          []string            `json:"addIntegrationIDs,omitempty"`
+	RemoveIntegrationIDs       []string            `json:"removeIntegrationIDs,omitempty"`
+	ClearIntegrations          *bool               `json:"clearIntegrations,omitempty"`
+	FileID                     *string             `json:"fileID,omitempty"`
+	ClearFile                  *bool               `json:"clearFile,omitempty"`
+	AddWorkflowObjectRefIDs    []string            `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs []string            `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs    *bool               `json:"clearWorkflowObjectRefs,omitempty"`
+	RevisionBump               *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
 // UpdateAssessmentInput is used for update Assessment object.
@@ -26737,15 +26728,9 @@ type UpdateControlInput struct {
 	// the kind of the control
 	ControlKindName      *string `json:"controlKindName,omitempty"`
 	ClearControlKindName *bool   `json:"clearControlKindName,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges      map[string]any `json:"proposedChanges,omitempty"`
-	ClearProposedChanges *bool          `json:"clearProposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID      *string `json:"proposedByUserID,omitempty"`
-	ClearProposedByUserID *bool   `json:"clearProposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt      *time.Time `json:"proposedAt,omitempty"`
-	ClearProposedAt *bool      `json:"clearProposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
 	RefCode                        *string                   `json:"refCode,omitempty"`
 	AddEvidenceIDs                 []string                  `json:"addEvidenceIDs,omitempty"`
@@ -27366,15 +27351,9 @@ type UpdateEvidenceInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges      map[string]any `json:"proposedChanges,omitempty"`
-	ClearProposedChanges *bool          `json:"clearProposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID      *string `json:"proposedByUserID,omitempty"`
-	ClearProposedByUserID *bool   `json:"clearProposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt      *time.Time `json:"proposedAt,omitempty"`
-	ClearProposedAt *bool      `json:"clearProposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// the name of the evidence
 	Name *string `json:"name,omitempty"`
 	// the description of the evidence, what is contained in the uploaded file(s) or url(s)
@@ -27424,6 +27403,9 @@ type UpdateEvidenceInput struct {
 	AddCommentIDs                  []string              `json:"addCommentIDs,omitempty"`
 	RemoveCommentIDs               []string              `json:"removeCommentIDs,omitempty"`
 	ClearComments                  *bool                 `json:"clearComments,omitempty"`
+	AddWorkflowObjectRefIDs        []string              `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs     []string              `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs        *bool                 `json:"clearWorkflowObjectRefs,omitempty"`
 	AddComment                     *CreateNoteInput      `json:"addComment,omitempty"`
 	DeleteComment                  *string               `json:"deleteComment,omitempty"`
 }
@@ -28036,15 +28018,9 @@ type UpdateInternalPolicyInput struct {
 	// the kind of the internal_policy
 	InternalPolicyKindName      *string `json:"internalPolicyKindName,omitempty"`
 	ClearInternalPolicyKindName *bool   `json:"clearInternalPolicyKindName,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges      map[string]any `json:"proposedChanges,omitempty"`
-	ClearProposedChanges *bool          `json:"clearProposedChanges,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID      *string `json:"proposedByUserID,omitempty"`
-	ClearProposedByUserID *bool   `json:"clearProposedByUserID,omitempty"`
-	// when changes were proposed
-	ProposedAt                     *time.Time                `json:"proposedAt,omitempty"`
-	ClearProposedAt                *bool                     `json:"clearProposedAt,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker         *bool                     `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker    *bool                     `json:"clearWorkflowEligibleMarker,omitempty"`
 	OwnerID                        *string                   `json:"ownerID,omitempty"`
 	ClearOwner                     *bool                     `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs             []string                  `json:"addBlockedGroupIDs,omitempty"`
@@ -28854,57 +28830,63 @@ type UpdateProcedureInput struct {
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// the kind of the procedure
-	ProcedureKindName       *string                   `json:"procedureKindName,omitempty"`
-	ClearProcedureKindName  *bool                     `json:"clearProcedureKindName,omitempty"`
-	OwnerID                 *string                   `json:"ownerID,omitempty"`
-	ClearOwner              *bool                     `json:"clearOwner,omitempty"`
-	AddBlockedGroupIDs      []string                  `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs   []string                  `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups      *bool                     `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs            []string                  `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs         []string                  `json:"removeEditorIDs,omitempty"`
-	ClearEditors            *bool                     `json:"clearEditors,omitempty"`
-	ApproverID              *string                   `json:"approverID,omitempty"`
-	ClearApprover           *bool                     `json:"clearApprover,omitempty"`
-	DelegateID              *string                   `json:"delegateID,omitempty"`
-	ClearDelegate           *bool                     `json:"clearDelegate,omitempty"`
-	ProcedureKindID         *string                   `json:"procedureKindID,omitempty"`
-	ClearProcedureKind      *bool                     `json:"clearProcedureKind,omitempty"`
-	AddControlIDs           []string                  `json:"addControlIDs,omitempty"`
-	RemoveControlIDs        []string                  `json:"removeControlIDs,omitempty"`
-	ClearControls           *bool                     `json:"clearControls,omitempty"`
-	AddSubcontrolIDs        []string                  `json:"addSubcontrolIDs,omitempty"`
-	RemoveSubcontrolIDs     []string                  `json:"removeSubcontrolIDs,omitempty"`
-	ClearSubcontrols        *bool                     `json:"clearSubcontrols,omitempty"`
-	AddInternalPolicyIDs    []string                  `json:"addInternalPolicyIDs,omitempty"`
-	RemoveInternalPolicyIDs []string                  `json:"removeInternalPolicyIDs,omitempty"`
-	ClearInternalPolicies   *bool                     `json:"clearInternalPolicies,omitempty"`
-	AddProgramIDs           []string                  `json:"addProgramIDs,omitempty"`
-	RemoveProgramIDs        []string                  `json:"removeProgramIDs,omitempty"`
-	ClearPrograms           *bool                     `json:"clearPrograms,omitempty"`
-	AddNarrativeIDs         []string                  `json:"addNarrativeIDs,omitempty"`
-	RemoveNarrativeIDs      []string                  `json:"removeNarrativeIDs,omitempty"`
-	ClearNarratives         *bool                     `json:"clearNarratives,omitempty"`
-	AddRiskIDs              []string                  `json:"addRiskIDs,omitempty"`
-	RemoveRiskIDs           []string                  `json:"removeRiskIDs,omitempty"`
-	ClearRisks              *bool                     `json:"clearRisks,omitempty"`
-	AddTaskIDs              []string                  `json:"addTaskIDs,omitempty"`
-	RemoveTaskIDs           []string                  `json:"removeTaskIDs,omitempty"`
-	ClearTasks              *bool                     `json:"clearTasks,omitempty"`
-	AddCommentIDs           []string                  `json:"addCommentIDs,omitempty"`
-	RemoveCommentIDs        []string                  `json:"removeCommentIDs,omitempty"`
-	ClearComments           *bool                     `json:"clearComments,omitempty"`
-	AddDiscussionIDs        []string                  `json:"addDiscussionIDs,omitempty"`
-	RemoveDiscussionIDs     []string                  `json:"removeDiscussionIDs,omitempty"`
-	ClearDiscussions        *bool                     `json:"clearDiscussions,omitempty"`
-	FileID                  *string                   `json:"fileID,omitempty"`
-	ClearFile               *bool                     `json:"clearFile,omitempty"`
-	AddDiscussion           *CreateDiscussionInput    `json:"addDiscussion,omitempty"`
-	UpdateDiscussions       []*UpdateDiscussionsInput `json:"updateDiscussions,omitempty"`
-	DeleteDiscussion        *string                   `json:"deleteDiscussion,omitempty"`
-	AddComment              *CreateNoteInput          `json:"addComment,omitempty"`
-	DeleteComment           *string                   `json:"deleteComment,omitempty"`
-	RevisionBump            *models.VersionBump       `json:"RevisionBump,omitempty"`
+	ProcedureKindName      *string `json:"procedureKindName,omitempty"`
+	ClearProcedureKindName *bool   `json:"clearProcedureKindName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool                     `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool                     `json:"clearWorkflowEligibleMarker,omitempty"`
+	OwnerID                     *string                   `json:"ownerID,omitempty"`
+	ClearOwner                  *bool                     `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs          []string                  `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string                  `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool                     `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string                  `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string                  `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool                     `json:"clearEditors,omitempty"`
+	ApproverID                  *string                   `json:"approverID,omitempty"`
+	ClearApprover               *bool                     `json:"clearApprover,omitempty"`
+	DelegateID                  *string                   `json:"delegateID,omitempty"`
+	ClearDelegate               *bool                     `json:"clearDelegate,omitempty"`
+	ProcedureKindID             *string                   `json:"procedureKindID,omitempty"`
+	ClearProcedureKind          *bool                     `json:"clearProcedureKind,omitempty"`
+	AddControlIDs               []string                  `json:"addControlIDs,omitempty"`
+	RemoveControlIDs            []string                  `json:"removeControlIDs,omitempty"`
+	ClearControls               *bool                     `json:"clearControls,omitempty"`
+	AddSubcontrolIDs            []string                  `json:"addSubcontrolIDs,omitempty"`
+	RemoveSubcontrolIDs         []string                  `json:"removeSubcontrolIDs,omitempty"`
+	ClearSubcontrols            *bool                     `json:"clearSubcontrols,omitempty"`
+	AddInternalPolicyIDs        []string                  `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs     []string                  `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies       *bool                     `json:"clearInternalPolicies,omitempty"`
+	AddProgramIDs               []string                  `json:"addProgramIDs,omitempty"`
+	RemoveProgramIDs            []string                  `json:"removeProgramIDs,omitempty"`
+	ClearPrograms               *bool                     `json:"clearPrograms,omitempty"`
+	AddNarrativeIDs             []string                  `json:"addNarrativeIDs,omitempty"`
+	RemoveNarrativeIDs          []string                  `json:"removeNarrativeIDs,omitempty"`
+	ClearNarratives             *bool                     `json:"clearNarratives,omitempty"`
+	AddRiskIDs                  []string                  `json:"addRiskIDs,omitempty"`
+	RemoveRiskIDs               []string                  `json:"removeRiskIDs,omitempty"`
+	ClearRisks                  *bool                     `json:"clearRisks,omitempty"`
+	AddTaskIDs                  []string                  `json:"addTaskIDs,omitempty"`
+	RemoveTaskIDs               []string                  `json:"removeTaskIDs,omitempty"`
+	ClearTasks                  *bool                     `json:"clearTasks,omitempty"`
+	AddCommentIDs               []string                  `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs            []string                  `json:"removeCommentIDs,omitempty"`
+	ClearComments               *bool                     `json:"clearComments,omitempty"`
+	AddDiscussionIDs            []string                  `json:"addDiscussionIDs,omitempty"`
+	RemoveDiscussionIDs         []string                  `json:"removeDiscussionIDs,omitempty"`
+	ClearDiscussions            *bool                     `json:"clearDiscussions,omitempty"`
+	FileID                      *string                   `json:"fileID,omitempty"`
+	ClearFile                   *bool                     `json:"clearFile,omitempty"`
+	AddWorkflowObjectRefIDs     []string                  `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string                  `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs     *bool                     `json:"clearWorkflowObjectRefs,omitempty"`
+	AddDiscussion               *CreateDiscussionInput    `json:"addDiscussion,omitempty"`
+	UpdateDiscussions           []*UpdateDiscussionsInput `json:"updateDiscussions,omitempty"`
+	DeleteDiscussion            *string                   `json:"deleteDiscussion,omitempty"`
+	AddComment                  *CreateNoteInput          `json:"addComment,omitempty"`
+	DeleteComment               *string                   `json:"deleteComment,omitempty"`
+	RevisionBump                *models.VersionBump       `json:"RevisionBump,omitempty"`
 }
 
 // UpdateProgramInput is used for update Program object.
@@ -29600,6 +29582,9 @@ type UpdateSubcontrolInput struct {
 	// the kind of the subcontrol
 	SubcontrolKindName      *string `json:"subcontrolKindName,omitempty"`
 	ClearSubcontrolKindName *bool   `json:"clearSubcontrolKindName,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
+	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// the unique reference code for the control
 	RefCode                        *string                   `json:"refCode,omitempty"`
 	AddEvidenceIDs                 []string                  `json:"addEvidenceIDs,omitempty"`
@@ -29647,6 +29632,9 @@ type UpdateSubcontrolInput struct {
 	AddScheduledJobIDs             []string                  `json:"addScheduledJobIDs,omitempty"`
 	RemoveScheduledJobIDs          []string                  `json:"removeScheduledJobIDs,omitempty"`
 	ClearScheduledJobs             *bool                     `json:"clearScheduledJobs,omitempty"`
+	AddWorkflowObjectRefIDs        []string                  `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs     []string                  `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs        *bool                     `json:"clearWorkflowObjectRefs,omitempty"`
 	AddDiscussion                  *CreateDiscussionInput    `json:"addDiscussion,omitempty"`
 	UpdateDiscussions              []*UpdateDiscussionsInput `json:"updateDiscussions,omitempty"`
 	DeleteDiscussion               *string                   `json:"deleteDiscussion,omitempty"`
@@ -30450,14 +30438,6 @@ type UpdateWorkflowDefinitionInput struct {
 	IsDefault *bool `json:"isDefault,omitempty"`
 	// Whether the workflow definition is active
 	Active *bool `json:"active,omitempty"`
-	// Derived: normalized operations from definition for prefiltering; not user editable
-	TriggerOperations       []string `json:"triggerOperations,omitempty"`
-	AppendTriggerOperations []string `json:"appendTriggerOperations,omitempty"`
-	ClearTriggerOperations  *bool    `json:"clearTriggerOperations,omitempty"`
-	// Derived: normalized fields from definition for prefiltering; not user editable
-	TriggerFields       []string `json:"triggerFields,omitempty"`
-	AppendTriggerFields []string `json:"appendTriggerFields,omitempty"`
-	ClearTriggerFields  *bool    `json:"clearTriggerFields,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON      *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	ClearDefinitionJSON *bool                              `json:"clearDefinitionJSON,omitempty"`
@@ -30504,24 +30484,32 @@ type UpdateWorkflowInstanceInput struct {
 	LastEvaluatedAt      *time.Time `json:"lastEvaluatedAt,omitempty"`
 	ClearLastEvaluatedAt *bool      `json:"clearLastEvaluatedAt,omitempty"`
 	// Copy of definition JSON used for this instance
-	DefinitionSnapshot          *models.WorkflowDefinitionDocument `json:"definitionSnapshot,omitempty"`
-	ClearDefinitionSnapshot     *bool                              `json:"clearDefinitionSnapshot,omitempty"`
-	WorkflowDefinitionID        *string                            `json:"workflowDefinitionID,omitempty"`
-	ControlID                   *string                            `json:"controlID,omitempty"`
-	ClearControl                *bool                              `json:"clearControl,omitempty"`
-	InternalPolicyID            *string                            `json:"internalPolicyID,omitempty"`
-	ClearInternalPolicy         *bool                              `json:"clearInternalPolicy,omitempty"`
-	EvidenceID                  *string                            `json:"evidenceID,omitempty"`
-	ClearEvidence               *bool                              `json:"clearEvidence,omitempty"`
-	AddWorkflowAssignmentIDs    []string                           `json:"addWorkflowAssignmentIDs,omitempty"`
-	RemoveWorkflowAssignmentIDs []string                           `json:"removeWorkflowAssignmentIDs,omitempty"`
-	ClearWorkflowAssignments    *bool                              `json:"clearWorkflowAssignments,omitempty"`
-	AddWorkflowEventIDs         []string                           `json:"addWorkflowEventIDs,omitempty"`
-	RemoveWorkflowEventIDs      []string                           `json:"removeWorkflowEventIDs,omitempty"`
-	ClearWorkflowEvents         *bool                              `json:"clearWorkflowEvents,omitempty"`
-	AddWorkflowObjectRefIDs     []string                           `json:"addWorkflowObjectRefIDs,omitempty"`
-	RemoveWorkflowObjectRefIDs  []string                           `json:"removeWorkflowObjectRefIDs,omitempty"`
-	ClearWorkflowObjectRefs     *bool                              `json:"clearWorkflowObjectRefs,omitempty"`
+	DefinitionSnapshot      *models.WorkflowDefinitionDocument `json:"definitionSnapshot,omitempty"`
+	ClearDefinitionSnapshot *bool                              `json:"clearDefinitionSnapshot,omitempty"`
+	// Index of the current action being executed (used for recovery and resumption)
+	CurrentActionIndex          *int64   `json:"currentActionIndex,omitempty"`
+	WorkflowDefinitionID        *string  `json:"workflowDefinitionID,omitempty"`
+	ControlID                   *string  `json:"controlID,omitempty"`
+	ClearControl                *bool    `json:"clearControl,omitempty"`
+	InternalPolicyID            *string  `json:"internalPolicyID,omitempty"`
+	ClearInternalPolicy         *bool    `json:"clearInternalPolicy,omitempty"`
+	EvidenceID                  *string  `json:"evidenceID,omitempty"`
+	ClearEvidence               *bool    `json:"clearEvidence,omitempty"`
+	SubcontrolID                *string  `json:"subcontrolID,omitempty"`
+	ClearSubcontrol             *bool    `json:"clearSubcontrol,omitempty"`
+	ActionPlanID                *string  `json:"actionPlanID,omitempty"`
+	ClearActionPlan             *bool    `json:"clearActionPlan,omitempty"`
+	ProcedureID                 *string  `json:"procedureID,omitempty"`
+	ClearProcedure              *bool    `json:"clearProcedure,omitempty"`
+	AddWorkflowAssignmentIDs    []string `json:"addWorkflowAssignmentIDs,omitempty"`
+	RemoveWorkflowAssignmentIDs []string `json:"removeWorkflowAssignmentIDs,omitempty"`
+	ClearWorkflowAssignments    *bool    `json:"clearWorkflowAssignments,omitempty"`
+	AddWorkflowEventIDs         []string `json:"addWorkflowEventIDs,omitempty"`
+	RemoveWorkflowEventIDs      []string `json:"removeWorkflowEventIDs,omitempty"`
+	ClearWorkflowEvents         *bool    `json:"clearWorkflowEvents,omitempty"`
+	AddWorkflowObjectRefIDs     []string `json:"addWorkflowObjectRefIDs,omitempty"`
+	RemoveWorkflowObjectRefIDs  []string `json:"removeWorkflowObjectRefIDs,omitempty"`
+	ClearWorkflowObjectRefs     *bool    `json:"clearWorkflowObjectRefs,omitempty"`
 }
 
 type User struct {
@@ -32628,10 +32616,6 @@ type WorkflowDefinition struct {
 	IsDefault bool `json:"isDefault"`
 	// Whether the workflow definition is active
 	Active bool `json:"active"`
-	// Derived: normalized operations from definition for prefiltering; not user editable
-	TriggerOperations []string `json:"triggerOperations,omitempty"`
-	// Derived: normalized fields from definition for prefiltering; not user editable
-	TriggerFields []string `json:"triggerFields,omitempty"`
 	// Typed document describing triggers, conditions, and actions
 	DefinitionJSON *models.WorkflowDefinitionDocument `json:"definitionJSON,omitempty"`
 	// Cached list of fields that should trigger workflow evaluation
@@ -33145,6 +33129,8 @@ type WorkflowInstance struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the workflow definition this instance is based on
 	WorkflowDefinitionID string `json:"workflowDefinitionID"`
+	// ID of the workflow proposal this instance is associated with (when approval-before-commit is used)
+	WorkflowProposalID *string `json:"workflowProposalID,omitempty"`
 	// Current state of the workflow instance
 	State enums.WorkflowInstanceState `json:"state"`
 	// Optional context for the workflow instance
@@ -33153,13 +33139,21 @@ type WorkflowInstance struct {
 	LastEvaluatedAt *time.Time `json:"lastEvaluatedAt,omitempty"`
 	// Copy of definition JSON used for this instance
 	DefinitionSnapshot *models.WorkflowDefinitionDocument `json:"definitionSnapshot,omitempty"`
+	// Index of the current action being executed (used for recovery and resumption)
+	CurrentActionIndex int64 `json:"currentActionIndex"`
 	// ID of the control this workflow instance is associated with
 	ControlID *string `json:"controlID,omitempty"`
 	// ID of the internal policy this workflow instance is associated with
 	InternalPolicyID *string `json:"internalPolicyID,omitempty"`
 	// ID of the evidence this workflow instance is associated with
-	EvidenceID *string       `json:"evidenceID,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
+	EvidenceID *string `json:"evidenceID,omitempty"`
+	// ID of the subcontrol this workflow instance is associated with
+	SubcontrolID *string `json:"subcontrolID,omitempty"`
+	// ID of the actionplan this workflow instance is associated with
+	ActionPlanID *string `json:"actionPlanID,omitempty"`
+	// ID of the procedure this workflow instance is associated with
+	ProcedureID *string       `json:"procedureID,omitempty"`
+	Owner       *Organization `json:"owner,omitempty"`
 	// Definition driving this instance
 	WorkflowDefinition *WorkflowDefinition `json:"workflowDefinition"`
 	// Control this workflow instance is associated with
@@ -33167,7 +33161,13 @@ type WorkflowInstance struct {
 	// Internal policy this workflow instance is associated with
 	InternalPolicy *InternalPolicy `json:"internalPolicy,omitempty"`
 	// Evidence this workflow instance is associated with
-	Evidence            *Evidence                     `json:"evidence,omitempty"`
+	Evidence *Evidence `json:"evidence,omitempty"`
+	// Subcontrol this workflow instance is associated with
+	Subcontrol *Subcontrol `json:"subcontrol,omitempty"`
+	// ActionPlan this workflow instance is associated with
+	ActionPlan *ActionPlan `json:"actionPlan,omitempty"`
+	// Procedure this workflow instance is associated with
+	Procedure           *Procedure                    `json:"procedure,omitempty"`
 	WorkflowAssignments *WorkflowAssignmentConnection `json:"workflowAssignments"`
 	WorkflowEvents      *WorkflowEventConnection      `json:"workflowEvents"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
@@ -33340,6 +33340,22 @@ type WorkflowInstanceWhereInput struct {
 	WorkflowDefinitionIDHasSuffix    *string  `json:"workflowDefinitionIDHasSuffix,omitempty"`
 	WorkflowDefinitionIDEqualFold    *string  `json:"workflowDefinitionIDEqualFold,omitempty"`
 	WorkflowDefinitionIDContainsFold *string  `json:"workflowDefinitionIDContainsFold,omitempty"`
+	// workflow_proposal_id field predicates
+	WorkflowProposalID             *string  `json:"workflowProposalID,omitempty"`
+	WorkflowProposalIdneq          *string  `json:"workflowProposalIDNEQ,omitempty"`
+	WorkflowProposalIDIn           []string `json:"workflowProposalIDIn,omitempty"`
+	WorkflowProposalIDNotIn        []string `json:"workflowProposalIDNotIn,omitempty"`
+	WorkflowProposalIdgt           *string  `json:"workflowProposalIDGT,omitempty"`
+	WorkflowProposalIdgte          *string  `json:"workflowProposalIDGTE,omitempty"`
+	WorkflowProposalIdlt           *string  `json:"workflowProposalIDLT,omitempty"`
+	WorkflowProposalIdlte          *string  `json:"workflowProposalIDLTE,omitempty"`
+	WorkflowProposalIDContains     *string  `json:"workflowProposalIDContains,omitempty"`
+	WorkflowProposalIDHasPrefix    *string  `json:"workflowProposalIDHasPrefix,omitempty"`
+	WorkflowProposalIDHasSuffix    *string  `json:"workflowProposalIDHasSuffix,omitempty"`
+	WorkflowProposalIDIsNil        *bool    `json:"workflowProposalIDIsNil,omitempty"`
+	WorkflowProposalIDNotNil       *bool    `json:"workflowProposalIDNotNil,omitempty"`
+	WorkflowProposalIDEqualFold    *string  `json:"workflowProposalIDEqualFold,omitempty"`
+	WorkflowProposalIDContainsFold *string  `json:"workflowProposalIDContainsFold,omitempty"`
 	// state field predicates
 	State      *enums.WorkflowInstanceState  `json:"state,omitempty"`
 	StateNeq   *enums.WorkflowInstanceState  `json:"stateNEQ,omitempty"`
@@ -33356,6 +33372,15 @@ type WorkflowInstanceWhereInput struct {
 	LastEvaluatedAtLte    *time.Time   `json:"lastEvaluatedAtLTE,omitempty"`
 	LastEvaluatedAtIsNil  *bool        `json:"lastEvaluatedAtIsNil,omitempty"`
 	LastEvaluatedAtNotNil *bool        `json:"lastEvaluatedAtNotNil,omitempty"`
+	// current_action_index field predicates
+	CurrentActionIndex      *int64  `json:"currentActionIndex,omitempty"`
+	CurrentActionIndexNeq   *int64  `json:"currentActionIndexNEQ,omitempty"`
+	CurrentActionIndexIn    []int64 `json:"currentActionIndexIn,omitempty"`
+	CurrentActionIndexNotIn []int64 `json:"currentActionIndexNotIn,omitempty"`
+	CurrentActionIndexGt    *int64  `json:"currentActionIndexGT,omitempty"`
+	CurrentActionIndexGte   *int64  `json:"currentActionIndexGTE,omitempty"`
+	CurrentActionIndexLt    *int64  `json:"currentActionIndexLT,omitempty"`
+	CurrentActionIndexLte   *int64  `json:"currentActionIndexLTE,omitempty"`
 	// control_id field predicates
 	ControlID             *string  `json:"controlID,omitempty"`
 	ControlIdneq          *string  `json:"controlIDNEQ,omitempty"`
@@ -33404,6 +33429,54 @@ type WorkflowInstanceWhereInput struct {
 	EvidenceIDNotNil       *bool    `json:"evidenceIDNotNil,omitempty"`
 	EvidenceIDEqualFold    *string  `json:"evidenceIDEqualFold,omitempty"`
 	EvidenceIDContainsFold *string  `json:"evidenceIDContainsFold,omitempty"`
+	// subcontrol_id field predicates
+	SubcontrolID             *string  `json:"subcontrolID,omitempty"`
+	SubcontrolIdneq          *string  `json:"subcontrolIDNEQ,omitempty"`
+	SubcontrolIDIn           []string `json:"subcontrolIDIn,omitempty"`
+	SubcontrolIDNotIn        []string `json:"subcontrolIDNotIn,omitempty"`
+	SubcontrolIdgt           *string  `json:"subcontrolIDGT,omitempty"`
+	SubcontrolIdgte          *string  `json:"subcontrolIDGTE,omitempty"`
+	SubcontrolIdlt           *string  `json:"subcontrolIDLT,omitempty"`
+	SubcontrolIdlte          *string  `json:"subcontrolIDLTE,omitempty"`
+	SubcontrolIDContains     *string  `json:"subcontrolIDContains,omitempty"`
+	SubcontrolIDHasPrefix    *string  `json:"subcontrolIDHasPrefix,omitempty"`
+	SubcontrolIDHasSuffix    *string  `json:"subcontrolIDHasSuffix,omitempty"`
+	SubcontrolIDIsNil        *bool    `json:"subcontrolIDIsNil,omitempty"`
+	SubcontrolIDNotNil       *bool    `json:"subcontrolIDNotNil,omitempty"`
+	SubcontrolIDEqualFold    *string  `json:"subcontrolIDEqualFold,omitempty"`
+	SubcontrolIDContainsFold *string  `json:"subcontrolIDContainsFold,omitempty"`
+	// action_plan_id field predicates
+	ActionPlanID             *string  `json:"actionPlanID,omitempty"`
+	ActionPlanIdneq          *string  `json:"actionPlanIDNEQ,omitempty"`
+	ActionPlanIDIn           []string `json:"actionPlanIDIn,omitempty"`
+	ActionPlanIDNotIn        []string `json:"actionPlanIDNotIn,omitempty"`
+	ActionPlanIdgt           *string  `json:"actionPlanIDGT,omitempty"`
+	ActionPlanIdgte          *string  `json:"actionPlanIDGTE,omitempty"`
+	ActionPlanIdlt           *string  `json:"actionPlanIDLT,omitempty"`
+	ActionPlanIdlte          *string  `json:"actionPlanIDLTE,omitempty"`
+	ActionPlanIDContains     *string  `json:"actionPlanIDContains,omitempty"`
+	ActionPlanIDHasPrefix    *string  `json:"actionPlanIDHasPrefix,omitempty"`
+	ActionPlanIDHasSuffix    *string  `json:"actionPlanIDHasSuffix,omitempty"`
+	ActionPlanIDIsNil        *bool    `json:"actionPlanIDIsNil,omitempty"`
+	ActionPlanIDNotNil       *bool    `json:"actionPlanIDNotNil,omitempty"`
+	ActionPlanIDEqualFold    *string  `json:"actionPlanIDEqualFold,omitempty"`
+	ActionPlanIDContainsFold *string  `json:"actionPlanIDContainsFold,omitempty"`
+	// procedure_id field predicates
+	ProcedureID             *string  `json:"procedureID,omitempty"`
+	ProcedureIdneq          *string  `json:"procedureIDNEQ,omitempty"`
+	ProcedureIDIn           []string `json:"procedureIDIn,omitempty"`
+	ProcedureIDNotIn        []string `json:"procedureIDNotIn,omitempty"`
+	ProcedureIdgt           *string  `json:"procedureIDGT,omitempty"`
+	ProcedureIdgte          *string  `json:"procedureIDGTE,omitempty"`
+	ProcedureIdlt           *string  `json:"procedureIDLT,omitempty"`
+	ProcedureIdlte          *string  `json:"procedureIDLTE,omitempty"`
+	ProcedureIDContains     *string  `json:"procedureIDContains,omitempty"`
+	ProcedureIDHasPrefix    *string  `json:"procedureIDHasPrefix,omitempty"`
+	ProcedureIDHasSuffix    *string  `json:"procedureIDHasSuffix,omitempty"`
+	ProcedureIDIsNil        *bool    `json:"procedureIDIsNil,omitempty"`
+	ProcedureIDNotNil       *bool    `json:"procedureIDNotNil,omitempty"`
+	ProcedureIDEqualFold    *string  `json:"procedureIDEqualFold,omitempty"`
+	ProcedureIDContainsFold *string  `json:"procedureIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -33419,6 +33492,15 @@ type WorkflowInstanceWhereInput struct {
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
+	// subcontrol edge predicates
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
+	// action_plan edge predicates
+	HasActionPlan     *bool                   `json:"hasActionPlan,omitempty"`
+	HasActionPlanWith []*ActionPlanWhereInput `json:"hasActionPlanWith,omitempty"`
+	// procedure edge predicates
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 	// workflow_assignments edge predicates
 	HasWorkflowAssignments     *bool                           `json:"hasWorkflowAssignments,omitempty"`
 	HasWorkflowAssignmentsWith []*WorkflowAssignmentWhereInput `json:"hasWorkflowAssignmentsWith,omitempty"`
@@ -33457,8 +33539,14 @@ type WorkflowObjectRef struct {
 	// Directory membership referenced by this workflow instance
 	DirectoryMembershipID *string `json:"directoryMembershipID,omitempty"`
 	// Evidence referenced by this workflow instance
-	EvidenceID *string       `json:"evidenceID,omitempty"`
-	Owner      *Organization `json:"owner,omitempty"`
+	EvidenceID *string `json:"evidenceID,omitempty"`
+	// Subcontrol referenced by this workflow instance
+	SubcontrolID *string `json:"subcontrolID,omitempty"`
+	// ActionPlan referenced by this workflow instance
+	ActionPlanID *string `json:"actionPlanID,omitempty"`
+	// Procedure referenced by this workflow instance
+	ProcedureID *string       `json:"procedureID,omitempty"`
+	Owner       *Organization `json:"owner,omitempty"`
 	// Workflow instance this object is associated with
 	WorkflowInstance *WorkflowInstance `json:"workflowInstance"`
 	// Control referenced by this workflow instance
@@ -33477,6 +33565,12 @@ type WorkflowObjectRef struct {
 	DirectoryMembership *DirectoryMembership `json:"directoryMembership,omitempty"`
 	// Evidence referenced by this workflow instance
 	Evidence *Evidence `json:"evidence,omitempty"`
+	// Subcontrol referenced by this workflow instance
+	Subcontrol *Subcontrol `json:"subcontrol,omitempty"`
+	// ActionPlan referenced by this workflow instance
+	ActionPlan *ActionPlan `json:"actionPlan,omitempty"`
+	// Procedure referenced by this workflow instance
+	Procedure *Procedure `json:"procedure,omitempty"`
 }
 
 func (WorkflowObjectRef) IsNode() {}
@@ -33768,6 +33862,54 @@ type WorkflowObjectRefWhereInput struct {
 	EvidenceIDNotNil       *bool    `json:"evidenceIDNotNil,omitempty"`
 	EvidenceIDEqualFold    *string  `json:"evidenceIDEqualFold,omitempty"`
 	EvidenceIDContainsFold *string  `json:"evidenceIDContainsFold,omitempty"`
+	// subcontrol_id field predicates
+	SubcontrolID             *string  `json:"subcontrolID,omitempty"`
+	SubcontrolIdneq          *string  `json:"subcontrolIDNEQ,omitempty"`
+	SubcontrolIDIn           []string `json:"subcontrolIDIn,omitempty"`
+	SubcontrolIDNotIn        []string `json:"subcontrolIDNotIn,omitempty"`
+	SubcontrolIdgt           *string  `json:"subcontrolIDGT,omitempty"`
+	SubcontrolIdgte          *string  `json:"subcontrolIDGTE,omitempty"`
+	SubcontrolIdlt           *string  `json:"subcontrolIDLT,omitempty"`
+	SubcontrolIdlte          *string  `json:"subcontrolIDLTE,omitempty"`
+	SubcontrolIDContains     *string  `json:"subcontrolIDContains,omitempty"`
+	SubcontrolIDHasPrefix    *string  `json:"subcontrolIDHasPrefix,omitempty"`
+	SubcontrolIDHasSuffix    *string  `json:"subcontrolIDHasSuffix,omitempty"`
+	SubcontrolIDIsNil        *bool    `json:"subcontrolIDIsNil,omitempty"`
+	SubcontrolIDNotNil       *bool    `json:"subcontrolIDNotNil,omitempty"`
+	SubcontrolIDEqualFold    *string  `json:"subcontrolIDEqualFold,omitempty"`
+	SubcontrolIDContainsFold *string  `json:"subcontrolIDContainsFold,omitempty"`
+	// action_plan_id field predicates
+	ActionPlanID             *string  `json:"actionPlanID,omitempty"`
+	ActionPlanIdneq          *string  `json:"actionPlanIDNEQ,omitempty"`
+	ActionPlanIDIn           []string `json:"actionPlanIDIn,omitempty"`
+	ActionPlanIDNotIn        []string `json:"actionPlanIDNotIn,omitempty"`
+	ActionPlanIdgt           *string  `json:"actionPlanIDGT,omitempty"`
+	ActionPlanIdgte          *string  `json:"actionPlanIDGTE,omitempty"`
+	ActionPlanIdlt           *string  `json:"actionPlanIDLT,omitempty"`
+	ActionPlanIdlte          *string  `json:"actionPlanIDLTE,omitempty"`
+	ActionPlanIDContains     *string  `json:"actionPlanIDContains,omitempty"`
+	ActionPlanIDHasPrefix    *string  `json:"actionPlanIDHasPrefix,omitempty"`
+	ActionPlanIDHasSuffix    *string  `json:"actionPlanIDHasSuffix,omitempty"`
+	ActionPlanIDIsNil        *bool    `json:"actionPlanIDIsNil,omitempty"`
+	ActionPlanIDNotNil       *bool    `json:"actionPlanIDNotNil,omitempty"`
+	ActionPlanIDEqualFold    *string  `json:"actionPlanIDEqualFold,omitempty"`
+	ActionPlanIDContainsFold *string  `json:"actionPlanIDContainsFold,omitempty"`
+	// procedure_id field predicates
+	ProcedureID             *string  `json:"procedureID,omitempty"`
+	ProcedureIdneq          *string  `json:"procedureIDNEQ,omitempty"`
+	ProcedureIDIn           []string `json:"procedureIDIn,omitempty"`
+	ProcedureIDNotIn        []string `json:"procedureIDNotIn,omitempty"`
+	ProcedureIdgt           *string  `json:"procedureIDGT,omitempty"`
+	ProcedureIdgte          *string  `json:"procedureIDGTE,omitempty"`
+	ProcedureIdlt           *string  `json:"procedureIDLT,omitempty"`
+	ProcedureIdlte          *string  `json:"procedureIDLTE,omitempty"`
+	ProcedureIDContains     *string  `json:"procedureIDContains,omitempty"`
+	ProcedureIDHasPrefix    *string  `json:"procedureIDHasPrefix,omitempty"`
+	ProcedureIDHasSuffix    *string  `json:"procedureIDHasSuffix,omitempty"`
+	ProcedureIDIsNil        *bool    `json:"procedureIDIsNil,omitempty"`
+	ProcedureIDNotNil       *bool    `json:"procedureIDNotNil,omitempty"`
+	ProcedureIDEqualFold    *string  `json:"procedureIDEqualFold,omitempty"`
+	ProcedureIDContainsFold *string  `json:"procedureIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -33798,6 +33940,15 @@ type WorkflowObjectRefWhereInput struct {
 	// evidence edge predicates
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
+	// subcontrol edge predicates
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
+	// action_plan edge predicates
+	HasActionPlan     *bool                   `json:"hasActionPlan,omitempty"`
+	HasActionPlanWith []*ActionPlanWhereInput `json:"hasActionPlanWith,omitempty"`
+	// procedure edge predicates
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 }
 
 // Properties by which APIToken connections can be ordered.

@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // OrganizationCreate is the builder for creating a Organization entity.
@@ -1628,6 +1629,21 @@ func (_c *OrganizationCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Or
 		ids[i] = v[i].ID
 	}
 	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
+// AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
+func (_c *OrganizationCreate) AddWorkflowProposalIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddWorkflowProposalIDs(ids...)
+	return _c
+}
+
+// AddWorkflowProposals adds the "workflow_proposals" edges to the WorkflowProposal entity.
+func (_c *OrganizationCreate) AddWorkflowProposals(v ...*WorkflowProposal) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowProposalIDs(ids...)
 }
 
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
@@ -3392,6 +3408,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowProposalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

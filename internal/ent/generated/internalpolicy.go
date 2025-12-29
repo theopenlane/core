@@ -91,12 +91,8 @@ type InternalPolicy struct {
 	InternalPolicyKindName string `json:"internal_policy_kind_name,omitempty"`
 	// the kind of the internal_policy
 	InternalPolicyKindID string `json:"internal_policy_kind_id,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposed_at,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges                              InternalPolicyEdges `json:"edges"`
@@ -352,13 +348,13 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case internalpolicy.FieldTags, internalpolicy.FieldDetailsJSON, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions, internalpolicy.FieldProposedChanges:
+		case internalpolicy.FieldTags, internalpolicy.FieldDetailsJSON, internalpolicy.FieldTagSuggestions, internalpolicy.FieldDismissedTagSuggestions, internalpolicy.FieldControlSuggestions, internalpolicy.FieldDismissedControlSuggestions, internalpolicy.FieldImprovementSuggestions, internalpolicy.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
-		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired:
+		case internalpolicy.FieldSystemOwned, internalpolicy.FieldApprovalRequired, internalpolicy.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID, internalpolicy.FieldProposedByUserID:
+		case internalpolicy.FieldID, internalpolicy.FieldCreatedBy, internalpolicy.FieldUpdatedBy, internalpolicy.FieldDeletedBy, internalpolicy.FieldDisplayID, internalpolicy.FieldRevision, internalpolicy.FieldOwnerID, internalpolicy.FieldInternalNotes, internalpolicy.FieldSystemInternalID, internalpolicy.FieldName, internalpolicy.FieldStatus, internalpolicy.FieldPolicyType, internalpolicy.FieldDetails, internalpolicy.FieldReviewFrequency, internalpolicy.FieldApproverID, internalpolicy.FieldDelegateID, internalpolicy.FieldSummary, internalpolicy.FieldURL, internalpolicy.FieldFileID, internalpolicy.FieldInternalPolicyKindName, internalpolicy.FieldInternalPolicyKindID:
 			values[i] = new(sql.NullString)
-		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue, internalpolicy.FieldProposedAt:
+		case internalpolicy.FieldCreatedAt, internalpolicy.FieldUpdatedAt, internalpolicy.FieldDeletedAt, internalpolicy.FieldReviewDue:
 			values[i] = new(sql.NullTime)
 		case internalpolicy.ForeignKeys[0]: // custom_type_enum_internal_policies
 			values[i] = new(sql.NullString)
@@ -607,26 +603,11 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.InternalPolicyKindID = value.String
 			}
-		case internalpolicy.FieldProposedChanges:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
-					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
-				}
-			}
-		case internalpolicy.FieldProposedByUserID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+		case internalpolicy.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
-				_m.ProposedByUserID = value.String
-			}
-		case internalpolicy.FieldProposedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
-			} else if value.Valid {
-				_m.ProposedAt = new(time.Time)
-				*_m.ProposedAt = value.Time
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case internalpolicy.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -876,16 +857,8 @@ func (_m *InternalPolicy) String() string {
 	builder.WriteString("internal_policy_kind_id=")
 	builder.WriteString(_m.InternalPolicyKindID)
 	builder.WriteString(", ")
-	builder.WriteString("proposed_changes=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
-	builder.WriteString(", ")
-	builder.WriteString("proposed_by_user_id=")
-	builder.WriteString(_m.ProposedByUserID)
-	builder.WriteString(", ")
-	if v := _m.ProposedAt; v != nil {
-		builder.WriteString("proposed_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteByte(')')
 	return builder.String()
 }

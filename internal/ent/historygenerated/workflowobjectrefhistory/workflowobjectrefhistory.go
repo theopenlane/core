@@ -55,6 +55,12 @@ const (
 	FieldDirectoryMembershipID = "directory_membership_id"
 	// FieldEvidenceID holds the string denoting the evidence_id field in the database.
 	FieldEvidenceID = "evidence_id"
+	// FieldSubcontrolID holds the string denoting the subcontrol_id field in the database.
+	FieldSubcontrolID = "subcontrol_id"
+	// FieldActionPlanID holds the string denoting the action_plan_id field in the database.
+	FieldActionPlanID = "action_plan_id"
+	// FieldProcedureID holds the string denoting the procedure_id field in the database.
+	FieldProcedureID = "procedure_id"
 	// Table holds the table name of the workflowobjectrefhistory in the database.
 	Table = "workflow_object_ref_history"
 )
@@ -80,6 +86,9 @@ var Columns = []string{
 	FieldDirectoryGroupID,
 	FieldDirectoryMembershipID,
 	FieldEvidenceID,
+	FieldSubcontrolID,
+	FieldActionPlanID,
+	FieldProcedureID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -219,6 +228,21 @@ func ByDirectoryMembershipID(opts ...sql.OrderTermOption) OrderOption {
 // ByEvidenceID orders the results by the evidence_id field.
 func ByEvidenceID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEvidenceID, opts...).ToFunc()
+}
+
+// BySubcontrolID orders the results by the subcontrol_id field.
+func BySubcontrolID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubcontrolID, opts...).ToFunc()
+}
+
+// ByActionPlanID orders the results by the action_plan_id field.
+func ByActionPlanID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldActionPlanID, opts...).ToFunc()
+}
+
+// ByProcedureID orders the results by the procedure_id field.
+func ByProcedureID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldProcedureID, opts...).ToFunc()
 }
 
 var (

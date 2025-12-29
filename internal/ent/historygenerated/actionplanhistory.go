@@ -94,6 +94,8 @@ type ActionPlanHistory struct {
 	ActionPlanKindName string `json:"action_plan_kind_name,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// short title describing the action plan
 	Title string `json:"title,omitempty"`
 	// detailed description of remediation steps and objectives
@@ -128,7 +130,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case actionplanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned, actionplanhistory.FieldRequiresApproval, actionplanhistory.FieldBlocked:
+		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned, actionplanhistory.FieldWorkflowEligibleMarker, actionplanhistory.FieldRequiresApproval, actionplanhistory.FieldBlocked:
 			values[i] = new(sql.NullBool)
 		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
@@ -391,6 +393,12 @@ func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.ActionPlanKindID = value.String
 			}
+		case actionplanhistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
+			}
 		case actionplanhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
@@ -613,6 +621,9 @@ func (_m *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("action_plan_kind_id=")
 	builder.WriteString(_m.ActionPlanKindID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)

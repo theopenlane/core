@@ -275,3 +275,6 @@ type WorkflowInstance func(*sql.Selector)
 
 // WorkflowObjectRef is the predicate function for workflowobjectref builders.
 type WorkflowObjectRef func(*sql.Selector)
+
+// WorkflowProposal is the predicate function for workflowproposal builders.
+type WorkflowProposal func(*sql.Selector)

@@ -152,6 +152,21 @@ func EvidenceID(v string) predicate.WorkflowObjectRefHistory {
 	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldEvidenceID, v))
 }
 
+// SubcontrolID applies equality check predicate on the "subcontrol_id" field. It's identical to SubcontrolIDEQ.
+func SubcontrolID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldSubcontrolID, v))
+}
+
+// ActionPlanID applies equality check predicate on the "action_plan_id" field. It's identical to ActionPlanIDEQ.
+func ActionPlanID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldActionPlanID, v))
+}
+
+// ProcedureID applies equality check predicate on the "procedure_id" field. It's identical to ProcedureIDEQ.
+func ProcedureID(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldProcedureID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.WorkflowObjectRefHistory {
 	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1340,6 +1355,231 @@ func EvidenceIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
 // EvidenceIDContainsFold applies the ContainsFold predicate on the "evidence_id" field.
 func EvidenceIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
 	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldEvidenceID, v))
+}
+
+// SubcontrolIDEQ applies the EQ predicate on the "subcontrol_id" field.
+func SubcontrolIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDNEQ applies the NEQ predicate on the "subcontrol_id" field.
+func SubcontrolIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDIn applies the In predicate on the "subcontrol_id" field.
+func SubcontrolIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldSubcontrolID, vs...))
+}
+
+// SubcontrolIDNotIn applies the NotIn predicate on the "subcontrol_id" field.
+func SubcontrolIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldSubcontrolID, vs...))
+}
+
+// SubcontrolIDGT applies the GT predicate on the "subcontrol_id" field.
+func SubcontrolIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDGTE applies the GTE predicate on the "subcontrol_id" field.
+func SubcontrolIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDLT applies the LT predicate on the "subcontrol_id" field.
+func SubcontrolIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDLTE applies the LTE predicate on the "subcontrol_id" field.
+func SubcontrolIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDContains applies the Contains predicate on the "subcontrol_id" field.
+func SubcontrolIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDHasPrefix applies the HasPrefix predicate on the "subcontrol_id" field.
+func SubcontrolIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDHasSuffix applies the HasSuffix predicate on the "subcontrol_id" field.
+func SubcontrolIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDIsNil applies the IsNil predicate on the "subcontrol_id" field.
+func SubcontrolIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldSubcontrolID))
+}
+
+// SubcontrolIDNotNil applies the NotNil predicate on the "subcontrol_id" field.
+func SubcontrolIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldSubcontrolID))
+}
+
+// SubcontrolIDEqualFold applies the EqualFold predicate on the "subcontrol_id" field.
+func SubcontrolIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldSubcontrolID, v))
+}
+
+// SubcontrolIDContainsFold applies the ContainsFold predicate on the "subcontrol_id" field.
+func SubcontrolIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldSubcontrolID, v))
+}
+
+// ActionPlanIDEQ applies the EQ predicate on the "action_plan_id" field.
+func ActionPlanIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldActionPlanID, v))
+}
+
+// ActionPlanIDNEQ applies the NEQ predicate on the "action_plan_id" field.
+func ActionPlanIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldActionPlanID, v))
+}
+
+// ActionPlanIDIn applies the In predicate on the "action_plan_id" field.
+func ActionPlanIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldActionPlanID, vs...))
+}
+
+// ActionPlanIDNotIn applies the NotIn predicate on the "action_plan_id" field.
+func ActionPlanIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldActionPlanID, vs...))
+}
+
+// ActionPlanIDGT applies the GT predicate on the "action_plan_id" field.
+func ActionPlanIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldActionPlanID, v))
+}
+
+// ActionPlanIDGTE applies the GTE predicate on the "action_plan_id" field.
+func ActionPlanIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldActionPlanID, v))
+}
+
+// ActionPlanIDLT applies the LT predicate on the "action_plan_id" field.
+func ActionPlanIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldActionPlanID, v))
+}
+
+// ActionPlanIDLTE applies the LTE predicate on the "action_plan_id" field.
+func ActionPlanIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldActionPlanID, v))
+}
+
+// ActionPlanIDContains applies the Contains predicate on the "action_plan_id" field.
+func ActionPlanIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldActionPlanID, v))
+}
+
+// ActionPlanIDHasPrefix applies the HasPrefix predicate on the "action_plan_id" field.
+func ActionPlanIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldActionPlanID, v))
+}
+
+// ActionPlanIDHasSuffix applies the HasSuffix predicate on the "action_plan_id" field.
+func ActionPlanIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldActionPlanID, v))
+}
+
+// ActionPlanIDIsNil applies the IsNil predicate on the "action_plan_id" field.
+func ActionPlanIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldActionPlanID))
+}
+
+// ActionPlanIDNotNil applies the NotNil predicate on the "action_plan_id" field.
+func ActionPlanIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldActionPlanID))
+}
+
+// ActionPlanIDEqualFold applies the EqualFold predicate on the "action_plan_id" field.
+func ActionPlanIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldActionPlanID, v))
+}
+
+// ActionPlanIDContainsFold applies the ContainsFold predicate on the "action_plan_id" field.
+func ActionPlanIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldActionPlanID, v))
+}
+
+// ProcedureIDEQ applies the EQ predicate on the "procedure_id" field.
+func ProcedureIDEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEQ(FieldProcedureID, v))
+}
+
+// ProcedureIDNEQ applies the NEQ predicate on the "procedure_id" field.
+func ProcedureIDNEQ(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNEQ(FieldProcedureID, v))
+}
+
+// ProcedureIDIn applies the In predicate on the "procedure_id" field.
+func ProcedureIDIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIn(FieldProcedureID, vs...))
+}
+
+// ProcedureIDNotIn applies the NotIn predicate on the "procedure_id" field.
+func ProcedureIDNotIn(vs ...string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotIn(FieldProcedureID, vs...))
+}
+
+// ProcedureIDGT applies the GT predicate on the "procedure_id" field.
+func ProcedureIDGT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGT(FieldProcedureID, v))
+}
+
+// ProcedureIDGTE applies the GTE predicate on the "procedure_id" field.
+func ProcedureIDGTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldGTE(FieldProcedureID, v))
+}
+
+// ProcedureIDLT applies the LT predicate on the "procedure_id" field.
+func ProcedureIDLT(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLT(FieldProcedureID, v))
+}
+
+// ProcedureIDLTE applies the LTE predicate on the "procedure_id" field.
+func ProcedureIDLTE(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldLTE(FieldProcedureID, v))
+}
+
+// ProcedureIDContains applies the Contains predicate on the "procedure_id" field.
+func ProcedureIDContains(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContains(FieldProcedureID, v))
+}
+
+// ProcedureIDHasPrefix applies the HasPrefix predicate on the "procedure_id" field.
+func ProcedureIDHasPrefix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasPrefix(FieldProcedureID, v))
+}
+
+// ProcedureIDHasSuffix applies the HasSuffix predicate on the "procedure_id" field.
+func ProcedureIDHasSuffix(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldHasSuffix(FieldProcedureID, v))
+}
+
+// ProcedureIDIsNil applies the IsNil predicate on the "procedure_id" field.
+func ProcedureIDIsNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldIsNull(FieldProcedureID))
+}
+
+// ProcedureIDNotNil applies the NotNil predicate on the "procedure_id" field.
+func ProcedureIDNotNil() predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldNotNull(FieldProcedureID))
+}
+
+// ProcedureIDEqualFold applies the EqualFold predicate on the "procedure_id" field.
+func ProcedureIDEqualFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldEqualFold(FieldProcedureID, v))
+}
+
+// ProcedureIDContainsFold applies the ContainsFold predicate on the "procedure_id" field.
+func ProcedureIDContainsFold(v string) predicate.WorkflowObjectRefHistory {
+	return predicate.WorkflowObjectRefHistory(sql.FieldContainsFold(FieldProcedureID, v))
 }
 
 // And groups predicates with the AND operator between them.

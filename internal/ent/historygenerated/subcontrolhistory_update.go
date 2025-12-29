@@ -704,6 +704,26 @@ func (_u *SubcontrolHistoryUpdate) ClearSubcontrolKindID() *SubcontrolHistoryUpd
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *SubcontrolHistoryUpdate) SetWorkflowEligibleMarker(v bool) *SubcontrolHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *SubcontrolHistoryUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *SubcontrolHistoryUpdate) ClearWorkflowEligibleMarker() *SubcontrolHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolHistoryUpdate) SetRefCode(v string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetRefCode(v)
@@ -1101,6 +1121,12 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.SubcontrolKindIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)
@@ -1800,6 +1826,26 @@ func (_u *SubcontrolHistoryUpdateOne) ClearSubcontrolKindID() *SubcontrolHistory
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *SubcontrolHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *SubcontrolHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *SubcontrolHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *SubcontrolHistoryUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *SubcontrolHistoryUpdateOne) ClearWorkflowEligibleMarker() *SubcontrolHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_u *SubcontrolHistoryUpdateOne) SetRefCode(v string) *SubcontrolHistoryUpdateOne {
 	_u.mutation.SetRefCode(v)
@@ -2227,6 +2273,12 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.SubcontrolKindIDCleared() {
 		_spec.ClearField(subcontrolhistory.FieldSubcontrolKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(subcontrolhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(subcontrolhistory.FieldRefCode, field.TypeString, value)

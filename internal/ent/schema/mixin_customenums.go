@@ -18,13 +18,13 @@ import (
 // CustomEnumMixin holds the schema definition for the custom enums
 type CustomEnumMixin struct {
 	mixin.Schema
-
 	// schemaType is the type of the schema the enum applies to
 	schemaType any
-
 	// fieldName is the name of the field on the object the enum applies to, defaults to "kind" but could be customized
 	// to support different enum fields like "category"
 	fieldName string
+	// WorkflowEdgeEligible marks the enum edge as workflow-eligible
+	WorkflowEdgeEligible bool
 }
 
 // newCustomEnumMixin creates a new CustomEnumMixin with the given schema type and options
@@ -48,6 +48,13 @@ type customEnumOptions func(*CustomEnumMixin)
 func withEnumFieldName(fieldName string) customEnumOptions {
 	return func(c *CustomEnumMixin) {
 		c.fieldName = fieldName
+	}
+}
+
+// withWorkflowEnumEdges marks the enum edge as workflow-eligible
+func withWorkflowEnumEdges() customEnumOptions {
+	return func(c *CustomEnumMixin) {
+		c.WorkflowEdgeEligible = true
 	}
 }
 

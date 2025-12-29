@@ -1,3 +1,14 @@
+extend type Subcontrol {
+    """
+    Indicates if this subcontrol has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this subcontrol if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
 extend type Query {
     """
     Look up subcontrol by ID

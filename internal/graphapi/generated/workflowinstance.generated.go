@@ -70,6 +70,8 @@ func (ec *executionContext) fieldContext_WorkflowInstanceBulkCreatePayload_workf
 				return ec.fieldContext_WorkflowInstance_ownerID(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_WorkflowInstance_workflowDefinitionID(ctx, field)
+			case "workflowProposalID":
+				return ec.fieldContext_WorkflowInstance_workflowProposalID(ctx, field)
 			case "state":
 				return ec.fieldContext_WorkflowInstance_state(ctx, field)
 			case "context":
@@ -78,12 +80,20 @@ func (ec *executionContext) fieldContext_WorkflowInstanceBulkCreatePayload_workf
 				return ec.fieldContext_WorkflowInstance_lastEvaluatedAt(ctx, field)
 			case "definitionSnapshot":
 				return ec.fieldContext_WorkflowInstance_definitionSnapshot(ctx, field)
+			case "currentActionIndex":
+				return ec.fieldContext_WorkflowInstance_currentActionIndex(ctx, field)
 			case "controlID":
 				return ec.fieldContext_WorkflowInstance_controlID(ctx, field)
 			case "internalPolicyID":
 				return ec.fieldContext_WorkflowInstance_internalPolicyID(ctx, field)
 			case "evidenceID":
 				return ec.fieldContext_WorkflowInstance_evidenceID(ctx, field)
+			case "subcontrolID":
+				return ec.fieldContext_WorkflowInstance_subcontrolID(ctx, field)
+			case "actionPlanID":
+				return ec.fieldContext_WorkflowInstance_actionPlanID(ctx, field)
+			case "procedureID":
+				return ec.fieldContext_WorkflowInstance_procedureID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowInstance_owner(ctx, field)
 			case "workflowDefinition":
@@ -94,6 +104,12 @@ func (ec *executionContext) fieldContext_WorkflowInstanceBulkCreatePayload_workf
 				return ec.fieldContext_WorkflowInstance_internalPolicy(ctx, field)
 			case "evidence":
 				return ec.fieldContext_WorkflowInstance_evidence(ctx, field)
+			case "subcontrol":
+				return ec.fieldContext_WorkflowInstance_subcontrol(ctx, field)
+			case "actionPlan":
+				return ec.fieldContext_WorkflowInstance_actionPlan(ctx, field)
+			case "procedure":
+				return ec.fieldContext_WorkflowInstance_procedure(ctx, field)
 			case "workflowAssignments":
 				return ec.fieldContext_WorkflowInstance_workflowAssignments(ctx, field)
 			case "workflowEvents":
@@ -149,6 +165,8 @@ func (ec *executionContext) fieldContext_WorkflowInstanceCreatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_ownerID(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_WorkflowInstance_workflowDefinitionID(ctx, field)
+			case "workflowProposalID":
+				return ec.fieldContext_WorkflowInstance_workflowProposalID(ctx, field)
 			case "state":
 				return ec.fieldContext_WorkflowInstance_state(ctx, field)
 			case "context":
@@ -157,12 +175,20 @@ func (ec *executionContext) fieldContext_WorkflowInstanceCreatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_lastEvaluatedAt(ctx, field)
 			case "definitionSnapshot":
 				return ec.fieldContext_WorkflowInstance_definitionSnapshot(ctx, field)
+			case "currentActionIndex":
+				return ec.fieldContext_WorkflowInstance_currentActionIndex(ctx, field)
 			case "controlID":
 				return ec.fieldContext_WorkflowInstance_controlID(ctx, field)
 			case "internalPolicyID":
 				return ec.fieldContext_WorkflowInstance_internalPolicyID(ctx, field)
 			case "evidenceID":
 				return ec.fieldContext_WorkflowInstance_evidenceID(ctx, field)
+			case "subcontrolID":
+				return ec.fieldContext_WorkflowInstance_subcontrolID(ctx, field)
+			case "actionPlanID":
+				return ec.fieldContext_WorkflowInstance_actionPlanID(ctx, field)
+			case "procedureID":
+				return ec.fieldContext_WorkflowInstance_procedureID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowInstance_owner(ctx, field)
 			case "workflowDefinition":
@@ -173,6 +199,12 @@ func (ec *executionContext) fieldContext_WorkflowInstanceCreatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_internalPolicy(ctx, field)
 			case "evidence":
 				return ec.fieldContext_WorkflowInstance_evidence(ctx, field)
+			case "subcontrol":
+				return ec.fieldContext_WorkflowInstance_subcontrol(ctx, field)
+			case "actionPlan":
+				return ec.fieldContext_WorkflowInstance_actionPlan(ctx, field)
+			case "procedure":
+				return ec.fieldContext_WorkflowInstance_procedure(ctx, field)
 			case "workflowAssignments":
 				return ec.fieldContext_WorkflowInstance_workflowAssignments(ctx, field)
 			case "workflowEvents":
@@ -257,6 +289,8 @@ func (ec *executionContext) fieldContext_WorkflowInstanceUpdatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_ownerID(ctx, field)
 			case "workflowDefinitionID":
 				return ec.fieldContext_WorkflowInstance_workflowDefinitionID(ctx, field)
+			case "workflowProposalID":
+				return ec.fieldContext_WorkflowInstance_workflowProposalID(ctx, field)
 			case "state":
 				return ec.fieldContext_WorkflowInstance_state(ctx, field)
 			case "context":
@@ -265,12 +299,20 @@ func (ec *executionContext) fieldContext_WorkflowInstanceUpdatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_lastEvaluatedAt(ctx, field)
 			case "definitionSnapshot":
 				return ec.fieldContext_WorkflowInstance_definitionSnapshot(ctx, field)
+			case "currentActionIndex":
+				return ec.fieldContext_WorkflowInstance_currentActionIndex(ctx, field)
 			case "controlID":
 				return ec.fieldContext_WorkflowInstance_controlID(ctx, field)
 			case "internalPolicyID":
 				return ec.fieldContext_WorkflowInstance_internalPolicyID(ctx, field)
 			case "evidenceID":
 				return ec.fieldContext_WorkflowInstance_evidenceID(ctx, field)
+			case "subcontrolID":
+				return ec.fieldContext_WorkflowInstance_subcontrolID(ctx, field)
+			case "actionPlanID":
+				return ec.fieldContext_WorkflowInstance_actionPlanID(ctx, field)
+			case "procedureID":
+				return ec.fieldContext_WorkflowInstance_procedureID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowInstance_owner(ctx, field)
 			case "workflowDefinition":
@@ -281,6 +323,12 @@ func (ec *executionContext) fieldContext_WorkflowInstanceUpdatePayload_workflowI
 				return ec.fieldContext_WorkflowInstance_internalPolicy(ctx, field)
 			case "evidence":
 				return ec.fieldContext_WorkflowInstance_evidence(ctx, field)
+			case "subcontrol":
+				return ec.fieldContext_WorkflowInstance_subcontrol(ctx, field)
+			case "actionPlan":
+				return ec.fieldContext_WorkflowInstance_actionPlan(ctx, field)
+			case "procedure":
+				return ec.fieldContext_WorkflowInstance_procedure(ctx, field)
 			case "workflowAssignments":
 				return ec.fieldContext_WorkflowInstance_workflowAssignments(ctx, field)
 			case "workflowEvents":

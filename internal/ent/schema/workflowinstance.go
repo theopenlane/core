@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
@@ -47,6 +48,9 @@ func (WorkflowInstance) Fields() []ent.Field {
 		field.String("workflow_definition_id").
 			Comment("ID of the workflow definition this instance is based on").
 			NotEmpty(),
+		field.String("workflow_proposal_id").
+			Comment("ID of the workflow proposal this instance is associated with (when approval-before-commit is used)").
+			Optional(),
 		field.Enum("state").
 			Comment("Current state of the workflow instance").
 			GoType(enums.WorkflowInstanceState("")).
@@ -60,6 +64,10 @@ func (WorkflowInstance) Fields() []ent.Field {
 		field.JSON("definition_snapshot", models.WorkflowDefinitionDocument{}).
 			Comment("Copy of definition JSON used for this instance").
 			Optional(),
+		field.Int("current_action_index").
+			Comment("Index of the current action being executed (used for recovery and resumption)").
+			Default(0).
+			NonNegative(),
 		field.String("control_id").
 			Comment("ID of the control this workflow instance is associated with").
 			Optional(),
@@ -68,6 +76,15 @@ func (WorkflowInstance) Fields() []ent.Field {
 			Optional(),
 		field.String("evidence_id").
 			Comment("ID of the evidence this workflow instance is associated with").
+			Optional(),
+		field.String("subcontrol_id").
+			Comment("ID of the subcontrol this workflow instance is associated with").
+			Optional(),
+		field.String("action_plan_id").
+			Comment("ID of the actionplan this workflow instance is associated with").
+			Optional(),
+		field.String("procedure_id").
+			Comment("ID of the procedure this workflow instance is associated with").
 			Optional(),
 	}
 }
@@ -102,6 +119,33 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			edgeSchema: Evidence{},
 			field:      "evidence_id",
 			comment:    "Evidence this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Subcontrol{},
+			field:      "subcontrol_id",
+			comment:    "Subcontrol this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: ActionPlan{},
+			field:      "action_plan_id",
+			comment:    "ActionPlan this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Procedure{},
+			field:      "procedure_id",
+			comment:    "Procedure this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: WorkflowProposal{},
+			field:      "workflow_proposal_id",
+			comment:    "Proposal this workflow instance is associated with",
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: w,
@@ -138,7 +182,7 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 		prefix: "WFI",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
-				withParents(Control{}, InternalPolicy{}, Evidence{}),
+				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}),
 				withOrganizationOwner(true),
 			),
 		},

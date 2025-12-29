@@ -448,6 +448,20 @@ func (_c *ActionPlanHistoryCreate) SetNillableActionPlanKindID(v *string) *Actio
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *ActionPlanHistoryCreate) SetWorkflowEligibleMarker(v bool) *ActionPlanHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetTitle sets the "title" field.
 func (_c *ActionPlanHistoryCreate) SetTitle(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetTitle(v)
@@ -702,6 +716,10 @@ func (_c *ActionPlanHistoryCreate) defaults() error {
 		v := actionplanhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := actionplanhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.RequiresApproval(); !ok {
 		v := actionplanhistory.DefaultRequiresApproval
 		_c.mutation.SetRequiresApproval(v)
@@ -939,6 +957,10 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.ActionPlanKindID(); ok {
 		_spec.SetField(actionplanhistory.FieldActionPlanKindID, field.TypeString, value)
 		_node.ActionPlanKindID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(actionplanhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)

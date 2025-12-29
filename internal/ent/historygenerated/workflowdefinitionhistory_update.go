@@ -368,6 +368,62 @@ func (_u *WorkflowDefinitionHistoryUpdate) ClearTriggerFields() *WorkflowDefinit
 	return _u
 }
 
+// SetApprovalFields sets the "approval_fields" field.
+func (_u *WorkflowDefinitionHistoryUpdate) SetApprovalFields(v []string) *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.SetApprovalFields(v)
+	return _u
+}
+
+// AppendApprovalFields appends value to the "approval_fields" field.
+func (_u *WorkflowDefinitionHistoryUpdate) AppendApprovalFields(v []string) *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.AppendApprovalFields(v)
+	return _u
+}
+
+// ClearApprovalFields clears the value of the "approval_fields" field.
+func (_u *WorkflowDefinitionHistoryUpdate) ClearApprovalFields() *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.ClearApprovalFields()
+	return _u
+}
+
+// SetApprovalEdges sets the "approval_edges" field.
+func (_u *WorkflowDefinitionHistoryUpdate) SetApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.SetApprovalEdges(v)
+	return _u
+}
+
+// AppendApprovalEdges appends value to the "approval_edges" field.
+func (_u *WorkflowDefinitionHistoryUpdate) AppendApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.AppendApprovalEdges(v)
+	return _u
+}
+
+// ClearApprovalEdges clears the value of the "approval_edges" field.
+func (_u *WorkflowDefinitionHistoryUpdate) ClearApprovalEdges() *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.ClearApprovalEdges()
+	return _u
+}
+
+// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionHistoryUpdate) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.SetApprovalSubmissionMode(v)
+	return _u
+}
+
+// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
+func (_u *WorkflowDefinitionHistoryUpdate) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdate {
+	if v != nil {
+		_u.SetApprovalSubmissionMode(*v)
+	}
+	return _u
+}
+
+// ClearApprovalSubmissionMode clears the value of the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionHistoryUpdate) ClearApprovalSubmissionMode() *WorkflowDefinitionHistoryUpdate {
+	_u.mutation.ClearApprovalSubmissionMode()
+	return _u
+}
+
 // SetDefinitionJSON sets the "definition_json" field.
 func (_u *WorkflowDefinitionHistoryUpdate) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryUpdate {
 	_u.mutation.SetDefinitionJSON(v)
@@ -458,6 +514,11 @@ func (_u *WorkflowDefinitionHistoryUpdate) check() error {
 	if v, ok := _u.mutation.WorkflowKind(); ok {
 		if err := workflowdefinitionhistory.WorkflowKindValidator(v); err != nil {
 			return &ValidationError{Name: "workflow_kind", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.workflow_kind": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		if err := workflowdefinitionhistory.ApprovalSubmissionModeValidator(v); err != nil {
+			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.approval_submission_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -606,6 +667,34 @@ func (_u *WorkflowDefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.TriggerFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalFields(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalFields(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalFields, value)
+		})
+	}
+	if _u.mutation.ApprovalFieldsCleared() {
+		_spec.ClearField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalEdges(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalEdges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalEdges, value)
+		})
+	}
+	if _u.mutation.ApprovalEdgesCleared() {
+		_spec.ClearField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ApprovalSubmissionModeCleared() {
+		_spec.ClearField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.DefinitionJSON(); ok {
 		_spec.SetField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON, value)
@@ -980,6 +1069,62 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) ClearTriggerFields() *WorkflowDefi
 	return _u
 }
 
+// SetApprovalFields sets the "approval_fields" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) SetApprovalFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.SetApprovalFields(v)
+	return _u
+}
+
+// AppendApprovalFields appends value to the "approval_fields" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) AppendApprovalFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.AppendApprovalFields(v)
+	return _u
+}
+
+// ClearApprovalFields clears the value of the "approval_fields" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) ClearApprovalFields() *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.ClearApprovalFields()
+	return _u
+}
+
+// SetApprovalEdges sets the "approval_edges" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) SetApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.SetApprovalEdges(v)
+	return _u
+}
+
+// AppendApprovalEdges appends value to the "approval_edges" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) AppendApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.AppendApprovalEdges(v)
+	return _u
+}
+
+// ClearApprovalEdges clears the value of the "approval_edges" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) ClearApprovalEdges() *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.ClearApprovalEdges()
+	return _u
+}
+
+// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.SetApprovalSubmissionMode(v)
+	return _u
+}
+
+// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
+func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovalSubmissionMode(*v)
+	}
+	return _u
+}
+
+// ClearApprovalSubmissionMode clears the value of the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionHistoryUpdateOne) ClearApprovalSubmissionMode() *WorkflowDefinitionHistoryUpdateOne {
+	_u.mutation.ClearApprovalSubmissionMode()
+	return _u
+}
+
 // SetDefinitionJSON sets the "definition_json" field.
 func (_u *WorkflowDefinitionHistoryUpdateOne) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryUpdateOne {
 	_u.mutation.SetDefinitionJSON(v)
@@ -1083,6 +1228,11 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.WorkflowKind(); ok {
 		if err := workflowdefinitionhistory.WorkflowKindValidator(v); err != nil {
 			return &ValidationError{Name: "workflow_kind", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.workflow_kind": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		if err := workflowdefinitionhistory.ApprovalSubmissionModeValidator(v); err != nil {
+			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.approval_submission_mode": %w`, err)}
 		}
 	}
 	return nil
@@ -1248,6 +1398,34 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.TriggerFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalFields(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalFields(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalFields, value)
+		})
+	}
+	if _u.mutation.ApprovalFieldsCleared() {
+		_spec.ClearField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalEdges(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalEdges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalEdges, value)
+		})
+	}
+	if _u.mutation.ApprovalEdgesCleared() {
+		_spec.ClearField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		_spec.SetField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ApprovalSubmissionModeCleared() {
+		_spec.ClearField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.DefinitionJSON(); ok {
 		_spec.SetField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON, value)

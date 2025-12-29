@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -78,11 +79,29 @@ func (WorkflowDefinition) Fields() []ent.Field {
 		field.Strings("trigger_operations").
 			Comment("Derived: normalized operations from definition for prefiltering; not user editable").
 			Optional().
+			Annotations(entgql.Skip()).
 			Default([]string{}),
 		field.Strings("trigger_fields").
 			Comment("Derived: normalized fields from definition for prefiltering; not user editable").
 			Optional().
+			Annotations(entgql.Skip()).
 			Default([]string{}),
+		field.Strings("approval_fields").
+			Comment("Derived: fields that are approval-gated for this definition; not user editable").
+			Optional().
+			Annotations(entgql.Skip()).
+			Default([]string{}),
+		field.Strings("approval_edges").
+			Comment("Derived: edges that are approval-gated for this definition; not user editable").
+			Optional().
+			Annotations(entgql.Skip()).
+			Default([]string{}),
+		field.Enum("approval_submission_mode").
+			Annotations(entgql.Skip()).
+			Comment("Derived: MANUAL_SUBMIT (default) or AUTO_SUBMIT for approval domains; not user editable").
+			GoType(enums.WorkflowApprovalSubmissionMode("")).
+			Optional().
+			Default(string(enums.WorkflowApprovalSubmissionModeManualSubmit)),
 		field.JSON("definition_json", models.WorkflowDefinitionDocument{}).
 			Comment("Typed document describing triggers, conditions, and actions").
 			Optional(),

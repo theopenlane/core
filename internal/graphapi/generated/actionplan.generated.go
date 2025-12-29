@@ -5919,6 +5919,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
 			case "actionPlanKindID":
 				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_ActionPlan_workflowEligibleMarker(ctx, field)
 			case "title":
 				return ec.fieldContext_ActionPlan_title(ctx, field)
 			case "description":
@@ -5969,6 +5971,12 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_integrations(ctx, field)
 			case "file":
 				return ec.fieldContext_ActionPlan_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_ActionPlan_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_ActionPlan_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_ActionPlan_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -6093,6 +6101,8 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
 			case "actionPlanKindID":
 				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_ActionPlan_workflowEligibleMarker(ctx, field)
 			case "title":
 				return ec.fieldContext_ActionPlan_title(ctx, field)
 			case "description":
@@ -6143,6 +6153,12 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_integrations(ctx, field)
 			case "file":
 				return ec.fieldContext_ActionPlan_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_ActionPlan_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_ActionPlan_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_ActionPlan_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -6267,6 +6283,8 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
 			case "actionPlanKindID":
 				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_ActionPlan_workflowEligibleMarker(ctx, field)
 			case "title":
 				return ec.fieldContext_ActionPlan_title(ctx, field)
 			case "description":
@@ -6317,6 +6335,12 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_integrations(ctx, field)
 			case "file":
 				return ec.fieldContext_ActionPlan_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_ActionPlan_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_ActionPlan_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_ActionPlan_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},
@@ -6441,6 +6465,8 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_actionPlanKindName(ctx, field)
 			case "actionPlanKindID":
 				return ec.fieldContext_ActionPlan_actionPlanKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_ActionPlan_workflowEligibleMarker(ctx, field)
 			case "title":
 				return ec.fieldContext_ActionPlan_title(ctx, field)
 			case "description":
@@ -6491,6 +6517,12 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_integrations(ctx, field)
 			case "file":
 				return ec.fieldContext_ActionPlan_file(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_ActionPlan_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_ActionPlan_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_ActionPlan_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type ActionPlan", field.Name)
 		},

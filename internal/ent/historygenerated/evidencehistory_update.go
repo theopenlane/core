@@ -125,55 +125,23 @@ func (_u *EvidenceHistoryUpdate) ClearTags() *EvidenceHistoryUpdate {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *EvidenceHistoryUpdate) SetProposedChanges(v map[string]interface{}) *EvidenceHistoryUpdate {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *EvidenceHistoryUpdate) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *EvidenceHistoryUpdate) ClearProposedChanges() *EvidenceHistoryUpdate {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *EvidenceHistoryUpdate) SetProposedByUserID(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableProposedByUserID(v *string) *EvidenceHistoryUpdate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceHistoryUpdate {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *EvidenceHistoryUpdate) ClearProposedByUserID() *EvidenceHistoryUpdate {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *EvidenceHistoryUpdate) SetProposedAt(v time.Time) *EvidenceHistoryUpdate {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableProposedAt(v *time.Time) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *EvidenceHistoryUpdate) ClearProposedAt() *EvidenceHistoryUpdate {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *EvidenceHistoryUpdate) ClearWorkflowEligibleMarker() *EvidenceHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -467,23 +435,11 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(evidencehistory.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(evidencehistory.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(evidencehistory.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(evidencehistory.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(evidencehistory.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(evidencehistory.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
@@ -647,55 +603,23 @@ func (_u *EvidenceHistoryUpdateOne) ClearTags() *EvidenceHistoryUpdateOne {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *EvidenceHistoryUpdateOne) SetProposedChanges(v map[string]interface{}) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *EvidenceHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *EvidenceHistoryUpdateOne) ClearProposedChanges() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *EvidenceHistoryUpdateOne) SetProposedByUserID(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableProposedByUserID(v *string) *EvidenceHistoryUpdateOne {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *EvidenceHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceHistoryUpdateOne {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *EvidenceHistoryUpdateOne) ClearProposedByUserID() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *EvidenceHistoryUpdateOne) SetProposedAt(v time.Time) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableProposedAt(v *time.Time) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *EvidenceHistoryUpdateOne) ClearProposedAt() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *EvidenceHistoryUpdateOne) ClearWorkflowEligibleMarker() *EvidenceHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1019,23 +943,11 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(evidencehistory.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(evidencehistory.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(evidencehistory.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(evidencehistory.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(evidencehistory.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(evidencehistory.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)

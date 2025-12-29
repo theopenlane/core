@@ -704,55 +704,23 @@ func (_u *ControlHistoryUpdate) ClearControlKindID() *ControlHistoryUpdate {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *ControlHistoryUpdate) SetProposedChanges(v map[string]interface{}) *ControlHistoryUpdate {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ControlHistoryUpdate) SetWorkflowEligibleMarker(v bool) *ControlHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *ControlHistoryUpdate) ClearProposedChanges() *ControlHistoryUpdate {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *ControlHistoryUpdate) SetProposedByUserID(v string) *ControlHistoryUpdate {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *ControlHistoryUpdate) SetNillableProposedByUserID(v *string) *ControlHistoryUpdate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ControlHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ControlHistoryUpdate {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *ControlHistoryUpdate) ClearProposedByUserID() *ControlHistoryUpdate {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *ControlHistoryUpdate) SetProposedAt(v time.Time) *ControlHistoryUpdate {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *ControlHistoryUpdate) SetNillableProposedAt(v *time.Time) *ControlHistoryUpdate {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *ControlHistoryUpdate) ClearProposedAt() *ControlHistoryUpdate {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ControlHistoryUpdate) ClearWorkflowEligibleMarker() *ControlHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1160,23 +1128,11 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(controlhistory.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(controlhistory.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(controlhistory.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(controlhistory.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(controlhistory.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(controlhistory.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)
@@ -1879,55 +1835,23 @@ func (_u *ControlHistoryUpdateOne) ClearControlKindID() *ControlHistoryUpdateOne
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *ControlHistoryUpdateOne) SetProposedChanges(v map[string]interface{}) *ControlHistoryUpdateOne {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ControlHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *ControlHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *ControlHistoryUpdateOne) ClearProposedChanges() *ControlHistoryUpdateOne {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *ControlHistoryUpdateOne) SetProposedByUserID(v string) *ControlHistoryUpdateOne {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *ControlHistoryUpdateOne) SetNillableProposedByUserID(v *string) *ControlHistoryUpdateOne {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ControlHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ControlHistoryUpdateOne {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *ControlHistoryUpdateOne) ClearProposedByUserID() *ControlHistoryUpdateOne {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *ControlHistoryUpdateOne) SetProposedAt(v time.Time) *ControlHistoryUpdateOne {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *ControlHistoryUpdateOne) SetNillableProposedAt(v *time.Time) *ControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *ControlHistoryUpdateOne) ClearProposedAt() *ControlHistoryUpdateOne {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ControlHistoryUpdateOne) ClearWorkflowEligibleMarker() *ControlHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -2365,23 +2289,11 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	if _u.mutation.ControlKindIDCleared() {
 		_spec.ClearField(controlhistory.FieldControlKindID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(controlhistory.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(controlhistory.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(controlhistory.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(controlhistory.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(controlhistory.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(controlhistory.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(controlhistory.FieldRefCode, field.TypeString, value)

@@ -14,7 +14,7 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
-  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
+  HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
 steps:
@@ -70,12 +70,14 @@ steps:
         depends_on: "generate_config"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -86,6 +88,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -95,12 +98,14 @@ steps:
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -111,6 +116,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":helm: update helm chart"
@@ -118,12 +124,14 @@ steps:
         depends_on: "generate_config"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -134,6 +142,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -143,12 +152,14 @@ steps:
         depends_on: "helm_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -159,6 +170,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -168,11 +180,13 @@ steps:
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -180,6 +194,7 @@ steps:
               propagate-environment: true
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"

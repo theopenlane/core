@@ -86,12 +86,8 @@ const (
 	FieldInternalPolicyKindName = "internal_policy_kind_name"
 	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
 	FieldInternalPolicyKindID = "internal_policy_kind_id"
-	// FieldProposedChanges holds the string denoting the proposed_changes field in the database.
-	FieldProposedChanges = "proposed_changes"
-	// FieldProposedByUserID holds the string denoting the proposed_by_user_id field in the database.
-	FieldProposedByUserID = "proposed_by_user_id"
-	// FieldProposedAt holds the string denoting the proposed_at field in the database.
-	FieldProposedAt = "proposed_at"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -284,9 +280,7 @@ var Columns = []string{
 	FieldFileID,
 	FieldInternalPolicyKindName,
 	FieldInternalPolicyKindID,
-	FieldProposedChanges,
-	FieldProposedByUserID,
-	FieldProposedAt,
+	FieldWorkflowEligibleMarker,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "internal_policies"
@@ -349,8 +343,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
-	Interceptors [5]ent.Interceptor
+	Hooks        [17]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -386,6 +380,8 @@ var (
 	DefaultImprovementSuggestions []string
 	// DefaultDismissedImprovementSuggestions holds the default value on creation for the "dismissed_improvement_suggestions" field.
 	DefaultDismissedImprovementSuggestions []string
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -552,14 +548,9 @@ func ByInternalPolicyKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalPolicyKindID, opts...).ToFunc()
 }
 
-// ByProposedByUserID orders the results by the proposed_by_user_id field.
-func ByProposedByUserID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProposedByUserID, opts...).ToFunc()
-}
-
-// ByProposedAt orders the results by the proposed_at field.
-func ByProposedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProposedAt, opts...).ToFunc()
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

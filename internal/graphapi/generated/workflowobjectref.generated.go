@@ -84,6 +84,12 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefBulkCreatePayload_work
 				return ec.fieldContext_WorkflowObjectRef_directoryMembershipID(ctx, field)
 			case "evidenceID":
 				return ec.fieldContext_WorkflowObjectRef_evidenceID(ctx, field)
+			case "subcontrolID":
+				return ec.fieldContext_WorkflowObjectRef_subcontrolID(ctx, field)
+			case "actionPlanID":
+				return ec.fieldContext_WorkflowObjectRef_actionPlanID(ctx, field)
+			case "procedureID":
+				return ec.fieldContext_WorkflowObjectRef_procedureID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
 			case "workflowInstance":
@@ -104,6 +110,12 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefBulkCreatePayload_work
 				return ec.fieldContext_WorkflowObjectRef_directoryMembership(ctx, field)
 			case "evidence":
 				return ec.fieldContext_WorkflowObjectRef_evidence(ctx, field)
+			case "subcontrol":
+				return ec.fieldContext_WorkflowObjectRef_subcontrol(ctx, field)
+			case "actionPlan":
+				return ec.fieldContext_WorkflowObjectRef_actionPlan(ctx, field)
+			case "procedure":
+				return ec.fieldContext_WorkflowObjectRef_procedure(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},
@@ -167,6 +179,12 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefCreatePayload_workflow
 				return ec.fieldContext_WorkflowObjectRef_directoryMembershipID(ctx, field)
 			case "evidenceID":
 				return ec.fieldContext_WorkflowObjectRef_evidenceID(ctx, field)
+			case "subcontrolID":
+				return ec.fieldContext_WorkflowObjectRef_subcontrolID(ctx, field)
+			case "actionPlanID":
+				return ec.fieldContext_WorkflowObjectRef_actionPlanID(ctx, field)
+			case "procedureID":
+				return ec.fieldContext_WorkflowObjectRef_procedureID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
 			case "workflowInstance":
@@ -187,6 +205,12 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefCreatePayload_workflow
 				return ec.fieldContext_WorkflowObjectRef_directoryMembership(ctx, field)
 			case "evidence":
 				return ec.fieldContext_WorkflowObjectRef_evidence(ctx, field)
+			case "subcontrol":
+				return ec.fieldContext_WorkflowObjectRef_subcontrol(ctx, field)
+			case "actionPlan":
+				return ec.fieldContext_WorkflowObjectRef_actionPlan(ctx, field)
+			case "procedure":
+				return ec.fieldContext_WorkflowObjectRef_procedure(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},

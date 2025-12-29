@@ -319,9 +319,6 @@ server:
     dev: false
     enablegraphextensions: true
     enablegraphsubscriptions: false
-    fieldlevelencryption:
-        enabled: false
-        keyset: ""
     graphpool:
         maxworkers: 100
     idletimeout: 30000000000

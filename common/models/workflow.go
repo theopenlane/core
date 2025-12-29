@@ -12,16 +12,18 @@ import (
 
 // WorkflowDefinitionDocument represents the stored workflow definition with typed fields.
 type WorkflowDefinitionDocument struct {
-	Name         string                 `json:"name,omitempty"`
-	Description  string                 `json:"description,omitempty"`
-	SchemaType   string                 `json:"schemaType,omitempty"`
-	WorkflowKind enums.WorkflowKind     `json:"workflowKind,omitempty"`
-	Version      string                 `json:"version,omitempty"`
-	Targets      WorkflowSelector       `json:"targets,omitempty"`
-	Triggers     []WorkflowTrigger      `json:"triggers,omitempty"`
-	Conditions   []WorkflowCondition    `json:"conditions,omitempty"`
-	Actions      []WorkflowAction       `json:"actions,omitempty"`
-	Metadata     map[string]interface{} `json:"metadata,omitempty"`
+	Name         string             `json:"name,omitempty"`
+	Description  string             `json:"description,omitempty"`
+	SchemaType   string             `json:"schemaType,omitempty"`
+	WorkflowKind enums.WorkflowKind `json:"workflowKind,omitempty"`
+	// ApprovalSubmissionMode controls draft vs auto-submit behavior for approval domains.
+	ApprovalSubmissionMode enums.WorkflowApprovalSubmissionMode `json:"approvalSubmissionMode,omitempty"`
+	Version                string                               `json:"version,omitempty"`
+	Targets                WorkflowSelector                     `json:"targets,omitempty"`
+	Triggers               []WorkflowTrigger                    `json:"triggers,omitempty"`
+	Conditions             []WorkflowCondition                  `json:"conditions,omitempty"`
+	Actions                []WorkflowAction                     `json:"actions,omitempty"`
+	Metadata               map[string]any                       `json:"metadata,omitempty"`
 }
 
 // WorkflowTrigger describes when to run a workflow.
@@ -29,6 +31,7 @@ type WorkflowTrigger struct {
 	Operation   string                   `json:"operation,omitempty"`   // e.g. CREATE, UPDATE, DELETE
 	ObjectType  enums.WorkflowObjectType `json:"objectType,omitempty"`  // schema/object type the trigger targets
 	Fields      []string                 `json:"fields,omitempty"`      // specific fields that should trigger evaluation
+	Edges       []string                 `json:"edges,omitempty"`       // specific edges (relationships) that should trigger evaluation
 	Selector    WorkflowSelector         `json:"selector,omitempty"`    // scoping for tags/groups/objects
 	Expression  string                   `json:"expression,omitempty"`  // optional CEL expression
 	Description string                   `json:"description,omitempty"` // human friendly description
@@ -45,6 +48,7 @@ type WorkflowAction struct {
 	Key         string          `json:"key,omitempty"`    // unique key within the workflow
 	Type        string          `json:"type,omitempty"`   // action type, e.g. REQUEST_APPROVAL, NOTIFY
 	Params      json.RawMessage `json:"params,omitempty"` // opaque config for the action
+	When        string          `json:"when,omitempty"`   // optional CEL expression to conditionally execute this action
 	Description string          `json:"description,omitempty"`
 }
 
@@ -68,6 +72,12 @@ type WorkflowInstanceContext struct {
 	ObjectID             string                      `json:"objectId,omitempty"`
 	Version              int                         `json:"version,omitempty"`
 	Assignments          []WorkflowAssignmentContext `json:"assignments,omitempty"`
+	TriggerEventType     string                      `json:"triggerEventType,omitempty"`
+	TriggerChangedFields []string                    `json:"triggerChangedFields,omitempty"`
+	TriggerChangedEdges  []string                    `json:"triggerChangedEdges,omitempty"`
+	TriggerAddedIDs      map[string][]string         `json:"triggerAddedIds,omitempty"`
+	TriggerRemovedIDs    map[string][]string         `json:"triggerRemovedIds,omitempty"`
+	TriggerUserID        string                      `json:"triggerUserId,omitempty"`
 	Data                 json.RawMessage             `json:"data,omitempty"` // optional payload captured at runtime
 }
 
@@ -101,7 +111,7 @@ func (d WorkflowDefinitionDocument) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen.
-func (d *WorkflowDefinitionDocument) UnmarshalGQL(v interface{}) error {
+func (d *WorkflowDefinitionDocument) UnmarshalGQL(v any) error {
 	byteData, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -123,7 +133,7 @@ func (d WorkflowDefinitionSchema) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen.
-func (d *WorkflowDefinitionSchema) UnmarshalGQL(v interface{}) error {
+func (d *WorkflowDefinitionSchema) UnmarshalGQL(v any) error {
 	byteData, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -145,7 +155,7 @@ func (c WorkflowInstanceContext) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen.
-func (c *WorkflowInstanceContext) UnmarshalGQL(v interface{}) error {
+func (c *WorkflowInstanceContext) UnmarshalGQL(v any) error {
 	byteData, err := json.Marshal(v)
 	if err != nil {
 		return err
@@ -167,7 +177,7 @@ func (p WorkflowEventPayload) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen.
-func (p *WorkflowEventPayload) UnmarshalGQL(v interface{}) error {
+func (p *WorkflowEventPayload) UnmarshalGQL(v any) error {
 	byteData, err := json.Marshal(v)
 	if err != nil {
 		return err

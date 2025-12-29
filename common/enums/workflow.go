@@ -151,6 +151,104 @@ func (r *WorkflowAssignmentStatus) UnmarshalGQL(v interface{}) error {
 	return nil
 }
 
+// WorkflowProposalState enumerates proposal lifecycle states.
+type WorkflowProposalState string
+
+var (
+	WorkflowProposalStateDraft      WorkflowProposalState = "DRAFT"
+	WorkflowProposalStateSubmitted  WorkflowProposalState = "SUBMITTED"
+	WorkflowProposalStateApplied    WorkflowProposalState = "APPLIED"
+	WorkflowProposalStateRejected   WorkflowProposalState = "REJECTED"
+	WorkflowProposalStateSuperseded WorkflowProposalState = "SUPERSEDED"
+)
+
+var WorkflowProposalStates = []string{
+	string(WorkflowProposalStateDraft),
+	string(WorkflowProposalStateSubmitted),
+	string(WorkflowProposalStateApplied),
+	string(WorkflowProposalStateRejected),
+	string(WorkflowProposalStateSuperseded),
+}
+
+func (WorkflowProposalState) Values() (vals []string) {
+	return WorkflowProposalStates
+}
+
+func (r WorkflowProposalState) String() string { return string(r) }
+
+func ToWorkflowProposalState(v string) *WorkflowProposalState {
+	switch strings.ToUpper(v) {
+	case WorkflowProposalStateDraft.String():
+		return &WorkflowProposalStateDraft
+	case WorkflowProposalStateSubmitted.String():
+		return &WorkflowProposalStateSubmitted
+	case WorkflowProposalStateApplied.String():
+		return &WorkflowProposalStateApplied
+	case WorkflowProposalStateRejected.String():
+		return &WorkflowProposalStateRejected
+	case WorkflowProposalStateSuperseded.String():
+		return &WorkflowProposalStateSuperseded
+	default:
+		return nil
+	}
+}
+
+func (r WorkflowProposalState) MarshalGQL(w io.Writer) {
+	_, _ = w.Write([]byte(`"` + r.String() + `"`))
+}
+
+func (r *WorkflowProposalState) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowProposalState, v)
+	}
+	*r = WorkflowProposalState(str)
+	return nil
+}
+
+// WorkflowApprovalSubmissionMode enumerates how approval workflows are triggered for a domain.
+type WorkflowApprovalSubmissionMode string
+
+var (
+	WorkflowApprovalSubmissionModeManualSubmit WorkflowApprovalSubmissionMode = "MANUAL_SUBMIT"
+	WorkflowApprovalSubmissionModeAutoSubmit   WorkflowApprovalSubmissionMode = "AUTO_SUBMIT"
+)
+
+var WorkflowApprovalSubmissionModes = []string{
+	string(WorkflowApprovalSubmissionModeManualSubmit),
+	string(WorkflowApprovalSubmissionModeAutoSubmit),
+}
+
+func (WorkflowApprovalSubmissionMode) Values() (vals []string) {
+	return WorkflowApprovalSubmissionModes
+}
+
+func (r WorkflowApprovalSubmissionMode) String() string { return string(r) }
+
+func ToWorkflowApprovalSubmissionMode(v string) *WorkflowApprovalSubmissionMode {
+	switch strings.ToUpper(v) {
+	case WorkflowApprovalSubmissionModeManualSubmit.String():
+		return &WorkflowApprovalSubmissionModeManualSubmit
+	case WorkflowApprovalSubmissionModeAutoSubmit.String():
+		return &WorkflowApprovalSubmissionModeAutoSubmit
+	default:
+		return nil
+	}
+}
+
+func (r WorkflowApprovalSubmissionMode) MarshalGQL(w io.Writer) {
+	_, _ = w.Write([]byte(`"` + r.String() + `"`))
+}
+
+func (r *WorkflowApprovalSubmissionMode) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowApprovalSubmissionMode, v)
+	}
+	*r = WorkflowApprovalSubmissionMode(str)
+	return nil
+}
+
 // WorkflowTargetType enumerates assignment target types.
 type WorkflowTargetType string
 
@@ -202,82 +300,62 @@ func (r *WorkflowTargetType) UnmarshalGQL(v interface{}) error {
 	return nil
 }
 
-// WorkflowObjectType enumerates supported object types.
-type WorkflowObjectType string
+// WorkflowObjectType is auto-generated in workflow_object_type.go
+// The enum values are dynamically generated based on entities with ApprovalRequiredMixin.
+// See internal/ent/generate/templates/ent/workflow_object_type_enum.tmpl
+
+// WorkflowActionType enumerates workflow action types.
+type WorkflowActionType string
 
 var (
-	WorkflowObjectTypeControl     WorkflowObjectType = "CONTROL"
-	WorkflowObjectTypeTask        WorkflowObjectType = "TASK"
-	WorkflowObjectTypePolicy      WorkflowObjectType = "POLICY"
-	WorkflowObjectTypeProcedure   WorkflowObjectType = "PROCEDURE"
-	WorkflowObjectTypeEvidence    WorkflowObjectType = "EVIDENCE"
-	WorkflowObjectTypeAsset       WorkflowObjectType = "ASSET"
-	WorkflowObjectTypeRisk        WorkflowObjectType = "RISK"
-	WorkflowObjectTypeProgram     WorkflowObjectType = "PROGRAM"
-	WorkflowObjectTypeFinding     WorkflowObjectType = "FINDING"
-	WorkflowObjectTypeNarrative   WorkflowObjectType = "NARRATIVE"
-	WorkflowObjectTypeIntegration WorkflowObjectType = "INTEGRATION"
+	WorkflowActionTypeApproval     WorkflowActionType = "REQUEST_APPROVAL"
+	WorkflowActionTypeNotification WorkflowActionType = "NOTIFY"
+	WorkflowActionTypeWebhook      WorkflowActionType = "WEBHOOK"
+	WorkflowActionTypeFieldUpdate  WorkflowActionType = "UPDATE_FIELD"
+	WorkflowActionTypeIntegration  WorkflowActionType = "INTEGRATION"
 )
 
-var WorkflowObjectTypes = []string{
-	string(WorkflowObjectTypeControl),
-	string(WorkflowObjectTypeTask),
-	string(WorkflowObjectTypePolicy),
-	string(WorkflowObjectTypeProcedure),
-	string(WorkflowObjectTypeEvidence),
-	string(WorkflowObjectTypeAsset),
-	string(WorkflowObjectTypeRisk),
-	string(WorkflowObjectTypeProgram),
-	string(WorkflowObjectTypeFinding),
-	string(WorkflowObjectTypeNarrative),
-	string(WorkflowObjectTypeIntegration),
+var WorkflowActionTypes = []string{
+	string(WorkflowActionTypeApproval),
+	string(WorkflowActionTypeNotification),
+	string(WorkflowActionTypeWebhook),
+	string(WorkflowActionTypeFieldUpdate),
+	string(WorkflowActionTypeIntegration),
 }
 
-func (WorkflowObjectType) Values() (vals []string) {
-	return WorkflowObjectTypes
+func (WorkflowActionType) Values() (vals []string) {
+	return WorkflowActionTypes
 }
 
-func (r WorkflowObjectType) String() string { return string(r) }
+func (r WorkflowActionType) String() string { return string(r) }
 
-func ToWorkflowObjectType(v string) *WorkflowObjectType {
+func ToWorkflowActionType(v string) *WorkflowActionType {
 	switch strings.ToUpper(v) {
-	case WorkflowObjectTypeControl.String():
-		return &WorkflowObjectTypeControl
-	case WorkflowObjectTypeTask.String():
-		return &WorkflowObjectTypeTask
-	case WorkflowObjectTypePolicy.String():
-		return &WorkflowObjectTypePolicy
-	case WorkflowObjectTypeProcedure.String():
-		return &WorkflowObjectTypeProcedure
-	case WorkflowObjectTypeEvidence.String():
-		return &WorkflowObjectTypeEvidence
-	case WorkflowObjectTypeAsset.String():
-		return &WorkflowObjectTypeAsset
-	case WorkflowObjectTypeRisk.String():
-		return &WorkflowObjectTypeRisk
-	case WorkflowObjectTypeProgram.String():
-		return &WorkflowObjectTypeProgram
-	case WorkflowObjectTypeFinding.String():
-		return &WorkflowObjectTypeFinding
-	case WorkflowObjectTypeNarrative.String():
-		return &WorkflowObjectTypeNarrative
-	case WorkflowObjectTypeIntegration.String():
-		return &WorkflowObjectTypeIntegration
+	case WorkflowActionTypeApproval.String():
+		return &WorkflowActionTypeApproval
+	case WorkflowActionTypeNotification.String():
+		return &WorkflowActionTypeNotification
+	case WorkflowActionTypeWebhook.String():
+		return &WorkflowActionTypeWebhook
+	case WorkflowActionTypeFieldUpdate.String():
+		return &WorkflowActionTypeFieldUpdate
+	case WorkflowActionTypeIntegration.String():
+		return &WorkflowActionTypeIntegration
 	default:
 		return nil
 	}
 }
 
-func (r WorkflowObjectType) MarshalGQL(w io.Writer) {
+func (r WorkflowActionType) MarshalGQL(w io.Writer) {
 	_, _ = w.Write([]byte(`"` + r.String() + `"`))
 }
 
-func (r *WorkflowObjectType) UnmarshalGQL(v interface{}) error {
+func (r *WorkflowActionType) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
-		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowObjectType, v)
+		return fmt.Errorf("%w, got: %T", ErrWrongTypeWorkflowActionType, v)
 	}
-	*r = WorkflowObjectType(str)
+	*r = WorkflowActionType(str)
 	return nil
 }
 
@@ -285,15 +363,39 @@ func (r *WorkflowObjectType) UnmarshalGQL(v interface{}) error {
 type WorkflowEventType string
 
 var (
-	WorkflowEventTypeAction   WorkflowEventType = "ACTION"
-	WorkflowEventTypeTrigger  WorkflowEventType = "TRIGGER"
-	WorkflowEventTypeDecision WorkflowEventType = "DECISION"
+	WorkflowEventTypeAction                WorkflowEventType = "ACTION"
+	WorkflowEventTypeTrigger               WorkflowEventType = "TRIGGER"
+	WorkflowEventTypeDecision              WorkflowEventType = "DECISION"
+	WorkflowEventTypeInstanceTriggered     WorkflowEventType = "INSTANCE_TRIGGERED"
+	WorkflowEventTypeActionStarted         WorkflowEventType = "ACTION_STARTED"
+	WorkflowEventTypeActionCompleted       WorkflowEventType = "ACTION_COMPLETED"
+	WorkflowEventTypeActionFailed          WorkflowEventType = "ACTION_FAILED"
+	WorkflowEventTypeActionSkipped         WorkflowEventType = "ACTION_SKIPPED"
+	WorkflowEventTypeConditionEvaluated    WorkflowEventType = "CONDITION_EVALUATED"
+	WorkflowEventTypeAssignmentCreated     WorkflowEventType = "ASSIGNMENT_CREATED"
+	WorkflowEventTypeAssignmentResolved    WorkflowEventType = "ASSIGNMENT_RESOLVED"
+	WorkflowEventTypeAssignmentInvalidated WorkflowEventType = "ASSIGNMENT_INVALIDATED"
+	WorkflowEventTypeInstancePaused        WorkflowEventType = "INSTANCE_PAUSED"
+	WorkflowEventTypeInstanceResumed       WorkflowEventType = "INSTANCE_RESUMED"
+	WorkflowEventTypeInstanceCompleted     WorkflowEventType = "INSTANCE_COMPLETED"
 )
 
 var WorkflowEventTypes = []string{
 	string(WorkflowEventTypeAction),
 	string(WorkflowEventTypeTrigger),
 	string(WorkflowEventTypeDecision),
+	string(WorkflowEventTypeInstanceTriggered),
+	string(WorkflowEventTypeActionStarted),
+	string(WorkflowEventTypeActionCompleted),
+	string(WorkflowEventTypeActionFailed),
+	string(WorkflowEventTypeActionSkipped),
+	string(WorkflowEventTypeConditionEvaluated),
+	string(WorkflowEventTypeAssignmentCreated),
+	string(WorkflowEventTypeAssignmentResolved),
+	string(WorkflowEventTypeAssignmentInvalidated),
+	string(WorkflowEventTypeInstancePaused),
+	string(WorkflowEventTypeInstanceResumed),
+	string(WorkflowEventTypeInstanceCompleted),
 }
 
 func (WorkflowEventType) Values() (vals []string) {
@@ -310,6 +412,30 @@ func ToWorkflowEventType(v string) *WorkflowEventType {
 		return &WorkflowEventTypeTrigger
 	case WorkflowEventTypeDecision.String():
 		return &WorkflowEventTypeDecision
+	case WorkflowEventTypeInstanceTriggered.String():
+		return &WorkflowEventTypeInstanceTriggered
+	case WorkflowEventTypeActionStarted.String():
+		return &WorkflowEventTypeActionStarted
+	case WorkflowEventTypeActionCompleted.String():
+		return &WorkflowEventTypeActionCompleted
+	case WorkflowEventTypeActionFailed.String():
+		return &WorkflowEventTypeActionFailed
+	case WorkflowEventTypeActionSkipped.String():
+		return &WorkflowEventTypeActionSkipped
+	case WorkflowEventTypeConditionEvaluated.String():
+		return &WorkflowEventTypeConditionEvaluated
+	case WorkflowEventTypeAssignmentCreated.String():
+		return &WorkflowEventTypeAssignmentCreated
+	case WorkflowEventTypeAssignmentResolved.String():
+		return &WorkflowEventTypeAssignmentResolved
+	case WorkflowEventTypeAssignmentInvalidated.String():
+		return &WorkflowEventTypeAssignmentInvalidated
+	case WorkflowEventTypeInstancePaused.String():
+		return &WorkflowEventTypeInstancePaused
+	case WorkflowEventTypeInstanceResumed.String():
+		return &WorkflowEventTypeInstanceResumed
+	case WorkflowEventTypeInstanceCompleted.String():
+		return &WorkflowEventTypeInstanceCompleted
 	default:
 		return nil
 	}

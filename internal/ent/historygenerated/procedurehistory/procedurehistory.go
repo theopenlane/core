@@ -94,6 +94,8 @@ const (
 	FieldProcedureKindName = "procedure_kind_name"
 	// FieldProcedureKindID holds the string denoting the procedure_kind_id field in the database.
 	FieldProcedureKindID = "procedure_kind_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// Table holds the table name of the procedurehistory in the database.
 	Table = "procedure_history"
 )
@@ -138,6 +140,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldProcedureKindName,
 	FieldProcedureKindID,
+	FieldWorkflowEligibleMarker,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -189,6 +192,8 @@ var (
 	DefaultDismissedImprovementSuggestions []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -378,6 +383,11 @@ func ByProcedureKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByProcedureKindID orders the results by the procedure_kind_id field.
 func ByProcedureKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProcedureKindID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 var (
