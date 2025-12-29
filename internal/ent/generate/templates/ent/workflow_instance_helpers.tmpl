@@ -1,0 +1,100 @@
+{{/* Generate workflow instance creation helpers */}}
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "workflow_instance_helpers" }}
+
+{{/* Add the base header for the generated file */}}
+{{ $pkg := base $.Config.Package }}
+{{ template "header" $ }}
+
+import (
+	"github.com/theopenlane/core/common/enums"
+)
+
+// CreateWorkflowInstanceForObject creates a workflow instance and object ref for a given object type
+func (c *Client) CreateWorkflowInstanceForObject(ctx context.Context, definitionID string, objectType enums.WorkflowObjectType, objectID string, orgID string) (*WorkflowInstance, error) {
+	// Create the workflow instance
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create the workflow object ref based on object type
+	refCreate := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetOwnerID(orgID)
+
+	switch objectType {
+	{{- range $n := $.Nodes }}
+	{{- $hasWorkflowFields := false }}
+	{{- $isHistory := false }}
+	{{- range $f := $n.Fields }}
+		{{- if $f.Annotations.OPENLANE_WORKFLOW_ELIGIBLE }}
+			{{- $hasWorkflowFields = true }}
+		{{- end }}
+	{{- end }}
+	{{- if $n.Annotations.History }}
+		{{- if $n.Annotations.History.isHistory }}
+			{{- $isHistory = true }}
+		{{- end }}
+	{{- end }}
+	{{- if and $hasWorkflowFields (not $isHistory) }}
+	case enums.WorkflowObjectType{{ $n.Name }}:
+		refCreate.Set{{ $n.Name }}ID(objectID)
+	{{- end }}
+	{{- end }}
+	default:
+		return nil, fmt.Errorf("unsupported object type: %s", objectType)
+	}
+
+	if _, err := refCreate.Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+{{- range $n := $.Nodes }}
+{{- $hasWorkflowFields := false }}
+{{- $isHistory := false }}
+{{- range $f := $n.Fields }}
+	{{- if $f.Annotations.OPENLANE_WORKFLOW_ELIGIBLE }}
+		{{- $hasWorkflowFields = true }}
+	{{- end }}
+{{- end }}
+{{- if $n.Annotations.History }}
+	{{- if $n.Annotations.History.isHistory }}
+		{{- $isHistory = true }}
+	{{- end }}
+{{- end }}
+{{- if and $hasWorkflowFields (not $isHistory) }}
+
+// CreateWorkflowInstanceFor{{ $n.Name }} creates a workflow instance and object ref for a {{ $n.Name }}
+func (c *Client) CreateWorkflowInstanceFor{{ $n.Name }}(ctx context.Context, definitionID string, {{ $n.Package }}ID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		Set{{ $n.Name }}ID({{ $n.Package }}ID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+{{- end }}
+{{- end }}
+
+{{ end }}

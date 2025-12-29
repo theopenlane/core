@@ -6,9 +6,11 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/internal/graphsubscriptions"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // HookNotification runs on notification mutations to validate channels
@@ -61,4 +63,51 @@ func isValidChannels(channels []enums.Channel) error {
 	}
 
 	return nil
+}
+
+// HookNotificationPublish runs after notification creation to publish to subscribers
+func HookNotificationPublish() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.NotificationFunc(func(ctx context.Context, m *generated.NotificationMutation) (generated.Value, error) {
+			// Execute the mutation first
+			val, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// After successful creation, publish to subscription manager
+			notification, ok := val.(*generated.Notification)
+			if !ok {
+				logx.FromContext(ctx).Warn().Msg("notification hook: value is not a notification")
+				return val, nil
+			}
+
+			logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: notification created, attempting to publish")
+
+			// Get the global subscription manager
+			manager := graphsubscriptions.GetGlobalManager()
+			if manager == nil {
+				// No subscription manager configured, skip publishing
+				logx.FromContext(ctx).Debug().Msg("notification hook: subscription manager is nil, skipping publish")
+				return val, nil
+			}
+
+			// Get the user ID to publish to
+			userID := notification.UserID
+			if userID == "" {
+				// No specific user, skip publishing
+				logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: userID is empty, skipping publish")
+				return val, nil
+			}
+
+			logx.FromContext(ctx).Debug().Str("user_id", userID).Str("notification_id", notification.ID).Msg("notification hook: publishing to subscription manager")
+
+			// Publish the notification to subscribers
+			if err := manager.Publish(userID, notification); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("user_id", userID).Msg("failed to publish notification to subscribers")
+			}
+
+			return val, nil
+		})
+	}, ent.OpCreate)
 }

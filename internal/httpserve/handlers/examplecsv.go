@@ -4,8 +4,8 @@ import (
 	"embed"
 	"net/http"
 
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 )
 

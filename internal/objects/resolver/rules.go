@@ -3,8 +3,8 @@ package resolver
 import (
 	"context"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"
@@ -108,10 +108,11 @@ func devModeOptions() *storage.ProviderOptions {
 		storage.WithBucket(objects.DefaultDevStorageBucket),
 		storage.WithBasePath(objects.DefaultDevStorageBucket),
 		storage.WithProxyPresignEnabled(true),
-		storage.WithEndpoint("http://localhost:17608/v1/files"),
+		storage.WithEndpoint(objects.DefaultLocalDiskURL),
 		storage.WithProxyPresignConfig(&storage.ProxyPresignConfig{
-			BaseURL: "http://localhost:17608/v1/files",
+			BaseURL: objects.DefaultLocalDiskURL,
 		}),
+		storage.WithLocalURL(objects.DefaultLocalDiskURL),
 		storage.WithExtra("dev_mode", true),
 	)
 }

@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -115,8 +115,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [5]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [4]ent.Hook
+	Interceptors [1]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

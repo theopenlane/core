@@ -22,9 +22,9 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 func (suite *HandlerTestSuite) TestResetPasswordHandler() {

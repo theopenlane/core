@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+	"github.com/theopenlane/entx"
 )
 
 // WorkflowApprovalMixin adds fields for storing proposed changes that require approval.
@@ -13,18 +14,23 @@ type WorkflowApprovalMixin struct {
 	mixin.Schema
 }
 
-// Fields of the ApprovalRequiredMixin
+// Fields of the WorkflowApprovalMixin
 func (WorkflowApprovalMixin) Fields() []ent.Field {
 	return []ent.Field{
-		field.JSON("proposed_changes", map[string]any{}).
+		// Marker field to indicate this schema is workflow-eligible
+		// This field is used by templates to detect schemas with WorkflowApprovalMixin
+		field.Bool("workflow_eligible_marker").
+			Annotations(entx.FieldWorkflowEligible()).
 			Optional().
-			Comment("pending changes awaiting workflow approval"),
-		field.String("proposed_by_user_id").
-			Optional().
-			Comment("user who proposed the changes"),
-		field.Time("proposed_at").
-			Optional().
-			Nillable().
-			Comment("when changes were proposed"),
+			Default(true).
+			StructTag(`json:"-"`).
+			Comment("internal marker field for workflow eligibility, not exposed in API"),
 	}
 }
+
+// Interceptors of the WorkflowApprovalMixin
+// func (WorkflowApprovalMixin) Interceptors() []ent.Interceptor {
+// 	return []ent.Interceptor{
+// 		interceptors.WorkflowApprovalInterceptor(),
+// 	}
+// }

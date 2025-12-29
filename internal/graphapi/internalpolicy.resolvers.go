@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,6 +17,16 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *internalPolicyResolver) HasPendingWorkflow(ctx context.Context, obj *generated.InternalPolicy) (bool, error) {
+	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+}
+
+// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
+func (r *internalPolicyResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.InternalPolicy) (*generated.WorkflowInstance, error) {
+	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
+}
 
 // CreateInternalPolicy is the resolver for the createInternalPolicy field.
 func (r *mutationResolver) CreateInternalPolicy(ctx context.Context, input generated.CreateInternalPolicyInput) (*model.InternalPolicyCreatePayload, error) {

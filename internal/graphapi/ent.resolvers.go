@@ -9,10 +9,10 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
@@ -2809,14 +2809,34 @@ func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *gen
 	return nil
 }
 
+// ActionPlan returns gqlgenerated.ActionPlanResolver implementation.
+func (r *Resolver) ActionPlan() gqlgenerated.ActionPlanResolver { return &actionPlanResolver{r} }
+
+// Control returns gqlgenerated.ControlResolver implementation.
+func (r *Resolver) Control() gqlgenerated.ControlResolver { return &controlResolver{r} }
+
+// Evidence returns gqlgenerated.EvidenceResolver implementation.
+func (r *Resolver) Evidence() gqlgenerated.EvidenceResolver { return &evidenceResolver{r} }
+
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
+
+// InternalPolicy returns gqlgenerated.InternalPolicyResolver implementation.
+func (r *Resolver) InternalPolicy() gqlgenerated.InternalPolicyResolver {
+	return &internalPolicyResolver{r}
+}
 
 // Notification returns gqlgenerated.NotificationResolver implementation.
 func (r *Resolver) Notification() gqlgenerated.NotificationResolver { return &notificationResolver{r} }
 
+// Procedure returns gqlgenerated.ProcedureResolver implementation.
+func (r *Resolver) Procedure() gqlgenerated.ProcedureResolver { return &procedureResolver{r} }
+
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
+
+// Subcontrol returns gqlgenerated.SubcontrolResolver implementation.
+func (r *Resolver) Subcontrol() gqlgenerated.SubcontrolResolver { return &subcontrolResolver{r} }
 
 // CreateDiscussionInput returns gqlgenerated.CreateDiscussionInputResolver implementation.
 func (r *Resolver) CreateDiscussionInput() gqlgenerated.CreateDiscussionInputResolver {
@@ -2938,9 +2958,15 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 	return &updateTrustCenterInputResolver{r}
 }
 
+type actionPlanResolver struct{ *Resolver }
+type controlResolver struct{ *Resolver }
+type evidenceResolver struct{ *Resolver }
 type groupResolver struct{ *Resolver }
+type internalPolicyResolver struct{ *Resolver }
 type notificationResolver struct{ *Resolver }
+type procedureResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type subcontrolResolver struct{ *Resolver }
 type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }

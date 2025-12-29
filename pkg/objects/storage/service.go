@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	"github.com/theopenlane/core/common/storagetypes"
 )
 
 // ObjectService provides pure object management functionality without provider resolution

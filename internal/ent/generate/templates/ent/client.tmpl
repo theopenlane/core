@@ -1,75 +1,75 @@
 {{/* A template for adding additional client fields/options. */}}
 
 {{- define "import/additional/stdsql" }}
-    stdsql "database/sql"
+	stdsql "database/sql"
 {{- end }}
 
 
 {{ define "client/additional/driver/dialect" }}
-    // Dialect returns the driver dialect.
-    func(c *Client) Dialect() string {
-        return c.driver.Dialect()
-    }
+	// Dialect returns the driver dialect.
+	func(c *Client) Dialect() string {
+		return c.driver.Dialect()
+	}
 
-    // Driver returns the underlying driver.
-    func(c *Client) Driver() dialect.Driver {
-        return c.driver
-    }
+	// Driver returns the underlying driver.
+	func(c *Client) Driver() dialect.Driver {
+		return c.driver
+	}
 
-    // DB returns the underlying *sql.DB.
-    func (c *Client) DB() *stdsql.DB {
-        switch c.driver.(type) {
-        case *sql.Driver: // default
-            return c.driver.( *sql.Driver).DB()
-        case *entcache.Driver: // when using entcache we need to unwrap the driver
-            return c.driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
-        case *dialect.DebugDriver: // when the ent debug driver is used
-            driver := c.driver.(*dialect.DebugDriver)
+	// DB returns the underlying *sql.DB.
+	func (c *Client) DB() *stdsql.DB {
+		switch c.driver.(type) {
+		case *sql.Driver: // default
+			return c.driver.( *sql.Driver).DB()
+		case *entcache.Driver: // when using entcache we need to unwrap the driver
+			return c.driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+		case *dialect.DebugDriver: // when the ent debug driver is used
+			driver := c.driver.(*dialect.DebugDriver)
 
-            switch driver.Driver.(type) {
-            case *sql.Driver: // default
-                return driver.Driver.(*sql.Driver).DB()
-            case *entcache.Driver: // when using entcache we need to unwrap the driver
-                return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
-            default:
-                panic(fmt.Sprintf("ent: unknown driver type: %T", driver))
-            }
-        default:
-            panic(fmt.Sprintf("ent: unknown driver type: %T", c.driver))
-        }
-    }
+			switch driver.Driver.(type) {
+			case *sql.Driver: // default
+				return driver.Driver.(*sql.Driver).DB()
+			case *entcache.Driver: // when using entcache we need to unwrap the driver
+				return driver.Driver.(*entcache.Driver).Driver.(*sql.Driver).DB()
+			default:
+				panic(fmt.Sprintf("ent: unknown driver type: %T", driver))
+			}
+		default:
+			panic(fmt.Sprintf("ent: unknown driver type: %T", c.driver))
+		}
+	}
 {{ end }}
 
 {{ define "client/additional/close" }}
 // CloseAll closes the all database client connections
 func (c *Client) CloseAll() error {
-    if err := c.Job.Close(); err != nil {
-        return err
-    }
+	if err := c.Job.Close(); err != nil {
+		return err
+	}
 
-    return c.Close()
+	return c.Close()
 }
 {{ end }}
 
 {{ define "client/fields/additional/config" }}
-    // Config is the db client configuration
-    Config *entx.EntClientConfig
+	// Config is the db client configuration
+	Config *entx.EntClientConfig
 {{ end }}
 
 {{ define "client/fields/additional/job" }}
-    // Job is the job client to insert jobs into the queue.
-    Job riverqueue.JobClient
+	// Job is the job client to insert jobs into the queue.
+	Job riverqueue.JobClient
 {{ end }}
 
 {{ define "client/additional/job" }}
 // WithJobClient adds the job client to the database client based on the configuration.
 func (c *Client) WithJobClient() {
-    c.Job = NewJobClient(c.config)
+	c.Job = NewJobClient(c.config)
 }
 
 // NewJobClient returns a new job client based on the configuration.
 func NewJobClient(c config) riverqueue.JobClient {
-    return c.Job
+	return c.Job
 }
 {{ end }}
 

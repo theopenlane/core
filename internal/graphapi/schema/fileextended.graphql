@@ -1,3 +1,4 @@
 extend type File {
     presignedURL: String
+    base64: String
 }

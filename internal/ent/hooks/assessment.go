@@ -7,10 +7,10 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -27,7 +27,7 @@ func HookQuestionnaireAssessment() ent.Hook {
 				// but at least the jsonconfig needs to be provided
 				_, ok := m.Jsonconfig()
 				if !ok {
-					return nil, fmt.Errorf("jsonconfig is required if you do not create an assessment from a template") // nolint:err113
+					return nil, fmt.Errorf("jsonconfig is required if you do not create an assessment from a template") //nolint:err113
 				}
 				return next.Mutate(ctx, m)
 			}

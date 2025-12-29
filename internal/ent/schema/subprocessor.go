@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -19,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Subprocessor holds the schema definition for the Subprocessor entity
@@ -114,7 +114,6 @@ func (Subprocessor) Hooks() []ent.Hook {
 			ent.OpCreate,
 		),
 		hooks.HookSubprocessor(),
-		hooks.HookTrustcenterCacheInvalidation(),
 	}
 }
 

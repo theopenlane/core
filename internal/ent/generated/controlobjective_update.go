@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -24,7 +25,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -224,6 +224,24 @@ func (_u *ControlObjectiveUpdate) SetNillableDesiredOutcome(v *string) *ControlO
 // ClearDesiredOutcome clears the value of the "desired_outcome" field.
 func (_u *ControlObjectiveUpdate) ClearDesiredOutcome() *ControlObjectiveUpdate {
 	_u.mutation.ClearDesiredOutcome()
+	return _u
+}
+
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_u *ControlObjectiveUpdate) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveUpdate {
+	_u.mutation.SetDesiredOutcomeJSON(v)
+	return _u
+}
+
+// AppendDesiredOutcomeJSON appends value to the "desired_outcome_json" field.
+func (_u *ControlObjectiveUpdate) AppendDesiredOutcomeJSON(v []interface{}) *ControlObjectiveUpdate {
+	_u.mutation.AppendDesiredOutcomeJSON(v)
+	return _u
+}
+
+// ClearDesiredOutcomeJSON clears the value of the "desired_outcome_json" field.
+func (_u *ControlObjectiveUpdate) ClearDesiredOutcomeJSON() *ControlObjectiveUpdate {
+	_u.mutation.ClearDesiredOutcomeJSON()
 	return _u
 }
 
@@ -919,6 +937,17 @@ func (_u *ControlObjectiveUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.DesiredOutcomeCleared() {
 		_spec.ClearField(controlobjective.FieldDesiredOutcome, field.TypeString)
+	}
+	if value, ok := _u.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjective.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDesiredOutcomeJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlobjective.FieldDesiredOutcomeJSON, value)
+		})
+	}
+	if _u.mutation.DesiredOutcomeJSONCleared() {
+		_spec.ClearField(controlobjective.FieldDesiredOutcomeJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)
@@ -1734,6 +1763,24 @@ func (_u *ControlObjectiveUpdateOne) ClearDesiredOutcome() *ControlObjectiveUpda
 	return _u
 }
 
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_u *ControlObjectiveUpdateOne) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveUpdateOne {
+	_u.mutation.SetDesiredOutcomeJSON(v)
+	return _u
+}
+
+// AppendDesiredOutcomeJSON appends value to the "desired_outcome_json" field.
+func (_u *ControlObjectiveUpdateOne) AppendDesiredOutcomeJSON(v []interface{}) *ControlObjectiveUpdateOne {
+	_u.mutation.AppendDesiredOutcomeJSON(v)
+	return _u
+}
+
+// ClearDesiredOutcomeJSON clears the value of the "desired_outcome_json" field.
+func (_u *ControlObjectiveUpdateOne) ClearDesiredOutcomeJSON() *ControlObjectiveUpdateOne {
+	_u.mutation.ClearDesiredOutcomeJSON()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *ControlObjectiveUpdateOne) SetStatus(v enums.ObjectiveStatus) *ControlObjectiveUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -2456,6 +2503,17 @@ func (_u *ControlObjectiveUpdateOne) sqlSave(ctx context.Context) (_node *Contro
 	}
 	if _u.mutation.DesiredOutcomeCleared() {
 		_spec.ClearField(controlobjective.FieldDesiredOutcome, field.TypeString)
+	}
+	if value, ok := _u.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjective.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDesiredOutcomeJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, controlobjective.FieldDesiredOutcomeJSON, value)
+		})
+	}
+	if _u.mutation.DesiredOutcomeJSONCleared() {
+		_spec.ClearField(controlobjective.FieldDesiredOutcomeJSON, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)

@@ -9,9 +9,9 @@ import (
 	"strconv"
 
 	"entgo.io/contrib/entgql"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Return response for createBulkAPIToken mutation
@@ -2301,6 +2301,13 @@ type TrustcenterEntityDeletePayload struct {
 type TrustcenterEntityUpdatePayload struct {
 	// Updated trustcenterEntity
 	TrustcenterEntity *generated.TrustcenterEntity `json:"trustcenterEntity"`
+}
+
+// Update discussions related to an object
+type UpdateDiscussionsInput struct {
+	// id of the discussion to update
+	ID    string                           `json:"id"`
+	Input *generated.UpdateDiscussionInput `json:"input"`
 }
 
 // Return response for createBulkUser mutation

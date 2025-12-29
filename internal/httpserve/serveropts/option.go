@@ -32,15 +32,14 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/graphapi"
 	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/integrations/registry"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -591,16 +590,5 @@ func WithCSRF() ServerOption {
 			s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, csrf.Middleware(cfg))
 			s.Config.Handler.AdditionalMiddleware = append(s.Config.Handler.AdditionalMiddleware, csrf.Middleware(cfg))
 		}
-	})
-}
-
-// WithCrypto initializes the field level encryption system for the server
-func WithCrypto() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if err := crypto.Init(s.Config.Settings.Server.FieldLevelEncryption); err != nil {
-			log.Panic().Err(err).Msg("Error initializing crypto")
-		}
-
-		log.Info().Bool("enabled", s.Config.Settings.Server.FieldLevelEncryption.Enabled).Msg("Crypto initialized")
 	})
 }

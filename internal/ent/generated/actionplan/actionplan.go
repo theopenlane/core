@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -42,6 +42,8 @@ const (
 	FieldActionPlanType = "action_plan_type"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// FieldApprovalRequired holds the string denoting the approval_required field in the database.
 	FieldApprovalRequired = "approval_required"
 	// FieldReviewDue holds the string denoting the review_due field in the database.
@@ -82,6 +84,8 @@ const (
 	FieldActionPlanKindName = "action_plan_kind_name"
 	// FieldActionPlanKindID holds the string denoting the action_plan_kind_id field in the database.
 	FieldActionPlanKindID = "action_plan_kind_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -132,6 +136,8 @@ const (
 	EdgeIntegrations = "integrations"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the actionplan in the database.
 	Table = "action_plans"
 	// ApproverTable is the table that holds the approver relation/edge.
@@ -214,6 +220,13 @@ const (
 	FileInverseTable = "files"
 	// FileColumn is the table column denoting the file relation/edge.
 	FileColumn = "file_id"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "action_plan_id"
 )
 
 // Columns holds all SQL columns for actionplan fields.
@@ -231,6 +244,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldActionPlanType,
 	FieldDetails,
+	FieldDetailsJSON,
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
@@ -251,6 +265,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldActionPlanKindName,
 	FieldActionPlanKindID,
+	FieldWorkflowEligibleMarker,
 	FieldTitle,
 	FieldDescription,
 	FieldDueDate,
@@ -323,8 +338,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [14]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [13]ent.Hook
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -358,6 +373,8 @@ var (
 	DefaultDismissedImprovementSuggestions []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
 	// DefaultRequiresApproval holds the default value on creation for the "requires_approval" field.
@@ -533,6 +550,11 @@ func ByActionPlanKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByActionPlanKindID orders the results by the action_plan_kind_id field.
 func ByActionPlanKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldActionPlanKindID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByTitle orders the results by the title field.
@@ -740,6 +762,20 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newApproverStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -836,6 +872,13 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 

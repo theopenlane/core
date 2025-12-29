@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -27,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.
@@ -251,6 +251,12 @@ func (_c *InternalPolicyCreate) SetNillableDetails(v *string) *InternalPolicyCre
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *InternalPolicyCreate) SetDetailsJSON(v []interface{}) *InternalPolicyCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetApprovalRequired sets the "approval_required" field.
 func (_c *InternalPolicyCreate) SetApprovalRequired(v bool) *InternalPolicyCreate {
 	_c.mutation.SetApprovalRequired(v)
@@ -427,36 +433,16 @@ func (_c *InternalPolicyCreate) SetNillableInternalPolicyKindID(v *string) *Inte
 	return _c
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_c *InternalPolicyCreate) SetProposedChanges(v map[string]interface{}) *InternalPolicyCreate {
-	_c.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *InternalPolicyCreate) SetWorkflowEligibleMarker(v bool) *InternalPolicyCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
 	return _c
 }
 
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_c *InternalPolicyCreate) SetProposedByUserID(v string) *InternalPolicyCreate {
-	_c.mutation.SetProposedByUserID(v)
-	return _c
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_c *InternalPolicyCreate) SetNillableProposedByUserID(v *string) *InternalPolicyCreate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableWorkflowEligibleMarker(v *bool) *InternalPolicyCreate {
 	if v != nil {
-		_c.SetProposedByUserID(*v)
-	}
-	return _c
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_c *InternalPolicyCreate) SetProposedAt(v time.Time) *InternalPolicyCreate {
-	_c.mutation.SetProposedAt(v)
-	return _c
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_c *InternalPolicyCreate) SetNillableProposedAt(v *time.Time) *InternalPolicyCreate {
-	if v != nil {
-		_c.SetProposedAt(*v)
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -813,6 +799,10 @@ func (_c *InternalPolicyCreate) defaults() error {
 		v := internalpolicy.DefaultDismissedImprovementSuggestions
 		_c.mutation.SetDismissedImprovementSuggestions(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := internalpolicy.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if internalpolicy.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized internalpolicy.DefaultID (forgotten import generated/runtime?)")
@@ -956,6 +946,10 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(internalpolicy.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
+	}
 	if value, ok := _c.mutation.ApprovalRequired(); ok {
 		_spec.SetField(internalpolicy.FieldApprovalRequired, field.TypeBool, value)
 		_node.ApprovalRequired = value
@@ -1004,17 +998,9 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
 		_node.InternalPolicyKindName = value
 	}
-	if value, ok := _c.mutation.ProposedChanges(); ok {
-		_spec.SetField(internalpolicy.FieldProposedChanges, field.TypeJSON, value)
-		_node.ProposedChanges = value
-	}
-	if value, ok := _c.mutation.ProposedByUserID(); ok {
-		_spec.SetField(internalpolicy.FieldProposedByUserID, field.TypeString, value)
-		_node.ProposedByUserID = value
-	}
-	if value, ok := _c.mutation.ProposedAt(); ok {
-		_spec.SetField(internalpolicy.FieldProposedAt, field.TypeTime, value)
-		_node.ProposedAt = &value
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

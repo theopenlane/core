@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -22,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlObjectiveCreate is the builder for creating a ControlObjective entity.
@@ -215,6 +215,12 @@ func (_c *ControlObjectiveCreate) SetNillableDesiredOutcome(v *string) *ControlO
 	if v != nil {
 		_c.SetDesiredOutcome(*v)
 	}
+	return _c
+}
+
+// SetDesiredOutcomeJSON sets the "desired_outcome_json" field.
+func (_c *ControlObjectiveCreate) SetDesiredOutcomeJSON(v []interface{}) *ControlObjectiveCreate {
+	_c.mutation.SetDesiredOutcomeJSON(v)
 	return _c
 }
 
@@ -697,6 +703,10 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 	if value, ok := _c.mutation.DesiredOutcome(); ok {
 		_spec.SetField(controlobjective.FieldDesiredOutcome, field.TypeString, value)
 		_node.DesiredOutcome = value
+	}
+	if value, ok := _c.mutation.DesiredOutcomeJSON(); ok {
+		_spec.SetField(controlobjective.FieldDesiredOutcomeJSON, field.TypeJSON, value)
+		_node.DesiredOutcomeJSON = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(controlobjective.FieldStatus, field.TypeEnum, value)

@@ -5,7 +5,7 @@ builds:
   # Linux amd64
   # ------------------------
   - id: linux-amd64
-    main: ./cmd/cli
+    main: ./cli
     binary: openlane
     goos:
       - linux
@@ -27,7 +27,7 @@ builds:
   # Darwin amd64
   # ------------------------
   - id: darwin-amd64
-    main: ./cmd/cli
+    main: ./cli
     binary: openlane
     goos:
       - darwin
@@ -49,7 +49,7 @@ builds:
   # Darwin arm64
   # ------------------------
   - id: darwin-arm64
-    main: ./cmd/cli
+    main: ./cli
     binary: openlane
     goos:
       - darwin
@@ -70,7 +70,7 @@ builds:
   # Linux arm64
   # ------------------------
   - id: linux-arm64
-    main: ./cmd/cli
+    main: ./cli
     binary: openlane
     goos:
       - linux

@@ -94,6 +94,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -103,7 +104,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 90)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 91)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -159,6 +160,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldStatus:                          {Type: field.TypeEnum, Column: actionplan.FieldStatus},
 			actionplan.FieldActionPlanType:                  {Type: field.TypeString, Column: actionplan.FieldActionPlanType},
 			actionplan.FieldDetails:                         {Type: field.TypeString, Column: actionplan.FieldDetails},
+			actionplan.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: actionplan.FieldDetailsJSON},
 			actionplan.FieldApprovalRequired:                {Type: field.TypeBool, Column: actionplan.FieldApprovalRequired},
 			actionplan.FieldReviewDue:                       {Type: field.TypeTime, Column: actionplan.FieldReviewDue},
 			actionplan.FieldReviewFrequency:                 {Type: field.TypeEnum, Column: actionplan.FieldReviewFrequency},
@@ -179,6 +181,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldSystemInternalID:                {Type: field.TypeString, Column: actionplan.FieldSystemInternalID},
 			actionplan.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplan.FieldActionPlanKindName},
 			actionplan.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplan.FieldActionPlanKindID},
+			actionplan.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: actionplan.FieldWorkflowEligibleMarker},
 			actionplan.FieldTitle:                           {Type: field.TypeString, Column: actionplan.FieldTitle},
 			actionplan.FieldDescription:                     {Type: field.TypeString, Column: actionplan.FieldDescription},
 			actionplan.FieldDueDate:                         {Type: field.TypeTime, Column: actionplan.FieldDueDate},
@@ -328,6 +331,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldTags:                       {Type: field.TypeJSON, Column: control.FieldTags},
 			control.FieldTitle:                      {Type: field.TypeString, Column: control.FieldTitle},
 			control.FieldDescription:                {Type: field.TypeString, Column: control.FieldDescription},
+			control.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: control.FieldDescriptionJSON},
 			control.FieldAliases:                    {Type: field.TypeJSON, Column: control.FieldAliases},
 			control.FieldReferenceID:                {Type: field.TypeString, Column: control.FieldReferenceID},
 			control.FieldAuditorReferenceID:         {Type: field.TypeString, Column: control.FieldAuditorReferenceID},
@@ -357,9 +361,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldSystemInternalID:           {Type: field.TypeString, Column: control.FieldSystemInternalID},
 			control.FieldControlKindName:            {Type: field.TypeString, Column: control.FieldControlKindName},
 			control.FieldControlKindID:              {Type: field.TypeString, Column: control.FieldControlKindID},
-			control.FieldProposedChanges:            {Type: field.TypeJSON, Column: control.FieldProposedChanges},
-			control.FieldProposedByUserID:           {Type: field.TypeString, Column: control.FieldProposedByUserID},
-			control.FieldProposedAt:                 {Type: field.TypeTime, Column: control.FieldProposedAt},
+			control.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: control.FieldWorkflowEligibleMarker},
 			control.FieldRefCode:                    {Type: field.TypeString, Column: control.FieldRefCode},
 			control.FieldStandardID:                 {Type: field.TypeString, Column: control.FieldStandardID},
 		},
@@ -391,6 +393,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlimplementation.FieldVerified:           {Type: field.TypeBool, Column: controlimplementation.FieldVerified},
 			controlimplementation.FieldVerificationDate:   {Type: field.TypeTime, Column: controlimplementation.FieldVerificationDate},
 			controlimplementation.FieldDetails:            {Type: field.TypeString, Column: controlimplementation.FieldDetails},
+			controlimplementation.FieldDetailsJSON:        {Type: field.TypeJSON, Column: controlimplementation.FieldDetailsJSON},
 		},
 	}
 	graph.Nodes[8] = &sqlgraph.Node{
@@ -419,6 +422,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjective.FieldSystemInternalID:     {Type: field.TypeString, Column: controlobjective.FieldSystemInternalID},
 			controlobjective.FieldName:                 {Type: field.TypeString, Column: controlobjective.FieldName},
 			controlobjective.FieldDesiredOutcome:       {Type: field.TypeString, Column: controlobjective.FieldDesiredOutcome},
+			controlobjective.FieldDesiredOutcomeJSON:   {Type: field.TypeJSON, Column: controlobjective.FieldDesiredOutcomeJSON},
 			controlobjective.FieldStatus:               {Type: field.TypeEnum, Column: controlobjective.FieldStatus},
 			controlobjective.FieldSource:               {Type: field.TypeEnum, Column: controlobjective.FieldSource},
 			controlobjective.FieldControlObjectiveType: {Type: field.TypeString, Column: controlobjective.FieldControlObjectiveType},
@@ -804,27 +808,25 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Evidence",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			evidence.FieldCreatedAt:           {Type: field.TypeTime, Column: evidence.FieldCreatedAt},
-			evidence.FieldUpdatedAt:           {Type: field.TypeTime, Column: evidence.FieldUpdatedAt},
-			evidence.FieldCreatedBy:           {Type: field.TypeString, Column: evidence.FieldCreatedBy},
-			evidence.FieldUpdatedBy:           {Type: field.TypeString, Column: evidence.FieldUpdatedBy},
-			evidence.FieldDeletedAt:           {Type: field.TypeTime, Column: evidence.FieldDeletedAt},
-			evidence.FieldDeletedBy:           {Type: field.TypeString, Column: evidence.FieldDeletedBy},
-			evidence.FieldDisplayID:           {Type: field.TypeString, Column: evidence.FieldDisplayID},
-			evidence.FieldTags:                {Type: field.TypeJSON, Column: evidence.FieldTags},
-			evidence.FieldOwnerID:             {Type: field.TypeString, Column: evidence.FieldOwnerID},
-			evidence.FieldProposedChanges:     {Type: field.TypeJSON, Column: evidence.FieldProposedChanges},
-			evidence.FieldProposedByUserID:    {Type: field.TypeString, Column: evidence.FieldProposedByUserID},
-			evidence.FieldProposedAt:          {Type: field.TypeTime, Column: evidence.FieldProposedAt},
-			evidence.FieldName:                {Type: field.TypeString, Column: evidence.FieldName},
-			evidence.FieldDescription:         {Type: field.TypeString, Column: evidence.FieldDescription},
-			evidence.FieldCollectionProcedure: {Type: field.TypeString, Column: evidence.FieldCollectionProcedure},
-			evidence.FieldCreationDate:        {Type: field.TypeTime, Column: evidence.FieldCreationDate},
-			evidence.FieldRenewalDate:         {Type: field.TypeTime, Column: evidence.FieldRenewalDate},
-			evidence.FieldSource:              {Type: field.TypeString, Column: evidence.FieldSource},
-			evidence.FieldIsAutomated:         {Type: field.TypeBool, Column: evidence.FieldIsAutomated},
-			evidence.FieldURL:                 {Type: field.TypeString, Column: evidence.FieldURL},
-			evidence.FieldStatus:              {Type: field.TypeEnum, Column: evidence.FieldStatus},
+			evidence.FieldCreatedAt:              {Type: field.TypeTime, Column: evidence.FieldCreatedAt},
+			evidence.FieldUpdatedAt:              {Type: field.TypeTime, Column: evidence.FieldUpdatedAt},
+			evidence.FieldCreatedBy:              {Type: field.TypeString, Column: evidence.FieldCreatedBy},
+			evidence.FieldUpdatedBy:              {Type: field.TypeString, Column: evidence.FieldUpdatedBy},
+			evidence.FieldDeletedAt:              {Type: field.TypeTime, Column: evidence.FieldDeletedAt},
+			evidence.FieldDeletedBy:              {Type: field.TypeString, Column: evidence.FieldDeletedBy},
+			evidence.FieldDisplayID:              {Type: field.TypeString, Column: evidence.FieldDisplayID},
+			evidence.FieldTags:                   {Type: field.TypeJSON, Column: evidence.FieldTags},
+			evidence.FieldOwnerID:                {Type: field.TypeString, Column: evidence.FieldOwnerID},
+			evidence.FieldWorkflowEligibleMarker: {Type: field.TypeBool, Column: evidence.FieldWorkflowEligibleMarker},
+			evidence.FieldName:                   {Type: field.TypeString, Column: evidence.FieldName},
+			evidence.FieldDescription:            {Type: field.TypeString, Column: evidence.FieldDescription},
+			evidence.FieldCollectionProcedure:    {Type: field.TypeString, Column: evidence.FieldCollectionProcedure},
+			evidence.FieldCreationDate:           {Type: field.TypeTime, Column: evidence.FieldCreationDate},
+			evidence.FieldRenewalDate:            {Type: field.TypeTime, Column: evidence.FieldRenewalDate},
+			evidence.FieldSource:                 {Type: field.TypeString, Column: evidence.FieldSource},
+			evidence.FieldIsAutomated:            {Type: field.TypeBool, Column: evidence.FieldIsAutomated},
+			evidence.FieldURL:                    {Type: field.TypeString, Column: evidence.FieldURL},
+			evidence.FieldStatus:                 {Type: field.TypeEnum, Column: evidence.FieldStatus},
 		},
 	}
 	graph.Nodes[23] = &sqlgraph.Node{
@@ -1203,6 +1205,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldStatus:                          {Type: field.TypeEnum, Column: internalpolicy.FieldStatus},
 			internalpolicy.FieldPolicyType:                      {Type: field.TypeString, Column: internalpolicy.FieldPolicyType},
 			internalpolicy.FieldDetails:                         {Type: field.TypeString, Column: internalpolicy.FieldDetails},
+			internalpolicy.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: internalpolicy.FieldDetailsJSON},
 			internalpolicy.FieldApprovalRequired:                {Type: field.TypeBool, Column: internalpolicy.FieldApprovalRequired},
 			internalpolicy.FieldReviewDue:                       {Type: field.TypeTime, Column: internalpolicy.FieldReviewDue},
 			internalpolicy.FieldReviewFrequency:                 {Type: field.TypeEnum, Column: internalpolicy.FieldReviewFrequency},
@@ -1219,9 +1222,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldFileID:                          {Type: field.TypeString, Column: internalpolicy.FieldFileID},
 			internalpolicy.FieldInternalPolicyKindName:          {Type: field.TypeString, Column: internalpolicy.FieldInternalPolicyKindName},
 			internalpolicy.FieldInternalPolicyKindID:            {Type: field.TypeString, Column: internalpolicy.FieldInternalPolicyKindID},
-			internalpolicy.FieldProposedChanges:                 {Type: field.TypeJSON, Column: internalpolicy.FieldProposedChanges},
-			internalpolicy.FieldProposedByUserID:                {Type: field.TypeString, Column: internalpolicy.FieldProposedByUserID},
-			internalpolicy.FieldProposedAt:                      {Type: field.TypeTime, Column: internalpolicy.FieldProposedAt},
+			internalpolicy.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: internalpolicy.FieldWorkflowEligibleMarker},
 		},
 	}
 	graph.Nodes[35] = &sqlgraph.Node{
@@ -1494,6 +1495,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			note.FieldDisplayID:    {Type: field.TypeString, Column: note.FieldDisplayID},
 			note.FieldOwnerID:      {Type: field.TypeString, Column: note.FieldOwnerID},
 			note.FieldText:         {Type: field.TypeString, Column: note.FieldText},
+			note.FieldTextJSON:     {Type: field.TypeJSON, Column: note.FieldTextJSON},
 			note.FieldNoteRef:      {Type: field.TypeString, Column: note.FieldNoteRef},
 			note.FieldDiscussionID: {Type: field.TypeString, Column: note.FieldDiscussionID},
 			note.FieldIsEdited:     {Type: field.TypeBool, Column: note.FieldIsEdited},
@@ -1835,6 +1837,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldStatus:                          {Type: field.TypeEnum, Column: procedure.FieldStatus},
 			procedure.FieldProcedureType:                   {Type: field.TypeString, Column: procedure.FieldProcedureType},
 			procedure.FieldDetails:                         {Type: field.TypeString, Column: procedure.FieldDetails},
+			procedure.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: procedure.FieldDetailsJSON},
 			procedure.FieldApprovalRequired:                {Type: field.TypeBool, Column: procedure.FieldApprovalRequired},
 			procedure.FieldReviewDue:                       {Type: field.TypeTime, Column: procedure.FieldReviewDue},
 			procedure.FieldReviewFrequency:                 {Type: field.TypeEnum, Column: procedure.FieldReviewFrequency},
@@ -1854,6 +1857,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldSystemInternalID:                {Type: field.TypeString, Column: procedure.FieldSystemInternalID},
 			procedure.FieldProcedureKindName:               {Type: field.TypeString, Column: procedure.FieldProcedureKindName},
 			procedure.FieldProcedureKindID:                 {Type: field.TypeString, Column: procedure.FieldProcedureKindID},
+			procedure.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: procedure.FieldWorkflowEligibleMarker},
 		},
 	}
 	graph.Nodes[57] = &sqlgraph.Node{
@@ -2011,31 +2015,34 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Risk",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			risk.FieldCreatedAt:        {Type: field.TypeTime, Column: risk.FieldCreatedAt},
-			risk.FieldUpdatedAt:        {Type: field.TypeTime, Column: risk.FieldUpdatedAt},
-			risk.FieldCreatedBy:        {Type: field.TypeString, Column: risk.FieldCreatedBy},
-			risk.FieldUpdatedBy:        {Type: field.TypeString, Column: risk.FieldUpdatedBy},
-			risk.FieldDeletedAt:        {Type: field.TypeTime, Column: risk.FieldDeletedAt},
-			risk.FieldDeletedBy:        {Type: field.TypeString, Column: risk.FieldDeletedBy},
-			risk.FieldDisplayID:        {Type: field.TypeString, Column: risk.FieldDisplayID},
-			risk.FieldTags:             {Type: field.TypeJSON, Column: risk.FieldTags},
-			risk.FieldOwnerID:          {Type: field.TypeString, Column: risk.FieldOwnerID},
-			risk.FieldRiskKindName:     {Type: field.TypeString, Column: risk.FieldRiskKindName},
-			risk.FieldRiskKindID:       {Type: field.TypeString, Column: risk.FieldRiskKindID},
-			risk.FieldRiskCategoryName: {Type: field.TypeString, Column: risk.FieldRiskCategoryName},
-			risk.FieldRiskCategoryID:   {Type: field.TypeString, Column: risk.FieldRiskCategoryID},
-			risk.FieldName:             {Type: field.TypeString, Column: risk.FieldName},
-			risk.FieldStatus:           {Type: field.TypeEnum, Column: risk.FieldStatus},
-			risk.FieldRiskType:         {Type: field.TypeString, Column: risk.FieldRiskType},
-			risk.FieldCategory:         {Type: field.TypeString, Column: risk.FieldCategory},
-			risk.FieldImpact:           {Type: field.TypeEnum, Column: risk.FieldImpact},
-			risk.FieldLikelihood:       {Type: field.TypeEnum, Column: risk.FieldLikelihood},
-			risk.FieldScore:            {Type: field.TypeInt, Column: risk.FieldScore},
-			risk.FieldMitigation:       {Type: field.TypeString, Column: risk.FieldMitigation},
-			risk.FieldDetails:          {Type: field.TypeString, Column: risk.FieldDetails},
-			risk.FieldBusinessCosts:    {Type: field.TypeString, Column: risk.FieldBusinessCosts},
-			risk.FieldStakeholderID:    {Type: field.TypeString, Column: risk.FieldStakeholderID},
-			risk.FieldDelegateID:       {Type: field.TypeString, Column: risk.FieldDelegateID},
+			risk.FieldCreatedAt:         {Type: field.TypeTime, Column: risk.FieldCreatedAt},
+			risk.FieldUpdatedAt:         {Type: field.TypeTime, Column: risk.FieldUpdatedAt},
+			risk.FieldCreatedBy:         {Type: field.TypeString, Column: risk.FieldCreatedBy},
+			risk.FieldUpdatedBy:         {Type: field.TypeString, Column: risk.FieldUpdatedBy},
+			risk.FieldDeletedAt:         {Type: field.TypeTime, Column: risk.FieldDeletedAt},
+			risk.FieldDeletedBy:         {Type: field.TypeString, Column: risk.FieldDeletedBy},
+			risk.FieldDisplayID:         {Type: field.TypeString, Column: risk.FieldDisplayID},
+			risk.FieldTags:              {Type: field.TypeJSON, Column: risk.FieldTags},
+			risk.FieldOwnerID:           {Type: field.TypeString, Column: risk.FieldOwnerID},
+			risk.FieldRiskKindName:      {Type: field.TypeString, Column: risk.FieldRiskKindName},
+			risk.FieldRiskKindID:        {Type: field.TypeString, Column: risk.FieldRiskKindID},
+			risk.FieldRiskCategoryName:  {Type: field.TypeString, Column: risk.FieldRiskCategoryName},
+			risk.FieldRiskCategoryID:    {Type: field.TypeString, Column: risk.FieldRiskCategoryID},
+			risk.FieldName:              {Type: field.TypeString, Column: risk.FieldName},
+			risk.FieldStatus:            {Type: field.TypeEnum, Column: risk.FieldStatus},
+			risk.FieldRiskType:          {Type: field.TypeString, Column: risk.FieldRiskType},
+			risk.FieldCategory:          {Type: field.TypeString, Column: risk.FieldCategory},
+			risk.FieldImpact:            {Type: field.TypeEnum, Column: risk.FieldImpact},
+			risk.FieldLikelihood:        {Type: field.TypeEnum, Column: risk.FieldLikelihood},
+			risk.FieldScore:             {Type: field.TypeInt, Column: risk.FieldScore},
+			risk.FieldMitigation:        {Type: field.TypeString, Column: risk.FieldMitigation},
+			risk.FieldMitigationJSON:    {Type: field.TypeJSON, Column: risk.FieldMitigationJSON},
+			risk.FieldDetails:           {Type: field.TypeString, Column: risk.FieldDetails},
+			risk.FieldDetailsJSON:       {Type: field.TypeJSON, Column: risk.FieldDetailsJSON},
+			risk.FieldBusinessCosts:     {Type: field.TypeString, Column: risk.FieldBusinessCosts},
+			risk.FieldBusinessCostsJSON: {Type: field.TypeJSON, Column: risk.FieldBusinessCostsJSON},
+			risk.FieldStakeholderID:     {Type: field.TypeString, Column: risk.FieldStakeholderID},
+			risk.FieldDelegateID:        {Type: field.TypeString, Column: risk.FieldDelegateID},
 		},
 	}
 	graph.Nodes[62] = &sqlgraph.Node{
@@ -2174,6 +2181,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldTags:                       {Type: field.TypeJSON, Column: subcontrol.FieldTags},
 			subcontrol.FieldTitle:                      {Type: field.TypeString, Column: subcontrol.FieldTitle},
 			subcontrol.FieldDescription:                {Type: field.TypeString, Column: subcontrol.FieldDescription},
+			subcontrol.FieldDescriptionJSON:            {Type: field.TypeJSON, Column: subcontrol.FieldDescriptionJSON},
 			subcontrol.FieldAliases:                    {Type: field.TypeJSON, Column: subcontrol.FieldAliases},
 			subcontrol.FieldReferenceID:                {Type: field.TypeString, Column: subcontrol.FieldReferenceID},
 			subcontrol.FieldAuditorReferenceID:         {Type: field.TypeString, Column: subcontrol.FieldAuditorReferenceID},
@@ -2203,6 +2211,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldSystemInternalID:           {Type: field.TypeString, Column: subcontrol.FieldSystemInternalID},
 			subcontrol.FieldSubcontrolKindName:         {Type: field.TypeString, Column: subcontrol.FieldSubcontrolKindName},
 			subcontrol.FieldSubcontrolKindID:           {Type: field.TypeString, Column: subcontrol.FieldSubcontrolKindID},
+			subcontrol.FieldWorkflowEligibleMarker:     {Type: field.TypeBool, Column: subcontrol.FieldWorkflowEligibleMarker},
 			subcontrol.FieldRefCode:                    {Type: field.TypeString, Column: subcontrol.FieldRefCode},
 			subcontrol.FieldControlID:                  {Type: field.TypeString, Column: subcontrol.FieldControlID},
 		},
@@ -2344,6 +2353,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldTaskKindID:           {Type: field.TypeString, Column: task.FieldTaskKindID},
 			task.FieldTitle:                {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDetails:              {Type: field.TypeString, Column: task.FieldDetails},
+			task.FieldDetailsJSON:          {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
 			task.FieldStatus:               {Type: field.TypeEnum, Column: task.FieldStatus},
 			task.FieldCategory:             {Type: field.TypeString, Column: task.FieldCategory},
 			task.FieldDue:                  {Type: field.TypeTime, Column: task.FieldDue},
@@ -2798,32 +2808,35 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "WorkflowDefinition",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			workflowdefinition.FieldCreatedAt:         {Type: field.TypeTime, Column: workflowdefinition.FieldCreatedAt},
-			workflowdefinition.FieldUpdatedAt:         {Type: field.TypeTime, Column: workflowdefinition.FieldUpdatedAt},
-			workflowdefinition.FieldCreatedBy:         {Type: field.TypeString, Column: workflowdefinition.FieldCreatedBy},
-			workflowdefinition.FieldUpdatedBy:         {Type: field.TypeString, Column: workflowdefinition.FieldUpdatedBy},
-			workflowdefinition.FieldDeletedAt:         {Type: field.TypeTime, Column: workflowdefinition.FieldDeletedAt},
-			workflowdefinition.FieldDeletedBy:         {Type: field.TypeString, Column: workflowdefinition.FieldDeletedBy},
-			workflowdefinition.FieldDisplayID:         {Type: field.TypeString, Column: workflowdefinition.FieldDisplayID},
-			workflowdefinition.FieldTags:              {Type: field.TypeJSON, Column: workflowdefinition.FieldTags},
-			workflowdefinition.FieldOwnerID:           {Type: field.TypeString, Column: workflowdefinition.FieldOwnerID},
-			workflowdefinition.FieldSystemOwned:       {Type: field.TypeBool, Column: workflowdefinition.FieldSystemOwned},
-			workflowdefinition.FieldInternalNotes:     {Type: field.TypeString, Column: workflowdefinition.FieldInternalNotes},
-			workflowdefinition.FieldSystemInternalID:  {Type: field.TypeString, Column: workflowdefinition.FieldSystemInternalID},
-			workflowdefinition.FieldName:              {Type: field.TypeString, Column: workflowdefinition.FieldName},
-			workflowdefinition.FieldDescription:       {Type: field.TypeString, Column: workflowdefinition.FieldDescription},
-			workflowdefinition.FieldWorkflowKind:      {Type: field.TypeEnum, Column: workflowdefinition.FieldWorkflowKind},
-			workflowdefinition.FieldSchemaType:        {Type: field.TypeString, Column: workflowdefinition.FieldSchemaType},
-			workflowdefinition.FieldRevision:          {Type: field.TypeInt, Column: workflowdefinition.FieldRevision},
-			workflowdefinition.FieldDraft:             {Type: field.TypeBool, Column: workflowdefinition.FieldDraft},
-			workflowdefinition.FieldPublishedAt:       {Type: field.TypeTime, Column: workflowdefinition.FieldPublishedAt},
-			workflowdefinition.FieldCooldownSeconds:   {Type: field.TypeInt, Column: workflowdefinition.FieldCooldownSeconds},
-			workflowdefinition.FieldIsDefault:         {Type: field.TypeBool, Column: workflowdefinition.FieldIsDefault},
-			workflowdefinition.FieldActive:            {Type: field.TypeBool, Column: workflowdefinition.FieldActive},
-			workflowdefinition.FieldTriggerOperations: {Type: field.TypeJSON, Column: workflowdefinition.FieldTriggerOperations},
-			workflowdefinition.FieldTriggerFields:     {Type: field.TypeJSON, Column: workflowdefinition.FieldTriggerFields},
-			workflowdefinition.FieldDefinitionJSON:    {Type: field.TypeJSON, Column: workflowdefinition.FieldDefinitionJSON},
-			workflowdefinition.FieldTrackedFields:     {Type: field.TypeJSON, Column: workflowdefinition.FieldTrackedFields},
+			workflowdefinition.FieldCreatedAt:              {Type: field.TypeTime, Column: workflowdefinition.FieldCreatedAt},
+			workflowdefinition.FieldUpdatedAt:              {Type: field.TypeTime, Column: workflowdefinition.FieldUpdatedAt},
+			workflowdefinition.FieldCreatedBy:              {Type: field.TypeString, Column: workflowdefinition.FieldCreatedBy},
+			workflowdefinition.FieldUpdatedBy:              {Type: field.TypeString, Column: workflowdefinition.FieldUpdatedBy},
+			workflowdefinition.FieldDeletedAt:              {Type: field.TypeTime, Column: workflowdefinition.FieldDeletedAt},
+			workflowdefinition.FieldDeletedBy:              {Type: field.TypeString, Column: workflowdefinition.FieldDeletedBy},
+			workflowdefinition.FieldDisplayID:              {Type: field.TypeString, Column: workflowdefinition.FieldDisplayID},
+			workflowdefinition.FieldTags:                   {Type: field.TypeJSON, Column: workflowdefinition.FieldTags},
+			workflowdefinition.FieldOwnerID:                {Type: field.TypeString, Column: workflowdefinition.FieldOwnerID},
+			workflowdefinition.FieldSystemOwned:            {Type: field.TypeBool, Column: workflowdefinition.FieldSystemOwned},
+			workflowdefinition.FieldInternalNotes:          {Type: field.TypeString, Column: workflowdefinition.FieldInternalNotes},
+			workflowdefinition.FieldSystemInternalID:       {Type: field.TypeString, Column: workflowdefinition.FieldSystemInternalID},
+			workflowdefinition.FieldName:                   {Type: field.TypeString, Column: workflowdefinition.FieldName},
+			workflowdefinition.FieldDescription:            {Type: field.TypeString, Column: workflowdefinition.FieldDescription},
+			workflowdefinition.FieldWorkflowKind:           {Type: field.TypeEnum, Column: workflowdefinition.FieldWorkflowKind},
+			workflowdefinition.FieldSchemaType:             {Type: field.TypeString, Column: workflowdefinition.FieldSchemaType},
+			workflowdefinition.FieldRevision:               {Type: field.TypeInt, Column: workflowdefinition.FieldRevision},
+			workflowdefinition.FieldDraft:                  {Type: field.TypeBool, Column: workflowdefinition.FieldDraft},
+			workflowdefinition.FieldPublishedAt:            {Type: field.TypeTime, Column: workflowdefinition.FieldPublishedAt},
+			workflowdefinition.FieldCooldownSeconds:        {Type: field.TypeInt, Column: workflowdefinition.FieldCooldownSeconds},
+			workflowdefinition.FieldIsDefault:              {Type: field.TypeBool, Column: workflowdefinition.FieldIsDefault},
+			workflowdefinition.FieldActive:                 {Type: field.TypeBool, Column: workflowdefinition.FieldActive},
+			workflowdefinition.FieldTriggerOperations:      {Type: field.TypeJSON, Column: workflowdefinition.FieldTriggerOperations},
+			workflowdefinition.FieldTriggerFields:          {Type: field.TypeJSON, Column: workflowdefinition.FieldTriggerFields},
+			workflowdefinition.FieldApprovalFields:         {Type: field.TypeJSON, Column: workflowdefinition.FieldApprovalFields},
+			workflowdefinition.FieldApprovalEdges:          {Type: field.TypeJSON, Column: workflowdefinition.FieldApprovalEdges},
+			workflowdefinition.FieldApprovalSubmissionMode: {Type: field.TypeEnum, Column: workflowdefinition.FieldApprovalSubmissionMode},
+			workflowdefinition.FieldDefinitionJSON:         {Type: field.TypeJSON, Column: workflowdefinition.FieldDefinitionJSON},
+			workflowdefinition.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinition.FieldTrackedFields},
 		},
 	}
 	graph.Nodes[87] = &sqlgraph.Node{
@@ -2872,13 +2885,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowinstance.FieldTags:                 {Type: field.TypeJSON, Column: workflowinstance.FieldTags},
 			workflowinstance.FieldOwnerID:              {Type: field.TypeString, Column: workflowinstance.FieldOwnerID},
 			workflowinstance.FieldWorkflowDefinitionID: {Type: field.TypeString, Column: workflowinstance.FieldWorkflowDefinitionID},
+			workflowinstance.FieldWorkflowProposalID:   {Type: field.TypeString, Column: workflowinstance.FieldWorkflowProposalID},
 			workflowinstance.FieldState:                {Type: field.TypeEnum, Column: workflowinstance.FieldState},
 			workflowinstance.FieldContext:              {Type: field.TypeJSON, Column: workflowinstance.FieldContext},
 			workflowinstance.FieldLastEvaluatedAt:      {Type: field.TypeTime, Column: workflowinstance.FieldLastEvaluatedAt},
 			workflowinstance.FieldDefinitionSnapshot:   {Type: field.TypeJSON, Column: workflowinstance.FieldDefinitionSnapshot},
+			workflowinstance.FieldCurrentActionIndex:   {Type: field.TypeInt, Column: workflowinstance.FieldCurrentActionIndex},
 			workflowinstance.FieldControlID:            {Type: field.TypeString, Column: workflowinstance.FieldControlID},
 			workflowinstance.FieldInternalPolicyID:     {Type: field.TypeString, Column: workflowinstance.FieldInternalPolicyID},
 			workflowinstance.FieldEvidenceID:           {Type: field.TypeString, Column: workflowinstance.FieldEvidenceID},
+			workflowinstance.FieldSubcontrolID:         {Type: field.TypeString, Column: workflowinstance.FieldSubcontrolID},
+			workflowinstance.FieldActionPlanID:         {Type: field.TypeString, Column: workflowinstance.FieldActionPlanID},
+			workflowinstance.FieldProcedureID:          {Type: field.TypeString, Column: workflowinstance.FieldProcedureID},
 		},
 	}
 	graph.Nodes[89] = &sqlgraph.Node{
@@ -2907,6 +2925,37 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowobjectref.FieldDirectoryGroupID:      {Type: field.TypeString, Column: workflowobjectref.FieldDirectoryGroupID},
 			workflowobjectref.FieldDirectoryMembershipID: {Type: field.TypeString, Column: workflowobjectref.FieldDirectoryMembershipID},
 			workflowobjectref.FieldEvidenceID:            {Type: field.TypeString, Column: workflowobjectref.FieldEvidenceID},
+			workflowobjectref.FieldSubcontrolID:          {Type: field.TypeString, Column: workflowobjectref.FieldSubcontrolID},
+			workflowobjectref.FieldActionPlanID:          {Type: field.TypeString, Column: workflowobjectref.FieldActionPlanID},
+			workflowobjectref.FieldProcedureID:           {Type: field.TypeString, Column: workflowobjectref.FieldProcedureID},
+		},
+	}
+	graph.Nodes[90] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   workflowproposal.Table,
+			Columns: workflowproposal.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: workflowproposal.FieldID,
+			},
+		},
+		Type: "WorkflowProposal",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			workflowproposal.FieldCreatedAt:           {Type: field.TypeTime, Column: workflowproposal.FieldCreatedAt},
+			workflowproposal.FieldUpdatedAt:           {Type: field.TypeTime, Column: workflowproposal.FieldUpdatedAt},
+			workflowproposal.FieldCreatedBy:           {Type: field.TypeString, Column: workflowproposal.FieldCreatedBy},
+			workflowproposal.FieldUpdatedBy:           {Type: field.TypeString, Column: workflowproposal.FieldUpdatedBy},
+			workflowproposal.FieldTags:                {Type: field.TypeJSON, Column: workflowproposal.FieldTags},
+			workflowproposal.FieldOwnerID:             {Type: field.TypeString, Column: workflowproposal.FieldOwnerID},
+			workflowproposal.FieldWorkflowObjectRefID: {Type: field.TypeString, Column: workflowproposal.FieldWorkflowObjectRefID},
+			workflowproposal.FieldDomainKey:           {Type: field.TypeString, Column: workflowproposal.FieldDomainKey},
+			workflowproposal.FieldState:               {Type: field.TypeEnum, Column: workflowproposal.FieldState},
+			workflowproposal.FieldRevision:            {Type: field.TypeInt, Column: workflowproposal.FieldRevision},
+			workflowproposal.FieldChanges:             {Type: field.TypeJSON, Column: workflowproposal.FieldChanges},
+			workflowproposal.FieldProposedHash:        {Type: field.TypeString, Column: workflowproposal.FieldProposedHash},
+			workflowproposal.FieldApprovedHash:        {Type: field.TypeString, Column: workflowproposal.FieldApprovedHash},
+			workflowproposal.FieldSubmittedAt:         {Type: field.TypeTime, Column: workflowproposal.FieldSubmittedAt},
+			workflowproposal.FieldSubmittedByUserID:   {Type: field.TypeString, Column: workflowproposal.FieldSubmittedByUserID},
 		},
 	}
 	graph.MustAddE(
@@ -3088,6 +3137,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ActionPlan",
 		"File",
+	)
+	graph.MustAddE(
+		"workflow_object_refs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   actionplan.WorkflowObjectRefsTable,
+			Columns: []string{actionplan.WorkflowObjectRefsColumn},
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
 		"owner",
@@ -4924,6 +4985,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Evidence",
 		"Note",
+	)
+	graph.MustAddE(
+		"workflow_object_refs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+		},
+		"Evidence",
+		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
 		"owner",
@@ -8214,6 +8287,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
+		"workflow_proposals",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"WorkflowProposal",
+	)
+	graph.MustAddE(
 		"directory_accounts",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8548,6 +8633,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Procedure",
 		"File",
+	)
+	graph.MustAddE(
+		"workflow_object_refs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+		},
+		"Procedure",
+		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
 		"owner",
@@ -9976,6 +10073,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"MappedControl",
+	)
+	graph.MustAddE(
+		"workflow_object_refs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   subcontrol.WorkflowObjectRefsTable,
+			Columns: []string{subcontrol.WorkflowObjectRefsColumn},
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"WorkflowObjectRef",
 	)
 	graph.MustAddE(
 		"owner",
@@ -11466,6 +11575,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Evidence",
 	)
 	graph.MustAddE(
+		"subcontrol",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.SubcontrolTable,
+			Columns: []string{workflowinstance.SubcontrolColumn},
+			Bidi:    false,
+		},
+		"WorkflowInstance",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"action_plan",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ActionPlanTable,
+			Columns: []string{workflowinstance.ActionPlanColumn},
+			Bidi:    false,
+		},
+		"WorkflowInstance",
+		"ActionPlan",
+	)
+	graph.MustAddE(
+		"procedure",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ProcedureTable,
+			Columns: []string{workflowinstance.ProcedureColumn},
+			Bidi:    false,
+		},
+		"WorkflowInstance",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"workflow_proposal",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.WorkflowProposalTable,
+			Columns: []string{workflowinstance.WorkflowProposalColumn},
+			Bidi:    false,
+		},
+		"WorkflowInstance",
+		"WorkflowProposal",
+	)
+	graph.MustAddE(
 		"workflow_assignments",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -11524,6 +11681,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"WorkflowObjectRef",
 		"WorkflowInstance",
+	)
+	graph.MustAddE(
+		"workflow_proposals",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowobjectref.WorkflowProposalsTable,
+			Columns: []string{workflowobjectref.WorkflowProposalsColumn},
+			Bidi:    false,
+		},
+		"WorkflowObjectRef",
+		"WorkflowProposal",
 	)
 	graph.MustAddE(
 		"control",
@@ -11620,6 +11789,90 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"WorkflowObjectRef",
 		"Evidence",
+	)
+	graph.MustAddE(
+		"subcontrol",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.SubcontrolTable,
+			Columns: []string{workflowobjectref.SubcontrolColumn},
+			Bidi:    false,
+		},
+		"WorkflowObjectRef",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"action_plan",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.ActionPlanTable,
+			Columns: []string{workflowobjectref.ActionPlanColumn},
+			Bidi:    false,
+		},
+		"WorkflowObjectRef",
+		"ActionPlan",
+	)
+	graph.MustAddE(
+		"procedure",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.ProcedureTable,
+			Columns: []string{workflowobjectref.ProcedureColumn},
+			Bidi:    false,
+		},
+		"WorkflowObjectRef",
+		"Procedure",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   workflowproposal.OwnerTable,
+			Columns: []string{workflowproposal.OwnerColumn},
+			Bidi:    false,
+		},
+		"WorkflowProposal",
+		"Organization",
+	)
+	graph.MustAddE(
+		"workflow_object_ref",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowproposal.WorkflowObjectRefTable,
+			Columns: []string{workflowproposal.WorkflowObjectRefColumn},
+			Bidi:    false,
+		},
+		"WorkflowProposal",
+		"WorkflowObjectRef",
+	)
+	graph.MustAddE(
+		"user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowproposal.UserTable,
+			Columns: []string{workflowproposal.UserColumn},
+			Bidi:    false,
+		},
+		"WorkflowProposal",
+		"User",
+	)
+	graph.MustAddE(
+		"workflow_instances",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   workflowproposal.WorkflowInstancesTable,
+			Columns: []string{workflowproposal.WorkflowInstancesColumn},
+			Bidi:    false,
+		},
+		"WorkflowProposal",
+		"WorkflowInstance",
 	)
 	return graph
 }()
@@ -11879,6 +12132,11 @@ func (f *ActionPlanFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *ActionPlanFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(actionplan.FieldDetailsJSON))
+}
+
 // WhereApprovalRequired applies the entql bool predicate on the approval_required field.
 func (f *ActionPlanFilter) WhereApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(actionplan.FieldApprovalRequired))
@@ -11977,6 +12235,11 @@ func (f *ActionPlanFilter) WhereActionPlanKindName(p entql.StringP) {
 // WhereActionPlanKindID applies the entql string predicate on the action_plan_kind_id field.
 func (f *ActionPlanFilter) WhereActionPlanKindID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldActionPlanKindID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *ActionPlanFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(actionplan.FieldWorkflowEligibleMarker))
 }
 
 // WhereTitle applies the entql string predicate on the title field.
@@ -12224,6 +12487,20 @@ func (f *ActionPlanFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowObjectRefs applies a predicate to check if query has an edge workflow_object_refs.
+func (f *ActionPlanFilter) WhereHasWorkflowObjectRefs() {
+	f.Where(entql.HasEdge("workflow_object_refs"))
+}
+
+// WhereHasWorkflowObjectRefsWith applies a predicate to check if query has an edge workflow_object_refs with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) {
+	f.Where(entql.HasEdgeWith("workflow_object_refs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -13061,6 +13338,11 @@ func (f *ControlFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(control.FieldDescription))
 }
 
+// WhereDescriptionJSON applies the entql json.RawMessage predicate on the description_json field.
+func (f *ControlFilter) WhereDescriptionJSON(p entql.BytesP) {
+	f.Where(p.Field(control.FieldDescriptionJSON))
+}
+
 // WhereAliases applies the entql json.RawMessage predicate on the aliases field.
 func (f *ControlFilter) WhereAliases(p entql.BytesP) {
 	f.Where(p.Field(control.FieldAliases))
@@ -13206,19 +13488,9 @@ func (f *ControlFilter) WhereControlKindID(p entql.StringP) {
 	f.Where(p.Field(control.FieldControlKindID))
 }
 
-// WhereProposedChanges applies the entql json.RawMessage predicate on the proposed_changes field.
-func (f *ControlFilter) WhereProposedChanges(p entql.BytesP) {
-	f.Where(p.Field(control.FieldProposedChanges))
-}
-
-// WhereProposedByUserID applies the entql string predicate on the proposed_by_user_id field.
-func (f *ControlFilter) WhereProposedByUserID(p entql.StringP) {
-	f.Where(p.Field(control.FieldProposedByUserID))
-}
-
-// WhereProposedAt applies the entql time.Time predicate on the proposed_at field.
-func (f *ControlFilter) WhereProposedAt(p entql.TimeP) {
-	f.Where(p.Field(control.FieldProposedAt))
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *ControlFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(control.FieldWorkflowEligibleMarker))
 }
 
 // WhereRefCode applies the entql string predicate on the ref_code field.
@@ -13757,6 +14029,11 @@ func (f *ControlImplementationFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(controlimplementation.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *ControlImplementationFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(controlimplementation.FieldDetailsJSON))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ControlImplementationFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -13968,6 +14245,11 @@ func (f *ControlObjectiveFilter) WhereName(p entql.StringP) {
 // WhereDesiredOutcome applies the entql string predicate on the desired_outcome field.
 func (f *ControlObjectiveFilter) WhereDesiredOutcome(p entql.StringP) {
 	f.Where(p.Field(controlobjective.FieldDesiredOutcome))
+}
+
+// WhereDesiredOutcomeJSON applies the entql json.RawMessage predicate on the desired_outcome_json field.
+func (f *ControlObjectiveFilter) WhereDesiredOutcomeJSON(p entql.BytesP) {
+	f.Where(p.Field(controlobjective.FieldDesiredOutcomeJSON))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -16836,19 +17118,9 @@ func (f *EvidenceFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldOwnerID))
 }
 
-// WhereProposedChanges applies the entql json.RawMessage predicate on the proposed_changes field.
-func (f *EvidenceFilter) WhereProposedChanges(p entql.BytesP) {
-	f.Where(p.Field(evidence.FieldProposedChanges))
-}
-
-// WhereProposedByUserID applies the entql string predicate on the proposed_by_user_id field.
-func (f *EvidenceFilter) WhereProposedByUserID(p entql.StringP) {
-	f.Where(p.Field(evidence.FieldProposedByUserID))
-}
-
-// WhereProposedAt applies the entql time.Time predicate on the proposed_at field.
-func (f *EvidenceFilter) WhereProposedAt(p entql.TimeP) {
-	f.Where(p.Field(evidence.FieldProposedAt))
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *EvidenceFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(evidence.FieldWorkflowEligibleMarker))
 }
 
 // WhereName applies the entql string predicate on the name field.
@@ -17016,6 +17288,20 @@ func (f *EvidenceFilter) WhereHasComments() {
 // WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
 func (f *EvidenceFilter) WhereHasCommentsWith(preds ...predicate.Note) {
 	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowObjectRefs applies a predicate to check if query has an edge workflow_object_refs.
+func (f *EvidenceFilter) WhereHasWorkflowObjectRefs() {
+	f.Where(entql.HasEdge("workflow_object_refs"))
+}
+
+// WhereHasWorkflowObjectRefsWith applies a predicate to check if query has an edge workflow_object_refs with a given conditions (other predicates).
+func (f *EvidenceFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) {
+	f.Where(entql.HasEdgeWith("workflow_object_refs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -20096,6 +20382,11 @@ func (f *InternalPolicyFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *InternalPolicyFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(internalpolicy.FieldDetailsJSON))
+}
+
 // WhereApprovalRequired applies the entql bool predicate on the approval_required field.
 func (f *InternalPolicyFilter) WhereApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(internalpolicy.FieldApprovalRequired))
@@ -20176,19 +20467,9 @@ func (f *InternalPolicyFilter) WhereInternalPolicyKindID(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldInternalPolicyKindID))
 }
 
-// WhereProposedChanges applies the entql json.RawMessage predicate on the proposed_changes field.
-func (f *InternalPolicyFilter) WhereProposedChanges(p entql.BytesP) {
-	f.Where(p.Field(internalpolicy.FieldProposedChanges))
-}
-
-// WhereProposedByUserID applies the entql string predicate on the proposed_by_user_id field.
-func (f *InternalPolicyFilter) WhereProposedByUserID(p entql.StringP) {
-	f.Where(p.Field(internalpolicy.FieldProposedByUserID))
-}
-
-// WhereProposedAt applies the entql time.Time predicate on the proposed_at field.
-func (f *InternalPolicyFilter) WhereProposedAt(p entql.TimeP) {
-	f.Where(p.Field(internalpolicy.FieldProposedAt))
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *InternalPolicyFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(internalpolicy.FieldWorkflowEligibleMarker))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -21985,6 +22266,11 @@ func (f *NoteFilter) WhereOwnerID(p entql.StringP) {
 // WhereText applies the entql string predicate on the text field.
 func (f *NoteFilter) WhereText(p entql.StringP) {
 	f.Where(p.Field(note.FieldText))
+}
+
+// WhereTextJSON applies the entql json.RawMessage predicate on the text_json field.
+func (f *NoteFilter) WhereTextJSON(p entql.BytesP) {
+	f.Where(p.Field(note.FieldTextJSON))
 }
 
 // WhereNoteRef applies the entql string predicate on the note_ref field.
@@ -24518,6 +24804,20 @@ func (f *OrganizationFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.W
 	})))
 }
 
+// WhereHasWorkflowProposals applies a predicate to check if query has an edge workflow_proposals.
+func (f *OrganizationFilter) WhereHasWorkflowProposals() {
+	f.Where(entql.HasEdge("workflow_proposals"))
+}
+
+// WhereHasWorkflowProposalsWith applies a predicate to check if query has an edge workflow_proposals with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasWorkflowProposalsWith(preds ...predicate.WorkflowProposal) {
+	f.Where(entql.HasEdgeWith("workflow_proposals", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasDirectoryAccounts applies a predicate to check if query has an edge directory_accounts.
 func (f *OrganizationFilter) WhereHasDirectoryAccounts() {
 	f.Where(entql.HasEdge("directory_accounts"))
@@ -25226,6 +25526,11 @@ func (f *ProcedureFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *ProcedureFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(procedure.FieldDetailsJSON))
+}
+
 // WhereApprovalRequired applies the entql bool predicate on the approval_required field.
 func (f *ProcedureFilter) WhereApprovalRequired(p entql.BoolP) {
 	f.Where(p.Field(procedure.FieldApprovalRequired))
@@ -25319,6 +25624,11 @@ func (f *ProcedureFilter) WhereProcedureKindName(p entql.StringP) {
 // WhereProcedureKindID applies the entql string predicate on the procedure_kind_id field.
 func (f *ProcedureFilter) WhereProcedureKindID(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldProcedureKindID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *ProcedureFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(procedure.FieldWorkflowEligibleMarker))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -25539,6 +25849,20 @@ func (f *ProcedureFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *ProcedureFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowObjectRefs applies a predicate to check if query has an edge workflow_object_refs.
+func (f *ProcedureFilter) WhereHasWorkflowObjectRefs() {
+	f.Where(entql.HasEdge("workflow_object_refs"))
+}
+
+// WhereHasWorkflowObjectRefsWith applies a predicate to check if query has an edge workflow_object_refs with a given conditions (other predicates).
+func (f *ProcedureFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) {
+	f.Where(entql.HasEdgeWith("workflow_object_refs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -27150,14 +27474,29 @@ func (f *RiskFilter) WhereMitigation(p entql.StringP) {
 	f.Where(p.Field(risk.FieldMitigation))
 }
 
+// WhereMitigationJSON applies the entql json.RawMessage predicate on the mitigation_json field.
+func (f *RiskFilter) WhereMitigationJSON(p entql.BytesP) {
+	f.Where(p.Field(risk.FieldMitigationJSON))
+}
+
 // WhereDetails applies the entql string predicate on the details field.
 func (f *RiskFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(risk.FieldDetails))
 }
 
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *RiskFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(risk.FieldDetailsJSON))
+}
+
 // WhereBusinessCosts applies the entql string predicate on the business_costs field.
 func (f *RiskFilter) WhereBusinessCosts(p entql.StringP) {
 	f.Where(p.Field(risk.FieldBusinessCosts))
+}
+
+// WhereBusinessCostsJSON applies the entql json.RawMessage predicate on the business_costs_json field.
+func (f *RiskFilter) WhereBusinessCostsJSON(p entql.BytesP) {
+	f.Where(p.Field(risk.FieldBusinessCostsJSON))
 }
 
 // WhereStakeholderID applies the entql string predicate on the stakeholder_id field.
@@ -28281,6 +28620,11 @@ func (f *SubcontrolFilter) WhereDescription(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldDescription))
 }
 
+// WhereDescriptionJSON applies the entql json.RawMessage predicate on the description_json field.
+func (f *SubcontrolFilter) WhereDescriptionJSON(p entql.BytesP) {
+	f.Where(p.Field(subcontrol.FieldDescriptionJSON))
+}
+
 // WhereAliases applies the entql json.RawMessage predicate on the aliases field.
 func (f *SubcontrolFilter) WhereAliases(p entql.BytesP) {
 	f.Where(p.Field(subcontrol.FieldAliases))
@@ -28424,6 +28768,11 @@ func (f *SubcontrolFilter) WhereSubcontrolKindName(p entql.StringP) {
 // WhereSubcontrolKindID applies the entql string predicate on the subcontrol_kind_id field.
 func (f *SubcontrolFilter) WhereSubcontrolKindID(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldSubcontrolKindID))
+}
+
+// WhereWorkflowEligibleMarker applies the entql bool predicate on the workflow_eligible_marker field.
+func (f *SubcontrolFilter) WhereWorkflowEligibleMarker(p entql.BoolP) {
+	f.Where(p.Field(subcontrol.FieldWorkflowEligibleMarker))
 }
 
 // WhereRefCode applies the entql string predicate on the ref_code field.
@@ -28710,6 +29059,20 @@ func (f *SubcontrolFilter) WhereHasMappedFromSubcontrols() {
 // WhereHasMappedFromSubcontrolsWith applies a predicate to check if query has an edge mapped_from_subcontrols with a given conditions (other predicates).
 func (f *SubcontrolFilter) WhereHasMappedFromSubcontrolsWith(preds ...predicate.MappedControl) {
 	f.Where(entql.HasEdgeWith("mapped_from_subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowObjectRefs applies a predicate to check if query has an edge workflow_object_refs.
+func (f *SubcontrolFilter) WhereHasWorkflowObjectRefs() {
+	f.Where(entql.HasEdge("workflow_object_refs"))
+}
+
+// WhereHasWorkflowObjectRefsWith applies a predicate to check if query has an edge workflow_object_refs with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) {
+	f.Where(entql.HasEdgeWith("workflow_object_refs", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -29382,6 +29745,11 @@ func (f *TaskFilter) WhereTitle(p entql.StringP) {
 // WhereDetails applies the entql string predicate on the details field.
 func (f *TaskFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(task.FieldDetails))
+}
+
+// WhereDetailsJSON applies the entql json.RawMessage predicate on the details_json field.
+func (f *TaskFilter) WhereDetailsJSON(p entql.BytesP) {
+	f.Where(p.Field(task.FieldDetailsJSON))
 }
 
 // WhereStatus applies the entql string predicate on the status field.
@@ -32897,6 +33265,21 @@ func (f *WorkflowDefinitionFilter) WhereTriggerFields(p entql.BytesP) {
 	f.Where(p.Field(workflowdefinition.FieldTriggerFields))
 }
 
+// WhereApprovalFields applies the entql json.RawMessage predicate on the approval_fields field.
+func (f *WorkflowDefinitionFilter) WhereApprovalFields(p entql.BytesP) {
+	f.Where(p.Field(workflowdefinition.FieldApprovalFields))
+}
+
+// WhereApprovalEdges applies the entql json.RawMessage predicate on the approval_edges field.
+func (f *WorkflowDefinitionFilter) WhereApprovalEdges(p entql.BytesP) {
+	f.Where(p.Field(workflowdefinition.FieldApprovalEdges))
+}
+
+// WhereApprovalSubmissionMode applies the entql string predicate on the approval_submission_mode field.
+func (f *WorkflowDefinitionFilter) WhereApprovalSubmissionMode(p entql.StringP) {
+	f.Where(p.Field(workflowdefinition.FieldApprovalSubmissionMode))
+}
+
 // WhereDefinitionJSON applies the entql json.RawMessage predicate on the definition_json field.
 func (f *WorkflowDefinitionFilter) WhereDefinitionJSON(p entql.BytesP) {
 	f.Where(p.Field(workflowdefinition.FieldDefinitionJSON))
@@ -33167,6 +33550,11 @@ func (f *WorkflowInstanceFilter) WhereWorkflowDefinitionID(p entql.StringP) {
 	f.Where(p.Field(workflowinstance.FieldWorkflowDefinitionID))
 }
 
+// WhereWorkflowProposalID applies the entql string predicate on the workflow_proposal_id field.
+func (f *WorkflowInstanceFilter) WhereWorkflowProposalID(p entql.StringP) {
+	f.Where(p.Field(workflowinstance.FieldWorkflowProposalID))
+}
+
 // WhereState applies the entql string predicate on the state field.
 func (f *WorkflowInstanceFilter) WhereState(p entql.StringP) {
 	f.Where(p.Field(workflowinstance.FieldState))
@@ -33187,6 +33575,11 @@ func (f *WorkflowInstanceFilter) WhereDefinitionSnapshot(p entql.BytesP) {
 	f.Where(p.Field(workflowinstance.FieldDefinitionSnapshot))
 }
 
+// WhereCurrentActionIndex applies the entql int predicate on the current_action_index field.
+func (f *WorkflowInstanceFilter) WhereCurrentActionIndex(p entql.IntP) {
+	f.Where(p.Field(workflowinstance.FieldCurrentActionIndex))
+}
+
 // WhereControlID applies the entql string predicate on the control_id field.
 func (f *WorkflowInstanceFilter) WhereControlID(p entql.StringP) {
 	f.Where(p.Field(workflowinstance.FieldControlID))
@@ -33200,6 +33593,21 @@ func (f *WorkflowInstanceFilter) WhereInternalPolicyID(p entql.StringP) {
 // WhereEvidenceID applies the entql string predicate on the evidence_id field.
 func (f *WorkflowInstanceFilter) WhereEvidenceID(p entql.StringP) {
 	f.Where(p.Field(workflowinstance.FieldEvidenceID))
+}
+
+// WhereSubcontrolID applies the entql string predicate on the subcontrol_id field.
+func (f *WorkflowInstanceFilter) WhereSubcontrolID(p entql.StringP) {
+	f.Where(p.Field(workflowinstance.FieldSubcontrolID))
+}
+
+// WhereActionPlanID applies the entql string predicate on the action_plan_id field.
+func (f *WorkflowInstanceFilter) WhereActionPlanID(p entql.StringP) {
+	f.Where(p.Field(workflowinstance.FieldActionPlanID))
+}
+
+// WhereProcedureID applies the entql string predicate on the procedure_id field.
+func (f *WorkflowInstanceFilter) WhereProcedureID(p entql.StringP) {
+	f.Where(p.Field(workflowinstance.FieldProcedureID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -33266,6 +33674,62 @@ func (f *WorkflowInstanceFilter) WhereHasEvidence() {
 // WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
 func (f *WorkflowInstanceFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
 	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrol applies a predicate to check if query has an edge subcontrol.
+func (f *WorkflowInstanceFilter) WhereHasSubcontrol() {
+	f.Where(entql.HasEdge("subcontrol"))
+}
+
+// WhereHasSubcontrolWith applies a predicate to check if query has an edge subcontrol with a given conditions (other predicates).
+func (f *WorkflowInstanceFilter) WhereHasSubcontrolWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlan applies a predicate to check if query has an edge action_plan.
+func (f *WorkflowInstanceFilter) WhereHasActionPlan() {
+	f.Where(entql.HasEdge("action_plan"))
+}
+
+// WhereHasActionPlanWith applies a predicate to check if query has an edge action_plan with a given conditions (other predicates).
+func (f *WorkflowInstanceFilter) WhereHasActionPlanWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plan", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedure applies a predicate to check if query has an edge procedure.
+func (f *WorkflowInstanceFilter) WhereHasProcedure() {
+	f.Where(entql.HasEdge("procedure"))
+}
+
+// WhereHasProcedureWith applies a predicate to check if query has an edge procedure with a given conditions (other predicates).
+func (f *WorkflowInstanceFilter) WhereHasProcedureWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowProposal applies a predicate to check if query has an edge workflow_proposal.
+func (f *WorkflowInstanceFilter) WhereHasWorkflowProposal() {
+	f.Where(entql.HasEdge("workflow_proposal"))
+}
+
+// WhereHasWorkflowProposalWith applies a predicate to check if query has an edge workflow_proposal with a given conditions (other predicates).
+func (f *WorkflowInstanceFilter) WhereHasWorkflowProposalWith(preds ...predicate.WorkflowProposal) {
+	f.Where(entql.HasEdgeWith("workflow_proposal", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -33429,6 +33893,21 @@ func (f *WorkflowObjectRefFilter) WhereEvidenceID(p entql.StringP) {
 	f.Where(p.Field(workflowobjectref.FieldEvidenceID))
 }
 
+// WhereSubcontrolID applies the entql string predicate on the subcontrol_id field.
+func (f *WorkflowObjectRefFilter) WhereSubcontrolID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectref.FieldSubcontrolID))
+}
+
+// WhereActionPlanID applies the entql string predicate on the action_plan_id field.
+func (f *WorkflowObjectRefFilter) WhereActionPlanID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectref.FieldActionPlanID))
+}
+
+// WhereProcedureID applies the entql string predicate on the procedure_id field.
+func (f *WorkflowObjectRefFilter) WhereProcedureID(p entql.StringP) {
+	f.Where(p.Field(workflowobjectref.FieldProcedureID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *WorkflowObjectRefFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -33451,6 +33930,20 @@ func (f *WorkflowObjectRefFilter) WhereHasWorkflowInstance() {
 // WhereHasWorkflowInstanceWith applies a predicate to check if query has an edge workflow_instance with a given conditions (other predicates).
 func (f *WorkflowObjectRefFilter) WhereHasWorkflowInstanceWith(preds ...predicate.WorkflowInstance) {
 	f.Where(entql.HasEdgeWith("workflow_instance", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowProposals applies a predicate to check if query has an edge workflow_proposals.
+func (f *WorkflowObjectRefFilter) WhereHasWorkflowProposals() {
+	f.Where(entql.HasEdge("workflow_proposals"))
+}
+
+// WhereHasWorkflowProposalsWith applies a predicate to check if query has an edge workflow_proposals with a given conditions (other predicates).
+func (f *WorkflowObjectRefFilter) WhereHasWorkflowProposalsWith(preds ...predicate.WorkflowProposal) {
+	f.Where(entql.HasEdgeWith("workflow_proposals", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -33563,6 +34056,219 @@ func (f *WorkflowObjectRefFilter) WhereHasEvidence() {
 // WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
 func (f *WorkflowObjectRefFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
 	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrol applies a predicate to check if query has an edge subcontrol.
+func (f *WorkflowObjectRefFilter) WhereHasSubcontrol() {
+	f.Where(entql.HasEdge("subcontrol"))
+}
+
+// WhereHasSubcontrolWith applies a predicate to check if query has an edge subcontrol with a given conditions (other predicates).
+func (f *WorkflowObjectRefFilter) WhereHasSubcontrolWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrol", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlan applies a predicate to check if query has an edge action_plan.
+func (f *WorkflowObjectRefFilter) WhereHasActionPlan() {
+	f.Where(entql.HasEdge("action_plan"))
+}
+
+// WhereHasActionPlanWith applies a predicate to check if query has an edge action_plan with a given conditions (other predicates).
+func (f *WorkflowObjectRefFilter) WhereHasActionPlanWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plan", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasProcedure applies a predicate to check if query has an edge procedure.
+func (f *WorkflowObjectRefFilter) WhereHasProcedure() {
+	f.Where(entql.HasEdge("procedure"))
+}
+
+// WhereHasProcedureWith applies a predicate to check if query has an edge procedure with a given conditions (other predicates).
+func (f *WorkflowObjectRefFilter) WhereHasProcedureWith(preds ...predicate.Procedure) {
+	f.Where(entql.HasEdgeWith("procedure", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *WorkflowProposalQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the WorkflowProposalQuery builder.
+func (_q *WorkflowProposalQuery) Filter() *WorkflowProposalFilter {
+	return &WorkflowProposalFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *WorkflowProposalMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the WorkflowProposalMutation builder.
+func (m *WorkflowProposalMutation) Filter() *WorkflowProposalFilter {
+	return &WorkflowProposalFilter{config: m.config, predicateAdder: m}
+}
+
+// WorkflowProposalFilter provides a generic filtering capability at runtime for WorkflowProposalQuery.
+type WorkflowProposalFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *WorkflowProposalFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *WorkflowProposalFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *WorkflowProposalFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(workflowproposal.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *WorkflowProposalFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(workflowproposal.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *WorkflowProposalFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *WorkflowProposalFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldUpdatedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *WorkflowProposalFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(workflowproposal.FieldTags))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *WorkflowProposalFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldOwnerID))
+}
+
+// WhereWorkflowObjectRefID applies the entql string predicate on the workflow_object_ref_id field.
+func (f *WorkflowProposalFilter) WhereWorkflowObjectRefID(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldWorkflowObjectRefID))
+}
+
+// WhereDomainKey applies the entql string predicate on the domain_key field.
+func (f *WorkflowProposalFilter) WhereDomainKey(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldDomainKey))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *WorkflowProposalFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldState))
+}
+
+// WhereRevision applies the entql int predicate on the revision field.
+func (f *WorkflowProposalFilter) WhereRevision(p entql.IntP) {
+	f.Where(p.Field(workflowproposal.FieldRevision))
+}
+
+// WhereChanges applies the entql json.RawMessage predicate on the changes field.
+func (f *WorkflowProposalFilter) WhereChanges(p entql.BytesP) {
+	f.Where(p.Field(workflowproposal.FieldChanges))
+}
+
+// WhereProposedHash applies the entql string predicate on the proposed_hash field.
+func (f *WorkflowProposalFilter) WhereProposedHash(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldProposedHash))
+}
+
+// WhereApprovedHash applies the entql string predicate on the approved_hash field.
+func (f *WorkflowProposalFilter) WhereApprovedHash(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldApprovedHash))
+}
+
+// WhereSubmittedAt applies the entql time.Time predicate on the submitted_at field.
+func (f *WorkflowProposalFilter) WhereSubmittedAt(p entql.TimeP) {
+	f.Where(p.Field(workflowproposal.FieldSubmittedAt))
+}
+
+// WhereSubmittedByUserID applies the entql string predicate on the submitted_by_user_id field.
+func (f *WorkflowProposalFilter) WhereSubmittedByUserID(p entql.StringP) {
+	f.Where(p.Field(workflowproposal.FieldSubmittedByUserID))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *WorkflowProposalFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *WorkflowProposalFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowObjectRef applies a predicate to check if query has an edge workflow_object_ref.
+func (f *WorkflowProposalFilter) WhereHasWorkflowObjectRef() {
+	f.Where(entql.HasEdge("workflow_object_ref"))
+}
+
+// WhereHasWorkflowObjectRefWith applies a predicate to check if query has an edge workflow_object_ref with a given conditions (other predicates).
+func (f *WorkflowProposalFilter) WhereHasWorkflowObjectRefWith(preds ...predicate.WorkflowObjectRef) {
+	f.Where(entql.HasEdgeWith("workflow_object_ref", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasUser applies a predicate to check if query has an edge user.
+func (f *WorkflowProposalFilter) WhereHasUser() {
+	f.Where(entql.HasEdge("user"))
+}
+
+// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
+func (f *WorkflowProposalFilter) WhereHasUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasWorkflowInstances applies a predicate to check if query has an edge workflow_instances.
+func (f *WorkflowProposalFilter) WhereHasWorkflowInstances() {
+	f.Where(entql.HasEdge("workflow_instances"))
+}
+
+// WhereHasWorkflowInstancesWith applies a predicate to check if query has an edge workflow_instances with a given conditions (other predicates).
+func (f *WorkflowProposalFilter) WhereHasWorkflowInstancesWith(preds ...predicate.WorkflowInstance) {
+	f.Where(entql.HasEdgeWith("workflow_instances", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

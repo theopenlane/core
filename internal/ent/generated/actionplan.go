@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ActionPlan is the model entity for the ActionPlan schema.
@@ -47,6 +47,8 @@ type ActionPlan struct {
 	ActionPlanType string `json:"action_plan_type,omitempty"`
 	// details of the action_plan
 	Details string `json:"details,omitempty"`
+	// structured details of the action_plan in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// whether approval is required for edits to the action_plan
 	ApprovalRequired bool `json:"approval_required,omitempty"`
 	// the date the action_plan should be reviewed, calculated based on the review_frequency if not directly set
@@ -87,6 +89,8 @@ type ActionPlan struct {
 	ActionPlanKindName string `json:"action_plan_kind_name,omitempty"`
 	// the kind of the action_plan
 	ActionPlanKindID string `json:"action_plan_kind_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// short title describing the action plan
 	Title string `json:"title,omitempty"`
 	// detailed description of remediation steps and objectives
@@ -148,21 +152,24 @@ type ActionPlanEdges struct {
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// File holds the value of the file edge.
 	File *File `json:"file,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [15]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [15]map[string]int
 
-	namedRisks           map[string][]*Risk
-	namedControls        map[string][]*Control
-	namedPrograms        map[string][]*Program
-	namedFindings        map[string][]*Finding
-	namedVulnerabilities map[string][]*Vulnerability
-	namedReviews         map[string][]*Review
-	namedRemediations    map[string][]*Remediation
-	namedTasks           map[string][]*Task
-	namedIntegrations    map[string][]*Integration
+	namedRisks              map[string][]*Risk
+	namedControls           map[string][]*Control
+	namedPrograms           map[string][]*Program
+	namedFindings           map[string][]*Finding
+	namedVulnerabilities    map[string][]*Vulnerability
+	namedReviews            map[string][]*Review
+	namedRemediations       map[string][]*Remediation
+	namedTasks              map[string][]*Task
+	namedIntegrations       map[string][]*Integration
+	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
 // ApproverOrErr returns the Approver value or an error if the edge
@@ -301,14 +308,23 @@ func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	return nil, &NotLoadedError{edge: "file"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[14] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*ActionPlan) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case actionplan.FieldTags, actionplan.FieldTagSuggestions, actionplan.FieldDismissedTagSuggestions, actionplan.FieldControlSuggestions, actionplan.FieldDismissedControlSuggestions, actionplan.FieldImprovementSuggestions, actionplan.FieldDismissedImprovementSuggestions, actionplan.FieldMetadata, actionplan.FieldRawPayload:
+		case actionplan.FieldTags, actionplan.FieldDetailsJSON, actionplan.FieldTagSuggestions, actionplan.FieldDismissedTagSuggestions, actionplan.FieldControlSuggestions, actionplan.FieldDismissedControlSuggestions, actionplan.FieldImprovementSuggestions, actionplan.FieldDismissedImprovementSuggestions, actionplan.FieldMetadata, actionplan.FieldRawPayload:
 			values[i] = new([]byte)
-		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
+		case actionplan.FieldApprovalRequired, actionplan.FieldSystemOwned, actionplan.FieldWorkflowEligibleMarker, actionplan.FieldRequiresApproval, actionplan.FieldBlocked:
 			values[i] = new(sql.NullBool)
 		case actionplan.FieldID, actionplan.FieldCreatedBy, actionplan.FieldUpdatedBy, actionplan.FieldDeletedBy, actionplan.FieldRevision, actionplan.FieldName, actionplan.FieldStatus, actionplan.FieldActionPlanType, actionplan.FieldDetails, actionplan.FieldReviewFrequency, actionplan.FieldApproverID, actionplan.FieldDelegateID, actionplan.FieldSummary, actionplan.FieldURL, actionplan.FieldFileID, actionplan.FieldOwnerID, actionplan.FieldInternalNotes, actionplan.FieldSystemInternalID, actionplan.FieldActionPlanKindName, actionplan.FieldActionPlanKindID, actionplan.FieldTitle, actionplan.FieldDescription, actionplan.FieldPriority, actionplan.FieldBlockerReason, actionplan.FieldSource:
 			values[i] = new(sql.NullString)
@@ -414,6 +430,14 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case actionplan.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case actionplan.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -550,6 +574,12 @@ func (_m *ActionPlan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field action_plan_kind_id", values[i])
 			} else if value.Valid {
 				_m.ActionPlanKindID = value.String
+			}
+		case actionplan.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case actionplan.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -726,6 +756,11 @@ func (_m *ActionPlan) QueryFile() *FileQuery {
 	return NewActionPlanClient(_m.config).QueryFile(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewActionPlanClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this ActionPlan.
 // Note that you need to call ActionPlan.Unwrap() before calling this method if this ActionPlan
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -784,6 +819,9 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
+	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
@@ -852,6 +890,9 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("action_plan_kind_id=")
 	builder.WriteString(_m.ActionPlanKindID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
@@ -1104,6 +1145,30 @@ func (_m *ActionPlan) appendNamedIntegrations(name string, edges ...*Integration
 		_m.Edges.namedIntegrations[name] = []*Integration{}
 	} else {
 		_m.Edges.namedIntegrations[name] = append(_m.Edges.namedIntegrations[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

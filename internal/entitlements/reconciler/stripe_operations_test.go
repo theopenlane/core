@@ -157,17 +157,18 @@ func TestGenerateScheduleActionDescription(t *testing.T) {
 }
 
 func TestBuildValidProductsMap(t *testing.T) {
-	cat := &catalog.Catalog{
-		Modules: catalog.FeatureSet{
-			"module1": catalog.Feature{ProductID: "prod_module_1"},
-			"module2": catalog.Feature{ProductID: "prod_module_2"},
-			"module3": catalog.Feature{ProductID: ""}, // Empty product ID should be ignored
-		},
-		Addons: catalog.FeatureSet{
-			"addon1": catalog.Feature{ProductID: "prod_addon_1"},
-			"addon2": catalog.Feature{ProductID: "prod_addon_2"},
-			"addon3": catalog.Feature{ProductID: ""}, // Empty product ID should be ignored
-		},
+	cat := catalog.New()
+
+	cat.Modules = catalog.FeatureSet{
+		"module1": catalog.Feature{ProductID: "prod_module_1"},
+		"module2": catalog.Feature{ProductID: "prod_module_2"},
+		"module3": catalog.Feature{ProductID: ""}, // Empty product ID should be ignored
+	}
+
+	cat.Addons = catalog.FeatureSet{
+		"addon1": catalog.Feature{ProductID: "prod_addon_1"},
+		"addon2": catalog.Feature{ProductID: "prod_addon_2"},
+		"addon3": catalog.Feature{ProductID: ""}, // Empty product ID should be ignored
 	}
 
 	validProducts := BuildValidProductsMap(cat)

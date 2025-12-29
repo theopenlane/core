@@ -15,8 +15,10 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -26,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -198,7 +199,6 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 		WithSetting().All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unable to query organizations for auto-join")
-
 		return err
 	}
 
@@ -221,21 +221,33 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 			continue
 		}
 
-		// add user as a member to the organization
-		defaultRole := enums.RoleMember
-		input := generated.CreateOrgMembershipInput{
-			OrganizationID: org.ID,
-			UserID:         user.ID,
-			Role:           &defaultRole,
-		}
-
-		// add organization to the context for auto-join
+		// add organization to the context for accepted invite hook
 		ctx = auth.WithAuthenticatedUser(ctx, &auth.AuthenticatedUser{
 			SubjectID:       user.ID,
 			SubjectEmail:    user.Email,
 			OrganizationID:  org.ID,
 			OrganizationIDs: []string{org.ID},
 		})
+
+		// this triggers the invitation hook which will add the user to the organization
+		accepted, err := markPendingInvitesAsAccepted(ctx, dbClient, user.Email, org.ID)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to mark pending invites as accepted")
+			return err
+		}
+
+		if accepted > 0 {
+			lastOrgID = org.ID
+			continue
+		}
+
+		// add user as a member to the organization if no invites were found
+		defaultRole := enums.RoleMember
+		input := generated.CreateOrgMembershipInput{
+			OrganizationID: org.ID,
+			UserID:         user.ID,
+			Role:           &defaultRole,
+		}
 
 		if err := dbClient.OrgMembership.Create().
 			SetInput(input).
@@ -264,4 +276,29 @@ func autoJoinOrganizationsForUser(ctx context.Context, dbClient *generated.Clien
 	}
 
 	return nil
+}
+
+func markPendingInvitesAsAccepted(ctx context.Context, dbClient *generated.Client, email, orgID string) (int, error) {
+	invites, err := dbClient.Invite.Query().
+		Where(
+			invite.RecipientEqualFold(email),
+			invite.OwnerID(orgID),
+			invite.DeletedAtIsNil(),
+		).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to query pending invites")
+		return 0, err
+	}
+
+	for _, i := range invites {
+		if _, err := dbClient.Invite.UpdateOneID(i.ID).
+			SetStatus(enums.InvitationAccepted).
+			Save(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to mark pending invite as accepted")
+			return 0, err
+		}
+	}
+
+	return len(invites), nil
 }

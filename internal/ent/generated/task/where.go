@@ -7,9 +7,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -982,6 +982,16 @@ func DetailsEqualFold(v string) predicate.Task {
 // DetailsContainsFold applies the ContainsFold predicate on the "details" field.
 func DetailsContainsFold(v string) predicate.Task {
 	return predicate.Task(sql.FieldContainsFold(FieldDetails, v))
+}
+
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.Task {
+	return predicate.Task(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.Task {
+	return predicate.Task(sql.FieldNotNull(FieldDetailsJSON))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

@@ -36,13 +36,14 @@ import (
 // to include the reverse edges on the group schema
 type GroupPermissionsMixin struct {
 	mixin.Schema
-
 	// ViewPermissions adds view permission for a group
 	ViewPermissions bool
 	// IncludeInterceptorFilter is used to skip the interceptor filter
 	// this is used for more complex view permissions that are not solely based
 	// on the group membership
 	IncludeInterceptorFilter bool
+	// WorkflowEdgeEligible marks group permission edges as workflow-eligible.
+	WorkflowEdgeEligible bool
 }
 
 // GroupPermissionsEdgesMixin is a mixin for the reverse edges on the group schema
@@ -127,6 +128,13 @@ func withSkipViewPermissions() groupPermissionsOption {
 func withGroupPermissionsInterceptor() groupPermissionsOption {
 	return func(g *GroupPermissionsMixin) {
 		g.IncludeInterceptorFilter = true
+	}
+}
+
+// withWorkflowGroupEdges marks group permission edges as workflow-eligible.
+func withWorkflowGroupEdges() groupPermissionsOption {
+	return func(g *GroupPermissionsMixin) {
+		g.WorkflowEdgeEligible = true
 	}
 }
 

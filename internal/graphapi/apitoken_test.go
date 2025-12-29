@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/testutils"
 )
 
@@ -354,12 +353,12 @@ func TestLastUsedAPIToken(t *testing.T) {
 	assert.Check(t, res.APIToken.LastUsedAt == nil)
 
 	// setup graph client using the API token
-	authHeader := openlaneclient.Authorization{
+	authHeader := testclient.Authorization{
 		BearerToken: token.Token,
 	}
 
 	graphClient, err := testutils.TestClientWithAuth(suite.client.db, suite.client.objectStore,
-		openlaneclient.WithCredentials(authHeader),
+		testclient.WithCredentials(authHeader),
 	)
 	assert.NilError(t, err)
 

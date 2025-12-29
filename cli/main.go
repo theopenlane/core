@@ -1,0 +1,69 @@
+//go:build cli
+
+package main
+
+import (
+	core "github.com/theopenlane/core/cli/cmd"
+
+	// since the cmds are not part of the same package
+	// they must all be imported in main
+	_ "github.com/theopenlane/core/cli/cmd/apitokens"
+	_ "github.com/theopenlane/core/cli/cmd/contact"
+	_ "github.com/theopenlane/core/cli/cmd/control"
+	_ "github.com/theopenlane/core/cli/cmd/controlimplementation"
+	_ "github.com/theopenlane/core/cli/cmd/controlobjective"
+	_ "github.com/theopenlane/core/cli/cmd/customdomain"
+	_ "github.com/theopenlane/core/cli/cmd/dnsverification"
+	_ "github.com/theopenlane/core/cli/cmd/documentdata"
+	_ "github.com/theopenlane/core/cli/cmd/entity"
+	_ "github.com/theopenlane/core/cli/cmd/entitytype"
+	_ "github.com/theopenlane/core/cli/cmd/evidence"
+	_ "github.com/theopenlane/core/cli/cmd/file"
+	_ "github.com/theopenlane/core/cli/cmd/group"
+	_ "github.com/theopenlane/core/cli/cmd/groupmembers"
+	_ "github.com/theopenlane/core/cli/cmd/groupsetting"
+	_ "github.com/theopenlane/core/cli/cmd/integration"
+	_ "github.com/theopenlane/core/cli/cmd/internalpolicy"
+	_ "github.com/theopenlane/core/cli/cmd/invite"
+	_ "github.com/theopenlane/core/cli/cmd/jobresult"
+	_ "github.com/theopenlane/core/cli/cmd/jobrunnertoken"
+	_ "github.com/theopenlane/core/cli/cmd/jobtemplate"
+	_ "github.com/theopenlane/core/cli/cmd/login"
+	_ "github.com/theopenlane/core/cli/cmd/mappabledomain"
+	_ "github.com/theopenlane/core/cli/cmd/mappedcontrol"
+	_ "github.com/theopenlane/core/cli/cmd/narrative"
+	_ "github.com/theopenlane/core/cli/cmd/organization"
+	_ "github.com/theopenlane/core/cli/cmd/organizationsetting"
+	_ "github.com/theopenlane/core/cli/cmd/orgmembers"
+	_ "github.com/theopenlane/core/cli/cmd/orgsubscription"
+	_ "github.com/theopenlane/core/cli/cmd/personalaccesstokens"
+	_ "github.com/theopenlane/core/cli/cmd/procedure"
+	_ "github.com/theopenlane/core/cli/cmd/program"
+	_ "github.com/theopenlane/core/cli/cmd/programmembers"
+	_ "github.com/theopenlane/core/cli/cmd/register"
+	_ "github.com/theopenlane/core/cli/cmd/reset"
+	_ "github.com/theopenlane/core/cli/cmd/risk"
+	_ "github.com/theopenlane/core/cli/cmd/scheduledjob"
+	_ "github.com/theopenlane/core/cli/cmd/search"
+	_ "github.com/theopenlane/core/cli/cmd/standard"
+	_ "github.com/theopenlane/core/cli/cmd/subcontrol"
+	_ "github.com/theopenlane/core/cli/cmd/subprocessor"
+	_ "github.com/theopenlane/core/cli/cmd/subscriber"
+	_ "github.com/theopenlane/core/cli/cmd/switchcontext"
+	_ "github.com/theopenlane/core/cli/cmd/task"
+	_ "github.com/theopenlane/core/cli/cmd/template"
+	_ "github.com/theopenlane/core/cli/cmd/trustcenter"
+	_ "github.com/theopenlane/core/cli/cmd/trustcentercompliance"
+	_ "github.com/theopenlane/core/cli/cmd/trustcenterdoc"
+	_ "github.com/theopenlane/core/cli/cmd/trustcenterdomain"
+	_ "github.com/theopenlane/core/cli/cmd/trustcenternda"
+	_ "github.com/theopenlane/core/cli/cmd/trustcentersubprocessors"
+	_ "github.com/theopenlane/core/cli/cmd/trustcenterwatermarkconfig"
+	_ "github.com/theopenlane/core/cli/cmd/user"
+	_ "github.com/theopenlane/core/cli/cmd/usersetting"
+	_ "github.com/theopenlane/core/cli/cmd/version"
+)
+
+func main() {
+	core.Execute()
+}

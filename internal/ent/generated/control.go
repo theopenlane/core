@@ -10,14 +10,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Control is the model entity for the Control schema.
@@ -45,6 +45,8 @@ type Control struct {
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []interface{} `json:"description_json,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -103,12 +105,8 @@ type Control struct {
 	ControlKindName string `json:"control_kind_name,omitempty"`
 	// the kind of the control
 	ControlKindID string `json:"control_kind_id,omitempty"`
-	// pending changes awaiting workflow approval
-	ProposedChanges map[string]interface{} `json:"proposed_changes,omitempty"`
-	// user who proposed the changes
-	ProposedByUserID string `json:"proposed_by_user_id,omitempty"`
-	// when changes were proposed
-	ProposedAt *time.Time `json:"proposed_at,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the standard that the control belongs to, if applicable
@@ -492,13 +490,13 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case control.FieldTags, control.FieldAliases, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences, control.FieldTestingProcedures, control.FieldEvidenceRequests, control.FieldProposedChanges:
+		case control.FieldTags, control.FieldDescriptionJSON, control.FieldAliases, control.FieldMappedCategories, control.FieldAssessmentObjectives, control.FieldAssessmentMethods, control.FieldControlQuestions, control.FieldImplementationGuidance, control.FieldExampleEvidence, control.FieldReferences, control.FieldTestingProcedures, control.FieldEvidenceRequests:
 			values[i] = new([]byte)
-		case control.FieldSystemOwned:
+		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldProposedByUserID, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldRefCode, control.FieldStandardID:
 			values[i] = new(sql.NullString)
-		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt, control.FieldProposedAt:
+		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case control.ForeignKeys[0]: // custom_type_enum_controls
 			values[i] = new(sql.NullString)
@@ -590,6 +588,14 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				_m.Description = value.String
+			}
+		case control.FieldDescriptionJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field description_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DescriptionJSON); err != nil {
+					return fmt.Errorf("unmarshal field description_json: %w", err)
+				}
 			}
 		case control.FieldAliases:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -790,26 +796,11 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ControlKindID = value.String
 			}
-		case control.FieldProposedChanges:
-			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_changes", values[i])
-			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.ProposedChanges); err != nil {
-					return fmt.Errorf("unmarshal field proposed_changes: %w", err)
-				}
-			}
-		case control.FieldProposedByUserID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_by_user_id", values[i])
+		case control.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
 			} else if value.Valid {
-				_m.ProposedByUserID = value.String
-			}
-		case control.FieldProposedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field proposed_at", values[i])
-			} else if value.Valid {
-				_m.ProposedAt = new(time.Time)
-				*_m.ProposedAt = value.Time
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case control.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1062,6 +1053,9 @@ func (_m *Control) String() string {
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
 	builder.WriteString(", ")
+	builder.WriteString("description_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DescriptionJSON))
+	builder.WriteString(", ")
 	builder.WriteString("aliases=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Aliases))
 	builder.WriteString(", ")
@@ -1159,16 +1153,8 @@ func (_m *Control) String() string {
 	builder.WriteString("control_kind_id=")
 	builder.WriteString(_m.ControlKindID)
 	builder.WriteString(", ")
-	builder.WriteString("proposed_changes=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProposedChanges))
-	builder.WriteString(", ")
-	builder.WriteString("proposed_by_user_id=")
-	builder.WriteString(_m.ProposedByUserID)
-	builder.WriteString(", ")
-	if v := _m.ProposedAt; v != nil {
-		builder.WriteString("proposed_at=")
-		builder.WriteString(v.Format(time.ANSIC))
-	}
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
 	builder.WriteString(_m.RefCode)

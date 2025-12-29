@@ -16,11 +16,11 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -85,6 +85,9 @@ func HookImportDocument() ent.Hook {
 
 				return next.Mutate(ctx, m)
 			}
+
+			mut2 := generated.InternalPolicyMutation{}
+			mut2.Name()
 
 			_, exists := mut.URL()
 
@@ -248,7 +251,7 @@ func importURLToSchema(m importSchemaMutation) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) // nolint:err113
+		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) //nolint:err113
 	}
 
 	// Read a bounded amount of data based on configured import size to prevent memory overuse
@@ -256,7 +259,7 @@ func importURLToSchema(m importSchemaMutation) error {
 
 	buf, err := io.ReadAll(reader)
 	if err != nil {
-		return fmt.Errorf("failed to read response body: %w", err) // nolint:err113
+		return fmt.Errorf("failed to read response body: %w", err) //nolint:err113
 	}
 
 	// Detect MIME using storage helper with fallback to header to handle servers with incorrect content type

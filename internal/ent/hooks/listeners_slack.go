@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slacktemplates"
@@ -31,7 +32,7 @@ func SetSlackConfig(cfg SlackConfig) {
 }
 
 // handleSubscriberMutation processes subscriber mutations and publishes Slack notifications when a record is created
-func handleSubscriberMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleSubscriberMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload.Operation != ent.OpCreate.String() {
 		return nil
 	}
@@ -44,7 +45,7 @@ func handleSubscriberMutation(ctx *soiree.EventContext, payload *MutationPayload
 }
 
 // handleUserMutation processes user mutations and publishes Slack notifications when a record is created
-func handleUserMutation(ctx *soiree.EventContext, payload *MutationPayload) error {
+func handleUserMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	if payload.Operation != ent.OpCreate.String() {
 		return nil
 	}

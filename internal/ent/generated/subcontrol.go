@@ -10,14 +10,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Subcontrol is the model entity for the Subcontrol schema.
@@ -45,6 +45,8 @@ type Subcontrol struct {
 	Title string `json:"title,omitempty"`
 	// description of what the control is supposed to accomplish
 	Description string `json:"description,omitempty"`
+	// structured details of the control in JSON format
+	DescriptionJSON []interface{} `json:"description_json,omitempty"`
 	// additional names (ref_codes) for the control
 	Aliases []string `json:"aliases,omitempty"`
 	// internal reference id of the control, can be used for internal tracking
@@ -103,6 +105,8 @@ type Subcontrol struct {
 	SubcontrolKindName string `json:"subcontrol_kind_name,omitempty"`
 	// the kind of the subcontrol
 	SubcontrolKindID string `json:"subcontrol_kind_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// the unique reference code for the control
 	RefCode string `json:"ref_code,omitempty"`
 	// the id of the parent control
@@ -162,11 +166,13 @@ type SubcontrolEdges struct {
 	MappedToSubcontrols []*MappedControl `json:"mapped_to_subcontrols,omitempty"`
 	// MappedFromSubcontrols holds the value of the mapped_from_subcontrols edge.
 	MappedFromSubcontrols []*MappedControl `json:"mapped_from_subcontrols,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [19]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -182,6 +188,7 @@ type SubcontrolEdges struct {
 	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToSubcontrols    map[string][]*MappedControl
 	namedMappedFromSubcontrols  map[string][]*MappedControl
+	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
 
 // EvidenceOrErr returns the Evidence value or an error if the edge
@@ -376,14 +383,23 @@ func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) 
 	return nil, &NotLoadedError{edge: "mapped_from_subcontrols"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubcontrolEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[20] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case subcontrol.FieldTags, subcontrol.FieldAliases, subcontrol.FieldMappedCategories, subcontrol.FieldAssessmentObjectives, subcontrol.FieldAssessmentMethods, subcontrol.FieldControlQuestions, subcontrol.FieldImplementationGuidance, subcontrol.FieldExampleEvidence, subcontrol.FieldReferences, subcontrol.FieldTestingProcedures, subcontrol.FieldEvidenceRequests:
+		case subcontrol.FieldTags, subcontrol.FieldDescriptionJSON, subcontrol.FieldAliases, subcontrol.FieldMappedCategories, subcontrol.FieldAssessmentObjectives, subcontrol.FieldAssessmentMethods, subcontrol.FieldControlQuestions, subcontrol.FieldImplementationGuidance, subcontrol.FieldExampleEvidence, subcontrol.FieldReferences, subcontrol.FieldTestingProcedures, subcontrol.FieldEvidenceRequests:
 			values[i] = new([]byte)
-		case subcontrol.FieldSystemOwned:
+		case subcontrol.FieldSystemOwned, subcontrol.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case subcontrol.FieldID, subcontrol.FieldCreatedBy, subcontrol.FieldUpdatedBy, subcontrol.FieldDeletedBy, subcontrol.FieldDisplayID, subcontrol.FieldTitle, subcontrol.FieldDescription, subcontrol.FieldReferenceID, subcontrol.FieldAuditorReferenceID, subcontrol.FieldResponsiblePartyID, subcontrol.FieldStatus, subcontrol.FieldSource, subcontrol.FieldReferenceFramework, subcontrol.FieldReferenceFrameworkRevision, subcontrol.FieldControlType, subcontrol.FieldCategory, subcontrol.FieldCategoryID, subcontrol.FieldSubcategory, subcontrol.FieldControlOwnerID, subcontrol.FieldDelegateID, subcontrol.FieldOwnerID, subcontrol.FieldInternalNotes, subcontrol.FieldSystemInternalID, subcontrol.FieldSubcontrolKindName, subcontrol.FieldSubcontrolKindID, subcontrol.FieldRefCode, subcontrol.FieldControlID:
 			values[i] = new(sql.NullString)
@@ -485,6 +501,14 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[i])
 			} else if value.Valid {
 				_m.Description = value.String
+			}
+		case subcontrol.FieldDescriptionJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field description_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DescriptionJSON); err != nil {
+					return fmt.Errorf("unmarshal field description_json: %w", err)
+				}
 			}
 		case subcontrol.FieldAliases:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -685,6 +709,12 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SubcontrolKindID = value.String
 			}
+		case subcontrol.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
+			}
 		case subcontrol.FieldRefCode:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field ref_code", values[i])
@@ -859,6 +889,11 @@ func (_m *Subcontrol) QueryMappedFromSubcontrols() *MappedControlQuery {
 	return NewSubcontrolClient(_m.config).QueryMappedFromSubcontrols(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Subcontrol entity.
+func (_m *Subcontrol) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewSubcontrolClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this Subcontrol.
 // Note that you need to call Subcontrol.Unwrap() before calling this method if this Subcontrol
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -911,6 +946,9 @@ func (_m *Subcontrol) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(_m.Description)
+	builder.WriteString(", ")
+	builder.WriteString("description_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DescriptionJSON))
 	builder.WriteString(", ")
 	builder.WriteString("aliases=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Aliases))
@@ -1008,6 +1046,9 @@ func (_m *Subcontrol) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("subcontrol_kind_id=")
 	builder.WriteString(_m.SubcontrolKindID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("ref_code=")
 	builder.WriteString(_m.RefCode)
@@ -1351,6 +1392,30 @@ func (_m *Subcontrol) appendNamedMappedFromSubcontrols(name string, edges ...*Ma
 		_m.Edges.namedMappedFromSubcontrols[name] = []*MappedControl{}
 	} else {
 		_m.Edges.namedMappedFromSubcontrols[name] = append(_m.Edges.namedMappedFromSubcontrols[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subcontrol) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subcontrol) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

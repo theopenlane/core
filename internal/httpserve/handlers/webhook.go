@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
+	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -28,7 +29,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 const (
@@ -261,7 +261,8 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 
 	num, err := h.DBClient.APIToken.Update().Where(apitoken.OwnerID(orgID)).
 		SetIsActive(false).
-		SetExpiresAt(time.Now().Add(-24 * time.Hour)). // nolint:mnd // set expiration to 24 hours ago
+		// set expiration to 24 hours
+		SetExpiresAt(time.Now().Add(-24 * time.Hour)). //nolint:mnd
 		SetRevokedAt(time.Now()).
 		SetRevokedReason("subscription paused or deleted").
 		SetRevokedBy("entitlements_engine").

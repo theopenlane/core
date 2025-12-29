@@ -8,10 +8,10 @@ import (
 
 	"github.com/stripe/stripe-go/v84"
 
+	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	catalog "github.com/theopenlane/core/internal/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // StripePriceToOrgPrice converts a stripe.Price to an OrgPrice
@@ -176,7 +176,7 @@ func ApplyStripePrice[T OrgPriceSetter[T]](b T, p *stripe.Price) T {
 	}
 
 	price := models.Price{
-		Amount:   float64(p.UnitAmount) / 100.0, // nolint:mnd
+		Amount:   float64(p.UnitAmount) / 100.0, //nolint:mnd
 		Interval: interval,
 		Currency: string(p.Currency),
 	}
@@ -268,7 +268,7 @@ func ApplyStripeSubscription[T OrgSubscriptionSetter[T]](b T, sub *stripe.Subscr
 			}
 
 			price = models.Price{
-				Amount:   float64(item.Price.UnitAmount) / 100.0, // nolint:mnd
+				Amount:   float64(item.Price.UnitAmount) / 100.0, //nolint:mnd
 				Interval: interval,
 				Currency: string(item.Price.Currency),
 			}
@@ -312,7 +312,7 @@ func ApplyStripeSubscriptionItem[T OrgModuleSetter[T]](ctx context.Context, b T,
 	}
 
 	price := models.Price{
-		Amount:   float64(item.Price.UnitAmount) / 100.0, // nolint:mnd
+		Amount:   float64(item.Price.UnitAmount) / 100.0, //nolint:mnd
 		Interval: interval,
 		Currency: string(item.Price.Currency),
 	}

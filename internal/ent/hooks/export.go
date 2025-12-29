@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/corejobs"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
@@ -64,7 +64,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return v, err
 	}
 
-	_, err = m.Job.Insert(ctx, corejobs.ExportContentArgs{
+	_, err = m.Job.Insert(ctx, jobspec.ExportContentArgs{
 		ExportID:       id,
 		UserID:         requestorID,
 		OrganizationID: au.OrganizationID,

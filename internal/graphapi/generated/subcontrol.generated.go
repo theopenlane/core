@@ -70,6 +70,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Subcontrol_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Subcontrol_aliases(ctx, field)
 			case "referenceID":
@@ -128,6 +130,8 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
 			case "subcontrolKindID":
 				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Subcontrol_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -168,6 +172,12 @@ func (ec *executionContext) fieldContext_SubcontrolBulkCreatePayload_subcontrols
 				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Subcontrol_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -246,6 +256,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Subcontrol_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Subcontrol_aliases(ctx, field)
 			case "referenceID":
@@ -304,6 +316,8 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
 			case "subcontrolKindID":
 				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Subcontrol_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -344,6 +358,12 @@ func (ec *executionContext) fieldContext_SubcontrolCreatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Subcontrol_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},
@@ -422,6 +442,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Subcontrol_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Subcontrol_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Subcontrol_aliases(ctx, field)
 			case "referenceID":
@@ -480,6 +502,8 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_subcontrolKindName(ctx, field)
 			case "subcontrolKindID":
 				return ec.fieldContext_Subcontrol_subcontrolKindID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Subcontrol_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Subcontrol_refCode(ctx, field)
 			case "controlID":
@@ -520,6 +544,12 @@ func (ec *executionContext) fieldContext_SubcontrolUpdatePayload_subcontrol(_ co
 				return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Subcontrol_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Subcontrol_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Subcontrol", field.Name)
 		},

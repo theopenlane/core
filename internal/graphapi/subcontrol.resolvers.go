@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -141,4 +142,14 @@ func (r *queryResolver) Subcontrol(ctx context.Context, id string) (*generated.S
 	}
 
 	return res, nil
+}
+
+// HasPendingWorkflow is the resolver for the hasPendingWorkflow field.
+func (r *subcontrolResolver) HasPendingWorkflow(ctx context.Context, obj *generated.Subcontrol) (bool, error) {
+	panic(fmt.Errorf("not implemented: HasPendingWorkflow - hasPendingWorkflow"))
+}
+
+// ActiveWorkflowInstance is the resolver for the activeWorkflowInstance field.
+func (r *subcontrolResolver) ActiveWorkflowInstance(ctx context.Context, obj *generated.Subcontrol) (*generated.WorkflowInstance, error) {
+	panic(fmt.Errorf("not implemented: ActiveWorkflowInstance - activeWorkflowInstance"))
 }

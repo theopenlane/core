@@ -7,7 +7,7 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 func (suite *HandlerTestSuite) TestHasValidSSOSession() {

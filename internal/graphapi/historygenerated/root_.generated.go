@@ -11,8 +11,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/pkg/enums"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -61,6 +61,7 @@ type ComplexityRoot struct {
 		DelegateID                      func(childComplexity int) int
 		Description                     func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -92,6 +93,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		WorkflowEligibleMarker          func(childComplexity int) int
 	}
 
 	ActionPlanHistoryConnection struct {
@@ -248,6 +250,7 @@ type ComplexityRoot struct {
 		CreatedBy                  func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
@@ -258,9 +261,6 @@ type ComplexityRoot struct {
 		MappedCategories           func(childComplexity int) int
 		Operation                  func(childComplexity int) int
 		OwnerID                    func(childComplexity int) int
-		ProposedAt                 func(childComplexity int) int
-		ProposedByUserID           func(childComplexity int) int
-		ProposedChanges            func(childComplexity int) int
 		Ref                        func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
@@ -279,6 +279,7 @@ type ComplexityRoot struct {
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		WorkflowEligibleMarker     func(childComplexity int) int
 	}
 
 	ControlHistoryConnection struct {
@@ -296,6 +297,7 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
+		DetailsJSON        func(childComplexity int) int
 		HistoryTime        func(childComplexity int) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
@@ -330,6 +332,7 @@ type ComplexityRoot struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
+		DesiredOutcomeJSON   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		HistoryTime          func(childComplexity int) int
 		ID                   func(childComplexity int) int
@@ -657,29 +660,27 @@ type ComplexityRoot struct {
 	}
 
 	EvidenceHistory struct {
-		CollectionProcedure func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		CreationDate        func(childComplexity int) int
-		Description         func(childComplexity int) int
-		DisplayID           func(childComplexity int) int
-		HistoryTime         func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		IsAutomated         func(childComplexity int) int
-		Name                func(childComplexity int) int
-		Operation           func(childComplexity int) int
-		OwnerID             func(childComplexity int) int
-		ProposedAt          func(childComplexity int) int
-		ProposedByUserID    func(childComplexity int) int
-		ProposedChanges     func(childComplexity int) int
-		Ref                 func(childComplexity int) int
-		RenewalDate         func(childComplexity int) int
-		Source              func(childComplexity int) int
-		Status              func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		URL                 func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
+		CollectionProcedure    func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		CreationDate           func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		IsAutomated            func(childComplexity int) int
+		Name                   func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		RenewalDate            func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		URL                    func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
 	}
 
 	EvidenceHistoryConnection struct {
@@ -993,6 +994,7 @@ type ComplexityRoot struct {
 		CreatedBy                       func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -1008,9 +1010,6 @@ type ComplexityRoot struct {
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
 		PolicyType                      func(childComplexity int) int
-		ProposedAt                      func(childComplexity int) int
-		ProposedByUserID                func(childComplexity int) int
-		ProposedChanges                 func(childComplexity int) int
 		Ref                             func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
@@ -1024,6 +1023,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		WorkflowEligibleMarker          func(childComplexity int) int
 	}
 
 	InternalPolicyHistoryConnection struct {
@@ -1171,6 +1171,7 @@ type ComplexityRoot struct {
 		OwnerID      func(childComplexity int) int
 		Ref          func(childComplexity int) int
 		Text         func(childComplexity int) int
+		TextJSON     func(childComplexity int) int
 		UpdatedAt    func(childComplexity int) int
 		UpdatedBy    func(childComplexity int) int
 	}
@@ -1336,6 +1337,7 @@ type ComplexityRoot struct {
 		CreatedBy                       func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -1364,6 +1366,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		WorkflowEligibleMarker          func(childComplexity int) int
 	}
 
 	ProcedureHistoryConnection struct {
@@ -1606,33 +1609,36 @@ type ComplexityRoot struct {
 	}
 
 	RiskHistory struct {
-		BusinessCosts    func(childComplexity int) int
-		Category         func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		DisplayID        func(childComplexity int) int
-		HistoryTime      func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		Likelihood       func(childComplexity int) int
-		Mitigation       func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Operation        func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Ref              func(childComplexity int) int
-		RiskCategoryID   func(childComplexity int) int
-		RiskCategoryName func(childComplexity int) int
-		RiskKindID       func(childComplexity int) int
-		RiskKindName     func(childComplexity int) int
-		RiskType         func(childComplexity int) int
-		Score            func(childComplexity int) int
-		StakeholderID    func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
+		BusinessCosts     func(childComplexity int) int
+		BusinessCostsJSON func(childComplexity int) int
+		Category          func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DelegateID        func(childComplexity int) int
+		Details           func(childComplexity int) int
+		DetailsJSON       func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		Impact            func(childComplexity int) int
+		Likelihood        func(childComplexity int) int
+		Mitigation        func(childComplexity int) int
+		MitigationJSON    func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		RiskCategoryID    func(childComplexity int) int
+		RiskCategoryName  func(childComplexity int) int
+		RiskKindID        func(childComplexity int) int
+		RiskKindName      func(childComplexity int) int
+		RiskType          func(childComplexity int) int
+		Score             func(childComplexity int) int
+		StakeholderID     func(childComplexity int) int
+		Status            func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
 	}
 
 	RiskHistoryConnection struct {
@@ -1760,6 +1766,7 @@ type ComplexityRoot struct {
 		CreatedBy                  func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		DisplayID                  func(childComplexity int) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
@@ -1789,6 +1796,7 @@ type ComplexityRoot struct {
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		WorkflowEligibleMarker     func(childComplexity int) int
 	}
 
 	SubcontrolHistoryConnection struct {
@@ -1841,6 +1849,7 @@ type ComplexityRoot struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		Details              func(childComplexity int) int
+		DetailsJSON          func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Due                  func(childComplexity int) int
 		ExternalReferenceURL func(childComplexity int) int
@@ -2312,34 +2321,32 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowDefinitionHistory struct {
-		Active            func(childComplexity int) int
-		CooldownSeconds   func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DefinitionJSON    func(childComplexity int) int
-		Description       func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		Draft             func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		InternalNotes     func(childComplexity int) int
-		IsDefault         func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		PublishedAt       func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		Revision          func(childComplexity int) int
-		SchemaType        func(childComplexity int) int
-		SystemInternalID  func(childComplexity int) int
-		SystemOwned       func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		TrackedFields     func(childComplexity int) int
-		TriggerFields     func(childComplexity int) int
-		TriggerOperations func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		WorkflowKind      func(childComplexity int) int
+		Active           func(childComplexity int) int
+		CooldownSeconds  func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DefinitionJSON   func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		Draft            func(childComplexity int) int
+		HistoryTime      func(childComplexity int) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		IsDefault        func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Operation        func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		Ref              func(childComplexity int) int
+		Revision         func(childComplexity int) int
+		SchemaType       func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		TrackedFields    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		WorkflowKind     func(childComplexity int) int
 	}
 
 	WorkflowDefinitionHistoryConnection struct {
@@ -2382,10 +2389,12 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowInstanceHistory struct {
+		ActionPlanID         func(childComplexity int) int
 		Context              func(childComplexity int) int
 		ControlID            func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		CurrentActionIndex   func(childComplexity int) int
 		DefinitionSnapshot   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		EvidenceID           func(childComplexity int) int
@@ -2395,12 +2404,15 @@ type ComplexityRoot struct {
 		LastEvaluatedAt      func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		ProcedureID          func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		State                func(childComplexity int) int
+		SubcontrolID         func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
 		WorkflowDefinitionID func(childComplexity int) int
+		WorkflowProposalID   func(childComplexity int) int
 	}
 
 	WorkflowInstanceHistoryConnection struct {
@@ -2415,6 +2427,7 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowObjectRefHistory struct {
+		ActionPlanID          func(childComplexity int) int
 		ControlID             func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -2429,7 +2442,9 @@ type ComplexityRoot struct {
 		InternalPolicyID      func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		ProcedureID           func(childComplexity int) int
 		Ref                   func(childComplexity int) int
+		SubcontrolID          func(childComplexity int) int
 		TaskID                func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
@@ -2564,6 +2579,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.Details(childComplexity), true
+
+	case "ActionPlanHistory.detailsJSON":
+		if e.complexity.ActionPlanHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.DetailsJSON(childComplexity), true
 
 	case "ActionPlanHistory.dismissedControlSuggestions":
 		if e.complexity.ActionPlanHistory.DismissedControlSuggestions == nil {
@@ -2781,6 +2803,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.UpdatedBy(childComplexity), true
+
+	case "ActionPlanHistory.workflowEligibleMarker":
+		if e.complexity.ActionPlanHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.ActionPlanHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "ActionPlanHistoryConnection.edges":
 		if e.complexity.ActionPlanHistoryConnection.Edges == nil {
@@ -3559,6 +3588,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.Description(childComplexity), true
 
+	case "ControlHistory.descriptionJSON":
+		if e.complexity.ControlHistory.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.DescriptionJSON(childComplexity), true
+
 	case "ControlHistory.displayID":
 		if e.complexity.ControlHistory.DisplayID == nil {
 			break
@@ -3628,27 +3664,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.OwnerID(childComplexity), true
-
-	case "ControlHistory.proposedAt":
-		if e.complexity.ControlHistory.ProposedAt == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.ProposedAt(childComplexity), true
-
-	case "ControlHistory.proposedByUserID":
-		if e.complexity.ControlHistory.ProposedByUserID == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.ProposedByUserID(childComplexity), true
-
-	case "ControlHistory.proposedChanges":
-		if e.complexity.ControlHistory.ProposedChanges == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.ProposedChanges(childComplexity), true
 
 	case "ControlHistory.ref":
 		if e.complexity.ControlHistory.Ref == nil {
@@ -3776,6 +3791,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ControlHistory.UpdatedBy(childComplexity), true
 
+	case "ControlHistory.workflowEligibleMarker":
+		if e.complexity.ControlHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.ControlHistory.WorkflowEligibleMarker(childComplexity), true
+
 	case "ControlHistoryConnection.edges":
 		if e.complexity.ControlHistoryConnection.Edges == nil {
 			break
@@ -3831,6 +3853,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementationHistory.Details(childComplexity), true
+
+	case "ControlImplementationHistory.detailsJSON":
+		if e.complexity.ControlImplementationHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementationHistory.DetailsJSON(childComplexity), true
 
 	case "ControlImplementationHistory.historyTime":
 		if e.complexity.ControlImplementationHistory.HistoryTime == nil {
@@ -4006,6 +4035,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjectiveHistory.DesiredOutcome(childComplexity), true
+
+	case "ControlObjectiveHistory.desiredOutcomeJSON":
+		if e.complexity.ControlObjectiveHistory.DesiredOutcomeJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlObjectiveHistory.DesiredOutcomeJSON(childComplexity), true
 
 	case "ControlObjectiveHistory.displayID":
 		if e.complexity.ControlObjectiveHistory.DisplayID == nil {
@@ -5750,27 +5786,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceHistory.OwnerID(childComplexity), true
 
-	case "EvidenceHistory.proposedAt":
-		if e.complexity.EvidenceHistory.ProposedAt == nil {
-			break
-		}
-
-		return e.complexity.EvidenceHistory.ProposedAt(childComplexity), true
-
-	case "EvidenceHistory.proposedByUserID":
-		if e.complexity.EvidenceHistory.ProposedByUserID == nil {
-			break
-		}
-
-		return e.complexity.EvidenceHistory.ProposedByUserID(childComplexity), true
-
-	case "EvidenceHistory.proposedChanges":
-		if e.complexity.EvidenceHistory.ProposedChanges == nil {
-			break
-		}
-
-		return e.complexity.EvidenceHistory.ProposedChanges(childComplexity), true
-
 	case "EvidenceHistory.ref":
 		if e.complexity.EvidenceHistory.Ref == nil {
 			break
@@ -5826,6 +5841,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.EvidenceHistory.UpdatedBy(childComplexity), true
+
+	case "EvidenceHistory.workflowEligibleMarker":
+		if e.complexity.EvidenceHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.EvidenceHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "EvidenceHistoryConnection.edges":
 		if e.complexity.EvidenceHistoryConnection.Edges == nil {
@@ -7451,6 +7473,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.Details(childComplexity), true
 
+	case "InternalPolicyHistory.detailsJSON":
+		if e.complexity.InternalPolicyHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.DetailsJSON(childComplexity), true
+
 	case "InternalPolicyHistory.dismissedControlSuggestions":
 		if e.complexity.InternalPolicyHistory.DismissedControlSuggestions == nil {
 			break
@@ -7556,27 +7585,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.PolicyType(childComplexity), true
 
-	case "InternalPolicyHistory.proposedAt":
-		if e.complexity.InternalPolicyHistory.ProposedAt == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicyHistory.ProposedAt(childComplexity), true
-
-	case "InternalPolicyHistory.proposedByUserID":
-		if e.complexity.InternalPolicyHistory.ProposedByUserID == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicyHistory.ProposedByUserID(childComplexity), true
-
-	case "InternalPolicyHistory.proposedChanges":
-		if e.complexity.InternalPolicyHistory.ProposedChanges == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicyHistory.ProposedChanges(childComplexity), true
-
 	case "InternalPolicyHistory.ref":
 		if e.complexity.InternalPolicyHistory.Ref == nil {
 			break
@@ -7667,6 +7675,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicyHistory.UpdatedBy(childComplexity), true
+
+	case "InternalPolicyHistory.workflowEligibleMarker":
+		if e.complexity.InternalPolicyHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicyHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "InternalPolicyHistoryConnection.edges":
 		if e.complexity.InternalPolicyHistoryConnection.Edges == nil {
@@ -8381,6 +8396,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteHistory.Text(childComplexity), true
+
+	case "NoteHistory.textJSON":
+		if e.complexity.NoteHistory.TextJSON == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.TextJSON(childComplexity), true
 
 	case "NoteHistory.updatedAt":
 		if e.complexity.NoteHistory.UpdatedAt == nil {
@@ -9201,6 +9223,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.Details(childComplexity), true
 
+	case "ProcedureHistory.detailsJSON":
+		if e.complexity.ProcedureHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.DetailsJSON(childComplexity), true
+
 	case "ProcedureHistory.dismissedControlSuggestions":
 		if e.complexity.ProcedureHistory.DismissedControlSuggestions == nil {
 			break
@@ -9396,6 +9425,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProcedureHistory.UpdatedBy(childComplexity), true
+
+	case "ProcedureHistory.workflowEligibleMarker":
+		if e.complexity.ProcedureHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.ProcedureHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "ProcedureHistoryConnection.edges":
 		if e.complexity.ProcedureHistoryConnection.Edges == nil {
@@ -11097,6 +11133,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskHistory.BusinessCosts(childComplexity), true
 
+	case "RiskHistory.businessCostsJSON":
+		if e.complexity.RiskHistory.BusinessCostsJSON == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.BusinessCostsJSON(childComplexity), true
+
 	case "RiskHistory.category":
 		if e.complexity.RiskHistory.Category == nil {
 			break
@@ -11131,6 +11174,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskHistory.Details(childComplexity), true
+
+	case "RiskHistory.detailsJSON":
+		if e.complexity.RiskHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.DetailsJSON(childComplexity), true
 
 	case "RiskHistory.displayID":
 		if e.complexity.RiskHistory.DisplayID == nil {
@@ -11173,6 +11223,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskHistory.Mitigation(childComplexity), true
+
+	case "RiskHistory.mitigationJSON":
+		if e.complexity.RiskHistory.MitigationJSON == nil {
+			break
+		}
+
+		return e.complexity.RiskHistory.MitigationJSON(childComplexity), true
 
 	case "RiskHistory.name":
 		if e.complexity.RiskHistory.Name == nil {
@@ -11916,6 +11973,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolHistory.Description(childComplexity), true
 
+	case "SubcontrolHistory.descriptionJSON":
+		if e.complexity.SubcontrolHistory.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.DescriptionJSON(childComplexity), true
+
 	case "SubcontrolHistory.displayID":
 		if e.complexity.SubcontrolHistory.DisplayID == nil {
 			break
@@ -12118,6 +12182,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SubcontrolHistory.UpdatedBy(childComplexity), true
+
+	case "SubcontrolHistory.workflowEligibleMarker":
+		if e.complexity.SubcontrolHistory.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.SubcontrolHistory.WorkflowEligibleMarker(childComplexity), true
 
 	case "SubcontrolHistoryConnection.edges":
 		if e.complexity.SubcontrolHistoryConnection.Edges == nil {
@@ -12356,6 +12427,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.Details(childComplexity), true
+
+	case "TaskHistory.detailsJSON":
+		if e.complexity.TaskHistory.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.TaskHistory.DetailsJSON(childComplexity), true
 
 	case "TaskHistory.displayID":
 		if e.complexity.TaskHistory.DisplayID == nil {
@@ -14933,20 +15011,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowDefinitionHistory.TrackedFields(childComplexity), true
 
-	case "WorkflowDefinitionHistory.triggerFields":
-		if e.complexity.WorkflowDefinitionHistory.TriggerFields == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.TriggerFields(childComplexity), true
-
-	case "WorkflowDefinitionHistory.triggerOperations":
-		if e.complexity.WorkflowDefinitionHistory.TriggerOperations == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinitionHistory.TriggerOperations(childComplexity), true
-
 	case "WorkflowDefinitionHistory.updatedAt":
 		if e.complexity.WorkflowDefinitionHistory.UpdatedAt == nil {
 			break
@@ -15136,6 +15200,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEventHistoryEdge.Node(childComplexity), true
 
+	case "WorkflowInstanceHistory.actionPlanID":
+		if e.complexity.WorkflowInstanceHistory.ActionPlanID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.ActionPlanID(childComplexity), true
+
 	case "WorkflowInstanceHistory.context":
 		if e.complexity.WorkflowInstanceHistory.Context == nil {
 			break
@@ -15163,6 +15234,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowInstanceHistory.currentActionIndex":
+		if e.complexity.WorkflowInstanceHistory.CurrentActionIndex == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.CurrentActionIndex(childComplexity), true
 
 	case "WorkflowInstanceHistory.definitionSnapshot":
 		if e.complexity.WorkflowInstanceHistory.DefinitionSnapshot == nil {
@@ -15227,6 +15305,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstanceHistory.OwnerID(childComplexity), true
 
+	case "WorkflowInstanceHistory.procedureID":
+		if e.complexity.WorkflowInstanceHistory.ProcedureID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.ProcedureID(childComplexity), true
+
 	case "WorkflowInstanceHistory.ref":
 		if e.complexity.WorkflowInstanceHistory.Ref == nil {
 			break
@@ -15240,6 +15325,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceHistory.State(childComplexity), true
+
+	case "WorkflowInstanceHistory.subcontrolID":
+		if e.complexity.WorkflowInstanceHistory.SubcontrolID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.SubcontrolID(childComplexity), true
 
 	case "WorkflowInstanceHistory.tags":
 		if e.complexity.WorkflowInstanceHistory.Tags == nil {
@@ -15268,6 +15360,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceHistory.WorkflowDefinitionID(childComplexity), true
+
+	case "WorkflowInstanceHistory.workflowProposalID":
+		if e.complexity.WorkflowInstanceHistory.WorkflowProposalID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.WorkflowProposalID(childComplexity), true
 
 	case "WorkflowInstanceHistoryConnection.edges":
 		if e.complexity.WorkflowInstanceHistoryConnection.Edges == nil {
@@ -15303,6 +15402,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowObjectRefHistory.actionPlanID":
+		if e.complexity.WorkflowObjectRefHistory.ActionPlanID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.ActionPlanID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.controlID":
 		if e.complexity.WorkflowObjectRefHistory.ControlID == nil {
@@ -15402,12 +15508,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRefHistory.OwnerID(childComplexity), true
 
+	case "WorkflowObjectRefHistory.procedureID":
+		if e.complexity.WorkflowObjectRefHistory.ProcedureID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.ProcedureID(childComplexity), true
+
 	case "WorkflowObjectRefHistory.ref":
 		if e.complexity.WorkflowObjectRefHistory.Ref == nil {
 			break
 		}
 
 		return e.complexity.WorkflowObjectRefHistory.Ref(childComplexity), true
+
+	case "WorkflowObjectRefHistory.subcontrolID":
+		if e.complexity.WorkflowObjectRefHistory.SubcontrolID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.SubcontrolID(childComplexity), true
 
 	case "WorkflowObjectRefHistory.taskID":
 		if e.complexity.WorkflowObjectRefHistory.TaskID == nil {
@@ -15811,7 +15931,7 @@ scalar WorkflowEventPayload
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
-`, BuiltIn: false},
+scalar Any`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 type ActionPlanHistory implements Node {
@@ -15847,6 +15967,10 @@ type ActionPlanHistory implements Node {
   details of the action_plan
   """
   details: String
+  """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
   """
   whether approval is required for edits to the action_plan
   """
@@ -15925,6 +16049,10 @@ type ActionPlanHistory implements Node {
   """
   actionPlanKindID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   short title describing the action plan
   """
   title: String!
@@ -15989,7 +16117,7 @@ type ActionPlanHistoryConnection {
 """
 ActionPlanHistoryDocumentStatus is enum for the field status
 """
-enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -16012,7 +16140,7 @@ type ActionPlanHistoryEdge {
 """
 ActionPlanHistoryFrequency is enum for the field review_frequency
 """
-enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -16059,7 +16187,7 @@ enum ActionPlanHistoryOrderField {
 """
 ActionPlanHistoryPriority is enum for the field priority
 """
-enum ActionPlanHistoryPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+enum ActionPlanHistoryPriority @goModel(model: "github.com/theopenlane/core/common/enums.Priority") {
   LOW
   MEDIUM
   HIGH
@@ -16462,6 +16590,13 @@ input ActionPlanHistoryWhereInput {
   actionPlanKindIDEqualFold: String
   actionPlanKindIDContainsFold: String
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   title field predicates
   """
   title: String
@@ -16619,7 +16754,7 @@ type AssessmentHistory implements Node {
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
 """
-enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
+enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -16930,7 +17065,7 @@ type AssessmentResponseHistory implements Node {
 """
 AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
+enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentResponseStatus") {
   NOT_STARTED
   SENT
   COMPLETED
@@ -17296,7 +17431,7 @@ type AssetHistory implements Node {
 """
 AssetHistoryAssetType is enum for the field asset_type
 """
-enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/common/enums.AssetType") {
   TECHNOLOGY
   DOMAIN
   DEVICE
@@ -17734,7 +17869,7 @@ enum ContactHistoryOrderField {
 """
 ContactHistoryUserStatus is enum for the field status
 """
-enum ContactHistoryUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum ContactHistoryUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -18020,6 +18155,10 @@ type ControlHistory implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -18136,17 +18275,9 @@ type ControlHistory implements Node {
   """
   controlKindID: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -18176,7 +18307,7 @@ type ControlHistoryConnection {
 """
 ControlHistoryControlSource is enum for the field source
 """
-enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -18185,7 +18316,7 @@ enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pk
 """
 ControlHistoryControlStatus is enum for the field status
 """
-enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -18197,7 +18328,7 @@ enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pk
 """
 ControlHistoryControlType is enum for the field control_type
 """
-enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -18729,36 +18860,12 @@ input ControlHistoryWhereInput {
   controlKindIDEqualFold: String
   controlKindIDContainsFold: String
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   ref_code field predicates
   """
@@ -18843,6 +18950,10 @@ type ControlImplementationHistory implements Node {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
 }
 """
 A connection to a list of items.
@@ -18864,7 +18975,7 @@ type ControlImplementationHistoryConnection {
 """
 ControlImplementationHistoryDocumentStatus is enum for the field status
 """
-enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -19204,6 +19315,10 @@ type ControlObjectiveHistory implements Node {
   """
   desiredOutcome: String
   """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
+  """
   status of the control objective
   """
   status: ControlObjectiveHistoryObjectiveStatus
@@ -19244,7 +19359,7 @@ type ControlObjectiveHistoryConnection {
 """
 ControlObjectiveHistoryControlSource is enum for the field source
 """
-enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -19266,7 +19381,7 @@ type ControlObjectiveHistoryEdge {
 """
 ControlObjectiveHistoryObjectiveStatus is enum for the field status
 """
-enum ControlObjectiveHistoryObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+enum ControlObjectiveHistoryObjectiveStatus @goModel(model: "github.com/theopenlane/core/common/enums.ObjectiveStatus") {
   ACTIVE
   ARCHIVED
   DRAFT
@@ -20040,7 +20155,7 @@ type DNSVerificationHistoryConnection {
 """
 DNSVerificationHistoryDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationHistoryDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+enum DNSVerificationHistoryDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/common/enums.DNSVerificationStatus") {
   active
   pending
   active_redeploying
@@ -20103,7 +20218,7 @@ enum DNSVerificationHistoryOrderField {
 """
 DNSVerificationHistorySSLVerificationStatus is enum for the field acme_challenge_status
 """
-enum DNSVerificationHistorySSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+enum DNSVerificationHistorySSLVerificationStatus @goModel(model: "github.com/theopenlane/core/common/enums.SSLVerificationStatus") {
   initializing
   pending_validation
   deleted
@@ -20524,7 +20639,7 @@ type DirectoryAccountHistoryConnection {
 """
 DirectoryAccountHistoryDirectoryAccountMFAState is enum for the field mfa_state
 """
-enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountMFAState") {
   UNKNOWN
   DISABLED
   ENABLED
@@ -20533,7 +20648,7 @@ enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com
 """
 DirectoryAccountHistoryDirectoryAccountStatus is enum for the field status
 """
-enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountStatus") {
   ACTIVE
   INACTIVE
   SUSPENDED
@@ -20542,7 +20657,7 @@ enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/t
 """
 DirectoryAccountHistoryDirectoryAccountType is enum for the field account_type
 """
-enum DirectoryAccountHistoryDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+enum DirectoryAccountHistoryDirectoryAccountType @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountType") {
   USER
   SERVICE
   SHARED
@@ -21140,7 +21255,7 @@ type DirectoryGroupHistoryConnection {
 """
 DirectoryGroupHistoryDirectoryGroupClassification is enum for the field classification
 """
-enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryGroupClassification") {
   SECURITY
   DISTRIBUTION
   TEAM
@@ -21149,7 +21264,7 @@ enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.c
 """
 DirectoryGroupHistoryDirectoryGroupStatus is enum for the field status
 """
-enum DirectoryGroupHistoryDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+enum DirectoryGroupHistoryDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryGroupStatus") {
   ACTIVE
   INACTIVE
   DELETED
@@ -21598,7 +21713,7 @@ type DirectoryMembershipHistoryConnection {
 """
 DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
 """
-enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
   MANAGER
   OWNER
@@ -23108,17 +23223,9 @@ type EvidenceHistory implements Node {
   """
   ownerID: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -23189,7 +23296,7 @@ type EvidenceHistoryEdge {
 """
 EvidenceHistoryEvidenceStatus is enum for the field status
 """
-enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
   SUBMITTED
   READY_FOR_AUDITOR
   AUDITOR_APPROVED
@@ -23385,36 +23492,12 @@ input EvidenceHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   name field predicates
   """
@@ -25822,7 +25905,7 @@ enum GroupMembershipHistoryOrderField {
 """
 GroupMembershipHistoryRole is enum for the field role
 """
-enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -26048,7 +26131,7 @@ type GroupSettingHistoryEdge {
 """
 GroupSettingHistoryJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enums.JoinPolicy") {
+enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/theopenlane/core/common/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -26086,7 +26169,7 @@ enum GroupSettingHistoryOrderField {
 """
 GroupSettingHistoryVisibility is enum for the field visibility
 """
-enum GroupSettingHistoryVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.Visibility") {
+enum GroupSettingHistoryVisibility @goModel(model: "github.com/theopenlane/core/common/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -27032,6 +27115,10 @@ type InternalPolicyHistory implements Node {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -27093,17 +27180,9 @@ type InternalPolicyHistory implements Node {
   """
   internalPolicyKindID: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
 }
 """
 A connection to a list of items.
@@ -27125,7 +27204,7 @@ type InternalPolicyHistoryConnection {
 """
 InternalPolicyHistoryDocumentStatus is enum for the field status
 """
-enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -27148,7 +27227,7 @@ type InternalPolicyHistoryEdge {
 """
 InternalPolicyHistoryFrequency is enum for the field review_frequency
 """
-enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -27601,36 +27680,12 @@ input InternalPolicyHistoryWhereInput {
   internalPolicyKindIDEqualFold: String
   internalPolicyKindIDContainsFold: String
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
 }
 type JobTemplateHistory implements Node {
   id: ID!
@@ -27723,7 +27778,7 @@ type JobTemplateHistoryEdge {
 """
 JobTemplateHistoryJobPlatformType is enum for the field platform
 """
-enum JobTemplateHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+enum JobTemplateHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/common/enums.JobPlatformType") {
   GO
   TS
 }
@@ -28313,7 +28368,7 @@ type MappedControlHistoryEdge {
 """
 MappedControlHistoryMappingSource is enum for the field source
 """
-enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/core/common/enums.MappingSource") {
   MANUAL
   SUGGESTED
   IMPORTED
@@ -28321,7 +28376,7 @@ enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/c
 """
 MappedControlHistoryMappingType is enum for the field mapping_type
 """
-enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/core/common/enums.MappingType") {
   EQUAL
   SUPERSET
   SUBSET
@@ -28974,6 +29029,10 @@ type NoteHistory implements Node {
   """
   text: String!
   """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  """
   ref location of the note
   """
   noteRef: String
@@ -29345,7 +29404,7 @@ enum OrgMembershipHistoryOrderField {
 """
 OrgMembershipHistoryRole is enum for the field role
 """
-enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -30335,7 +30394,7 @@ enum OrganizationSettingHistoryOrderField {
 """
 OrganizationSettingHistoryRegion is enum for the field geo_location
 """
-enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/core/pkg/enums.Region") {
+enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/core/common/enums.Region") {
   AMER
   EMEA
   APAC
@@ -30343,7 +30402,7 @@ enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/co
 """
 OrganizationSettingHistorySSOProvider is enum for the field identity_provider
 """
-enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/core/common/enums.SSOProvider") {
   OKTA
   ONE_LOGIN
   GOOGLE_WORKSPACE
@@ -30836,6 +30895,10 @@ type ProcedureHistory implements Node {
   """
   details: String
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -30908,6 +30971,10 @@ type ProcedureHistory implements Node {
   the kind of the procedure
   """
   procedureKindID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
 }
 """
 A connection to a list of items.
@@ -30929,7 +30996,7 @@ type ProcedureHistoryConnection {
 """
 ProcedureHistoryDocumentStatus is enum for the field status
 """
-enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -30952,7 +31019,7 @@ type ProcedureHistoryEdge {
 """
 ProcedureHistoryFrequency is enum for the field review_frequency
 """
-enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -31404,6 +31471,13 @@ input ProcedureHistoryWhereInput {
   procedureKindIDNotNil: Boolean
   procedureKindIDEqualFold: String
   procedureKindIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
 }
 type ProgramHistory implements Node {
   id: ID!
@@ -31559,7 +31633,7 @@ enum ProgramHistoryOrderField {
 """
 ProgramHistoryProgramStatus is enum for the field status
 """
-enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
+enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/common/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
   ACTION_REQUIRED
@@ -31570,7 +31644,7 @@ enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pk
 """
 ProgramHistoryProgramType is enum for the field program_type
 """
-enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/common/enums.ProgramType") {
   FRAMEWORK
   GAP_ANALYSIS
   RISK_ASSESSMENT
@@ -32021,7 +32095,7 @@ enum ProgramMembershipHistoryOrderField {
 """
 ProgramMembershipHistoryRole is enum for the field role
 """
-enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -35574,13 +35648,25 @@ type RiskHistory implements Node {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   """
   the id of the group responsible for risk oversight
   """
@@ -35660,7 +35746,7 @@ enum RiskHistoryOrderField {
 """
 RiskHistoryRiskImpact is enum for the field impact
 """
-enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/common/enums.RiskImpact") {
   LOW
   MODERATE
   HIGH
@@ -35669,7 +35755,7 @@ enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enum
 """
 RiskHistoryRiskLikelihood is enum for the field likelihood
 """
-enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/common/enums.RiskLikelihood") {
   UNLIKELY
   LIKELY
   HIGHLY_LIKELY
@@ -35677,7 +35763,7 @@ enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/
 """
 RiskHistoryRiskStatus is enum for the field status
 """
-enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/common/enums.RiskStatus") {
   OPEN
   IN_PROGRESS
   ONGOING
@@ -36194,7 +36280,7 @@ enum ScanHistoryOrderField {
 """
 ScanHistoryScanStatus is enum for the field status
 """
-enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/common/enums.ScanStatus") {
   PENDING
   PROCESSING
   COMPLETED
@@ -36203,7 +36289,7 @@ enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enum
 """
 ScanHistoryScanType is enum for the field scan_type
 """
-enum ScanHistoryScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+enum ScanHistoryScanType @goModel(model: "github.com/theopenlane/core/common/enums.ScanType") {
   DOMAIN
   VULNERABILITY
   VENDOR
@@ -36826,7 +36912,7 @@ enum StandardHistoryOrderField {
 """
 StandardHistoryStandardStatus is enum for the field status
 """
-enum StandardHistoryStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+enum StandardHistoryStandardStatus @goModel(model: "github.com/theopenlane/core/common/enums.StandardStatus") {
   ACTIVE
   DRAFT
   ARCHIVED
@@ -37257,6 +37343,10 @@ type SubcontrolHistory implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -37373,6 +37463,10 @@ type SubcontrolHistory implements Node {
   """
   subcontrolKindID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String! @externalSource(source: FRAMEWORK)
@@ -37401,7 +37495,7 @@ type SubcontrolHistoryConnection {
 """
 SubcontrolHistoryControlSource is enum for the field source
 """
-enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -37410,7 +37504,7 @@ enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core
 """
 SubcontrolHistoryControlStatus is enum for the field status
 """
-enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -37422,7 +37516,7 @@ enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core
 """
 SubcontrolHistoryControlType is enum for the field control_type
 """
-enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -37954,6 +38048,13 @@ input SubcontrolHistoryWhereInput {
   subcontrolKindIDEqualFold: String
   subcontrolKindIDContainsFold: String
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   ref_code field predicates
   """
   refCode: String
@@ -38381,6 +38482,10 @@ type TaskHistory implements Node {
   """
   details: String
   """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   the status of the task
   """
   status: TaskHistoryTaskStatus!
@@ -38488,7 +38593,7 @@ enum TaskHistoryOrderField {
 """
 TaskHistoryTaskStatus is enum for the field status
 """
-enum TaskHistoryTaskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TaskStatus") {
+enum TaskHistoryTaskStatus @goModel(model: "github.com/theopenlane/core/common/enums.TaskStatus") {
   OPEN
   IN_PROGRESS
   IN_REVIEW
@@ -38925,7 +39030,7 @@ type TemplateHistoryConnection {
 """
 TemplateHistoryDocumentType is enum for the field template_type
 """
-enum TemplateHistoryDocumentType @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentType") {
+enum TemplateHistoryDocumentType @goModel(model: "github.com/theopenlane/core/common/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -38977,7 +39082,7 @@ enum TemplateHistoryOrderField {
 """
 TemplateHistoryTemplateKind is enum for the field kind
 """
-enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
 }
@@ -39581,7 +39686,7 @@ enum TrustCenterDocHistoryOrderField {
 """
 TrustCenterDocHistoryTrustCenterDocumentVisibility is enum for the field visibility
 """
-enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterDocumentVisibility") {
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
@@ -39589,7 +39694,7 @@ enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.
 """
 TrustCenterDocHistoryWatermarkStatus is enum for the field watermark_status
 """
-enum TrustCenterDocHistoryWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+enum TrustCenterDocHistoryWatermarkStatus @goModel(model: "github.com/theopenlane/core/common/enums.WatermarkStatus") {
   PENDING
   IN_PROGRESS
   SUCCESS
@@ -39949,7 +40054,7 @@ enum TrustCenterHistoryOrderField {
 """
 TrustCenterHistoryTrustCenterPreviewStatus is enum for the field preview_status
 """
-enum TrustCenterHistoryTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+enum TrustCenterHistoryTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterPreviewStatus") {
   PROVISIONING
   READY
   FAILED
@@ -40329,14 +40434,14 @@ enum TrustCenterSettingHistoryOrderField {
 """
 TrustCenterSettingHistoryTrustCenterEnvironment is enum for the field environment
 """
-enum TrustCenterSettingHistoryTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+enum TrustCenterSettingHistoryTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterEnvironment") {
   LIVE
   PREVIEW
 }
 """
 TrustCenterSettingHistoryTrustCenterThemeMode is enum for the field theme_mode
 """
-enum TrustCenterSettingHistoryTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+enum TrustCenterSettingHistoryTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterThemeMode") {
   EASY
   ADVANCED
 }
@@ -41068,7 +41173,7 @@ type TrustCenterWatermarkConfigHistoryEdge {
 """
 TrustCenterWatermarkConfigHistoryFont is enum for the field font
 """
-enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
   COURIER
   COURIER_BOLD
   COURIER_BOLDOBLIQUE
@@ -41719,7 +41824,7 @@ type UserHistory implements Node {
 """
 UserHistoryAuthProvider is enum for the field last_login_provider
 """
-enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
+enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/common/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -41791,7 +41896,7 @@ enum UserHistoryOrderField {
 """
 UserHistoryRole is enum for the field role
 """
-enum UserHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum UserHistoryRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -42289,7 +42394,7 @@ enum UserSettingHistoryOrderField {
 """
 UserSettingHistoryUserStatus is enum for the field status
 """
-enum UserSettingHistoryUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum UserSettingHistoryUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -43680,7 +43785,7 @@ input WorkflowAssignmentHistoryWhereInput {
 """
 WorkflowAssignmentHistoryWorkflowAssignmentStatus is enum for the field status
 """
-enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowAssignmentStatus") {
   PENDING
   APPROVED
   REJECTED
@@ -44020,7 +44125,7 @@ input WorkflowAssignmentTargetHistoryWhereInput {
 """
 WorkflowAssignmentTargetHistoryWorkflowTargetType is enum for the field target_type
 """
-enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowTargetType") {
   USER
   GROUP
   ROLE
@@ -44099,14 +44204,6 @@ type WorkflowDefinitionHistory implements Node {
   Whether the workflow definition is active
   """
   active: Boolean!
-  """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
   """
   Typed document describing triggers, conditions, and actions
   """
@@ -44482,7 +44579,7 @@ input WorkflowDefinitionHistoryWhereInput {
 """
 WorkflowDefinitionHistoryWorkflowKind is enum for the field workflow_kind
 """
-enum WorkflowDefinitionHistoryWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+enum WorkflowDefinitionHistoryWorkflowKind @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowKind") {
   APPROVAL
   LIFECYCLE
   NOTIFICATION
@@ -44760,10 +44857,22 @@ input WorkflowEventHistoryWhereInput {
 """
 WorkflowEventHistoryWorkflowEventType is enum for the field event_type
 """
-enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowEventType") {
   ACTION
   TRIGGER
   DECISION
+  INSTANCE_TRIGGERED
+  ACTION_STARTED
+  ACTION_COMPLETED
+  ACTION_FAILED
+  ACTION_SKIPPED
+  CONDITION_EVALUATED
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_INVALIDATED
+  INSTANCE_PAUSED
+  INSTANCE_RESUMED
+  INSTANCE_COMPLETED
 }
 type WorkflowInstanceHistory implements Node {
   id: ID!
@@ -44791,6 +44900,10 @@ type WorkflowInstanceHistory implements Node {
   """
   workflowDefinitionID: String!
   """
+  ID of the workflow proposal this instance is associated with (when approval-before-commit is used)
+  """
+  workflowProposalID: String
+  """
   Current state of the workflow instance
   """
   state: WorkflowInstanceHistoryWorkflowInstanceState!
@@ -44807,6 +44920,10 @@ type WorkflowInstanceHistory implements Node {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int!
+  """
   ID of the control this workflow instance is associated with
   """
   controlID: String
@@ -44818,6 +44935,18 @@ type WorkflowInstanceHistory implements Node {
   ID of the evidence this workflow instance is associated with
   """
   evidenceID: String
+  """
+  ID of the subcontrol this workflow instance is associated with
+  """
+  subcontrolID: String
+  """
+  ID of the actionplan this workflow instance is associated with
+  """
+  actionPlanID: String
+  """
+  ID of the procedure this workflow instance is associated with
+  """
+  procedureID: String
 }
 """
 A connection to a list of items.
@@ -45048,6 +45177,24 @@ input WorkflowInstanceHistoryWhereInput {
   workflowDefinitionIDEqualFold: String
   workflowDefinitionIDContainsFold: String
   """
+  workflow_proposal_id field predicates
+  """
+  workflowProposalID: String
+  workflowProposalIDNEQ: String
+  workflowProposalIDIn: [String!]
+  workflowProposalIDNotIn: [String!]
+  workflowProposalIDGT: String
+  workflowProposalIDGTE: String
+  workflowProposalIDLT: String
+  workflowProposalIDLTE: String
+  workflowProposalIDContains: String
+  workflowProposalIDHasPrefix: String
+  workflowProposalIDHasSuffix: String
+  workflowProposalIDIsNil: Boolean
+  workflowProposalIDNotNil: Boolean
+  workflowProposalIDEqualFold: String
+  workflowProposalIDContainsFold: String
+  """
   state field predicates
   """
   state: WorkflowInstanceHistoryWorkflowInstanceState
@@ -45067,6 +45214,17 @@ input WorkflowInstanceHistoryWhereInput {
   lastEvaluatedAtLTE: Time
   lastEvaluatedAtIsNil: Boolean
   lastEvaluatedAtNotNil: Boolean
+  """
+  current_action_index field predicates
+  """
+  currentActionIndex: Int
+  currentActionIndexNEQ: Int
+  currentActionIndexIn: [Int!]
+  currentActionIndexNotIn: [Int!]
+  currentActionIndexGT: Int
+  currentActionIndexGTE: Int
+  currentActionIndexLT: Int
+  currentActionIndexLTE: Int
   """
   control_id field predicates
   """
@@ -45121,11 +45279,65 @@ input WorkflowInstanceHistoryWhereInput {
   evidenceIDNotNil: Boolean
   evidenceIDEqualFold: String
   evidenceIDContainsFold: String
+  """
+  subcontrol_id field predicates
+  """
+  subcontrolID: String
+  subcontrolIDNEQ: String
+  subcontrolIDIn: [String!]
+  subcontrolIDNotIn: [String!]
+  subcontrolIDGT: String
+  subcontrolIDGTE: String
+  subcontrolIDLT: String
+  subcontrolIDLTE: String
+  subcontrolIDContains: String
+  subcontrolIDHasPrefix: String
+  subcontrolIDHasSuffix: String
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: String
+  subcontrolIDContainsFold: String
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: String
+  actionPlanIDNEQ: String
+  actionPlanIDIn: [String!]
+  actionPlanIDNotIn: [String!]
+  actionPlanIDGT: String
+  actionPlanIDGTE: String
+  actionPlanIDLT: String
+  actionPlanIDLTE: String
+  actionPlanIDContains: String
+  actionPlanIDHasPrefix: String
+  actionPlanIDHasSuffix: String
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: String
+  actionPlanIDContainsFold: String
+  """
+  procedure_id field predicates
+  """
+  procedureID: String
+  procedureIDNEQ: String
+  procedureIDIn: [String!]
+  procedureIDNotIn: [String!]
+  procedureIDGT: String
+  procedureIDGTE: String
+  procedureIDLT: String
+  procedureIDLTE: String
+  procedureIDContains: String
+  procedureIDHasPrefix: String
+  procedureIDHasSuffix: String
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: String
+  procedureIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
 """
-enum WorkflowInstanceHistoryWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+enum WorkflowInstanceHistoryWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowInstanceState") {
   RUNNING
   COMPLETED
   FAILED
@@ -45184,6 +45396,18 @@ type WorkflowObjectRefHistory implements Node {
   Evidence referenced by this workflow instance
   """
   evidenceID: String
+  """
+  Subcontrol referenced by this workflow instance
+  """
+  subcontrolID: String
+  """
+  ActionPlan referenced by this workflow instance
+  """
+  actionPlanID: String
+  """
+  Procedure referenced by this workflow instance
+  """
+  procedureID: String
 }
 """
 A connection to a list of items.
@@ -45557,12 +45781,66 @@ input WorkflowObjectRefHistoryWhereInput {
   evidenceIDNotNil: Boolean
   evidenceIDEqualFold: String
   evidenceIDContainsFold: String
+  """
+  subcontrol_id field predicates
+  """
+  subcontrolID: String
+  subcontrolIDNEQ: String
+  subcontrolIDIn: [String!]
+  subcontrolIDNotIn: [String!]
+  subcontrolIDGT: String
+  subcontrolIDGTE: String
+  subcontrolIDLT: String
+  subcontrolIDLTE: String
+  subcontrolIDContains: String
+  subcontrolIDHasPrefix: String
+  subcontrolIDHasSuffix: String
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: String
+  subcontrolIDContainsFold: String
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: String
+  actionPlanIDNEQ: String
+  actionPlanIDIn: [String!]
+  actionPlanIDNotIn: [String!]
+  actionPlanIDGT: String
+  actionPlanIDGTE: String
+  actionPlanIDLT: String
+  actionPlanIDLTE: String
+  actionPlanIDContains: String
+  actionPlanIDHasPrefix: String
+  actionPlanIDHasSuffix: String
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: String
+  actionPlanIDContainsFold: String
+  """
+  procedure_id field predicates
+  """
+  procedureID: String
+  procedureIDNEQ: String
+  procedureIDIn: [String!]
+  procedureIDNotIn: [String!]
+  procedureIDGT: String
+  procedureIDGTE: String
+  procedureIDLT: String
+  procedureIDLTE: String
+  procedureIDContains: String
+  procedureIDHasPrefix: String
+  procedureIDHasSuffix: String
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: String
+  procedureIDContainsFold: String
 }
 `, BuiltIn: false},
 	{Name: "../schemahistory/enums.graphql", Input: `"""
 ControlControlSource is enum for the field source
 """
-enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED

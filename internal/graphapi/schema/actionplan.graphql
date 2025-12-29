@@ -1,3 +1,14 @@
+extend type ActionPlan {
+    """
+    Indicates if this actionPlan has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this actionPlan if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
 extend type Query {
     """
     Look up actionPlan by ID

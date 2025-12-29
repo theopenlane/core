@@ -1,20 +1,20 @@
 {{/* A template for adding additional config fields/options. */}}
 
 {{ define "config/fields/job" -}}
-    // Job is the job client to insert jobs into the queue.
-    Job riverqueue.JobClient
+	// Job is the job client to insert jobs into the queue.
+	Job riverqueue.JobClient
 {{ end }}
 
 {{ define "config/options/job" }}
-    // Job option added by the client template to add the job client.
-    func Job(ctx context.Context, opts ...riverqueue.Option) Option {
-        return func(c *config) {
-            var err error
+	// Job option added by the client template to add the job client.
+	func Job(ctx context.Context, opts ...riverqueue.Option) Option {
+		return func(c *config) {
+			var err error
 
-            c.Job, err = riverqueue.New(ctx, opts...)
-            if err != nil {
-                panic(err)
-            }
-        }
-    }
+			c.Job, err = riverqueue.New(ctx, opts...)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
 {{ end }}

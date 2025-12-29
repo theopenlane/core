@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -26,7 +27,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // RiskCreate is the builder for creating a Risk entity.
@@ -306,6 +306,12 @@ func (_c *RiskCreate) SetNillableMitigation(v *string) *RiskCreate {
 	return _c
 }
 
+// SetMitigationJSON sets the "mitigation_json" field.
+func (_c *RiskCreate) SetMitigationJSON(v []interface{}) *RiskCreate {
+	_c.mutation.SetMitigationJSON(v)
+	return _c
+}
+
 // SetDetails sets the "details" field.
 func (_c *RiskCreate) SetDetails(v string) *RiskCreate {
 	_c.mutation.SetDetails(v)
@@ -320,6 +326,12 @@ func (_c *RiskCreate) SetNillableDetails(v *string) *RiskCreate {
 	return _c
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_c *RiskCreate) SetDetailsJSON(v []interface{}) *RiskCreate {
+	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
 // SetBusinessCosts sets the "business_costs" field.
 func (_c *RiskCreate) SetBusinessCosts(v string) *RiskCreate {
 	_c.mutation.SetBusinessCosts(v)
@@ -331,6 +343,12 @@ func (_c *RiskCreate) SetNillableBusinessCosts(v *string) *RiskCreate {
 	if v != nil {
 		_c.SetBusinessCosts(*v)
 	}
+	return _c
+}
+
+// SetBusinessCostsJSON sets the "business_costs_json" field.
+func (_c *RiskCreate) SetBusinessCostsJSON(v []interface{}) *RiskCreate {
+	_c.mutation.SetBusinessCostsJSON(v)
 	return _c
 }
 
@@ -849,13 +867,25 @@ func (_c *RiskCreate) createSpec() (*Risk, *sqlgraph.CreateSpec) {
 		_spec.SetField(risk.FieldMitigation, field.TypeString, value)
 		_node.Mitigation = value
 	}
+	if value, ok := _c.mutation.MitigationJSON(); ok {
+		_spec.SetField(risk.FieldMitigationJSON, field.TypeJSON, value)
+		_node.MitigationJSON = value
+	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 		_node.Details = value
 	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(risk.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
+	}
 	if value, ok := _c.mutation.BusinessCosts(); ok {
 		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
 		_node.BusinessCosts = value
+	}
+	if value, ok := _c.mutation.BusinessCostsJSON(); ok {
+		_spec.SetField(risk.FieldBusinessCostsJSON, field.TypeJSON, value)
+		_node.BusinessCostsJSON = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

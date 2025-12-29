@@ -341,6 +341,10 @@ type ActionPlan implements Node {
   """
   details: String
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -417,6 +421,10 @@ type ActionPlan implements Node {
   the kind of the action_plan
   """
   actionPlanKindID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   short title describing the action plan
   """
@@ -751,6 +759,37 @@ type ActionPlan implements Node {
     where: IntegrationWhereInput
   ): IntegrationConnection!
   file: File
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -772,7 +811,7 @@ type ActionPlanConnection {
 """
 ActionPlanDocumentStatus is enum for the field status
 """
-enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -795,7 +834,7 @@ type ActionPlanEdge {
 """
 ActionPlanFrequency is enum for the field review_frequency
 """
-enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -833,7 +872,7 @@ enum ActionPlanOrderField {
 """
 ActionPlanPriority is enum for the field priority
 """
-enum ActionPlanPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+enum ActionPlanPriority @goModel(model: "github.com/theopenlane/core/common/enums.Priority") {
   LOW
   MEDIUM
   HIGH
@@ -1200,6 +1239,13 @@ input ActionPlanWhereInput {
   actionPlanKindIDEqualFold: ID
   actionPlanKindIDContainsFold: ID
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   title field predicates
   """
   title: String
@@ -1384,6 +1430,11 @@ input ActionPlanWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Assessment implements Node {
   id: ID!
@@ -1550,7 +1601,7 @@ type Assessment implements Node {
 """
 AssessmentAssessmentType is enum for the field assessment_type
 """
-enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
+enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -1660,7 +1711,7 @@ type AssessmentResponse implements Node {
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
+enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentResponseStatus") {
   NOT_STARTED
   SENT
   COMPLETED
@@ -2366,7 +2417,7 @@ type Asset implements Node {
 """
 AssetAssetType is enum for the field asset_type
 """
-enum AssetAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+enum AssetAssetType @goModel(model: "github.com/theopenlane/core/common/enums.AssetType") {
   TECHNOLOGY
   DOMAIN
   DEVICE
@@ -2845,7 +2896,7 @@ enum ContactOrderField {
 """
 ContactUserStatus is enum for the field status
 """
-enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -3107,6 +3158,10 @@ type Control implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -3223,17 +3278,9 @@ type Control implements Node {
   """
   controlKindID: ID
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -3929,7 +3976,7 @@ type ControlConnection {
 """
 ControlControlSource is enum for the field source
 """
-enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -3938,7 +3985,7 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ControlControlStatus is enum for the field status
 """
-enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -3950,7 +3997,7 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ControlControlType is enum for the field control_type
 """
-enum ControlControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum ControlControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -4015,6 +4062,10 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
   owner: Organization
   blockedGroups(
     """
@@ -4223,7 +4274,7 @@ type ControlImplementationConnection {
 """
 ControlImplementationDocumentStatus is enum for the field status
 """
-enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -4549,6 +4600,10 @@ type ControlObjective implements Node {
   the desired outcome or target of the control objective
   """
   desiredOutcome: String
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
   """
   status of the control objective
   """
@@ -4963,7 +5018,7 @@ type ControlObjectiveConnection {
 """
 ControlObjectiveControlSource is enum for the field source
 """
-enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -4985,7 +5040,7 @@ type ControlObjectiveEdge {
 """
 ControlObjectiveObjectiveStatus is enum for the field status
 """
-enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/core/common/enums.ObjectiveStatus") {
   ACTIVE
   ARCHIVED
   DRAFT
@@ -5838,36 +5893,12 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   ref_code field predicates
   """
@@ -6109,6 +6140,10 @@ input CreateActionPlanInput {
   """
   details: String
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -6160,6 +6195,10 @@ input CreateActionPlanInput {
   the kind of the action_plan
   """
   actionPlanKindName: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   short title describing the action plan
   """
@@ -6218,6 +6257,7 @@ input CreateActionPlanInput {
   taskIDs: [ID!]
   integrationIDs: [ID!]
   fileID: ID
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateAssessmentInput is used for create Assessment object.
@@ -6397,6 +6437,10 @@ input CreateControlImplementationInput {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -6422,6 +6466,10 @@ input CreateControlInput {
   description of what the control is supposed to accomplish
   """
   description: String @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
   """
   additional names (ref_codes) for the control
   """
@@ -6515,17 +6563,9 @@ input CreateControlInput {
   """
   controlKindName: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -6586,6 +6626,10 @@ input CreateControlObjectiveInput {
   the desired outcome or target of the control objective
   """
   desiredOutcome: String
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
   """
   status of the control objective
   """
@@ -7119,17 +7163,9 @@ input CreateEvidenceInput {
   """
   tags: [String!]
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -7175,6 +7211,7 @@ input CreateEvidenceInput {
   programIDs: [ID!]
   taskIDs: [ID!]
   commentIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateExportInput is used for create Export object.
@@ -7713,6 +7750,10 @@ input CreateInternalPolicyInput {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -7757,17 +7798,9 @@ input CreateInternalPolicyInput {
   """
   internalPolicyKindName: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -8087,6 +8120,10 @@ input CreateNoteInput {
   the text of the note
   """
   text: String!
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
   """
   ref location of the note
   """
@@ -8472,6 +8509,10 @@ input CreateProcedureInput {
   """
   details: String
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -8523,6 +8564,10 @@ input CreateProcedureInput {
   the kind of the procedure
   """
   procedureKindName: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -8539,6 +8584,7 @@ input CreateProcedureInput {
   commentIDs: [ID!]
   discussionIDs: [ID!]
   fileID: ID
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateProgramInput is used for create Program object.
@@ -8900,13 +8946,25 @@ input CreateRiskInput {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -9103,6 +9161,10 @@ input CreateSubcontrolInput {
   """
   description: String @externalReadOnly(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -9195,6 +9257,10 @@ input CreateSubcontrolInput {
   """
   subcontrolKindName: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String! @externalReadOnly(source: FRAMEWORK)
@@ -9216,6 +9282,7 @@ input CreateSubcontrolInput {
   controlID: ID!
   controlImplementationIDs: [ID!]
   scheduledJobIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -9332,6 +9399,10 @@ input CreateTaskInput {
   the details of the task
   """
   details: String
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
   """
   the status of the task
   """
@@ -10043,14 +10114,6 @@ input CreateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -10107,11 +10170,18 @@ input CreateWorkflowInstanceInput {
   Copy of definition JSON used for this instance
   """
   definitionSnapshot: WorkflowDefinitionDocument
+  """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int
   ownerID: ID
   workflowDefinitionID: ID!
   controlID: ID
   internalPolicyID: ID
   evidenceID: ID
+  subcontrolID: ID
+  actionPlanID: ID
+  procedureID: ID
   workflowAssignmentIDs: [ID!]
   workflowEventIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -10130,6 +10200,9 @@ input CreateWorkflowObjectRefInput {
   directoryAccountID: ID
   directoryGroupID: ID
   evidenceID: ID
+  subcontrolID: ID
+  actionPlanID: ID
+  procedureID: ID
 }
 """
 Define a Relay Cursor type:
@@ -11216,7 +11289,7 @@ type DNSVerificationConnection {
 """
 DNSVerificationDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/common/enums.DNSVerificationStatus") {
   active
   pending
   active_redeploying
@@ -11270,7 +11343,7 @@ enum DNSVerificationOrderField {
 """
 DNSVerificationSSLVerificationStatus is enum for the field acme_challenge_status
 """
-enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/core/common/enums.SSLVerificationStatus") {
   initializing
   pending_validation
   deleted
@@ -11764,7 +11837,7 @@ type DirectoryAccountConnection {
 """
 DirectoryAccountDirectoryAccountMFAState is enum for the field mfa_state
 """
-enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountMFAState") {
   UNKNOWN
   DISABLED
   ENABLED
@@ -11773,7 +11846,7 @@ enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theope
 """
 DirectoryAccountDirectoryAccountStatus is enum for the field status
 """
-enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountStatus") {
   ACTIVE
   INACTIVE
   SUSPENDED
@@ -11782,7 +11855,7 @@ enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenl
 """
 DirectoryAccountDirectoryAccountType is enum for the field account_type
 """
-enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountType") {
   USER
   SERVICE
   SHARED
@@ -12464,7 +12537,7 @@ type DirectoryGroupConnection {
 """
 DirectoryGroupDirectoryGroupClassification is enum for the field classification
 """
-enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryGroupClassification") {
   SECURITY
   DISTRIBUTION
   TEAM
@@ -12473,7 +12546,7 @@ enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theo
 """
 DirectoryGroupDirectoryGroupStatus is enum for the field status
 """
-enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryGroupStatus") {
   ACTIVE
   INACTIVE
   DELETED
@@ -12977,7 +13050,7 @@ type DirectoryMembershipConnection {
 """
 DirectoryMembershipDirectoryMembershipRole is enum for the field role
 """
-enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
   MANAGER
   OWNER
@@ -13370,7 +13443,7 @@ type DirectorySyncRunConnection {
 """
 DirectorySyncRunDirectorySyncRunStatus is enum for the field status
 """
-enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectorySyncRunStatus") {
+enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectorySyncRunStatus") {
   PENDING
   RUNNING
   COMPLETED
@@ -15811,17 +15884,9 @@ type Evidence implements Node {
   """
   ownerID: ID
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -16107,6 +16172,37 @@ type Evidence implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -16141,7 +16237,7 @@ type EvidenceEdge {
 """
 EvidenceEvidenceStatus is enum for the field status
 """
-enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
   SUBMITTED
   READY_FOR_AUDITOR
   AUDITOR_APPROVED
@@ -16292,36 +16388,12 @@ input EvidenceWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   name field predicates
   """
@@ -16495,6 +16567,11 @@ input EvidenceWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Export implements Node {
   id: ID!
@@ -16631,13 +16708,13 @@ type ExportEdge {
 """
 ExportExportFormat is enum for the field format
 """
-enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportFormat") {
+enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enums.ExportFormat") {
   CSV
 }
 """
 ExportExportStatus is enum for the field status
 """
-enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportStatus") {
+enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ExportStatus") {
   PENDING
   FAILED
   READY
@@ -16646,7 +16723,7 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.E
 """
 ExportExportType is enum for the field export_type
 """
-enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
+enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
   CONTROL
   DIRECTORY_MEMBERSHIP
   EVIDENCE
@@ -20743,7 +20820,7 @@ enum GroupMembershipOrderField {
 """
 GroupMembershipRole is enum for the field role
 """
-enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -20921,7 +20998,7 @@ type GroupSettingEdge {
 """
 GroupSettingJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enums.JoinPolicy") {
+enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/common/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -20950,7 +21027,7 @@ enum GroupSettingOrderField {
 """
 GroupSettingVisibility is enum for the field visibility
 """
-enum GroupSettingVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.Visibility") {
+enum GroupSettingVisibility @goModel(model: "github.com/theopenlane/core/common/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -22757,6 +22834,10 @@ type InternalPolicy implements Node {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -22818,17 +22899,9 @@ type InternalPolicy implements Node {
   """
   internalPolicyKindID: ID
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   owner: Organization
   blockedGroups(
     """
@@ -23295,7 +23368,7 @@ type InternalPolicyConnection {
 """
 InternalPolicyDocumentStatus is enum for the field status
 """
-enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -23318,7 +23391,7 @@ type InternalPolicyEdge {
 """
 InternalPolicyFrequency is enum for the field review_frequency
 """
-enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -23726,36 +23799,12 @@ input InternalPolicyWhereInput {
   internalPolicyKindIDEqualFold: ID
   internalPolicyKindIDContainsFold: ID
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   owner edge predicates
   """
@@ -23984,7 +24033,7 @@ type InviteEdge {
 """
 InviteInviteStatus is enum for the field status
 """
-enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.InviteStatus") {
+enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/common/enums.InviteStatus") {
   INVITATION_SENT
   APPROVAL_REQUIRED
   INVITATION_ACCEPTED
@@ -24016,7 +24065,7 @@ enum InviteOrderField {
 """
 InviteRole is enum for the field role
 """
-enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum InviteRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -24293,7 +24342,7 @@ type JobResultEdge {
 """
 JobResultJobExecutionStatus is enum for the field status
 """
-enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobExecutionStatus") {
+enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/core/common/enums.JobExecutionStatus") {
   CANCELED
   SUCCESS
   PENDING
@@ -24650,7 +24699,7 @@ type JobRunnerEdge {
 """
 JobRunnerJobRunnerStatus is enum for the field status
 """
-enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobRunnerStatus") {
+enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/common/enums.JobRunnerStatus") {
   ONLINE
   OFFLINE
 }
@@ -25592,7 +25641,7 @@ type JobTemplateEdge {
 """
 JobTemplateJobPlatformType is enum for the field platform
 """
-enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/common/enums.JobPlatformType") {
   GO
   TS
 }
@@ -26319,7 +26368,7 @@ type MappedControlEdge {
 """
 MappedControlMappingSource is enum for the field source
 """
-enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/common/enums.MappingSource") {
   MANUAL
   SUGGESTED
   IMPORTED
@@ -26327,7 +26376,7 @@ enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg
 """
 MappedControlMappingType is enum for the field mapping_type
 """
-enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/common/enums.MappingType") {
   EQUAL
   SUPERSET
   SUBSET
@@ -27177,6 +27226,10 @@ type Note implements Node {
   """
   text: String!
   """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  """
   ref location of the note
   """
   noteRef: String
@@ -27559,7 +27612,7 @@ type Notification implements Node {
 """
 NotificationNotificationType is enum for the field notification_type
 """
-enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/pkg/enums.NotificationType") {
+enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/common/enums.NotificationType") {
   ORGANIZATION
   USER
 }
@@ -27759,7 +27812,7 @@ enum OrgMembershipOrderField {
 """
 OrgMembershipRole is enum for the field role
 """
-enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -31050,7 +31103,7 @@ enum OrganizationSettingOrderField {
 """
 OrganizationSettingRegion is enum for the field geo_location
 """
-enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/enums.Region") {
+enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/common/enums.Region") {
   AMER
   EMEA
   APAC
@@ -31058,7 +31111,7 @@ enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/
 """
 OrganizationSettingSSOProvider is enum for the field identity_provider
 """
-enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/common/enums.SSOProvider") {
   OKTA
   ONE_LOGIN
   GOOGLE_WORKSPACE
@@ -32491,6 +32544,10 @@ type Procedure implements Node {
   """
   details: String
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -32563,6 +32620,10 @@ type Procedure implements Node {
   the kind of the procedure
   """
   procedureKindID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   owner: Organization
   blockedGroups(
     """
@@ -32915,6 +32976,37 @@ type Procedure implements Node {
     where: DiscussionWhereInput
   ): DiscussionConnection!
   file: File
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -32936,7 +33028,7 @@ type ProcedureConnection {
 """
 ProcedureDocumentStatus is enum for the field status
 """
-enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -32959,7 +33051,7 @@ type ProcedureEdge {
 """
 ProcedureFrequency is enum for the field review_frequency
 """
-enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -33367,6 +33459,13 @@ input ProcedureWhereInput {
   procedureKindIDEqualFold: ID
   procedureKindIDContainsFold: ID
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -33446,6 +33545,11 @@ input ProcedureWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -34156,7 +34260,7 @@ enum ProgramMembershipOrderField {
 """
 ProgramMembershipRole is enum for the field role
 """
-enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -34280,7 +34384,7 @@ enum ProgramOrderField {
 """
 ProgramProgramStatus is enum for the field status
 """
-enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
+enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/common/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
   ACTION_REQUIRED
@@ -34291,7 +34395,7 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ProgramProgramType is enum for the field program_type
 """
-enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/common/enums.ProgramType") {
   FRAMEWORK
   GAP_ANALYSIS
   RISK_ASSESSMENT
@@ -39762,13 +39866,25 @@ type Risk implements Node {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   """
   the id of the group responsible for risk oversight
   """
@@ -40315,7 +40431,7 @@ enum RiskOrderField {
 """
 RiskRiskImpact is enum for the field impact
 """
-enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/common/enums.RiskImpact") {
   LOW
   MODERATE
   HIGH
@@ -40324,7 +40440,7 @@ enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskI
 """
 RiskRiskLikelihood is enum for the field likelihood
 """
-enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/common/enums.RiskLikelihood") {
   UNLIKELY
   LIKELY
   HIGHLY_LIKELY
@@ -40332,7 +40448,7 @@ enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.R
 """
 RiskRiskStatus is enum for the field status
 """
-enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/common/enums.RiskStatus") {
   OPEN
   IN_PROGRESS
   ONGOING
@@ -41057,7 +41173,7 @@ enum ScanOrderField {
 """
 ScanScanStatus is enum for the field status
 """
-enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/common/enums.ScanStatus") {
   PENDING
   PROCESSING
   COMPLETED
@@ -41066,7 +41182,7 @@ enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanS
 """
 ScanScanType is enum for the field scan_type
 """
-enum ScanScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.ScanType") {
   DOMAIN
   VULNERABILITY
   VENDOR
@@ -41473,7 +41589,7 @@ enum ScheduledJobRunOrderField {
 """
 ScheduledJobRunScheduledJobRunStatus is enum for the field status
 """
-enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScheduledJobRunStatus") {
+enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.ScheduledJobRunStatus") {
   PENDING
   ACQUIRED
 }
@@ -42084,7 +42200,7 @@ enum StandardOrderField {
 """
 StandardStandardStatus is enum for the field status
 """
-enum StandardStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+enum StandardStandardStatus @goModel(model: "github.com/theopenlane/core/common/enums.StandardStatus") {
   ACTIVE
   DRAFT
   ARCHIVED
@@ -42501,6 +42617,10 @@ type Subcontrol implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -42616,6 +42736,10 @@ type Subcontrol implements Node {
   the kind of the subcontrol
   """
   subcontrolKindID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -43011,6 +43135,37 @@ type Subcontrol implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -43032,7 +43187,7 @@ type SubcontrolConnection {
 """
 SubcontrolControlSource is enum for the field source
 """
-enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -43041,7 +43196,7 @@ enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/en
 """
 SubcontrolControlStatus is enum for the field status
 """
-enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -43053,7 +43208,7 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/en
 """
 SubcontrolControlType is enum for the field control_type
 """
-enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -43543,6 +43698,13 @@ input SubcontrolWhereInput {
   subcontrolKindIDEqualFold: ID
   subcontrolKindIDContainsFold: ID
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   ref_code field predicates
   """
   refCode: String
@@ -43664,6 +43826,11 @@ input SubcontrolWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Subprocessor implements Node {
   id: ID!
@@ -44844,6 +45011,10 @@ type Task implements Node {
   """
   details: String
   """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   the status of the task
   """
   status: TaskTaskStatus!
@@ -45351,7 +45522,7 @@ enum TaskOrderField {
 """
 TaskTaskStatus is enum for the field status
 """
-enum TaskTaskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TaskStatus") {
+enum TaskTaskStatus @goModel(model: "github.com/theopenlane/core/common/enums.TaskStatus") {
   OPEN
   IN_PROGRESS
   IN_REVIEW
@@ -45939,7 +46110,7 @@ type TemplateConnection {
 """
 TemplateDocumentType is enum for the field template_type
 """
-enum TemplateDocumentType @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentType") {
+enum TemplateDocumentType @goModel(model: "github.com/theopenlane/core/common/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -45982,7 +46153,7 @@ enum TemplateOrderField {
 """
 TemplateTemplateKind is enum for the field kind
 """
-enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
 }
@@ -46785,7 +46956,7 @@ enum TrustCenterDocOrderField {
 """
 TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
 """
-enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterDocumentVisibility") {
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
@@ -46793,7 +46964,7 @@ enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/the
 """
 TrustCenterDocWatermarkStatus is enum for the field watermark_status
 """
-enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/core/common/enums.WatermarkStatus") {
   PENDING
   IN_PROGRESS
   SUCCESS
@@ -47223,14 +47394,14 @@ enum TrustCenterSettingOrderField {
 """
 TrustCenterSettingTrustCenterEnvironment is enum for the field environment
 """
-enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterEnvironment") {
   LIVE
   PREVIEW
 }
 """
 TrustCenterSettingTrustCenterThemeMode is enum for the field theme_mode
 """
-enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterThemeMode") {
   EASY
   ADVANCED
 }
@@ -47825,7 +47996,7 @@ input TrustCenterSubprocessorWhereInput {
 """
 TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
 """
-enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterPreviewStatus") {
   PROVISIONING
   READY
   FAILED
@@ -47918,7 +48089,7 @@ type TrustCenterWatermarkConfigEdge {
 """
 TrustCenterWatermarkConfigFont is enum for the field font
 """
-enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
   COURIER
   COURIER_BOLD
   COURIER_BOLDOBLIQUE
@@ -48779,6 +48950,12 @@ input UpdateActionPlanInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -48849,6 +49026,11 @@ input UpdateActionPlanInput {
   """
   actionPlanKindName: String
   clearActionPlanKindName: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   """
   short title describing the action plan
   """
@@ -48938,6 +49120,9 @@ input UpdateActionPlanInput {
   clearIntegrations: Boolean
   fileID: ID
   clearFile: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateAssessmentInput is used for update Assessment object.
@@ -49159,6 +49344,12 @@ input UpdateControlImplementationInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -49199,6 +49390,12 @@ input UpdateControlInput {
   """
   description: String @externalReadOnly(source: FRAMEWORK)
   clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  appendDescriptionJSON: [Any!]
+  clearDescriptionJSON: Boolean
   """
   additional names (ref_codes) for the control
   """
@@ -49320,20 +49517,10 @@ input UpdateControlInput {
   controlKindName: String
   clearControlKindName: Boolean
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  clearProposedChanges: Boolean
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  clearProposedByUserID: Boolean
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
-  clearProposedAt: Boolean
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -49444,6 +49631,12 @@ input UpdateControlObjectiveInput {
   """
   desiredOutcome: String
   clearDesiredOutcome: Boolean
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
+  appendDesiredOutcomeJSON: [Any!]
+  clearDesiredOutcomeJSON: Boolean
   """
   status of the control objective
   """
@@ -50129,20 +50322,10 @@ input UpdateEvidenceInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  clearProposedChanges: Boolean
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  clearProposedByUserID: Boolean
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
-  clearProposedAt: Boolean
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -50210,6 +50393,9 @@ input UpdateEvidenceInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateExportInput is used for update Export object.
@@ -50971,6 +51157,12 @@ input UpdateInternalPolicyInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -51032,20 +51224,10 @@ input UpdateInternalPolicyInput {
   internalPolicyKindName: String
   clearInternalPolicyKindName: Boolean
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  clearProposedChanges: Boolean
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  clearProposedByUserID: Boolean
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
-  clearProposedAt: Boolean
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -51452,6 +51634,12 @@ input UpdateNoteInput {
   the text of the note
   """
   text: String
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  appendTextJSON: [Any!]
+  clearTextJSON: Boolean
   """
   ref location of the note
   """
@@ -51983,6 +52171,12 @@ input UpdateProcedureInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -52053,6 +52247,11 @@ input UpdateProcedureInput {
   """
   procedureKindName: String
   clearProcedureKindName: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -52096,6 +52295,9 @@ input UpdateProcedureInput {
   clearDiscussions: Boolean
   fileID: ID
   clearFile: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.
@@ -52619,15 +52821,33 @@ input UpdateRiskInput {
   mitigation: String
   clearMitigation: Boolean
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  appendMitigationJSON: [Any!]
+  clearMitigationJSON: Boolean
+  """
   details of the risk
   """
   details: String
   clearDetails: Boolean
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   business costs associated with the risk
   """
   businessCosts: String
   clearBusinessCosts: Boolean
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
+  appendBusinessCostsJSON: [Any!]
+  clearBusinessCostsJSON: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -52900,6 +53120,12 @@ input UpdateSubcontrolInput {
   description: String @externalReadOnly(source: FRAMEWORK)
   clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  appendDescriptionJSON: [Any!]
+  clearDescriptionJSON: Boolean
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -53020,6 +53246,11 @@ input UpdateSubcontrolInput {
   subcontrolKindName: String
   clearSubcontrolKindName: Boolean
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String @externalReadOnly(source: FRAMEWORK)
@@ -53068,6 +53299,9 @@ input UpdateSubcontrolInput {
   addScheduledJobIDs: [ID!]
   removeScheduledJobIDs: [ID!]
   clearScheduledJobs: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateSubprocessorInput is used for update Subprocessor object.
@@ -53216,6 +53450,12 @@ input UpdateTaskInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   """
   the status of the task
   """
@@ -54173,18 +54413,6 @@ input UpdateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  appendTriggerOperations: [String!]
-  clearTriggerOperations: Boolean
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  appendTriggerFields: [String!]
-  clearTriggerFields: Boolean
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -54254,6 +54482,10 @@ input UpdateWorkflowInstanceInput {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   clearDefinitionSnapshot: Boolean
+  """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int
   workflowDefinitionID: ID
   controlID: ID
   clearControl: Boolean
@@ -54261,6 +54493,12 @@ input UpdateWorkflowInstanceInput {
   clearInternalPolicy: Boolean
   evidenceID: ID
   clearEvidence: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
+  actionPlanID: ID
+  clearActionPlan: Boolean
+  procedureID: ID
+  clearProcedure: Boolean
   addWorkflowAssignmentIDs: [ID!]
   removeWorkflowAssignmentIDs: [ID!]
   clearWorkflowAssignments: Boolean
@@ -54815,7 +55053,7 @@ type User implements Node {
 """
 UserAuthProvider is enum for the field last_login_provider
 """
-enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
+enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/common/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -54878,7 +55116,7 @@ enum UserOrderField {
 """
 UserRole is enum for the field role
 """
-enum UserRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum UserRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -54981,7 +55219,7 @@ enum UserSettingOrderField {
 """
 UserSettingUserStatus is enum for the field status
 """
-enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -57602,7 +57840,7 @@ input WorkflowAssignmentTargetWhereInput {
 """
 WorkflowAssignmentTargetWorkflowTargetType is enum for the field target_type
 """
-enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowTargetType") {
   USER
   GROUP
   ROLE
@@ -57899,7 +58137,7 @@ input WorkflowAssignmentWhereInput {
 """
 WorkflowAssignmentWorkflowAssignmentStatus is enum for the field status
 """
-enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowAssignmentStatus") {
   PENDING
   APPROVED
   REJECTED
@@ -57974,14 +58212,6 @@ type WorkflowDefinition implements Node {
   Whether the workflow definition is active
   """
   active: Boolean!
-  """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
   """
   Typed document describing triggers, conditions, and actions
   """
@@ -58390,7 +58620,7 @@ input WorkflowDefinitionWhereInput {
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
 """
-enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowKind") {
   APPROVAL
   LIFECYCLE
   NOTIFICATION
@@ -58632,10 +58862,22 @@ input WorkflowEventWhereInput {
 """
 WorkflowEventWorkflowEventType is enum for the field event_type
 """
-enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowEventType") {
   ACTION
   TRIGGER
   DECISION
+  INSTANCE_TRIGGERED
+  ACTION_STARTED
+  ACTION_COMPLETED
+  ACTION_FAILED
+  ACTION_SKIPPED
+  CONDITION_EVALUATED
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_INVALIDATED
+  INSTANCE_PAUSED
+  INSTANCE_RESUMED
+  INSTANCE_COMPLETED
 }
 type WorkflowInstance implements Node {
   id: ID!
@@ -58660,6 +58902,10 @@ type WorkflowInstance implements Node {
   """
   workflowDefinitionID: ID!
   """
+  ID of the workflow proposal this instance is associated with (when approval-before-commit is used)
+  """
+  workflowProposalID: ID
+  """
   Current state of the workflow instance
   """
   state: WorkflowInstanceWorkflowInstanceState!
@@ -58676,6 +58922,10 @@ type WorkflowInstance implements Node {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int!
+  """
   ID of the control this workflow instance is associated with
   """
   controlID: ID
@@ -58687,6 +58937,18 @@ type WorkflowInstance implements Node {
   ID of the evidence this workflow instance is associated with
   """
   evidenceID: ID
+  """
+  ID of the subcontrol this workflow instance is associated with
+  """
+  subcontrolID: ID
+  """
+  ID of the actionplan this workflow instance is associated with
+  """
+  actionPlanID: ID
+  """
+  ID of the procedure this workflow instance is associated with
+  """
+  procedureID: ID
   owner: Organization
   """
   Definition driving this instance
@@ -58704,6 +58966,18 @@ type WorkflowInstance implements Node {
   Evidence this workflow instance is associated with
   """
   evidence: Evidence
+  """
+  Subcontrol this workflow instance is associated with
+  """
+  subcontrol: Subcontrol
+  """
+  ActionPlan this workflow instance is associated with
+  """
+  actionPlan: ActionPlan
+  """
+  Procedure this workflow instance is associated with
+  """
+  procedure: Procedure
   workflowAssignments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -58982,6 +59256,24 @@ input WorkflowInstanceWhereInput {
   workflowDefinitionIDEqualFold: ID
   workflowDefinitionIDContainsFold: ID
   """
+  workflow_proposal_id field predicates
+  """
+  workflowProposalID: ID
+  workflowProposalIDNEQ: ID
+  workflowProposalIDIn: [ID!]
+  workflowProposalIDNotIn: [ID!]
+  workflowProposalIDGT: ID
+  workflowProposalIDGTE: ID
+  workflowProposalIDLT: ID
+  workflowProposalIDLTE: ID
+  workflowProposalIDContains: ID
+  workflowProposalIDHasPrefix: ID
+  workflowProposalIDHasSuffix: ID
+  workflowProposalIDIsNil: Boolean
+  workflowProposalIDNotNil: Boolean
+  workflowProposalIDEqualFold: ID
+  workflowProposalIDContainsFold: ID
+  """
   state field predicates
   """
   state: WorkflowInstanceWorkflowInstanceState
@@ -59001,6 +59293,17 @@ input WorkflowInstanceWhereInput {
   lastEvaluatedAtLTE: Time
   lastEvaluatedAtIsNil: Boolean
   lastEvaluatedAtNotNil: Boolean
+  """
+  current_action_index field predicates
+  """
+  currentActionIndex: Int
+  currentActionIndexNEQ: Int
+  currentActionIndexIn: [Int!]
+  currentActionIndexNotIn: [Int!]
+  currentActionIndexGT: Int
+  currentActionIndexGTE: Int
+  currentActionIndexLT: Int
+  currentActionIndexLTE: Int
   """
   control_id field predicates
   """
@@ -59056,6 +59359,60 @@ input WorkflowInstanceWhereInput {
   evidenceIDEqualFold: ID
   evidenceIDContainsFold: ID
   """
+  subcontrol_id field predicates
+  """
+  subcontrolID: ID
+  subcontrolIDNEQ: ID
+  subcontrolIDIn: [ID!]
+  subcontrolIDNotIn: [ID!]
+  subcontrolIDGT: ID
+  subcontrolIDGTE: ID
+  subcontrolIDLT: ID
+  subcontrolIDLTE: ID
+  subcontrolIDContains: ID
+  subcontrolIDHasPrefix: ID
+  subcontrolIDHasSuffix: ID
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: ID
+  subcontrolIDContainsFold: ID
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: ID
+  actionPlanIDNEQ: ID
+  actionPlanIDIn: [ID!]
+  actionPlanIDNotIn: [ID!]
+  actionPlanIDGT: ID
+  actionPlanIDGTE: ID
+  actionPlanIDLT: ID
+  actionPlanIDLTE: ID
+  actionPlanIDContains: ID
+  actionPlanIDHasPrefix: ID
+  actionPlanIDHasSuffix: ID
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: ID
+  actionPlanIDContainsFold: ID
+  """
+  procedure_id field predicates
+  """
+  procedureID: ID
+  procedureIDNEQ: ID
+  procedureIDIn: [ID!]
+  procedureIDNotIn: [ID!]
+  procedureIDGT: ID
+  procedureIDGTE: ID
+  procedureIDLT: ID
+  procedureIDLTE: ID
+  procedureIDContains: ID
+  procedureIDHasPrefix: ID
+  procedureIDHasSuffix: ID
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: ID
+  procedureIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -59081,6 +59438,21 @@ input WorkflowInstanceWhereInput {
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
   """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  action_plan edge predicates
+  """
+  hasActionPlan: Boolean
+  hasActionPlanWith: [ActionPlanWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
+  """
   workflow_assignments edge predicates
   """
   hasWorkflowAssignments: Boolean
@@ -59099,7 +59471,7 @@ input WorkflowInstanceWhereInput {
 """
 WorkflowInstanceWorkflowInstanceState is enum for the field state
 """
-enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowInstanceState") {
   RUNNING
   COMPLETED
   FAILED
@@ -59155,6 +59527,18 @@ type WorkflowObjectRef implements Node {
   Evidence referenced by this workflow instance
   """
   evidenceID: ID
+  """
+  Subcontrol referenced by this workflow instance
+  """
+  subcontrolID: ID
+  """
+  ActionPlan referenced by this workflow instance
+  """
+  actionPlanID: ID
+  """
+  Procedure referenced by this workflow instance
+  """
+  procedureID: ID
   owner: Organization
   """
   Workflow instance this object is associated with
@@ -59192,6 +59576,18 @@ type WorkflowObjectRef implements Node {
   Evidence referenced by this workflow instance
   """
   evidence: Evidence
+  """
+  Subcontrol referenced by this workflow instance
+  """
+  subcontrol: Subcontrol
+  """
+  ActionPlan referenced by this workflow instance
+  """
+  actionPlan: ActionPlan
+  """
+  Procedure referenced by this workflow instance
+  """
+  procedure: Procedure
 }
 """
 A connection to a list of items.
@@ -59521,6 +59917,60 @@ input WorkflowObjectRefWhereInput {
   evidenceIDEqualFold: ID
   evidenceIDContainsFold: ID
   """
+  subcontrol_id field predicates
+  """
+  subcontrolID: ID
+  subcontrolIDNEQ: ID
+  subcontrolIDIn: [ID!]
+  subcontrolIDNotIn: [ID!]
+  subcontrolIDGT: ID
+  subcontrolIDGTE: ID
+  subcontrolIDLT: ID
+  subcontrolIDLTE: ID
+  subcontrolIDContains: ID
+  subcontrolIDHasPrefix: ID
+  subcontrolIDHasSuffix: ID
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: ID
+  subcontrolIDContainsFold: ID
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: ID
+  actionPlanIDNEQ: ID
+  actionPlanIDIn: [ID!]
+  actionPlanIDNotIn: [ID!]
+  actionPlanIDGT: ID
+  actionPlanIDGTE: ID
+  actionPlanIDLT: ID
+  actionPlanIDLTE: ID
+  actionPlanIDContains: ID
+  actionPlanIDHasPrefix: ID
+  actionPlanIDHasSuffix: ID
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: ID
+  actionPlanIDContainsFold: ID
+  """
+  procedure_id field predicates
+  """
+  procedureID: ID
+  procedureIDNEQ: ID
+  procedureIDIn: [ID!]
+  procedureIDNotIn: [ID!]
+  procedureIDGT: ID
+  procedureIDGTE: ID
+  procedureIDLT: ID
+  procedureIDLTE: ID
+  procedureIDContains: ID
+  procedureIDHasPrefix: ID
+  procedureIDHasSuffix: ID
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: ID
+  procedureIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -59570,4 +60020,19 @@ input WorkflowObjectRefWhereInput {
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  action_plan edge predicates
+  """
+  hasActionPlan: Boolean
+  hasActionPlanWith: [ActionPlanWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
 }

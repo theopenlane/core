@@ -5,31 +5,28 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
+// HookTrustCenterWatermarkConfig process files for trust center watermark config
 func HookTrustCenterWatermarkConfig() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterWatermarkConfigFunc(func(ctx context.Context, m *generated.TrustCenterWatermarkConfigMutation) (generated.Value, error) {
 			logx.FromContext(ctx).Debug().Msg("trust center watermark config hook")
 
-			fileIDs := objects.GetFileIDsFromContext(ctx)
-			if len(fileIDs) > 0 {
-				var err error
+			var err error
 
-				ctx, err = checkTrustCenterWatermarkConfigFiles(ctx, m)
-				if err != nil {
-					return nil, err
-				}
+			ctx, err = checkTrustCenterWatermarkConfigFiles(ctx, m)
+			if err != nil {
+				return nil, err
+			}
 
-				m.SetFileID(fileIDs[0])
-				m.ClearText()
-			} else if text, textSet := m.Text(); textSet && text != "" {
+			if text, textSet := m.Text(); textSet && text != "" {
 				m.ClearLogoID()
 				m.ClearFile()
 			}
@@ -53,7 +50,7 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 			}
 
 			for _, doc := range docs {
-				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+				if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
 					TrustCenterDocumentID: doc.ID,
 				}, nil); err != nil {
 					return nil, err
@@ -65,33 +62,26 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
+// checkTrustCenterWatermarkConfigFiles checks for logo files in the context
 func checkTrustCenterWatermarkConfigFiles(ctx context.Context, m *generated.TrustCenterWatermarkConfigMutation) (context.Context, error) {
 	key := "logoFile"
-	// get the file from the context, if it exists
-	file, _ := objects.FilesFromContextWithKey(ctx, key)
 
-	// return early if no file is provided
-	if file == nil {
-		return ctx, nil
-	}
-
-	// we should only have one file
-	if len(file) > 1 {
+	logoFiles, _ := objects.FilesFromContextWithKey(ctx, key)
+	if len(logoFiles) > 1 {
 		return ctx, ErrNotSingularUpload
 	}
 
-	if len(file) == 0 {
-		return ctx, nil
+	if len(logoFiles) == 1 {
+		m.SetFileID(logoFiles[0].ID)
+		m.ClearText()
+
+		adapter := objects.NewGenericMutationAdapter(m,
+			func(mut *generated.TrustCenterWatermarkConfigMutation) (string, bool) { return mut.ID() },
+			func(mut *generated.TrustCenterWatermarkConfigMutation) string { return mut.Type() },
+		)
+
+		return objects.ProcessFilesForMutation(ctx, adapter, key, "trust_center_watermark_config")
 	}
-
-	if file[0].FieldName != key {
-		return ctx, nil
-	}
-
-	file[0].Parent.ID, _ = m.ID()
-	file[0].Parent.Type = "trust_center_watermark_config"
-
-	ctx = objects.UpdateFileInContextByKey(ctx, key, file[0])
 
 	return ctx, nil
 }

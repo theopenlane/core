@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -186,6 +186,11 @@ func ProcedureKindName(v string) predicate.Procedure {
 // ProcedureKindID applies equality check predicate on the "procedure_kind_id" field. It's identical to ProcedureKindIDEQ.
 func ProcedureKindID(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldProcedureKindID, v))
+}
+
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -1041,6 +1046,16 @@ func DetailsEqualFold(v string) predicate.Procedure {
 // DetailsContainsFold applies the ContainsFold predicate on the "details" field.
 func DetailsContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldDetails, v))
+}
+
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldDetailsJSON))
 }
 
 // ApprovalRequiredEQ applies the EQ predicate on the "approval_required" field.
@@ -1908,6 +1923,26 @@ func ProcedureKindIDContainsFold(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldContainsFold(FieldProcedureKindID, v))
 }
 
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.Procedure {
+	return predicate.Procedure(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.Procedure {
+	return predicate.Procedure(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.Procedure {
+	return predicate.Procedure(sql.FieldNotNull(FieldWorkflowEligibleMarker))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Procedure {
 	return predicate.Procedure(func(s *sql.Selector) {
@@ -2364,6 +2399,35 @@ func HasFileWith(preds ...predicate.File) predicate.Procedure {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.Procedure
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
+func HasWorkflowObjectRefs() predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowObjectRefsWith applies the HasEdge predicate on the "workflow_object_refs" edge with a given conditions (other predicates).
+func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Procedure {
+	return predicate.Procedure(func(s *sql.Selector) {
+		step := newWorkflowObjectRefsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

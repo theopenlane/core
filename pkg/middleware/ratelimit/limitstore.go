@@ -87,7 +87,7 @@ func (r *RateLimiter) Check(key string) (limitStatus *LimitStatus, err error) {
 }
 
 // calcRate calculates current rate based on previous and current values
-func (r *RateLimiter) calcRate(timeFromCurrWindow time.Duration, prevValue int64, currentValue int64) float64 { // nolint: unused
+func (r *RateLimiter) calcRate(timeFromCurrWindow time.Duration, prevValue int64, currentValue int64) float64 { //nolint:unused
 	return float64((float64(r.windowSize)-float64(timeFromCurrWindow))/float64(r.windowSize))*float64(prevValue) + float64(currentValue)
 }
 

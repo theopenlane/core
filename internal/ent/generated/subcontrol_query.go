@@ -33,8 +33,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // SubcontrolQuery is the builder for querying Subcontrol entities.
@@ -64,6 +66,7 @@ type SubcontrolQuery struct {
 	withScheduledJobs               *ScheduledJobQuery
 	withMappedToSubcontrols         *MappedControlQuery
 	withMappedFromSubcontrols       *MappedControlQuery
+	withWorkflowObjectRefs          *WorkflowObjectRefQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Subcontrol) error
 	modifiers                       []func(*sql.Selector)
@@ -81,6 +84,7 @@ type SubcontrolQuery struct {
 	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToSubcontrols    map[string]*MappedControlQuery
 	withNamedMappedFromSubcontrols  map[string]*MappedControlQuery
+	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -617,6 +621,31 @@ func (_q *SubcontrolQuery) QueryMappedFromSubcontrols() *MappedControlQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *SubcontrolQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, subcontrol.WorkflowObjectRefsTable, subcontrol.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Subcontrol entity from the query.
 // Returns a *NotFoundError when no Subcontrol was found.
 func (_q *SubcontrolQuery) First(ctx context.Context) (*Subcontrol, error) {
@@ -829,6 +858,7 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withScheduledJobs:          _q.withScheduledJobs.Clone(),
 		withMappedToSubcontrols:    _q.withMappedToSubcontrols.Clone(),
 		withMappedFromSubcontrols:  _q.withMappedFromSubcontrols.Clone(),
+		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1056,6 +1086,17 @@ func (_q *SubcontrolQuery) WithMappedFromSubcontrols(opts ...func(*MappedControl
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *SubcontrolQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1141,7 +1182,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [21]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1162,6 +1203,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withScheduledJobs != nil,
 			_q.withMappedToSubcontrols != nil,
 			_q.withMappedFromSubcontrols != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	if withFKs {
@@ -1332,6 +1374,15 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Subcontrol) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Subcontrol, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedEvidence {
 		if err := _q.loadEvidence(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedEvidence(name) },
@@ -1427,6 +1478,13 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadMappedFromSubcontrols(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedMappedFromSubcontrols(name) },
 			func(n *Subcontrol, e *MappedControl) { n.appendNamedMappedFromSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Subcontrol) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Subcontrol, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2359,6 +2417,37 @@ func (_q *SubcontrolQuery) loadMappedFromSubcontrols(ctx context.Context, query 
 	}
 	return nil
 }
+func (_q *SubcontrolQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subcontrol)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldSubcontrolID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subcontrol.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubcontrolID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subcontrol_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *SubcontrolQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2672,21 +2761,34 @@ func (_q *SubcontrolQuery) WithNamedMappedFromSubcontrols(name string, opts ...f
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubcontrolQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *SubcontrolQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (sq *SubcontrolQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "Subcontrol").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, sq.ctx, ent.OpQueryIDs)
-	if err := sq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return sq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, sq, qr, sq.inters)
+	ids, err := sq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Subcontrol").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "Subcontrol").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

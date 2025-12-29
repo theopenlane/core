@@ -102,6 +102,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -252,6 +253,7 @@ func checkColumn(t, c string) error {
 			workflowevent.Table:              workflowevent.ValidColumn,
 			workflowinstance.Table:           workflowinstance.ValidColumn,
 			workflowobjectref.Table:          workflowobjectref.ValidColumn,
+			workflowproposal.Table:           workflowproposal.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

@@ -15,6 +15,7 @@ import (
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -23,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -564,7 +564,7 @@ func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 	// safety check so we don't panic with an invalid email on user creation before
 	// validation
 	emailParts := strings.SplitAfter(email, "@")
-	if len(emailParts) != 2 { // nolint:mnd
+	if len(emailParts) != 2 { //nolint:mnd
 		return ErrEmailDomainNotAllowed
 	}
 

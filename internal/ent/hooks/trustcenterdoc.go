@@ -2,27 +2,20 @@ package hooks
 
 import (
 	"context"
-	"errors"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/pkg/corejobs"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-)
-
-var (
-	errMissingFileID         = errors.New("missing file id")
-	errCannotSetFileOnCreate = errors.New("cannot set file id on create")
-	errNotSingularUpload     = errors.New("expected a single file upload")
 )
 
 // internalTrustCenterDocUpdateKey is used to mark internal update operations within hooks
@@ -40,7 +33,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			_, mutationSetsOriginalFileID := m.OriginalFileID()
 
 			if mutationSetsFileID || len(fileIDs) > 0 {
-				return nil, errCannotSetFileOnCreate
+				return nil, ErrCannotSetFileOnCreate
 			}
 
 			// Process trust center doc file
@@ -57,7 +50,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 				// we should only have one file
 				if len(docFiles) > 1 {
-					return nil, errNotSingularUpload
+					return nil, ErrNotSingularUpload
 				}
 
 				m.SetOriginalFileID(docFiles[0].ID)
@@ -85,7 +78,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			if !mutationSetsOriginalFileID && len(docFiles) == 0 {
 				// check if watermarking is enabled because if it is a file must be present
 				if watermarkingEnabledSet && watermarkingEnabled {
-					return nil, errMissingFileID
+					return nil, ErrMissingFileID
 				}
 
 				// otherwise set the visibility to NOT_VISIBLE
@@ -93,7 +86,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			} else if !watermarkingEnabledSet || !watermarkingEnabled {
 				origFileID, origFileIDSet := m.OriginalFileID()
 				if !origFileIDSet {
-					return nil, errMissingFileID
+					return nil, ErrMissingFileID
 				}
 				m.SetFileID(origFileID)
 			}
@@ -128,7 +121,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if trustCenterDoc.WatermarkingEnabled {
 				logx.FromContext(ctx).Debug().Msg("watermarking enabled, queuing job")
-				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+				if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
 					return nil, err
@@ -141,7 +134,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 }
 
 // HookUpdateTrustCenterDoc is an ent hook that processes file uploads and sets appropriate fields and permissions on update
-func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
+func HookUpdateTrustCenterDoc() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterDocFunc(func(ctx context.Context, m *generated.TrustCenterDocMutation) (generated.Value, error) {
 			// Skip hook logic if this is an internal operation from the create hook
@@ -260,7 +253,7 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 
 			if mutationSetsOriginalFileID || len(docFiles) > 0 {
 				if trustCenterDoc.WatermarkingEnabled {
-					if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+					if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
 						TrustCenterDocumentID: trustCenterDoc.ID,
 					}, nil); err != nil {
 						return nil, err

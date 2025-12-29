@@ -10,6 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -36,8 +38,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlCreate is the builder for creating a Control entity.
@@ -168,6 +168,12 @@ func (_c *ControlCreate) SetNillableDescription(v *string) *ControlCreate {
 	if v != nil {
 		_c.SetDescription(*v)
 	}
+	return _c
+}
+
+// SetDescriptionJSON sets the "description_json" field.
+func (_c *ControlCreate) SetDescriptionJSON(v []interface{}) *ControlCreate {
+	_c.mutation.SetDescriptionJSON(v)
 	return _c
 }
 
@@ -497,36 +503,16 @@ func (_c *ControlCreate) SetNillableControlKindID(v *string) *ControlCreate {
 	return _c
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_c *ControlCreate) SetProposedChanges(v map[string]interface{}) *ControlCreate {
-	_c.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *ControlCreate) SetWorkflowEligibleMarker(v bool) *ControlCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
 	return _c
 }
 
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_c *ControlCreate) SetProposedByUserID(v string) *ControlCreate {
-	_c.mutation.SetProposedByUserID(v)
-	return _c
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_c *ControlCreate) SetNillableProposedByUserID(v *string) *ControlCreate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *ControlCreate) SetNillableWorkflowEligibleMarker(v *bool) *ControlCreate {
 	if v != nil {
-		_c.SetProposedByUserID(*v)
-	}
-	return _c
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_c *ControlCreate) SetProposedAt(v time.Time) *ControlCreate {
-	_c.mutation.SetProposedAt(v)
-	return _c
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_c *ControlCreate) SetNillableProposedAt(v *time.Time) *ControlCreate {
-	if v != nil {
-		_c.SetProposedAt(*v)
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -1011,6 +997,10 @@ func (_c *ControlCreate) defaults() error {
 		v := control.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := control.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if control.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized control.DefaultID (forgotten import generated/runtime?)")
@@ -1135,6 +1125,10 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
+	if value, ok := _c.mutation.DescriptionJSON(); ok {
+		_spec.SetField(control.FieldDescriptionJSON, field.TypeJSON, value)
+		_node.DescriptionJSON = value
+	}
 	if value, ok := _c.mutation.Aliases(); ok {
 		_spec.SetField(control.FieldAliases, field.TypeJSON, value)
 		_node.Aliases = value
@@ -1231,17 +1225,9 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_spec.SetField(control.FieldControlKindName, field.TypeString, value)
 		_node.ControlKindName = value
 	}
-	if value, ok := _c.mutation.ProposedChanges(); ok {
-		_spec.SetField(control.FieldProposedChanges, field.TypeJSON, value)
-		_node.ProposedChanges = value
-	}
-	if value, ok := _c.mutation.ProposedByUserID(); ok {
-		_spec.SetField(control.FieldProposedByUserID, field.TypeString, value)
-		_node.ProposedByUserID = value
-	}
-	if value, ok := _c.mutation.ProposedAt(); ok {
-		_spec.SetField(control.FieldProposedAt, field.TypeTime, value)
-		_node.ProposedAt = &value
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(control.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)

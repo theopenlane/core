@@ -12,6 +12,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -78,7 +79,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				props.Set("ID", eventID.ID)
 				addMutationFields(props, mutation)
 
-				payload := &MutationPayload{
+				payload := &events.MutationPayload{
 					Mutation:  mutation,
 					Operation: op,
 					EntityID:  eventID.ID,
@@ -189,7 +190,7 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 
 // emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(ctx context.Context, m entgen.Mutation) bool { // nolint:revive
+	return func(ctx context.Context, m entgen.Mutation) bool { //nolint:revive
 		if e == nil || m == nil {
 			return false
 		}

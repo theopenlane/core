@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
@@ -115,7 +116,7 @@ func TestNeedsPolicyDBQuery(t *testing.T) {
 func TestExtractTaskFromPayload(t *testing.T) {
 	tests := []struct {
 		name     string
-		payload  interface{}
+		payload  *events.MutationPayload
 		expected *taskFields
 	}{
 		{
@@ -124,13 +125,8 @@ func TestExtractTaskFromPayload(t *testing.T) {
 			expected: &taskFields{},
 		},
 		{
-			name:     "non-mutation payload",
-			payload:  "invalid",
-			expected: &taskFields{},
-		},
-		{
 			name: "valid payload with entity ID only",
-			payload: &mutationPayload{
+			payload: &events.MutationPayload{
 				EntityID: "task-123",
 			},
 			expected: &taskFields{
@@ -153,7 +149,7 @@ func TestExtractTaskFromPayload(t *testing.T) {
 func TestExtractPolicyFromPayload(t *testing.T) {
 	tests := []struct {
 		name     string
-		payload  interface{}
+		payload  *events.MutationPayload
 		expected *policyFields
 	}{
 		{
@@ -162,13 +158,8 @@ func TestExtractPolicyFromPayload(t *testing.T) {
 			expected: &policyFields{},
 		},
 		{
-			name:     "non-mutation payload",
-			payload:  "invalid",
-			expected: &policyFields{},
-		},
-		{
 			name: "valid payload with entity ID only",
-			payload: &mutationPayload{
+			payload: &events.MutationPayload{
 				EntityID: "policy-123",
 			},
 			expected: &policyFields{
@@ -192,7 +183,7 @@ func TestExtractPolicyFromPayload(t *testing.T) {
 func TestRegisterListeners(t *testing.T) {
 	registered := make(map[string]bool)
 
-	mockAddListener := func(entityType string, handler func(*soiree.EventContext, any) error) {
+	mockAddListener := func(entityType string, handler func(*soiree.EventContext, *events.MutationPayload) error) {
 		registered[entityType] = true
 		assert.NotNil(t, handler)
 	}
@@ -233,7 +224,7 @@ func TestPolicyNotificationInput(t *testing.T) {
 }
 
 func TestMutationPayload(t *testing.T) {
-	payload := &mutationPayload{
+	payload := &events.MutationPayload{
 		Mutation:  nil,
 		Operation: "create",
 		EntityID:  "entity-123",
@@ -483,7 +474,7 @@ func TestFetchTaskFields_Integration(t *testing.T) {
 	tests := []struct {
 		name        string
 		props       soiree.Properties
-		payload     interface{}
+		payload     *events.MutationPayload
 		expectError bool
 		expected    *taskFields
 	}{
@@ -505,7 +496,7 @@ func TestFetchTaskFields_Integration(t *testing.T) {
 		{
 			name:  "all fields from payload",
 			props: mockProps(make(map[string]interface{})),
-			payload: &mutationPayload{
+			payload: &events.MutationPayload{
 				EntityID: "task-payload-1",
 			},
 			expectError: false,
@@ -518,7 +509,7 @@ func TestFetchTaskFields_Integration(t *testing.T) {
 			props: mockProps(map[string]interface{}{
 				"id": "task-prop-2",
 			}),
-			payload: &mutationPayload{
+			payload: &events.MutationPayload{
 				EntityID: "task-payload-2",
 			},
 			expectError: false,
@@ -552,7 +543,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 	tests := []struct {
 		name        string
 		props       soiree.Properties
-		payload     interface{}
+		payload     *events.MutationPayload
 		expectError bool
 		expected    *policyFields
 	}{
@@ -576,7 +567,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 		{
 			name:  "all fields from payload",
 			props: mockProps(make(map[string]interface{})),
-			payload: &mutationPayload{
+			payload: &events.MutationPayload{
 				EntityID: "policy-payload-1",
 			},
 			expectError: false,

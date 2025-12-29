@@ -9,12 +9,12 @@ import (
 	"net/http/httptest"
 	"strings"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/ulids"
 )
 

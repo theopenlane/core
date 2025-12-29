@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -50,6 +50,8 @@ const (
 	FieldVerificationDate = "verification_date"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -124,6 +126,7 @@ var Columns = []string{
 	FieldVerified,
 	FieldVerificationDate,
 	FieldDetails,
+	FieldDetailsJSON,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "control_implementations"
@@ -175,8 +178,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Hooks        [11]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

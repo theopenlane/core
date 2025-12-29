@@ -7,10 +7,9 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/internal/ent/hush"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations
@@ -68,7 +67,6 @@ func (Hush) Fields() []ent.Field {
 			Sensitive().
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
-				hush.EncryptField(), // Automatically encrypt this field
 			).
 			Optional().
 			Immutable(),
@@ -77,7 +75,6 @@ func (Hush) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
-				hush.EncryptField(), // Automatically encrypt this field
 			),
 		field.JSON("metadata", map[string]any{}).
 			Comment("additional metadata about the credential").

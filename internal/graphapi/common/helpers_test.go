@@ -1,4 +1,4 @@
-package common // nolint:revive
+package common //nolint:revive
 
 import (
 	"testing"

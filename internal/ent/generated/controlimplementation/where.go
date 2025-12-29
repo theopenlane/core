@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1001,6 +1001,16 @@ func DetailsEqualFold(v string) predicate.ControlImplementation {
 // DetailsContainsFold applies the ContainsFold predicate on the "details" field.
 func DetailsContainsFold(v string) predicate.ControlImplementation {
 	return predicate.ControlImplementation(sql.FieldContainsFold(FieldDetails, v))
+}
+
+// DetailsJSONIsNil applies the IsNil predicate on the "details_json" field.
+func DetailsJSONIsNil() predicate.ControlImplementation {
+	return predicate.ControlImplementation(sql.FieldIsNull(FieldDetailsJSON))
+}
+
+// DetailsJSONNotNil applies the NotNil predicate on the "details_json" field.
+func DetailsJSONNotNil() predicate.ControlImplementation {
+	return predicate.ControlImplementation(sql.FieldNotNull(FieldDetailsJSON))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

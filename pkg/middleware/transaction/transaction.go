@@ -5,10 +5,10 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -42,23 +42,29 @@ func NewContext(parent context.Context, c *ent.Tx) context.Context {
 // Middleware returns a middleware function for transactions on REST endpoints
 func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		client, err := d.EntDBClient.Tx(c.Request().Context())
+		reqCtx := c.Request().Context()
+		client, err := d.EntDBClient.Tx(reqCtx)
 		if err != nil {
-			log.Error().Err(err).Msg(transactionStartErr)
+			logx.FromContext(reqCtx).Error().Err(err).Msg(transactionStartErr)
 
 			return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
 		}
 
 		// add to context
-		ctx := NewContext(c.Request().Context(), client)
+		ctx := NewContext(reqCtx, client)
 
 		c.SetRequest(c.Request().WithContext(ctx))
 
 		if err := next(c); err != nil {
-			log.Debug().Msg("rolling back transaction in middleware")
+			logx.FromContext(ctx).
+				Info().
+				Err(err).
+				Str("method", c.Request().Method).
+				Str("path", c.Request().URL.Path).
+				Msg("rolling back transaction in middleware")
 
 			if err := client.Rollback(); err != nil {
-				log.Error().Err(err).Msg(rollbackErr)
+				logx.FromContext(ctx).Error().Err(err).Msg(rollbackErr)
 
 				return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
 			}
@@ -66,10 +72,10 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 			return err
 		}
 
-		log.Debug().Msg("committing transaction in middleware")
+		logx.FromContext(ctx).Debug().Msg("committing transaction in middleware")
 
 		if err := client.Commit(); err != nil {
-			log.Error().Err(err).Msg(transactionCommitErr)
+			logx.FromContext(ctx).Error().Err(err).Msg(transactionCommitErr)
 
 			return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
 		}

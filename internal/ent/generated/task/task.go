@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -44,6 +44,8 @@ const (
 	FieldTitle = "title"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldCategory holds the string denoting the category field in the database.
@@ -227,6 +229,7 @@ var Columns = []string{
 	FieldTaskKindID,
 	FieldTitle,
 	FieldDetails,
+	FieldDetailsJSON,
 	FieldStatus,
 	FieldCategory,
 	FieldDue,
@@ -307,8 +310,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Hooks        [11]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

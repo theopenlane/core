@@ -11,9 +11,9 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // WorkflowObjectRef is a through table linking workflow instances to workflow-addressable objects.
@@ -78,6 +78,18 @@ func (WorkflowObjectRef) Fields() []ent.Field {
 			Immutable().
 			Comment("Evidence referenced by this workflow instance").
 			Optional(),
+		field.String("subcontrol_id").
+			Immutable().
+			Comment("Subcontrol referenced by this workflow instance").
+			Optional(),
+		field.String("action_plan_id").
+			Immutable().
+			Comment("ActionPlan referenced by this workflow instance").
+			Optional(),
+		field.String("procedure_id").
+			Immutable().
+			Comment("Procedure referenced by this workflow instance").
+			Optional(),
 	}
 }
 
@@ -91,6 +103,15 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Workflow instance this object is associated with",
 			required:   true,
 			immutable:  true,
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: WorkflowProposal{},
+			ref:        "workflow_object_ref",
+			comment:    "Workflow proposals targeting this object reference",
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
@@ -148,6 +169,27 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Evidence referenced by this workflow instance",
 			immutable:  true,
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Subcontrol{},
+			field:      "subcontrol_id",
+			comment:    "Subcontrol referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: ActionPlan{},
+			field:      "action_plan_id",
+			comment:    "ActionPlan referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Procedure{},
+			field:      "procedure_id",
+			comment:    "Procedure referenced by this workflow instance",
+			immutable:  true,
+		}),
 	}
 }
 
@@ -170,6 +212,12 @@ func (WorkflowObjectRef) Indexes() []ent.Index {
 			Unique(),
 		index.Fields("workflow_instance_id", "evidence_id").
 			Unique(),
+		index.Fields("workflow_instance_id", "subcontrol_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "action_plan_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "procedure_id").
+			Unique(),
 	}
 }
 
@@ -181,7 +229,7 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
-				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}),
+				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}),
 				withOrganizationOwner(true),
 			),
 		},

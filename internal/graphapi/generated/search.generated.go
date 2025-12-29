@@ -1327,7 +1327,7 @@ func (ec *executionContext) _SearchResults_searchContext(ctx context.Context, fi
 			return obj.SearchContext, nil
 		},
 		nil,
-		ec.marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchContextᚄ,
+		ec.marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐSearchContextᚄ,
 		true,
 		false,
 	)

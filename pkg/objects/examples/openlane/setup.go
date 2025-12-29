@@ -12,10 +12,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	models "github.com/theopenlane/core/pkg/openapi"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+
+	openlane "github.com/theopenlane/go-client"
 )
 
 type registerResponse struct {
@@ -87,10 +88,10 @@ func VerifyUser(ctx context.Context, baseURL *url.URL, token string) error {
 }
 
 // LoginUser logs in a user and returns an authenticated Openlane client
-func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*openlaneclient.OpenlaneClient, error) {
-	config := openlaneclient.NewDefaultConfig()
+func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*openlane.OpenlaneClient, error) {
+	config := openlane.NewDefaultConfig()
 
-	client, err := openlaneclient.New(config, openlaneclient.WithBaseURL(baseURL))
+	client, err := openlane.New(config, openlane.WithBaseURL(baseURL))
 	if err != nil {
 		return nil, fmt.Errorf("create initial client: %w", err)
 	}
@@ -110,10 +111,10 @@ func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*
 		return nil, fmt.Errorf("get session: %w", err)
 	}
 
-	authClient, err := openlaneclient.New(
+	authClient, err := openlane.New(
 		config,
-		openlaneclient.WithBaseURL(baseURL),
-		openlaneclient.WithCredentials(openlaneclient.Authorization{
+		openlane.WithBaseURL(baseURL),
+		openlane.WithCredentials(openlane.Authorization{
 			BearerToken: resp.AccessToken,
 			Session:     session,
 		}),
@@ -126,8 +127,8 @@ func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*
 }
 
 // CreateOrganization creates a new organization
-func CreateOrganization(ctx context.Context, client *openlaneclient.OpenlaneClient, name, description string) (string, error) {
-	input := openlaneclient.CreateOrganizationInput{
+func CreateOrganization(ctx context.Context, client *openlane.OpenlaneClient, name, description string) (string, error) {
+	input := openlane.CreateOrganizationInput{
 		Name:        name,
 		Description: &description,
 	}
@@ -141,7 +142,7 @@ func CreateOrganization(ctx context.Context, client *openlaneclient.OpenlaneClie
 }
 
 // GetOrganizationID retrieves the first organization ID for the current user
-func GetOrganizationID(ctx context.Context, client *openlaneclient.OpenlaneClient) (string, error) {
+func GetOrganizationID(ctx context.Context, client *openlane.OpenlaneClient) (string, error) {
 	orgs, err := client.GetOrganizations(ctx, nil, nil, nil)
 	if err != nil {
 		return "", fmt.Errorf("get organizations: %w", err)
@@ -155,8 +156,8 @@ func GetOrganizationID(ctx context.Context, client *openlaneclient.OpenlaneClien
 }
 
 // CreatePAT creates a personal access token for the specified organization
-func CreatePAT(ctx context.Context, client *openlaneclient.OpenlaneClient, orgID, name, description string) (string, error) {
-	input := openlaneclient.CreatePersonalAccessTokenInput{
+func CreatePAT(ctx context.Context, client *openlane.OpenlaneClient, orgID, name, description string) (string, error) {
+	input := openlane.CreatePersonalAccessTokenInput{
 		Name:            name,
 		Description:     &description,
 		OrganizationIDs: []string{orgID},
@@ -171,17 +172,17 @@ func CreatePAT(ctx context.Context, client *openlaneclient.OpenlaneClient, orgID
 }
 
 // InitializeClient creates an Openlane client with the given token and optional organization ID
-func InitializeClient(baseURL *url.URL, token, orgID string) (*openlaneclient.OpenlaneClient, error) {
-	config := openlaneclient.NewDefaultConfig()
+func InitializeClient(baseURL *url.URL, token, orgID string) (*openlane.OpenlaneClient, error) {
+	config := openlane.NewDefaultConfig()
 
 	if orgID != "" {
-		config.Interceptors = append(config.Interceptors, openlaneclient.WithOrganizationHeader(orgID))
+		config.Interceptors = append(config.Interceptors, openlane.WithOrganizationHeader(orgID))
 	}
 
-	client, err := openlaneclient.New(
+	client, err := openlane.New(
 		config,
-		openlaneclient.WithBaseURL(baseURL),
-		openlaneclient.WithCredentials(openlaneclient.Authorization{
+		openlane.WithBaseURL(baseURL),
+		openlane.WithCredentials(openlane.Authorization{
 			BearerToken: token,
 		}),
 	)
@@ -208,10 +209,10 @@ func CreateUpload(filePath string) (*graphql.Upload, error) {
 }
 
 // CreateEvidenceWithFile creates evidence with an attached file
-func CreateEvidenceWithFile(ctx context.Context, client *openlaneclient.OpenlaneClient, name, desc string, upload *graphql.Upload) (*openlaneclient.CreateEvidence, error) {
+func CreateEvidenceWithFile(ctx context.Context, client *openlane.OpenlaneClient, name, desc string, upload *graphql.Upload) (*openlane.CreateEvidence, error) {
 	status := enums.EvidenceStatusSubmitted
 
-	input := openlaneclient.CreateEvidenceInput{
+	input := openlane.CreateEvidenceInput{
 		Name:        name,
 		Description: &desc,
 		Status:      &status,

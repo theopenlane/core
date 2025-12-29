@@ -11,9 +11,9 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -36,10 +36,16 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	ActionPlan() ActionPlanResolver
+	Control() ControlResolver
+	Evidence() EvidenceResolver
 	Group() GroupResolver
+	InternalPolicy() InternalPolicyResolver
 	Mutation() MutationResolver
 	Notification() NotificationResolver
+	Procedure() ProcedureResolver
 	Query() QueryResolver
+	Subcontrol() SubcontrolResolver
 	Subscription() SubscriptionResolver
 	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
@@ -133,6 +139,7 @@ type ComplexityRoot struct {
 		ActionPlanKindID                func(childComplexity int) int
 		ActionPlanKindName              func(childComplexity int) int
 		ActionPlanType                  func(childComplexity int) int
+		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -147,6 +154,7 @@ type ComplexityRoot struct {
 		DelegateID                      func(childComplexity int) int
 		Description                     func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
 		DismissedTagSuggestions         func(childComplexity int) int
@@ -154,6 +162,7 @@ type ComplexityRoot struct {
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
 		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		HasPendingWorkflow              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
@@ -185,6 +194,8 @@ type ComplexityRoot struct {
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
 		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		WorkflowEligibleMarker          func(childComplexity int) int
+		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	ActionPlanBulkCreatePayload struct {
@@ -428,6 +439,7 @@ type ComplexityRoot struct {
 
 	Control struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		ActiveWorkflowInstance     func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -452,6 +464,7 @@ type ComplexityRoot struct {
 		Delegate                   func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Editors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -459,6 +472,7 @@ type ComplexityRoot struct {
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
 		Findings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		HasPendingWorkflow         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -469,9 +483,6 @@ type ComplexityRoot struct {
 		OwnerID                    func(childComplexity int) int
 		Procedures                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ProposedAt                 func(childComplexity int) int
-		ProposedByUserID           func(childComplexity int) int
-		ProposedChanges            func(childComplexity int) int
 		RefCode                    func(childComplexity int) int
 		ReferenceFramework         func(childComplexity int) int
 		ReferenceFrameworkRevision func(childComplexity int) int
@@ -496,6 +507,7 @@ type ComplexityRoot struct {
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		WorkflowEligibleMarker     func(childComplexity int) int
 		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
@@ -566,6 +578,7 @@ type ComplexityRoot struct {
 		CreatedAt          func(childComplexity int) int
 		CreatedBy          func(childComplexity int) int
 		Details            func(childComplexity int) int
+		DetailsJSON        func(childComplexity int) int
 		Editors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                 func(childComplexity int) int
 		ImplementationDate func(childComplexity int) int
@@ -624,6 +637,7 @@ type ComplexityRoot struct {
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
 		DesiredOutcome       func(childComplexity int) int
+		DesiredOutcomeJSON   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Editors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Evidence             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -1331,6 +1345,7 @@ type ComplexityRoot struct {
 	}
 
 	Evidence struct {
+		ActiveWorkflowInstance func(childComplexity int) int
 		CollectionProcedure    func(childComplexity int) int
 		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -1342,15 +1357,13 @@ type ComplexityRoot struct {
 		Description            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Files                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		HasPendingWorkflow     func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IsAutomated            func(childComplexity int) int
 		Name                   func(childComplexity int) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
 		Programs               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ProposedAt             func(childComplexity int) int
-		ProposedByUserID       func(childComplexity int) int
-		ProposedChanges        func(childComplexity int) int
 		RenewalDate            func(childComplexity int) int
 		Source                 func(childComplexity int) int
 		Status                 func(childComplexity int) int
@@ -1360,6 +1373,8 @@ type ComplexityRoot struct {
 		URL                    func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		WorkflowEligibleMarker func(childComplexity int) int
+		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	EvidenceBulkCreatePayload struct {
@@ -1440,6 +1455,7 @@ type ComplexityRoot struct {
 	}
 
 	File struct {
+		Base64                func(childComplexity int) int
 		CategoryType          func(childComplexity int) int
 		Contact               func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -1951,6 +1967,7 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicy struct {
+		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -1965,6 +1982,7 @@ type ComplexityRoot struct {
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
@@ -1973,6 +1991,7 @@ type ComplexityRoot struct {
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
+		HasPendingWorkflow              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -1986,9 +2005,6 @@ type ComplexityRoot struct {
 		PolicyType                      func(childComplexity int) int
 		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		ProposedAt                      func(childComplexity int) int
-		ProposedByUserID                func(childComplexity int) int
-		ProposedChanges                 func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
 		Revision                        func(childComplexity int) int
@@ -2004,6 +2020,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		WorkflowEligibleMarker          func(childComplexity int) int
 		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
@@ -2915,6 +2932,7 @@ type ComplexityRoot struct {
 		Subcontrol     func(childComplexity int) int
 		Task           func(childComplexity int) int
 		Text           func(childComplexity int) int
+		TextJSON       func(childComplexity int) int
 		TrustCenter    func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 		UpdatedBy      func(childComplexity int) int
@@ -3307,6 +3325,7 @@ type ComplexityRoot struct {
 	}
 
 	Procedure struct {
+		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
@@ -3319,6 +3338,7 @@ type ComplexityRoot struct {
 		Delegate                        func(childComplexity int) int
 		DelegateID                      func(childComplexity int) int
 		Details                         func(childComplexity int) int
+		DetailsJSON                     func(childComplexity int) int
 		Discussions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DismissedControlSuggestions     func(childComplexity int) int
 		DismissedImprovementSuggestions func(childComplexity int) int
@@ -3327,6 +3347,7 @@ type ComplexityRoot struct {
 		Editors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		File                            func(childComplexity int) int
 		FileID                          func(childComplexity int) int
+		HasPendingWorkflow              func(childComplexity int) int
 		ID                              func(childComplexity int) int
 		ImprovementSuggestions          func(childComplexity int) int
 		InternalNotes                   func(childComplexity int) int
@@ -3355,6 +3376,8 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		WorkflowEligibleMarker          func(childComplexity int) int
+		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	ProcedureBulkCreatePayload struct {
@@ -3877,50 +3900,53 @@ type ComplexityRoot struct {
 	}
 
 	Risk struct {
-		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		BlockedGroups    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		BusinessCosts    func(childComplexity int) int
-		Category         func(childComplexity int) int
-		Comments         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Delegate         func(childComplexity int) int
-		DelegateID       func(childComplexity int) int
-		Details          func(childComplexity int) int
-		Discussions      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
-		DisplayID        func(childComplexity int) int
-		Editors          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		ID               func(childComplexity int) int
-		Impact           func(childComplexity int) int
-		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		Likelihood       func(childComplexity int) int
-		Mitigation       func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Procedures       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Programs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		RiskCategory     func(childComplexity int) int
-		RiskCategoryID   func(childComplexity int) int
-		RiskCategoryName func(childComplexity int) int
-		RiskKind         func(childComplexity int) int
-		RiskKindID       func(childComplexity int) int
-		RiskKindName     func(childComplexity int) int
-		RiskType         func(childComplexity int) int
-		Scans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		Score            func(childComplexity int) int
-		Stakeholder      func(childComplexity int) int
-		StakeholderID    func(childComplexity int) int
-		Status           func(childComplexity int) int
-		Subcontrols      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Viewers          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ActionPlans       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assets            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		BlockedGroups     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		BusinessCosts     func(childComplexity int) int
+		BusinessCostsJSON func(childComplexity int) int
+		Category          func(childComplexity int) int
+		Comments          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		Delegate          func(childComplexity int) int
+		DelegateID        func(childComplexity int) int
+		Details           func(childComplexity int) int
+		DetailsJSON       func(childComplexity int) int
+		Discussions       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
+		DisplayID         func(childComplexity int) int
+		Editors           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Entities          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		ID                func(childComplexity int) int
+		Impact            func(childComplexity int) int
+		InternalPolicies  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		Likelihood        func(childComplexity int) int
+		Mitigation        func(childComplexity int) int
+		MitigationJSON    func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		Procedures        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Programs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RiskCategory      func(childComplexity int) int
+		RiskCategoryID    func(childComplexity int) int
+		RiskCategoryName  func(childComplexity int) int
+		RiskKind          func(childComplexity int) int
+		RiskKindID        func(childComplexity int) int
+		RiskKindName      func(childComplexity int) int
+		RiskType          func(childComplexity int) int
+		Scans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		Score             func(childComplexity int) int
+		Stakeholder       func(childComplexity int) int
+		StakeholderID     func(childComplexity int) int
+		Status            func(childComplexity int) int
+		Subcontrols       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tags              func(childComplexity int) int
+		Tasks             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
+		Viewers           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	RiskBulkCreatePayload struct {
@@ -4223,6 +4249,7 @@ type ComplexityRoot struct {
 
 	Subcontrol struct {
 		ActionPlans                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		ActiveWorkflowInstance     func(childComplexity int) int
 		Aliases                    func(childComplexity int) int
 		AssessmentMethods          func(childComplexity int) int
 		AssessmentObjectives       func(childComplexity int) int
@@ -4243,11 +4270,13 @@ type ComplexityRoot struct {
 		Delegate                   func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
 		Description                func(childComplexity int) int
+		DescriptionJSON            func(childComplexity int) int
 		Discussions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) int
 		DisplayID                  func(childComplexity int) int
 		Evidence                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
 		EvidenceRequests           func(childComplexity int) int
 		ExampleEvidence            func(childComplexity int) int
+		HasPendingWorkflow         func(childComplexity int) int
 		ID                         func(childComplexity int) int
 		ImplementationGuidance     func(childComplexity int) int
 		InternalNotes              func(childComplexity int) int
@@ -4280,6 +4309,8 @@ type ComplexityRoot struct {
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		WorkflowEligibleMarker     func(childComplexity int) int
+		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	SubcontrolBulkCreatePayload struct {
@@ -4420,7 +4451,7 @@ type ComplexityRoot struct {
 	}
 
 	Subscription struct {
-		TaskCreated func(childComplexity int) int
+		NotificationCreated func(childComplexity int) int
 	}
 
 	TFASetting struct {
@@ -4518,6 +4549,7 @@ type ComplexityRoot struct {
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Details                func(childComplexity int) int
+		DetailsJSON            func(childComplexity int) int
 		DisplayID              func(childComplexity int) int
 		Due                    func(childComplexity int) int
 		Evidence               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
@@ -5339,34 +5371,32 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowDefinition struct {
-		Active            func(childComplexity int) int
-		CooldownSeconds   func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		DefinitionJSON    func(childComplexity int) int
-		Description       func(childComplexity int) int
-		DisplayID         func(childComplexity int) int
-		Draft             func(childComplexity int) int
-		Groups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                func(childComplexity int) int
-		InternalNotes     func(childComplexity int) int
-		IsDefault         func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Owner             func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		PublishedAt       func(childComplexity int) int
-		Revision          func(childComplexity int) int
-		SchemaType        func(childComplexity int) int
-		SystemInternalID  func(childComplexity int) int
-		SystemOwned       func(childComplexity int) int
-		TagDefinitions    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
-		Tags              func(childComplexity int) int
-		TrackedFields     func(childComplexity int) int
-		TriggerFields     func(childComplexity int) int
-		TriggerOperations func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
-		WorkflowKind      func(childComplexity int) int
+		Active           func(childComplexity int) int
+		CooldownSeconds  func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		DefinitionJSON   func(childComplexity int) int
+		Description      func(childComplexity int) int
+		DisplayID        func(childComplexity int) int
+		Draft            func(childComplexity int) int
+		Groups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID               func(childComplexity int) int
+		InternalNotes    func(childComplexity int) int
+		IsDefault        func(childComplexity int) int
+		Name             func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		PublishedAt      func(childComplexity int) int
+		Revision         func(childComplexity int) int
+		SchemaType       func(childComplexity int) int
+		SystemInternalID func(childComplexity int) int
+		SystemOwned      func(childComplexity int) int
+		TagDefinitions   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
+		Tags             func(childComplexity int) int
+		TrackedFields    func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		WorkflowKind     func(childComplexity int) int
 	}
 
 	WorkflowDefinitionBulkCreatePayload struct {
@@ -5440,11 +5470,14 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowInstance struct {
+		ActionPlan           func(childComplexity int) int
+		ActionPlanID         func(childComplexity int) int
 		Context              func(childComplexity int) int
 		Control              func(childComplexity int) int
 		ControlID            func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
+		CurrentActionIndex   func(childComplexity int) int
 		DefinitionSnapshot   func(childComplexity int) int
 		DisplayID            func(childComplexity int) int
 		Evidence             func(childComplexity int) int
@@ -5455,7 +5488,11 @@ type ComplexityRoot struct {
 		LastEvaluatedAt      func(childComplexity int) int
 		Owner                func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
+		Procedure            func(childComplexity int) int
+		ProcedureID          func(childComplexity int) int
 		State                func(childComplexity int) int
+		Subcontrol           func(childComplexity int) int
+		SubcontrolID         func(childComplexity int) int
 		Tags                 func(childComplexity int) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
@@ -5464,6 +5501,7 @@ type ComplexityRoot struct {
 		WorkflowDefinitionID func(childComplexity int) int
 		WorkflowEvents       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
 		WorkflowObjectRefs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowProposalID   func(childComplexity int) int
 	}
 
 	WorkflowInstanceBulkCreatePayload struct {
@@ -5494,6 +5532,8 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowObjectRef struct {
+		ActionPlan            func(childComplexity int) int
+		ActionPlanID          func(childComplexity int) int
 		Control               func(childComplexity int) int
 		ControlID             func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -5514,6 +5554,10 @@ type ComplexityRoot struct {
 		InternalPolicyID      func(childComplexity int) int
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
+		Procedure             func(childComplexity int) int
+		ProcedureID           func(childComplexity int) int
+		Subcontrol            func(childComplexity int) int
+		SubcontrolID          func(childComplexity int) int
 		Task                  func(childComplexity int) int
 		TaskID                func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
@@ -5796,6 +5840,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.ActionPlanType(childComplexity), true
 
+	case "ActionPlan.activeWorkflowInstance":
+		if e.complexity.ActionPlan.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.ActiveWorkflowInstance(childComplexity), true
+
 	case "ActionPlan.approvalRequired":
 		if e.complexity.ActionPlan.ApprovalRequired == nil {
 			break
@@ -5899,6 +5950,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlan.Details(childComplexity), true
 
+	case "ActionPlan.detailsJSON":
+		if e.complexity.ActionPlan.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.DetailsJSON(childComplexity), true
+
 	case "ActionPlan.dismissedControlSuggestions":
 		if e.complexity.ActionPlan.DismissedControlSuggestions == nil {
 			break
@@ -5952,6 +6010,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "ActionPlan.hasPendingWorkflow":
+		if e.complexity.ActionPlan.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.HasPendingWorkflow(childComplexity), true
 
 	case "ActionPlan.id":
 		if e.complexity.ActionPlan.ID == nil {
@@ -6204,6 +6269,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "ActionPlan.workflowEligibleMarker":
+		if e.complexity.ActionPlan.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.ActionPlan.WorkflowEligibleMarker(childComplexity), true
+
+	case "ActionPlan.workflowObjectRefs":
+		if e.complexity.ActionPlan.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_ActionPlan_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ActionPlan.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "ActionPlanBulkCreatePayload.actionPlans":
 		if e.complexity.ActionPlanBulkCreatePayload.ActionPlans == nil {
@@ -7173,6 +7257,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Control.activeWorkflowInstance":
+		if e.complexity.Control.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Control.ActiveWorkflowInstance(childComplexity), true
+
 	case "Control.aliases":
 		if e.complexity.Control.Aliases == nil {
 			break
@@ -7371,6 +7462,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.Description(childComplexity), true
 
+	case "Control.descriptionJSON":
+		if e.complexity.Control.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.Control.DescriptionJSON(childComplexity), true
+
 	case "Control.discussions":
 		if e.complexity.Control.Discussions == nil {
 			break
@@ -7439,6 +7537,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "Control.hasPendingWorkflow":
+		if e.complexity.Control.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Control.HasPendingWorkflow(childComplexity), true
 
 	case "Control.id":
 		if e.complexity.Control.ID == nil {
@@ -7529,27 +7634,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
-
-	case "Control.proposedAt":
-		if e.complexity.Control.ProposedAt == nil {
-			break
-		}
-
-		return e.complexity.Control.ProposedAt(childComplexity), true
-
-	case "Control.proposedByUserID":
-		if e.complexity.Control.ProposedByUserID == nil {
-			break
-		}
-
-		return e.complexity.Control.ProposedByUserID(childComplexity), true
-
-	case "Control.proposedChanges":
-		if e.complexity.Control.ProposedChanges == nil {
-			break
-		}
-
-		return e.complexity.Control.ProposedChanges(childComplexity), true
 
 	case "Control.refCode":
 		if e.complexity.Control.RefCode == nil {
@@ -7743,6 +7827,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.UpdatedBy(childComplexity), true
+
+	case "Control.workflowEligibleMarker":
+		if e.complexity.Control.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.Control.WorkflowEligibleMarker(childComplexity), true
 
 	case "Control.workflowObjectRefs":
 		if e.complexity.Control.WorkflowObjectRefs == nil {
@@ -7954,6 +8045,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlImplementation.Details(childComplexity), true
+
+	case "ControlImplementation.detailsJSON":
+		if e.complexity.ControlImplementation.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlImplementation.DetailsJSON(childComplexity), true
 
 	case "ControlImplementation.editors":
 		if e.complexity.ControlImplementation.Editors == nil {
@@ -8222,6 +8320,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjective.DesiredOutcome(childComplexity), true
+
+	case "ControlObjective.desiredOutcomeJSON":
+		if e.complexity.ControlObjective.DesiredOutcomeJSON == nil {
+			break
+		}
+
+		return e.complexity.ControlObjective.DesiredOutcomeJSON(childComplexity), true
 
 	case "ControlObjective.displayID":
 		if e.complexity.ControlObjective.DisplayID == nil {
@@ -11373,6 +11478,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EventUpdatePayload.Event(childComplexity), true
 
+	case "Evidence.activeWorkflowInstance":
+		if e.complexity.Evidence.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Evidence.ActiveWorkflowInstance(childComplexity), true
+
 	case "Evidence.collectionProcedure":
 		if e.complexity.Evidence.CollectionProcedure == nil {
 			break
@@ -11475,6 +11587,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Evidence.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
+	case "Evidence.hasPendingWorkflow":
+		if e.complexity.Evidence.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Evidence.HasPendingWorkflow(childComplexity), true
+
 	case "Evidence.id":
 		if e.complexity.Evidence.ID == nil {
 			break
@@ -11521,27 +11640,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
-
-	case "Evidence.proposedAt":
-		if e.complexity.Evidence.ProposedAt == nil {
-			break
-		}
-
-		return e.complexity.Evidence.ProposedAt(childComplexity), true
-
-	case "Evidence.proposedByUserID":
-		if e.complexity.Evidence.ProposedByUserID == nil {
-			break
-		}
-
-		return e.complexity.Evidence.ProposedByUserID(childComplexity), true
-
-	case "Evidence.proposedChanges":
-		if e.complexity.Evidence.ProposedChanges == nil {
-			break
-		}
-
-		return e.complexity.Evidence.ProposedChanges(childComplexity), true
 
 	case "Evidence.renewalDate":
 		if e.complexity.Evidence.RenewalDate == nil {
@@ -11615,6 +11713,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.UpdatedBy(childComplexity), true
+
+	case "Evidence.workflowEligibleMarker":
+		if e.complexity.Evidence.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.Evidence.WorkflowEligibleMarker(childComplexity), true
+
+	case "Evidence.workflowObjectRefs":
+		if e.complexity.Evidence.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "EvidenceBulkCreatePayload.evidences":
 		if e.complexity.EvidenceBulkCreatePayload.Evidences == nil {
@@ -11870,6 +11987,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ExportUpdatePayload.Export(childComplexity), true
+
+	case "File.base64":
+		if e.complexity.File.Base64 == nil {
+			break
+		}
+
+		return e.complexity.File.Base64(childComplexity), true
 
 	case "File.categoryType":
 		if e.complexity.File.CategoryType == nil {
@@ -14620,6 +14744,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.IntegrationEdge.Node(childComplexity), true
 
+	case "InternalPolicy.activeWorkflowInstance":
+		if e.complexity.InternalPolicy.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.ActiveWorkflowInstance(childComplexity), true
+
 	case "InternalPolicy.approvalRequired":
 		if e.complexity.InternalPolicy.ApprovalRequired == nil {
 			break
@@ -14743,6 +14874,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicy.Details(childComplexity), true
 
+	case "InternalPolicy.detailsJSON":
+		if e.complexity.InternalPolicy.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.DetailsJSON(childComplexity), true
+
 	case "InternalPolicy.discussions":
 		if e.complexity.InternalPolicy.Discussions == nil {
 			break
@@ -14808,6 +14946,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.FileID(childComplexity), true
+
+	case "InternalPolicy.hasPendingWorkflow":
+		if e.complexity.InternalPolicy.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.HasPendingWorkflow(childComplexity), true
 
 	case "InternalPolicy.id":
 		if e.complexity.InternalPolicy.ID == nil {
@@ -14914,27 +15059,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
-
-	case "InternalPolicy.proposedAt":
-		if e.complexity.InternalPolicy.ProposedAt == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.ProposedAt(childComplexity), true
-
-	case "InternalPolicy.proposedByUserID":
-		if e.complexity.InternalPolicy.ProposedByUserID == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.ProposedByUserID(childComplexity), true
-
-	case "InternalPolicy.proposedChanges":
-		if e.complexity.InternalPolicy.ProposedChanges == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.ProposedChanges(childComplexity), true
 
 	case "InternalPolicy.reviewDue":
 		if e.complexity.InternalPolicy.ReviewDue == nil {
@@ -15055,6 +15179,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.UpdatedBy(childComplexity), true
+
+	case "InternalPolicy.workflowEligibleMarker":
+		if e.complexity.InternalPolicy.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.InternalPolicy.WorkflowEligibleMarker(childComplexity), true
 
 	case "InternalPolicy.workflowObjectRefs":
 		if e.complexity.InternalPolicy.WorkflowObjectRefs == nil {
@@ -22104,6 +22235,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Note.Text(childComplexity), true
 
+	case "Note.textJSON":
+		if e.complexity.Note.TextJSON == nil {
+			break
+		}
+
+		return e.complexity.Note.TextJSON(childComplexity), true
+
 	case "Note.trustCenter":
 		if e.complexity.Note.TrustCenter == nil {
 			break
@@ -24406,6 +24544,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.PersonalAccessTokenUpdatePayload.PersonalAccessToken(childComplexity), true
 
+	case "Procedure.activeWorkflowInstance":
+		if e.complexity.Procedure.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Procedure.ActiveWorkflowInstance(childComplexity), true
+
 	case "Procedure.approvalRequired":
 		if e.complexity.Procedure.ApprovalRequired == nil {
 			break
@@ -24505,6 +24650,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.Details(childComplexity), true
 
+	case "Procedure.detailsJSON":
+		if e.complexity.Procedure.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.Procedure.DetailsJSON(childComplexity), true
+
 	case "Procedure.discussions":
 		if e.complexity.Procedure.Discussions == nil {
 			break
@@ -24570,6 +24722,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.FileID(childComplexity), true
+
+	case "Procedure.hasPendingWorkflow":
+		if e.complexity.Procedure.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Procedure.HasPendingWorkflow(childComplexity), true
 
 	case "Procedure.id":
 		if e.complexity.Procedure.ID == nil {
@@ -24796,6 +24955,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Procedure.UpdatedBy(childComplexity), true
+
+	case "Procedure.workflowEligibleMarker":
+		if e.complexity.Procedure.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.Procedure.WorkflowEligibleMarker(childComplexity), true
+
+	case "Procedure.workflowObjectRefs":
+		if e.complexity.Procedure.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Procedure_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Procedure.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "ProcedureBulkCreatePayload.procedures":
 		if e.complexity.ProcedureBulkCreatePayload.Procedures == nil {
@@ -28909,6 +29087,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.BusinessCosts(childComplexity), true
 
+	case "Risk.businessCostsJSON":
+		if e.complexity.Risk.BusinessCostsJSON == nil {
+			break
+		}
+
+		return e.complexity.Risk.BusinessCostsJSON(childComplexity), true
+
 	case "Risk.category":
 		if e.complexity.Risk.Category == nil {
 			break
@@ -28974,6 +29159,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Details(childComplexity), true
+
+	case "Risk.detailsJSON":
+		if e.complexity.Risk.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.Risk.DetailsJSON(childComplexity), true
 
 	case "Risk.discussions":
 		if e.complexity.Risk.Discussions == nil {
@@ -29057,6 +29249,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.Mitigation(childComplexity), true
+
+	case "Risk.mitigationJSON":
+		if e.complexity.Risk.MitigationJSON == nil {
+			break
+		}
+
+		return e.complexity.Risk.MitigationJSON(childComplexity), true
 
 	case "Risk.name":
 		if e.complexity.Risk.Name == nil {
@@ -30515,6 +30714,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
 
+	case "Subcontrol.activeWorkflowInstance":
+		if e.complexity.Subcontrol.ActiveWorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.ActiveWorkflowInstance(childComplexity), true
+
 	case "Subcontrol.aliases":
 		if e.complexity.Subcontrol.Aliases == nil {
 			break
@@ -30670,6 +30876,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.Description(childComplexity), true
 
+	case "Subcontrol.descriptionJSON":
+		if e.complexity.Subcontrol.DescriptionJSON == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.DescriptionJSON(childComplexity), true
+
 	case "Subcontrol.discussions":
 		if e.complexity.Subcontrol.Discussions == nil {
 			break
@@ -30714,6 +30927,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.ExampleEvidence(childComplexity), true
+
+	case "Subcontrol.hasPendingWorkflow":
+		if e.complexity.Subcontrol.HasPendingWorkflow == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.HasPendingWorkflow(childComplexity), true
 
 	case "Subcontrol.id":
 		if e.complexity.Subcontrol.ID == nil {
@@ -30968,6 +31188,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Subcontrol.UpdatedBy(childComplexity), true
+
+	case "Subcontrol.workflowEligibleMarker":
+		if e.complexity.Subcontrol.WorkflowEligibleMarker == nil {
+			break
+		}
+
+		return e.complexity.Subcontrol.WorkflowEligibleMarker(childComplexity), true
+
+	case "Subcontrol.workflowObjectRefs":
+		if e.complexity.Subcontrol.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Subcontrol_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Subcontrol.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "SubcontrolBulkCreatePayload.subcontrols":
 		if e.complexity.SubcontrolBulkCreatePayload.Subcontrols == nil {
@@ -31434,12 +31673,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubscriberUpdatePayload.Subscriber(childComplexity), true
 
-	case "Subscription.taskCreated":
-		if e.complexity.Subscription.TaskCreated == nil {
+	case "Subscription.notificationCreated":
+		if e.complexity.Subscription.NotificationCreated == nil {
 			break
 		}
 
-		return e.complexity.Subscription.TaskCreated(childComplexity), true
+		return e.complexity.Subscription.NotificationCreated(childComplexity), true
 
 	case "TFASetting.createdAt":
 		if e.complexity.TFASetting.CreatedAt == nil {
@@ -31871,6 +32110,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.Details(childComplexity), true
+
+	case "Task.detailsJSON":
+		if e.complexity.Task.DetailsJSON == nil {
+			break
+		}
+
+		return e.complexity.Task.DetailsJSON(childComplexity), true
 
 	case "Task.displayID":
 		if e.complexity.Task.DisplayID == nil {
@@ -35677,20 +35923,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowDefinition.TrackedFields(childComplexity), true
 
-	case "WorkflowDefinition.triggerFields":
-		if e.complexity.WorkflowDefinition.TriggerFields == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.TriggerFields(childComplexity), true
-
-	case "WorkflowDefinition.triggerOperations":
-		if e.complexity.WorkflowDefinition.TriggerOperations == nil {
-			break
-		}
-
-		return e.complexity.WorkflowDefinition.TriggerOperations(childComplexity), true
-
 	case "WorkflowDefinition.updatedAt":
 		if e.complexity.WorkflowDefinition.UpdatedAt == nil {
 			break
@@ -35929,6 +36161,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEventUpdatePayload.WorkflowEvent(childComplexity), true
 
+	case "WorkflowInstance.actionPlan":
+		if e.complexity.WorkflowInstance.ActionPlan == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.ActionPlan(childComplexity), true
+
+	case "WorkflowInstance.actionPlanID":
+		if e.complexity.WorkflowInstance.ActionPlanID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.ActionPlanID(childComplexity), true
+
 	case "WorkflowInstance.context":
 		if e.complexity.WorkflowInstance.Context == nil {
 			break
@@ -35963,6 +36209,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstance.CreatedBy(childComplexity), true
+
+	case "WorkflowInstance.currentActionIndex":
+		if e.complexity.WorkflowInstance.CurrentActionIndex == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.CurrentActionIndex(childComplexity), true
 
 	case "WorkflowInstance.definitionSnapshot":
 		if e.complexity.WorkflowInstance.DefinitionSnapshot == nil {
@@ -36034,12 +36287,40 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstance.OwnerID(childComplexity), true
 
+	case "WorkflowInstance.procedure":
+		if e.complexity.WorkflowInstance.Procedure == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Procedure(childComplexity), true
+
+	case "WorkflowInstance.procedureID":
+		if e.complexity.WorkflowInstance.ProcedureID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.ProcedureID(childComplexity), true
+
 	case "WorkflowInstance.state":
 		if e.complexity.WorkflowInstance.State == nil {
 			break
 		}
 
 		return e.complexity.WorkflowInstance.State(childComplexity), true
+
+	case "WorkflowInstance.subcontrol":
+		if e.complexity.WorkflowInstance.Subcontrol == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Subcontrol(childComplexity), true
+
+	case "WorkflowInstance.subcontrolID":
+		if e.complexity.WorkflowInstance.SubcontrolID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.SubcontrolID(childComplexity), true
 
 	case "WorkflowInstance.tags":
 		if e.complexity.WorkflowInstance.Tags == nil {
@@ -36112,6 +36393,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowInstance.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
+	case "WorkflowInstance.workflowProposalID":
+		if e.complexity.WorkflowInstance.WorkflowProposalID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.WorkflowProposalID(childComplexity), true
+
 	case "WorkflowInstanceBulkCreatePayload.workflowInstances":
 		if e.complexity.WorkflowInstanceBulkCreatePayload.WorkflowInstances == nil {
 			break
@@ -36174,6 +36462,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowInstanceUpdatePayload.WorkflowInstance(childComplexity), true
+
+	case "WorkflowObjectRef.actionPlan":
+		if e.complexity.WorkflowObjectRef.ActionPlan == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.ActionPlan(childComplexity), true
+
+	case "WorkflowObjectRef.actionPlanID":
+		if e.complexity.WorkflowObjectRef.ActionPlanID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.ActionPlanID(childComplexity), true
 
 	case "WorkflowObjectRef.control":
 		if e.complexity.WorkflowObjectRef.Control == nil {
@@ -36314,6 +36616,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectRef.OwnerID(childComplexity), true
+
+	case "WorkflowObjectRef.procedure":
+		if e.complexity.WorkflowObjectRef.Procedure == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Procedure(childComplexity), true
+
+	case "WorkflowObjectRef.procedureID":
+		if e.complexity.WorkflowObjectRef.ProcedureID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.ProcedureID(childComplexity), true
+
+	case "WorkflowObjectRef.subcontrol":
+		if e.complexity.WorkflowObjectRef.Subcontrol == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Subcontrol(childComplexity), true
+
+	case "WorkflowObjectRef.subcontrolID":
+		if e.complexity.WorkflowObjectRef.SubcontrolID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.SubcontrolID(childComplexity), true
 
 	case "WorkflowObjectRef.task":
 		if e.complexity.WorkflowObjectRef.Task == nil {
@@ -36677,6 +37007,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateDirectoryMembershipInput,
 		ec.unmarshalInputUpdateDirectorySyncRunInput,
 		ec.unmarshalInputUpdateDiscussionInput,
+		ec.unmarshalInputUpdateDiscussionsInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
@@ -36990,8 +37321,19 @@ scalar WorkflowEventPayload
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
-`, BuiltIn: false},
-	{Name: "../schema/actionplan.graphql", Input: `extend type Query {
+scalar Any`, BuiltIn: false},
+	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
+    """
+    Indicates if this actionPlan has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this actionPlan if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up actionPlan by ID
     """
@@ -37688,7 +38030,18 @@ type ContactBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
-	{Name: "../schema/control.graphql", Input: `extend type Query {
+	{Name: "../schema/control.graphql", Input: `extend type Control {
+    """
+    Indicates if this control has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this control if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up control by ID
     """
@@ -39674,6 +40027,10 @@ type ActionPlan implements Node {
   """
   details: String
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -39750,6 +40107,10 @@ type ActionPlan implements Node {
   the kind of the action_plan
   """
   actionPlanKindID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   short title describing the action plan
   """
@@ -40084,6 +40445,37 @@ type ActionPlan implements Node {
     where: IntegrationWhereInput
   ): IntegrationConnection!
   file: File
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -40105,7 +40497,7 @@ type ActionPlanConnection {
 """
 ActionPlanDocumentStatus is enum for the field status
 """
-enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -40128,7 +40520,7 @@ type ActionPlanEdge {
 """
 ActionPlanFrequency is enum for the field review_frequency
 """
-enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -40166,7 +40558,7 @@ enum ActionPlanOrderField {
 """
 ActionPlanPriority is enum for the field priority
 """
-enum ActionPlanPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+enum ActionPlanPriority @goModel(model: "github.com/theopenlane/core/common/enums.Priority") {
   LOW
   MEDIUM
   HIGH
@@ -40533,6 +40925,13 @@ input ActionPlanWhereInput {
   actionPlanKindIDEqualFold: ID
   actionPlanKindIDContainsFold: ID
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   title field predicates
   """
   title: String
@@ -40717,6 +41116,11 @@ input ActionPlanWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Assessment implements Node {
   id: ID!
@@ -40883,7 +41287,7 @@ type Assessment implements Node {
 """
 AssessmentAssessmentType is enum for the field assessment_type
 """
-enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
+enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -40993,7 +41397,7 @@ type AssessmentResponse implements Node {
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
+enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/common/enums.AssessmentResponseStatus") {
   NOT_STARTED
   SENT
   COMPLETED
@@ -41699,7 +42103,7 @@ type Asset implements Node {
 """
 AssetAssetType is enum for the field asset_type
 """
-enum AssetAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+enum AssetAssetType @goModel(model: "github.com/theopenlane/core/common/enums.AssetType") {
   TECHNOLOGY
   DOMAIN
   DEVICE
@@ -42178,7 +42582,7 @@ enum ContactOrderField {
 """
 ContactUserStatus is enum for the field status
 """
-enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -42440,6 +42844,10 @@ type Control implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -42556,17 +42964,9 @@ type Control implements Node {
   """
   controlKindID: ID
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -43262,7 +43662,7 @@ type ControlConnection {
 """
 ControlControlSource is enum for the field source
 """
-enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -43271,7 +43671,7 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ControlControlStatus is enum for the field status
 """
-enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -43283,7 +43683,7 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ControlControlType is enum for the field control_type
 """
-enum ControlControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum ControlControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -43348,6 +43748,10 @@ type ControlImplementation implements Node {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
   owner: Organization
   blockedGroups(
     """
@@ -43556,7 +43960,7 @@ type ControlImplementationConnection {
 """
 ControlImplementationDocumentStatus is enum for the field status
 """
-enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -43882,6 +44286,10 @@ type ControlObjective implements Node {
   the desired outcome or target of the control objective
   """
   desiredOutcome: String
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
   """
   status of the control objective
   """
@@ -44296,7 +44704,7 @@ type ControlObjectiveConnection {
 """
 ControlObjectiveControlSource is enum for the field source
 """
-enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -44318,7 +44726,7 @@ type ControlObjectiveEdge {
 """
 ControlObjectiveObjectiveStatus is enum for the field status
 """
-enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/core/common/enums.ObjectiveStatus") {
   ACTIVE
   ARCHIVED
   DRAFT
@@ -45171,36 +45579,12 @@ input ControlWhereInput {
   controlKindIDEqualFold: ID
   controlKindIDContainsFold: ID
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   ref_code field predicates
   """
@@ -45442,6 +45826,10 @@ input CreateActionPlanInput {
   """
   details: String
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -45493,6 +45881,10 @@ input CreateActionPlanInput {
   the kind of the action_plan
   """
   actionPlanKindName: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   short title describing the action plan
   """
@@ -45551,6 +45943,7 @@ input CreateActionPlanInput {
   taskIDs: [ID!]
   integrationIDs: [ID!]
   fileID: ID
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateAssessmentInput is used for create Assessment object.
@@ -45730,6 +46123,10 @@ input CreateControlImplementationInput {
   details of the control implementation
   """
   details: String
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -45755,6 +46152,10 @@ input CreateControlInput {
   description of what the control is supposed to accomplish
   """
   description: String @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
   """
   additional names (ref_codes) for the control
   """
@@ -45848,17 +46249,9 @@ input CreateControlInput {
   """
   controlKindName: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -45919,6 +46312,10 @@ input CreateControlObjectiveInput {
   the desired outcome or target of the control objective
   """
   desiredOutcome: String
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
   """
   status of the control objective
   """
@@ -46452,17 +46849,9 @@ input CreateEvidenceInput {
   """
   tags: [String!]
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -46508,6 +46897,7 @@ input CreateEvidenceInput {
   programIDs: [ID!]
   taskIDs: [ID!]
   commentIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateExportInput is used for create Export object.
@@ -47046,6 +47436,10 @@ input CreateInternalPolicyInput {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -47090,17 +47484,9 @@ input CreateInternalPolicyInput {
   """
   internalPolicyKindName: String
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -47420,6 +47806,10 @@ input CreateNoteInput {
   the text of the note
   """
   text: String!
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
   """
   ref location of the note
   """
@@ -47805,6 +48195,10 @@ input CreateProcedureInput {
   """
   details: String
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -47856,6 +48250,10 @@ input CreateProcedureInput {
   the kind of the procedure
   """
   procedureKindName: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -47872,6 +48270,7 @@ input CreateProcedureInput {
   commentIDs: [ID!]
   discussionIDs: [ID!]
   fileID: ID
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateProgramInput is used for create Program object.
@@ -48233,13 +48632,25 @@ input CreateRiskInput {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -48436,6 +48847,10 @@ input CreateSubcontrolInput {
   """
   description: String @externalReadOnly(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -48528,6 +48943,10 @@ input CreateSubcontrolInput {
   """
   subcontrolKindName: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String! @externalReadOnly(source: FRAMEWORK)
@@ -48549,6 +48968,7 @@ input CreateSubcontrolInput {
   controlID: ID!
   controlImplementationIDs: [ID!]
   scheduledJobIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -48665,6 +49085,10 @@ input CreateTaskInput {
   the details of the task
   """
   details: String
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
   """
   the status of the task
   """
@@ -49376,14 +49800,6 @@ input CreateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -49440,11 +49856,18 @@ input CreateWorkflowInstanceInput {
   Copy of definition JSON used for this instance
   """
   definitionSnapshot: WorkflowDefinitionDocument
+  """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int
   ownerID: ID
   workflowDefinitionID: ID!
   controlID: ID
   internalPolicyID: ID
   evidenceID: ID
+  subcontrolID: ID
+  actionPlanID: ID
+  procedureID: ID
   workflowAssignmentIDs: [ID!]
   workflowEventIDs: [ID!]
   workflowObjectRefIDs: [ID!]
@@ -49463,6 +49886,9 @@ input CreateWorkflowObjectRefInput {
   directoryAccountID: ID
   directoryGroupID: ID
   evidenceID: ID
+  subcontrolID: ID
+  actionPlanID: ID
+  procedureID: ID
 }
 """
 Define a Relay Cursor type:
@@ -50549,7 +50975,7 @@ type DNSVerificationConnection {
 """
 DNSVerificationDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/common/enums.DNSVerificationStatus") {
   active
   pending
   active_redeploying
@@ -50603,7 +51029,7 @@ enum DNSVerificationOrderField {
 """
 DNSVerificationSSLVerificationStatus is enum for the field acme_challenge_status
 """
-enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/core/common/enums.SSLVerificationStatus") {
   initializing
   pending_validation
   deleted
@@ -51097,7 +51523,7 @@ type DirectoryAccountConnection {
 """
 DirectoryAccountDirectoryAccountMFAState is enum for the field mfa_state
 """
-enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountMFAState") {
   UNKNOWN
   DISABLED
   ENABLED
@@ -51106,7 +51532,7 @@ enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theope
 """
 DirectoryAccountDirectoryAccountStatus is enum for the field status
 """
-enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountStatus") {
   ACTIVE
   INACTIVE
   SUSPENDED
@@ -51115,7 +51541,7 @@ enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenl
 """
 DirectoryAccountDirectoryAccountType is enum for the field account_type
 """
-enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryAccountType") {
   USER
   SERVICE
   SHARED
@@ -51797,7 +52223,7 @@ type DirectoryGroupConnection {
 """
 DirectoryGroupDirectoryGroupClassification is enum for the field classification
 """
-enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryGroupClassification") {
   SECURITY
   DISTRIBUTION
   TEAM
@@ -51806,7 +52232,7 @@ enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theo
 """
 DirectoryGroupDirectoryGroupStatus is enum for the field status
 """
-enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryGroupStatus") {
   ACTIVE
   INACTIVE
   DELETED
@@ -52310,7 +52736,7 @@ type DirectoryMembershipConnection {
 """
 DirectoryMembershipDirectoryMembershipRole is enum for the field role
 """
-enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
   MANAGER
   OWNER
@@ -52703,7 +53129,7 @@ type DirectorySyncRunConnection {
 """
 DirectorySyncRunDirectorySyncRunStatus is enum for the field status
 """
-enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectorySyncRunStatus") {
+enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.DirectorySyncRunStatus") {
   PENDING
   RUNNING
   COMPLETED
@@ -55144,17 +55570,9 @@ type Evidence implements Node {
   """
   ownerID: ID
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -55440,6 +55858,37 @@ type Evidence implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -55474,7 +55923,7 @@ type EvidenceEdge {
 """
 EvidenceEvidenceStatus is enum for the field status
 """
-enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/common/enums.EvidenceStatus") {
   SUBMITTED
   READY_FOR_AUDITOR
   AUDITOR_APPROVED
@@ -55625,36 +56074,12 @@ input EvidenceWhereInput {
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   name field predicates
   """
@@ -55828,6 +56253,11 @@ input EvidenceWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Export implements Node {
   id: ID!
@@ -55964,13 +56394,13 @@ type ExportEdge {
 """
 ExportExportFormat is enum for the field format
 """
-enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportFormat") {
+enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/common/enums.ExportFormat") {
   CSV
 }
 """
 ExportExportStatus is enum for the field status
 """
-enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportStatus") {
+enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/common/enums.ExportStatus") {
   PENDING
   FAILED
   READY
@@ -55979,7 +56409,7 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.E
 """
 ExportExportType is enum for the field export_type
 """
-enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
+enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
   CONTROL
   DIRECTORY_MEMBERSHIP
   EVIDENCE
@@ -60076,7 +60506,7 @@ enum GroupMembershipOrderField {
 """
 GroupMembershipRole is enum for the field role
 """
-enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -60254,7 +60684,7 @@ type GroupSettingEdge {
 """
 GroupSettingJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enums.JoinPolicy") {
+enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/common/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -60283,7 +60713,7 @@ enum GroupSettingOrderField {
 """
 GroupSettingVisibility is enum for the field visibility
 """
-enum GroupSettingVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.Visibility") {
+enum GroupSettingVisibility @goModel(model: "github.com/theopenlane/core/common/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -62090,6 +62520,10 @@ type InternalPolicy implements Node {
   """
   details: String
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -62151,17 +62585,9 @@ type InternalPolicy implements Node {
   """
   internalPolicyKindID: ID
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
+  workflowEligibleMarker: Boolean
   owner: Organization
   blockedGroups(
     """
@@ -62628,7 +63054,7 @@ type InternalPolicyConnection {
 """
 InternalPolicyDocumentStatus is enum for the field status
 """
-enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -62651,7 +63077,7 @@ type InternalPolicyEdge {
 """
 InternalPolicyFrequency is enum for the field review_frequency
 """
-enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -63059,36 +63485,12 @@ input InternalPolicyWhereInput {
   internalPolicyKindIDEqualFold: ID
   internalPolicyKindIDContainsFold: ID
   """
-  proposed_by_user_id field predicates
+  workflow_eligible_marker field predicates
   """
-  proposedByUserID: String
-  proposedByUserIDNEQ: String
-  proposedByUserIDIn: [String!]
-  proposedByUserIDNotIn: [String!]
-  proposedByUserIDGT: String
-  proposedByUserIDGTE: String
-  proposedByUserIDLT: String
-  proposedByUserIDLTE: String
-  proposedByUserIDContains: String
-  proposedByUserIDHasPrefix: String
-  proposedByUserIDHasSuffix: String
-  proposedByUserIDIsNil: Boolean
-  proposedByUserIDNotNil: Boolean
-  proposedByUserIDEqualFold: String
-  proposedByUserIDContainsFold: String
-  """
-  proposed_at field predicates
-  """
-  proposedAt: Time
-  proposedAtNEQ: Time
-  proposedAtIn: [Time!]
-  proposedAtNotIn: [Time!]
-  proposedAtGT: Time
-  proposedAtGTE: Time
-  proposedAtLT: Time
-  proposedAtLTE: Time
-  proposedAtIsNil: Boolean
-  proposedAtNotNil: Boolean
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   owner edge predicates
   """
@@ -63317,7 +63719,7 @@ type InviteEdge {
 """
 InviteInviteStatus is enum for the field status
 """
-enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.InviteStatus") {
+enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/common/enums.InviteStatus") {
   INVITATION_SENT
   APPROVAL_REQUIRED
   INVITATION_ACCEPTED
@@ -63349,7 +63751,7 @@ enum InviteOrderField {
 """
 InviteRole is enum for the field role
 """
-enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum InviteRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -63626,7 +64028,7 @@ type JobResultEdge {
 """
 JobResultJobExecutionStatus is enum for the field status
 """
-enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobExecutionStatus") {
+enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/core/common/enums.JobExecutionStatus") {
   CANCELED
   SUCCESS
   PENDING
@@ -63983,7 +64385,7 @@ type JobRunnerEdge {
 """
 JobRunnerJobRunnerStatus is enum for the field status
 """
-enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobRunnerStatus") {
+enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/common/enums.JobRunnerStatus") {
   ONLINE
   OFFLINE
 }
@@ -64925,7 +65327,7 @@ type JobTemplateEdge {
 """
 JobTemplateJobPlatformType is enum for the field platform
 """
-enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/common/enums.JobPlatformType") {
   GO
   TS
 }
@@ -65652,7 +66054,7 @@ type MappedControlEdge {
 """
 MappedControlMappingSource is enum for the field source
 """
-enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/common/enums.MappingSource") {
   MANUAL
   SUGGESTED
   IMPORTED
@@ -65660,7 +66062,7 @@ enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg
 """
 MappedControlMappingType is enum for the field mapping_type
 """
-enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/common/enums.MappingType") {
   EQUAL
   SUPERSET
   SUBSET
@@ -66510,6 +66912,10 @@ type Note implements Node {
   """
   text: String!
   """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  """
   ref location of the note
   """
   noteRef: String
@@ -66892,7 +67298,7 @@ type Notification implements Node {
 """
 NotificationNotificationType is enum for the field notification_type
 """
-enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/pkg/enums.NotificationType") {
+enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/common/enums.NotificationType") {
   ORGANIZATION
   USER
 }
@@ -67092,7 +67498,7 @@ enum OrgMembershipOrderField {
 """
 OrgMembershipRole is enum for the field role
 """
-enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -70383,7 +70789,7 @@ enum OrganizationSettingOrderField {
 """
 OrganizationSettingRegion is enum for the field geo_location
 """
-enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/enums.Region") {
+enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/common/enums.Region") {
   AMER
   EMEA
   APAC
@@ -70391,7 +70797,7 @@ enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/
 """
 OrganizationSettingSSOProvider is enum for the field identity_provider
 """
-enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/common/enums.SSOProvider") {
   OKTA
   ONE_LOGIN
   GOOGLE_WORKSPACE
@@ -71824,6 +72230,10 @@ type Procedure implements Node {
   """
   details: String
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -71896,6 +72306,10 @@ type Procedure implements Node {
   the kind of the procedure
   """
   procedureKindID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   owner: Organization
   blockedGroups(
     """
@@ -72248,6 +72662,37 @@ type Procedure implements Node {
     where: DiscussionWhereInput
   ): DiscussionConnection!
   file: File
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -72269,7 +72714,7 @@ type ProcedureConnection {
 """
 ProcedureDocumentStatus is enum for the field status
 """
-enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/common/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -72292,7 +72737,7 @@ type ProcedureEdge {
 """
 ProcedureFrequency is enum for the field review_frequency
 """
-enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/common/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -72700,6 +73145,13 @@ input ProcedureWhereInput {
   procedureKindIDEqualFold: ID
   procedureKindIDContainsFold: ID
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -72779,6 +73231,11 @@ input ProcedureWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Program implements Node {
   id: ID!
@@ -73489,7 +73946,7 @@ enum ProgramMembershipOrderField {
 """
 ProgramMembershipRole is enum for the field role
 """
-enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -73613,7 +74070,7 @@ enum ProgramOrderField {
 """
 ProgramProgramStatus is enum for the field status
 """
-enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
+enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/common/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
   ACTION_REQUIRED
@@ -73624,7 +74081,7 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ProgramProgramType is enum for the field program_type
 """
-enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/common/enums.ProgramType") {
   FRAMEWORK
   GAP_ANALYSIS
   RISK_ASSESSMENT
@@ -79095,13 +79552,25 @@ type Risk implements Node {
   """
   mitigation: String
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  """
   details of the risk
   """
   details: String
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   business costs associated with the risk
   """
   businessCosts: String
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
   """
   the id of the group responsible for risk oversight
   """
@@ -79648,7 +80117,7 @@ enum RiskOrderField {
 """
 RiskRiskImpact is enum for the field impact
 """
-enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/common/enums.RiskImpact") {
   LOW
   MODERATE
   HIGH
@@ -79657,7 +80126,7 @@ enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskI
 """
 RiskRiskLikelihood is enum for the field likelihood
 """
-enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/common/enums.RiskLikelihood") {
   UNLIKELY
   LIKELY
   HIGHLY_LIKELY
@@ -79665,7 +80134,7 @@ enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.R
 """
 RiskRiskStatus is enum for the field status
 """
-enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/common/enums.RiskStatus") {
   OPEN
   IN_PROGRESS
   ONGOING
@@ -80390,7 +80859,7 @@ enum ScanOrderField {
 """
 ScanScanStatus is enum for the field status
 """
-enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/common/enums.ScanStatus") {
   PENDING
   PROCESSING
   COMPLETED
@@ -80399,7 +80868,7 @@ enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanS
 """
 ScanScanType is enum for the field scan_type
 """
-enum ScanScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+enum ScanScanType @goModel(model: "github.com/theopenlane/core/common/enums.ScanType") {
   DOMAIN
   VULNERABILITY
   VENDOR
@@ -80806,7 +81275,7 @@ enum ScheduledJobRunOrderField {
 """
 ScheduledJobRunScheduledJobRunStatus is enum for the field status
 """
-enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScheduledJobRunStatus") {
+enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.ScheduledJobRunStatus") {
   PENDING
   ACQUIRED
 }
@@ -81417,7 +81886,7 @@ enum StandardOrderField {
 """
 StandardStandardStatus is enum for the field status
 """
-enum StandardStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+enum StandardStandardStatus @goModel(model: "github.com/theopenlane/core/common/enums.StandardStatus") {
   ACTIVE
   DRAFT
   ARCHIVED
@@ -81834,6 +82303,10 @@ type Subcontrol implements Node {
   """
   description: String @externalSource(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -81949,6 +82422,10 @@ type Subcontrol implements Node {
   the kind of the subcontrol
   """
   subcontrolKindID: ID
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -82344,6 +82821,37 @@ type Subcontrol implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -82365,7 +82873,7 @@ type SubcontrolConnection {
 """
 SubcontrolControlSource is enum for the field source
 """
-enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/common/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -82374,7 +82882,7 @@ enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/en
 """
 SubcontrolControlStatus is enum for the field status
 """
-enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -82386,7 +82894,7 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/en
 """
 SubcontrolControlType is enum for the field control_type
 """
-enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -82876,6 +83384,13 @@ input SubcontrolWhereInput {
   subcontrolKindIDEqualFold: ID
   subcontrolKindIDContainsFold: ID
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   ref_code field predicates
   """
   refCode: String
@@ -82997,6 +83512,11 @@ input SubcontrolWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Subprocessor implements Node {
   id: ID!
@@ -84177,6 +84697,10 @@ type Task implements Node {
   """
   details: String
   """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  """
   the status of the task
   """
   status: TaskTaskStatus!
@@ -84684,7 +85208,7 @@ enum TaskOrderField {
 """
 TaskTaskStatus is enum for the field status
 """
-enum TaskTaskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TaskStatus") {
+enum TaskTaskStatus @goModel(model: "github.com/theopenlane/core/common/enums.TaskStatus") {
   OPEN
   IN_PROGRESS
   IN_REVIEW
@@ -85272,7 +85796,7 @@ type TemplateConnection {
 """
 TemplateDocumentType is enum for the field template_type
 """
-enum TemplateDocumentType @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentType") {
+enum TemplateDocumentType @goModel(model: "github.com/theopenlane/core/common/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -85315,7 +85839,7 @@ enum TemplateOrderField {
 """
 TemplateTemplateKind is enum for the field kind
 """
-enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/common/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
 }
@@ -86118,7 +86642,7 @@ enum TrustCenterDocOrderField {
 """
 TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
 """
-enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterDocumentVisibility") {
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
@@ -86126,7 +86650,7 @@ enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/the
 """
 TrustCenterDocWatermarkStatus is enum for the field watermark_status
 """
-enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/core/common/enums.WatermarkStatus") {
   PENDING
   IN_PROGRESS
   SUCCESS
@@ -86556,14 +87080,14 @@ enum TrustCenterSettingOrderField {
 """
 TrustCenterSettingTrustCenterEnvironment is enum for the field environment
 """
-enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterEnvironment") {
   LIVE
   PREVIEW
 }
 """
 TrustCenterSettingTrustCenterThemeMode is enum for the field theme_mode
 """
-enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterThemeMode") {
   EASY
   ADVANCED
 }
@@ -87158,7 +87682,7 @@ input TrustCenterSubprocessorWhereInput {
 """
 TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
 """
-enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterPreviewStatus") {
   PROVISIONING
   READY
   FAILED
@@ -87251,7 +87775,7 @@ type TrustCenterWatermarkConfigEdge {
 """
 TrustCenterWatermarkConfigFont is enum for the field font
 """
-enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/common/enums.Font") {
   COURIER
   COURIER_BOLD
   COURIER_BOLDOBLIQUE
@@ -88112,6 +88636,12 @@ input UpdateActionPlanInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the action_plan in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the action_plan
   """
   approvalRequired: Boolean
@@ -88182,6 +88712,11 @@ input UpdateActionPlanInput {
   """
   actionPlanKindName: String
   clearActionPlanKindName: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   """
   short title describing the action plan
   """
@@ -88271,6 +88806,9 @@ input UpdateActionPlanInput {
   clearIntegrations: Boolean
   fileID: ID
   clearFile: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateAssessmentInput is used for update Assessment object.
@@ -88492,6 +89030,12 @@ input UpdateControlImplementationInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the control implementation in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -88532,6 +89076,12 @@ input UpdateControlInput {
   """
   description: String @externalReadOnly(source: FRAMEWORK)
   clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
+  """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  appendDescriptionJSON: [Any!]
+  clearDescriptionJSON: Boolean
   """
   additional names (ref_codes) for the control
   """
@@ -88653,20 +89203,10 @@ input UpdateControlInput {
   controlKindName: String
   clearControlKindName: Boolean
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  clearProposedChanges: Boolean
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  clearProposedByUserID: Boolean
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
-  clearProposedAt: Boolean
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   """
   the unique reference code for the control
   """
@@ -88777,6 +89317,12 @@ input UpdateControlObjectiveInput {
   """
   desiredOutcome: String
   clearDesiredOutcome: Boolean
+  """
+  structured details of the control objective in JSON format
+  """
+  desiredOutcomeJSON: [Any!]
+  appendDesiredOutcomeJSON: [Any!]
+  clearDesiredOutcomeJSON: Boolean
   """
   status of the control objective
   """
@@ -89462,20 +90008,10 @@ input UpdateEvidenceInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  clearProposedChanges: Boolean
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  clearProposedByUserID: Boolean
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
-  clearProposedAt: Boolean
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   """
   the name of the evidence
   """
@@ -89543,6 +90079,9 @@ input UpdateEvidenceInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateExportInput is used for update Export object.
@@ -90304,6 +90843,12 @@ input UpdateInternalPolicyInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the policy in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the policy
   """
   approvalRequired: Boolean
@@ -90365,20 +90910,10 @@ input UpdateInternalPolicyInput {
   internalPolicyKindName: String
   clearInternalPolicyKindName: Boolean
   """
-  pending changes awaiting workflow approval
+  internal marker field for workflow eligibility, not exposed in API
   """
-  proposedChanges: Map
-  clearProposedChanges: Boolean
-  """
-  user who proposed the changes
-  """
-  proposedByUserID: String
-  clearProposedByUserID: Boolean
-  """
-  when changes were proposed
-  """
-  proposedAt: Time
-  clearProposedAt: Boolean
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -90785,6 +91320,12 @@ input UpdateNoteInput {
   the text of the note
   """
   text: String
+  """
+  structured details of the note in JSON format
+  """
+  textJSON: [Any!]
+  appendTextJSON: [Any!]
+  clearTextJSON: Boolean
   """
   ref location of the note
   """
@@ -91316,6 +91857,12 @@ input UpdateProcedureInput {
   details: String
   clearDetails: Boolean
   """
+  structured details of the procedure in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   whether approval is required for edits to the procedure
   """
   approvalRequired: Boolean
@@ -91386,6 +91933,11 @@ input UpdateProcedureInput {
   """
   procedureKindName: String
   clearProcedureKindName: Boolean
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -91429,6 +91981,9 @@ input UpdateProcedureInput {
   clearDiscussions: Boolean
   fileID: ID
   clearFile: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateProgramInput is used for update Program object.
@@ -91952,15 +92507,33 @@ input UpdateRiskInput {
   mitigation: String
   clearMitigation: Boolean
   """
+  structured details of the mitigation in JSON format
+  """
+  mitigationJSON: [Any!]
+  appendMitigationJSON: [Any!]
+  clearMitigationJSON: Boolean
+  """
   details of the risk
   """
   details: String
   clearDetails: Boolean
   """
+  structured details of the risk in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
+  """
   business costs associated with the risk
   """
   businessCosts: String
   clearBusinessCosts: Boolean
+  """
+  structured details of the business costs in JSON format
+  """
+  businessCostsJSON: [Any!]
+  appendBusinessCostsJSON: [Any!]
+  clearBusinessCostsJSON: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -92233,6 +92806,12 @@ input UpdateSubcontrolInput {
   description: String @externalReadOnly(source: FRAMEWORK)
   clearDescription: Boolean @externalReadOnly(source: FRAMEWORK)
   """
+  structured details of the control in JSON format
+  """
+  descriptionJSON: [Any!]
+  appendDescriptionJSON: [Any!]
+  clearDescriptionJSON: Boolean
+  """
   additional names (ref_codes) for the control
   """
   aliases: [String!]
@@ -92353,6 +92932,11 @@ input UpdateSubcontrolInput {
   subcontrolKindName: String
   clearSubcontrolKindName: Boolean
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  clearWorkflowEligibleMarker: Boolean
+  """
   the unique reference code for the control
   """
   refCode: String @externalReadOnly(source: FRAMEWORK)
@@ -92401,6 +92985,9 @@ input UpdateSubcontrolInput {
   addScheduledJobIDs: [ID!]
   removeScheduledJobIDs: [ID!]
   clearScheduledJobs: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateSubprocessorInput is used for update Subprocessor object.
@@ -92549,6 +93136,12 @@ input UpdateTaskInput {
   """
   details: String
   clearDetails: Boolean
+  """
+  structured details of the task in JSON format
+  """
+  detailsJSON: [Any!]
+  appendDetailsJSON: [Any!]
+  clearDetailsJSON: Boolean
   """
   the status of the task
   """
@@ -93506,18 +94099,6 @@ input UpdateWorkflowDefinitionInput {
   """
   active: Boolean
   """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  appendTriggerOperations: [String!]
-  clearTriggerOperations: Boolean
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
-  appendTriggerFields: [String!]
-  clearTriggerFields: Boolean
-  """
   Typed document describing triggers, conditions, and actions
   """
   definitionJSON: WorkflowDefinitionDocument
@@ -93587,6 +94168,10 @@ input UpdateWorkflowInstanceInput {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   clearDefinitionSnapshot: Boolean
+  """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int
   workflowDefinitionID: ID
   controlID: ID
   clearControl: Boolean
@@ -93594,6 +94179,12 @@ input UpdateWorkflowInstanceInput {
   clearInternalPolicy: Boolean
   evidenceID: ID
   clearEvidence: Boolean
+  subcontrolID: ID
+  clearSubcontrol: Boolean
+  actionPlanID: ID
+  clearActionPlan: Boolean
+  procedureID: ID
+  clearProcedure: Boolean
   addWorkflowAssignmentIDs: [ID!]
   removeWorkflowAssignmentIDs: [ID!]
   clearWorkflowAssignments: Boolean
@@ -94148,7 +94739,7 @@ type User implements Node {
 """
 UserAuthProvider is enum for the field last_login_provider
 """
-enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
+enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/common/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -94211,7 +94802,7 @@ enum UserOrderField {
 """
 UserRole is enum for the field role
 """
-enum UserRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum UserRole @goModel(model: "github.com/theopenlane/core/common/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -94314,7 +94905,7 @@ enum UserSettingOrderField {
 """
 UserSettingUserStatus is enum for the field status
 """
-enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/common/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -96935,7 +97526,7 @@ input WorkflowAssignmentTargetWhereInput {
 """
 WorkflowAssignmentTargetWorkflowTargetType is enum for the field target_type
 """
-enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowTargetType") {
   USER
   GROUP
   ROLE
@@ -97232,7 +97823,7 @@ input WorkflowAssignmentWhereInput {
 """
 WorkflowAssignmentWorkflowAssignmentStatus is enum for the field status
 """
-enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowAssignmentStatus") {
   PENDING
   APPROVED
   REJECTED
@@ -97307,14 +97898,6 @@ type WorkflowDefinition implements Node {
   Whether the workflow definition is active
   """
   active: Boolean!
-  """
-  Derived: normalized operations from definition for prefiltering; not user editable
-  """
-  triggerOperations: [String!]
-  """
-  Derived: normalized fields from definition for prefiltering; not user editable
-  """
-  triggerFields: [String!]
   """
   Typed document describing triggers, conditions, and actions
   """
@@ -97723,7 +98306,7 @@ input WorkflowDefinitionWhereInput {
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
 """
-enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowKind") {
   APPROVAL
   LIFECYCLE
   NOTIFICATION
@@ -97965,10 +98548,22 @@ input WorkflowEventWhereInput {
 """
 WorkflowEventWorkflowEventType is enum for the field event_type
 """
-enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowEventType") {
   ACTION
   TRIGGER
   DECISION
+  INSTANCE_TRIGGERED
+  ACTION_STARTED
+  ACTION_COMPLETED
+  ACTION_FAILED
+  ACTION_SKIPPED
+  CONDITION_EVALUATED
+  ASSIGNMENT_CREATED
+  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_INVALIDATED
+  INSTANCE_PAUSED
+  INSTANCE_RESUMED
+  INSTANCE_COMPLETED
 }
 type WorkflowInstance implements Node {
   id: ID!
@@ -97993,6 +98588,10 @@ type WorkflowInstance implements Node {
   """
   workflowDefinitionID: ID!
   """
+  ID of the workflow proposal this instance is associated with (when approval-before-commit is used)
+  """
+  workflowProposalID: ID
+  """
   Current state of the workflow instance
   """
   state: WorkflowInstanceWorkflowInstanceState!
@@ -98009,6 +98608,10 @@ type WorkflowInstance implements Node {
   """
   definitionSnapshot: WorkflowDefinitionDocument
   """
+  Index of the current action being executed (used for recovery and resumption)
+  """
+  currentActionIndex: Int!
+  """
   ID of the control this workflow instance is associated with
   """
   controlID: ID
@@ -98020,6 +98623,18 @@ type WorkflowInstance implements Node {
   ID of the evidence this workflow instance is associated with
   """
   evidenceID: ID
+  """
+  ID of the subcontrol this workflow instance is associated with
+  """
+  subcontrolID: ID
+  """
+  ID of the actionplan this workflow instance is associated with
+  """
+  actionPlanID: ID
+  """
+  ID of the procedure this workflow instance is associated with
+  """
+  procedureID: ID
   owner: Organization
   """
   Definition driving this instance
@@ -98037,6 +98652,18 @@ type WorkflowInstance implements Node {
   Evidence this workflow instance is associated with
   """
   evidence: Evidence
+  """
+  Subcontrol this workflow instance is associated with
+  """
+  subcontrol: Subcontrol
+  """
+  ActionPlan this workflow instance is associated with
+  """
+  actionPlan: ActionPlan
+  """
+  Procedure this workflow instance is associated with
+  """
+  procedure: Procedure
   workflowAssignments(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -98315,6 +98942,24 @@ input WorkflowInstanceWhereInput {
   workflowDefinitionIDEqualFold: ID
   workflowDefinitionIDContainsFold: ID
   """
+  workflow_proposal_id field predicates
+  """
+  workflowProposalID: ID
+  workflowProposalIDNEQ: ID
+  workflowProposalIDIn: [ID!]
+  workflowProposalIDNotIn: [ID!]
+  workflowProposalIDGT: ID
+  workflowProposalIDGTE: ID
+  workflowProposalIDLT: ID
+  workflowProposalIDLTE: ID
+  workflowProposalIDContains: ID
+  workflowProposalIDHasPrefix: ID
+  workflowProposalIDHasSuffix: ID
+  workflowProposalIDIsNil: Boolean
+  workflowProposalIDNotNil: Boolean
+  workflowProposalIDEqualFold: ID
+  workflowProposalIDContainsFold: ID
+  """
   state field predicates
   """
   state: WorkflowInstanceWorkflowInstanceState
@@ -98334,6 +98979,17 @@ input WorkflowInstanceWhereInput {
   lastEvaluatedAtLTE: Time
   lastEvaluatedAtIsNil: Boolean
   lastEvaluatedAtNotNil: Boolean
+  """
+  current_action_index field predicates
+  """
+  currentActionIndex: Int
+  currentActionIndexNEQ: Int
+  currentActionIndexIn: [Int!]
+  currentActionIndexNotIn: [Int!]
+  currentActionIndexGT: Int
+  currentActionIndexGTE: Int
+  currentActionIndexLT: Int
+  currentActionIndexLTE: Int
   """
   control_id field predicates
   """
@@ -98389,6 +99045,60 @@ input WorkflowInstanceWhereInput {
   evidenceIDEqualFold: ID
   evidenceIDContainsFold: ID
   """
+  subcontrol_id field predicates
+  """
+  subcontrolID: ID
+  subcontrolIDNEQ: ID
+  subcontrolIDIn: [ID!]
+  subcontrolIDNotIn: [ID!]
+  subcontrolIDGT: ID
+  subcontrolIDGTE: ID
+  subcontrolIDLT: ID
+  subcontrolIDLTE: ID
+  subcontrolIDContains: ID
+  subcontrolIDHasPrefix: ID
+  subcontrolIDHasSuffix: ID
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: ID
+  subcontrolIDContainsFold: ID
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: ID
+  actionPlanIDNEQ: ID
+  actionPlanIDIn: [ID!]
+  actionPlanIDNotIn: [ID!]
+  actionPlanIDGT: ID
+  actionPlanIDGTE: ID
+  actionPlanIDLT: ID
+  actionPlanIDLTE: ID
+  actionPlanIDContains: ID
+  actionPlanIDHasPrefix: ID
+  actionPlanIDHasSuffix: ID
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: ID
+  actionPlanIDContainsFold: ID
+  """
+  procedure_id field predicates
+  """
+  procedureID: ID
+  procedureIDNEQ: ID
+  procedureIDIn: [ID!]
+  procedureIDNotIn: [ID!]
+  procedureIDGT: ID
+  procedureIDGTE: ID
+  procedureIDLT: ID
+  procedureIDLTE: ID
+  procedureIDContains: ID
+  procedureIDHasPrefix: ID
+  procedureIDHasSuffix: ID
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: ID
+  procedureIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -98414,6 +99124,21 @@ input WorkflowInstanceWhereInput {
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
   """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  action_plan edge predicates
+  """
+  hasActionPlan: Boolean
+  hasActionPlanWith: [ActionPlanWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
+  """
   workflow_assignments edge predicates
   """
   hasWorkflowAssignments: Boolean
@@ -98432,7 +99157,7 @@ input WorkflowInstanceWhereInput {
 """
 WorkflowInstanceWorkflowInstanceState is enum for the field state
 """
-enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/common/enums.WorkflowInstanceState") {
   RUNNING
   COMPLETED
   FAILED
@@ -98488,6 +99213,18 @@ type WorkflowObjectRef implements Node {
   Evidence referenced by this workflow instance
   """
   evidenceID: ID
+  """
+  Subcontrol referenced by this workflow instance
+  """
+  subcontrolID: ID
+  """
+  ActionPlan referenced by this workflow instance
+  """
+  actionPlanID: ID
+  """
+  Procedure referenced by this workflow instance
+  """
+  procedureID: ID
   owner: Organization
   """
   Workflow instance this object is associated with
@@ -98525,6 +99262,18 @@ type WorkflowObjectRef implements Node {
   Evidence referenced by this workflow instance
   """
   evidence: Evidence
+  """
+  Subcontrol referenced by this workflow instance
+  """
+  subcontrol: Subcontrol
+  """
+  ActionPlan referenced by this workflow instance
+  """
+  actionPlan: ActionPlan
+  """
+  Procedure referenced by this workflow instance
+  """
+  procedure: Procedure
 }
 """
 A connection to a list of items.
@@ -98854,6 +99603,60 @@ input WorkflowObjectRefWhereInput {
   evidenceIDEqualFold: ID
   evidenceIDContainsFold: ID
   """
+  subcontrol_id field predicates
+  """
+  subcontrolID: ID
+  subcontrolIDNEQ: ID
+  subcontrolIDIn: [ID!]
+  subcontrolIDNotIn: [ID!]
+  subcontrolIDGT: ID
+  subcontrolIDGTE: ID
+  subcontrolIDLT: ID
+  subcontrolIDLTE: ID
+  subcontrolIDContains: ID
+  subcontrolIDHasPrefix: ID
+  subcontrolIDHasSuffix: ID
+  subcontrolIDIsNil: Boolean
+  subcontrolIDNotNil: Boolean
+  subcontrolIDEqualFold: ID
+  subcontrolIDContainsFold: ID
+  """
+  action_plan_id field predicates
+  """
+  actionPlanID: ID
+  actionPlanIDNEQ: ID
+  actionPlanIDIn: [ID!]
+  actionPlanIDNotIn: [ID!]
+  actionPlanIDGT: ID
+  actionPlanIDGTE: ID
+  actionPlanIDLT: ID
+  actionPlanIDLTE: ID
+  actionPlanIDContains: ID
+  actionPlanIDHasPrefix: ID
+  actionPlanIDHasSuffix: ID
+  actionPlanIDIsNil: Boolean
+  actionPlanIDNotNil: Boolean
+  actionPlanIDEqualFold: ID
+  actionPlanIDContainsFold: ID
+  """
+  procedure_id field predicates
+  """
+  procedureID: ID
+  procedureIDNEQ: ID
+  procedureIDIn: [ID!]
+  procedureIDNotIn: [ID!]
+  procedureIDGT: ID
+  procedureIDGTE: ID
+  procedureIDLT: ID
+  procedureIDLTE: ID
+  procedureIDContains: ID
+  procedureIDHasPrefix: ID
+  procedureIDHasSuffix: ID
+  procedureIDIsNil: Boolean
+  procedureIDNotNil: Boolean
+  procedureIDEqualFold: ID
+  procedureIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -98903,6 +99706,21 @@ input WorkflowObjectRefWhereInput {
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  subcontrol edge predicates
+  """
+  hasSubcontrol: Boolean
+  hasSubcontrolWith: [SubcontrolWhereInput!]
+  """
+  action_plan edge predicates
+  """
+  hasActionPlan: Boolean
+  hasActionPlanWith: [ActionPlanWhereInput!]
+  """
+  procedure edge predicates
+  """
+  hasProcedure: Boolean
+  hasProcedureWith: [ProcedureWhereInput!]
 }
 `, BuiltIn: false},
 	{Name: "../schema/entity.graphql", Input: `extend type Query {
@@ -99279,7 +100097,18 @@ type EventBulkDeletePayload {
     """
     deletedIDs: [ID!]!
 }`, BuiltIn: false},
-	{Name: "../schema/evidence.graphql", Input: `extend type Query {
+	{Name: "../schema/evidence.graphql", Input: `extend type Evidence {
+    """
+    Indicates if this evidence has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this evidence if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up evidence by ID
     """
@@ -99512,7 +100341,9 @@ type FileDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/fileextended.graphql", Input: `extend type File {
     presignedURL: String
-}`, BuiltIn: false},
+    base64: String
+}
+`, BuiltIn: false},
 	{Name: "../schema/finding.graphql", Input: `extend type Query {
     """
     Look up finding by ID
@@ -99889,7 +100720,7 @@ extend type Mutation{
 """
 Permission is enum for the permissions types
 """
-enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {
+enum Permission @goModel(model: "github.com/theopenlane/core/common/enums.Permission") {
   EDITOR
   VIEWER
   CREATOR
@@ -100520,7 +101351,18 @@ type IntegrationDeletePayload {
     deletedID: ID!
 }
 `, BuiltIn: false},
-	{Name: "../schema/internalpolicy.graphql", Input: `extend type Query {
+	{Name: "../schema/internalpolicy.graphql", Input: `extend type InternalPolicy {
+    """
+    Indicates if this internalPolicy has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this internalPolicy if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up internalPolicy by ID
     """
@@ -101624,6 +102466,7 @@ extend input UpdateTaskInput {
 
 extend input UpdateControlInput {
     addDiscussion: CreateDiscussionInput
+    updateDiscussions: [UpdateDiscussionsInput!]
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -101631,6 +102474,7 @@ extend input UpdateControlInput {
 
 extend input UpdateSubcontrolInput {
     addDiscussion: CreateDiscussionInput
+    updateDiscussions: [UpdateDiscussionsInput!]
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -101638,6 +102482,7 @@ extend input UpdateSubcontrolInput {
 
 extend input UpdateRiskInput {
     addDiscussion: CreateDiscussionInput
+    updateDiscussions: [UpdateDiscussionsInput!]
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -101645,6 +102490,7 @@ extend input UpdateRiskInput {
 
 extend input UpdateInternalPolicyInput {
     addDiscussion: CreateDiscussionInput
+    updateDiscussions: [UpdateDiscussionsInput!]
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -101652,9 +102498,21 @@ extend input UpdateInternalPolicyInput {
 
 extend input UpdateProcedureInput {
     addDiscussion: CreateDiscussionInput
+    updateDiscussions: [UpdateDiscussionsInput!]
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
+}
+
+"""
+Update discussions related to an object
+"""
+input UpdateDiscussionsInput {
+    """
+    id of the discussion to update
+    """
+    id: ID!
+    input: UpdateDiscussionInput!
 }
 
 extend input UpdateEvidenceInput {
@@ -102353,7 +103211,18 @@ type PersonalAccessTokenBulkCreatePayload {
     """
     personalAccessTokens: [PersonalAccessToken!]
 }`, BuiltIn: false},
-	{Name: "../schema/procedure.graphql", Input: `extend type Query {
+	{Name: "../schema/procedure.graphql", Input: `extend type Procedure {
+    """
+    Indicates if this procedure has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this procedure if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up procedure by ID
     """
@@ -104619,7 +105488,18 @@ type StandardBulkCreatePayload {
     """
     standards: [Standard!]
 }`, BuiltIn: false},
-	{Name: "../schema/subcontrol.graphql", Input: `extend type Query {
+	{Name: "../schema/subcontrol.graphql", Input: `extend type Subcontrol {
+    """
+    Indicates if this subcontrol has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this subcontrol if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
     """
     Look up subcontrol by ID
     """
@@ -105009,9 +105889,9 @@ type SubscriberBulkCreatePayload {
 `, BuiltIn: false},
 	{Name: "../schema/subscription.graphql", Input: `type Subscription {
   """
-  Subscribe to task creation events for the authenticated user
+  Subscribe to notification creation events for the authenticated user
   """
-  taskCreated: Task!
+  notificationCreated: Notification!
 }
 `, BuiltIn: false},
 	{Name: "../schema/tagdefinition.graphql", Input: `extend type Query {

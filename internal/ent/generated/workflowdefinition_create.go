@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // WorkflowDefinitionCreate is the builder for creating a WorkflowDefinition entity.
@@ -305,6 +305,32 @@ func (_c *WorkflowDefinitionCreate) SetTriggerFields(v []string) *WorkflowDefini
 	return _c
 }
 
+// SetApprovalFields sets the "approval_fields" field.
+func (_c *WorkflowDefinitionCreate) SetApprovalFields(v []string) *WorkflowDefinitionCreate {
+	_c.mutation.SetApprovalFields(v)
+	return _c
+}
+
+// SetApprovalEdges sets the "approval_edges" field.
+func (_c *WorkflowDefinitionCreate) SetApprovalEdges(v []string) *WorkflowDefinitionCreate {
+	_c.mutation.SetApprovalEdges(v)
+	return _c
+}
+
+// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
+func (_c *WorkflowDefinitionCreate) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionCreate {
+	_c.mutation.SetApprovalSubmissionMode(v)
+	return _c
+}
+
+// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
+func (_c *WorkflowDefinitionCreate) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionCreate {
+	if v != nil {
+		_c.SetApprovalSubmissionMode(*v)
+	}
+	return _c
+}
+
 // SetDefinitionJSON sets the "definition_json" field.
 func (_c *WorkflowDefinitionCreate) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionCreate {
 	_c.mutation.SetDefinitionJSON(v)
@@ -461,6 +487,18 @@ func (_c *WorkflowDefinitionCreate) defaults() error {
 		v := workflowdefinition.DefaultTriggerFields
 		_c.mutation.SetTriggerFields(v)
 	}
+	if _, ok := _c.mutation.ApprovalFields(); !ok {
+		v := workflowdefinition.DefaultApprovalFields
+		_c.mutation.SetApprovalFields(v)
+	}
+	if _, ok := _c.mutation.ApprovalEdges(); !ok {
+		v := workflowdefinition.DefaultApprovalEdges
+		_c.mutation.SetApprovalEdges(v)
+	}
+	if _, ok := _c.mutation.ApprovalSubmissionMode(); !ok {
+		v := workflowdefinition.DefaultApprovalSubmissionMode
+		_c.mutation.SetApprovalSubmissionMode(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if workflowdefinition.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized workflowdefinition.DefaultID (forgotten import generated/runtime?)")
@@ -524,6 +562,11 @@ func (_c *WorkflowDefinitionCreate) check() error {
 	}
 	if _, ok := _c.mutation.Active(); !ok {
 		return &ValidationError{Name: "active", err: errors.New(`generated: missing required field "WorkflowDefinition.active"`)}
+	}
+	if v, ok := _c.mutation.ApprovalSubmissionMode(); ok {
+		if err := workflowdefinition.ApprovalSubmissionModeValidator(v); err != nil {
+			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.approval_submission_mode": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -652,6 +695,18 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 	if value, ok := _c.mutation.TriggerFields(); ok {
 		_spec.SetField(workflowdefinition.FieldTriggerFields, field.TypeJSON, value)
 		_node.TriggerFields = value
+	}
+	if value, ok := _c.mutation.ApprovalFields(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalFields, field.TypeJSON, value)
+		_node.ApprovalFields = value
+	}
+	if value, ok := _c.mutation.ApprovalEdges(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalEdges, field.TypeJSON, value)
+		_node.ApprovalEdges = value
+	}
+	if value, ok := _c.mutation.ApprovalSubmissionMode(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalSubmissionMode, field.TypeEnum, value)
+		_node.ApprovalSubmissionMode = value
 	}
 	if value, ok := _c.mutation.DefinitionJSON(); ok {
 		_spec.SetField(workflowdefinition.FieldDefinitionJSON, field.TypeJSON, value)

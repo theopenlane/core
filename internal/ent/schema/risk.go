@@ -9,15 +9,15 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Risk defines the risk schema.
@@ -107,15 +107,33 @@ func (Risk) Fields() []ent.Field {
 		field.Text("mitigation").
 			Optional().
 			Comment("mitigation for the risk"),
+		field.JSON("mitigation_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the mitigation in JSON format"),
 		field.Text("details").
 			Optional().
 			Comment("details of the risk"),
+		field.JSON("details_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the risk in JSON format"),
 		field.Text("business_costs").
 			Annotations(
 				entgql.OrderField("business_costs"),
 			).
 			Optional().
 			Comment("business costs associated with the risk"),
+		field.JSON("business_costs_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the business costs in JSON format"),
 		field.String("stakeholder_id").
 			Optional().
 			Unique().

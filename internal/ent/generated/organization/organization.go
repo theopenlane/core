@@ -221,6 +221,8 @@ const (
 	EdgeWorkflowAssignmentTargets = "workflow_assignment_targets"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
 	EdgeWorkflowObjectRefs = "workflow_object_refs"
+	// EdgeWorkflowProposals holds the string denoting the workflow_proposals edge name in mutations.
+	EdgeWorkflowProposals = "workflow_proposals"
 	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
 	EdgeDirectoryAccounts = "directory_accounts"
 	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
@@ -823,6 +825,13 @@ const (
 	WorkflowObjectRefsInverseTable = "workflow_object_refs"
 	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
 	WorkflowObjectRefsColumn = "owner_id"
+	// WorkflowProposalsTable is the table that holds the workflow_proposals relation/edge.
+	WorkflowProposalsTable = "workflow_proposals"
+	// WorkflowProposalsInverseTable is the table name for the WorkflowProposal entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowproposal" package.
+	WorkflowProposalsInverseTable = "workflow_proposals"
+	// WorkflowProposalsColumn is the table column denoting the workflow_proposals relation/edge.
+	WorkflowProposalsColumn = "owner_id"
 	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
 	DirectoryAccountsTable = "directory_accounts"
 	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
@@ -920,8 +929,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [25]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [24]ent.Hook
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -2222,6 +2231,20 @@ func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 	}
 }
 
+// ByWorkflowProposalsCount orders the results by workflow_proposals count.
+func ByWorkflowProposalsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowProposalsStep(), opts...)
+	}
+}
+
+// ByWorkflowProposals orders the results by workflow_proposals terms.
+func ByWorkflowProposals(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowProposalsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByDirectoryAccountsCount orders the results by directory_accounts count.
 func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2905,6 +2928,13 @@ func newWorkflowObjectRefsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+	)
+}
+func newWorkflowProposalsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowProposalsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowProposalsTable, WorkflowProposalsColumn),
 	)
 }
 func newDirectoryAccountsStep() *sqlgraph.Step {

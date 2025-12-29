@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -60,10 +60,16 @@ const (
 	FieldScore = "score"
 	// FieldMitigation holds the string denoting the mitigation field in the database.
 	FieldMitigation = "mitigation"
+	// FieldMitigationJSON holds the string denoting the mitigation_json field in the database.
+	FieldMitigationJSON = "mitigation_json"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// FieldBusinessCosts holds the string denoting the business_costs field in the database.
 	FieldBusinessCosts = "business_costs"
+	// FieldBusinessCostsJSON holds the string denoting the business_costs_json field in the database.
+	FieldBusinessCostsJSON = "business_costs_json"
 	// FieldStakeholderID holds the string denoting the stakeholder_id field in the database.
 	FieldStakeholderID = "stakeholder_id"
 	// FieldDelegateID holds the string denoting the delegate_id field in the database.
@@ -256,8 +262,11 @@ var Columns = []string{
 	FieldLikelihood,
 	FieldScore,
 	FieldMitigation,
+	FieldMitigationJSON,
 	FieldDetails,
+	FieldDetailsJSON,
 	FieldBusinessCosts,
+	FieldBusinessCostsJSON,
 	FieldStakeholderID,
 	FieldDelegateID,
 }
@@ -328,8 +337,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Hooks        [14]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

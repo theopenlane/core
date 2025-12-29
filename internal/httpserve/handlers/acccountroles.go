@@ -10,9 +10,9 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // AccountAccessHandler list roles a subject has access to in relation an object

@@ -10,9 +10,9 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 // AccountAccessHandler checks if a subject has access to an object

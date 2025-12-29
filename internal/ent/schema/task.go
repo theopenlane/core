@@ -14,13 +14,13 @@ import (
 
 	"github.com/theopenlane/entx/accessmap"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/graphapi/directives"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // Task holds the schema definition for the Task entity
@@ -61,6 +61,12 @@ func (Task) Fields() []ent.Field {
 		field.Text("details").
 			Comment("the details of the task").
 			Optional(),
+		field.JSON("details_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the task in JSON format"),
 		field.Enum("status").
 			GoType(enums.TaskStatus("")).
 			Comment("the status of the task").

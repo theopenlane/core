@@ -40,7 +40,6 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/core/pkg/summarizer"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
@@ -131,7 +130,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// setup fga client
 	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	c := &client{
 		fga: fgaClient,
@@ -148,7 +147,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	}
 
 	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
-	requireNoError(err)
+	requireNoError(t, err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -185,7 +184,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	entCfg.EmailValidation.Enabled = false
 
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	pool := soiree.NewPondPool(
 		soiree.WithMaxWorkers(100), //nolint:mnd
@@ -194,11 +193,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// setup history client
 	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	// setup mock entitlements client
 	entitlements, err := suite.mockStripeClient()
-	requireNoError(err)
+	requireNoError(t, err)
 
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
@@ -220,15 +219,15 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	// assign values
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
-	requireNoError(err)
+	requireNoError(t, err)
 
 	suite.client = c
 }
@@ -236,14 +235,14 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	// close the database connection
 	err := suite.client.db.Close()
-	requireNoError(err)
+	requireNoError(t, err)
 
 	// close the database container
 	testutils.TeardownFixture(suite.tf)
 
 	// terminate all fga containers
 	err = suite.ofgaTF.TeardownFixture()
-	requireNoError(err)
+	requireNoError(t, err)
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
@@ -357,17 +356,18 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 func assertErrorCode(t *testing.T, err *gqlerror.Error, code string) {
 	t.Helper()
 
-	assert.Equal(t, code, openlaneclient.GetErrorCode(err))
+	assert.Equal(t, code, testclient.GetErrorCode(err))
 }
 
 // assertErrorMessage checks if the error message matches the expected message
 func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 	t.Helper()
 
-	assert.Equal(t, msg, openlaneclient.GetErrorMessage(err))
+	assert.Equal(t, msg, testclient.GetErrorMessage(err))
 }
 
-func requireNoError(err error) {
+func requireNoError(t *testing.T, err error) {
+	t.Helper()
 	if err != nil {
 		log.Error().Err(err).Msg("fatal error during test setup or teardown")
 

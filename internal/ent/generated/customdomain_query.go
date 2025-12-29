@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CustomDomainQuery is the builder for querying CustomDomain entities.
@@ -718,21 +719,20 @@ func (_q *CustomDomainQuery) Modify(modifiers ...func(s *sql.Selector)) *CustomD
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (cdq *CustomDomainQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "CustomDomain").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, cdq.ctx, ent.OpQueryIDs)
-	if err := cdq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return cdq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, cdq, qr, cdq.inters)
+	ids, err := cdq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "CustomDomain").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "CustomDomain").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

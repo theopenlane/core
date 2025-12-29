@@ -12,6 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -38,8 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -185,6 +185,24 @@ func (_u *ControlUpdate) SetNillableDescription(v *string) *ControlUpdate {
 // ClearDescription clears the value of the "description" field.
 func (_u *ControlUpdate) ClearDescription() *ControlUpdate {
 	_u.mutation.ClearDescription()
+	return _u
+}
+
+// SetDescriptionJSON sets the "description_json" field.
+func (_u *ControlUpdate) SetDescriptionJSON(v []interface{}) *ControlUpdate {
+	_u.mutation.SetDescriptionJSON(v)
+	return _u
+}
+
+// AppendDescriptionJSON appends value to the "description_json" field.
+func (_u *ControlUpdate) AppendDescriptionJSON(v []interface{}) *ControlUpdate {
+	_u.mutation.AppendDescriptionJSON(v)
+	return _u
+}
+
+// ClearDescriptionJSON clears the value of the "description_json" field.
+func (_u *ControlUpdate) ClearDescriptionJSON() *ControlUpdate {
+	_u.mutation.ClearDescriptionJSON()
 	return _u
 }
 
@@ -708,55 +726,23 @@ func (_u *ControlUpdate) ClearControlKindID() *ControlUpdate {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *ControlUpdate) SetProposedChanges(v map[string]interface{}) *ControlUpdate {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ControlUpdate) SetWorkflowEligibleMarker(v bool) *ControlUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *ControlUpdate) ClearProposedChanges() *ControlUpdate {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *ControlUpdate) SetProposedByUserID(v string) *ControlUpdate {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *ControlUpdate) SetNillableProposedByUserID(v *string) *ControlUpdate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ControlUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ControlUpdate {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *ControlUpdate) ClearProposedByUserID() *ControlUpdate {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *ControlUpdate) SetProposedAt(v time.Time) *ControlUpdate {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *ControlUpdate) SetNillableProposedAt(v *time.Time) *ControlUpdate {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *ControlUpdate) ClearProposedAt() *ControlUpdate {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ControlUpdate) ClearWorkflowEligibleMarker() *ControlUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -1820,6 +1806,17 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(control.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.DescriptionJSON(); ok {
+		_spec.SetField(control.FieldDescriptionJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDescriptionJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldDescriptionJSON, value)
+		})
+	}
+	if _u.mutation.DescriptionJSONCleared() {
+		_spec.ClearField(control.FieldDescriptionJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(control.FieldAliases, field.TypeJSON, value)
 	}
@@ -2011,23 +2008,11 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ControlKindNameCleared() {
 		_spec.ClearField(control.FieldControlKindName, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(control.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(control.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(control.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(control.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(control.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(control.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(control.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(control.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)
@@ -3466,6 +3451,24 @@ func (_u *ControlUpdateOne) ClearDescription() *ControlUpdateOne {
 	return _u
 }
 
+// SetDescriptionJSON sets the "description_json" field.
+func (_u *ControlUpdateOne) SetDescriptionJSON(v []interface{}) *ControlUpdateOne {
+	_u.mutation.SetDescriptionJSON(v)
+	return _u
+}
+
+// AppendDescriptionJSON appends value to the "description_json" field.
+func (_u *ControlUpdateOne) AppendDescriptionJSON(v []interface{}) *ControlUpdateOne {
+	_u.mutation.AppendDescriptionJSON(v)
+	return _u
+}
+
+// ClearDescriptionJSON clears the value of the "description_json" field.
+func (_u *ControlUpdateOne) ClearDescriptionJSON() *ControlUpdateOne {
+	_u.mutation.ClearDescriptionJSON()
+	return _u
+}
+
 // SetAliases sets the "aliases" field.
 func (_u *ControlUpdateOne) SetAliases(v []string) *ControlUpdateOne {
 	_u.mutation.SetAliases(v)
@@ -3986,55 +3989,23 @@ func (_u *ControlUpdateOne) ClearControlKindID() *ControlUpdateOne {
 	return _u
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_u *ControlUpdateOne) SetProposedChanges(v map[string]interface{}) *ControlUpdateOne {
-	_u.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ControlUpdateOne) SetWorkflowEligibleMarker(v bool) *ControlUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
 	return _u
 }
 
-// ClearProposedChanges clears the value of the "proposed_changes" field.
-func (_u *ControlUpdateOne) ClearProposedChanges() *ControlUpdateOne {
-	_u.mutation.ClearProposedChanges()
-	return _u
-}
-
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_u *ControlUpdateOne) SetProposedByUserID(v string) *ControlUpdateOne {
-	_u.mutation.SetProposedByUserID(v)
-	return _u
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_u *ControlUpdateOne) SetNillableProposedByUserID(v *string) *ControlUpdateOne {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ControlUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ControlUpdateOne {
 	if v != nil {
-		_u.SetProposedByUserID(*v)
+		_u.SetWorkflowEligibleMarker(*v)
 	}
 	return _u
 }
 
-// ClearProposedByUserID clears the value of the "proposed_by_user_id" field.
-func (_u *ControlUpdateOne) ClearProposedByUserID() *ControlUpdateOne {
-	_u.mutation.ClearProposedByUserID()
-	return _u
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_u *ControlUpdateOne) SetProposedAt(v time.Time) *ControlUpdateOne {
-	_u.mutation.SetProposedAt(v)
-	return _u
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_u *ControlUpdateOne) SetNillableProposedAt(v *time.Time) *ControlUpdateOne {
-	if v != nil {
-		_u.SetProposedAt(*v)
-	}
-	return _u
-}
-
-// ClearProposedAt clears the value of the "proposed_at" field.
-func (_u *ControlUpdateOne) ClearProposedAt() *ControlUpdateOne {
-	_u.mutation.ClearProposedAt()
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ControlUpdateOne) ClearWorkflowEligibleMarker() *ControlUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -5128,6 +5099,17 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(control.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.DescriptionJSON(); ok {
+		_spec.SetField(control.FieldDescriptionJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDescriptionJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, control.FieldDescriptionJSON, value)
+		})
+	}
+	if _u.mutation.DescriptionJSONCleared() {
+		_spec.ClearField(control.FieldDescriptionJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(control.FieldAliases, field.TypeJSON, value)
 	}
@@ -5319,23 +5301,11 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	if _u.mutation.ControlKindNameCleared() {
 		_spec.ClearField(control.FieldControlKindName, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProposedChanges(); ok {
-		_spec.SetField(control.FieldProposedChanges, field.TypeJSON, value)
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(control.FieldWorkflowEligibleMarker, field.TypeBool, value)
 	}
-	if _u.mutation.ProposedChangesCleared() {
-		_spec.ClearField(control.FieldProposedChanges, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ProposedByUserID(); ok {
-		_spec.SetField(control.FieldProposedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ProposedByUserIDCleared() {
-		_spec.ClearField(control.FieldProposedByUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProposedAt(); ok {
-		_spec.SetField(control.FieldProposedAt, field.TypeTime, value)
-	}
-	if _u.mutation.ProposedAtCleared() {
-		_spec.ClearField(control.FieldProposedAt, field.TypeTime)
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(control.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.RefCode(); ok {
 		_spec.SetField(control.FieldRefCode, field.TypeString, value)

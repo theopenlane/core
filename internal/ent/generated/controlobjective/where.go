@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1061,6 +1061,16 @@ func DesiredOutcomeEqualFold(v string) predicate.ControlObjective {
 // DesiredOutcomeContainsFold applies the ContainsFold predicate on the "desired_outcome" field.
 func DesiredOutcomeContainsFold(v string) predicate.ControlObjective {
 	return predicate.ControlObjective(sql.FieldContainsFold(FieldDesiredOutcome, v))
+}
+
+// DesiredOutcomeJSONIsNil applies the IsNil predicate on the "desired_outcome_json" field.
+func DesiredOutcomeJSONIsNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldIsNull(FieldDesiredOutcomeJSON))
+}
+
+// DesiredOutcomeJSONNotNil applies the NotNil predicate on the "desired_outcome_json" field.
+func DesiredOutcomeJSONNotNil() predicate.ControlObjective {
+	return predicate.ControlObjective(sql.FieldNotNull(FieldDesiredOutcomeJSON))
 }
 
 // StatusEQ applies the EQ predicate on the "status" field.

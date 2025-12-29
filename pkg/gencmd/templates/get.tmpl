@@ -7,7 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cli/cmd"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 var getCmd = &cobra.Command{
@@ -22,11 +23,7 @@ var getCmd = &cobra.Command{
 func init() {
 	command.AddCommand(getCmd)
 
-	{{- if not .HistoryCmd }}
 	getCmd.Flags().StringP("id", "i", "", "{{ .Name | ToLowerCamel }} id to query")
-	{{ else }}
-	getCmd.Flags().StringP("id", "i", "", "id to query")
-	{{- end }}
 }
 
 // get an existing {{ .Name | ToLowerCamel }} in the platform
@@ -54,22 +51,17 @@ func get(ctx context.Context) error {
 
 	{{- end }}
 
-	{{- if .HistoryCmd }}
-
-	// filter options
-	id := cmd.Config.String("id")
-	if id != "" {
-		o, err := client.Get{{ .Name | ToUpperCamel | ToPlural }}(ctx, nil, nil, &openlaneclient.{{ .Name | ToUpperCamel }}WhereInput{
-			Ref: &id,
-		})
-		cobra.CheckErr(err)
-
-		return consoleOutput(o)
+	var order *graphclient.{{ .Name | ToUpperCamel }}Order
+	if cmd.OrderBy != nil && cmd.OrderDirection != nil {
+		order = &graphclient.{{ .Name | ToUpperCamel }}Order{
+			Direction: graphclient.OrderDirection(strings.ToUpper(*cmd.OrderDirection)),
+			Field:     graphclient.{{ .Name | ToUpperCamel }}OrderField(*cmd.OrderBy),
+		}
 	}
-	{{- end }}
+
 
 	// get all will be filtered for the authorized organization(s)
-	o, err := client.GetAll{{ .Name | ToUpperCamel | ToPlural }}(ctx)
+	o, err := client.GetAll{{ .Name | ToUpperCamel | ToPlural }}(ctx, cmd.First, cmd.Last, cmd.After, cmd.Before, []*graphclient.{{ .Name | ToUpperCamel }}Order{order})
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

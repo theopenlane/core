@@ -1,3 +1,14 @@
+extend type Control {
+    """
+    Indicates if this control has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this control if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
 extend type Query {
     """
     Look up control by ID

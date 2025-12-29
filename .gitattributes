@@ -1,0 +1,2 @@
+internal/**/checksum/.*     merge=ours
+.task/checksum/*            merge=ours

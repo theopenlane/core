@@ -6,13 +6,14 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // ActionPlan defines the action plan schema.
@@ -114,6 +115,15 @@ func (a ActionPlan) Edges() []ent.Edge {
 			edgeSchema: File{},
 			field:      "file_id",
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: a,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "action_plan",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
 	}
 }
 
@@ -123,9 +133,10 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			NewDocumentMixin(a),
-			newOrgOwnedMixin(a),
+			newOrgOwnedMixin(a, withWorkflowOwnedEdges()),
 			mixin.NewSystemOwnedMixin(),
-			newCustomEnumMixin(a),
+			newCustomEnumMixin(a, withWorkflowEnumEdges()),
+			WorkflowApprovalMixin{},
 		}}.getMixins(a)
 }
 

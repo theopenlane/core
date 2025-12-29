@@ -8,12 +8,12 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
 

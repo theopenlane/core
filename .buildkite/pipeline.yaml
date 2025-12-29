@@ -14,7 +14,7 @@ env:
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
-  HELM_CHART_REPO: https://github.com/theopenlane/openlane-infra.git
+  HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
 steps:
@@ -32,7 +32,7 @@ steps:
           - go.{mod,sum}
           - internal/ent/**
           - internal/graphapi/**
-          - pkg/enums/**
+          - common/enums/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -70,12 +70,14 @@ steps:
         depends_on: "generate_config"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -86,6 +88,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -95,12 +98,14 @@ steps:
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -111,6 +116,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "SLACK_WEBHOOK_URL"
                 - "BUILDKITE_BUILD_CHECKOUT_PATH=/workdir"
       - label: ":helm: update helm chart"
@@ -118,12 +124,14 @@ steps:
         depends_on: "generate_config"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -134,6 +142,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -143,12 +152,14 @@ steps:
         depends_on: "helm_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -159,6 +170,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
@@ -168,11 +180,13 @@ steps:
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         if_changed:
-          - config/**
+          - config/configmap-config-file.yaml
+          - config/helm-values.yaml
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -180,6 +194,7 @@ steps:
               propagate-environment: true
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
       - label: ":rocket: update image tag for release"
         key: "image_tag_automation"
@@ -238,8 +253,11 @@ steps:
         key: "go_test_graph"
         cancel_on_build_failing: true
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude: # do not run tests if only cli files changed
+            - cli/**
         env:
           TEST_DB_URL: "docker://postgres:{{matrix.version}}"
         matrix:
@@ -266,8 +284,11 @@ steps:
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
       - label: ":golang: go test - all except graphapi"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude: # do not run tests if only cli files changed
+            - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -318,8 +339,11 @@ steps:
         skip: true # skip for now, we are using a bunch of test executions that aren't entirely useful
         cancel_on_build_failing: false
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude:
+            - cli/**
         depends_on: ["go_test_graph", "go_test_no_graph"]
         commands: |
           #!/bin/bash
@@ -353,8 +377,11 @@ steps:
         key: "scan-upload-pr"
         cancel_on_build_failing: true
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude:
+            - cli/**
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
@@ -387,8 +414,11 @@ steps:
       - label: ":github: upload reports"
         key: "scan-upload"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
+          include:
+            - "**.go"
+            - go.{mod,sum}
+          exclude:
+            - cli/**
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_graph"]
@@ -426,10 +456,13 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/${APP_NAME}"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
-          - cmd/**
-          - docker/Dockerfile
+          include:
+            - "**.go"
+            - go.{mod,sum}
+            - cmd/**
+            - docker/Dockerfile
+          exclude:
+            - cli/**
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -455,9 +488,10 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
-          - cmd/cli/**
+          include:
+            - go.{mod,sum}
+            - cli/**
+            - common/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -592,9 +626,12 @@ steps:
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
         if_changed:
-          - "**.go"
-          - go.{mod,sum}
-          - docker/Dockerfile
+          include:
+            - "**.go"
+            - go.{mod,sum}
+            - docker/Dockerfile
+          exclude:
+            - cli/**
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}

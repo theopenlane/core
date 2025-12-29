@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Procedure is the model entity for the Procedure schema.
@@ -51,6 +51,8 @@ type Procedure struct {
 	ProcedureType string `json:"procedure_type,omitempty"`
 	// details of the procedure
 	Details string `json:"details,omitempty"`
+	// structured details of the procedure in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// whether approval is required for edits to the procedure
 	ApprovalRequired bool `json:"approval_required,omitempty"`
 	// the date the procedure should be reviewed, calculated based on the review_frequency if not directly set
@@ -89,6 +91,8 @@ type Procedure struct {
 	ProcedureKindName string `json:"procedure_kind_name,omitempty"`
 	// the kind of the procedure
 	ProcedureKindID string `json:"procedure_kind_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ProcedureQuery when eager-loading is set.
 	Edges                        ProcedureEdges `json:"edges"`
@@ -131,23 +135,26 @@ type ProcedureEdges struct {
 	Discussions []*Discussion `json:"discussions,omitempty"`
 	// File holds the value of the file edge.
 	File *File `json:"file,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
-	namedBlockedGroups    map[string][]*Group
-	namedEditors          map[string][]*Group
-	namedControls         map[string][]*Control
-	namedSubcontrols      map[string][]*Subcontrol
-	namedInternalPolicies map[string][]*InternalPolicy
-	namedPrograms         map[string][]*Program
-	namedNarratives       map[string][]*Narrative
-	namedRisks            map[string][]*Risk
-	namedTasks            map[string][]*Task
-	namedComments         map[string][]*Note
-	namedDiscussions      map[string][]*Discussion
+	namedBlockedGroups      map[string][]*Group
+	namedEditors            map[string][]*Group
+	namedControls           map[string][]*Control
+	namedSubcontrols        map[string][]*Subcontrol
+	namedInternalPolicies   map[string][]*InternalPolicy
+	namedPrograms           map[string][]*Program
+	namedNarratives         map[string][]*Narrative
+	namedRisks              map[string][]*Risk
+	namedTasks              map[string][]*Task
+	namedComments           map[string][]*Note
+	namedDiscussions        map[string][]*Discussion
+	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -304,14 +311,23 @@ func (e ProcedureEdges) FileOrErr() (*File, error) {
 	return nil, &NotLoadedError{edge: "file"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[16] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Procedure) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case procedure.FieldTags, procedure.FieldTagSuggestions, procedure.FieldDismissedTagSuggestions, procedure.FieldControlSuggestions, procedure.FieldDismissedControlSuggestions, procedure.FieldImprovementSuggestions, procedure.FieldDismissedImprovementSuggestions:
+		case procedure.FieldTags, procedure.FieldDetailsJSON, procedure.FieldTagSuggestions, procedure.FieldDismissedTagSuggestions, procedure.FieldControlSuggestions, procedure.FieldDismissedControlSuggestions, procedure.FieldImprovementSuggestions, procedure.FieldDismissedImprovementSuggestions:
 			values[i] = new([]byte)
-		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned:
+		case procedure.FieldApprovalRequired, procedure.FieldSystemOwned, procedure.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case procedure.FieldID, procedure.FieldCreatedBy, procedure.FieldUpdatedBy, procedure.FieldDeletedBy, procedure.FieldDisplayID, procedure.FieldRevision, procedure.FieldOwnerID, procedure.FieldName, procedure.FieldStatus, procedure.FieldProcedureType, procedure.FieldDetails, procedure.FieldReviewFrequency, procedure.FieldApproverID, procedure.FieldDelegateID, procedure.FieldSummary, procedure.FieldURL, procedure.FieldFileID, procedure.FieldInternalNotes, procedure.FieldSystemInternalID, procedure.FieldProcedureKindName, procedure.FieldProcedureKindID:
 			values[i] = new(sql.NullString)
@@ -427,6 +443,14 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case procedure.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case procedure.FieldApprovalRequired:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -558,6 +582,12 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ProcedureKindID = value.String
 			}
+		case procedure.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
+			}
 		case procedure.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_objective_procedures", values[i])
@@ -665,6 +695,11 @@ func (_m *Procedure) QueryFile() *FileQuery {
 	return NewProcedureClient(_m.config).QueryFile(_m)
 }
 
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Procedure entity.
+func (_m *Procedure) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewProcedureClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
 // Update returns a builder for updating this Procedure.
 // Note that you need to call Procedure.Unwrap() before calling this method if this Procedure
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -730,6 +765,9 @@ func (_m *Procedure) String() string {
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
 	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
+	builder.WriteString(", ")
 	builder.WriteString("approval_required=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalRequired))
 	builder.WriteString(", ")
@@ -794,6 +832,9 @@ func (_m *Procedure) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_kind_id=")
 	builder.WriteString(_m.ProcedureKindID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -1059,6 +1100,30 @@ func (_m *Procedure) appendNamedDiscussions(name string, edges ...*Discussion) {
 		_m.Edges.namedDiscussions[name] = []*Discussion{}
 	} else {
 		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Procedure) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Procedure) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

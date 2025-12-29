@@ -87,7 +87,7 @@ func TestEmitSync(t *testing.T) {
 		{
 			name: "failure",
 			listener: func(_ *EventContext, e Event) error {
-				return errors.New("listener error") // nolint: err113
+				return errors.New("listener error") //nolint:err113
 			},
 			expectErr: true,
 		},

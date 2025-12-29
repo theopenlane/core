@@ -13,18 +13,23 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // WorkflowInstanceQuery is the builder for querying WorkflowInstance entities.
@@ -39,6 +44,10 @@ type WorkflowInstanceQuery struct {
 	withControl                  *ControlQuery
 	withInternalPolicy           *InternalPolicyQuery
 	withEvidence                 *EvidenceQuery
+	withSubcontrol               *SubcontrolQuery
+	withActionPlan               *ActionPlanQuery
+	withProcedure                *ProcedureQuery
+	withWorkflowProposal         *WorkflowProposalQuery
 	withWorkflowAssignments      *WorkflowAssignmentQuery
 	withWorkflowEvents           *WorkflowEventQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
@@ -201,6 +210,106 @@ func (_q *WorkflowInstanceQuery) QueryEvidence() *EvidenceQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubcontrol chains the current query on the "subcontrol" edge.
+func (_q *WorkflowInstanceQuery) QuerySubcontrol() *SubcontrolQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.SubcontrolTable, workflowinstance.SubcontrolColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionPlan chains the current query on the "action_plan" edge.
+func (_q *WorkflowInstanceQuery) QueryActionPlan() *ActionPlanQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.ActionPlanTable, workflowinstance.ActionPlanColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedure chains the current query on the "procedure" edge.
+func (_q *WorkflowInstanceQuery) QueryProcedure() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.ProcedureTable, workflowinstance.ProcedureColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Procedure
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowProposal chains the current query on the "workflow_proposal" edge.
+func (_q *WorkflowInstanceQuery) QueryWorkflowProposal() *WorkflowProposalQuery {
+	query := (&WorkflowProposalClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, selector),
+			sqlgraph.To(workflowproposal.Table, workflowproposal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.WorkflowProposalTable, workflowinstance.WorkflowProposalColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowProposal
 		step.Edge.Schema = schemaConfig.WorkflowInstance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -480,6 +589,10 @@ func (_q *WorkflowInstanceQuery) Clone() *WorkflowInstanceQuery {
 		withControl:             _q.withControl.Clone(),
 		withInternalPolicy:      _q.withInternalPolicy.Clone(),
 		withEvidence:            _q.withEvidence.Clone(),
+		withSubcontrol:          _q.withSubcontrol.Clone(),
+		withActionPlan:          _q.withActionPlan.Clone(),
+		withProcedure:           _q.withProcedure.Clone(),
+		withWorkflowProposal:    _q.withWorkflowProposal.Clone(),
 		withWorkflowAssignments: _q.withWorkflowAssignments.Clone(),
 		withWorkflowEvents:      _q.withWorkflowEvents.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
@@ -542,6 +655,50 @@ func (_q *WorkflowInstanceQuery) WithEvidence(opts ...func(*EvidenceQuery)) *Wor
 		opt(query)
 	}
 	_q.withEvidence = query
+	return _q
+}
+
+// WithSubcontrol tells the query-builder to eager-load the nodes that are connected to
+// the "subcontrol" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithSubcontrol(opts ...func(*SubcontrolQuery)) *WorkflowInstanceQuery {
+	query := (&SubcontrolClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubcontrol = query
+	return _q
+}
+
+// WithActionPlan tells the query-builder to eager-load the nodes that are connected to
+// the "action_plan" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithActionPlan(opts ...func(*ActionPlanQuery)) *WorkflowInstanceQuery {
+	query := (&ActionPlanClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withActionPlan = query
+	return _q
+}
+
+// WithProcedure tells the query-builder to eager-load the nodes that are connected to
+// the "procedure" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithProcedure(opts ...func(*ProcedureQuery)) *WorkflowInstanceQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProcedure = query
+	return _q
+}
+
+// WithWorkflowProposal tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_proposal" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *WorkflowInstanceQuery) WithWorkflowProposal(opts ...func(*WorkflowProposalQuery)) *WorkflowInstanceQuery {
+	query := (&WorkflowProposalClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowProposal = query
 	return _q
 }
 
@@ -662,12 +819,16 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	var (
 		nodes       = []*WorkflowInstance{}
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [12]bool{
 			_q.withOwner != nil,
 			_q.withWorkflowDefinition != nil,
 			_q.withControl != nil,
 			_q.withInternalPolicy != nil,
 			_q.withEvidence != nil,
+			_q.withSubcontrol != nil,
+			_q.withActionPlan != nil,
+			_q.withProcedure != nil,
+			_q.withWorkflowProposal != nil,
 			_q.withWorkflowAssignments != nil,
 			_q.withWorkflowEvents != nil,
 			_q.withWorkflowObjectRefs != nil,
@@ -723,6 +884,30 @@ func (_q *WorkflowInstanceQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	if query := _q.withEvidence; query != nil {
 		if err := _q.loadEvidence(ctx, query, nodes, nil,
 			func(n *WorkflowInstance, e *Evidence) { n.Edges.Evidence = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubcontrol; query != nil {
+		if err := _q.loadSubcontrol(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Subcontrol) { n.Edges.Subcontrol = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withActionPlan; query != nil {
+		if err := _q.loadActionPlan(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *ActionPlan) { n.Edges.ActionPlan = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProcedure; query != nil {
+		if err := _q.loadProcedure(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *Procedure) { n.Edges.Procedure = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowProposal; query != nil {
+		if err := _q.loadWorkflowProposal(ctx, query, nodes, nil,
+			func(n *WorkflowInstance, e *WorkflowProposal) { n.Edges.WorkflowProposal = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -927,6 +1112,122 @@ func (_q *WorkflowInstanceQuery) loadEvidence(ctx context.Context, query *Eviden
 	}
 	return nil
 }
+func (_q *WorkflowInstanceQuery) loadSubcontrol(ctx context.Context, query *SubcontrolQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Subcontrol)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].SubcontrolID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(subcontrol.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "subcontrol_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadActionPlan(ctx context.Context, query *ActionPlanQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *ActionPlan)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].ActionPlanID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(actionplan.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "action_plan_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadProcedure(ctx context.Context, query *ProcedureQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *Procedure)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].ProcedureID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(procedure.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "procedure_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *WorkflowInstanceQuery) loadWorkflowProposal(ctx context.Context, query *WorkflowProposalQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *WorkflowProposal)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*WorkflowInstance)
+	for i := range nodes {
+		fk := nodes[i].WorkflowProposalID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(workflowproposal.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "workflow_proposal_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *WorkflowInstanceQuery) loadWorkflowAssignments(ctx context.Context, query *WorkflowAssignmentQuery, nodes []*WorkflowInstance, init func(*WorkflowInstance), assign func(*WorkflowInstance, *WorkflowAssignment)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*WorkflowInstance)
@@ -1066,6 +1367,18 @@ func (_q *WorkflowInstanceQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withEvidence != nil {
 			_spec.Node.AddColumnOnce(workflowinstance.FieldEvidenceID)
 		}
+		if _q.withSubcontrol != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldSubcontrolID)
+		}
+		if _q.withActionPlan != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldActionPlanID)
+		}
+		if _q.withProcedure != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldProcedureID)
+		}
+		if _q.withWorkflowProposal != nil {
+			_spec.Node.AddColumnOnce(workflowinstance.FieldWorkflowProposalID)
+		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -1176,21 +1489,20 @@ func (_q *WorkflowInstanceQuery) WithNamedWorkflowObjectRefs(name string, opts .
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (wiq *WorkflowInstanceQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowInstance").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, wiq.ctx, ent.OpQueryIDs)
-	if err := wiq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return wiq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, wiq, qr, wiq.inters)
+	ids, err := wiq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowInstance").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "WorkflowInstance").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

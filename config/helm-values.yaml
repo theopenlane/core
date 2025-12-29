@@ -127,10 +127,6 @@ coreConfiguration:
       cookiepath: "/"  # @schema type:string; default:/
     # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
     defaulttrustcenterdomain: ""  # @schema type:string
-    # -- FieldLevelEncryption contains the configuration for field level encryption
-    fieldlevelencryption:
-      # -- Enabled indicates whether Tink encryption is enabled
-      enabled: false  # @schema type:boolean; default:false
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: ""  # @schema type:string
@@ -533,9 +529,9 @@ coreConfiguration:
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripewebhookevents: []
     # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-    stripewebhookapiversion: "2025_11_17_CLOVER"  # @schema type:string; default:2025_11_17_CLOVER
+    stripewebhookapiversion: "2025_12_15_CLOVER"  # @schema type:string; default:2025_12_15_CLOVER
     # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-    stripewebhookdiscardapiversion: "2025_10_29_CLOVER"  # @schema type:string; default:2025_10_29_CLOVER
+    stripewebhookdiscardapiversion: "2025_11_17_CLOVER"  # @schema type:string; default:2025_11_17_CLOVER
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
     # -- Enabled indicates whether the key watcher is enabled
@@ -571,14 +567,6 @@ externalSecrets:
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
-    # -- core-server-fieldlevelencryption-keyset secret configuration
-    core-server-fieldlevelencryption-keyset:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for server.fieldlevelencryption.keyset
-      secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
     # -- core-auth-providers-github-clientsecret secret configuration
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret
@@ -843,14 +831,6 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-2025_10_29_clover secret configuration
-    core-subscription-stripewebhooksecrets-2025_10_29_clover:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripewebhooksecrets.2025_10_29_CLOVER
-      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_10_29_CLOVER"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-2025_10_29_clover"  # @schema type:string
     # -- core-subscription-stripewebhooksecrets-2025_11_17_clover secret configuration
     core-subscription-stripewebhooksecrets-2025_11_17_clover:
       # -- Enable this external secret
@@ -859,6 +839,14 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_11_17_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2025_11_17_clover"  # @schema type:string
+    # -- core-subscription-stripewebhooksecrets-2025_12_15_clover secret configuration
+    core-subscription-stripewebhooksecrets-2025_12_15_clover:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.stripewebhooksecrets.2025_12_15_CLOVER
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_12_15_CLOVER"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-stripewebhooksecrets-2025_12_15_clover"  # @schema type:string
     # -- core-keywatcher-secretmanager secret configuration
     core-keywatcher-secretmanager:
       # -- Enable this external secret

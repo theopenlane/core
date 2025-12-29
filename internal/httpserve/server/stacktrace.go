@@ -5,8 +5,9 @@ import (
 	"net/http"
 
 	"github.com/pkg/errors"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
+
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 type stackTracer interface {
@@ -31,7 +32,7 @@ func CustomHTTPErrorHandler(c echo.Context, err error) {
 		errorResponse["stackTrace"] = err.StackTrace()
 	}
 
-	log.Error().
+	logx.FromContext(c.Request().Context()).Error().
 		Err(err).
 		Str("query", fmt.Sprintf("%v", c.QueryParams())).
 		Str("url", c.Request().URL.String()).

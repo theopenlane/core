@@ -9,13 +9,13 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlImplementationCreate is the builder for creating a ControlImplementation entity.
@@ -238,6 +238,12 @@ func (_c *ControlImplementationCreate) SetNillableDetails(v *string) *ControlImp
 	if v != nil {
 		_c.SetDetails(*v)
 	}
+	return _c
+}
+
+// SetDetailsJSON sets the "details_json" field.
+func (_c *ControlImplementationCreate) SetDetailsJSON(v []interface{}) *ControlImplementationCreate {
+	_c.mutation.SetDetailsJSON(v)
 	return _c
 }
 
@@ -530,6 +536,10 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(controlimplementation.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(controlimplementation.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

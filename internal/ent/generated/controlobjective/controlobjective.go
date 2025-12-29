@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -48,6 +48,8 @@ const (
 	FieldName = "name"
 	// FieldDesiredOutcome holds the string denoting the desired_outcome field in the database.
 	FieldDesiredOutcome = "desired_outcome"
+	// FieldDesiredOutcomeJSON holds the string denoting the desired_outcome_json field in the database.
+	FieldDesiredOutcomeJSON = "desired_outcome_json"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldSource holds the string denoting the source field in the database.
@@ -179,6 +181,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldName,
 	FieldDesiredOutcome,
+	FieldDesiredOutcomeJSON,
 	FieldStatus,
 	FieldSource,
 	FieldControlObjectiveType,
@@ -232,8 +235,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [13]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Hooks        [12]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

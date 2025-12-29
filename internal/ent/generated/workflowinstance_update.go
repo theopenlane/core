@@ -12,17 +12,21 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -145,6 +149,26 @@ func (_u *WorkflowInstanceUpdate) SetNillableWorkflowDefinitionID(v *string) *Wo
 	return _u
 }
 
+// SetWorkflowProposalID sets the "workflow_proposal_id" field.
+func (_u *WorkflowInstanceUpdate) SetWorkflowProposalID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetWorkflowProposalID(v)
+	return _u
+}
+
+// SetNillableWorkflowProposalID sets the "workflow_proposal_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableWorkflowProposalID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetWorkflowProposalID(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowProposalID clears the value of the "workflow_proposal_id" field.
+func (_u *WorkflowInstanceUpdate) ClearWorkflowProposalID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearWorkflowProposalID()
+	return _u
+}
+
 // SetState sets the "state" field.
 func (_u *WorkflowInstanceUpdate) SetState(v enums.WorkflowInstanceState) *WorkflowInstanceUpdate {
 	_u.mutation.SetState(v)
@@ -219,6 +243,27 @@ func (_u *WorkflowInstanceUpdate) ClearDefinitionSnapshot() *WorkflowInstanceUpd
 	return _u
 }
 
+// SetCurrentActionIndex sets the "current_action_index" field.
+func (_u *WorkflowInstanceUpdate) SetCurrentActionIndex(v int) *WorkflowInstanceUpdate {
+	_u.mutation.ResetCurrentActionIndex()
+	_u.mutation.SetCurrentActionIndex(v)
+	return _u
+}
+
+// SetNillableCurrentActionIndex sets the "current_action_index" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableCurrentActionIndex(v *int) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetCurrentActionIndex(*v)
+	}
+	return _u
+}
+
+// AddCurrentActionIndex adds value to the "current_action_index" field.
+func (_u *WorkflowInstanceUpdate) AddCurrentActionIndex(v int) *WorkflowInstanceUpdate {
+	_u.mutation.AddCurrentActionIndex(v)
+	return _u
+}
+
 // SetControlID sets the "control_id" field.
 func (_u *WorkflowInstanceUpdate) SetControlID(v string) *WorkflowInstanceUpdate {
 	_u.mutation.SetControlID(v)
@@ -279,6 +324,66 @@ func (_u *WorkflowInstanceUpdate) ClearEvidenceID() *WorkflowInstanceUpdate {
 	return _u
 }
 
+// SetSubcontrolID sets the "subcontrol_id" field.
+func (_u *WorkflowInstanceUpdate) SetSubcontrolID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetSubcontrolID(v)
+	return _u
+}
+
+// SetNillableSubcontrolID sets the "subcontrol_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableSubcontrolID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetSubcontrolID(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolID clears the value of the "subcontrol_id" field.
+func (_u *WorkflowInstanceUpdate) ClearSubcontrolID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearSubcontrolID()
+	return _u
+}
+
+// SetActionPlanID sets the "action_plan_id" field.
+func (_u *WorkflowInstanceUpdate) SetActionPlanID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetActionPlanID(v)
+	return _u
+}
+
+// SetNillableActionPlanID sets the "action_plan_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableActionPlanID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetActionPlanID(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanID clears the value of the "action_plan_id" field.
+func (_u *WorkflowInstanceUpdate) ClearActionPlanID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearActionPlanID()
+	return _u
+}
+
+// SetProcedureID sets the "procedure_id" field.
+func (_u *WorkflowInstanceUpdate) SetProcedureID(v string) *WorkflowInstanceUpdate {
+	_u.mutation.SetProcedureID(v)
+	return _u
+}
+
+// SetNillableProcedureID sets the "procedure_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdate) SetNillableProcedureID(v *string) *WorkflowInstanceUpdate {
+	if v != nil {
+		_u.SetProcedureID(*v)
+	}
+	return _u
+}
+
+// ClearProcedureID clears the value of the "procedure_id" field.
+func (_u *WorkflowInstanceUpdate) ClearProcedureID() *WorkflowInstanceUpdate {
+	_u.mutation.ClearProcedureID()
+	return _u
+}
+
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_u *WorkflowInstanceUpdate) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceUpdate {
 	return _u.SetWorkflowDefinitionID(v.ID)
@@ -297,6 +402,26 @@ func (_u *WorkflowInstanceUpdate) SetInternalPolicy(v *InternalPolicy) *Workflow
 // SetEvidence sets the "evidence" edge to the Evidence entity.
 func (_u *WorkflowInstanceUpdate) SetEvidence(v *Evidence) *WorkflowInstanceUpdate {
 	return _u.SetEvidenceID(v.ID)
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_u *WorkflowInstanceUpdate) SetSubcontrol(v *Subcontrol) *WorkflowInstanceUpdate {
+	return _u.SetSubcontrolID(v.ID)
+}
+
+// SetActionPlan sets the "action_plan" edge to the ActionPlan entity.
+func (_u *WorkflowInstanceUpdate) SetActionPlan(v *ActionPlan) *WorkflowInstanceUpdate {
+	return _u.SetActionPlanID(v.ID)
+}
+
+// SetProcedure sets the "procedure" edge to the Procedure entity.
+func (_u *WorkflowInstanceUpdate) SetProcedure(v *Procedure) *WorkflowInstanceUpdate {
+	return _u.SetProcedureID(v.ID)
+}
+
+// SetWorkflowProposal sets the "workflow_proposal" edge to the WorkflowProposal entity.
+func (_u *WorkflowInstanceUpdate) SetWorkflowProposal(v *WorkflowProposal) *WorkflowInstanceUpdate {
+	return _u.SetWorkflowProposalID(v.ID)
 }
 
 // AddWorkflowAssignmentIDs adds the "workflow_assignments" edge to the WorkflowAssignment entity by IDs.
@@ -370,6 +495,30 @@ func (_u *WorkflowInstanceUpdate) ClearInternalPolicy() *WorkflowInstanceUpdate 
 // ClearEvidence clears the "evidence" edge to the Evidence entity.
 func (_u *WorkflowInstanceUpdate) ClearEvidence() *WorkflowInstanceUpdate {
 	_u.mutation.ClearEvidence()
+	return _u
+}
+
+// ClearSubcontrol clears the "subcontrol" edge to the Subcontrol entity.
+func (_u *WorkflowInstanceUpdate) ClearSubcontrol() *WorkflowInstanceUpdate {
+	_u.mutation.ClearSubcontrol()
+	return _u
+}
+
+// ClearActionPlan clears the "action_plan" edge to the ActionPlan entity.
+func (_u *WorkflowInstanceUpdate) ClearActionPlan() *WorkflowInstanceUpdate {
+	_u.mutation.ClearActionPlan()
+	return _u
+}
+
+// ClearProcedure clears the "procedure" edge to the Procedure entity.
+func (_u *WorkflowInstanceUpdate) ClearProcedure() *WorkflowInstanceUpdate {
+	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// ClearWorkflowProposal clears the "workflow_proposal" edge to the WorkflowProposal entity.
+func (_u *WorkflowInstanceUpdate) ClearWorkflowProposal() *WorkflowInstanceUpdate {
+	_u.mutation.ClearWorkflowProposal()
 	return _u
 }
 
@@ -490,6 +639,11 @@ func (_u *WorkflowInstanceUpdate) check() error {
 			return &ValidationError{Name: "state", err: fmt.Errorf(`generated: validator failed for field "WorkflowInstance.state": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CurrentActionIndex(); ok {
+		if err := workflowinstance.CurrentActionIndexValidator(v); err != nil {
+			return &ValidationError{Name: "current_action_index", err: fmt.Errorf(`generated: validator failed for field "WorkflowInstance.current_action_index": %w`, err)}
+		}
+	}
 	if _u.mutation.WorkflowDefinitionCleared() && len(_u.mutation.WorkflowDefinitionIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "WorkflowInstance.workflow_definition"`)
 	}
@@ -575,6 +729,12 @@ func (_u *WorkflowInstanceUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.DefinitionSnapshotCleared() {
 		_spec.ClearField(workflowinstance.FieldDefinitionSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CurrentActionIndex(); ok {
+		_spec.SetField(workflowinstance.FieldCurrentActionIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedCurrentActionIndex(); ok {
+		_spec.AddField(workflowinstance.FieldCurrentActionIndex, field.TypeInt, value)
 	}
 	if _u.mutation.WorkflowDefinitionCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -692,6 +852,130 @@ func (_u *WorkflowInstanceUpdate) sqlSave(ctx context.Context) (_node int, err e
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.SubcontrolTable,
+			Columns: []string{workflowinstance.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.SubcontrolTable,
+			Columns: []string{workflowinstance.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ActionPlanTable,
+			Columns: []string{workflowinstance.ActionPlanColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ActionPlanTable,
+			Columns: []string{workflowinstance.ActionPlanColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ProcedureTable,
+			Columns: []string{workflowinstance.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ProcedureTable,
+			Columns: []string{workflowinstance.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowProposalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.WorkflowProposalTable,
+			Columns: []string{workflowinstance.WorkflowProposalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowProposalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.WorkflowProposalTable,
+			Columns: []string{workflowinstance.WorkflowProposalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowInstance
@@ -972,6 +1256,26 @@ func (_u *WorkflowInstanceUpdateOne) SetNillableWorkflowDefinitionID(v *string) 
 	return _u
 }
 
+// SetWorkflowProposalID sets the "workflow_proposal_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetWorkflowProposalID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetWorkflowProposalID(v)
+	return _u
+}
+
+// SetNillableWorkflowProposalID sets the "workflow_proposal_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableWorkflowProposalID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetWorkflowProposalID(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowProposalID clears the value of the "workflow_proposal_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearWorkflowProposalID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearWorkflowProposalID()
+	return _u
+}
+
 // SetState sets the "state" field.
 func (_u *WorkflowInstanceUpdateOne) SetState(v enums.WorkflowInstanceState) *WorkflowInstanceUpdateOne {
 	_u.mutation.SetState(v)
@@ -1046,6 +1350,27 @@ func (_u *WorkflowInstanceUpdateOne) ClearDefinitionSnapshot() *WorkflowInstance
 	return _u
 }
 
+// SetCurrentActionIndex sets the "current_action_index" field.
+func (_u *WorkflowInstanceUpdateOne) SetCurrentActionIndex(v int) *WorkflowInstanceUpdateOne {
+	_u.mutation.ResetCurrentActionIndex()
+	_u.mutation.SetCurrentActionIndex(v)
+	return _u
+}
+
+// SetNillableCurrentActionIndex sets the "current_action_index" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableCurrentActionIndex(v *int) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetCurrentActionIndex(*v)
+	}
+	return _u
+}
+
+// AddCurrentActionIndex adds value to the "current_action_index" field.
+func (_u *WorkflowInstanceUpdateOne) AddCurrentActionIndex(v int) *WorkflowInstanceUpdateOne {
+	_u.mutation.AddCurrentActionIndex(v)
+	return _u
+}
+
 // SetControlID sets the "control_id" field.
 func (_u *WorkflowInstanceUpdateOne) SetControlID(v string) *WorkflowInstanceUpdateOne {
 	_u.mutation.SetControlID(v)
@@ -1106,6 +1431,66 @@ func (_u *WorkflowInstanceUpdateOne) ClearEvidenceID() *WorkflowInstanceUpdateOn
 	return _u
 }
 
+// SetSubcontrolID sets the "subcontrol_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetSubcontrolID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetSubcontrolID(v)
+	return _u
+}
+
+// SetNillableSubcontrolID sets the "subcontrol_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableSubcontrolID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetSubcontrolID(*v)
+	}
+	return _u
+}
+
+// ClearSubcontrolID clears the value of the "subcontrol_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearSubcontrolID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearSubcontrolID()
+	return _u
+}
+
+// SetActionPlanID sets the "action_plan_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetActionPlanID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetActionPlanID(v)
+	return _u
+}
+
+// SetNillableActionPlanID sets the "action_plan_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableActionPlanID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetActionPlanID(*v)
+	}
+	return _u
+}
+
+// ClearActionPlanID clears the value of the "action_plan_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearActionPlanID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearActionPlanID()
+	return _u
+}
+
+// SetProcedureID sets the "procedure_id" field.
+func (_u *WorkflowInstanceUpdateOne) SetProcedureID(v string) *WorkflowInstanceUpdateOne {
+	_u.mutation.SetProcedureID(v)
+	return _u
+}
+
+// SetNillableProcedureID sets the "procedure_id" field if the given value is not nil.
+func (_u *WorkflowInstanceUpdateOne) SetNillableProcedureID(v *string) *WorkflowInstanceUpdateOne {
+	if v != nil {
+		_u.SetProcedureID(*v)
+	}
+	return _u
+}
+
+// ClearProcedureID clears the value of the "procedure_id" field.
+func (_u *WorkflowInstanceUpdateOne) ClearProcedureID() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearProcedureID()
+	return _u
+}
+
 // SetWorkflowDefinition sets the "workflow_definition" edge to the WorkflowDefinition entity.
 func (_u *WorkflowInstanceUpdateOne) SetWorkflowDefinition(v *WorkflowDefinition) *WorkflowInstanceUpdateOne {
 	return _u.SetWorkflowDefinitionID(v.ID)
@@ -1124,6 +1509,26 @@ func (_u *WorkflowInstanceUpdateOne) SetInternalPolicy(v *InternalPolicy) *Workf
 // SetEvidence sets the "evidence" edge to the Evidence entity.
 func (_u *WorkflowInstanceUpdateOne) SetEvidence(v *Evidence) *WorkflowInstanceUpdateOne {
 	return _u.SetEvidenceID(v.ID)
+}
+
+// SetSubcontrol sets the "subcontrol" edge to the Subcontrol entity.
+func (_u *WorkflowInstanceUpdateOne) SetSubcontrol(v *Subcontrol) *WorkflowInstanceUpdateOne {
+	return _u.SetSubcontrolID(v.ID)
+}
+
+// SetActionPlan sets the "action_plan" edge to the ActionPlan entity.
+func (_u *WorkflowInstanceUpdateOne) SetActionPlan(v *ActionPlan) *WorkflowInstanceUpdateOne {
+	return _u.SetActionPlanID(v.ID)
+}
+
+// SetProcedure sets the "procedure" edge to the Procedure entity.
+func (_u *WorkflowInstanceUpdateOne) SetProcedure(v *Procedure) *WorkflowInstanceUpdateOne {
+	return _u.SetProcedureID(v.ID)
+}
+
+// SetWorkflowProposal sets the "workflow_proposal" edge to the WorkflowProposal entity.
+func (_u *WorkflowInstanceUpdateOne) SetWorkflowProposal(v *WorkflowProposal) *WorkflowInstanceUpdateOne {
+	return _u.SetWorkflowProposalID(v.ID)
 }
 
 // AddWorkflowAssignmentIDs adds the "workflow_assignments" edge to the WorkflowAssignment entity by IDs.
@@ -1197,6 +1602,30 @@ func (_u *WorkflowInstanceUpdateOne) ClearInternalPolicy() *WorkflowInstanceUpda
 // ClearEvidence clears the "evidence" edge to the Evidence entity.
 func (_u *WorkflowInstanceUpdateOne) ClearEvidence() *WorkflowInstanceUpdateOne {
 	_u.mutation.ClearEvidence()
+	return _u
+}
+
+// ClearSubcontrol clears the "subcontrol" edge to the Subcontrol entity.
+func (_u *WorkflowInstanceUpdateOne) ClearSubcontrol() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearSubcontrol()
+	return _u
+}
+
+// ClearActionPlan clears the "action_plan" edge to the ActionPlan entity.
+func (_u *WorkflowInstanceUpdateOne) ClearActionPlan() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearActionPlan()
+	return _u
+}
+
+// ClearProcedure clears the "procedure" edge to the Procedure entity.
+func (_u *WorkflowInstanceUpdateOne) ClearProcedure() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearProcedure()
+	return _u
+}
+
+// ClearWorkflowProposal clears the "workflow_proposal" edge to the WorkflowProposal entity.
+func (_u *WorkflowInstanceUpdateOne) ClearWorkflowProposal() *WorkflowInstanceUpdateOne {
+	_u.mutation.ClearWorkflowProposal()
 	return _u
 }
 
@@ -1330,6 +1759,11 @@ func (_u *WorkflowInstanceUpdateOne) check() error {
 			return &ValidationError{Name: "state", err: fmt.Errorf(`generated: validator failed for field "WorkflowInstance.state": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CurrentActionIndex(); ok {
+		if err := workflowinstance.CurrentActionIndexValidator(v); err != nil {
+			return &ValidationError{Name: "current_action_index", err: fmt.Errorf(`generated: validator failed for field "WorkflowInstance.current_action_index": %w`, err)}
+		}
+	}
 	if _u.mutation.WorkflowDefinitionCleared() && len(_u.mutation.WorkflowDefinitionIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "WorkflowInstance.workflow_definition"`)
 	}
@@ -1432,6 +1866,12 @@ func (_u *WorkflowInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 	}
 	if _u.mutation.DefinitionSnapshotCleared() {
 		_spec.ClearField(workflowinstance.FieldDefinitionSnapshot, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.CurrentActionIndex(); ok {
+		_spec.SetField(workflowinstance.FieldCurrentActionIndex, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedCurrentActionIndex(); ok {
+		_spec.AddField(workflowinstance.FieldCurrentActionIndex, field.TypeInt, value)
 	}
 	if _u.mutation.WorkflowDefinitionCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1549,6 +1989,130 @@ func (_u *WorkflowInstanceUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SubcontrolCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.SubcontrolTable,
+			Columns: []string{workflowinstance.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SubcontrolIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.SubcontrolTable,
+			Columns: []string{workflowinstance.SubcontrolColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ActionPlanTable,
+			Columns: []string{workflowinstance.ActionPlanColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ActionPlanTable,
+			Columns: []string{workflowinstance.ActionPlanColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProcedureCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ProcedureTable,
+			Columns: []string{workflowinstance.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProcedureIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.ProcedureTable,
+			Columns: []string{workflowinstance.ProcedureColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowProposalCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.WorkflowProposalTable,
+			Columns: []string{workflowinstance.WorkflowProposalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowProposalIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowinstance.WorkflowProposalTable,
+			Columns: []string{workflowinstance.WorkflowProposalColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowInstance

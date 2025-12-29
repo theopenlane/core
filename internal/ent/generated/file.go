@@ -88,6 +88,8 @@ type File struct {
 
 	// PresignedURL is the presigned URL for the file when using s3 storage
 	PresignedURL string `json:"presignedURL,omitempty"`
+	// Base64 is the base64 representation of the file when using database storage
+	Base64 string `json:"base64,omitempty"`
 }
 
 // FileEdges holds the relations/edges for other nodes in the graph.

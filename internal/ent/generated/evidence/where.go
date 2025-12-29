@@ -7,8 +7,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -108,14 +108,9 @@ func OwnerID(v string) predicate.Evidence {
 	return predicate.Evidence(sql.FieldEQ(FieldOwnerID, v))
 }
 
-// ProposedByUserID applies equality check predicate on the "proposed_by_user_id" field. It's identical to ProposedByUserIDEQ.
-func ProposedByUserID(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldEQ(FieldProposedByUserID, v))
-}
-
-// ProposedAt applies equality check predicate on the "proposed_at" field. It's identical to ProposedAtEQ.
-func ProposedAt(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldEQ(FieldProposedAt, v))
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -683,139 +678,24 @@ func OwnerIDContainsFold(v string) predicate.Evidence {
 	return predicate.Evidence(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
-// ProposedChangesIsNil applies the IsNil predicate on the "proposed_changes" field.
-func ProposedChangesIsNil() predicate.Evidence {
-	return predicate.Evidence(sql.FieldIsNull(FieldProposedChanges))
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
 }
 
-// ProposedChangesNotNil applies the NotNil predicate on the "proposed_changes" field.
-func ProposedChangesNotNil() predicate.Evidence {
-	return predicate.Evidence(sql.FieldNotNull(FieldProposedChanges))
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.Evidence {
+	return predicate.Evidence(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
 }
 
-// ProposedByUserIDEQ applies the EQ predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDEQ(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldEQ(FieldProposedByUserID, v))
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldIsNull(FieldWorkflowEligibleMarker))
 }
 
-// ProposedByUserIDNEQ applies the NEQ predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDNEQ(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldNEQ(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDIn applies the In predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDIn(vs ...string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldIn(FieldProposedByUserID, vs...))
-}
-
-// ProposedByUserIDNotIn applies the NotIn predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDNotIn(vs ...string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldNotIn(FieldProposedByUserID, vs...))
-}
-
-// ProposedByUserIDGT applies the GT predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDGT(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldGT(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDGTE applies the GTE predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDGTE(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldGTE(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDLT applies the LT predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDLT(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldLT(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDLTE applies the LTE predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDLTE(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldLTE(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDContains applies the Contains predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDContains(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldContains(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDHasPrefix applies the HasPrefix predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDHasPrefix(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldHasPrefix(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDHasSuffix applies the HasSuffix predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDHasSuffix(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldHasSuffix(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDIsNil applies the IsNil predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDIsNil() predicate.Evidence {
-	return predicate.Evidence(sql.FieldIsNull(FieldProposedByUserID))
-}
-
-// ProposedByUserIDNotNil applies the NotNil predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDNotNil() predicate.Evidence {
-	return predicate.Evidence(sql.FieldNotNull(FieldProposedByUserID))
-}
-
-// ProposedByUserIDEqualFold applies the EqualFold predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDEqualFold(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldEqualFold(FieldProposedByUserID, v))
-}
-
-// ProposedByUserIDContainsFold applies the ContainsFold predicate on the "proposed_by_user_id" field.
-func ProposedByUserIDContainsFold(v string) predicate.Evidence {
-	return predicate.Evidence(sql.FieldContainsFold(FieldProposedByUserID, v))
-}
-
-// ProposedAtEQ applies the EQ predicate on the "proposed_at" field.
-func ProposedAtEQ(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldEQ(FieldProposedAt, v))
-}
-
-// ProposedAtNEQ applies the NEQ predicate on the "proposed_at" field.
-func ProposedAtNEQ(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldNEQ(FieldProposedAt, v))
-}
-
-// ProposedAtIn applies the In predicate on the "proposed_at" field.
-func ProposedAtIn(vs ...time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldIn(FieldProposedAt, vs...))
-}
-
-// ProposedAtNotIn applies the NotIn predicate on the "proposed_at" field.
-func ProposedAtNotIn(vs ...time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldNotIn(FieldProposedAt, vs...))
-}
-
-// ProposedAtGT applies the GT predicate on the "proposed_at" field.
-func ProposedAtGT(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldGT(FieldProposedAt, v))
-}
-
-// ProposedAtGTE applies the GTE predicate on the "proposed_at" field.
-func ProposedAtGTE(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldGTE(FieldProposedAt, v))
-}
-
-// ProposedAtLT applies the LT predicate on the "proposed_at" field.
-func ProposedAtLT(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldLT(FieldProposedAt, v))
-}
-
-// ProposedAtLTE applies the LTE predicate on the "proposed_at" field.
-func ProposedAtLTE(v time.Time) predicate.Evidence {
-	return predicate.Evidence(sql.FieldLTE(FieldProposedAt, v))
-}
-
-// ProposedAtIsNil applies the IsNil predicate on the "proposed_at" field.
-func ProposedAtIsNil() predicate.Evidence {
-	return predicate.Evidence(sql.FieldIsNull(FieldProposedAt))
-}
-
-// ProposedAtNotNil applies the NotNil predicate on the "proposed_at" field.
-func ProposedAtNotNil() predicate.Evidence {
-	return predicate.Evidence(sql.FieldNotNull(FieldProposedAt))
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -1586,6 +1466,35 @@ func HasCommentsWith(preds ...predicate.Note) predicate.Evidence {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
+func HasWorkflowObjectRefs() predicate.Evidence {
+	return predicate.Evidence(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowObjectRefsWith applies the HasEdge predicate on the "workflow_object_refs" edge with a given conditions (other predicates).
+func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Evidence {
+	return predicate.Evidence(func(s *sql.Selector) {
+		step := newWorkflowObjectRefsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

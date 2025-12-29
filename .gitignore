@@ -79,3 +79,4 @@ junit*.xml
 
 # build files
 dist/
+.objects-examples.yaml

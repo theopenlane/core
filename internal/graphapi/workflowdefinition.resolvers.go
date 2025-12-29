@@ -92,7 +92,7 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 	}
 
 	// setup update request
-	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTriggerOperations(input.AppendTriggerOperations).AppendTriggerFields(input.AppendTriggerFields).AppendTrackedFields(input.AppendTrackedFields)
+	req := res.Update().SetInput(input).AppendTags(input.AppendTags).AppendTrackedFields(input.AppendTrackedFields)
 
 	res, err = req.Save(ctx)
 	if err != nil {

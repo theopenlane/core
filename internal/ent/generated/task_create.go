@@ -10,6 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -27,8 +29,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // TaskCreate is the builder for creating a Task entity.
@@ -193,6 +193,12 @@ func (_c *TaskCreate) SetNillableDetails(v *string) *TaskCreate {
 	if v != nil {
 		_c.SetDetails(*v)
 	}
+	return _c
+}
+
+// SetDetailsJSON sets the "details_json" field.
+func (_c *TaskCreate) SetDetailsJSON(v []interface{}) *TaskCreate {
+	_c.mutation.SetDetailsJSON(v)
 	return _c
 }
 
@@ -782,6 +788,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(task.FieldDetails, field.TypeString, value)
 		_node.Details = value
+	}
+	if value, ok := _c.mutation.DetailsJSON(); ok {
+		_spec.SetField(task.FieldDetailsJSON, field.TypeJSON, value)
+		_node.DetailsJSON = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)

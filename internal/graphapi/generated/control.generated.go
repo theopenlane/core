@@ -70,6 +70,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Control_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
@@ -128,12 +130,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Control_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Control_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Control_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -192,6 +190,10 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -270,6 +272,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Control_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
@@ -328,12 +332,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Control_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Control_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Control_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -392,6 +392,10 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -470,6 +474,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Control_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
@@ -528,12 +534,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Control_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Control_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Control_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -592,6 +594,10 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},
@@ -670,6 +676,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_title(ctx, field)
 			case "description":
 				return ec.fieldContext_Control_description(ctx, field)
+			case "descriptionJSON":
+				return ec.fieldContext_Control_descriptionJSON(ctx, field)
 			case "aliases":
 				return ec.fieldContext_Control_aliases(ctx, field)
 			case "referenceID":
@@ -728,12 +736,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_controlKindName(ctx, field)
 			case "controlKindID":
 				return ec.fieldContext_Control_controlKindID(ctx, field)
-			case "proposedChanges":
-				return ec.fieldContext_Control_proposedChanges(ctx, field)
-			case "proposedByUserID":
-				return ec.fieldContext_Control_proposedByUserID(ctx, field)
-			case "proposedAt":
-				return ec.fieldContext_Control_proposedAt(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Control_workflowEligibleMarker(ctx, field)
 			case "refCode":
 				return ec.fieldContext_Control_refCode(ctx, field)
 			case "standardID":
@@ -792,6 +796,10 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Control_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Control_activeWorkflowInstance(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Control", field.Name)
 		},

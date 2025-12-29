@@ -1,11 +1,12 @@
 package gencatalog
 
 import (
+	models "github.com/theopenlane/core/common/models"
 	catalog "github.com/theopenlane/core/pkg/catalog"
 )
 
 // GetDefaultCatalog returns the default catalog; if useSandbox is true, it returns the sandbox catalog
-func GetDefaultCatalog(useSandbox bool) catalog.Catalog {
+func GetDefaultCatalog(useSandbox bool) models.Catalog {
 	if useSandbox {
 		return DefaultSandboxCatalog
 	}
@@ -24,5 +25,9 @@ func GetModules(useSandbox bool) catalog.FeatureSet {
 func GetCatalogByAudience(useSandbox bool, audience string) *catalog.Catalog {
 	c := GetDefaultCatalog(useSandbox)
 
-	return c.Visible(audience)
+	cat := catalog.Catalog{
+		Catalog: c,
+	}
+
+	return cat.Visible(audience)
 }

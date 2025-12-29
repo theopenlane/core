@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // DirectorySyncRunQuery is the builder for querying DirectorySyncRun entities.
@@ -947,21 +948,20 @@ func (_q *DirectorySyncRunQuery) WithNamedDirectoryMemberships(name string, opts
 	return _q
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (dsrq *DirectorySyncRunQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectorySyncRun").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, dsrq.ctx, ent.OpQueryIDs)
-	if err := dsrq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return dsrq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, dsrq, qr, dsrq.inters)
+	ids, err := dsrq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DirectorySyncRun").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "DirectorySyncRun").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

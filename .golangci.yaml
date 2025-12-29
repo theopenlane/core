@@ -22,41 +22,35 @@ linters:
       - legacy
       - std-error-handling
     paths:
-      - internal/graphapi/generated/gen_models.go
-      - internal/graphapi/historygenerated/gen_models.go
-      - pkg/openlaneclient/graphclient.go
-      - pkg/testutils/*
-      - internal/ent/generated/*
-      - internal/ent/historygenerated/*
-      - internal/ent/templates/*
-      - jsonschema/templates/*
-      - pkg/objects/mocks/*
-      - pkg/corejobs/internal/cloudflare/mocks/*
-      - pkg/corejobs/internal/olclient/mocks/*
-      - internal/graphapi/generate/*
-      - internal/graphapi/generated/*
-      - internal/graphapi/historygenerated/*
-      - pkg/entitlements/test/*
-      - cmd/cli/cmd/*
-      - pkg/sleuth/static/*
-      - pkg/entitlements/mocks/*
-      - pkg/events/soiree/examples/*
-      - pkg/middleware/ratelimiter/examples/*
-      - internal/ent/hush/examples/*
-      - pkg/objects/examples/*
+      - internal/graphapi/testclient
+      - internal/graphapi/model/
+      - internal/graphapi/historymodel
+      - internal/ent/generated
+      - internal/ent/authzgenerated
+      - internal/ent/historygenerated
+      - internal/ent/historyschema
+      - internal/httpserve/handlers/test_webfinger
+      - internal/ent/hush/examples
+      - pkg/middleware/ratelimit/examples
+      - pkg/entitlements/test
+      - pkg/entitlements/mocks
+      - pkg/objects/mocks
+      - pkg/events/soiree/examples
+      - pkg/objects/examples
+      - pkg/testutils
+      - internal/graphapi/generated
+      - internal/graphapi/historygenerated
+      - internal/httpserve/handlers/internal
 formatters:
   enable:
     - gofmt
   exclusions:
     generated: lax
-    warn-unused: true
     paths:
       - internal/graphapi/generated/gen_models.go
       - internal/graphapi/historygenerated/gen_models.go
-      - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - pkg/entitlements/test/*
-      - cmd/cli/cmd/*
+      - cli/cmd/*
       - pkg/events/soiree/examples/*
-      - pkg/sleuth/dnsx/* # this should be fixed in the future
       - internal/ent/hush/examples/*

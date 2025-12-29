@@ -4,10 +4,12 @@ package app
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/url"
 	"os"
+	"path/filepath"
 
 	"github.com/urfave/cli/v3"
 
@@ -26,6 +28,7 @@ func openlaneCommand() *cli.Command {
 			&cli.StringFlag{Name: "name", Usage: "Evidence name", Value: "Security Compliance Evidence"},
 			&cli.StringFlag{Name: "description", Usage: "Evidence description", Value: "Security compliance validation evidence"},
 			&cli.StringFlag{Name: "file", Usage: "Path to evidence file"},
+			&cli.StringFlag{Name: "base64-output", Usage: "Path to write the file base64 response payload"},
 			&cli.BoolFlag{Name: "verbose", Usage: "Enable verbose logging"},
 		},
 		Action: func(ctx context.Context, cmd *cli.Command) error {
@@ -36,6 +39,7 @@ func openlaneCommand() *cli.Command {
 				Name:           cmd.String("name"),
 				Description:    cmd.String("description"),
 				FilePath:       cmd.String("file"),
+				Base64Output:   cmd.String("base64-output"),
 				Verbose:        cmd.Bool("verbose"),
 			}
 			out := cmd.Writer
@@ -54,6 +58,7 @@ type openlaneConfig struct {
 	Name           string
 	Description    string
 	FilePath       string
+	Base64Output   string
 	Verbose        bool
 }
 
@@ -123,13 +128,46 @@ func runOpenlane(ctx context.Context, out io.Writer, cfg openlaneConfig) error {
 
 	if len(evidence.CreateEvidence.Evidence.Files.Edges) > 0 {
 		fmt.Fprintf(out, "\n  Attachments (%d):\n", len(evidence.CreateEvidence.Evidence.Files.Edges))
+		fileID := ""
 		for _, edge := range evidence.CreateEvidence.Evidence.Files.Edges {
 			if edge.Node != nil {
 				fmt.Fprintf(out, "    - File ID: %s\n", edge.Node.ID)
+				if fileID == "" {
+					fileID = edge.Node.ID
+				}
 				if edge.Node.PresignedURL != nil && *edge.Node.PresignedURL != "" {
 					fmt.Fprintf(out, "      Presigned URL: %s\n", *edge.Node.PresignedURL)
 				}
 			}
+		}
+
+		if fileID != "" {
+			base64Response, err := openlane.FetchFileBase64(ctx, client, fileID)
+			if err != nil {
+				return fmt.Errorf("fetch base64 response: %w", err)
+			}
+
+			outputPath := cfg.Base64Output
+			if outputPath == "" {
+				outputPath = resolvePath(filepath.Join("tmp", fmt.Sprintf("file-base64-%s.json", fileID)))
+			} else {
+				outputPath = resolvePath(outputPath)
+			}
+
+			if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
+				return fmt.Errorf("create base64 output directory: %w", err)
+			}
+
+			payload, err := json.MarshalIndent(base64Response, "", "  ")
+			if err != nil {
+				return fmt.Errorf("marshal base64 response: %w", err)
+			}
+
+			if err := os.WriteFile(outputPath, payload, 0o644); err != nil {
+				return fmt.Errorf("write base64 response: %w", err)
+			}
+
+			fmt.Fprintf(out, "  Base64 response written to: %s\n", outputPath)
 		}
 	}
 
@@ -138,5 +176,5 @@ func runOpenlane(ctx context.Context, out io.Writer, cfg openlaneConfig) error {
 }
 
 func defaultEvidenceFile() string {
-	return resolvePath("testdata/sample-files/document.json")
+	return resolvePath("testdata/sample-files/image.png")
 }

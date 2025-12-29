@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -28,7 +29,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -378,6 +378,24 @@ func (_u *RiskUpdate) ClearMitigation() *RiskUpdate {
 	return _u
 }
 
+// SetMitigationJSON sets the "mitigation_json" field.
+func (_u *RiskUpdate) SetMitigationJSON(v []interface{}) *RiskUpdate {
+	_u.mutation.SetMitigationJSON(v)
+	return _u
+}
+
+// AppendMitigationJSON appends value to the "mitigation_json" field.
+func (_u *RiskUpdate) AppendMitigationJSON(v []interface{}) *RiskUpdate {
+	_u.mutation.AppendMitigationJSON(v)
+	return _u
+}
+
+// ClearMitigationJSON clears the value of the "mitigation_json" field.
+func (_u *RiskUpdate) ClearMitigationJSON() *RiskUpdate {
+	_u.mutation.ClearMitigationJSON()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *RiskUpdate) SetDetails(v string) *RiskUpdate {
 	_u.mutation.SetDetails(v)
@@ -398,6 +416,24 @@ func (_u *RiskUpdate) ClearDetails() *RiskUpdate {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *RiskUpdate) SetDetailsJSON(v []interface{}) *RiskUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *RiskUpdate) AppendDetailsJSON(v []interface{}) *RiskUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *RiskUpdate) ClearDetailsJSON() *RiskUpdate {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetBusinessCosts sets the "business_costs" field.
 func (_u *RiskUpdate) SetBusinessCosts(v string) *RiskUpdate {
 	_u.mutation.SetBusinessCosts(v)
@@ -415,6 +451,24 @@ func (_u *RiskUpdate) SetNillableBusinessCosts(v *string) *RiskUpdate {
 // ClearBusinessCosts clears the value of the "business_costs" field.
 func (_u *RiskUpdate) ClearBusinessCosts() *RiskUpdate {
 	_u.mutation.ClearBusinessCosts()
+	return _u
+}
+
+// SetBusinessCostsJSON sets the "business_costs_json" field.
+func (_u *RiskUpdate) SetBusinessCostsJSON(v []interface{}) *RiskUpdate {
+	_u.mutation.SetBusinessCostsJSON(v)
+	return _u
+}
+
+// AppendBusinessCostsJSON appends value to the "business_costs_json" field.
+func (_u *RiskUpdate) AppendBusinessCostsJSON(v []interface{}) *RiskUpdate {
+	_u.mutation.AppendBusinessCostsJSON(v)
+	return _u
+}
+
+// ClearBusinessCostsJSON clears the value of the "business_costs_json" field.
+func (_u *RiskUpdate) ClearBusinessCostsJSON() *RiskUpdate {
+	_u.mutation.ClearBusinessCostsJSON()
 	return _u
 }
 
@@ -1233,17 +1287,50 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.MitigationCleared() {
 		_spec.ClearField(risk.FieldMitigation, field.TypeString)
 	}
+	if value, ok := _u.mutation.MitigationJSON(); ok {
+		_spec.SetField(risk.FieldMitigationJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedMitigationJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, risk.FieldMitigationJSON, value)
+		})
+	}
+	if _u.mutation.MitigationJSONCleared() {
+		_spec.ClearField(risk.FieldMitigationJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeString)
 	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(risk.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, risk.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(risk.FieldDetailsJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.BusinessCosts(); ok {
 		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
 	}
 	if _u.mutation.BusinessCostsCleared() {
 		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
+	}
+	if value, ok := _u.mutation.BusinessCostsJSON(); ok {
+		_spec.SetField(risk.FieldBusinessCostsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedBusinessCostsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, risk.FieldBusinessCostsJSON, value)
+		})
+	}
+	if _u.mutation.BusinessCostsJSONCleared() {
+		_spec.ClearField(risk.FieldBusinessCostsJSON, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2444,6 +2531,24 @@ func (_u *RiskUpdateOne) ClearMitigation() *RiskUpdateOne {
 	return _u
 }
 
+// SetMitigationJSON sets the "mitigation_json" field.
+func (_u *RiskUpdateOne) SetMitigationJSON(v []interface{}) *RiskUpdateOne {
+	_u.mutation.SetMitigationJSON(v)
+	return _u
+}
+
+// AppendMitigationJSON appends value to the "mitigation_json" field.
+func (_u *RiskUpdateOne) AppendMitigationJSON(v []interface{}) *RiskUpdateOne {
+	_u.mutation.AppendMitigationJSON(v)
+	return _u
+}
+
+// ClearMitigationJSON clears the value of the "mitigation_json" field.
+func (_u *RiskUpdateOne) ClearMitigationJSON() *RiskUpdateOne {
+	_u.mutation.ClearMitigationJSON()
+	return _u
+}
+
 // SetDetails sets the "details" field.
 func (_u *RiskUpdateOne) SetDetails(v string) *RiskUpdateOne {
 	_u.mutation.SetDetails(v)
@@ -2464,6 +2569,24 @@ func (_u *RiskUpdateOne) ClearDetails() *RiskUpdateOne {
 	return _u
 }
 
+// SetDetailsJSON sets the "details_json" field.
+func (_u *RiskUpdateOne) SetDetailsJSON(v []interface{}) *RiskUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *RiskUpdateOne) AppendDetailsJSON(v []interface{}) *RiskUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *RiskUpdateOne) ClearDetailsJSON() *RiskUpdateOne {
+	_u.mutation.ClearDetailsJSON()
+	return _u
+}
+
 // SetBusinessCosts sets the "business_costs" field.
 func (_u *RiskUpdateOne) SetBusinessCosts(v string) *RiskUpdateOne {
 	_u.mutation.SetBusinessCosts(v)
@@ -2481,6 +2604,24 @@ func (_u *RiskUpdateOne) SetNillableBusinessCosts(v *string) *RiskUpdateOne {
 // ClearBusinessCosts clears the value of the "business_costs" field.
 func (_u *RiskUpdateOne) ClearBusinessCosts() *RiskUpdateOne {
 	_u.mutation.ClearBusinessCosts()
+	return _u
+}
+
+// SetBusinessCostsJSON sets the "business_costs_json" field.
+func (_u *RiskUpdateOne) SetBusinessCostsJSON(v []interface{}) *RiskUpdateOne {
+	_u.mutation.SetBusinessCostsJSON(v)
+	return _u
+}
+
+// AppendBusinessCostsJSON appends value to the "business_costs_json" field.
+func (_u *RiskUpdateOne) AppendBusinessCostsJSON(v []interface{}) *RiskUpdateOne {
+	_u.mutation.AppendBusinessCostsJSON(v)
+	return _u
+}
+
+// ClearBusinessCostsJSON clears the value of the "business_costs_json" field.
+func (_u *RiskUpdateOne) ClearBusinessCostsJSON() *RiskUpdateOne {
+	_u.mutation.ClearBusinessCostsJSON()
 	return _u
 }
 
@@ -3329,17 +3470,50 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	if _u.mutation.MitigationCleared() {
 		_spec.ClearField(risk.FieldMitigation, field.TypeString)
 	}
+	if value, ok := _u.mutation.MitigationJSON(); ok {
+		_spec.SetField(risk.FieldMitigationJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedMitigationJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, risk.FieldMitigationJSON, value)
+		})
+	}
+	if _u.mutation.MitigationJSONCleared() {
+		_spec.ClearField(risk.FieldMitigationJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(risk.FieldDetails, field.TypeString, value)
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(risk.FieldDetails, field.TypeString)
 	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(risk.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, risk.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(risk.FieldDetailsJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.BusinessCosts(); ok {
 		_spec.SetField(risk.FieldBusinessCosts, field.TypeString, value)
 	}
 	if _u.mutation.BusinessCostsCleared() {
 		_spec.ClearField(risk.FieldBusinessCosts, field.TypeString)
+	}
+	if value, ok := _u.mutation.BusinessCostsJSON(); ok {
+		_spec.SetField(risk.FieldBusinessCostsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedBusinessCostsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, risk.FieldBusinessCostsJSON, value)
+		})
+	}
+	if _u.mutation.BusinessCostsJSONCleared() {
+		_spec.ClearField(risk.FieldBusinessCostsJSON, field.TypeJSON)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

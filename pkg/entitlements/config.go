@@ -18,9 +18,9 @@ type Config struct {
 	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
 	StripeWebhookEvents []string `json:"stripewebhookevents" koanf:"stripewebhookevents"`
 	// StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-	StripeWebhookAPIVersion string `json:"stripewebhookapiversion" koanf:"stripewebhookapiversion" default:"2025_11_17_CLOVER"`
+	StripeWebhookAPIVersion string `json:"stripewebhookapiversion" koanf:"stripewebhookapiversion" default:"2025_12_15_CLOVER"`
 	// StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-	StripeWebhookDiscardAPIVersion string `json:"stripewebhookdiscardapiversion" koanf:"stripewebhookdiscardapiversion" default:"2025_10_29_CLOVER"`
+	StripeWebhookDiscardAPIVersion string `json:"stripewebhookdiscardapiversion" koanf:"stripewebhookdiscardapiversion" default:"2025_11_17_CLOVER"`
 }
 
 type ConfigOpts func(*Config)

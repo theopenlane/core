@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlImplementation is the model entity for the ControlImplementation schema.
@@ -52,6 +52,8 @@ type ControlImplementation struct {
 	VerificationDate time.Time `json:"verification_date,omitempty"`
 	// details of the control implementation
 	Details string `json:"details,omitempty"`
+	// structured details of the control implementation in JSON format
+	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ControlImplementationQuery when eager-loading is set.
 	Edges                                   ControlImplementationEdges `json:"edges"`
@@ -160,7 +162,7 @@ func (*ControlImplementation) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlimplementation.FieldTags:
+		case controlimplementation.FieldTags, controlimplementation.FieldDetailsJSON:
 			values[i] = new([]byte)
 		case controlimplementation.FieldSystemOwned, controlimplementation.FieldVerified:
 			values[i] = new(sql.NullBool)
@@ -292,6 +294,14 @@ func (_m *ControlImplementation) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field details", values[i])
 			} else if value.Valid {
 				_m.Details = value.String
+			}
+		case controlimplementation.FieldDetailsJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field details_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
+					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
 			}
 		case controlimplementation.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -429,6 +439,9 @@ func (_m *ControlImplementation) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)
+	builder.WriteString(", ")
+	builder.WriteString("details_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -86,6 +86,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1609,6 +1610,21 @@ func (_u *OrganizationUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *Or
 		ids[i] = v[i].ID
 	}
 	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
+// AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowProposalIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// AddWorkflowProposals adds the "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *OrganizationUpdate) AddWorkflowProposals(v ...*WorkflowProposal) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowProposalIDs(ids...)
 }
 
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
@@ -3459,6 +3475,27 @@ func (_u *OrganizationUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearWorkflowProposals clears all "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *OrganizationUpdate) ClearWorkflowProposals() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowProposals()
+	return _u
+}
+
+// RemoveWorkflowProposalIDs removes the "workflow_proposals" edge to WorkflowProposal entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowProposalIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowProposals removes "workflow_proposals" edges to WorkflowProposal entities.
+func (_u *OrganizationUpdate) RemoveWorkflowProposals(v ...*WorkflowProposal) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowProposalIDs(ids...)
 }
 
 // ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
@@ -7818,6 +7855,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowProposalsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowProposalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.DirectoryAccountsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -9635,6 +9720,21 @@ func (_u *OrganizationUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) 
 		ids[i] = v[i].ID
 	}
 	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
+// AddWorkflowProposalIDs adds the "workflow_proposals" edge to the WorkflowProposal entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowProposalIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// AddWorkflowProposals adds the "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *OrganizationUpdateOne) AddWorkflowProposals(v ...*WorkflowProposal) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowProposalIDs(ids...)
 }
 
 // AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
@@ -11485,6 +11585,27 @@ func (_u *OrganizationUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRe
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearWorkflowProposals clears all "workflow_proposals" edges to the WorkflowProposal entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowProposals() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowProposals()
+	return _u
+}
+
+// RemoveWorkflowProposalIDs removes the "workflow_proposals" edge to WorkflowProposal entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowProposalIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowProposalIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowProposals removes "workflow_proposals" edges to WorkflowProposal entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowProposals(v ...*WorkflowProposal) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowProposalIDs(ids...)
 }
 
 // ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
@@ -15869,6 +15990,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowProposalsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowProposalsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowProposalsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowProposalsTable,
+			Columns: []string{organization.WorkflowProposalsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

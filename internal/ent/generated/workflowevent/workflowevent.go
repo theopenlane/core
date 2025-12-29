@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -108,8 +108,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -132,7 +132,7 @@ var (
 // EventTypeValidator is a validator for the "event_type" field enum values. It is called by the builders before save.
 func EventTypeValidator(et enums.WorkflowEventType) error {
 	switch et.String() {
-	case "ACTION", "TRIGGER", "DECISION":
+	case "ACTION", "TRIGGER", "DECISION", "INSTANCE_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_RESOLVED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "INSTANCE_COMPLETED":
 		return nil
 	default:
 		return fmt.Errorf("workflowevent: invalid enum value for event_type field: %q", et)

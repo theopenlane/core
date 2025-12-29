@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/testutils"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"

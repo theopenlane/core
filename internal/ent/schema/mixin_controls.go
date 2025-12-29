@@ -10,12 +10,12 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/graphapi/directives"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -44,14 +44,62 @@ func (m ControlMixin) Edges() []ent.Edge {
 	}
 
 	return []ent.Edge{
-		defaultEdgeFromWithPagination(c, Evidence{}),
-		defaultEdgeToWithPagination(c, ControlObjective{}),
-		defaultEdgeToWithPagination(c, Task{}),
-		defaultEdgeToWithPagination(c, Narrative{}),
-		defaultEdgeToWithPagination(c, Risk{}),
-		defaultEdgeToWithPagination(c, ActionPlan{}),
-		defaultEdgeToWithPagination(c, Procedure{}),
-		defaultEdgeFromWithPagination(c, InternalPolicy{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Evidence{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: ControlObjective{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Task{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Narrative{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Risk{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: ActionPlan{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Procedure{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: InternalPolicy{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: c,
 			name:       "comments",
@@ -59,6 +107,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			comment:    "conversations related to the control",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -67,6 +116,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			comment:    "discussions related to the control",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		// owner is the user who is responsible for the control
@@ -79,6 +129,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entgql.OrderField("CONTROL_OWNER_name"),
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -90,6 +141,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entgql.OrderField("DELEGATE_name"),
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
@@ -101,6 +153,7 @@ func (m ControlMixin) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entgql.OrderField("RESPONSIBLE_PARTY_name"),
 				accessmap.EdgeViewCheck(Entity{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 	}
@@ -156,6 +209,12 @@ var controlFields = []ent.Field{
 			directives.ExternalSourceDirectiveAnnotation,
 		).
 		Comment("description of what the control is supposed to accomplish"),
+	field.JSON("description_json", []any{}).
+		Optional().
+		Annotations(
+			entgql.Type("[Any!]"),
+		).
+		Comment("structured details of the control in JSON format"),
 	field.Strings("aliases").Optional().
 		Annotations(
 			entx.FieldSearchable(),

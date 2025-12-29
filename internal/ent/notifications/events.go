@@ -4,14 +4,13 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/ent"
-
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/events"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -22,15 +21,6 @@ var (
 	// ErrEntityIDNotFound is returned when entity ID is not found in props
 	ErrEntityIDNotFound = errors.New("entity ID not found in props")
 )
-
-// mutationPayload mirrors the MutationPayload struct from hooks package
-// to avoid import cycle
-type mutationPayload struct {
-	Mutation  ent.Mutation
-	Operation string
-	EntityID  string
-	Client    *generated.Client
-}
 
 type taskFields struct {
 	title    string
@@ -59,7 +49,7 @@ type policyNotificationInput struct {
 }
 
 // handleTaskMutation processes task mutations and creates notifications when assignee changes
-func handleTaskMutation(ctx *soiree.EventContext, payload any) error {
+func handleTaskMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	props := ctx.Properties()
 	if props == nil {
 		return nil
@@ -99,7 +89,7 @@ func handleTaskMutation(ctx *soiree.EventContext, payload any) error {
 }
 
 // fetchTaskFields retrieves task fields from payload, props, or queries database if missing
-func fetchTaskFields(ctx *soiree.EventContext, props soiree.Properties, payload any) (*taskFields, error) {
+func fetchTaskFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*taskFields, error) {
 	fields := &taskFields{}
 
 	extractTaskFromPayload(payload, fields)
@@ -115,17 +105,16 @@ func fetchTaskFields(ctx *soiree.EventContext, props soiree.Properties, payload 
 }
 
 // extractTaskFromPayload extracts task fields from mutation payload
-func extractTaskFromPayload(payload any, fields *taskFields) {
-	mutPayload, ok := payload.(*mutationPayload)
-	if !ok || mutPayload == nil {
+func extractTaskFromPayload(payload *events.MutationPayload, fields *taskFields) {
+	if payload == nil {
 		return
 	}
 
-	if mutPayload.EntityID != "" {
-		fields.entityID = mutPayload.EntityID
+	if payload.EntityID != "" {
+		fields.entityID = payload.EntityID
 	}
 
-	taskMut, ok := mutPayload.Mutation.(*generated.TaskMutation)
+	taskMut, ok := payload.Mutation.(*generated.TaskMutation)
 	if !ok {
 		return
 	}
@@ -194,7 +183,7 @@ func queryTaskFromDB(ctx *soiree.EventContext, fields *taskFields) error {
 }
 
 // handleInternalPolicyMutation processes internal policy mutations and creates notifications when status = NEEDS_APPROVAL
-func handleInternalPolicyMutation(ctx *soiree.EventContext, payload any) error {
+func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	props := ctx.Properties()
 	if props == nil {
 		return nil
@@ -246,7 +235,7 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload any) error {
 }
 
 // fetchPolicyFields retrieves internal policy fields from payload, props, or queries database if missing
-func fetchPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payload any) (*policyFields, error) {
+func fetchPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payload *events.MutationPayload) (*policyFields, error) {
 	fields := &policyFields{}
 
 	extractPolicyFromPayload(payload, fields)
@@ -262,17 +251,16 @@ func fetchPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payloa
 }
 
 // extractPolicyFromPayload extracts policy fields from mutation payload
-func extractPolicyFromPayload(payload any, fields *policyFields) {
-	mutPayload, ok := payload.(*mutationPayload)
-	if !ok || mutPayload == nil {
+func extractPolicyFromPayload(payload *events.MutationPayload, fields *policyFields) {
+	if payload == nil {
 		return
 	}
 
-	if mutPayload.EntityID != "" {
-		fields.entityID = mutPayload.EntityID
+	if payload.EntityID != "" {
+		fields.entityID = payload.EntityID
 	}
 
-	policyMut, ok := mutPayload.Mutation.(*generated.InternalPolicyMutation)
+	policyMut, ok := payload.Mutation.(*generated.InternalPolicyMutation)
 	if !ok {
 		return
 	}
@@ -453,7 +441,7 @@ func newNotificationCreation(ctx *soiree.EventContext, userIDs []string, input *
 
 // RegisterListeners registers notification listeners with the given eventer
 // This is called from hooks package to register the listeners
-func RegisterListeners(addListener func(entityType string, handler func(*soiree.EventContext, any) error)) {
+func RegisterListeners(addListener func(entityType string, handler func(*soiree.EventContext, *events.MutationPayload) error)) {
 	addListener(generated.TypeTask, handleTaskMutation)
 	addListener(generated.TypeInternalPolicy, handleInternalPolicyMutation)
 }

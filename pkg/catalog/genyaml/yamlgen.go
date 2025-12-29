@@ -15,7 +15,7 @@ import (
 	"github.com/stoewer/go-strcase"
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/common/models"
 )
 
 // main is the entry point for the gencatalog CLI application and just a // little wrapper instead of having everything in main
@@ -28,7 +28,7 @@ func main() {
 
 const (
 	repoPath       = "github.com/theopenlane/core/pkg/catalog"
-	modelsPath     = "github.com/theopenlane/core/pkg/models"
+	modelsPath     = "github.com/theopenlane/core/common/models"
 	sandboxCatalog = "catalog_sandbox.yaml"
 	sandboxOutput  = "./gencatalog/gencatalog_sandbox.go"
 )
@@ -88,7 +88,7 @@ func genyamlApp() *cli.Command {
 				return err
 			}
 
-			var ct catalog.Catalog
+			var ct models.Catalog
 
 			if err := yaml.Unmarshal(data, &ct); err != nil {
 				return err
@@ -114,7 +114,7 @@ func genyamlApp() *cli.Command {
 				return nil
 			}
 
-			if err := os.WriteFile(output, formatted, 0600); err != nil { // nolint: mnd
+			if err := os.WriteFile(output, formatted, 0600); err != nil { //nolint:mnd
 				return err
 			}
 
@@ -132,8 +132,8 @@ func genyamlApp() *cli.Command {
 }
 
 // catalogLit generates the main block for catalog.Catalog
-func catalogLit(c catalog.Catalog) *jen.Statement {
-	return jen.Qual(repoPath, "Catalog").Values(jen.Dict{
+func catalogLit(c models.Catalog) *jen.Statement {
+	return jen.Qual(modelsPath, "Catalog").Values(jen.Dict{
 		jen.Id("Version"): jen.Lit(c.Version),
 		jen.Id("SHA"):     jen.Lit(c.SHA),
 		jen.Id("Modules"): featureSetLit(c.Modules),
@@ -143,7 +143,7 @@ func catalogLit(c catalog.Catalog) *jen.Statement {
 
 // featureSetLit generates a map for a FeatureSet, sorting the keys and
 // creating a dict for the values
-func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
+func featureSetLit(fs models.FeatureSet) *jen.Statement {
 	keys := make([]string, 0, len(fs))
 
 	for k := range fs {
@@ -159,11 +159,11 @@ func featureSetLit(fs catalog.FeatureSet) *jen.Statement {
 		dict[jen.Id("string").Call(jen.Qual(modelsPath, name))] = featureLit(fs[k])
 	}
 
-	return jen.Map(jen.String()).Qual(repoPath, "Feature").Values(dict)
+	return jen.Map(jen.String()).Qual(modelsPath, "Feature").Values(dict)
 }
 
-// featureLit generates the main structure for a catalog.Feature
-func featureLit(f catalog.Feature) *jen.Statement {
+// featureLit generates the main structure for a models.Feature
+func featureLit(f models.Feature) *jen.Statement {
 	dict := jen.Dict{
 		jen.Id("DisplayName"):          jen.Lit(f.DisplayName),
 		jen.Id("LookupKey"):            jen.Lit(f.LookupKey),
@@ -194,37 +194,37 @@ func featureLit(f catalog.Feature) *jen.Statement {
 		dict[jen.Id("ProductID")] = jen.Lit(f.ProductID)
 	}
 
-	return jen.Qual(repoPath, "Feature").Values(dict)
+	return jen.Qual(modelsPath, "Feature").Values(dict)
 }
 
 // isBillingEmpty checks if all fields in Billing are zero values
-func isBillingEmpty(b catalog.Billing) bool {
+func isBillingEmpty(b models.Billing) bool {
 	return len(b.Prices) == 0
 }
 
-// billingLit generates a block for catalog.Billing, including Prices
-// as a slice each representing a catalog.Price
-func billingLit(b catalog.Billing) *jen.Statement {
+// billingLit generates a block for models.Billing, including Prices
+// as a slice each representing a models.Price
+func billingLit(b models.Billing) *jen.Statement {
 	items := make([]jen.Code, len(b.Prices))
 
 	for i, p := range b.Prices {
 		items[i] = priceLit(p)
 	}
 
-	return jen.Qual(repoPath, "Billing").Values(jen.Dict{
-		jen.Id("Prices"): jen.Index().Qual(repoPath, "Price").Values(items...)})
+	return jen.Qual(modelsPath, "Billing").Values(jen.Dict{
+		jen.Id("Prices"): jen.Index().Qual(modelsPath, "ItemPrice").Values(items...)})
 }
 
-// usageLit generates a block for catalog.Usage, currently only
+// usageLit generates a block for models.Usage, currently only
 // containing EvidenceStorageGB (records limitations / metering not yet implemented), but can be extended in the future
-func usageLit(u catalog.Usage) *jen.Statement {
-	return jen.Qual(repoPath, "Usage").Values(jen.Dict{
+func usageLit(u models.Usage) *jen.Statement {
+	return jen.Qual(modelsPath, "Usage").Values(jen.Dict{
 		jen.Id("EvidenceStorageGB"): jen.Lit(u.EvidenceStorageGB),
 	})
 }
 
 // priceLit generates a list of elemtents for price
-func priceLit(p catalog.Price) *jen.Statement {
+func priceLit(p models.ItemPrice) *jen.Statement {
 	dict := jen.Dict{
 		jen.Id("Interval"):   jen.Lit(p.Interval),
 		jen.Id("UnitAmount"): jen.Lit(p.UnitAmount),
@@ -259,12 +259,12 @@ func priceLit(p catalog.Price) *jen.Statement {
 		dict[jen.Id("Metadata")] = jen.Map(jen.String()).String().Values(mdict)
 	}
 
-	return jen.Qual(repoPath, "Price").Values(dict)
+	return jen.Qual(modelsPath, "ItemPrice").Values(dict)
 }
 
 // writeModuleConstants writes OrgModule constant definitions derived from the
 // catalog file. The output is formatted Go code under pkg/models
-func writeModuleConstants(path string, c catalog.Catalog) error {
+func writeModuleConstants(path string, c models.Catalog) error {
 	modKeys := make([]string, 0, len(c.Modules)+len(c.Addons))
 	personalMods := make([]string, 0, len(c.Modules)+len(c.Addons))
 	trialMods := make([]string, 0, len(c.Modules)+len(c.Addons))

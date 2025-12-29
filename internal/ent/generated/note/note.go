@@ -33,6 +33,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldText holds the string denoting the text field in the database.
 	FieldText = "text"
+	// FieldTextJSON holds the string denoting the text_json field in the database.
+	FieldTextJSON = "text_json"
 	// FieldNoteRef holds the string denoting the note_ref field in the database.
 	FieldNoteRef = "note_ref"
 	// FieldDiscussionID holds the string denoting the discussion_id field in the database.
@@ -145,6 +147,7 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldOwnerID,
 	FieldText,
+	FieldTextJSON,
 	FieldNoteRef,
 	FieldDiscussionID,
 	FieldIsEdited,
@@ -191,8 +194,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
-	Interceptors [4]ent.Interceptor
+	Hooks        [7]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

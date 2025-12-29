@@ -12,9 +12,9 @@ import (
 
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -101,6 +101,12 @@ func getDocumentFields(documentType string) []ent.Field {
 				entx.FieldSearchable(),
 			).
 			Comment(fmt.Sprintf("details of the %s", documentType)),
+		field.JSON("details_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment(fmt.Sprintf("structured details of the %s in JSON format", documentType)),
 		field.Bool("approval_required").
 			Default(true).
 			Optional().
@@ -179,6 +185,7 @@ func getApproverEdges(documentType string) []ent.Edge {
 			Field("approver_id").
 			Annotations(
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment(fmt.Sprintf("the group of users who are responsible for approving the %s", documentType)),
 		edge.To("delegate", Group.Type).
@@ -186,6 +193,7 @@ func getApproverEdges(documentType string) []ent.Edge {
 			Field("delegate_id").
 			Annotations(
 				accessmap.EdgeViewCheck(Group{}.Name()),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment(fmt.Sprintf("temporary delegates for the %s, used for temporary approval", documentType)),
 	}

@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVEntityType($input: Upload!) {
   createBulkCSVEntityType(input: $input) {
     entityTypes {
@@ -96,6 +95,7 @@ query GetEntityTypes($where: EntityTypeWhereInput) {
     }
   }
 }
+
 mutation UpdateEntityType($updateEntityTypeId: ID!, $input: UpdateEntityTypeInput!) {
   updateEntityType(id: $updateEntityTypeId, input: $input) {
     entityType {

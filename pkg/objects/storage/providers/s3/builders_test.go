@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 func TestNewS3Builder(t *testing.T) {

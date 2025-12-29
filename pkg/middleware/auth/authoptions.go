@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
+	api "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	api "github.com/theopenlane/core/pkg/openapi"
 )
 
 // Option allows users to optionally supply configuration to the Authorization middleware.

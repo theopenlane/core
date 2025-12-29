@@ -12,12 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -368,6 +368,62 @@ func (_u *WorkflowDefinitionUpdate) ClearTriggerFields() *WorkflowDefinitionUpda
 	return _u
 }
 
+// SetApprovalFields sets the "approval_fields" field.
+func (_u *WorkflowDefinitionUpdate) SetApprovalFields(v []string) *WorkflowDefinitionUpdate {
+	_u.mutation.SetApprovalFields(v)
+	return _u
+}
+
+// AppendApprovalFields appends value to the "approval_fields" field.
+func (_u *WorkflowDefinitionUpdate) AppendApprovalFields(v []string) *WorkflowDefinitionUpdate {
+	_u.mutation.AppendApprovalFields(v)
+	return _u
+}
+
+// ClearApprovalFields clears the value of the "approval_fields" field.
+func (_u *WorkflowDefinitionUpdate) ClearApprovalFields() *WorkflowDefinitionUpdate {
+	_u.mutation.ClearApprovalFields()
+	return _u
+}
+
+// SetApprovalEdges sets the "approval_edges" field.
+func (_u *WorkflowDefinitionUpdate) SetApprovalEdges(v []string) *WorkflowDefinitionUpdate {
+	_u.mutation.SetApprovalEdges(v)
+	return _u
+}
+
+// AppendApprovalEdges appends value to the "approval_edges" field.
+func (_u *WorkflowDefinitionUpdate) AppendApprovalEdges(v []string) *WorkflowDefinitionUpdate {
+	_u.mutation.AppendApprovalEdges(v)
+	return _u
+}
+
+// ClearApprovalEdges clears the value of the "approval_edges" field.
+func (_u *WorkflowDefinitionUpdate) ClearApprovalEdges() *WorkflowDefinitionUpdate {
+	_u.mutation.ClearApprovalEdges()
+	return _u
+}
+
+// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionUpdate) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionUpdate {
+	_u.mutation.SetApprovalSubmissionMode(v)
+	return _u
+}
+
+// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
+func (_u *WorkflowDefinitionUpdate) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionUpdate {
+	if v != nil {
+		_u.SetApprovalSubmissionMode(*v)
+	}
+	return _u
+}
+
+// ClearApprovalSubmissionMode clears the value of the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionUpdate) ClearApprovalSubmissionMode() *WorkflowDefinitionUpdate {
+	_u.mutation.ClearApprovalSubmissionMode()
+	return _u
+}
+
 // SetDefinitionJSON sets the "definition_json" field.
 func (_u *WorkflowDefinitionUpdate) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionUpdate {
 	_u.mutation.SetDefinitionJSON(v)
@@ -542,6 +598,11 @@ func (_u *WorkflowDefinitionUpdate) check() error {
 			return &ValidationError{Name: "schema_type", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.schema_type": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		if err := workflowdefinition.ApprovalSubmissionModeValidator(v); err != nil {
+			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.approval_submission_mode": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -682,6 +743,34 @@ func (_u *WorkflowDefinitionUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.TriggerFieldsCleared() {
 		_spec.ClearField(workflowdefinition.FieldTriggerFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalFields(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalFields, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalFields(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinition.FieldApprovalFields, value)
+		})
+	}
+	if _u.mutation.ApprovalFieldsCleared() {
+		_spec.ClearField(workflowdefinition.FieldApprovalFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalEdges(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalEdges, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalEdges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinition.FieldApprovalEdges, value)
+		})
+	}
+	if _u.mutation.ApprovalEdgesCleared() {
+		_spec.ClearField(workflowdefinition.FieldApprovalEdges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalSubmissionMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ApprovalSubmissionModeCleared() {
+		_spec.ClearField(workflowdefinition.FieldApprovalSubmissionMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.DefinitionJSON(); ok {
 		_spec.SetField(workflowdefinition.FieldDefinitionJSON, field.TypeJSON, value)
@@ -1152,6 +1241,62 @@ func (_u *WorkflowDefinitionUpdateOne) ClearTriggerFields() *WorkflowDefinitionU
 	return _u
 }
 
+// SetApprovalFields sets the "approval_fields" field.
+func (_u *WorkflowDefinitionUpdateOne) SetApprovalFields(v []string) *WorkflowDefinitionUpdateOne {
+	_u.mutation.SetApprovalFields(v)
+	return _u
+}
+
+// AppendApprovalFields appends value to the "approval_fields" field.
+func (_u *WorkflowDefinitionUpdateOne) AppendApprovalFields(v []string) *WorkflowDefinitionUpdateOne {
+	_u.mutation.AppendApprovalFields(v)
+	return _u
+}
+
+// ClearApprovalFields clears the value of the "approval_fields" field.
+func (_u *WorkflowDefinitionUpdateOne) ClearApprovalFields() *WorkflowDefinitionUpdateOne {
+	_u.mutation.ClearApprovalFields()
+	return _u
+}
+
+// SetApprovalEdges sets the "approval_edges" field.
+func (_u *WorkflowDefinitionUpdateOne) SetApprovalEdges(v []string) *WorkflowDefinitionUpdateOne {
+	_u.mutation.SetApprovalEdges(v)
+	return _u
+}
+
+// AppendApprovalEdges appends value to the "approval_edges" field.
+func (_u *WorkflowDefinitionUpdateOne) AppendApprovalEdges(v []string) *WorkflowDefinitionUpdateOne {
+	_u.mutation.AppendApprovalEdges(v)
+	return _u
+}
+
+// ClearApprovalEdges clears the value of the "approval_edges" field.
+func (_u *WorkflowDefinitionUpdateOne) ClearApprovalEdges() *WorkflowDefinitionUpdateOne {
+	_u.mutation.ClearApprovalEdges()
+	return _u
+}
+
+// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionUpdateOne) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionUpdateOne {
+	_u.mutation.SetApprovalSubmissionMode(v)
+	return _u
+}
+
+// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
+func (_u *WorkflowDefinitionUpdateOne) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionUpdateOne {
+	if v != nil {
+		_u.SetApprovalSubmissionMode(*v)
+	}
+	return _u
+}
+
+// ClearApprovalSubmissionMode clears the value of the "approval_submission_mode" field.
+func (_u *WorkflowDefinitionUpdateOne) ClearApprovalSubmissionMode() *WorkflowDefinitionUpdateOne {
+	_u.mutation.ClearApprovalSubmissionMode()
+	return _u
+}
+
 // SetDefinitionJSON sets the "definition_json" field.
 func (_u *WorkflowDefinitionUpdateOne) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionUpdateOne {
 	_u.mutation.SetDefinitionJSON(v)
@@ -1339,6 +1484,11 @@ func (_u *WorkflowDefinitionUpdateOne) check() error {
 			return &ValidationError{Name: "schema_type", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.schema_type": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		if err := workflowdefinition.ApprovalSubmissionModeValidator(v); err != nil {
+			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`generated: validator failed for field "WorkflowDefinition.approval_submission_mode": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1496,6 +1646,34 @@ func (_u *WorkflowDefinitionUpdateOne) sqlSave(ctx context.Context) (_node *Work
 	}
 	if _u.mutation.TriggerFieldsCleared() {
 		_spec.ClearField(workflowdefinition.FieldTriggerFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalFields(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalFields, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalFields(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinition.FieldApprovalFields, value)
+		})
+	}
+	if _u.mutation.ApprovalFieldsCleared() {
+		_spec.ClearField(workflowdefinition.FieldApprovalFields, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalEdges(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalEdges, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedApprovalEdges(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, workflowdefinition.FieldApprovalEdges, value)
+		})
+	}
+	if _u.mutation.ApprovalEdgesCleared() {
+		_spec.ClearField(workflowdefinition.FieldApprovalEdges, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalSubmissionMode(); ok {
+		_spec.SetField(workflowdefinition.FieldApprovalSubmissionMode, field.TypeEnum, value)
+	}
+	if _u.mutation.ApprovalSubmissionModeCleared() {
+		_spec.ClearField(workflowdefinition.FieldApprovalSubmissionMode, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.DefinitionJSON(); ok {
 		_spec.SetField(workflowdefinition.FieldDefinitionJSON, field.TypeJSON, value)

@@ -12,13 +12,42 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
+
+// cleanupTrustCenterData removes all trust centers and watermark configs for the test user's organization.
+// This ensures the Only() query in hooks works correctly when tests expect a single watermark config.
+func cleanupTrustCenterData(t *testing.T) {
+	t.Helper()
+	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
+
+	wcs, err := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
+	assert.NilError(t, err)
+	for _, wc := range wcs {
+		_ = suite.client.db.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
+	}
+
+	tcs, err := suite.client.db.TrustCenter.Query().All(ctx)
+	assert.NilError(t, err)
+	for _, tc := range tcs {
+		_ = suite.client.db.TrustCenter.DeleteOneID(tc.ID).Exec(ctx)
+	}
+}
+
+func cleanupWatermarkConfigs(t *testing.T) {
+	t.Helper()
+	ctx := privacy.DecisionContext(setContext(testUser1.UserCtx, suite.client.db), privacy.Allow)
+
+	wcs, _ := suite.client.db.TrustCenterWatermarkConfig.Query().All(ctx)
+	for _, wc := range wcs {
+		_ = suite.client.db.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
+	}
+}
 
 func TestQueryTrustCenterDocByID(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
@@ -38,7 +67,7 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 	testCases := []struct {
 		name                  string
@@ -192,7 +221,7 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	testCases := []struct {
@@ -570,7 +599,7 @@ func TestQueryTrustCenterDocs(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	testCases := []struct {
@@ -857,7 +886,7 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	t.Run("sysadmin can update protected document", func(t *testing.T) {
@@ -890,6 +919,8 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	// Helper function to create fresh file uploads
@@ -1284,7 +1315,7 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 
 	tuple := fgax.GetTupleKey(req)
 	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
-		requireNoError(err)
+		requireNoError(t, err)
 	}
 
 	testCases := []struct {
@@ -1461,6 +1492,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 			})
 		}
 
+		cleanupWatermarkConfigs(t)
 		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
@@ -1508,11 +1540,14 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityNotVisible, updatedDoc.Visibility), "Visibility should be automatically set to NOT_VISIBLE when file is cleared")
 
 		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+		cleanupWatermarkConfigs(t)
 		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 }
 
 func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
@@ -1623,6 +1658,8 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
@@ -1772,6 +1809,8 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 }
 
 func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
+	cleanupTrustCenterData(t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	createPDFUpload := func() *graphql.Upload {

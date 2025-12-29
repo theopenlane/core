@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -23,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/accessmap"
 )
 

@@ -9,11 +9,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // ControlObjective defines the controlobjective schema.
@@ -54,6 +54,12 @@ func (ControlObjective) Fields() []ent.Field {
 		field.Text("desired_outcome").
 			Optional().
 			Comment("the desired outcome or target of the control objective"),
+		field.JSON("desired_outcome_json", []any{}).
+			Optional().
+			Annotations(
+				entgql.Type("[Any!]"),
+			).
+			Comment("structured details of the control objective in JSON format"),
 		field.Enum("status").
 			GoType(enums.ObjectiveStatus("")).
 			Optional().

@@ -39,6 +39,19 @@ For more information or to learn about how to use the system, visit our [docs pa
 
 ## Development
 
+> [!TIP]
+>   This repo takes heavy use of `go:build` flags to help with compile times, which can result in tooling like VSCode showing errors of unknown functions. It is suggested to add the following build flags to your settings:
+>
+> `-tags=cli,test,codegen`
+
+## Layout
+
+The repo contains three main modules:
+
+1. core - this is the root go module, containing all the main api for openlane.
+1. common - this contains packages that core depends on, along with external repos. This commonly holds type definitions that need to be exported and referenced by other applications
+1. cli - this contains the openlane-cli, this is dependent on the `go-client` which is currently in another repo, but the cli is frequently used within development so we've left this here for now
+
 ### Dependencies
 
 The vast majority of behaviors of the system can be turned on or off by updating

@@ -10,6 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -29,8 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // SubcontrolCreate is the builder for creating a Subcontrol entity.
@@ -161,6 +162,12 @@ func (_c *SubcontrolCreate) SetNillableDescription(v *string) *SubcontrolCreate 
 	if v != nil {
 		_c.SetDescription(*v)
 	}
+	return _c
+}
+
+// SetDescriptionJSON sets the "description_json" field.
+func (_c *SubcontrolCreate) SetDescriptionJSON(v []interface{}) *SubcontrolCreate {
+	_c.mutation.SetDescriptionJSON(v)
 	return _c
 }
 
@@ -490,6 +497,20 @@ func (_c *SubcontrolCreate) SetNillableSubcontrolKindID(v *string) *SubcontrolCr
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *SubcontrolCreate) SetWorkflowEligibleMarker(v bool) *SubcontrolCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *SubcontrolCreate) SetNillableWorkflowEligibleMarker(v *bool) *SubcontrolCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetRefCode sets the "ref_code" field.
 func (_c *SubcontrolCreate) SetRefCode(v string) *SubcontrolCreate {
 	_c.mutation.SetRefCode(v)
@@ -756,6 +777,21 @@ func (_c *SubcontrolCreate) AddMappedFromSubcontrols(v ...*MappedControl) *Subco
 	return _c.AddMappedFromSubcontrolIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *SubcontrolCreate) AddWorkflowObjectRefIDs(ids ...string) *SubcontrolCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *SubcontrolCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *SubcontrolCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (_c *SubcontrolCreate) Mutation() *SubcontrolMutation {
 	return _c.mutation
@@ -826,6 +862,10 @@ func (_c *SubcontrolCreate) defaults() error {
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subcontrol.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := subcontrol.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if subcontrol.DefaultID == nil {
@@ -962,6 +1002,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 		_spec.SetField(subcontrol.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
+	if value, ok := _c.mutation.DescriptionJSON(); ok {
+		_spec.SetField(subcontrol.FieldDescriptionJSON, field.TypeJSON, value)
+		_node.DescriptionJSON = value
+	}
 	if value, ok := _c.mutation.Aliases(); ok {
 		_spec.SetField(subcontrol.FieldAliases, field.TypeJSON, value)
 		_node.Aliases = value
@@ -1057,6 +1101,10 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SubcontrolKindName(); ok {
 		_spec.SetField(subcontrol.FieldSubcontrolKindName, field.TypeString, value)
 		_node.SubcontrolKindName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(subcontrol.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.RefCode(); ok {
 		_spec.SetField(subcontrol.FieldRefCode, field.TypeString, value)
@@ -1403,6 +1451,23 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.MappedControlFromSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   subcontrol.WorkflowObjectRefsTable,
+			Columns: []string{subcontrol.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

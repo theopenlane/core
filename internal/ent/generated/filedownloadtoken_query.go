@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // FileDownloadTokenQuery is the builder for querying FileDownloadToken entities.
@@ -557,21 +558,20 @@ func (_q *FileDownloadTokenQuery) Modify(modifiers ...func(s *sql.Selector)) *Fi
 	return _q.Select()
 }
 
-// CountIDs returns the count of ids and allows for filtering of the query post retrieval by IDs
+// CountIDs returns the count of ids with FGA batch filtering applied
 func (fdtq *FileDownloadTokenQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "FileDownloadToken").Str("operation", "count_ids").Msg("CountIDs: starting")
+
 	ctx = setContextOp(ctx, fdtq.ctx, ent.OpQueryIDs)
-	if err := fdtq.prepareQuery(ctx); err != nil {
-		return 0, err
-	}
 
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return fdtq.IDs(ctx)
-	})
-
-	ids, err := withInterceptors[[]string](ctx, fdtq, qr, fdtq.inters)
+	ids, err := fdtq.IDs(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "FileDownloadToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+
 		return 0, err
 	}
+
+	logx.FromContext(ctx).Debug().Str("query_type", "FileDownloadToken").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }

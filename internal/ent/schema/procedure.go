@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -52,14 +52,55 @@ func (Procedure) Fields() []ent.Field {
 // Edges of the Procedure
 func (p Procedure) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFromWithPagination(p, Control{}),
-		defaultEdgeFromWithPagination(p, Subcontrol{}),
-		defaultEdgeFromWithPagination(p, InternalPolicy{}),
-		defaultEdgeFromWithPagination(p, Program{}),
-		defaultEdgeToWithPagination(p, Narrative{}),
-		defaultEdgeToWithPagination(p, Risk{}),
-		defaultEdgeToWithPagination(p, Task{}),
-
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Control{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Subcontrol{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: InternalPolicy{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Program{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Narrative{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Risk{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Task{},
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: p,
 			name:       "comments",
@@ -67,6 +108,7 @@ func (p Procedure) Edges() []ent.Edge {
 			comment:    "conversations related to the procedure",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
@@ -75,13 +117,25 @@ func (p Procedure) Edges() []ent.Edge {
 			comment:    "discussions related to the procedure",
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
-
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: p,
 			edgeSchema: File{},
 			field:      "file_id",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "procedure",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
 		}),
 	}
 }
@@ -94,11 +148,12 @@ func (p Procedure) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(p),
 			// add group edit permissions to the procedure
-			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
+			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			// all procedures are documents
 			NewDocumentMixin(p),
 			mixin.NewSystemOwnedMixin(),
-			newCustomEnumMixin(p),
+			newCustomEnumMixin(p, withWorkflowEnumEdges()),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(p)
 }

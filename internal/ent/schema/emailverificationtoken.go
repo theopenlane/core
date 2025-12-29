@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/entx/history"
@@ -32,7 +32,7 @@ type EmailVerificationToken struct {
 }
 
 // SchemaEmailVerificationToken is the name of the EmailVerificationToken schema.
-const SchemaEmailVerificationToken = "email_verification_token" // nolint:gosec
+const SchemaEmailVerificationToken = "email_verification_token" //nolint:gosec
 
 // Name returns the name of the EmailVerificationToken schema.
 func (EmailVerificationToken) Name() string {

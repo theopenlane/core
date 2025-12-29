@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
@@ -27,7 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -247,6 +248,24 @@ func (_u *ProcedureUpdate) SetNillableDetails(v *string) *ProcedureUpdate {
 // ClearDetails clears the value of the "details" field.
 func (_u *ProcedureUpdate) ClearDetails() *ProcedureUpdate {
 	_u.mutation.ClearDetails()
+	return _u
+}
+
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ProcedureUpdate) SetDetailsJSON(v []interface{}) *ProcedureUpdate {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ProcedureUpdate) AppendDetailsJSON(v []interface{}) *ProcedureUpdate {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ProcedureUpdate) ClearDetailsJSON() *ProcedureUpdate {
+	_u.mutation.ClearDetailsJSON()
 	return _u
 }
 
@@ -598,6 +617,26 @@ func (_u *ProcedureUpdate) ClearProcedureKindID() *ProcedureUpdate {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ProcedureUpdate) SetWorkflowEligibleMarker(v bool) *ProcedureUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ProcedureUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ProcedureUpdate) ClearWorkflowEligibleMarker() *ProcedureUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProcedureUpdate) SetOwner(v *Organization) *ProcedureUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -786,6 +825,21 @@ func (_u *ProcedureUpdate) AddDiscussions(v ...*Discussion) *ProcedureUpdate {
 // SetFile sets the "file" edge to the File entity.
 func (_u *ProcedureUpdate) SetFile(v *File) *ProcedureUpdate {
 	return _u.SetFileID(v.ID)
+}
+
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *ProcedureUpdate) AddWorkflowObjectRefIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ProcedureUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -1054,6 +1108,27 @@ func (_u *ProcedureUpdate) ClearFile() *ProcedureUpdate {
 	return _u
 }
 
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ProcedureUpdate) ClearWorkflowObjectRefs() *ProcedureUpdate {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *ProcedureUpdate) RemoveWorkflowObjectRefIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *ProcedureUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *ProcedureUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
@@ -1207,6 +1282,17 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedure.FieldDetails, field.TypeString)
 	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(procedure.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(procedure.FieldDetailsJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)
 	}
@@ -1323,6 +1409,12 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ProcedureKindNameCleared() {
 		_spec.ClearField(procedure.FieldProcedureKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(procedure.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2007,6 +2099,54 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Procedure
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2232,6 +2372,24 @@ func (_u *ProcedureUpdateOne) SetNillableDetails(v *string) *ProcedureUpdateOne 
 // ClearDetails clears the value of the "details" field.
 func (_u *ProcedureUpdateOne) ClearDetails() *ProcedureUpdateOne {
 	_u.mutation.ClearDetails()
+	return _u
+}
+
+// SetDetailsJSON sets the "details_json" field.
+func (_u *ProcedureUpdateOne) SetDetailsJSON(v []interface{}) *ProcedureUpdateOne {
+	_u.mutation.SetDetailsJSON(v)
+	return _u
+}
+
+// AppendDetailsJSON appends value to the "details_json" field.
+func (_u *ProcedureUpdateOne) AppendDetailsJSON(v []interface{}) *ProcedureUpdateOne {
+	_u.mutation.AppendDetailsJSON(v)
+	return _u
+}
+
+// ClearDetailsJSON clears the value of the "details_json" field.
+func (_u *ProcedureUpdateOne) ClearDetailsJSON() *ProcedureUpdateOne {
+	_u.mutation.ClearDetailsJSON()
 	return _u
 }
 
@@ -2583,6 +2741,26 @@ func (_u *ProcedureUpdateOne) ClearProcedureKindID() *ProcedureUpdateOne {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *ProcedureUpdateOne) SetWorkflowEligibleMarker(v bool) *ProcedureUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *ProcedureUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *ProcedureUpdateOne) ClearWorkflowEligibleMarker() *ProcedureUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ProcedureUpdateOne) SetOwner(v *Organization) *ProcedureUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -2771,6 +2949,21 @@ func (_u *ProcedureUpdateOne) AddDiscussions(v ...*Discussion) *ProcedureUpdateO
 // SetFile sets the "file" edge to the File entity.
 func (_u *ProcedureUpdateOne) SetFile(v *File) *ProcedureUpdateOne {
 	return _u.SetFileID(v.ID)
+}
+
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *ProcedureUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ProcedureUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
 }
 
 // Mutation returns the ProcedureMutation object of the builder.
@@ -3039,6 +3232,27 @@ func (_u *ProcedureUpdateOne) ClearFile() *ProcedureUpdateOne {
 	return _u
 }
 
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *ProcedureUpdateOne) ClearWorkflowObjectRefs() *ProcedureUpdateOne {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *ProcedureUpdateOne) RemoveWorkflowObjectRefIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *ProcedureUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
 // Where appends a list predicates to the ProcedureUpdate builder.
 func (_u *ProcedureUpdateOne) Where(ps ...predicate.Procedure) *ProcedureUpdateOne {
 	_u.mutation.Where(ps...)
@@ -3222,6 +3436,17 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedure.FieldDetails, field.TypeString)
 	}
+	if value, ok := _u.mutation.DetailsJSON(); ok {
+		_spec.SetField(procedure.FieldDetailsJSON, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, procedure.FieldDetailsJSON, value)
+		})
+	}
+	if _u.mutation.DetailsJSONCleared() {
+		_spec.ClearField(procedure.FieldDetailsJSON, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.ApprovalRequired(); ok {
 		_spec.SetField(procedure.FieldApprovalRequired, field.TypeBool, value)
 	}
@@ -3338,6 +3563,12 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.ProcedureKindNameCleared() {
 		_spec.ClearField(procedure.FieldProcedureKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(procedure.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(procedure.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -4017,6 +4248,54 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			},
 		}
 		edge.Schema = _u.schemaConfig.Procedure
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   procedure.WorkflowObjectRefsTable,
+			Columns: []string{procedure.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

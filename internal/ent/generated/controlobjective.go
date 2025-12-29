@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/enums"
 )
 
 // ControlObjective is the model entity for the ControlObjective schema.
@@ -50,6 +50,8 @@ type ControlObjective struct {
 	Name string `json:"name,omitempty"`
 	// the desired outcome or target of the control objective
 	DesiredOutcome string `json:"desired_outcome,omitempty"`
+	// structured details of the control objective in JSON format
+	DesiredOutcomeJSON []interface{} `json:"desired_outcome_json,omitempty"`
 	// status of the control objective
 	Status enums.ObjectiveStatus `json:"status,omitempty"`
 	// source of the control, e.g. framework, template, custom, etc.
@@ -238,7 +240,7 @@ func (*ControlObjective) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case controlobjective.FieldTags:
+		case controlobjective.FieldTags, controlobjective.FieldDesiredOutcomeJSON:
 			values[i] = new([]byte)
 		case controlobjective.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -360,6 +362,14 @@ func (_m *ControlObjective) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field desired_outcome", values[i])
 			} else if value.Valid {
 				_m.DesiredOutcome = value.String
+			}
+		case controlobjective.FieldDesiredOutcomeJSON:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field desired_outcome_json", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.DesiredOutcomeJSON); err != nil {
+					return fmt.Errorf("unmarshal field desired_outcome_json: %w", err)
+				}
 			}
 		case controlobjective.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -540,6 +550,9 @@ func (_m *ControlObjective) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("desired_outcome=")
 	builder.WriteString(_m.DesiredOutcome)
+	builder.WriteString(", ")
+	builder.WriteString("desired_outcome_json=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DesiredOutcomeJSON))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

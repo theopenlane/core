@@ -6,13 +6,13 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -32,7 +32,7 @@ func HookCreateCustomDomain() ent.Hook {
 					return v, err
 				}
 
-				_, err = m.Job.Insert(ctx, corejobs.CreateCustomDomainArgs{
+				_, err = m.Job.Insert(ctx, jobspec.CreateCustomDomainArgs{
 					CustomDomainID: id,
 				}, nil)
 
@@ -108,7 +108,7 @@ func HookDeleteCustomDomain() ent.Hook {
 					return nil, err
 				}
 
-				_, err = m.Job.Insert(ctx, corejobs.DeleteCustomDomainArgs{
+				_, err = m.Job.Insert(ctx, jobspec.DeleteCustomDomainArgs{
 					DNSVerificationID:          cd.DNSVerificationID,
 					CloudflareCustomHostnameID: dnsVerification.CloudflareHostnameID,
 					CloudflareZoneID:           mappableDomain.ZoneID,

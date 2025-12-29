@@ -2,10 +2,12 @@ package interceptors
 
 import (
 	"context"
+	"encoding/base64"
 	"time"
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 
@@ -14,8 +16,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
 // InterceptorFile is an ent interceptor that filters the file query on the organization id
@@ -68,9 +70,7 @@ func InterceptorPresignedURL() ent.Interceptor {
 		return intercept.FileFunc(func(ctx context.Context, q *generated.FileQuery) (generated.Value, error) {
 			logx.FromContext(ctx).Debug().Msg("InterceptorPresignedURL")
 
-			if proxy.ShouldBypassPresignInterceptor(ctx) {
-				return next.Query(ctx, q)
-			}
+			bypassPresign := proxy.ShouldBypassPresignInterceptor(ctx)
 
 			v, err := next.Query(ctx, q)
 			if err != nil {
@@ -78,16 +78,17 @@ func InterceptorPresignedURL() ent.Interceptor {
 			}
 
 			if q.ObjectManager == nil {
-				logx.FromContext(ctx).Warn().Msg("object manager is nil, skipping presignedURL")
+				logx.FromContext(ctx).Warn().Msg("object manager is nil, skipping file enrichment")
 
 				return v, nil
 			}
 
-			// get the fields that were queried and check for the presignedURL field
-			fields := graphutils.CheckForRequestedField(ctx, "presignedURL")
+			// get the fields that were queried and check for the presignedURL/base64 fields
+			presignedRequested := !bypassPresign && graphutils.CheckForRequestedField(ctx, "presignedURL")
+			base64Requested := graphutils.CheckForRequestedField(ctx, "base64")
 
 			// if the presignedURL field wasn't queried, return the result as is
-			if !fields {
+			if !presignedRequested && !base64Requested {
 				return v, nil
 			}
 
@@ -95,8 +96,15 @@ func InterceptorPresignedURL() ent.Interceptor {
 			res, ok := v.([]*generated.File)
 			if ok {
 				for _, f := range res {
-					if err := setPresignedURL(ctx, f, q); err != nil {
-						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURL")
+					if presignedRequested {
+						if err := setPresignedURL(ctx, f, q); err != nil {
+							logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURL")
+						}
+					}
+					if base64Requested {
+						if err := setBase64(ctx, f, q); err != nil {
+							logx.FromContext(ctx).Warn().Err(err).Msg("failed to set base64")
+						}
 					}
 				}
 
@@ -106,8 +114,15 @@ func InterceptorPresignedURL() ent.Interceptor {
 			// if its not a list, check the single entry
 			f, ok := v.(*generated.File)
 			if ok {
-				if err := setPresignedURL(ctx, f, q); err != nil {
-					logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
+				if presignedRequested {
+					if err := setPresignedURL(ctx, f, q); err != nil {
+						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set presignedURLs")
+					}
+				}
+				if base64Requested {
+					if err := setBase64(ctx, f, q); err != nil {
+						logx.FromContext(ctx).Warn().Err(err).Msg("failed to set base64")
+					}
 				}
 
 				return v, nil
@@ -121,14 +136,11 @@ func InterceptorPresignedURL() ent.Interceptor {
 // presignedURLDuration is the duration for the presigned URL to be valid
 const presignedURLDuration = 60 * time.Minute * 24 // 24 hours
 
-// setPresignedURL sets the presigned URL for the file response that is valid for 24 hours
-func setPresignedURL(ctx context.Context, file *generated.File, q *generated.FileQuery) error {
-	// if the storage path or file is empty, skip
-	if file == nil || file.StoragePath == "" {
+func storageFileFromEnt(file *generated.File) *storagetypes.File {
+	if file == nil {
 		return nil
 	}
 
-	// Convert ent File to storagetypes.File
 	storageFile := &storagetypes.File{
 		ID:           file.ID,
 		OriginalName: file.ProvidedFileName,
@@ -158,6 +170,21 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 		storageFile.Metadata = metadata
 	}
 
+	return storageFile
+}
+
+// setPresignedURL sets the presigned URL for the file response that is valid for 24 hours
+func setPresignedURL(ctx context.Context, file *generated.File, q *generated.FileQuery) error {
+	// if the storage path or file is empty, skip
+	if file == nil || file.StoragePath == "" {
+		return nil
+	}
+
+	storageFile := storageFileFromEnt(file)
+	if storageFile == nil {
+		return nil
+	}
+
 	url, err := q.ObjectManager.GetPresignedURL(ctx, storageFile, presignedURLDuration)
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("failed to get presigned URL")
@@ -166,6 +193,46 @@ func setPresignedURL(ctx context.Context, file *generated.File, q *generated.Fil
 	}
 
 	file.PresignedURL = url
+
+	return nil
+}
+
+// setBase64 sets the base64-encoded contents of the file for the response payload
+func setBase64(ctx context.Context, file *generated.File, q *generated.FileQuery) error {
+	if file == nil {
+		return nil
+	}
+
+	if storagetypes.ProviderType(file.StorageProvider) == storagetypes.DatabaseProvider && len(file.FileContents) > 0 {
+		file.Base64 = base64.StdEncoding.EncodeToString(file.FileContents)
+		return nil
+	}
+
+	if file.StoragePath == "" {
+		return nil
+	}
+
+	storageFile := storageFileFromEnt(file)
+	if storageFile == nil {
+		return nil
+	}
+
+	downloadOpts := &storage.DownloadOptions{
+		FileName:     file.ProvidedFileName,
+		ContentType:  file.DetectedContentType,
+		FileMetadata: storageFile.FileMetadata,
+	}
+
+	downloaded, err := q.ObjectManager.Download(ctx, nil, storageFile, downloadOpts)
+	if err != nil {
+		return err
+	}
+
+	if downloaded == nil {
+		return nil
+	}
+
+	file.Base64 = base64.StdEncoding.EncodeToString(downloaded.File)
 
 	return nil
 }

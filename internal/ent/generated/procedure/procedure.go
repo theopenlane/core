@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -46,6 +46,8 @@ const (
 	FieldProcedureType = "procedure_type"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
+	// FieldDetailsJSON holds the string denoting the details_json field in the database.
+	FieldDetailsJSON = "details_json"
 	// FieldApprovalRequired holds the string denoting the approval_required field in the database.
 	FieldApprovalRequired = "approval_required"
 	// FieldReviewDue holds the string denoting the review_due field in the database.
@@ -84,6 +86,8 @@ const (
 	FieldProcedureKindName = "procedure_kind_name"
 	// FieldProcedureKindID holds the string denoting the procedure_kind_id field in the database.
 	FieldProcedureKindID = "procedure_kind_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -116,6 +120,8 @@ const (
 	EdgeDiscussions = "discussions"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the procedure in the database.
 	Table = "procedures"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -212,6 +218,13 @@ const (
 	FileInverseTable = "files"
 	// FileColumn is the table column denoting the file relation/edge.
 	FileColumn = "file_id"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "procedure_id"
 )
 
 // Columns holds all SQL columns for procedure fields.
@@ -231,6 +244,7 @@ var Columns = []string{
 	FieldStatus,
 	FieldProcedureType,
 	FieldDetails,
+	FieldDetailsJSON,
 	FieldApprovalRequired,
 	FieldReviewDue,
 	FieldReviewFrequency,
@@ -250,6 +264,7 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldProcedureKindName,
 	FieldProcedureKindID,
+	FieldWorkflowEligibleMarker,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "procedures"
@@ -310,8 +325,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [18]ent.Hook
-	Interceptors [5]ent.Interceptor
+	Hooks        [17]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -347,6 +362,8 @@ var (
 	DefaultDismissedImprovementSuggestions []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -511,6 +528,11 @@ func ByProcedureKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByProcedureKindID orders the results by the procedure_kind_id field.
 func ByProcedureKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldProcedureKindID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -701,6 +723,20 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -811,6 +847,13 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 

@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
@@ -90,8 +92,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 )
 
 // APITokenWhereInput represents a where input for filtering APIToken queries.
@@ -1176,6 +1176,12 @@ type ActionPlanWhereInput struct {
 	ActionPlanKindIDEqualFold    *string  `json:"actionPlanKindIDEqualFold,omitempty"`
 	ActionPlanKindIDContainsFold *string  `json:"actionPlanKindIDContainsFold,omitempty"`
 
+	// "workflow_eligible_marker" field predicates.
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
 	// "title" field predicates.
 	Title             *string  `json:"title,omitempty"`
 	TitleNEQ          *string  `json:"titleNEQ,omitempty"`
@@ -1337,6 +1343,10 @@ type ActionPlanWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "workflow_object_refs" edge predicates.
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -2259,6 +2269,18 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	if i.ActionPlanKindIDContainsFold != nil {
 		predicates = append(predicates, actionplan.ActionPlanKindIDContainsFold(*i.ActionPlanKindIDContainsFold))
 	}
+	if i.WorkflowEligibleMarker != nil {
+		predicates = append(predicates, actionplan.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
+	}
+	if i.WorkflowEligibleMarkerNEQ != nil {
+		predicates = append(predicates, actionplan.WorkflowEligibleMarkerNEQ(*i.WorkflowEligibleMarkerNEQ))
+	}
+	if i.WorkflowEligibleMarkerIsNil {
+		predicates = append(predicates, actionplan.WorkflowEligibleMarkerIsNil())
+	}
+	if i.WorkflowEligibleMarkerNotNil {
+		predicates = append(predicates, actionplan.WorkflowEligibleMarkerNotNil())
+	}
 	if i.Title != nil {
 		predicates = append(predicates, actionplan.TitleEQ(*i.Title))
 	}
@@ -2775,6 +2797,24 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, actionplan.HasFileWith(with...))
+	}
+	if i.HasWorkflowObjectRefs != nil {
+		p := actionplan.HasWorkflowObjectRefs()
+		if !*i.HasWorkflowObjectRefs {
+			p = actionplan.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasWorkflowObjectRefsWith) > 0 {
+		with := make([]predicate.WorkflowObjectRef, 0, len(i.HasWorkflowObjectRefsWith))
+		for _, w := range i.HasWorkflowObjectRefsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasWorkflowObjectRefsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, actionplan.HasWorkflowObjectRefsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -6501,34 +6541,11 @@ type ControlWhereInput struct {
 	ControlKindIDEqualFold    *string  `json:"controlKindIDEqualFold,omitempty"`
 	ControlKindIDContainsFold *string  `json:"controlKindIDContainsFold,omitempty"`
 
-	// "proposed_by_user_id" field predicates.
-	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
-	ProposedByUserIDNEQ          *string  `json:"proposedByUserIDNEQ,omitempty"`
-	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
-	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
-	ProposedByUserIDGT           *string  `json:"proposedByUserIDGT,omitempty"`
-	ProposedByUserIDGTE          *string  `json:"proposedByUserIDGTE,omitempty"`
-	ProposedByUserIDLT           *string  `json:"proposedByUserIDLT,omitempty"`
-	ProposedByUserIDLTE          *string  `json:"proposedByUserIDLTE,omitempty"`
-	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
-	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
-	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
-	ProposedByUserIDIsNil        bool     `json:"proposedByUserIDIsNil,omitempty"`
-	ProposedByUserIDNotNil       bool     `json:"proposedByUserIDNotNil,omitempty"`
-	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
-	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
-
-	// "proposed_at" field predicates.
-	ProposedAt       *time.Time  `json:"proposedAt,omitempty"`
-	ProposedAtNEQ    *time.Time  `json:"proposedAtNEQ,omitempty"`
-	ProposedAtIn     []time.Time `json:"proposedAtIn,omitempty"`
-	ProposedAtNotIn  []time.Time `json:"proposedAtNotIn,omitempty"`
-	ProposedAtGT     *time.Time  `json:"proposedAtGT,omitempty"`
-	ProposedAtGTE    *time.Time  `json:"proposedAtGTE,omitempty"`
-	ProposedAtLT     *time.Time  `json:"proposedAtLT,omitempty"`
-	ProposedAtLTE    *time.Time  `json:"proposedAtLTE,omitempty"`
-	ProposedAtIsNil  bool        `json:"proposedAtIsNil,omitempty"`
-	ProposedAtNotNil bool        `json:"proposedAtNotNil,omitempty"`
+	// "workflow_eligible_marker" field predicates.
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
 
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
@@ -7792,80 +7809,17 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	if i.ControlKindIDContainsFold != nil {
 		predicates = append(predicates, control.ControlKindIDContainsFold(*i.ControlKindIDContainsFold))
 	}
-	if i.ProposedByUserID != nil {
-		predicates = append(predicates, control.ProposedByUserIDEQ(*i.ProposedByUserID))
+	if i.WorkflowEligibleMarker != nil {
+		predicates = append(predicates, control.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
 	}
-	if i.ProposedByUserIDNEQ != nil {
-		predicates = append(predicates, control.ProposedByUserIDNEQ(*i.ProposedByUserIDNEQ))
+	if i.WorkflowEligibleMarkerNEQ != nil {
+		predicates = append(predicates, control.WorkflowEligibleMarkerNEQ(*i.WorkflowEligibleMarkerNEQ))
 	}
-	if len(i.ProposedByUserIDIn) > 0 {
-		predicates = append(predicates, control.ProposedByUserIDIn(i.ProposedByUserIDIn...))
+	if i.WorkflowEligibleMarkerIsNil {
+		predicates = append(predicates, control.WorkflowEligibleMarkerIsNil())
 	}
-	if len(i.ProposedByUserIDNotIn) > 0 {
-		predicates = append(predicates, control.ProposedByUserIDNotIn(i.ProposedByUserIDNotIn...))
-	}
-	if i.ProposedByUserIDGT != nil {
-		predicates = append(predicates, control.ProposedByUserIDGT(*i.ProposedByUserIDGT))
-	}
-	if i.ProposedByUserIDGTE != nil {
-		predicates = append(predicates, control.ProposedByUserIDGTE(*i.ProposedByUserIDGTE))
-	}
-	if i.ProposedByUserIDLT != nil {
-		predicates = append(predicates, control.ProposedByUserIDLT(*i.ProposedByUserIDLT))
-	}
-	if i.ProposedByUserIDLTE != nil {
-		predicates = append(predicates, control.ProposedByUserIDLTE(*i.ProposedByUserIDLTE))
-	}
-	if i.ProposedByUserIDContains != nil {
-		predicates = append(predicates, control.ProposedByUserIDContains(*i.ProposedByUserIDContains))
-	}
-	if i.ProposedByUserIDHasPrefix != nil {
-		predicates = append(predicates, control.ProposedByUserIDHasPrefix(*i.ProposedByUserIDHasPrefix))
-	}
-	if i.ProposedByUserIDHasSuffix != nil {
-		predicates = append(predicates, control.ProposedByUserIDHasSuffix(*i.ProposedByUserIDHasSuffix))
-	}
-	if i.ProposedByUserIDIsNil {
-		predicates = append(predicates, control.ProposedByUserIDIsNil())
-	}
-	if i.ProposedByUserIDNotNil {
-		predicates = append(predicates, control.ProposedByUserIDNotNil())
-	}
-	if i.ProposedByUserIDEqualFold != nil {
-		predicates = append(predicates, control.ProposedByUserIDEqualFold(*i.ProposedByUserIDEqualFold))
-	}
-	if i.ProposedByUserIDContainsFold != nil {
-		predicates = append(predicates, control.ProposedByUserIDContainsFold(*i.ProposedByUserIDContainsFold))
-	}
-	if i.ProposedAt != nil {
-		predicates = append(predicates, control.ProposedAtEQ(*i.ProposedAt))
-	}
-	if i.ProposedAtNEQ != nil {
-		predicates = append(predicates, control.ProposedAtNEQ(*i.ProposedAtNEQ))
-	}
-	if len(i.ProposedAtIn) > 0 {
-		predicates = append(predicates, control.ProposedAtIn(i.ProposedAtIn...))
-	}
-	if len(i.ProposedAtNotIn) > 0 {
-		predicates = append(predicates, control.ProposedAtNotIn(i.ProposedAtNotIn...))
-	}
-	if i.ProposedAtGT != nil {
-		predicates = append(predicates, control.ProposedAtGT(*i.ProposedAtGT))
-	}
-	if i.ProposedAtGTE != nil {
-		predicates = append(predicates, control.ProposedAtGTE(*i.ProposedAtGTE))
-	}
-	if i.ProposedAtLT != nil {
-		predicates = append(predicates, control.ProposedAtLT(*i.ProposedAtLT))
-	}
-	if i.ProposedAtLTE != nil {
-		predicates = append(predicates, control.ProposedAtLTE(*i.ProposedAtLTE))
-	}
-	if i.ProposedAtIsNil {
-		predicates = append(predicates, control.ProposedAtIsNil())
-	}
-	if i.ProposedAtNotNil {
-		predicates = append(predicates, control.ProposedAtNotNil())
+	if i.WorkflowEligibleMarkerNotNil {
+		predicates = append(predicates, control.WorkflowEligibleMarkerNotNil())
 	}
 	if i.RefCode != nil {
 		predicates = append(predicates, control.RefCodeEQ(*i.RefCode))
@@ -21903,34 +21857,11 @@ type EvidenceWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
-	// "proposed_by_user_id" field predicates.
-	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
-	ProposedByUserIDNEQ          *string  `json:"proposedByUserIDNEQ,omitempty"`
-	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
-	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
-	ProposedByUserIDGT           *string  `json:"proposedByUserIDGT,omitempty"`
-	ProposedByUserIDGTE          *string  `json:"proposedByUserIDGTE,omitempty"`
-	ProposedByUserIDLT           *string  `json:"proposedByUserIDLT,omitempty"`
-	ProposedByUserIDLTE          *string  `json:"proposedByUserIDLTE,omitempty"`
-	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
-	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
-	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
-	ProposedByUserIDIsNil        bool     `json:"proposedByUserIDIsNil,omitempty"`
-	ProposedByUserIDNotNil       bool     `json:"proposedByUserIDNotNil,omitempty"`
-	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
-	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
-
-	// "proposed_at" field predicates.
-	ProposedAt       *time.Time  `json:"proposedAt,omitempty"`
-	ProposedAtNEQ    *time.Time  `json:"proposedAtNEQ,omitempty"`
-	ProposedAtIn     []time.Time `json:"proposedAtIn,omitempty"`
-	ProposedAtNotIn  []time.Time `json:"proposedAtNotIn,omitempty"`
-	ProposedAtGT     *time.Time  `json:"proposedAtGT,omitempty"`
-	ProposedAtGTE    *time.Time  `json:"proposedAtGTE,omitempty"`
-	ProposedAtLT     *time.Time  `json:"proposedAtLT,omitempty"`
-	ProposedAtLTE    *time.Time  `json:"proposedAtLTE,omitempty"`
-	ProposedAtIsNil  bool        `json:"proposedAtIsNil,omitempty"`
-	ProposedAtNotNil bool        `json:"proposedAtNotNil,omitempty"`
+	// "workflow_eligible_marker" field predicates.
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
 
 	// "name" field predicates.
 	Name             *string  `json:"name,omitempty"`
@@ -22086,6 +22017,10 @@ type EvidenceWhereInput struct {
 	// "comments" edge predicates.
 	HasComments     *bool             `json:"hasComments,omitempty"`
 	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
+
+	// "workflow_object_refs" edge predicates.
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -22423,80 +22358,17 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, evidence.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
-	if i.ProposedByUserID != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDEQ(*i.ProposedByUserID))
+	if i.WorkflowEligibleMarker != nil {
+		predicates = append(predicates, evidence.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
 	}
-	if i.ProposedByUserIDNEQ != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDNEQ(*i.ProposedByUserIDNEQ))
+	if i.WorkflowEligibleMarkerNEQ != nil {
+		predicates = append(predicates, evidence.WorkflowEligibleMarkerNEQ(*i.WorkflowEligibleMarkerNEQ))
 	}
-	if len(i.ProposedByUserIDIn) > 0 {
-		predicates = append(predicates, evidence.ProposedByUserIDIn(i.ProposedByUserIDIn...))
+	if i.WorkflowEligibleMarkerIsNil {
+		predicates = append(predicates, evidence.WorkflowEligibleMarkerIsNil())
 	}
-	if len(i.ProposedByUserIDNotIn) > 0 {
-		predicates = append(predicates, evidence.ProposedByUserIDNotIn(i.ProposedByUserIDNotIn...))
-	}
-	if i.ProposedByUserIDGT != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDGT(*i.ProposedByUserIDGT))
-	}
-	if i.ProposedByUserIDGTE != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDGTE(*i.ProposedByUserIDGTE))
-	}
-	if i.ProposedByUserIDLT != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDLT(*i.ProposedByUserIDLT))
-	}
-	if i.ProposedByUserIDLTE != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDLTE(*i.ProposedByUserIDLTE))
-	}
-	if i.ProposedByUserIDContains != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDContains(*i.ProposedByUserIDContains))
-	}
-	if i.ProposedByUserIDHasPrefix != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDHasPrefix(*i.ProposedByUserIDHasPrefix))
-	}
-	if i.ProposedByUserIDHasSuffix != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDHasSuffix(*i.ProposedByUserIDHasSuffix))
-	}
-	if i.ProposedByUserIDIsNil {
-		predicates = append(predicates, evidence.ProposedByUserIDIsNil())
-	}
-	if i.ProposedByUserIDNotNil {
-		predicates = append(predicates, evidence.ProposedByUserIDNotNil())
-	}
-	if i.ProposedByUserIDEqualFold != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDEqualFold(*i.ProposedByUserIDEqualFold))
-	}
-	if i.ProposedByUserIDContainsFold != nil {
-		predicates = append(predicates, evidence.ProposedByUserIDContainsFold(*i.ProposedByUserIDContainsFold))
-	}
-	if i.ProposedAt != nil {
-		predicates = append(predicates, evidence.ProposedAtEQ(*i.ProposedAt))
-	}
-	if i.ProposedAtNEQ != nil {
-		predicates = append(predicates, evidence.ProposedAtNEQ(*i.ProposedAtNEQ))
-	}
-	if len(i.ProposedAtIn) > 0 {
-		predicates = append(predicates, evidence.ProposedAtIn(i.ProposedAtIn...))
-	}
-	if len(i.ProposedAtNotIn) > 0 {
-		predicates = append(predicates, evidence.ProposedAtNotIn(i.ProposedAtNotIn...))
-	}
-	if i.ProposedAtGT != nil {
-		predicates = append(predicates, evidence.ProposedAtGT(*i.ProposedAtGT))
-	}
-	if i.ProposedAtGTE != nil {
-		predicates = append(predicates, evidence.ProposedAtGTE(*i.ProposedAtGTE))
-	}
-	if i.ProposedAtLT != nil {
-		predicates = append(predicates, evidence.ProposedAtLT(*i.ProposedAtLT))
-	}
-	if i.ProposedAtLTE != nil {
-		predicates = append(predicates, evidence.ProposedAtLTE(*i.ProposedAtLTE))
-	}
-	if i.ProposedAtIsNil {
-		predicates = append(predicates, evidence.ProposedAtIsNil())
-	}
-	if i.ProposedAtNotNil {
-		predicates = append(predicates, evidence.ProposedAtNotNil())
+	if i.WorkflowEligibleMarkerNotNil {
+		predicates = append(predicates, evidence.WorkflowEligibleMarkerNotNil())
 	}
 	if i.Name != nil {
 		predicates = append(predicates, evidence.NameEQ(*i.Name))
@@ -22963,6 +22835,24 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, evidence.HasCommentsWith(with...))
+	}
+	if i.HasWorkflowObjectRefs != nil {
+		p := evidence.HasWorkflowObjectRefs()
+		if !*i.HasWorkflowObjectRefs {
+			p = evidence.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasWorkflowObjectRefsWith) > 0 {
+		with := make([]predicate.WorkflowObjectRef, 0, len(i.HasWorkflowObjectRefsWith))
+		for _, w := range i.HasWorkflowObjectRefsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasWorkflowObjectRefsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, evidence.HasWorkflowObjectRefsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -33689,34 +33579,11 @@ type InternalPolicyWhereInput struct {
 	InternalPolicyKindIDEqualFold    *string  `json:"internalPolicyKindIDEqualFold,omitempty"`
 	InternalPolicyKindIDContainsFold *string  `json:"internalPolicyKindIDContainsFold,omitempty"`
 
-	// "proposed_by_user_id" field predicates.
-	ProposedByUserID             *string  `json:"proposedByUserID,omitempty"`
-	ProposedByUserIDNEQ          *string  `json:"proposedByUserIDNEQ,omitempty"`
-	ProposedByUserIDIn           []string `json:"proposedByUserIDIn,omitempty"`
-	ProposedByUserIDNotIn        []string `json:"proposedByUserIDNotIn,omitempty"`
-	ProposedByUserIDGT           *string  `json:"proposedByUserIDGT,omitempty"`
-	ProposedByUserIDGTE          *string  `json:"proposedByUserIDGTE,omitempty"`
-	ProposedByUserIDLT           *string  `json:"proposedByUserIDLT,omitempty"`
-	ProposedByUserIDLTE          *string  `json:"proposedByUserIDLTE,omitempty"`
-	ProposedByUserIDContains     *string  `json:"proposedByUserIDContains,omitempty"`
-	ProposedByUserIDHasPrefix    *string  `json:"proposedByUserIDHasPrefix,omitempty"`
-	ProposedByUserIDHasSuffix    *string  `json:"proposedByUserIDHasSuffix,omitempty"`
-	ProposedByUserIDIsNil        bool     `json:"proposedByUserIDIsNil,omitempty"`
-	ProposedByUserIDNotNil       bool     `json:"proposedByUserIDNotNil,omitempty"`
-	ProposedByUserIDEqualFold    *string  `json:"proposedByUserIDEqualFold,omitempty"`
-	ProposedByUserIDContainsFold *string  `json:"proposedByUserIDContainsFold,omitempty"`
-
-	// "proposed_at" field predicates.
-	ProposedAt       *time.Time  `json:"proposedAt,omitempty"`
-	ProposedAtNEQ    *time.Time  `json:"proposedAtNEQ,omitempty"`
-	ProposedAtIn     []time.Time `json:"proposedAtIn,omitempty"`
-	ProposedAtNotIn  []time.Time `json:"proposedAtNotIn,omitempty"`
-	ProposedAtGT     *time.Time  `json:"proposedAtGT,omitempty"`
-	ProposedAtGTE    *time.Time  `json:"proposedAtGTE,omitempty"`
-	ProposedAtLT     *time.Time  `json:"proposedAtLT,omitempty"`
-	ProposedAtLTE    *time.Time  `json:"proposedAtLTE,omitempty"`
-	ProposedAtIsNil  bool        `json:"proposedAtIsNil,omitempty"`
-	ProposedAtNotNil bool        `json:"proposedAtNotNil,omitempty"`
+	// "workflow_eligible_marker" field predicates.
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
 
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
@@ -34754,80 +34621,17 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	if i.InternalPolicyKindIDContainsFold != nil {
 		predicates = append(predicates, internalpolicy.InternalPolicyKindIDContainsFold(*i.InternalPolicyKindIDContainsFold))
 	}
-	if i.ProposedByUserID != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDEQ(*i.ProposedByUserID))
+	if i.WorkflowEligibleMarker != nil {
+		predicates = append(predicates, internalpolicy.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
 	}
-	if i.ProposedByUserIDNEQ != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDNEQ(*i.ProposedByUserIDNEQ))
+	if i.WorkflowEligibleMarkerNEQ != nil {
+		predicates = append(predicates, internalpolicy.WorkflowEligibleMarkerNEQ(*i.WorkflowEligibleMarkerNEQ))
 	}
-	if len(i.ProposedByUserIDIn) > 0 {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDIn(i.ProposedByUserIDIn...))
+	if i.WorkflowEligibleMarkerIsNil {
+		predicates = append(predicates, internalpolicy.WorkflowEligibleMarkerIsNil())
 	}
-	if len(i.ProposedByUserIDNotIn) > 0 {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDNotIn(i.ProposedByUserIDNotIn...))
-	}
-	if i.ProposedByUserIDGT != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDGT(*i.ProposedByUserIDGT))
-	}
-	if i.ProposedByUserIDGTE != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDGTE(*i.ProposedByUserIDGTE))
-	}
-	if i.ProposedByUserIDLT != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDLT(*i.ProposedByUserIDLT))
-	}
-	if i.ProposedByUserIDLTE != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDLTE(*i.ProposedByUserIDLTE))
-	}
-	if i.ProposedByUserIDContains != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDContains(*i.ProposedByUserIDContains))
-	}
-	if i.ProposedByUserIDHasPrefix != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDHasPrefix(*i.ProposedByUserIDHasPrefix))
-	}
-	if i.ProposedByUserIDHasSuffix != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDHasSuffix(*i.ProposedByUserIDHasSuffix))
-	}
-	if i.ProposedByUserIDIsNil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDIsNil())
-	}
-	if i.ProposedByUserIDNotNil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDNotNil())
-	}
-	if i.ProposedByUserIDEqualFold != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDEqualFold(*i.ProposedByUserIDEqualFold))
-	}
-	if i.ProposedByUserIDContainsFold != nil {
-		predicates = append(predicates, internalpolicy.ProposedByUserIDContainsFold(*i.ProposedByUserIDContainsFold))
-	}
-	if i.ProposedAt != nil {
-		predicates = append(predicates, internalpolicy.ProposedAtEQ(*i.ProposedAt))
-	}
-	if i.ProposedAtNEQ != nil {
-		predicates = append(predicates, internalpolicy.ProposedAtNEQ(*i.ProposedAtNEQ))
-	}
-	if len(i.ProposedAtIn) > 0 {
-		predicates = append(predicates, internalpolicy.ProposedAtIn(i.ProposedAtIn...))
-	}
-	if len(i.ProposedAtNotIn) > 0 {
-		predicates = append(predicates, internalpolicy.ProposedAtNotIn(i.ProposedAtNotIn...))
-	}
-	if i.ProposedAtGT != nil {
-		predicates = append(predicates, internalpolicy.ProposedAtGT(*i.ProposedAtGT))
-	}
-	if i.ProposedAtGTE != nil {
-		predicates = append(predicates, internalpolicy.ProposedAtGTE(*i.ProposedAtGTE))
-	}
-	if i.ProposedAtLT != nil {
-		predicates = append(predicates, internalpolicy.ProposedAtLT(*i.ProposedAtLT))
-	}
-	if i.ProposedAtLTE != nil {
-		predicates = append(predicates, internalpolicy.ProposedAtLTE(*i.ProposedAtLTE))
-	}
-	if i.ProposedAtIsNil {
-		predicates = append(predicates, internalpolicy.ProposedAtIsNil())
-	}
-	if i.ProposedAtNotNil {
-		predicates = append(predicates, internalpolicy.ProposedAtNotNil())
+	if i.WorkflowEligibleMarkerNotNil {
+		predicates = append(predicates, internalpolicy.WorkflowEligibleMarkerNotNil())
 	}
 
 	if i.HasOwner != nil {
@@ -49299,6 +49103,12 @@ type ProcedureWhereInput struct {
 	ProcedureKindIDEqualFold    *string  `json:"procedureKindIDEqualFold,omitempty"`
 	ProcedureKindIDContainsFold *string  `json:"procedureKindIDContainsFold,omitempty"`
 
+	// "workflow_eligible_marker" field predicates.
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -49362,6 +49172,10 @@ type ProcedureWhereInput struct {
 	// "file" edge predicates.
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+
+	// "workflow_object_refs" edge predicates.
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -50323,6 +50137,18 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	if i.ProcedureKindIDContainsFold != nil {
 		predicates = append(predicates, procedure.ProcedureKindIDContainsFold(*i.ProcedureKindIDContainsFold))
 	}
+	if i.WorkflowEligibleMarker != nil {
+		predicates = append(predicates, procedure.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
+	}
+	if i.WorkflowEligibleMarkerNEQ != nil {
+		predicates = append(predicates, procedure.WorkflowEligibleMarkerNEQ(*i.WorkflowEligibleMarkerNEQ))
+	}
+	if i.WorkflowEligibleMarkerIsNil {
+		predicates = append(predicates, procedure.WorkflowEligibleMarkerIsNil())
+	}
+	if i.WorkflowEligibleMarkerNotNil {
+		predicates = append(predicates, procedure.WorkflowEligibleMarkerNotNil())
+	}
 
 	if i.HasOwner != nil {
 		p := procedure.HasOwner()
@@ -50611,6 +50437,24 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, procedure.HasFileWith(with...))
+	}
+	if i.HasWorkflowObjectRefs != nil {
+		p := procedure.HasWorkflowObjectRefs()
+		if !*i.HasWorkflowObjectRefs {
+			p = procedure.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasWorkflowObjectRefsWith) > 0 {
+		with := make([]predicate.WorkflowObjectRef, 0, len(i.HasWorkflowObjectRefsWith))
+		for _, w := range i.HasWorkflowObjectRefsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasWorkflowObjectRefsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, procedure.HasWorkflowObjectRefsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -62171,6 +62015,12 @@ type SubcontrolWhereInput struct {
 	SubcontrolKindIDEqualFold    *string  `json:"subcontrolKindIDEqualFold,omitempty"`
 	SubcontrolKindIDContainsFold *string  `json:"subcontrolKindIDContainsFold,omitempty"`
 
+	// "workflow_eligible_marker" field predicates.
+	WorkflowEligibleMarker       *bool `json:"workflowEligibleMarker,omitempty"`
+	WorkflowEligibleMarkerNEQ    *bool `json:"workflowEligibleMarkerNEQ,omitempty"`
+	WorkflowEligibleMarkerIsNil  bool  `json:"workflowEligibleMarkerIsNil,omitempty"`
+	WorkflowEligibleMarkerNotNil bool  `json:"workflowEligibleMarkerNotNil,omitempty"`
+
 	// "ref_code" field predicates.
 	RefCode             *string  `json:"refCode,omitempty"`
 	RefCodeNEQ          *string  `json:"refCodeNEQ,omitempty"`
@@ -62272,6 +62122,10 @@ type SubcontrolWhereInput struct {
 	// "scheduled_jobs" edge predicates.
 	HasScheduledJobs     *bool                     `json:"hasScheduledJobs,omitempty"`
 	HasScheduledJobsWith []*ScheduledJobWhereInput `json:"hasScheduledJobsWith,omitempty"`
+
+	// "workflow_object_refs" edge predicates.
+	HasWorkflowObjectRefs     *bool                          `json:"hasWorkflowObjectRefs,omitempty"`
+	HasWorkflowObjectRefsWith []*WorkflowObjectRefWhereInput `json:"hasWorkflowObjectRefsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -63395,6 +63249,18 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	if i.SubcontrolKindIDContainsFold != nil {
 		predicates = append(predicates, subcontrol.SubcontrolKindIDContainsFold(*i.SubcontrolKindIDContainsFold))
 	}
+	if i.WorkflowEligibleMarker != nil {
+		predicates = append(predicates, subcontrol.WorkflowEligibleMarkerEQ(*i.WorkflowEligibleMarker))
+	}
+	if i.WorkflowEligibleMarkerNEQ != nil {
+		predicates = append(predicates, subcontrol.WorkflowEligibleMarkerNEQ(*i.WorkflowEligibleMarkerNEQ))
+	}
+	if i.WorkflowEligibleMarkerIsNil {
+		predicates = append(predicates, subcontrol.WorkflowEligibleMarkerIsNil())
+	}
+	if i.WorkflowEligibleMarkerNotNil {
+		predicates = append(predicates, subcontrol.WorkflowEligibleMarkerNotNil())
+	}
 	if i.RefCode != nil {
 		predicates = append(predicates, subcontrol.RefCodeEQ(*i.RefCode))
 	}
@@ -63797,6 +63663,24 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, subcontrol.HasScheduledJobsWith(with...))
+	}
+	if i.HasWorkflowObjectRefs != nil {
+		p := subcontrol.HasWorkflowObjectRefs()
+		if !*i.HasWorkflowObjectRefs {
+			p = subcontrol.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasWorkflowObjectRefsWith) > 0 {
+		with := make([]predicate.WorkflowObjectRef, 0, len(i.HasWorkflowObjectRefsWith))
+		for _, w := range i.HasWorkflowObjectRefsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasWorkflowObjectRefsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, subcontrol.HasWorkflowObjectRefsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -82958,6 +82842,23 @@ type WorkflowInstanceWhereInput struct {
 	WorkflowDefinitionIDEqualFold    *string  `json:"workflowDefinitionIDEqualFold,omitempty"`
 	WorkflowDefinitionIDContainsFold *string  `json:"workflowDefinitionIDContainsFold,omitempty"`
 
+	// "workflow_proposal_id" field predicates.
+	WorkflowProposalID             *string  `json:"workflowProposalID,omitempty"`
+	WorkflowProposalIDNEQ          *string  `json:"workflowProposalIDNEQ,omitempty"`
+	WorkflowProposalIDIn           []string `json:"workflowProposalIDIn,omitempty"`
+	WorkflowProposalIDNotIn        []string `json:"workflowProposalIDNotIn,omitempty"`
+	WorkflowProposalIDGT           *string  `json:"workflowProposalIDGT,omitempty"`
+	WorkflowProposalIDGTE          *string  `json:"workflowProposalIDGTE,omitempty"`
+	WorkflowProposalIDLT           *string  `json:"workflowProposalIDLT,omitempty"`
+	WorkflowProposalIDLTE          *string  `json:"workflowProposalIDLTE,omitempty"`
+	WorkflowProposalIDContains     *string  `json:"workflowProposalIDContains,omitempty"`
+	WorkflowProposalIDHasPrefix    *string  `json:"workflowProposalIDHasPrefix,omitempty"`
+	WorkflowProposalIDHasSuffix    *string  `json:"workflowProposalIDHasSuffix,omitempty"`
+	WorkflowProposalIDIsNil        bool     `json:"workflowProposalIDIsNil,omitempty"`
+	WorkflowProposalIDNotNil       bool     `json:"workflowProposalIDNotNil,omitempty"`
+	WorkflowProposalIDEqualFold    *string  `json:"workflowProposalIDEqualFold,omitempty"`
+	WorkflowProposalIDContainsFold *string  `json:"workflowProposalIDContainsFold,omitempty"`
+
 	// "state" field predicates.
 	State      *enums.WorkflowInstanceState  `json:"state,omitempty"`
 	StateNEQ   *enums.WorkflowInstanceState  `json:"stateNEQ,omitempty"`
@@ -82975,6 +82876,16 @@ type WorkflowInstanceWhereInput struct {
 	LastEvaluatedAtLTE    *time.Time  `json:"lastEvaluatedAtLTE,omitempty"`
 	LastEvaluatedAtIsNil  bool        `json:"lastEvaluatedAtIsNil,omitempty"`
 	LastEvaluatedAtNotNil bool        `json:"lastEvaluatedAtNotNil,omitempty"`
+
+	// "current_action_index" field predicates.
+	CurrentActionIndex      *int  `json:"currentActionIndex,omitempty"`
+	CurrentActionIndexNEQ   *int  `json:"currentActionIndexNEQ,omitempty"`
+	CurrentActionIndexIn    []int `json:"currentActionIndexIn,omitempty"`
+	CurrentActionIndexNotIn []int `json:"currentActionIndexNotIn,omitempty"`
+	CurrentActionIndexGT    *int  `json:"currentActionIndexGT,omitempty"`
+	CurrentActionIndexGTE   *int  `json:"currentActionIndexGTE,omitempty"`
+	CurrentActionIndexLT    *int  `json:"currentActionIndexLT,omitempty"`
+	CurrentActionIndexLTE   *int  `json:"currentActionIndexLTE,omitempty"`
 
 	// "control_id" field predicates.
 	ControlID             *string  `json:"controlID,omitempty"`
@@ -83027,6 +82938,57 @@ type WorkflowInstanceWhereInput struct {
 	EvidenceIDEqualFold    *string  `json:"evidenceIDEqualFold,omitempty"`
 	EvidenceIDContainsFold *string  `json:"evidenceIDContainsFold,omitempty"`
 
+	// "subcontrol_id" field predicates.
+	SubcontrolID             *string  `json:"subcontrolID,omitempty"`
+	SubcontrolIDNEQ          *string  `json:"subcontrolIDNEQ,omitempty"`
+	SubcontrolIDIn           []string `json:"subcontrolIDIn,omitempty"`
+	SubcontrolIDNotIn        []string `json:"subcontrolIDNotIn,omitempty"`
+	SubcontrolIDGT           *string  `json:"subcontrolIDGT,omitempty"`
+	SubcontrolIDGTE          *string  `json:"subcontrolIDGTE,omitempty"`
+	SubcontrolIDLT           *string  `json:"subcontrolIDLT,omitempty"`
+	SubcontrolIDLTE          *string  `json:"subcontrolIDLTE,omitempty"`
+	SubcontrolIDContains     *string  `json:"subcontrolIDContains,omitempty"`
+	SubcontrolIDHasPrefix    *string  `json:"subcontrolIDHasPrefix,omitempty"`
+	SubcontrolIDHasSuffix    *string  `json:"subcontrolIDHasSuffix,omitempty"`
+	SubcontrolIDIsNil        bool     `json:"subcontrolIDIsNil,omitempty"`
+	SubcontrolIDNotNil       bool     `json:"subcontrolIDNotNil,omitempty"`
+	SubcontrolIDEqualFold    *string  `json:"subcontrolIDEqualFold,omitempty"`
+	SubcontrolIDContainsFold *string  `json:"subcontrolIDContainsFold,omitempty"`
+
+	// "action_plan_id" field predicates.
+	ActionPlanID             *string  `json:"actionPlanID,omitempty"`
+	ActionPlanIDNEQ          *string  `json:"actionPlanIDNEQ,omitempty"`
+	ActionPlanIDIn           []string `json:"actionPlanIDIn,omitempty"`
+	ActionPlanIDNotIn        []string `json:"actionPlanIDNotIn,omitempty"`
+	ActionPlanIDGT           *string  `json:"actionPlanIDGT,omitempty"`
+	ActionPlanIDGTE          *string  `json:"actionPlanIDGTE,omitempty"`
+	ActionPlanIDLT           *string  `json:"actionPlanIDLT,omitempty"`
+	ActionPlanIDLTE          *string  `json:"actionPlanIDLTE,omitempty"`
+	ActionPlanIDContains     *string  `json:"actionPlanIDContains,omitempty"`
+	ActionPlanIDHasPrefix    *string  `json:"actionPlanIDHasPrefix,omitempty"`
+	ActionPlanIDHasSuffix    *string  `json:"actionPlanIDHasSuffix,omitempty"`
+	ActionPlanIDIsNil        bool     `json:"actionPlanIDIsNil,omitempty"`
+	ActionPlanIDNotNil       bool     `json:"actionPlanIDNotNil,omitempty"`
+	ActionPlanIDEqualFold    *string  `json:"actionPlanIDEqualFold,omitempty"`
+	ActionPlanIDContainsFold *string  `json:"actionPlanIDContainsFold,omitempty"`
+
+	// "procedure_id" field predicates.
+	ProcedureID             *string  `json:"procedureID,omitempty"`
+	ProcedureIDNEQ          *string  `json:"procedureIDNEQ,omitempty"`
+	ProcedureIDIn           []string `json:"procedureIDIn,omitempty"`
+	ProcedureIDNotIn        []string `json:"procedureIDNotIn,omitempty"`
+	ProcedureIDGT           *string  `json:"procedureIDGT,omitempty"`
+	ProcedureIDGTE          *string  `json:"procedureIDGTE,omitempty"`
+	ProcedureIDLT           *string  `json:"procedureIDLT,omitempty"`
+	ProcedureIDLTE          *string  `json:"procedureIDLTE,omitempty"`
+	ProcedureIDContains     *string  `json:"procedureIDContains,omitempty"`
+	ProcedureIDHasPrefix    *string  `json:"procedureIDHasPrefix,omitempty"`
+	ProcedureIDHasSuffix    *string  `json:"procedureIDHasSuffix,omitempty"`
+	ProcedureIDIsNil        bool     `json:"procedureIDIsNil,omitempty"`
+	ProcedureIDNotNil       bool     `json:"procedureIDNotNil,omitempty"`
+	ProcedureIDEqualFold    *string  `json:"procedureIDEqualFold,omitempty"`
+	ProcedureIDContainsFold *string  `json:"procedureIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -83046,6 +83008,18 @@ type WorkflowInstanceWhereInput struct {
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
+
+	// "subcontrol" edge predicates.
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
+
+	// "action_plan" edge predicates.
+	HasActionPlan     *bool                   `json:"hasActionPlan,omitempty"`
+	HasActionPlanWith []*ActionPlanWhereInput `json:"hasActionPlanWith,omitempty"`
+
+	// "procedure" edge predicates.
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 
 	// "workflow_assignments" edge predicates.
 	HasWorkflowAssignments     *bool                           `json:"hasWorkflowAssignments,omitempty"`
@@ -83434,6 +83408,51 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	if i.WorkflowDefinitionIDContainsFold != nil {
 		predicates = append(predicates, workflowinstance.WorkflowDefinitionIDContainsFold(*i.WorkflowDefinitionIDContainsFold))
 	}
+	if i.WorkflowProposalID != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDEQ(*i.WorkflowProposalID))
+	}
+	if i.WorkflowProposalIDNEQ != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDNEQ(*i.WorkflowProposalIDNEQ))
+	}
+	if len(i.WorkflowProposalIDIn) > 0 {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDIn(i.WorkflowProposalIDIn...))
+	}
+	if len(i.WorkflowProposalIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDNotIn(i.WorkflowProposalIDNotIn...))
+	}
+	if i.WorkflowProposalIDGT != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDGT(*i.WorkflowProposalIDGT))
+	}
+	if i.WorkflowProposalIDGTE != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDGTE(*i.WorkflowProposalIDGTE))
+	}
+	if i.WorkflowProposalIDLT != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDLT(*i.WorkflowProposalIDLT))
+	}
+	if i.WorkflowProposalIDLTE != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDLTE(*i.WorkflowProposalIDLTE))
+	}
+	if i.WorkflowProposalIDContains != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDContains(*i.WorkflowProposalIDContains))
+	}
+	if i.WorkflowProposalIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDHasPrefix(*i.WorkflowProposalIDHasPrefix))
+	}
+	if i.WorkflowProposalIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDHasSuffix(*i.WorkflowProposalIDHasSuffix))
+	}
+	if i.WorkflowProposalIDIsNil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDIsNil())
+	}
+	if i.WorkflowProposalIDNotNil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDNotNil())
+	}
+	if i.WorkflowProposalIDEqualFold != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDEqualFold(*i.WorkflowProposalIDEqualFold))
+	}
+	if i.WorkflowProposalIDContainsFold != nil {
+		predicates = append(predicates, workflowinstance.WorkflowProposalIDContainsFold(*i.WorkflowProposalIDContainsFold))
+	}
 	if i.State != nil {
 		predicates = append(predicates, workflowinstance.StateEQ(*i.State))
 	}
@@ -83475,6 +83494,30 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if i.LastEvaluatedAtNotNil {
 		predicates = append(predicates, workflowinstance.LastEvaluatedAtNotNil())
+	}
+	if i.CurrentActionIndex != nil {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexEQ(*i.CurrentActionIndex))
+	}
+	if i.CurrentActionIndexNEQ != nil {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexNEQ(*i.CurrentActionIndexNEQ))
+	}
+	if len(i.CurrentActionIndexIn) > 0 {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexIn(i.CurrentActionIndexIn...))
+	}
+	if len(i.CurrentActionIndexNotIn) > 0 {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexNotIn(i.CurrentActionIndexNotIn...))
+	}
+	if i.CurrentActionIndexGT != nil {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexGT(*i.CurrentActionIndexGT))
+	}
+	if i.CurrentActionIndexGTE != nil {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexGTE(*i.CurrentActionIndexGTE))
+	}
+	if i.CurrentActionIndexLT != nil {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexLT(*i.CurrentActionIndexLT))
+	}
+	if i.CurrentActionIndexLTE != nil {
+		predicates = append(predicates, workflowinstance.CurrentActionIndexLTE(*i.CurrentActionIndexLTE))
 	}
 	if i.ControlID != nil {
 		predicates = append(predicates, workflowinstance.ControlIDEQ(*i.ControlID))
@@ -83611,6 +83654,141 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	if i.EvidenceIDContainsFold != nil {
 		predicates = append(predicates, workflowinstance.EvidenceIDContainsFold(*i.EvidenceIDContainsFold))
 	}
+	if i.SubcontrolID != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDEQ(*i.SubcontrolID))
+	}
+	if i.SubcontrolIDNEQ != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDNEQ(*i.SubcontrolIDNEQ))
+	}
+	if len(i.SubcontrolIDIn) > 0 {
+		predicates = append(predicates, workflowinstance.SubcontrolIDIn(i.SubcontrolIDIn...))
+	}
+	if len(i.SubcontrolIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstance.SubcontrolIDNotIn(i.SubcontrolIDNotIn...))
+	}
+	if i.SubcontrolIDGT != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDGT(*i.SubcontrolIDGT))
+	}
+	if i.SubcontrolIDGTE != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDGTE(*i.SubcontrolIDGTE))
+	}
+	if i.SubcontrolIDLT != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDLT(*i.SubcontrolIDLT))
+	}
+	if i.SubcontrolIDLTE != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDLTE(*i.SubcontrolIDLTE))
+	}
+	if i.SubcontrolIDContains != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDContains(*i.SubcontrolIDContains))
+	}
+	if i.SubcontrolIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDHasPrefix(*i.SubcontrolIDHasPrefix))
+	}
+	if i.SubcontrolIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDHasSuffix(*i.SubcontrolIDHasSuffix))
+	}
+	if i.SubcontrolIDIsNil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDIsNil())
+	}
+	if i.SubcontrolIDNotNil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDNotNil())
+	}
+	if i.SubcontrolIDEqualFold != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDEqualFold(*i.SubcontrolIDEqualFold))
+	}
+	if i.SubcontrolIDContainsFold != nil {
+		predicates = append(predicates, workflowinstance.SubcontrolIDContainsFold(*i.SubcontrolIDContainsFold))
+	}
+	if i.ActionPlanID != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDEQ(*i.ActionPlanID))
+	}
+	if i.ActionPlanIDNEQ != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDNEQ(*i.ActionPlanIDNEQ))
+	}
+	if len(i.ActionPlanIDIn) > 0 {
+		predicates = append(predicates, workflowinstance.ActionPlanIDIn(i.ActionPlanIDIn...))
+	}
+	if len(i.ActionPlanIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstance.ActionPlanIDNotIn(i.ActionPlanIDNotIn...))
+	}
+	if i.ActionPlanIDGT != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDGT(*i.ActionPlanIDGT))
+	}
+	if i.ActionPlanIDGTE != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDGTE(*i.ActionPlanIDGTE))
+	}
+	if i.ActionPlanIDLT != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDLT(*i.ActionPlanIDLT))
+	}
+	if i.ActionPlanIDLTE != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDLTE(*i.ActionPlanIDLTE))
+	}
+	if i.ActionPlanIDContains != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDContains(*i.ActionPlanIDContains))
+	}
+	if i.ActionPlanIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDHasPrefix(*i.ActionPlanIDHasPrefix))
+	}
+	if i.ActionPlanIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDHasSuffix(*i.ActionPlanIDHasSuffix))
+	}
+	if i.ActionPlanIDIsNil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDIsNil())
+	}
+	if i.ActionPlanIDNotNil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDNotNil())
+	}
+	if i.ActionPlanIDEqualFold != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDEqualFold(*i.ActionPlanIDEqualFold))
+	}
+	if i.ActionPlanIDContainsFold != nil {
+		predicates = append(predicates, workflowinstance.ActionPlanIDContainsFold(*i.ActionPlanIDContainsFold))
+	}
+	if i.ProcedureID != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDEQ(*i.ProcedureID))
+	}
+	if i.ProcedureIDNEQ != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDNEQ(*i.ProcedureIDNEQ))
+	}
+	if len(i.ProcedureIDIn) > 0 {
+		predicates = append(predicates, workflowinstance.ProcedureIDIn(i.ProcedureIDIn...))
+	}
+	if len(i.ProcedureIDNotIn) > 0 {
+		predicates = append(predicates, workflowinstance.ProcedureIDNotIn(i.ProcedureIDNotIn...))
+	}
+	if i.ProcedureIDGT != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDGT(*i.ProcedureIDGT))
+	}
+	if i.ProcedureIDGTE != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDGTE(*i.ProcedureIDGTE))
+	}
+	if i.ProcedureIDLT != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDLT(*i.ProcedureIDLT))
+	}
+	if i.ProcedureIDLTE != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDLTE(*i.ProcedureIDLTE))
+	}
+	if i.ProcedureIDContains != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDContains(*i.ProcedureIDContains))
+	}
+	if i.ProcedureIDHasPrefix != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDHasPrefix(*i.ProcedureIDHasPrefix))
+	}
+	if i.ProcedureIDHasSuffix != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDHasSuffix(*i.ProcedureIDHasSuffix))
+	}
+	if i.ProcedureIDIsNil {
+		predicates = append(predicates, workflowinstance.ProcedureIDIsNil())
+	}
+	if i.ProcedureIDNotNil {
+		predicates = append(predicates, workflowinstance.ProcedureIDNotNil())
+	}
+	if i.ProcedureIDEqualFold != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDEqualFold(*i.ProcedureIDEqualFold))
+	}
+	if i.ProcedureIDContainsFold != nil {
+		predicates = append(predicates, workflowinstance.ProcedureIDContainsFold(*i.ProcedureIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := workflowinstance.HasOwner()
@@ -83701,6 +83879,60 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, workflowinstance.HasEvidenceWith(with...))
+	}
+	if i.HasSubcontrol != nil {
+		p := workflowinstance.HasSubcontrol()
+		if !*i.HasSubcontrol {
+			p = workflowinstance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		for _, w := range i.HasSubcontrolWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, workflowinstance.HasSubcontrolWith(with...))
+	}
+	if i.HasActionPlan != nil {
+		p := workflowinstance.HasActionPlan()
+		if !*i.HasActionPlan {
+			p = workflowinstance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasActionPlanWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanWith))
+		for _, w := range i.HasActionPlanWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasActionPlanWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, workflowinstance.HasActionPlanWith(with...))
+	}
+	if i.HasProcedure != nil {
+		p := workflowinstance.HasProcedure()
+		if !*i.HasProcedure {
+			p = workflowinstance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProcedureWith) > 0 {
+		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		for _, w := range i.HasProcedureWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProcedureWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, workflowinstance.HasProcedureWith(with...))
 	}
 	if i.HasWorkflowAssignments != nil {
 		p := workflowinstance.HasWorkflowAssignments()
@@ -84026,6 +84258,57 @@ type WorkflowObjectRefWhereInput struct {
 	EvidenceIDEqualFold    *string  `json:"evidenceIDEqualFold,omitempty"`
 	EvidenceIDContainsFold *string  `json:"evidenceIDContainsFold,omitempty"`
 
+	// "subcontrol_id" field predicates.
+	SubcontrolID             *string  `json:"subcontrolID,omitempty"`
+	SubcontrolIDNEQ          *string  `json:"subcontrolIDNEQ,omitempty"`
+	SubcontrolIDIn           []string `json:"subcontrolIDIn,omitempty"`
+	SubcontrolIDNotIn        []string `json:"subcontrolIDNotIn,omitempty"`
+	SubcontrolIDGT           *string  `json:"subcontrolIDGT,omitempty"`
+	SubcontrolIDGTE          *string  `json:"subcontrolIDGTE,omitempty"`
+	SubcontrolIDLT           *string  `json:"subcontrolIDLT,omitempty"`
+	SubcontrolIDLTE          *string  `json:"subcontrolIDLTE,omitempty"`
+	SubcontrolIDContains     *string  `json:"subcontrolIDContains,omitempty"`
+	SubcontrolIDHasPrefix    *string  `json:"subcontrolIDHasPrefix,omitempty"`
+	SubcontrolIDHasSuffix    *string  `json:"subcontrolIDHasSuffix,omitempty"`
+	SubcontrolIDIsNil        bool     `json:"subcontrolIDIsNil,omitempty"`
+	SubcontrolIDNotNil       bool     `json:"subcontrolIDNotNil,omitempty"`
+	SubcontrolIDEqualFold    *string  `json:"subcontrolIDEqualFold,omitempty"`
+	SubcontrolIDContainsFold *string  `json:"subcontrolIDContainsFold,omitempty"`
+
+	// "action_plan_id" field predicates.
+	ActionPlanID             *string  `json:"actionPlanID,omitempty"`
+	ActionPlanIDNEQ          *string  `json:"actionPlanIDNEQ,omitempty"`
+	ActionPlanIDIn           []string `json:"actionPlanIDIn,omitempty"`
+	ActionPlanIDNotIn        []string `json:"actionPlanIDNotIn,omitempty"`
+	ActionPlanIDGT           *string  `json:"actionPlanIDGT,omitempty"`
+	ActionPlanIDGTE          *string  `json:"actionPlanIDGTE,omitempty"`
+	ActionPlanIDLT           *string  `json:"actionPlanIDLT,omitempty"`
+	ActionPlanIDLTE          *string  `json:"actionPlanIDLTE,omitempty"`
+	ActionPlanIDContains     *string  `json:"actionPlanIDContains,omitempty"`
+	ActionPlanIDHasPrefix    *string  `json:"actionPlanIDHasPrefix,omitempty"`
+	ActionPlanIDHasSuffix    *string  `json:"actionPlanIDHasSuffix,omitempty"`
+	ActionPlanIDIsNil        bool     `json:"actionPlanIDIsNil,omitempty"`
+	ActionPlanIDNotNil       bool     `json:"actionPlanIDNotNil,omitempty"`
+	ActionPlanIDEqualFold    *string  `json:"actionPlanIDEqualFold,omitempty"`
+	ActionPlanIDContainsFold *string  `json:"actionPlanIDContainsFold,omitempty"`
+
+	// "procedure_id" field predicates.
+	ProcedureID             *string  `json:"procedureID,omitempty"`
+	ProcedureIDNEQ          *string  `json:"procedureIDNEQ,omitempty"`
+	ProcedureIDIn           []string `json:"procedureIDIn,omitempty"`
+	ProcedureIDNotIn        []string `json:"procedureIDNotIn,omitempty"`
+	ProcedureIDGT           *string  `json:"procedureIDGT,omitempty"`
+	ProcedureIDGTE          *string  `json:"procedureIDGTE,omitempty"`
+	ProcedureIDLT           *string  `json:"procedureIDLT,omitempty"`
+	ProcedureIDLTE          *string  `json:"procedureIDLTE,omitempty"`
+	ProcedureIDContains     *string  `json:"procedureIDContains,omitempty"`
+	ProcedureIDHasPrefix    *string  `json:"procedureIDHasPrefix,omitempty"`
+	ProcedureIDHasSuffix    *string  `json:"procedureIDHasSuffix,omitempty"`
+	ProcedureIDIsNil        bool     `json:"procedureIDIsNil,omitempty"`
+	ProcedureIDNotNil       bool     `json:"procedureIDNotNil,omitempty"`
+	ProcedureIDEqualFold    *string  `json:"procedureIDEqualFold,omitempty"`
+	ProcedureIDContainsFold *string  `json:"procedureIDContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -84065,6 +84348,18 @@ type WorkflowObjectRefWhereInput struct {
 	// "evidence" edge predicates.
 	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
 	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
+
+	// "subcontrol" edge predicates.
+	HasSubcontrol     *bool                   `json:"hasSubcontrol,omitempty"`
+	HasSubcontrolWith []*SubcontrolWhereInput `json:"hasSubcontrolWith,omitempty"`
+
+	// "action_plan" edge predicates.
+	HasActionPlan     *bool                   `json:"hasActionPlan,omitempty"`
+	HasActionPlanWith []*ActionPlanWhereInput `json:"hasActionPlanWith,omitempty"`
+
+	// "procedure" edge predicates.
+	HasProcedure     *bool                  `json:"hasProcedure,omitempty"`
+	HasProcedureWith []*ProcedureWhereInput `json:"hasProcedureWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -84801,6 +85096,141 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	if i.EvidenceIDContainsFold != nil {
 		predicates = append(predicates, workflowobjectref.EvidenceIDContainsFold(*i.EvidenceIDContainsFold))
 	}
+	if i.SubcontrolID != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDEQ(*i.SubcontrolID))
+	}
+	if i.SubcontrolIDNEQ != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDNEQ(*i.SubcontrolIDNEQ))
+	}
+	if len(i.SubcontrolIDIn) > 0 {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDIn(i.SubcontrolIDIn...))
+	}
+	if len(i.SubcontrolIDNotIn) > 0 {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDNotIn(i.SubcontrolIDNotIn...))
+	}
+	if i.SubcontrolIDGT != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDGT(*i.SubcontrolIDGT))
+	}
+	if i.SubcontrolIDGTE != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDGTE(*i.SubcontrolIDGTE))
+	}
+	if i.SubcontrolIDLT != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDLT(*i.SubcontrolIDLT))
+	}
+	if i.SubcontrolIDLTE != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDLTE(*i.SubcontrolIDLTE))
+	}
+	if i.SubcontrolIDContains != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDContains(*i.SubcontrolIDContains))
+	}
+	if i.SubcontrolIDHasPrefix != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDHasPrefix(*i.SubcontrolIDHasPrefix))
+	}
+	if i.SubcontrolIDHasSuffix != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDHasSuffix(*i.SubcontrolIDHasSuffix))
+	}
+	if i.SubcontrolIDIsNil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDIsNil())
+	}
+	if i.SubcontrolIDNotNil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDNotNil())
+	}
+	if i.SubcontrolIDEqualFold != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDEqualFold(*i.SubcontrolIDEqualFold))
+	}
+	if i.SubcontrolIDContainsFold != nil {
+		predicates = append(predicates, workflowobjectref.SubcontrolIDContainsFold(*i.SubcontrolIDContainsFold))
+	}
+	if i.ActionPlanID != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDEQ(*i.ActionPlanID))
+	}
+	if i.ActionPlanIDNEQ != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDNEQ(*i.ActionPlanIDNEQ))
+	}
+	if len(i.ActionPlanIDIn) > 0 {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDIn(i.ActionPlanIDIn...))
+	}
+	if len(i.ActionPlanIDNotIn) > 0 {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDNotIn(i.ActionPlanIDNotIn...))
+	}
+	if i.ActionPlanIDGT != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDGT(*i.ActionPlanIDGT))
+	}
+	if i.ActionPlanIDGTE != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDGTE(*i.ActionPlanIDGTE))
+	}
+	if i.ActionPlanIDLT != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDLT(*i.ActionPlanIDLT))
+	}
+	if i.ActionPlanIDLTE != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDLTE(*i.ActionPlanIDLTE))
+	}
+	if i.ActionPlanIDContains != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDContains(*i.ActionPlanIDContains))
+	}
+	if i.ActionPlanIDHasPrefix != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDHasPrefix(*i.ActionPlanIDHasPrefix))
+	}
+	if i.ActionPlanIDHasSuffix != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDHasSuffix(*i.ActionPlanIDHasSuffix))
+	}
+	if i.ActionPlanIDIsNil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDIsNil())
+	}
+	if i.ActionPlanIDNotNil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDNotNil())
+	}
+	if i.ActionPlanIDEqualFold != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDEqualFold(*i.ActionPlanIDEqualFold))
+	}
+	if i.ActionPlanIDContainsFold != nil {
+		predicates = append(predicates, workflowobjectref.ActionPlanIDContainsFold(*i.ActionPlanIDContainsFold))
+	}
+	if i.ProcedureID != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDEQ(*i.ProcedureID))
+	}
+	if i.ProcedureIDNEQ != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDNEQ(*i.ProcedureIDNEQ))
+	}
+	if len(i.ProcedureIDIn) > 0 {
+		predicates = append(predicates, workflowobjectref.ProcedureIDIn(i.ProcedureIDIn...))
+	}
+	if len(i.ProcedureIDNotIn) > 0 {
+		predicates = append(predicates, workflowobjectref.ProcedureIDNotIn(i.ProcedureIDNotIn...))
+	}
+	if i.ProcedureIDGT != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDGT(*i.ProcedureIDGT))
+	}
+	if i.ProcedureIDGTE != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDGTE(*i.ProcedureIDGTE))
+	}
+	if i.ProcedureIDLT != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDLT(*i.ProcedureIDLT))
+	}
+	if i.ProcedureIDLTE != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDLTE(*i.ProcedureIDLTE))
+	}
+	if i.ProcedureIDContains != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDContains(*i.ProcedureIDContains))
+	}
+	if i.ProcedureIDHasPrefix != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDHasPrefix(*i.ProcedureIDHasPrefix))
+	}
+	if i.ProcedureIDHasSuffix != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDHasSuffix(*i.ProcedureIDHasSuffix))
+	}
+	if i.ProcedureIDIsNil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDIsNil())
+	}
+	if i.ProcedureIDNotNil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDNotNil())
+	}
+	if i.ProcedureIDEqualFold != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDEqualFold(*i.ProcedureIDEqualFold))
+	}
+	if i.ProcedureIDContainsFold != nil {
+		predicates = append(predicates, workflowobjectref.ProcedureIDContainsFold(*i.ProcedureIDContainsFold))
+	}
 
 	if i.HasOwner != nil {
 		p := workflowobjectref.HasOwner()
@@ -84981,6 +85411,60 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, workflowobjectref.HasEvidenceWith(with...))
+	}
+	if i.HasSubcontrol != nil {
+		p := workflowobjectref.HasSubcontrol()
+		if !*i.HasSubcontrol {
+			p = workflowobjectref.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasSubcontrolWith) > 0 {
+		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		for _, w := range i.HasSubcontrolWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasSubcontrolWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, workflowobjectref.HasSubcontrolWith(with...))
+	}
+	if i.HasActionPlan != nil {
+		p := workflowobjectref.HasActionPlan()
+		if !*i.HasActionPlan {
+			p = workflowobjectref.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasActionPlanWith) > 0 {
+		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanWith))
+		for _, w := range i.HasActionPlanWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasActionPlanWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, workflowobjectref.HasActionPlanWith(with...))
+	}
+	if i.HasProcedure != nil {
+		p := workflowobjectref.HasProcedure()
+		if !*i.HasProcedure {
+			p = workflowobjectref.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasProcedureWith) > 0 {
+		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		for _, w := range i.HasProcedureWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasProcedureWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, workflowobjectref.HasProcedureWith(with...))
 	}
 	switch len(predicates) {
 	case 0:

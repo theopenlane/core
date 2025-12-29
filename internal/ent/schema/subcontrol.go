@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
@@ -75,11 +75,17 @@ func (s Subcontrol) Edges() []ent.Edge {
 			edgeSchema: Control{},
 			field:      "control_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: ControlImplementation{},
 			comment:    "the implementation(s) of the subcontrol",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
+			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
@@ -92,6 +98,7 @@ func (s Subcontrol) Edges() []ent.Edge {
 			t:          MappedControl.Type,
 			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
@@ -101,6 +108,15 @@ func (s Subcontrol) Edges() []ent.Edge {
 			t:          MappedControl.Type,
 			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
+				entx.FieldWorkflowEligible(),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: WorkflowObjectRef{},
+			ref:        "subcontrol",
+			annotations: []schema.Annotation{
+				entx.FieldWorkflowEligible(),
 			},
 		}),
 	}
@@ -121,7 +137,8 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 			mixin.NewSystemOwnedMixin(),
-			newCustomEnumMixin(s),
+			newCustomEnumMixin(s, withWorkflowEnumEdges()),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(s)
 }

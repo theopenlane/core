@@ -16,12 +16,12 @@ import (
 	provider "github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 
+	"github.com/theopenlane/core/common/enums"
+	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
-	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 

@@ -132,7 +132,7 @@ func (p *PondPool) WaitingTasks() int {
 		return math.MaxInt
 	}
 
-	return int(waitingTasks) // nolint:gosec
+	return int(waitingTasks) //nolint:gosec
 }
 
 // SuccessfulTasks returns the number of tasks that completed successfully
@@ -155,5 +155,5 @@ func uintToInt(v uint64) int {
 		return math.MaxInt
 	}
 
-	return int(v) // nolint:gosec
+	return int(v) //nolint:gosec
 }

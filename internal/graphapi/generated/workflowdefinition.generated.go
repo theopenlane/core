@@ -94,10 +94,6 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionBulkCreatePayload_wor
 				return ec.fieldContext_WorkflowDefinition_isDefault(ctx, field)
 			case "active":
 				return ec.fieldContext_WorkflowDefinition_active(ctx, field)
-			case "triggerOperations":
-				return ec.fieldContext_WorkflowDefinition_triggerOperations(ctx, field)
-			case "triggerFields":
-				return ec.fieldContext_WorkflowDefinition_triggerFields(ctx, field)
 			case "definitionJSON":
 				return ec.fieldContext_WorkflowDefinition_definitionJSON(ctx, field)
 			case "trackedFields":
@@ -181,10 +177,6 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionCreatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_isDefault(ctx, field)
 			case "active":
 				return ec.fieldContext_WorkflowDefinition_active(ctx, field)
-			case "triggerOperations":
-				return ec.fieldContext_WorkflowDefinition_triggerOperations(ctx, field)
-			case "triggerFields":
-				return ec.fieldContext_WorkflowDefinition_triggerFields(ctx, field)
 			case "definitionJSON":
 				return ec.fieldContext_WorkflowDefinition_definitionJSON(ctx, field)
 			case "trackedFields":
@@ -297,10 +289,6 @@ func (ec *executionContext) fieldContext_WorkflowDefinitionUpdatePayload_workflo
 				return ec.fieldContext_WorkflowDefinition_isDefault(ctx, field)
 			case "active":
 				return ec.fieldContext_WorkflowDefinition_active(ctx, field)
-			case "triggerOperations":
-				return ec.fieldContext_WorkflowDefinition_triggerOperations(ctx, field)
-			case "triggerFields":
-				return ec.fieldContext_WorkflowDefinition_triggerFields(ctx, field)
 			case "definitionJSON":
 				return ec.fieldContext_WorkflowDefinition_definitionJSON(ctx, field)
 			case "trackedFields":

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -20,7 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // EvidenceCreate is the builder for creating a Evidence entity.
@@ -140,36 +141,16 @@ func (_c *EvidenceCreate) SetNillableOwnerID(v *string) *EvidenceCreate {
 	return _c
 }
 
-// SetProposedChanges sets the "proposed_changes" field.
-func (_c *EvidenceCreate) SetProposedChanges(v map[string]interface{}) *EvidenceCreate {
-	_c.mutation.SetProposedChanges(v)
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *EvidenceCreate) SetWorkflowEligibleMarker(v bool) *EvidenceCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
 	return _c
 }
 
-// SetProposedByUserID sets the "proposed_by_user_id" field.
-func (_c *EvidenceCreate) SetProposedByUserID(v string) *EvidenceCreate {
-	_c.mutation.SetProposedByUserID(v)
-	return _c
-}
-
-// SetNillableProposedByUserID sets the "proposed_by_user_id" field if the given value is not nil.
-func (_c *EvidenceCreate) SetNillableProposedByUserID(v *string) *EvidenceCreate {
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceCreate {
 	if v != nil {
-		_c.SetProposedByUserID(*v)
-	}
-	return _c
-}
-
-// SetProposedAt sets the "proposed_at" field.
-func (_c *EvidenceCreate) SetProposedAt(v time.Time) *EvidenceCreate {
-	_c.mutation.SetProposedAt(v)
-	return _c
-}
-
-// SetNillableProposedAt sets the "proposed_at" field if the given value is not nil.
-func (_c *EvidenceCreate) SetNillableProposedAt(v *time.Time) *EvidenceCreate {
-	if v != nil {
-		_c.SetProposedAt(*v)
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -431,6 +412,21 @@ func (_c *EvidenceCreate) AddComments(v ...*Note) *EvidenceCreate {
 	return _c.AddCommentIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *EvidenceCreate) AddWorkflowObjectRefIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *EvidenceCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the EvidenceMutation object of the builder.
 func (_c *EvidenceCreate) Mutation() *EvidenceMutation {
 	return _c.mutation
@@ -485,6 +481,10 @@ func (_c *EvidenceCreate) defaults() error {
 	if _, ok := _c.mutation.Tags(); !ok {
 		v := evidence.DefaultTags
 		_c.mutation.SetTags(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := evidence.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.CreationDate(); !ok {
 		if evidence.DefaultCreationDate == nil {
@@ -615,17 +615,9 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 		_spec.SetField(evidence.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := _c.mutation.ProposedChanges(); ok {
-		_spec.SetField(evidence.FieldProposedChanges, field.TypeJSON, value)
-		_node.ProposedChanges = value
-	}
-	if value, ok := _c.mutation.ProposedByUserID(); ok {
-		_spec.SetField(evidence.FieldProposedByUserID, field.TypeString, value)
-		_node.ProposedByUserID = value
-	}
-	if value, ok := _c.mutation.ProposedAt(); ok {
-		_spec.SetField(evidence.FieldProposedAt, field.TypeTime, value)
-		_node.ProposedAt = &value
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(evidence.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(evidence.FieldName, field.TypeString, value)
@@ -812,6 +804,23 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   evidence.WorkflowObjectRefsTable,
+			Columns: []string{evidence.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
