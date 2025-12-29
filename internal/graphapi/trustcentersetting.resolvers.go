@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.
@@ -50,34 +52,21 @@ func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id stri
 
 // UpdateTrustCenterPreviewSetting is the resolver for the updateTrustCenterPreviewSetting field.
 func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
-	previewSetting, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(
-		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
-	).Only(ctx)
+	transactionCtx := withTransactionalMutation(ctx)
+	trustCenter, err := resolveTrustCenterForPreviewSetting(ctx, transactionCtx, "")
 	if err != nil {
-		if !generated.IsNotFound(err) {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
-		}
-
-		// if not found, get the trust center to create new preview settings
-		trustCenter, err := withTransactionalMutation(ctx).TrustCenter.Query().Only(ctx)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
-		}
-
-		// create new preview settings
-		previewSetting, err = withTransactionalMutation(ctx).TrustCenterSetting.Create().
-			SetTrustCenterID(trustCenter.ID).
-			SetEnvironment(enums.TrustCenterEnvironmentPreview).
-			Save(ctx)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
-		}
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 
-	req := previewSetting.Update().SetInput(input)
+	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
-	res, err := req.Save(ctx)
+		return nil, rout.ErrPermissionDenied
+	}
+
+	res, err := upsertPreviewSetting(ctx, transactionCtx, trustCenter, nil, &input)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upsert trust center preview setting")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcentersetting"})
 	}
 

@@ -1268,6 +1268,43 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
+// TestTrustCenterUpdateHookWithCustomDomainRemoval tests that DeletePirschDomain job is called when custom_domain_id is cleared
+func TestTrustCenterUpdateHookWithCustomDomainRemoval(t *testing.T) {
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
+
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	fakePirschDomainID := "fake-pirsch-domain-id-clear-test"
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).
+		SetPirschDomainID(fakePirschDomainID).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	err = suite.client.db.Job.TruncateRiverTables(testUser1.UserCtx)
+	assert.NilError(t, err)
+
+	resp, err := suite.client.api.UpdateTrustCenter(testUser1.UserCtx, trustCenterWithDomain.ID, testclient.UpdateTrustCenterInput{
+		ClearCustomDomain: lo.ToPtr(true),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	jobs := rivertest.RequireManyInserted(testUser1.UserCtx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+		[]rivertest.ExpectedJob{
+			{
+				Args: jobspec.DeletePirschDomainArgs{
+					PirschDomainID: fakePirschDomainID,
+				},
+			},
+		})
+	assert.Assert(t, jobs != nil)
+	assert.Assert(t, is.Len(jobs, 1))
+
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterWithDomain.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
 // TestTrustCenterDeleteHookWithPirschDomain tests that DeletePirschDomain job is called when pirsch_domain_id exists during deletion
 func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 	// Create trust center with custom domain for testUser1

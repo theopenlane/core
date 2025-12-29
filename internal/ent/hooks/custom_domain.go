@@ -32,7 +32,7 @@ func HookCreateCustomDomain() ent.Hook {
 					return v, err
 				}
 
-				_, err = m.Job.Insert(ctx, jobspec.CreateCustomDomainArgs{
+				err = enqueueJob(ctx, m.Job, jobspec.CreateCustomDomainArgs{
 					CustomDomainID: id,
 				}, nil)
 
@@ -74,16 +74,25 @@ func HookDeleteCustomDomain() ent.Hook {
 				}
 
 				trustCenters, err := m.Client().TrustCenter.Query().
-					Where(trustcenter.HasCustomDomainWith(customdomain.ID(id))).
+					Where(trustcenter.Or(
+						trustcenter.HasCustomDomainWith(customdomain.ID(id)),
+						trustcenter.HasPreviewDomainWith(customdomain.ID(id)),
+					)).
 					All(ctx)
 				if err != nil {
 					return nil, err
 				}
 
 				for _, tc := range trustCenters {
-					if err = m.Client().TrustCenter.UpdateOneID(tc.ID).
-						ClearCustomDomain().
-						Exec(ctx); err != nil {
+					update := m.Client().TrustCenter.UpdateOneID(tc.ID)
+					if tc.CustomDomainID != nil && *tc.CustomDomainID == id {
+						update.ClearCustomDomain()
+					}
+					if tc.PreviewDomainID == id {
+						update.ClearPreviewDomain()
+					}
+
+					if err = update.Exec(ctx); err != nil {
 						return nil, err
 					}
 				}
@@ -108,7 +117,8 @@ func HookDeleteCustomDomain() ent.Hook {
 					return nil, err
 				}
 
-				_, err = m.Job.Insert(ctx, jobspec.DeleteCustomDomainArgs{
+				err = enqueueJob(ctx, m.Job, jobspec.DeleteCustomDomainArgs{
+					CustomDomainID:             id,
 					DNSVerificationID:          cd.DNSVerificationID,
 					CloudflareCustomHostnameID: dnsVerification.CloudflareHostnameID,
 					CloudflareZoneID:           mappableDomain.ZoneID,

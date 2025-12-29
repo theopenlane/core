@@ -21,12 +21,15 @@ func HookTrustCenterComplianceAuthz() ent.Hook {
 				return nil, err
 			}
 
-			if m.Op().Is(ent.OpCreate) {
+			switch {
+			case m.Op().Is(ent.OpCreate):
 				// create the trust member admin and relationship tuple for parent org
 				err = trustCenterComplianceCreateHook(ctx, m)
-			} else if isDeleteOp(ctx, m) {
+			case isDeleteOp(ctx, m):
 				// delete all relationship tuples on delete, or soft delete (Update Op)
 				err = trustCenterComplianceDeleteHook(ctx, m)
+			case m.Op().Is(ent.OpUpdate | ent.OpUpdateOne):
+				err = trustCenterComplianceUpdateHook(ctx, m)
 			}
 
 			return retValue, err
@@ -81,6 +84,67 @@ func trustCenterComplianceDeleteHook(ctx context.Context, m *generated.TrustCent
 	})
 	if _, err := m.Authz.WriteTupleKeys(ctx, nil, []fgax.TupleKey{tupleKey}); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to delete relationship tuple")
+
+		return ErrInternalServerError
+	}
+
+	return nil
+}
+
+// trustCenterComplianceUpdateHook keeps relationship tuples in sync when the standard changes
+func trustCenterComplianceUpdateHook(ctx context.Context, m *generated.TrustCenterComplianceMutation) error {
+	trustCenterID, trustCenterExists := m.TrustCenterID()
+	if !trustCenterExists || trustCenterID == "" {
+		if oldTrustCenterID, err := m.OldTrustCenterID(ctx); err == nil && oldTrustCenterID != "" {
+			trustCenterID = oldTrustCenterID
+		}
+	}
+	if trustCenterID == "" {
+		return nil
+	}
+
+	newStandardID, newStandardSet := m.StandardID()
+	standardCleared := m.StandardCleared()
+	if !newStandardSet && !standardCleared {
+		return nil
+	}
+
+	oldStandardID, err := m.OldStandardID(ctx)
+	if err != nil {
+		oldStandardID = ""
+	}
+
+	var tuplesToDelete []fgax.TupleKey
+	var tuplesToAdd []fgax.TupleKey
+
+	if oldStandardID != "" && (standardCleared || (newStandardSet && newStandardID != oldStandardID)) {
+		tupleKey := fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   trustCenterID,
+			SubjectType: "trust_center",
+			ObjectID:    oldStandardID,
+			ObjectType:  "standard",
+			Relation:    "associated_with",
+		})
+		tuplesToDelete = append(tuplesToDelete, tupleKey)
+	}
+
+	if newStandardSet && newStandardID != "" && newStandardID != oldStandardID {
+		tupleKey := fgax.GetTupleKey(fgax.TupleRequest{
+			SubjectID:   trustCenterID,
+			SubjectType: "trust_center",
+			ObjectID:    newStandardID,
+			ObjectType:  "standard",
+			Relation:    "associated_with",
+		})
+		tuplesToAdd = append(tuplesToAdd, tupleKey)
+	}
+
+	if len(tuplesToAdd) == 0 && len(tuplesToDelete) == 0 {
+		return nil
+	}
+
+	if _, err := m.Authz.WriteTupleKeys(ctx, tuplesToAdd, tuplesToDelete); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to update relationship tuples")
 
 		return ErrInternalServerError
 	}

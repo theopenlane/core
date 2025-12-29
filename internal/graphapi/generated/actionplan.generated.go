@@ -397,8 +397,8 @@ type MutationResolver interface {
 	UpdateBulkTrustCenterSubprocessor(ctx context.Context, ids []string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkUpdatePayload, error)
 	DeleteTrustCenterSubprocessor(ctx context.Context, id string) (*model.TrustCenterSubprocessorDeletePayload, error)
 	DeleteBulkTrustCenterSubprocessor(ctx context.Context, ids []string) (*model.TrustCenterSubprocessorBulkDeletePayload, error)
-	CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error)
-	UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error)
+	CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error)
+	UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error)
 	DeleteTrustCenterWatermarkConfig(ctx context.Context, id string) (*model.TrustCenterWatermarkConfigDeletePayload, error)
 	CreateUser(ctx context.Context, input generated.CreateUserInput, avatarFile *graphql.Upload) (*model.UserCreatePayload, error)
 	UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error)
@@ -2681,11 +2681,11 @@ func (ec *executionContext) field_Mutation_createTrustCenterWatermarkConfig_args
 		return nil, err
 	}
 	args["input"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["logoFile"] = arg1
+	args["watermarkFile"] = arg1
 	return args, nil
 }
 
@@ -5645,11 +5645,11 @@ func (ec *executionContext) field_Mutation_updateTrustCenterWatermarkConfig_args
 		return nil, err
 	}
 	args["input"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "watermarkFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
 	if err != nil {
 		return nil, err
 	}
-	args["logoFile"] = arg2
+	args["watermarkFile"] = arg2
 	return args, nil
 }
 
@@ -23617,7 +23617,7 @@ func (ec *executionContext) _Mutation_createTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_createTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustCenterWatermarkConfig(ctx, fc.Args["input"].(generated.CreateTrustCenterWatermarkConfigInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.resolvers.Mutation().CreateTrustCenterWatermarkConfig(ctx, fc.Args["input"].(generated.CreateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload,
@@ -23662,7 +23662,7 @@ func (ec *executionContext) _Mutation_updateTrustCenterWatermarkConfig(ctx conte
 		ec.fieldContext_Mutation_updateTrustCenterWatermarkConfig,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.resolvers.Mutation().UpdateTrustCenterWatermarkConfig(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), fc.Args["watermarkFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload,

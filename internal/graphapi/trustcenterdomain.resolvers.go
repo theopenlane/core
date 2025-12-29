@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -25,7 +26,12 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 
 	transactionCtx := withTransactionalMutation(ctx)
 
-	mappableDomainID, err := transactionCtx.MappableDomain.Query().Where(mappabledomain.Name(cnameTarget)).FirstID(ctx)
+	normalizedCnameTarget := cnameTarget
+	if normalized, err := domain.NormalizeHostname(cnameTarget); err == nil {
+		normalizedCnameTarget = normalized
+	}
+
+	mappableDomainID, err := transactionCtx.MappableDomain.Query().Where(mappabledomain.Name(normalizedCnameTarget)).FirstID(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
 	}
@@ -47,6 +53,12 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 	if trustCenter.CustomDomainID != nil {
 		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
 	}
+
+	normalizedCname, err := domain.NormalizeHostname(input.CnameRecord)
+	if err != nil {
+		return nil, rout.InvalidField("cname_record")
+	}
+	input.CnameRecord = normalizedCname
 
 	// set the organization in the auth context if its not done for us
 	if err := common.SetOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {

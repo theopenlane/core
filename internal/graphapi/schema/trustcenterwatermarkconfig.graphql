@@ -19,7 +19,7 @@ extend type Mutation{
         values of the trustCenterWatermarkConfig
         """
         input: CreateTrustCenterWatermarkConfigInput!
-        logoFile: Upload
+        watermarkFile: Upload
     ): TrustCenterWatermarkConfigCreatePayload!
     """
     Update an existing trustCenterWatermarkConfig
@@ -33,7 +33,7 @@ extend type Mutation{
         New values for the trustCenterWatermarkConfig
         """
         input: UpdateTrustCenterWatermarkConfigInput!
-        logoFile: Upload
+        watermarkFile: Upload
     ): TrustCenterWatermarkConfigUpdatePayload!
     """
     Delete an existing trustCenterWatermarkConfig

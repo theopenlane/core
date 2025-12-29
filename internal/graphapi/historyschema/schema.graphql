@@ -32787,7 +32787,7 @@ type Mutation {
 		values of the trustCenterWatermarkConfig
 		"""
 		input: CreateTrustCenterWatermarkConfigInput!
-	logoFile: Upload): TrustCenterWatermarkConfigCreatePayload!
+	watermarkFile: Upload): TrustCenterWatermarkConfigCreatePayload!
 	"""
 	Update an existing trustCenterWatermarkConfig
 	"""
@@ -32801,7 +32801,7 @@ type Mutation {
 		New values for the trustCenterWatermarkConfig
 		"""
 		input: UpdateTrustCenterWatermarkConfigInput!
-	logoFile: Upload): TrustCenterWatermarkConfigUpdatePayload!
+	watermarkFile: Upload): TrustCenterWatermarkConfigUpdatePayload!
 	"""
 	Delete an existing trustCenterWatermarkConfig
 	"""

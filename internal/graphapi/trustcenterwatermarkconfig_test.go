@@ -41,12 +41,12 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		}
 	}
 	testCases := []struct {
-		name        string
-		input       testclient.CreateTrustCenterWatermarkConfigInput
-		logoFile    *graphql.Upload
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name            string
+		input           testclient.CreateTrustCenterWatermarkConfigInput
+		watermarkFile   *graphql.Upload
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedErr     string
 	}{
 		{
 			name: "happy path, minimal, text",
@@ -61,9 +61,9 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
 				TrustCenterID: &trustCenter.ID,
 			},
-			logoFile: createPNGUpload(),
-			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			watermarkFile: createPNGUpload(),
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
 		},
 		{
 			name: "happy path, all fields",
@@ -111,14 +111,14 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			if tc.logoFile != nil {
+			if tc.watermarkFile != nil {
 				if tc.expectedErr == "" {
-					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.watermarkFile})
 				} else {
 					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
-			resp, err := tc.client.CreateTrustCenterWatermarkConfig(tc.ctx, tc.input, tc.logoFile)
+			resp, err := tc.client.CreateTrustCenterWatermarkConfig(tc.ctx, tc.input, tc.watermarkFile)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -251,12 +251,12 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		}
 	}
 	testCases := []struct {
-		name        string
-		input       testclient.UpdateTrustCenterWatermarkConfigInput
-		logoFile    *graphql.Upload
-		client      *testclient.TestClient
-		ctx         context.Context
-		expectedErr string
+		name            string
+		input           testclient.UpdateTrustCenterWatermarkConfigInput
+		watermarkFile   *graphql.Upload
+		client          *testclient.TestClient
+		ctx             context.Context
+		expectedErr     string
 	}{
 		{
 			name: "happy path, update text",
@@ -271,9 +271,9 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 			input: testclient.UpdateTrustCenterWatermarkConfigInput{
 				Text: lo.ToPtr("Updated Text"),
 			},
-			logoFile: createPNGUpload(),
-			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
+			watermarkFile: createPNGUpload(),
+			client:        suite.client.api,
+			ctx:           testUser1.UserCtx,
 		},
 		{
 			name: "happy path, update all fields",
@@ -301,14 +301,14 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			if tc.logoFile != nil {
+			if tc.watermarkFile != nil {
 				if tc.expectedErr == "" {
-					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
+					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.watermarkFile})
 				} else {
 					expectUploadCheckOnly(t, suite.client.mockProvider)
 				}
 			}
-			resp, err := tc.client.UpdateTrustCenterWatermarkConfig(tc.ctx, watermarkConfig.ID, tc.input, tc.logoFile)
+			resp, err := tc.client.UpdateTrustCenterWatermarkConfig(tc.ctx, watermarkConfig.ID, tc.input, tc.watermarkFile)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 

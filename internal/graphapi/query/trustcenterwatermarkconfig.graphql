@@ -1,5 +1,5 @@
-mutation CreateTrustCenterWatermarkConfig($input: CreateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
-  createTrustCenterWatermarkConfig(input: $input, logoFile: $logoFile) {
+mutation CreateTrustCenterWatermarkConfig($input: CreateTrustCenterWatermarkConfigInput!, $watermarkFile: Upload) {
+  createTrustCenterWatermarkConfig(input: $input, watermarkFile: $watermarkFile) {
     trustCenterWatermarkConfig {
       createdAt
       createdBy
@@ -60,6 +60,7 @@ query GetAllTrustCenterWatermarkConfigs {
     }
   }
 }
+
 query GetTrustCenterWatermarkConfigByID($trustCenterWatermarkConfigId: ID!) {
   trustCenterWatermarkConfig(id: $trustCenterWatermarkConfigId) {
     createdAt
@@ -114,8 +115,13 @@ query GetTrustCenterWatermarkConfigs($first: Int, $last: Int, $where: TrustCente
     }
   }
 }
-mutation UpdateTrustCenterWatermarkConfig($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
-  updateTrustCenterWatermarkConfig(id: $updateTrustCenterWatermarkConfigId, input: $input, logoFile: $logoFile) {
+
+mutation UpdateTrustCenterWatermarkConfig($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $watermarkFile: Upload) {
+  updateTrustCenterWatermarkConfig(
+    id: $updateTrustCenterWatermarkConfigId
+    input: $input
+    watermarkFile: $watermarkFile
+  ) {
     trustCenterWatermarkConfig {
       createdAt
       createdBy

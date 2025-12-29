@@ -69,13 +69,18 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 				return nil, ErrMissingTrustCenterID
 			}
 
-			if m.Job == nil {
-				logx.FromContext(ctx).Warn().Msg("job client is nil, skipping preview domain creation job")
+			trustCenter, err := m.Client().TrustCenter.Get(ctx, trustCenterID)
+			if err != nil {
+				return nil, err
+			}
+
+			if trustCenter.PreviewDomainID != "" {
+				logx.FromContext(ctx).Debug().Str("trust_center_id", trustCenterID).Msg("preview domain already exists, skipping creation job")
 				return v, nil
 			}
 
 			// Insert job to create preview domain with config values
-			if _, err = m.Job.Insert(ctx, jobspec.CreatePreviewDomainArgs{
+			if err = enqueueJob(ctx, m.Job, jobspec.CreatePreviewDomainArgs{
 				TrustCenterID:            trustCenterID,
 				TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
 				TrustCenterCnameTarget:   trustCenterConfig.CnameTarget,
@@ -95,46 +100,24 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	logoKey := "logoFile"
 	faviconKey := "faviconFile"
 
-	logoFiles, _ := objects.FilesFromContextWithKey(ctx, logoKey)
-	if len(logoFiles) > 1 {
-		return ctx, ErrTooManyLogoFiles
+	var err error
+
+	ctx, err = processSingleMutationFile(ctx, m, logoKey, "trust_center_setting", ErrTooManyLogoFiles,
+		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetLogoLocalFileID(id) },
+		func(mut *generated.TrustCenterSettingMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
+	)
+	if err != nil {
+		return ctx, err
 	}
 
-	if len(logoFiles) == 1 {
-		m.SetLogoLocalFileID(logoFiles[0].ID)
-
-		adapter := objects.NewGenericMutationAdapter(m,
-			func(mut *generated.TrustCenterSettingMutation) (string, bool) { return mut.ID() },
-			func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
-		)
-
-		var err error
-
-		ctx, err = objects.ProcessFilesForMutation(ctx, adapter, logoKey, "trust_center_setting")
-		if err != nil {
-			return ctx, err
-		}
-	}
-
-	faviconFiles, _ := objects.FilesFromContextWithKey(ctx, faviconKey)
-	if len(faviconFiles) > 1 {
-		return ctx, ErrTooManyFaviconFiles
-	}
-
-	if len(faviconFiles) == 1 {
-		m.SetFaviconLocalFileID(faviconFiles[0].ID)
-
-		adapter := objects.NewGenericMutationAdapter(m,
-			func(mut *generated.TrustCenterSettingMutation) (string, bool) { return mut.ID() },
-			func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
-		)
-
-		var err error
-
-		ctx, err = objects.ProcessFilesForMutation(ctx, adapter, faviconKey, "trust_center_setting")
-		if err != nil {
-			return ctx, err
-		}
+	ctx, err = processSingleMutationFile(ctx, m, faviconKey, "trust_center_setting", ErrTooManyFaviconFiles,
+		func(mut *generated.TrustCenterSettingMutation, id string) { mut.SetFaviconLocalFileID(id) },
+		func(mut *generated.TrustCenterSettingMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.TrustCenterSettingMutation) string { return mut.Type() },
+	)
+	if err != nil {
+		return ctx, err
 	}
 
 	return ctx, nil

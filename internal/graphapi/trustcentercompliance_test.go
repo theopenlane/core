@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -294,6 +295,52 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(newUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOther.ID}).MustDelete(newUser2.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(newUser.UserCtx, t)
+}
+
+func TestUpdateTrustCenterComplianceUpdatesFgaTuples(t *testing.T) {
+	cleanupTrustCenterData(t)
+
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	resp, err := suite.client.api.CreateTrustCenterCompliance(testUser1.UserCtx, testclient.CreateTrustCenterComplianceInput{
+		TrustCenterID: &trustCenter.ID,
+		StandardID:    standard1.ID,
+	})
+	assert.NilError(t, err)
+	complianceID := resp.CreateTrustCenterCompliance.TrustCenterCompliance.ID
+
+	checkTuple := func(standardID string, shouldExist bool) {
+		ac := fgax.AccessCheck{
+			SubjectID:   trustCenter.ID,
+			SubjectType: "trust_center",
+			ObjectID:    standardID,
+			ObjectType:  "standard",
+			Relation:    "associated_with",
+		}
+		exists, err := suite.client.db.Authz.CheckAccess(testUser1.UserCtx, ac)
+		assert.NilError(t, err)
+		if shouldExist {
+			assert.Assert(t, exists)
+		} else {
+			assert.Assert(t, !exists)
+		}
+	}
+
+	checkTuple(standard1.ID, true)
+
+	_, err = suite.client.api.UpdateTrustCenterCompliance(testUser1.UserCtx, complianceID, testclient.UpdateTrustCenterComplianceInput{
+		StandardID: &standard2.ID,
+	})
+	assert.NilError(t, err)
+
+	checkTuple(standard1.ID, false)
+	checkTuple(standard2.ID, true)
+
+	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestQueryTrustCenterCompliances(t *testing.T) {

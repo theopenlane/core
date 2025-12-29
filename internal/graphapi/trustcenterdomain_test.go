@@ -29,6 +29,17 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(testUser.UserCtx, t)
 	})
 
+	t.Run("normalizes cname record input", func(t *testing.T) {
+		inputDomain := "https://Trust.Example.com/path"
+		resp, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
+			CnameRecord: inputDomain,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal("trust.example.com", resp.CreateTrustCenterDomain.CustomDomain.CnameRecord))
+		(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: resp.CreateTrustCenterDomain.CustomDomain.ID}).MustDelete(testUser.UserCtx, t)
+	})
+
 	t.Run("trust center not found", func(t *testing.T) {
 		_, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
 			CnameRecord:   gofakeit.DomainName(),

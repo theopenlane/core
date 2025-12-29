@@ -13,12 +13,19 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateCustomDomain is the resolver for the createCustomDomain field.
 func (r *mutationResolver) CreateCustomDomain(ctx context.Context, input generated.CreateCustomDomainInput) (*model.CustomDomainCreatePayload, error) {
+	normalizedCname, err := domain.NormalizeHostname(input.CnameRecord)
+	if err != nil {
+		return nil, rout.InvalidField("cname_record")
+	}
+	input.CnameRecord = normalizedCname
+
 	// set the organization in the auth context if its not done for us
 	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
@@ -40,6 +47,15 @@ func (r *mutationResolver) CreateCustomDomain(ctx context.Context, input generat
 func (r *mutationResolver) CreateBulkCustomDomain(ctx context.Context, input []*generated.CreateCustomDomainInput) (*model.CustomDomainBulkCreatePayload, error) {
 	if len(input) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	for _, data := range input {
+		normalizedCname, err := domain.NormalizeHostname(data.CnameRecord)
+		if err != nil {
+			return nil, rout.InvalidField("cname_record")
+		}
+
+		data.CnameRecord = normalizedCname
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -64,6 +80,15 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 
 	if len(data) == 0 {
 		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	for _, item := range data {
+		normalizedCname, err := domain.NormalizeHostname(item.CnameRecord)
+		if err != nil {
+			return nil, rout.InvalidField("cname_record")
+		}
+
+		item.CnameRecord = normalizedCname
 	}
 
 	// set the organization in the auth context if its not done for us
