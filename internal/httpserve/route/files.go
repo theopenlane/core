@@ -1,6 +1,7 @@
 package route
 
 import (
+	"fmt"
 	"mime"
 	"net/http"
 	"os"
@@ -17,7 +18,7 @@ import (
 // it is *ONLY* registered when the disk mode object storage is used
 func registerUploadsHandler(router *Router) (err error) {
 	config := Config{
-		Path:        "/files/:name",
+		Path:        "/files/:orgid/:id/:name",
 		Method:      http.MethodGet,
 		Name:        "Files",
 		Description: "Serve uploaded files from local storage (development only)",
@@ -28,8 +29,13 @@ func registerUploadsHandler(router *Router) (err error) {
 		SimpleHandler: func(ctx echo.Context) error {
 			fileSystem := os.DirFS(router.LocalFilePath)
 
-			p := ctx.PathParam("name")
-			name := filepath.ToSlash(filepath.Clean(strings.TrimPrefix(p, "/")))
+			// Build the file path from the URL parameters
+			orgID := ctx.PathParam("orgid")
+			objectID := ctx.PathParam("id")
+			fileName := ctx.PathParam("name")
+
+			// Clean and construct the full file path
+			name := filepath.ToSlash(filepath.Clean(strings.TrimPrefix(fmt.Sprintf("%s/%s/%s", orgID, objectID, fileName), "/")))
 
 			// Detect and set the correct content type based on file extension
 			ext := filepath.Ext(name)
