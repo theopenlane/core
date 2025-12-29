@@ -204,6 +204,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 GITHUB_TOKEN: GITHUB_TOKEN
+                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
                 SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -215,6 +216,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
               environment:
                 - "GITHUB_TOKEN"
+                - "GITHUB_SSH_PRIVATE_KEY"
                 - "HELM_CHART_REPO"
                 - "HELM_CHART_PATH"
                 - "SLACK_WEBHOOK_URL"
