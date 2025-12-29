@@ -17,7 +17,7 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/echox v0.2.4
-	github.com/theopenlane/entx v0.20.2
+	github.com/theopenlane/entx v0.20.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.6.2
 	github.com/zitadel/oidc/v3 v3.45.1
@@ -35,7 +35,6 @@ require (
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
-	github.com/brianvoe/gofakeit/v7 v7.14.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
