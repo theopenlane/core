@@ -1,4 +1,4 @@
-h1:DiP4AQ7omoARLtvZAKDE98ekGyvFp9aexgnXNbTl/5c=
+h1:htWlRlOKi6liFhecWvzTyWQpywo5he2O5/CHMU0qMNg=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -103,3 +103,5 @@ h1:DiP4AQ7omoARLtvZAKDE98ekGyvFp9aexgnXNbTl/5c=
 20251218191513_plate_json_history.sql h1:2LpqqO8OG3Jy6xkSoMtvUCcEUsl08oF6wP/+2F767V0=
 20251228005134_workflowproposalschema.sql h1:UKUkaHstKExbnbn9klQohPejPNTv2HR90eO239SwelU=
 20251228005137_workflowproposalschema_history.sql h1:GihJaZ7qqVYqrh4AdcRdzM67Pu6I4ETYY/YR8zsJPrg=
+20251229081144_discussions.sql h1:UlBP5HMA8R/DLRCTjdXDiymIIrclFSSn6KN/tKJlEqU=
+20251229081148_discussions_history.sql h1:iPyTN6qW/eTHW9fC5DZuXuFikqnUbCydT7WrxXktHL4=

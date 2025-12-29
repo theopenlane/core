@@ -1525,10 +1525,13 @@ func init() {
 	discussion.Hooks[2] = discussionMixinHooks1[0]
 
 	discussion.Hooks[3] = discussionMixinHooks4[0]
+
+	discussion.Hooks[4] = discussionMixinHooks4[1]
 	discussionMixinInters1 := discussionMixin[1].Interceptors()
 	discussionMixinInters4 := discussionMixin[4].Interceptors()
 	discussion.Interceptors[0] = discussionMixinInters1[0]
 	discussion.Interceptors[1] = discussionMixinInters4[0]
+	discussion.Interceptors[2] = discussionMixinInters4[1]
 	discussionMixinFields0 := discussionMixin[0].Fields()
 	_ = discussionMixinFields0
 	discussionMixinFields2 := discussionMixin[2].Fields()
