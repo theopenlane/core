@@ -17,7 +17,7 @@ extend input UpdateTaskInput {
 
 extend input UpdateControlInput {
     addDiscussion: CreateDiscussionInput
-    updateDiscussions: [UpdateDiscussionsInput!]
+    updateDiscussion: UpdateDiscussionsInput
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -25,7 +25,7 @@ extend input UpdateControlInput {
 
 extend input UpdateSubcontrolInput {
     addDiscussion: CreateDiscussionInput
-    updateDiscussions: [UpdateDiscussionsInput!]
+    updateDiscussion: UpdateDiscussionsInput
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -33,7 +33,7 @@ extend input UpdateSubcontrolInput {
 
 extend input UpdateRiskInput {
     addDiscussion: CreateDiscussionInput
-    updateDiscussions: [UpdateDiscussionsInput!]
+    updateDiscussion: UpdateDiscussionsInput
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -41,7 +41,7 @@ extend input UpdateRiskInput {
 
 extend input UpdateInternalPolicyInput {
     addDiscussion: CreateDiscussionInput
-    updateDiscussions: [UpdateDiscussionsInput!]
+    updateDiscussion: UpdateDiscussionsInput
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
@@ -49,7 +49,7 @@ extend input UpdateInternalPolicyInput {
 
 extend input UpdateProcedureInput {
     addDiscussion: CreateDiscussionInput
-    updateDiscussions: [UpdateDiscussionsInput!]
+    updateDiscussion: UpdateDiscussionsInput
     deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID

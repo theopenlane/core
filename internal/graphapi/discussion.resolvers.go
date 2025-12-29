@@ -171,17 +171,32 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	data.DiscussionID = graphutils.GetStringInputVariableByName(ctx, "id")
-	if data.DiscussionID == nil {
-		return common.NewNotFoundError("discussion")
+	// get the discussion id from the input, this can be used when its a sub-input
+	// like updateXObject -> updateDiscussion -> addComment
+	dataInput := graphutils.GetMapInputVariableByName(ctx, "input")
+	if dataInput != nil {
+		d := *dataInput
+		input, ok := d["updateDiscussion"].(map[string]any)
+		if ok {
+			idVal, ok := input["id"].(string)
+			if ok && idVal != "" {
+				data.DiscussionID = &idVal
+			}
+
+		}
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	// otherwise fall back to the main id argument
+	if data.DiscussionID == nil {
+		data.DiscussionID = graphutils.GetStringInputVariableByName(ctx, "id")
+		if data.DiscussionID == nil {
+			return common.NewNotFoundError("discussion")
+		}
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }

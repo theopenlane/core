@@ -159,27 +159,12 @@ func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._NoteDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNUpdateDiscussionsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUpdateDiscussionsInput(ctx context.Context, v any) (*model.UpdateDiscussionsInput, error) {
-	res, err := ec.unmarshalInputUpdateDiscussionsInput(ctx, v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) unmarshalOUpdateDiscussionsInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUpdateDiscussionsInputᚄ(ctx context.Context, v any) ([]*model.UpdateDiscussionsInput, error) {
+func (ec *executionContext) unmarshalOUpdateDiscussionsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUpdateDiscussionsInput(ctx context.Context, v any) (*model.UpdateDiscussionsInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
-	var err error
-	res := make([]*model.UpdateDiscussionsInput, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNUpdateDiscussionsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUpdateDiscussionsInput(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
+	res, err := ec.unmarshalInputUpdateDiscussionsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 // endregion ***************************** type.gotpl *****************************

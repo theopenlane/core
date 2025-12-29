@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -359,6 +360,11 @@ func (_c *NoteCreate) SetTrustCenter(v *TrustCenter) *NoteCreate {
 	return _c.SetTrustCenterID(v.ID)
 }
 
+// SetDiscussion sets the "discussion" edge to the Discussion entity.
+func (_c *NoteCreate) SetDiscussion(v *Discussion) *NoteCreate {
+	return _c.SetDiscussionID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_c *NoteCreate) AddFileIDs(ids ...string) *NoteCreate {
 	_c.mutation.AddFileIDs(ids...)
@@ -541,10 +547,6 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		_spec.SetField(note.FieldNoteRef, field.TypeString, value)
 		_node.NoteRef = value
 	}
-	if value, ok := _c.mutation.DiscussionID(); ok {
-		_spec.SetField(note.FieldDiscussionID, field.TypeString, value)
-		_node.DiscussionID = value
-	}
 	if value, ok := _c.mutation.IsEdited(); ok {
 		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
 		_node.IsEdited = value
@@ -709,6 +711,24 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.trust_center_posts = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DiscussionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.DiscussionTable,
+			Columns: []string{note.DiscussionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DiscussionID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {

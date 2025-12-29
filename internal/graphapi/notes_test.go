@@ -7,11 +7,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
-func TestMutationUpdateNote(t *testing.T) {
+func TestMutationUpdateNoteForTask(t *testing.T) {
 	task := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -91,8 +92,185 @@ func TestMutationUpdateNote(t *testing.T) {
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
-func TestMutationDeleteNote(t *testing.T) {
+func TestMutationAddNoteForControl(t *testing.T) {
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	testCases := []struct {
+		name        string
+		request     testclient.UpdateControlInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "happy path, add discussion",
+			request: testclient.UpdateControlInput{
+				AddDiscussion: &testclient.CreateDiscussionInput{
+					ExternalID: lo.ToPtr("DISC-12345"),
+					IsResolved: lo.ToPtr(false),
+					AddComment: &testclient.CreateNoteInput{
+						Text: "This is a test note as part of a discussion",
+					},
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, minimal input",
+			request: testclient.UpdateControlInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is a test note",
+				},
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path with PAT",
+			request: testclient.UpdateControlInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text:    "This is a test note using PAT",
+					OwnerID: &testUser1.OrganizationID,
+				},
+			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "missing required field - text",
+			request: testclient.UpdateControlInput{
+				AddComment: &testclient.CreateNoteInput{},
+			},
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "value is less than the required length",
+		},
+		{
+			name: "control not found",
+			request: testclient.UpdateControlInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text:    "This is a test note",
+					OwnerID: &testUser1.OrganizationID,
+				},
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx, // wrong user
+			expectedErr: notAuthorizedErrorMsg,
+		},
+	}
+
+	for idx, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateControl(tc.ctx, control.ID, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.UpdateControl.Control.Comments.Edges != nil)
+			// we want to make sure we have at least idx+1 comments, this means you need to keep the test order
+			// intact so all failures are after all successes
+			assert.Assert(t, len(resp.UpdateControl.Control.Comments.Edges) > idx)
+
+			if tc.request.AddComment != nil {
+				assert.Check(t, is.Equal(tc.request.AddComment.Text, resp.UpdateControl.Control.Comments.Edges[idx].Node.Text))
+			}
+
+			if tc.request.AddDiscussion != nil {
+				assert.Assert(t, resp.UpdateControl.Control.Discussions.Edges != nil)
+				assert.Assert(t, len(resp.UpdateControl.Control.Discussions.Edges) != 0)
+				assert.Assert(t, len(resp.UpdateControl.Control.Discussions.Edges[0].Node.Comments.Edges) != 0)
+				assert.Check(t, is.Equal(tc.request.AddDiscussion.AddComment.Text, resp.UpdateControl.Control.Discussions.Edges[0].Node.Comments.Edges[0].Node.Text))
+			}
+
+			noteID := resp.UpdateControl.Control.Comments.Edges[idx].Node.ID
+
+			_, err = tc.client.GetNoteByID(tc.ctx, noteID)
+			assert.NilError(t, err)
+		})
+	}
+
+	// clean up
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationUpdateDiscussionForControl(t *testing.T) {
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// add initial discussion to update
+	resp, err := suite.client.api.UpdateControl(testUser1.UserCtx, control.ID, testclient.UpdateControlInput{
+		AddDiscussion: &testclient.CreateDiscussionInput{
+			ExternalID: lo.ToPtr("DISC-22401"),
+			IsResolved: lo.ToPtr(false),
+			AddComment: &testclient.CreateNoteInput{
+				Text: "This is a test note as part of a discussion",
+			},
+		},
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.UpdateControl.Control.Comments.Edges != nil)
+	assert.Assert(t, len(resp.UpdateControl.Control.Comments.Edges) == 1)
+
+	assert.Assert(t, resp.UpdateControl.Control.Discussions.Edges != nil)
+	assert.Assert(t, len(resp.UpdateControl.Control.Discussions.Edges) != 0)
+	assert.Assert(t, len(resp.UpdateControl.Control.Discussions.Edges[0].Node.Comments.Edges) != 0)
+	assert.Check(t, is.Equal("This is a test note as part of a discussion", resp.UpdateControl.Control.Discussions.Edges[0].Node.Comments.Edges[0].Node.Text))
+
+	discussionID := resp.UpdateControl.Control.Discussions.Edges[0].Node.ID
+
+	// now update the discussion by adding another comment
+	updateResp, err := suite.client.api.UpdateControl(testUser1.UserCtx, control.ID, testclient.UpdateControlInput{
+		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
+			ID: discussionID,
+			Input: &testclient.UpdateDiscussionInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is an additional comment in the discussion",
+				},
+			},
+		},
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateResp != nil)
+	assert.Assert(t, updateResp.UpdateControl.Control.Discussions.Edges != nil)
+	assert.Assert(t, len(updateResp.UpdateControl.Control.Discussions.Edges) != 0)
+
+	updatedDiscussion := updateResp.UpdateControl.Control.Discussions.Edges[0].Node
+	assert.Assert(t, len(updatedDiscussion.Comments.Edges) == 2)
+	assert.Check(t, is.Equal("This is an additional comment in the discussion", updatedDiscussion.Comments.Edges[1].Node.Text))
+
+	// now lets try to remove a comment from the discussion
+	noteToRemoveID := updatedDiscussion.Comments.Edges[0].Node.ID
+
+	updateResp2, err := suite.client.api.UpdateControl(testUser1.UserCtx, control.ID, testclient.UpdateControlInput{
+		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
+			ID: discussionID,
+			Input: &testclient.UpdateDiscussionInput{
+				RemoveCommentIDs: []string{noteToRemoveID},
+			},
+		},
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateResp2 != nil)
+	assert.Assert(t, updateResp2.UpdateControl.Control.Discussions.Edges != nil)
+	assert.Assert(t, len(updateResp2.UpdateControl.Control.Discussions.Edges) != 0)
+
+	updatedDiscussion2 := updateResp2.UpdateControl.Control.Discussions.Edges[0].Node
+	assert.Assert(t, len(updatedDiscussion2.Comments.Edges) == 1)
+	assert.Check(t, is.Equal("This is an additional comment in the discussion", updatedDiscussion2.Comments.Edges[0].Node.Text))
+
+	// clean up
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationDeleteNoteForTask(t *testing.T) {
 	userTask := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	createResp, err := suite.client.api.UpdateTask(testUser1.UserCtx, userTask.ID, testclient.UpdateTaskInput{
@@ -109,6 +287,9 @@ func TestMutationDeleteNote(t *testing.T) {
 
 	_, err = suite.client.api.DeleteNote(testUser1.UserCtx, noteID)
 	assert.NilError(t, err)
+
+	// cleanup task
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: userTask.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTaskNotes(t *testing.T) {

@@ -761,6 +761,9 @@ func (_q *DiscussionQuery) loadComments(ctx context.Context, query *NoteQuery, n
 		}
 	}
 	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(note.FieldDiscussionID)
+	}
 	query.Where(predicate.Note(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(discussion.CommentsColumn), fks...))
 	}))
@@ -769,13 +772,10 @@ func (_q *DiscussionQuery) loadComments(ctx context.Context, query *NoteQuery, n
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.discussion_comments
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "discussion_comments" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.DiscussionID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "discussion_comments" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "discussion_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

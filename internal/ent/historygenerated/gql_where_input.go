@@ -14589,6 +14589,8 @@ type DiscussionHistoryWhereInput struct {
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
 	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        bool     `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       bool     `json:"externalIDNotNil,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
 
@@ -15006,6 +15008,12 @@ func (i *DiscussionHistoryWhereInput) P() (predicate.DiscussionHistory, error) {
 	}
 	if i.ExternalIDHasSuffix != nil {
 		predicates = append(predicates, discussionhistory.ExternalIDHasSuffix(*i.ExternalIDHasSuffix))
+	}
+	if i.ExternalIDIsNil {
+		predicates = append(predicates, discussionhistory.ExternalIDIsNil())
+	}
+	if i.ExternalIDNotNil {
+		predicates = append(predicates, discussionhistory.ExternalIDNotNil())
 	}
 	if i.ExternalIDEqualFold != nil {
 		predicates = append(predicates, discussionhistory.ExternalIDEqualFold(*i.ExternalIDEqualFold))

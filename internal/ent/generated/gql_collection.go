@@ -11237,7 +11237,7 @@ func (_q *DiscussionQuery) collectField(ctx context.Context, oneNode bool, opCtx
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"discussion_comments"`
+							NodeID string `sql:"discussion_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {
@@ -29505,6 +29505,21 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			}
 			_q.withTrustCenter = query
 
+		case "discussion":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DiscussionClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, discussionImplementors)...); err != nil {
+				return err
+			}
+			_q.withDiscussion = query
+			if _, ok := fieldSeen[note.FieldDiscussionID]; !ok {
+				selectedFields = append(selectedFields, note.FieldDiscussionID)
+				fieldSeen[note.FieldDiscussionID] = struct{}{}
+			}
+
 		case "files":
 			var (
 				alias = field.Alias
@@ -29548,10 +29563,10 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[9] == nil {
-								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[9][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -29559,10 +29574,10 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Note) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[9] == nil {
-								nodes[i].Edges.totalCount[9] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[9][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})

@@ -5608,6 +5608,14 @@ func (_m *Note) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Discussion(ctx context.Context) (*Discussion, error) {
+	result, err := _m.Edges.DiscussionOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDiscussion().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) Files(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
 ) (*FileConnection, error) {
@@ -5616,7 +5624,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {

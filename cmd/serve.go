@@ -174,7 +174,14 @@ func serve(ctx context.Context) error {
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
-	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, entOpts...)
+	clientOpts := []entdb.Option{}
+	clientOpts = append(clientOpts,
+		entdb.WithEventer(),
+		entdb.WithModules(),
+		entdb.WithMetricsHook(),
+	)
+
+	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, clientOpts, entOpts...)
 	if err != nil {
 		return err
 	}

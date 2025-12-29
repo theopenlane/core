@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 
@@ -63,15 +64,6 @@ func (Note) Fields() []ent.Field {
 	}
 }
 
-// id
-// comment_ref (string)
-// discussion_id (number)
-// user_id (string)
-// content (json)
-// is_edited (boolean) default false
-// created_at (DateTime)
-// updated_at (DateTime)
-
 // Mixin of the Note
 func (n Note) Mixin() []ent.Mixin {
 	return mixinConfig{
@@ -80,7 +72,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}),
 				withOrganizationOwner(false),
 				withOwnerRelation(fgax.OwnerRelation),
 			),
@@ -130,6 +122,16 @@ func (n Note) Edges() []ent.Edge {
 			fromSchema: n,
 			edgeSchema: TrustCenter{},
 			ref:        "posts",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Discussion{},
+			ref:        "comments",
+			field:      "discussion_id",
+			annotations: []schema.Annotation{
+				// you should only need to be able to view a discussion to add a comment to it
+				accessmap.EdgeViewCheck(Discussion{}.Name()),
+			},
 		}),
 		defaultEdgeToWithPagination(n, File{}),
 	}

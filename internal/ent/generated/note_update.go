@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -351,6 +352,11 @@ func (_u *NoteUpdate) SetTrustCenter(v *TrustCenter) *NoteUpdate {
 	return _u.SetTrustCenterID(v.ID)
 }
 
+// SetDiscussion sets the "discussion" edge to the Discussion entity.
+func (_u *NoteUpdate) SetDiscussion(v *Discussion) *NoteUpdate {
+	return _u.SetDiscussionID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -416,6 +422,12 @@ func (_u *NoteUpdate) ClearEvidence() *NoteUpdate {
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (_u *NoteUpdate) ClearTrustCenter() *NoteUpdate {
 	_u.mutation.ClearTrustCenter()
+	return _u
+}
+
+// ClearDiscussion clears the "discussion" edge to the Discussion entity.
+func (_u *NoteUpdate) ClearDiscussion() *NoteUpdate {
+	_u.mutation.ClearDiscussion()
 	return _u
 }
 
@@ -559,12 +571,6 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.NoteRefCleared() {
 		_spec.ClearField(note.FieldNoteRef, field.TypeString)
-	}
-	if value, ok := _u.mutation.DiscussionID(); ok {
-		_spec.SetField(note.FieldDiscussionID, field.TypeString, value)
-	}
-	if _u.mutation.DiscussionIDCleared() {
-		_spec.ClearField(note.FieldDiscussionID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IsEdited(); ok {
 		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
@@ -809,6 +815,37 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.DiscussionTable,
+			Columns: []string{note.DiscussionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.DiscussionTable,
+			Columns: []string{note.DiscussionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
@@ -1199,6 +1236,11 @@ func (_u *NoteUpdateOne) SetTrustCenter(v *TrustCenter) *NoteUpdateOne {
 	return _u.SetTrustCenterID(v.ID)
 }
 
+// SetDiscussion sets the "discussion" edge to the Discussion entity.
+func (_u *NoteUpdateOne) SetDiscussion(v *Discussion) *NoteUpdateOne {
+	return _u.SetDiscussionID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -1264,6 +1306,12 @@ func (_u *NoteUpdateOne) ClearEvidence() *NoteUpdateOne {
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
 func (_u *NoteUpdateOne) ClearTrustCenter() *NoteUpdateOne {
 	_u.mutation.ClearTrustCenter()
+	return _u
+}
+
+// ClearDiscussion clears the "discussion" edge to the Discussion entity.
+func (_u *NoteUpdateOne) ClearDiscussion() *NoteUpdateOne {
+	_u.mutation.ClearDiscussion()
 	return _u
 }
 
@@ -1437,12 +1485,6 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 	}
 	if _u.mutation.NoteRefCleared() {
 		_spec.ClearField(note.FieldNoteRef, field.TypeString)
-	}
-	if value, ok := _u.mutation.DiscussionID(); ok {
-		_spec.SetField(note.FieldDiscussionID, field.TypeString, value)
-	}
-	if _u.mutation.DiscussionIDCleared() {
-		_spec.ClearField(note.FieldDiscussionID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IsEdited(); ok {
 		_spec.SetField(note.FieldIsEdited, field.TypeBool, value)
@@ -1687,6 +1729,37 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.DiscussionTable,
+			Columns: []string{note.DiscussionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.DiscussionTable,
+			Columns: []string{note.DiscussionColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note

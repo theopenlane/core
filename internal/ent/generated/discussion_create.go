@@ -131,6 +131,14 @@ func (_c *DiscussionCreate) SetExternalID(v string) *DiscussionCreate {
 	return _c
 }
 
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *DiscussionCreate) SetNillableExternalID(v *string) *DiscussionCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetIsResolved sets the "is_resolved" field.
 func (_c *DiscussionCreate) SetIsResolved(v bool) *DiscussionCreate {
 	_c.mutation.SetIsResolved(v)
@@ -345,9 +353,6 @@ func (_c *DiscussionCreate) check() error {
 		if err := discussion.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Discussion.owner_id": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.ExternalID(); !ok {
-		return &ValidationError{Name: "external_id", err: errors.New(`generated: missing required field "Discussion.external_id"`)}
 	}
 	if _, ok := _c.mutation.IsResolved(); !ok {
 		return &ValidationError{Name: "is_resolved", err: errors.New(`generated: missing required field "Discussion.is_resolved"`)}

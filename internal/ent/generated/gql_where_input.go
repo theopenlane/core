@@ -18224,6 +18224,8 @@ type DiscussionWhereInput struct {
 	ExternalIDContains     *string  `json:"externalIDContains,omitempty"`
 	ExternalIDHasPrefix    *string  `json:"externalIDHasPrefix,omitempty"`
 	ExternalIDHasSuffix    *string  `json:"externalIDHasSuffix,omitempty"`
+	ExternalIDIsNil        bool     `json:"externalIDIsNil,omitempty"`
+	ExternalIDNotNil       bool     `json:"externalIDNotNil,omitempty"`
 	ExternalIDEqualFold    *string  `json:"externalIDEqualFold,omitempty"`
 	ExternalIDContainsFold *string  `json:"externalIDContainsFold,omitempty"`
 
@@ -18588,6 +18590,12 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if i.ExternalIDHasSuffix != nil {
 		predicates = append(predicates, discussion.ExternalIDHasSuffix(*i.ExternalIDHasSuffix))
+	}
+	if i.ExternalIDIsNil {
+		predicates = append(predicates, discussion.ExternalIDIsNil())
+	}
+	if i.ExternalIDNotNil {
+		predicates = append(predicates, discussion.ExternalIDNotNil())
 	}
 	if i.ExternalIDEqualFold != nil {
 		predicates = append(predicates, discussion.ExternalIDEqualFold(*i.ExternalIDEqualFold))
@@ -41906,6 +41914,10 @@ type NoteWhereInput struct {
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
 
+	// "discussion" edge predicates.
+	HasDiscussion     *bool                   `json:"hasDiscussion,omitempty"`
+	HasDiscussionWith []*DiscussionWhereInput `json:"hasDiscussionWith,omitempty"`
+
 	// "files" edge predicates.
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -42543,6 +42555,24 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, note.HasTrustCenterWith(with...))
+	}
+	if i.HasDiscussion != nil {
+		p := note.HasDiscussion()
+		if !*i.HasDiscussion {
+			p = note.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasDiscussionWith) > 0 {
+		with := make([]predicate.Discussion, 0, len(i.HasDiscussionWith))
+		for _, w := range i.HasDiscussionWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasDiscussionWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, note.HasDiscussionWith(with...))
 	}
 	if i.HasFiles != nil {
 		p := note.HasFiles()

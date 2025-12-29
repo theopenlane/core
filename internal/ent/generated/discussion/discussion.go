@@ -62,7 +62,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "note" package.
 	CommentsInverseTable = "notes"
 	// CommentsColumn is the table column denoting the comments relation/edge.
-	CommentsColumn = "discussion_comments"
+	CommentsColumn = "discussion_id"
 	// ControlTable is the table that holds the control relation/edge.
 	ControlTable = "discussions"
 	// ControlInverseTable is the table name for the Control entity.
@@ -145,8 +145,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
-	Interceptors [2]ent.Interceptor
+	Hooks        [5]ent.Hook
+	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time

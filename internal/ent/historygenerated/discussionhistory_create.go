@@ -161,6 +161,14 @@ func (_c *DiscussionHistoryCreate) SetExternalID(v string) *DiscussionHistoryCre
 	return _c
 }
 
+// SetNillableExternalID sets the "external_id" field if the given value is not nil.
+func (_c *DiscussionHistoryCreate) SetNillableExternalID(v *string) *DiscussionHistoryCreate {
+	if v != nil {
+		_c.SetExternalID(*v)
+	}
+	return _c
+}
+
 // SetIsResolved sets the "is_resolved" field.
 func (_c *DiscussionHistoryCreate) SetIsResolved(v bool) *DiscussionHistoryCreate {
 	_c.mutation.SetIsResolved(v)
@@ -273,9 +281,6 @@ func (_c *DiscussionHistoryCreate) check() error {
 		if err := discussionhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "DiscussionHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.ExternalID(); !ok {
-		return &ValidationError{Name: "external_id", err: errors.New(`historygenerated: missing required field "DiscussionHistory.external_id"`)}
 	}
 	if _, ok := _c.mutation.IsResolved(); !ok {
 		return &ValidationError{Name: "is_resolved", err: errors.New(`historygenerated: missing required field "DiscussionHistory.is_resolved"`)}

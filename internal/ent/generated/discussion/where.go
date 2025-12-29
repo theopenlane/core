@@ -617,6 +617,16 @@ func ExternalIDHasSuffix(v string) predicate.Discussion {
 	return predicate.Discussion(sql.FieldHasSuffix(FieldExternalID, v))
 }
 
+// ExternalIDIsNil applies the IsNil predicate on the "external_id" field.
+func ExternalIDIsNil() predicate.Discussion {
+	return predicate.Discussion(sql.FieldIsNull(FieldExternalID))
+}
+
+// ExternalIDNotNil applies the NotNil predicate on the "external_id" field.
+func ExternalIDNotNil() predicate.Discussion {
+	return predicate.Discussion(sql.FieldNotNull(FieldExternalID))
+}
+
 // ExternalIDEqualFold applies the EqualFold predicate on the "external_id" field.
 func ExternalIDEqualFold(v string) predicate.Discussion {
 	return predicate.Discussion(sql.FieldEqualFold(FieldExternalID, v))

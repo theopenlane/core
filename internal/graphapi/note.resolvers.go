@@ -278,30 +278,34 @@ func (r *updateControlInputResolver) AddDiscussion(ctx context.Context, obj *gen
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
+
 	return nil
 }
 
-// UpdateDiscussions is the resolver for the updateDiscussions field.
-func (r *updateControlInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateControlInput, data []*model.UpdateDiscussionsInput) error {
-	for _, discussionInput := range data {
-		if discussionInput.Input == nil || discussionInput.ID == "" {
-			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+// UpdateDiscussion is the resolver for the updateDiscussion field.
+func (r *updateControlInputResolver) UpdateDiscussion(ctx context.Context, obj *generated.UpdateControlInput, data *model.UpdateDiscussionsInput) error {
+	if data.Input == nil || data.ID == "" {
+		logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
 
-			continue
-		}
-		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
-
-		// setup update request
-		req := res.Update().SetInput(*discussionInput.Input)
-
-		res, err = req.Save(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
+		return nil
 	}
+
+	res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, data.ID)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(*data.Input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.Input.AddCommentIDs...)
+	obj.RemoveCommentIDs = append(obj.RemoveCommentIDs, data.Input.RemoveCommentIDs...)
 
 	return nil
 }
@@ -337,12 +341,9 @@ func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *genera
 		return common.NewNotFoundError("control")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -420,30 +421,34 @@ func (r *updateInternalPolicyInputResolver) AddDiscussion(ctx context.Context, o
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
+
 	return nil
 }
 
-// UpdateDiscussions is the resolver for the updateDiscussions field.
-func (r *updateInternalPolicyInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data []*model.UpdateDiscussionsInput) error {
-	for _, discussionInput := range data {
-		if discussionInput.Input == nil || discussionInput.ID == "" {
-			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+// UpdateDiscussion is the resolver for the updateDiscussion field.
+func (r *updateInternalPolicyInputResolver) UpdateDiscussion(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *model.UpdateDiscussionsInput) error {
+	if data.Input == nil || data.ID == "" {
+		logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
 
-			continue
-		}
-		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
-
-		// setup update request
-		req := res.Update().SetInput(*discussionInput.Input)
-
-		res, err = req.Save(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
+		return nil
 	}
+
+	res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, data.ID)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(*data.Input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.Input.AddCommentIDs...)
+	obj.RemoveCommentIDs = append(obj.RemoveCommentIDs, data.Input.RemoveCommentIDs...)
 
 	return nil
 }
@@ -479,12 +484,9 @@ func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj 
 		return common.NewNotFoundError("internalpolicy")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -524,30 +526,34 @@ func (r *updateProcedureInputResolver) AddDiscussion(ctx context.Context, obj *g
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
+
 	return nil
 }
 
-// UpdateDiscussions is the resolver for the updateDiscussions field.
-func (r *updateProcedureInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateProcedureInput, data []*model.UpdateDiscussionsInput) error {
-	for _, discussionInput := range data {
-		if discussionInput.Input == nil || discussionInput.ID == "" {
-			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+// UpdateDiscussion is the resolver for the updateDiscussion field.
+func (r *updateProcedureInputResolver) UpdateDiscussion(ctx context.Context, obj *generated.UpdateProcedureInput, data *model.UpdateDiscussionsInput) error {
+	if data.Input == nil || data.ID == "" {
+		logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
 
-			continue
-		}
-		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
-
-		// setup update request
-		req := res.Update().SetInput(*discussionInput.Input)
-
-		res, err = req.Save(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
+		return nil
 	}
+
+	res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, data.ID)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(*data.Input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.Input.AddCommentIDs...)
+	obj.RemoveCommentIDs = append(obj.RemoveCommentIDs, data.Input.RemoveCommentIDs...)
 
 	return nil
 }
@@ -583,12 +589,9 @@ func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *gene
 		return common.NewNotFoundError("procedure")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -628,30 +631,34 @@ func (r *updateRiskInputResolver) AddDiscussion(ctx context.Context, obj *genera
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
+
 	return nil
 }
 
-// UpdateDiscussions is the resolver for the updateDiscussions field.
-func (r *updateRiskInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateRiskInput, data []*model.UpdateDiscussionsInput) error {
-	for _, discussionInput := range data {
-		if discussionInput.Input == nil || discussionInput.ID == "" {
-			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+// UpdateDiscussion is the resolver for the updateDiscussion field.
+func (r *updateRiskInputResolver) UpdateDiscussion(ctx context.Context, obj *generated.UpdateRiskInput, data *model.UpdateDiscussionsInput) error {
+	if data.Input == nil || data.ID == "" {
+		logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
 
-			continue
-		}
-		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
-
-		// setup update request
-		req := res.Update().SetInput(*discussionInput.Input)
-
-		res, err = req.Save(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
+		return nil
 	}
+
+	res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, data.ID)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(*data.Input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.Input.AddCommentIDs...)
+	obj.RemoveCommentIDs = append(obj.RemoveCommentIDs, data.Input.RemoveCommentIDs...)
 
 	return nil
 }
@@ -687,12 +694,9 @@ func (r *updateRiskInputResolver) AddComment(ctx context.Context, obj *generated
 		return common.NewNotFoundError("risk")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
@@ -732,30 +736,34 @@ func (r *updateSubcontrolInputResolver) AddDiscussion(ctx context.Context, obj *
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
+
 	return nil
 }
 
-// UpdateDiscussions is the resolver for the updateDiscussions field.
-func (r *updateSubcontrolInputResolver) UpdateDiscussions(ctx context.Context, obj *generated.UpdateSubcontrolInput, data []*model.UpdateDiscussionsInput) error {
-	for _, discussionInput := range data {
-		if discussionInput.Input == nil || discussionInput.ID == "" {
-			logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
+// UpdateDiscussion is the resolver for the updateDiscussion field.
+func (r *updateSubcontrolInputResolver) UpdateDiscussion(ctx context.Context, obj *generated.UpdateSubcontrolInput, data *model.UpdateDiscussionsInput) error {
+	if data.Input == nil || data.ID == "" {
+		logx.FromContext(ctx).Warn().Msg("skipping update discussions input with nil input")
 
-			continue
-		}
-		res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, discussionInput.ID)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
-
-		// setup update request
-		req := res.Update().SetInput(*discussionInput.Input)
-
-		res, err = req.Save(ctx)
-		if err != nil {
-			return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
-		}
+		return nil
 	}
+
+	res, err := withTransactionalMutation(ctx).Discussion.Get(ctx, data.ID)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(*data.Input)
+
+	res, err = req.Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "discussionsinput"})
+	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, data.Input.AddCommentIDs...)
+	obj.RemoveCommentIDs = append(obj.RemoveCommentIDs, data.Input.RemoveCommentIDs...)
 
 	return nil
 }
@@ -791,12 +799,9 @@ func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *gen
 		return common.NewNotFoundError("subcontrol")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }

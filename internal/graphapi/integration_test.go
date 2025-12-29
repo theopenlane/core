@@ -13,8 +13,6 @@ import (
 )
 
 func TestIntegrationBuilder(t *testing.T) {
-	t.Parallel()
-
 	// setup user context
 	orgUser := suite.userBuilder(context.Background(), t)
 
@@ -55,8 +53,6 @@ func TestIntegrationBuilder(t *testing.T) {
 }
 
 func TestSecretBuilder(t *testing.T) {
-	t.Parallel()
-
 	// setup user context
 	orgUser := suite.userBuilder(context.Background(), t)
 	ctx := setContext(orgUser.UserCtx, suite.client.db)
@@ -93,8 +89,6 @@ func TestSecretBuilder(t *testing.T) {
 }
 
 func TestIntegrationWithSecretsRelationship(t *testing.T) {
-	t.Parallel()
-
 	// setup user context
 	orgUser := suite.userBuilder(context.Background(), t)
 	ctx := setContext(orgUser.UserCtx, suite.client.db)
