@@ -1,7 +1,5 @@
 # server settings
 server:
-  debug: true
-  pretty: true
   dev: true
   complexitylimit: 200
   graphPool:
@@ -20,18 +18,15 @@ server:
   cors:
     alloworigins:
       - http://localhost:3001
-      - http://localhost:5500
       - https://studio.apollographql.com
-      - https://studio.apollographql.com
+      - https://sandbox.embed.apollographql.com
       - http://localhost:8000
+  defaulttrustcenterdomain: "trust.theopenlane.net"
+  trustcentercnametarget: "openlane-dns.com"
 
   # tls settings
   tls:
     enabled: false
-
-# dbx settings
-dbx:
-  enabled: false
 
 # db settings
 db:
@@ -125,12 +120,6 @@ email:
 
 ratelimit:
   enabled: false
-  includemethod: false
-  includepath: false
-  sendretryafterheader: true
-  options:
-    - requests: 10
-      window: 1s
 
 entConfig:
   maxschemaimportsize: 262144
@@ -144,15 +133,6 @@ entConfig:
     - vendor
     - account
     - customer
-
-  windmill:
-    enabled: true
-    baseurl: "http://localhost:8090"
-    workspace: "test"
-    token: "token_here"
-    defaulttimeout: "30s"
-    onfailurescript: ""
-    onsuccessscript: ""
 
 objectstorage:
   devmode: true # when enabled, a local disk storage provider is automatically configured and other providers are ignored

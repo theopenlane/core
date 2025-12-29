@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/validators"
+	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -41,7 +42,6 @@ import (
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/summarizer"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"

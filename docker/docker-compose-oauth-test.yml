@@ -2,7 +2,7 @@ services:
   oauth-test-ui:
     image: nginx:alpine
     volumes:
-      - ../pkg/testutils/integrations:/usr/share/nginx/html:ro
+      - ../internal/testutils/integrations:/usr/share/nginx/html:ro
     ports:
       - "3004:80"
     networks:

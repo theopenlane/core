@@ -1,5 +1,30 @@
 [files]
-extend-exclude = ["db","internal/ent/generated/**","internal/ent/historygenerated", "go.mod","go.sum","pkg/testutils/","internal/graphapi/tools_test.go","internal/httpserve/handlers/tools_test.go", "plans.yaml", "internal/graphapi/_example_test.go", "pkg/sleuth/static/**", "pkg/catalog/catalog.yaml", "pkg/catalog/gencatalog/*", ".buildkite/*", ".task/*","internal/httpserve/specs/", "internal/graphapi/schema/*", "internal/graphapi/model/*","internal/graphapi/testclient/*", "internal/graphapi/generated/*","internal/graphapi/clientschema/*","common/openapi/"]
+extend-exclude = [
+"go.mod",
+  "go.sum",
+  "db",
+  "internal/ent/generated/**",
+  "internal/ent/historygenerated",
+  "internal/testutils/",
+  "internal/graphapi/tools_test.go",
+  "internal/httpserve/handlers/tools_test.go",
+  "internal/graphapi/_example_test.go",
+  "internal/httpserve/specs/",
+  "internal/graphapi/schema/*",
+  "internal/graphapi/historyschema/*",
+  "internal/graphapi/model/*",
+  "internal/graphapi/generated/*",
+  "internal/graphapi/historygenerated/*",
+  "internal/graphapi/clientschema/*",
+  "internal/graphapi/historyschema/*",
+  "internal/graphapi/testclient/*",
+  "pkg/catalog/catalog.yaml",
+  "pkg/catalog/gencatalog/*",
+  ".buildkite/*",
+  ".task/*",
+  "common/openapi/",
+  "plans.yaml",
+]
 ignore-hidden = true
 ignore-files = true
 ignore-dot = true
@@ -16,5 +41,16 @@ ignore-hex = true
 identifier-leading-digits = false
 locale = "en"
 extend-ignore-identifiers-re = []
-extend-ignore-words-re = ["(?i)requestor","(?i)indentity","(?i)encrypter","(?i)seeked","(?i)generater","(?i)policys", "typ", "vulnerabilitys", "(?i)entitys", "eis"]
+extend-ignore-words-re = [
+  "(?i)requestor",
+  "(?i)indentity",
+  "(?i)encrypter",
+  "(?i)seeked",
+  "(?i)generater",
+  "(?i)policys",
+  "typ",
+  "vulnerabilitys",
+  "(?i)entitys",
+  "eis",
+]
 extend-ignore-re = ["(?Rm)^.*//\\s*spellchecker:disable-line$"]

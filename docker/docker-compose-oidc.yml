@@ -12,7 +12,7 @@ services:
   sso-ui:
     image: nginx:alpine
     volumes:
-      - ../pkg/testutils/login/sso:/usr/share/nginx/html:ro
+      - ../internal/testutils/login/sso:/usr/share/nginx/html:ro
     ports:
       - "3001:80"
     networks:
@@ -21,7 +21,7 @@ services:
   tokens-ui:
     image: nginx:alpine
     volumes:
-      - ../pkg/testutils/tokensso:/usr/share/nginx/html:ro
+      - ../internal/testutils/tokensso:/usr/share/nginx/html:ro
     ports:
       - "3002:80"
     networks:
