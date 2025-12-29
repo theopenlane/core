@@ -2625,7 +2625,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterPreviewSetting       func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSetting              func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor         func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
-		CreateTrustCenterWatermarkConfig      func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkConfig *graphql.Upload) int
+		CreateTrustCenterWatermarkConfig      func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
 		CreateTrustcenterEntity               func(childComplexity int, input generated.CreateTrustcenterEntityInput, logoFile *graphql.Upload) int
 		CreateUploadInternalPolicy            func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
 		CreateUploadProcedure                 func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
@@ -2845,7 +2845,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterPreviewSetting       func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSetting              func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor         func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
-		UpdateTrustCenterWatermarkConfig      func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkConfig *graphql.Upload) int
+		UpdateTrustCenterWatermarkConfig      func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) int
 		UpdateTrustcenterEntity               func(childComplexity int, id string, input generated.UpdateTrustcenterEntityInput, logoFile *graphql.Upload) int
 		UpdateUser                            func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                     func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
@@ -19100,7 +19100,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["watermarkConfig"].(*graphql.Upload)), true
+		return e.complexity.Mutation.CreateTrustCenterWatermarkConfig(childComplexity, args["input"].(generated.CreateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload)), true
 
 	case "Mutation.createTrustcenterEntity":
 		if e.complexity.Mutation.CreateTrustcenterEntity == nil {
@@ -21735,7 +21735,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTrustCenterWatermarkConfig(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), args["watermarkConfig"].(*graphql.Upload)), true
+		return e.complexity.Mutation.UpdateTrustCenterWatermarkConfig(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterWatermarkConfigInput), args["watermarkFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustcenterEntity":
 		if e.complexity.Mutation.UpdateTrustcenterEntity == nil {
@@ -107288,7 +107288,7 @@ extend type Mutation{
         values of the trustCenterWatermarkConfig
         """
         input: CreateTrustCenterWatermarkConfigInput!
-        watermarkConfig: Upload
+        watermarkFile: Upload
     ): TrustCenterWatermarkConfigCreatePayload!
     """
     Update an existing trustCenterWatermarkConfig
@@ -107302,7 +107302,7 @@ extend type Mutation{
         New values for the trustCenterWatermarkConfig
         """
         input: UpdateTrustCenterWatermarkConfigInput!
-        watermarkConfig: Upload
+        watermarkFile: Upload
     ): TrustCenterWatermarkConfigUpdatePayload!
     """
     Delete an existing trustCenterWatermarkConfig

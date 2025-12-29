@@ -16,7 +16,7 @@ import (
 )
 
 // CreateTrustCenterWatermarkConfig is the resolver for the createTrustCenterWatermarkConfig field.
-func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, watermarkConfig *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error) {
+func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error) {
 	if input.TrustCenterID == nil {
 		var err error
 		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterwatermarkconfig")
@@ -42,7 +42,7 @@ func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context,
 }
 
 // UpdateTrustCenterWatermarkConfig is the resolver for the updateTrustCenterWatermarkConfig field.
-func (r *mutationResolver) UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkConfig *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error) {
+func (r *mutationResolver) UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, watermarkFile *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterwatermarkconfig"})

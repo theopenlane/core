@@ -356,7 +356,7 @@ func HookTrustCenterUpdate() ent.Hook {
 					}
 				}
 
-				if previousCustomDomainID != nil && m.Job != nil {
+				if previousCustomDomainID != nil {
 					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
 						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
 							CustomDomain: cd.CnameRecord,
@@ -382,15 +382,14 @@ func HookTrustCenterUpdate() ent.Hook {
 					return nil, err
 				}
 
-				if m.Job != nil {
-					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
-						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
-							CustomDomain: cd.CnameRecord,
-						}, nil); err != nil {
-							return nil, err
-						}
+				if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
+					if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
+						CustomDomain: cd.CnameRecord,
+					}, nil); err != nil {
+						return nil, err
 					}
 				}
+
 			}
 
 			return v, nil

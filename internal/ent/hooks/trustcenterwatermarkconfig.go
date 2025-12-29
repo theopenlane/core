@@ -63,7 +63,7 @@ func HookTrustCenterWatermarkConfig() ent.Hook {
 
 // checkTrustCenterWatermarkConfigFiles checks for watermark config files in the context
 func checkTrustCenterWatermarkConfigFiles(ctx context.Context, m *generated.TrustCenterWatermarkConfigMutation) (context.Context, error) {
-	key := "watermarkConfig"
+	key := "watermarkFile"
 	ctx, err := processSingleMutationFile(ctx, m, key, "trust_center_watermark_config", ErrNotSingularUpload,
 		func(mut *generated.TrustCenterWatermarkConfigMutation, id string) {
 			mut.SetFileID(id)

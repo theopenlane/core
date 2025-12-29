@@ -442,10 +442,9 @@ func enqueueCacheRefresh(ctx context.Context, jobClient riverqueue.JobClient, tr
 		return nil
 	}
 
-	_, err := jobClient.Insert(ctx, jobspec.SyncTrustCenterCacheArgs{
+	if err := enqueueJob(ctx, jobClient, jobspec.SyncTrustCenterCacheArgs{
 		TrustCenterID: trustCenterID,
-	}, nil)
-	if err != nil {
+	}, nil); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to insert sync trust center cache job")
 
 		return nil

@@ -95,25 +95,18 @@ func upsertPreviewSetting(ctx context.Context, client *generated.Client, trustCe
 		if err != nil {
 			return nil, err
 		}
+	}
 
-		if updateInput != nil {
-			previewSetting, err = previewSetting.Update().SetInput(*updateInput).Save(ctx)
-			if err != nil {
-				return nil, err
-			}
+	if updateInput != nil {
+		previewSetting, err = previewSetting.Update().SetInput(*updateInput).Save(ctx)
+		if err != nil {
+			return nil, err
 		}
-	} else {
-		if updateInput != nil {
-			previewSetting, err = previewSetting.Update().SetInput(*updateInput).Save(ctx)
-			if err != nil {
-				return nil, err
-			}
-		} else if createInput != nil {
-			update := buildPreviewSettingUpdateInput(*createInput)
-			previewSetting, err = previewSetting.Update().SetInput(update).Save(ctx)
-			if err != nil {
-				return nil, err
-			}
+	} else if createInput != nil {
+		update := buildPreviewSettingUpdateInput(*createInput)
+		previewSetting, err = previewSetting.Update().SetInput(update).Save(ctx)
+		if err != nil {
+			return nil, err
 		}
 	}
 

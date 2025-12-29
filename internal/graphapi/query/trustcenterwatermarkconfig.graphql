@@ -1,8 +1,5 @@
-mutation CreateTrustCenterWatermarkConfig($input: CreateTrustCenterWatermarkConfigInput!, $watermarkConfig: Upload) {
-  createTrustCenterWatermarkConfig(
-    input: $input
-    watermarkConfig: $watermarkConfig
-  ) {
+mutation CreateTrustCenterWatermarkConfig($input: CreateTrustCenterWatermarkConfigInput!, $watermarkFile: Upload) {
+  createTrustCenterWatermarkConfig(input: $input, watermarkFile: $watermarkFile) {
     trustCenterWatermarkConfig {
       createdAt
       createdBy
@@ -119,11 +116,11 @@ query GetTrustCenterWatermarkConfigs($first: Int, $last: Int, $where: TrustCente
   }
 }
 
-mutation UpdateTrustCenterWatermarkConfig($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $watermarkConfig: Upload) {
+mutation UpdateTrustCenterWatermarkConfig($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $watermarkFile: Upload) {
   updateTrustCenterWatermarkConfig(
     id: $updateTrustCenterWatermarkConfigId
     input: $input
-    watermarkConfig: $watermarkConfig
+    watermarkFile: $watermarkFile
   ) {
     trustCenterWatermarkConfig {
       createdAt

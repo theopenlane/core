@@ -58,5 +58,5 @@ func HookDNSVerificationDelete() ent.Hook {
 
 			return next.Mutate(ctx, m)
 		})
-	}, ent.OpDelete|ent.OpDeleteOne)
+	}, ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne)
 }
