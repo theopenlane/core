@@ -729,3 +729,6 @@ steps:
               step: migrate
               atlas-env: dev
               config: "file://db/atlas.hcl"
+      - label: ":go: go-client schema update"
+        trigger: go-client
+        if: build.tag != null
