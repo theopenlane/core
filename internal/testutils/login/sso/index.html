@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSO Webfinger Test</title>
+    <link href="../webauthn/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div
+      class="container d-flex justify-content-center align-items-center vh-100"
+    >
+      <div class="bg-light p-5 rounded w-50">
+        <h1 class="mb-4 text-center">SSO Webfinger</h1>
+        <div class="mb-3">
+          <input
+            type="email"
+            class="form-control"
+            id="username"
+            placeholder="email"
+          />
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-primary" id="checkButton">
+            Check Enforcement
+          </button>
+        </div>
+        <div class="mt-3" id="output"></div>
+      </div>
+    </div>
+    <script>
+      const apiBase = "http://localhost:17608";
+
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("email")) {
+        document.getElementById("output").innerText =
+          "Logged in as " + params.get("email");
+
+        const headers = { "Content-Type": "application/json" };
+        const sessionToken = params.get("session");
+        if (sessionToken) {
+          headers["Authorization"] = `Bearer ${sessionToken}`;
+        }
+
+        // fetch user details via GraphQL self query
+        fetch(apiBase + "/query", {
+          method: "POST",
+          headers,
+          credentials: "include",
+          body: JSON.stringify({ query: "{ self { id name email } }" }),
+        })
+          .then((r) => r.json())
+          .then((d) => {
+            const p = document.createElement("pre");
+            p.textContent = JSON.stringify(d, null, 2);
+            document.getElementById("output").appendChild(p);
+          })
+          .catch((err) => {
+            const p = document.createElement("div");
+            p.style.color = "red";
+            p.textContent = err;
+            document.getElementById("output").appendChild(p);
+          });
+      }
+
+      document
+        .getElementById("checkButton")
+        .addEventListener("click", function () {
+          const email = document.getElementById("username").value;
+          fetch(
+            apiBase +
+              "/.well-known/webfinger?resource=acct:" +
+              encodeURIComponent(email),
+          )
+            .then((r) => r.json())
+            .then((d) => {
+              document.getElementById("output").innerText = JSON.stringify(d);
+              if (d.enforced && d.organization_id) {
+                const ret = encodeURIComponent(
+                  window.location.origin + window.location.pathname,
+                );
+                const loginPath = "/v1/sso/login";
+                window.location =
+                  apiBase +
+                  loginPath +
+                  "?organization_id=" +
+                  d.organization_id +
+                  "&return=" +
+                  ret;
+              }
+            })
+            .catch((err) => {
+              document.getElementById("output").innerText = err;
+            });
+        });
+    </script>
+  </body>
+</html>

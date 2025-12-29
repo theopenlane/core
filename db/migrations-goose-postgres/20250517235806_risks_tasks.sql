@@ -1,7 +1,0 @@
--- +goose Up
--- create "risk_tasks" table
-CREATE TABLE "risk_tasks" ("risk_id" character varying NOT NULL, "task_id" character varying NOT NULL, PRIMARY KEY ("risk_id", "task_id"), CONSTRAINT "risk_tasks_risk_id" FOREIGN KEY ("risk_id") REFERENCES "risks" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "risk_tasks_task_id" FOREIGN KEY ("task_id") REFERENCES "tasks" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
-
--- +goose Down
--- reverse: create "risk_tasks" table
-DROP TABLE "risk_tasks";
