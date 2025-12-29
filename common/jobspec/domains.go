@@ -81,3 +81,12 @@ type ClearTrustCenterCacheArgs struct {
 
 // Kind satisfies the river.Job interface
 func (ClearTrustCenterCacheArgs) Kind() string { return "clear_trust_center_cache" }
+
+// SyncTrustCenterCacheArgs for the worker to refresh trust center cache entries
+type SyncTrustCenterCacheArgs struct {
+	// TrustCenterID is the ID of the trust center to refresh cache for
+	TrustCenterID string `json:"trust_center_id"`
+}
+
+// Kind satisfies the river.Job interface
+func (SyncTrustCenterCacheArgs) Kind() string { return "sync_trust_center_cache" }

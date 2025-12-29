@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"github.com/riverqueue/river"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -74,4 +76,16 @@ func getMutationIDs(ctx context.Context, m utils.GenericMutation) []string {
 	}
 
 	return nil
+}
+
+// enqueueJob inserts a job when a job client is available, otherwise logs and skips.
+func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.JobArgs, opts *river.InsertOpts) error {
+	if jobClient == nil {
+		logx.FromContext(ctx).Warn().Str("job_kind", "unknown").Msg("job client is nil, skipping job insert")
+		return nil
+	}
+
+	_, err := jobClient.Insert(ctx, args, opts)
+
+	return err
 }

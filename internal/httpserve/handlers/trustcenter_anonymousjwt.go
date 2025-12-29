@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -41,14 +42,22 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 	}
 
 	hostname := parsedURL.Hostname()
-	if hostname == "" {
+	normalizedHost, err := domain.NormalizeHostname(hostname)
+	if err != nil {
 		return h.BadRequest(ctx, ErrInvalidRefererURL, openapi)
+	}
+
+	normalizedDefaultDomain, err := domain.NormalizeHostname(h.DefaultTrustCenterDomain)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("invalid default trust center domain")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	var trustCenter *generated.TrustCenter
 
 	// 3. check if the URL is the "default trust center domain"
-	if hostname == h.DefaultTrustCenterDomain {
+	if normalizedHost == normalizedDefaultDomain {
 		// 4. if we have the default trust center domain, then we require the PATH of the url to be the "slug"
 		pathSegments := strings.Split(strings.Trim(parsedURL.Path, "/"), "/")
 		if len(pathSegments) == 0 || pathSegments[0] == "" {
@@ -60,7 +69,6 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 		// 4a. query the database for trust centers with the slug and the default hostname
 		trustCenter, err = h.DBClient.TrustCenter.Query().
 			Where(trustcenter.SlugEQ(slug)).
-			Where(trustcenter.Not(trustcenter.HasCustomDomain())).
 			Only(allowCtx)
 		if err != nil {
 			if generated.IsNotFound(err) {
@@ -74,9 +82,14 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 	} else {
 		// 5. if not default trust center, all we care about is the hostname.
 		// 5a. query the database for trust centers with the hostname
+		domainPredicate := customdomain.Or(
+			customdomain.CnameRecordEqualFold(normalizedHost),
+			customdomain.CnameRecordEqualFold(normalizedHost+"."),
+		)
 		trustCenter, err = h.DBClient.TrustCenter.Query().
-			Where(trustcenter.HasCustomDomainWith(
-				customdomain.CnameRecordEQ(hostname),
+			Where(trustcenter.Or(
+				trustcenter.HasCustomDomainWith(domainPredicate),
+				trustcenter.HasPreviewDomainWith(domainPredicate),
 			)).
 			Only(allowCtx)
 		if err != nil {

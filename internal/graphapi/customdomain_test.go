@@ -745,3 +745,25 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(anotherUser.UserCtx, t)
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(anotherUser.UserCtx, t)
 }
+
+func TestDeleteCustomDomainClearsPreviewDomain(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
+		SetPreviewDomainID(previewDomain.ID).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	resp, err := suite.client.api.DeleteCustomDomain(testUser1.UserCtx, previewDomain.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(previewDomain.ID, resp.DeleteCustomDomain.DeletedID))
+
+	updatedTrustCenter, err := suite.client.db.TrustCenter.Get(dbCtx, trustCenter.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal("", updatedTrustCenter.PreviewDomainID))
+
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: previewDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}

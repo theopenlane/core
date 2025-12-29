@@ -121,7 +121,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if trustCenterDoc.WatermarkingEnabled {
 				logx.FromContext(ctx).Debug().Msg("watermarking enabled, queuing job")
-				if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
+				if err := enqueueJob(ctx, m.Job, jobspec.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
 					return nil, err
@@ -253,7 +253,7 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 
 			if mutationSetsOriginalFileID || len(docFiles) > 0 {
 				if trustCenterDoc.WatermarkingEnabled {
-					if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
+					if err := enqueueJob(ctx, m.Job, jobspec.WatermarkDocArgs{
 						TrustCenterDocumentID: trustCenterDoc.ID,
 					}, nil); err != nil {
 						return nil, err

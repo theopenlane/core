@@ -11,8 +11,6 @@ import (
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -78,7 +76,7 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *events.Muta
 		return nil
 	}
 
-	return enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
 }
 
 // handleNoteMutation processes Note mutations and invalidates cache
@@ -98,7 +96,7 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	}
 
 	for _, tcID := range tcIDs {
-		if err := enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, tcID); err != nil {
+		if err := enqueueCacheRefresh(ctx.Context(), mut.Job, tcID); err != nil {
 			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to enqueue cache invalidation for note")
 		}
 	}
@@ -142,7 +140,7 @@ func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *events.M
 		return nil
 	}
 
-	return enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
 }
 
 // handleTrustCenterSubprocessorMutation processes TrustCenterSubprocessor mutations and invalidates cache
@@ -181,7 +179,7 @@ func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *ev
 		return nil
 	}
 
-	return enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
 }
 
 // handleTrustCenterComplianceMutation processes TrustCenterCompliance mutations and invalidates cache
@@ -220,7 +218,7 @@ func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *even
 		return nil
 	}
 
-	return enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
 }
 
 // handleSubprocessorMutation processes Subprocessor mutations and invalidates cache for related trust centers
@@ -267,7 +265,7 @@ func handleSubprocessorMutation(ctx *soiree.EventContext, payload *events.Mutati
 	}))
 
 	for _, tcID := range trustCenterIDs {
-		if err := enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, tcID); err != nil {
+		if err := enqueueCacheRefresh(ctx.Context(), mut.Job, tcID); err != nil {
 			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to enqueue cache invalidation for subprocessor")
 		}
 	}
@@ -319,12 +317,77 @@ func handleStandardMutation(ctx *soiree.EventContext, payload *events.MutationPa
 	}))
 
 	for _, tcID := range trustCenterIDs {
-		if err := enqueueCacheInvalidation(ctx.Context(), payload.Client, mut.Job, tcID); err != nil {
+		if err := enqueueCacheRefresh(ctx.Context(), mut.Job, tcID); err != nil {
 			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to enqueue cache invalidation for standard")
 		}
 	}
 
 	return nil
+}
+
+// handleTrustCenterSettingMutation processes TrustCenterSetting mutations and refreshes cache
+func handleTrustCenterSettingMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	if payload == nil || payload.Client == nil {
+		return nil
+	}
+
+	mut, ok := payload.Mutation.(*entgen.TrustCenterSettingMutation)
+	if !ok {
+		return nil
+	}
+
+	trustCenterID, exists := mut.TrustCenterID()
+	if trustCenterID == "" || !exists {
+		settingID := payload.EntityID
+		if settingID == "" {
+			if id, ok := mut.ID(); ok {
+				settingID = id
+			}
+		}
+
+		if settingID != "" {
+			setting, err := payload.Client.TrustCenterSetting.Get(ctx.Context(), settingID)
+			if err == nil && setting != nil {
+				trustCenterID = setting.TrustCenterID
+			}
+		}
+	}
+
+	if trustCenterID == "" {
+		return nil
+	}
+
+	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+}
+
+// handleTrustCenterMutation processes TrustCenter mutations and refreshes cache
+func handleTrustCenterMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	if payload == nil {
+		return nil
+	}
+
+	switch payload.Operation {
+	case ent.OpDelete.String(), ent.OpDeleteOne.String(), SoftDeleteOne:
+		return nil
+	}
+
+	mut, ok := payload.Mutation.(*entgen.TrustCenterMutation)
+	if !ok {
+		return nil
+	}
+
+	trustCenterID := payload.EntityID
+	if trustCenterID == "" {
+		if id, ok := mut.ID(); ok {
+			trustCenterID = id
+		}
+	}
+
+	if trustCenterID == "" {
+		return nil
+	}
+
+	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
 }
 
 // shouldInvalidateCacheForSubprocessor determines if subprocessor changes warrant cache invalidation
@@ -367,54 +430,23 @@ func shouldInvalidateCacheForStandard(mut *entgen.StandardMutation, operation st
 	return false
 }
 
-// enqueueCacheInvalidation enqueues a job to invalidate the trust center cache
-func enqueueCacheInvalidation(ctx context.Context, client *entgen.Client, jobClient riverqueue.JobClient, trustCenterID string) error {
+// enqueueCacheRefresh enqueues a job to refresh the trust center cache
+func enqueueCacheRefresh(ctx context.Context, jobClient riverqueue.JobClient, trustCenterID string) error {
 	if trustCenterID == "" {
 		return nil
 	}
 
-	tc, err := client.TrustCenter.Query().
-		Where(trustcenter.ID(trustCenterID)).
-		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug).
-		Only(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to query trust center for cache invalidation")
-		return nil
-	}
-
-	var customDomain string
-	if tc.CustomDomainID != nil {
-		cd, err := client.CustomDomain.Query().
-			Where(customdomain.ID(*tc.CustomDomainID)).
-			Select(customdomain.FieldCnameRecord).
-			Only(ctx)
-		if err == nil && cd.CnameRecord != "" {
-			customDomain = cd.CnameRecord
-		}
-	}
-
-	args := jobspec.ClearTrustCenterCacheArgs{}
-
-	if customDomain != "" {
-		args.CustomDomain = customDomain
-	}
-
-	if tc.Slug != "" {
-		args.TrustCenterSlug = tc.Slug
-	}
-
-	if args.CustomDomain == "" && args.TrustCenterSlug == "" {
-		return nil
-	}
-
 	if jobClient == nil {
-		logx.FromContext(ctx).Warn().Msg("no job client available, skipping cache invalidation job")
+		logx.FromContext(ctx).Debug().Msg("no job client available, skipping cache refresh job")
+
 		return nil
 	}
 
-	_, err = jobClient.Insert(ctx, args, nil)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("failed to insert clear trust center cache job")
+	if err := enqueueJob(ctx, jobClient, jobspec.SyncTrustCenterCacheArgs{
+		TrustCenterID: trustCenterID,
+	}, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to insert sync trust center cache job")
+
 		return nil
 	}
 

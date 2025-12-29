@@ -9,9 +9,6 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
@@ -23,19 +20,9 @@ func (r *mutationResolver) CreateTrustCenterPreviewSetting(ctx context.Context, 
 	transactionCtx := withTransactionalMutation(ctx)
 
 	// Get the trust center to verify it exists and get the owner ID
-	var trustCenter *generated.TrustCenter
-	var err error
-
-	if input.TrustCenterID != "" {
-		trustCenter, err = transactionCtx.TrustCenter.Get(ctx, input.TrustCenterID)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterpreviewsetting"})
-		}
-	} else {
-		trustCenter, err = transactionCtx.TrustCenter.Query().Only(ctx)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterpreviewsetting"})
-		}
+	trustCenter, err := resolveTrustCenterForPreviewSetting(ctx, transactionCtx, input.TrustCenterID)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterpreviewsetting"})
 	}
 
 	// Set the organization in the auth context if its not done for us
@@ -45,46 +32,9 @@ func (r *mutationResolver) CreateTrustCenterPreviewSetting(ctx context.Context, 
 		return nil, rout.ErrPermissionDenied
 	}
 
-	// Check if a preview setting already exists for this trust center
-	existingPreviewSetting, err := transactionCtx.TrustCenterSetting.Query().
-		Where(
-			trustcentersetting.TrustCenterIDEQ(trustCenter.ID),
-			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
-		).
-		Only(ctx)
-
-	// If a preview setting exists, delete it first
-	if err == nil && existingPreviewSetting != nil {
-		logx.FromContext(ctx).Info().Str("preview_setting_id", existingPreviewSetting.ID).Msg("deleting existing preview setting")
-
-		err = transactionCtx.TrustCenterSetting.DeleteOne(existingPreviewSetting).Exec(ctx)
-		if err != nil {
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterpreviewsetting"})
-		}
-	}
-
-	// Create the new preview setting
-	previewEnv := enums.TrustCenterEnvironmentPreview
-
-	createInput := generated.CreateTrustCenterSettingInput{
-		TrustCenterID:    &trustCenter.ID,
-		Environment:      &previewEnv,
-		Title:            input.Title,
-		Overview:         input.Overview,
-		PrimaryColor:     input.PrimaryColor,
-		LogoRemoteURL:    input.LogoRemoteURL,
-		LogoFileID:       input.LogoFileID,
-		FaviconRemoteURL: input.FaviconRemoteURL,
-		FaviconFileID:    input.FaviconFileID,
-		ThemeMode:        input.ThemeMode,
-		Font:             input.Font,
-		ForegroundColor:  input.ForegroundColor,
-		BackgroundColor:  input.BackgroundColor,
-		AccentColor:      input.AccentColor,
-	}
-
-	res, err := transactionCtx.TrustCenterSetting.Create().SetInput(createInput).Save(ctx)
+	res, err := upsertPreviewSetting(ctx, transactionCtx, trustCenter, &input, nil)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to upsert trust center preview setting")
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterpreviewsetting"})
 	}
 

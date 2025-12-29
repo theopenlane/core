@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -41,12 +42,22 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		Save(testUser1.UserCtx)
 
 	require.NoError(t, err)
+	previewDomain, err := suite.db.CustomDomain.Create().
+		SetCnameRecord("preview.meow.org").
+		SetMappableDomainID(mappableDomain.ID).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
 	slug := "meow"
 
 	trustCenterWithCD, err := suite.db.TrustCenter.Create().
 		SetSlug(slug).
 		SetOwnerID(testUser1.OrganizationID).
 		SetCustomDomainID(customDomain.ID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+	_, err = suite.db.TrustCenter.UpdateOneID(trustCenterWithCD.ID).
+		SetPreviewDomainID(previewDomain.ID).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
@@ -70,6 +81,12 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 			expectSuccess:  true,
 		},
 		{
+			name:           "happy path - default domain with slug when custom domain exists",
+			referer:        fmt.Sprintf("https://trust.openlane.com/%s", trustCenterWithCD.Slug),
+			expectedStatus: http.StatusOK,
+			expectSuccess:  true,
+		},
+		{
 			name:           "happy path - default domain with slug and path",
 			referer:        fmt.Sprintf("https://trust.openlane.com/%s", trustCenterNoCD.Slug),
 			expectedStatus: http.StatusOK,
@@ -78,6 +95,18 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 		{
 			name:           "happy path - custom domain",
 			referer:        fmt.Sprintf("https://%s/any/path", customDomain.CnameRecord),
+			expectedStatus: http.StatusOK,
+			expectSuccess:  true,
+		},
+		{
+			name:           "happy path - custom domain normalized",
+			referer:        fmt.Sprintf("https://%s./any/path", strings.ToUpper(customDomain.CnameRecord)),
+			expectedStatus: http.StatusOK,
+			expectSuccess:  true,
+		},
+		{
+			name:           "happy path - preview domain",
+			referer:        fmt.Sprintf("https://%s/preview/path", previewDomain.CnameRecord),
 			expectedStatus: http.StatusOK,
 			expectSuccess:  true,
 		},
@@ -180,4 +209,5 @@ func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {
 	suite.db.TrustCenter.DeleteOneID(trustCenterNoCD.ID).Exec(ctx)
 	suite.db.TrustCenter.DeleteOneID(trustCenterWithCD.ID).Exec(ctx)
 	suite.db.CustomDomain.DeleteOneID(customDomain.ID).Exec(ctx)
+	suite.db.CustomDomain.DeleteOneID(previewDomain.ID).Exec(ctx)
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 const (
@@ -73,14 +72,11 @@ func HookTrustcenterEntityCreate() ent.Hook {
 func HookTrustcenterEntityFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustcenterEntityFunc(func(ctx context.Context, m *generated.TrustcenterEntityMutation) (generated.Value, error) {
-			files, _ := pkgobjects.FilesFromContextWithKey(ctx, "logoFile")
-			if len(files) > 0 {
-				var err error
+			var err error
 
-				ctx, err = checkTrustcenterEntityFiles(ctx, m)
-				if err != nil {
-					return nil, err
-				}
+			ctx, err = checkTrustcenterEntityFiles(ctx, m)
+			if err != nil {
+				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
@@ -91,22 +87,14 @@ func HookTrustcenterEntityFiles() ent.Hook {
 // checkTrustcenterEntityFiles checks for logo files in the context
 func checkTrustcenterEntityFiles(ctx context.Context, m *generated.TrustcenterEntityMutation) (context.Context, error) {
 	key := "logoFile"
-
-	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
-	if len(files) == 0 {
-		return ctx, nil
-	}
-
-	if len(files) > 1 {
-		return ctx, ErrTooManyAvatarFiles
-	}
-
-	m.SetLogoFileID(files[0].ID)
-
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
+	ctx, err := processSingleMutationFile(ctx, m, key, "trustcenter_entity", ErrTooManyAvatarFiles,
+		func(mut *generated.TrustcenterEntityMutation, id string) { mut.SetLogoFileID(id) },
 		func(mut *generated.TrustcenterEntityMutation) (string, bool) { return mut.ID() },
 		func(mut *generated.TrustcenterEntityMutation) string { return mut.Type() },
 	)
+	if err != nil {
+		return ctx, err
+	}
 
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key, "trustcenter_entity")
+	return ctx, nil
 }
