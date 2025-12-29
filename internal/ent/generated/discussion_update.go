@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -110,26 +109,6 @@ func (_u *DiscussionUpdate) ClearDeletedBy() *DiscussionUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *DiscussionUpdate) SetOwnerID(v string) *DiscussionUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DiscussionUpdate) SetNillableOwnerID(v *string) *DiscussionUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DiscussionUpdate) ClearOwnerID() *DiscussionUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetExternalID sets the "external_id" field.
 func (_u *DiscussionUpdate) SetExternalID(v string) *DiscussionUpdate {
 	_u.mutation.SetExternalID(v)
@@ -141,6 +120,12 @@ func (_u *DiscussionUpdate) SetNillableExternalID(v *string) *DiscussionUpdate {
 	if v != nil {
 		_u.SetExternalID(*v)
 	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *DiscussionUpdate) ClearExternalID() *DiscussionUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -156,11 +141,6 @@ func (_u *DiscussionUpdate) SetNillableIsResolved(v *bool) *DiscussionUpdate {
 		_u.SetIsResolved(*v)
 	}
 	return _u
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *DiscussionUpdate) SetOwner(v *Organization) *DiscussionUpdate {
-	return _u.SetOwnerID(v.ID)
 }
 
 // AddCommentIDs adds the "comments" edge to the Note entity by IDs.
@@ -278,12 +258,6 @@ func (_u *DiscussionUpdate) Mutation() *DiscussionMutation {
 	return _u.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *DiscussionUpdate) ClearOwner() *DiscussionUpdate {
-	_u.mutation.ClearOwner()
-	return _u
-}
-
 // ClearComments clears all "comments" edges to the Note entity.
 func (_u *DiscussionUpdate) ClearComments() *DiscussionUpdate {
 	_u.mutation.ClearComments()
@@ -377,16 +351,6 @@ func (_u *DiscussionUpdate) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (_u *DiscussionUpdate) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := discussion.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Discussion.owner_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *DiscussionUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DiscussionUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -394,9 +358,6 @@ func (_u *DiscussionUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *Dis
 }
 
 func (_u *DiscussionUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(discussion.Table, discussion.Columns, sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -438,39 +399,11 @@ func (_u *DiscussionUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(discussion.FieldExternalID, field.TypeString, value)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(discussion.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.IsResolved(); ok {
 		_spec.SetField(discussion.FieldIsResolved, field.TypeBool, value)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   discussion.OwnerTable,
-			Columns: []string{discussion.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Discussion
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   discussion.OwnerTable,
-			Columns: []string{discussion.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Discussion
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.CommentsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -771,26 +704,6 @@ func (_u *DiscussionUpdateOne) ClearDeletedBy() *DiscussionUpdateOne {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *DiscussionUpdateOne) SetOwnerID(v string) *DiscussionUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DiscussionUpdateOne) SetNillableOwnerID(v *string) *DiscussionUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DiscussionUpdateOne) ClearOwnerID() *DiscussionUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetExternalID sets the "external_id" field.
 func (_u *DiscussionUpdateOne) SetExternalID(v string) *DiscussionUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -802,6 +715,12 @@ func (_u *DiscussionUpdateOne) SetNillableExternalID(v *string) *DiscussionUpdat
 	if v != nil {
 		_u.SetExternalID(*v)
 	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *DiscussionUpdateOne) ClearExternalID() *DiscussionUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -817,11 +736,6 @@ func (_u *DiscussionUpdateOne) SetNillableIsResolved(v *bool) *DiscussionUpdateO
 		_u.SetIsResolved(*v)
 	}
 	return _u
-}
-
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *DiscussionUpdateOne) SetOwner(v *Organization) *DiscussionUpdateOne {
-	return _u.SetOwnerID(v.ID)
 }
 
 // AddCommentIDs adds the "comments" edge to the Note entity by IDs.
@@ -939,12 +853,6 @@ func (_u *DiscussionUpdateOne) Mutation() *DiscussionMutation {
 	return _u.mutation
 }
 
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *DiscussionUpdateOne) ClearOwner() *DiscussionUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
-}
-
 // ClearComments clears all "comments" edges to the Note entity.
 func (_u *DiscussionUpdateOne) ClearComments() *DiscussionUpdateOne {
 	_u.mutation.ClearComments()
@@ -1051,16 +959,6 @@ func (_u *DiscussionUpdateOne) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (_u *DiscussionUpdateOne) check() error {
-	if v, ok := _u.mutation.OwnerID(); ok {
-		if err := discussion.OwnerIDValidator(v); err != nil {
-			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Discussion.owner_id": %w`, err)}
-		}
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *DiscussionUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DiscussionUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -1068,9 +966,6 @@ func (_u *DiscussionUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *
 }
 
 func (_u *DiscussionUpdateOne) sqlSave(ctx context.Context) (_node *Discussion, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(discussion.Table, discussion.Columns, sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1129,39 +1024,11 @@ func (_u *DiscussionUpdateOne) sqlSave(ctx context.Context) (_node *Discussion, 
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(discussion.FieldExternalID, field.TypeString, value)
 	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(discussion.FieldExternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.IsResolved(); ok {
 		_spec.SetField(discussion.FieldIsResolved, field.TypeBool, value)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   discussion.OwnerTable,
-			Columns: []string{discussion.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Discussion
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   discussion.OwnerTable,
-			Columns: []string{discussion.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Discussion
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.CommentsCleared() {
 		edge := &sqlgraph.EdgeSpec{

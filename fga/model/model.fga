@@ -462,8 +462,18 @@ type note
     define can_edit: [user, service] or owner or editor
     define can_delete: [user, service] or can_edit
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk, evidence]
+    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk, evidence, discussion]
     define editor: [organization#owner]
+    define owner : [user, service]
+# similar to notes, discussions are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
+type discussion
+  relations
+    define can_view: [user, service] or can_edit or can_view from parent
+    define can_edit: [user, service] or owner or editor
+    define can_delete: [user, service] or can_edit
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, control, procedure, internal_policy, subcontrol, control_objective, risk, evidence]
+    define editor: [organization#owner] or can_edit from parent
     define owner : [user, service]
 type evidence
   relations

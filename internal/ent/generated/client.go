@@ -13569,6 +13569,25 @@ func (c *NoteClient) QueryTrustCenter(_m *Note) *TrustCenterQuery {
 	return query
 }
 
+// QueryDiscussion queries the discussion edge of a Note.
+func (c *NoteClient) QueryDiscussion(_m *Note) *DiscussionQuery {
+	query := (&DiscussionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.DiscussionTable, note.DiscussionColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFiles queries the files edge of a Note.
 func (c *NoteClient) QueryFiles(_m *Note) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()

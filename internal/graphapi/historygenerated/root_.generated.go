@@ -22070,13 +22070,13 @@ type DiscussionHistory implements Node {
   createdBy: String
   updatedBy: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
-  the unique discussion identifier from external system, e.g. plate discussion id
+  the unique discussion identifier from external system, e.g. plate discussion id, only required if synced from external system
   """
-  externalID: String!
+  externalID: String
   """
   whether the discussion is resolved
   """
@@ -22292,6 +22292,8 @@ input DiscussionHistoryWhereInput {
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
+  externalIDIsNil: Boolean
+  externalIDNotNil: Boolean
   externalIDEqualFold: String
   externalIDContainsFold: String
   """

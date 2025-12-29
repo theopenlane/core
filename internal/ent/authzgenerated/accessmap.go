@@ -1391,6 +1391,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "discussion": {
+	ObjectType:      "discussion",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "files": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,

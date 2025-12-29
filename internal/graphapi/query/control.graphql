@@ -589,6 +589,40 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
           }
         }
       }
+      discussions {
+        edges {
+          node {
+            id
+            externalID
+            comments {
+              edges {
+                node {
+                  id
+                  displayID
+                  text
+                  createdAt
+                  createdBy
+                  updatedAt
+                  updatedBy
+                }
+              }
+            }
+          }
+        }
+      }
+      comments {
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
+      }
       programs {
         edges {
           node {

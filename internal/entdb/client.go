@@ -50,8 +50,41 @@ type client struct {
 	hc *historygenerated.Client
 }
 
+// options for creating the ent client
+type Option func(*ent.Client)
+
+// WithEventer adds the eventer hooks and listeners to the ent client
+func WithEventer() Option {
+	return func(c *ent.Client) {
+
+		// add event emission for mutations
+		eventer := hooks.NewEventerPool(c)
+		hooks.RegisterGlobalHooks(c, eventer)
+
+		if err := hooks.RegisterListeners(eventer); err != nil {
+			log.Fatal().Err(err).Msg("failed registering listeners")
+		}
+	}
+}
+
+// WithMetricsHook adds the metrics hook to the ent client
+func WithMetricsHook() Option {
+	return func(c *ent.Client) {
+		c.Use(hooks.MetricsHook())
+	}
+}
+
+// WithModules adds the modules interceptor to the ent client
+func WithModules() Option {
+	return func(c *ent.Client) {
+		modulesEnabled := utils.ModulesEnabled(c)
+
+		c.Intercept(interceptors.InterceptorModules(modulesEnabled))
+	}
+}
+
 // New returns a ent client with a primary and secondary, if configured, write database
-func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts ...ent.Option) (*ent.Client, error) {
+func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, clientOpts []Option, opts ...ent.Option) (*ent.Client, error) {
 	client := &client{
 		config: &c,
 	}
@@ -156,22 +189,16 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, opts .
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
 
-	modulesEnabled := utils.ModulesEnabled(db)
-
-	db.Intercept(interceptors.InterceptorModules(modulesEnabled))
-
 	// adds default hooks for all edge permissions
 	db.Use(hooks.HookEdgePermissions())
 
-	// add event emission for mutations
-	eventer := hooks.NewEventerPool(db)
-	hooks.RegisterGlobalHooks(db, eventer)
-
-	if err := hooks.RegisterListeners(eventer); err != nil {
-		return nil, err
+	// apply additional client options
+	for _, co := range clientOpts {
+		co(db)
 	}
 
-	db.Use(hooks.MetricsHook())
+	// adds default hooks for all edge permissions
+	db.Use(hooks.HookEdgePermissions())
 
 	db.Use(BlockHook())
 
@@ -410,12 +437,18 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 	// run migrations for tests
 	jobOpts = append(jobOpts, riverqueue.WithRunMigrations(true))
 
+	// Do not enable eventer or metrics in test clients
+	// to avoid polluting test output
+	clientOpts := []Option{
+		WithModules(),
+	}
+
 	// If a test container is used, retry the connection to the database to ensure it is up and running
 	if ctr.Pool != nil {
 		err = ctr.Pool.Retry(func() error {
 			log.Info().Msg("connecting to database...")
 
-			db, err = New(ctx, dbconf, jobOpts, entOpts...)
+			db, err = New(ctx, dbconf, jobOpts, clientOpts, entOpts...)
 			if err != nil {
 				log.Info().Err(err).Msg("retrying connection to database...")
 			}
@@ -423,7 +456,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 			return err
 		})
 	} else {
-		db, err = New(ctx, dbconf, jobOpts, entOpts...)
+		db, err = New(ctx, dbconf, jobOpts, clientOpts, entOpts...)
 	}
 
 	if err != nil {

@@ -6967,6 +6967,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenter",
 	)
 	graph.MustAddE(
+		"discussion",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.DiscussionTable,
+			Columns: []string{note.DiscussionColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"Discussion",
+	)
+	graph.MustAddE(
 		"files",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -22408,6 +22420,20 @@ func (f *NoteFilter) WhereHasTrustCenter() {
 // WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
 func (f *NoteFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
 	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDiscussion applies a predicate to check if query has an edge discussion.
+func (f *NoteFilter) WhereHasDiscussion() {
+	f.Where(entql.HasEdge("discussion"))
+}
+
+// WhereHasDiscussionWith applies a predicate to check if query has an edge discussion with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasDiscussionWith(preds ...predicate.Discussion) {
+	f.Where(entql.HasEdgeWith("discussion", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

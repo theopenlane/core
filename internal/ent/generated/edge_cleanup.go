@@ -216,6 +216,13 @@ func DirectorySyncRunEdgeCleanup(ctx context.Context, id string) error {
 func DiscussionEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup discussion edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).Note.Query().Where((note.HasDiscussionWith(discussion.ID(id)))).Exist(ctx); err == nil && exists {
+		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasDiscussionWith(discussion.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("error deleting note")
+			return err
+		}
+	}
+
 	return nil
 }
 

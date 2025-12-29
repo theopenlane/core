@@ -571,7 +571,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "external_id", Type: field.TypeString},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
 		{Name: "is_resolved", Type: field.TypeBool, Default: false},
 	}
 	// DiscussionHistoryTable holds the schema information for the "discussion_history" table.

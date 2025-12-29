@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -46,6 +47,7 @@ type NoteQuery struct {
 	withInternalPolicy *InternalPolicyQuery
 	withEvidence       *EvidenceQuery
 	withTrustCenter    *TrustCenterQuery
+	withDiscussion     *DiscussionQuery
 	withFiles          *FileQuery
 	withFKs            bool
 	loadTotal          []func(context.Context, []*Note) error
@@ -312,6 +314,31 @@ func (_q *NoteQuery) QueryTrustCenter() *TrustCenterQuery {
 	return query
 }
 
+// QueryDiscussion chains the current query on the "discussion" edge.
+func (_q *NoteQuery) QueryDiscussion() *DiscussionQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.DiscussionTable, note.DiscussionColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryFiles chains the current query on the "files" edge.
 func (_q *NoteQuery) QueryFiles() *FileQuery {
 	query := (&FileClient{config: _q.config}).Query()
@@ -538,6 +565,7 @@ func (_q *NoteQuery) Clone() *NoteQuery {
 		withInternalPolicy: _q.withInternalPolicy.Clone(),
 		withEvidence:       _q.withEvidence.Clone(),
 		withTrustCenter:    _q.withTrustCenter.Clone(),
+		withDiscussion:     _q.withDiscussion.Clone(),
 		withFiles:          _q.withFiles.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -645,6 +673,17 @@ func (_q *NoteQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *NoteQuery
 	return _q
 }
 
+// WithDiscussion tells the query-builder to eager-load the nodes that are connected to
+// the "discussion" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithDiscussion(opts ...func(*DiscussionQuery)) *NoteQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDiscussion = query
+	return _q
+}
+
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
 // the "files" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *NoteQuery) WithFiles(opts ...func(*FileQuery)) *NoteQuery {
@@ -741,7 +780,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			_q.withOwner != nil,
 			_q.withTask != nil,
 			_q.withControl != nil,
@@ -751,6 +790,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withInternalPolicy != nil,
 			_q.withEvidence != nil,
 			_q.withTrustCenter != nil,
+			_q.withDiscussion != nil,
 			_q.withFiles != nil,
 		}
 	)
@@ -834,6 +874,12 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if query := _q.withTrustCenter; query != nil {
 		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
 			func(n *Note, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDiscussion; query != nil {
+		if err := _q.loadDiscussion(ctx, query, nodes, nil,
+			func(n *Note, e *Discussion) { n.Edges.Discussion = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1144,6 +1190,35 @@ func (_q *NoteQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuer
 	}
 	return nil
 }
+func (_q *NoteQuery) loadDiscussion(ctx context.Context, query *DiscussionQuery, nodes []*Note, init func(*Note), assign func(*Note, *Discussion)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		fk := nodes[i].DiscussionID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(discussion.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "discussion_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *NoteQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Note, init func(*Note), assign func(*Note, *File)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Note)
@@ -1208,6 +1283,9 @@ func (_q *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(note.FieldOwnerID)
+		}
+		if _q.withDiscussion != nil {
+			_spec.Node.AddColumnOnce(note.FieldDiscussionID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

@@ -43,7 +43,8 @@ func (Discussion) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("external_id").
 			Unique().
-			Comment("the unique discussion identifier from external system, e.g. plate discussion id"),
+			Optional().
+			Comment("the unique discussion identifier from external system, e.g. plate discussion id, only required if synced from external system"),
 		field.Bool("is_resolved").
 			Comment("whether the discussion is resolved").
 			Default(false),
@@ -55,7 +56,11 @@ func (d Discussion) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(d),
+			newObjectOwnedMixin[generated.Discussion](
+				d,
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Risk{}, Evidence{}),
+				withOrganizationOwner(true),
+			),
 		},
 	}.getMixins(d)
 }
@@ -71,6 +76,8 @@ func (d Discussion) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
+			// deleting a discussion should delete its comments
+			cascadeDelete: "Discussion",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,
@@ -141,8 +148,6 @@ func (Discussion) Modules() []models.OrgModule {
 
 // Policy of the Discussion
 func (Discussion) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.AllowCreate(),

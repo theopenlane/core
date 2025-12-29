@@ -4229,7 +4229,7 @@ func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *Dir
 
 // CreateDiscussionInput represents a mutation input for creating discussions.
 type CreateDiscussionInput struct {
-	ExternalID       string
+	ExternalID       *string
 	IsResolved       *bool
 	OwnerID          *string
 	CommentIDs       []string
@@ -4242,7 +4242,9 @@ type CreateDiscussionInput struct {
 
 // Mutate applies the CreateDiscussionInput on the DiscussionMutation builder.
 func (i *CreateDiscussionInput) Mutate(m *DiscussionMutation) {
-	m.SetExternalID(i.ExternalID)
+	if v := i.ExternalID; v != nil {
+		m.SetExternalID(*v)
+	}
 	if v := i.IsResolved; v != nil {
 		m.SetIsResolved(*v)
 	}
@@ -4277,10 +4279,9 @@ func (c *DiscussionCreate) SetInput(i CreateDiscussionInput) *DiscussionCreate {
 
 // UpdateDiscussionInput represents a mutation input for updating discussions.
 type UpdateDiscussionInput struct {
+	ClearExternalID     bool
 	ExternalID          *string
 	IsResolved          *bool
-	ClearOwner          bool
-	OwnerID             *string
 	ClearComments       bool
 	AddCommentIDs       []string
 	RemoveCommentIDs    []string
@@ -4298,17 +4299,14 @@ type UpdateDiscussionInput struct {
 
 // Mutate applies the UpdateDiscussionInput on the DiscussionMutation builder.
 func (i *UpdateDiscussionInput) Mutate(m *DiscussionMutation) {
+	if i.ClearExternalID {
+		m.ClearExternalID()
+	}
 	if v := i.ExternalID; v != nil {
 		m.SetExternalID(*v)
 	}
 	if v := i.IsResolved; v != nil {
 		m.SetIsResolved(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearComments {
 		m.ClearComments()
@@ -9898,7 +9896,6 @@ type CreateNoteInput struct {
 	Text             string
 	TextJSON         []interface{}
 	NoteRef          *string
-	DiscussionID     *string
 	IsEdited         *bool
 	OwnerID          *string
 	TaskID           *string
@@ -9909,6 +9906,7 @@ type CreateNoteInput struct {
 	InternalPolicyID *string
 	EvidenceID       *string
 	TrustCenterID    *string
+	DiscussionID     *string
 	FileIDs          []string
 }
 
@@ -9920,9 +9918,6 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.NoteRef; v != nil {
 		m.SetNoteRef(*v)
-	}
-	if v := i.DiscussionID; v != nil {
-		m.SetDiscussionID(*v)
 	}
 	if v := i.IsEdited; v != nil {
 		m.SetIsEdited(*v)
@@ -9954,6 +9949,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
+	if v := i.DiscussionID; v != nil {
+		m.SetDiscussionID(*v)
+	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
@@ -9973,8 +9971,6 @@ type UpdateNoteInput struct {
 	AppendTextJSON      []interface{}
 	ClearNoteRef        bool
 	NoteRef             *string
-	ClearDiscussionID   bool
-	DiscussionID        *string
 	IsEdited            *bool
 	ClearTask           bool
 	TaskID              *string
@@ -9992,6 +9988,8 @@ type UpdateNoteInput struct {
 	EvidenceID          *string
 	ClearTrustCenter    bool
 	TrustCenterID       *string
+	ClearDiscussion     bool
+	DiscussionID        *string
 	ClearFiles          bool
 	AddFileIDs          []string
 	RemoveFileIDs       []string
@@ -10016,12 +10014,6 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.NoteRef; v != nil {
 		m.SetNoteRef(*v)
-	}
-	if i.ClearDiscussionID {
-		m.ClearDiscussionID()
-	}
-	if v := i.DiscussionID; v != nil {
-		m.SetDiscussionID(*v)
 	}
 	if v := i.IsEdited; v != nil {
 		m.SetIsEdited(*v)
@@ -10073,6 +10065,12 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearDiscussion {
+		m.ClearDiscussion()
+	}
+	if v := i.DiscussionID; v != nil {
+		m.SetDiscussionID(*v)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()

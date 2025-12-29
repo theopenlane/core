@@ -105,26 +105,6 @@ func (_u *DiscussionHistoryUpdate) ClearDeletedBy() *DiscussionHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *DiscussionHistoryUpdate) SetOwnerID(v string) *DiscussionHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableOwnerID(v *string) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DiscussionHistoryUpdate) ClearOwnerID() *DiscussionHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetExternalID sets the "external_id" field.
 func (_u *DiscussionHistoryUpdate) SetExternalID(v string) *DiscussionHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -136,6 +116,12 @@ func (_u *DiscussionHistoryUpdate) SetNillableExternalID(v *string) *DiscussionH
 	if v != nil {
 		_u.SetExternalID(*v)
 	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *DiscussionHistoryUpdate) ClearExternalID() *DiscussionHistoryUpdate {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -248,14 +234,14 @@ func (_u *DiscussionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(discussionhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(discussionhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(discussionhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(discussionhistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(discussionhistory.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IsResolved(); ok {
 		_spec.SetField(discussionhistory.FieldIsResolved, field.TypeBool, value)
@@ -356,26 +342,6 @@ func (_u *DiscussionHistoryUpdateOne) ClearDeletedBy() *DiscussionHistoryUpdateO
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *DiscussionHistoryUpdateOne) SetOwnerID(v string) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableOwnerID(v *string) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *DiscussionHistoryUpdateOne) ClearOwnerID() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetExternalID sets the "external_id" field.
 func (_u *DiscussionHistoryUpdateOne) SetExternalID(v string) *DiscussionHistoryUpdateOne {
 	_u.mutation.SetExternalID(v)
@@ -387,6 +353,12 @@ func (_u *DiscussionHistoryUpdateOne) SetNillableExternalID(v *string) *Discussi
 	if v != nil {
 		_u.SetExternalID(*v)
 	}
+	return _u
+}
+
+// ClearExternalID clears the value of the "external_id" field.
+func (_u *DiscussionHistoryUpdateOne) ClearExternalID() *DiscussionHistoryUpdateOne {
+	_u.mutation.ClearExternalID()
 	return _u
 }
 
@@ -529,14 +501,14 @@ func (_u *DiscussionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Discu
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(discussionhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(discussionhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(discussionhistory.FieldOwnerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(discussionhistory.FieldExternalID, field.TypeString, value)
+	}
+	if _u.mutation.ExternalIDCleared() {
+		_spec.ClearField(discussionhistory.FieldExternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.IsResolved(); ok {
 		_spec.SetField(discussionhistory.FieldIsResolved, field.TypeBool, value)

@@ -35,9 +35,9 @@ type Discussion struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the unique discussion identifier from external system, e.g. plate discussion id
+	// the unique discussion identifier from external system, e.g. plate discussion id, only required if synced from external system
 	ExternalID string `json:"external_id,omitempty"`
 	// whether the discussion is resolved
 	IsResolved bool `json:"is_resolved,omitempty"`

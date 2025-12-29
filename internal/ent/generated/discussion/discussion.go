@@ -62,7 +62,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "note" package.
 	CommentsInverseTable = "notes"
 	// CommentsColumn is the table column denoting the comments relation/edge.
-	CommentsColumn = "discussion_comments"
+	CommentsColumn = "discussion_id"
 	// ControlTable is the table that holds the control relation/edge.
 	ControlTable = "discussions"
 	// ControlInverseTable is the table name for the Control entity.
