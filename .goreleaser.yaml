@@ -111,11 +111,12 @@ signs:
   - cmd: cosign
     args:
       - "sign-blob"
-      - "--output-signature=${signature}"
+      - "--bundle=${signature}"
       - "${artifact}"
       - "--yes" # needed on cosign >= 2.0.0
     artifacts: archive
     output: true
+    signature: "${artifact}.sigstore.json"
 homebrew_casks:
   - homepage: 'https://github.com/theopenlane/core'
     description: 'openlane is the client CLI for interacting with the openlane server'
