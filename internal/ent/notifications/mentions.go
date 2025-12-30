@@ -446,32 +446,39 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 // objectMentionDetails holds the extracted details for mention processing
 type objectMentionDetails struct {
 	objectID       string
+	objectType     string
 	objectName     string
 	ownerID        string
 	newDetailsJSON string
 	oldDetailsJSON string
-	valid          bool
+	// newDetails and oldDetails are plain text fallbacks when JSON fields are empty.
+	// Not all editors use the JSON format - some store content in plain Details field.
+	newDetails string
+	oldDetails string
+	valid      bool
 }
 
-// documentMutation is an interface for mutations that have Name, DetailsJSON, and OwnerID fields.
+// documentMutation is an interface for mutations that have Name, Details, DetailsJSON, OwnerID, and Type fields.
 // This covers Risk, Procedure, and InternalPolicy mutations which share the same field structure.
 type documentMutation interface {
 	Name() (r string, exists bool)
+	Details() (r string, exists bool)
 	DetailsJSON() (r []any, exists bool)
 	OwnerID() (r string, exists bool)
+	Type() string
 }
 
 // oldDocumentDetails holds the old document details fetched from the database
 type oldDocumentDetails struct {
 	name        string
 	ownerID     string
+	details     string
 	detailsJSON []any
 }
 
 // handleObjectMentions is a generic handler for checking mentions in object details fields.
 // It uses type switching on the mutation to handle different object types.
 func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	var objectType string
 	if payload == nil {
 		return nil
 	}
@@ -490,34 +497,30 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 	case *generated.TaskMutation:
 		// Task is special - it has Title instead of Name
 		details = extractTaskMentionDetails(allowCtx, client, payload, mut)
-		objectType = "Task"
 	case *generated.RiskMutation:
 		details = extractDocumentMentionDetails(payload, mut, func() (*oldDocumentDetails, error) {
 			risk, err := client.Risk.Get(allowCtx, payload.EntityID)
 			if err != nil {
 				return nil, err
 			}
-			return &oldDocumentDetails{name: risk.Name, ownerID: risk.OwnerID, detailsJSON: risk.DetailsJSON}, nil
+			return &oldDocumentDetails{name: risk.Name, ownerID: risk.OwnerID, details: risk.Details, detailsJSON: risk.DetailsJSON}, nil
 		})
-		objectType = "Risk"
 	case *generated.ProcedureMutation:
 		details = extractDocumentMentionDetails(payload, mut, func() (*oldDocumentDetails, error) {
 			proc, err := client.Procedure.Get(allowCtx, payload.EntityID)
 			if err != nil {
 				return nil, err
 			}
-			return &oldDocumentDetails{name: proc.Name, ownerID: proc.OwnerID, detailsJSON: proc.DetailsJSON}, nil
+			return &oldDocumentDetails{name: proc.Name, ownerID: proc.OwnerID, details: proc.Details, detailsJSON: proc.DetailsJSON}, nil
 		})
-		objectType = "Procedure"
 	case *generated.InternalPolicyMutation:
 		details = extractDocumentMentionDetails(payload, mut, func() (*oldDocumentDetails, error) {
 			policy, err := client.InternalPolicy.Get(allowCtx, payload.EntityID)
 			if err != nil {
 				return nil, err
 			}
-			return &oldDocumentDetails{name: policy.Name, ownerID: policy.OwnerID, detailsJSON: policy.DetailsJSON}, nil
+			return &oldDocumentDetails{name: policy.Name, ownerID: policy.OwnerID, details: policy.Details, detailsJSON: policy.DetailsJSON}, nil
 		})
-		objectType = "InternalPolicy"
 	default:
 		return nil
 	}
@@ -526,18 +529,28 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 		return nil
 	}
 
-	// If no new details JSON, nothing to check
-	if details.newDetailsJSON == "" {
+	// Determine which text fields to use - prefer JSON but fall back to plain text.
+	// Not all editors use the JSON format - some store content in plain Details field.
+	newText := details.newDetailsJSON
+	oldText := details.oldDetailsJSON
+
+	if newText == "" {
+		newText = details.newDetails
+		oldText = details.oldDetails
+	}
+
+	// If no new details, nothing to check
+	if newText == "" {
 		return nil
 	}
 
 	// Check if the new details contain valid Slate text
-	if !slateparser.IsValidSlateText(details.newDetailsJSON) {
+	if !slateparser.IsValidSlateText(newText) {
 		return nil
 	}
 
 	// Check for new mentions
-	newMentions := slateparser.GetNewMentions(details.oldDetailsJSON, details.newDetailsJSON, objectType, details.objectID, details.objectName)
+	newMentions := slateparser.GetNewMentions(oldText, newText, details.objectType, details.objectID, details.objectName)
 	if len(newMentions) == 0 {
 		return nil
 	}
@@ -551,7 +564,7 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 	// Create mention notifications
 	input := mentionNotificationInput{
 		mentionedUserIDs: mentionedUserIDs,
-		objectType:       objectType,
+		objectType:       details.objectType,
 		objectID:         details.objectID,
 		objectName:       details.objectName,
 		ownerID:          details.ownerID,
@@ -570,12 +583,18 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 // Task is handled separately because it has Title instead of Name.
 func extractTaskMentionDetails(allowCtx context.Context, client *generated.Client, payload *events.MutationPayload, taskMut *generated.TaskMutation) objectMentionDetails {
 	details := objectMentionDetails{
-		objectID: payload.EntityID,
-		valid:    true,
+		objectID:   payload.EntityID,
+		objectType: taskMut.Type(),
+		valid:      true,
 	}
 
 	if detailsJSON, exists := taskMut.DetailsJSON(); exists {
 		details.newDetailsJSON = jsonSliceToString(detailsJSON)
+	}
+
+	// Also extract plain Details as fallback - not all editors use JSON format
+	if plainDetails, exists := taskMut.Details(); exists {
+		details.newDetails = plainDetails
 	}
 
 	if title, exists := taskMut.Title(); exists {
@@ -592,6 +611,7 @@ func extractTaskMentionDetails(allowCtx context.Context, client *generated.Clien
 			task, err := client.Task.Get(allowCtx, details.objectID)
 			if err == nil {
 				details.oldDetailsJSON = jsonSliceToString(task.DetailsJSON)
+				details.oldDetails = task.Details
 				if details.objectName == "" {
 					details.objectName = task.Title
 				}
@@ -613,12 +633,18 @@ func extractDocumentMentionDetails[T documentMutation](
 	queryFunc func() (*oldDocumentDetails, error),
 ) objectMentionDetails {
 	details := objectMentionDetails{
-		objectID: payload.EntityID,
-		valid:    true,
+		objectID:   payload.EntityID,
+		objectType: mut.Type(),
+		valid:      true,
 	}
 
 	if detailsJSON, exists := mut.DetailsJSON(); exists {
 		details.newDetailsJSON = jsonSliceToString(detailsJSON)
+	}
+
+	// Also extract plain Details as fallback - not all editors use JSON format
+	if plainDetails, exists := mut.Details(); exists {
+		details.newDetails = plainDetails
 	}
 
 	if name, exists := mut.Name(); exists {
@@ -635,6 +661,7 @@ func extractDocumentMentionDetails[T documentMutation](
 			oldDoc, err := queryFunc()
 			if err == nil {
 				details.oldDetailsJSON = jsonSliceToString(oldDoc.detailsJSON)
+				details.oldDetails = oldDoc.details
 				if details.objectName == "" {
 					details.objectName = oldDoc.name
 				}
