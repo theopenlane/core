@@ -1,0 +1,523 @@
+-- +goose Up
+-- create "action_plan_history" table
+CREATE TABLE "action_plan_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "revision" character varying NULL DEFAULT 'v0.0.1', "name" character varying NOT NULL, "status" character varying NULL DEFAULT 'DRAFT', "action_plan_type" character varying NULL, "details" text NULL, "details_json" jsonb NULL, "approval_required" boolean NULL DEFAULT true, "review_due" timestamptz NULL, "review_frequency" character varying NULL DEFAULT 'YEARLY', "approver_id" character varying NULL, "delegate_id" character varying NULL, "summary" character varying NULL, "tag_suggestions" jsonb NULL, "dismissed_tag_suggestions" jsonb NULL, "control_suggestions" jsonb NULL, "dismissed_control_suggestions" jsonb NULL, "improvement_suggestions" jsonb NULL, "dismissed_improvement_suggestions" jsonb NULL, "url" character varying NULL, "file_id" character varying NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "action_plan_kind_name" character varying NULL, "action_plan_kind_id" character varying NULL, "workflow_eligible_marker" boolean NULL DEFAULT true, "title" character varying NOT NULL, "description" text NULL, "due_date" timestamptz NULL, "completed_at" timestamptz NULL, "priority" character varying NULL, "requires_approval" boolean NOT NULL DEFAULT false, "blocked" boolean NOT NULL DEFAULT false, "blocker_reason" text NULL, "metadata" jsonb NULL, "raw_payload" jsonb NULL, "source" character varying NULL, PRIMARY KEY ("id"));
+-- create index "actionplanhistory_history_time" to table: "action_plan_history"
+CREATE INDEX "actionplanhistory_history_time" ON "action_plan_history" ("history_time");
+-- create "assessment_history" table
+CREATE TABLE "assessment_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "name" character varying NOT NULL, "assessment_type" character varying NOT NULL DEFAULT 'INTERNAL', "template_id" character varying NULL, "jsonconfig" jsonb NULL, "uischema" jsonb NULL, "response_due_duration" bigint NULL, PRIMARY KEY ("id"));
+-- create index "assessmenthistory_history_time" to table: "assessment_history"
+CREATE INDEX "assessmenthistory_history_time" ON "assessment_history" ("history_time");
+-- create "assessment_response_history" table
+CREATE TABLE "assessment_response_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "owner_id" character varying NULL, "assessment_id" character varying NOT NULL, "email" character varying NOT NULL, "send_attempts" bigint NOT NULL DEFAULT 1, "status" character varying NOT NULL DEFAULT 'SENT', "assigned_at" timestamptz NOT NULL, "started_at" timestamptz NOT NULL, "completed_at" timestamptz NULL, "due_date" timestamptz NULL, "document_data_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "assessmentresponsehistory_history_time" to table: "assessment_response_history"
+CREATE INDEX "assessmentresponsehistory_history_time" ON "assessment_response_history" ("history_time");
+-- create "asset_history" table
+CREATE TABLE "asset_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "asset_type" character varying NOT NULL DEFAULT 'TECHNOLOGY', "name" character varying NOT NULL, "description" character varying NULL, "identifier" character varying NULL, "website" character varying NULL, "cpe" character varying NULL, "categories" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "assethistory_history_time" to table: "asset_history"
+CREATE INDEX "assethistory_history_time" ON "asset_history" ("history_time");
+-- create "contact_history" table
+CREATE TABLE "contact_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "full_name" character varying NULL, "title" character varying NULL, "company" character varying NULL, "email" character varying NULL, "phone_number" character varying NULL, "address" character varying NULL, "status" character varying NOT NULL DEFAULT 'ACTIVE', PRIMARY KEY ("id"));
+-- create index "contacthistory_history_time" to table: "contact_history"
+CREATE INDEX "contacthistory_history_time" ON "contact_history" ("history_time");
+-- create "control_history" table
+CREATE TABLE "control_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "title" character varying NULL, "description" text NULL, "description_json" jsonb NULL, "aliases" jsonb NULL, "reference_id" character varying NULL, "auditor_reference_id" character varying NULL, "responsible_party_id" character varying NULL, "status" character varying NULL DEFAULT 'NOT_IMPLEMENTED', "source" character varying NULL DEFAULT 'USER_DEFINED', "reference_framework" character varying NULL, "reference_framework_revision" character varying NULL, "control_type" character varying NULL DEFAULT 'PREVENTATIVE', "category" character varying NULL, "category_id" character varying NULL, "subcategory" character varying NULL, "mapped_categories" jsonb NULL, "assessment_objectives" jsonb NULL, "assessment_methods" jsonb NULL, "control_questions" jsonb NULL, "implementation_guidance" jsonb NULL, "example_evidence" jsonb NULL, "references" jsonb NULL, "testing_procedures" jsonb NULL, "evidence_requests" jsonb NULL, "control_owner_id" character varying NULL, "delegate_id" character varying NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "control_kind_name" character varying NULL, "control_kind_id" character varying NULL, "workflow_eligible_marker" boolean NULL DEFAULT true, "ref_code" character varying NOT NULL, "standard_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "controlhistory_history_time" to table: "control_history"
+CREATE INDEX "controlhistory_history_time" ON "control_history" ("history_time");
+-- create "control_implementation_history" table
+CREATE TABLE "control_implementation_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "status" character varying NULL DEFAULT 'DRAFT', "implementation_date" timestamptz NULL, "verified" boolean NULL, "verification_date" timestamptz NULL, "details" text NULL, "details_json" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "controlimplementationhistory_history_time" to table: "control_implementation_history"
+CREATE INDEX "controlimplementationhistory_history_time" ON "control_implementation_history" ("history_time");
+-- create "control_objective_history" table
+CREATE TABLE "control_objective_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "revision" character varying NULL DEFAULT 'v0.0.1', "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "desired_outcome" text NULL, "desired_outcome_json" jsonb NULL, "status" character varying NULL DEFAULT 'DRAFT', "source" character varying NULL DEFAULT 'USER_DEFINED', "control_objective_type" character varying NULL, "category" character varying NULL, "subcategory" character varying NULL, PRIMARY KEY ("id"));
+-- create index "controlobjectivehistory_history_time" to table: "control_objective_history"
+CREATE INDEX "controlobjectivehistory_history_time" ON "control_objective_history" ("history_time");
+-- create "custom_domain_history" table
+CREATE TABLE "custom_domain_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "cname_record" character varying NOT NULL, "mappable_domain_id" character varying NOT NULL, "dns_verification_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "customdomainhistory_history_time" to table: "custom_domain_history"
+CREATE INDEX "customdomainhistory_history_time" ON "custom_domain_history" ("history_time");
+-- create "dns_verification_history" table
+CREATE TABLE "dns_verification_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "cloudflare_hostname_id" character varying NOT NULL, "dns_txt_record" character varying NOT NULL, "dns_txt_value" character varying NOT NULL, "dns_verification_status" character varying NOT NULL DEFAULT 'pending', "dns_verification_status_reason" character varying NULL, "acme_challenge_path" character varying NULL, "expected_acme_challenge_value" character varying NULL, "acme_challenge_status" character varying NOT NULL DEFAULT 'initializing', "acme_challenge_status_reason" character varying NULL, PRIMARY KEY ("id"));
+-- create index "dnsverificationhistory_history_time" to table: "dns_verification_history"
+CREATE INDEX "dnsverificationhistory_history_time" ON "dns_verification_history" ("history_time");
+-- create "directory_account_history" table
+CREATE TABLE "directory_account_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "integration_id" character varying NOT NULL, "directory_sync_run_id" character varying NOT NULL, "external_id" character varying NOT NULL, "secondary_key" character varying NULL, "canonical_email" character varying NULL, "display_name" character varying NULL, "given_name" character varying NULL, "family_name" character varying NULL, "job_title" character varying NULL, "department" character varying NULL, "organization_unit" character varying NULL, "account_type" character varying NULL DEFAULT 'USER', "status" character varying NOT NULL DEFAULT 'ACTIVE', "mfa_state" character varying NOT NULL DEFAULT 'UNKNOWN', "last_seen_ip" character varying NULL, "last_login_at" timestamptz NULL, "observed_at" timestamptz NOT NULL, "profile_hash" character varying NOT NULL DEFAULT '', "profile" jsonb NULL, "raw_profile_file_id" character varying NULL, "source_version" character varying NULL, PRIMARY KEY ("id"));
+-- create index "directoryaccounthistory_history_time" to table: "directory_account_history"
+CREATE INDEX "directoryaccounthistory_history_time" ON "directory_account_history" ("history_time");
+-- create "directory_group_history" table
+CREATE TABLE "directory_group_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "integration_id" character varying NOT NULL, "directory_sync_run_id" character varying NOT NULL, "external_id" character varying NOT NULL, "email" character varying NULL, "display_name" character varying NULL, "description" character varying NULL, "classification" character varying NOT NULL DEFAULT 'TEAM', "status" character varying NOT NULL DEFAULT 'ACTIVE', "external_sharing_allowed" boolean NULL DEFAULT false, "member_count" bigint NULL, "observed_at" timestamptz NOT NULL, "profile_hash" character varying NOT NULL DEFAULT '', "profile" jsonb NULL, "raw_profile_file_id" character varying NULL, "source_version" character varying NULL, PRIMARY KEY ("id"));
+-- create index "directorygrouphistory_history_time" to table: "directory_group_history"
+CREATE INDEX "directorygrouphistory_history_time" ON "directory_group_history" ("history_time");
+-- create "directory_membership_history" table
+CREATE TABLE "directory_membership_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "display_id" character varying NOT NULL, "owner_id" character varying NULL, "integration_id" character varying NOT NULL, "directory_sync_run_id" character varying NOT NULL, "directory_account_id" character varying NOT NULL, "directory_group_id" character varying NOT NULL, "role" character varying NULL DEFAULT 'MEMBER', "source" character varying NULL, "first_seen_at" timestamptz NULL, "last_seen_at" timestamptz NULL, "observed_at" timestamptz NOT NULL, "last_confirmed_run_id" character varying NULL, "metadata" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "directorymembershiphistory_history_time" to table: "directory_membership_history"
+CREATE INDEX "directorymembershiphistory_history_time" ON "directory_membership_history" ("history_time");
+-- create "discussion_history" table
+CREATE TABLE "discussion_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "owner_id" character varying NULL, "external_id" character varying NULL, "is_resolved" boolean NOT NULL DEFAULT false, PRIMARY KEY ("id"));
+-- create index "discussionhistory_history_time" to table: "discussion_history"
+CREATE INDEX "discussionhistory_history_time" ON "discussion_history" ("history_time");
+-- create "document_data_history" table
+CREATE TABLE "document_data_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "template_id" character varying NULL, "data" jsonb NOT NULL, PRIMARY KEY ("id"));
+-- create index "documentdatahistory_history_time" to table: "document_data_history"
+CREATE INDEX "documentdatahistory_history_time" ON "document_data_history" ("history_time");
+-- create "entity_history" table
+CREATE TABLE "entity_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" citext NULL, "display_name" character varying NULL, "description" character varying NULL, "domains" jsonb NULL, "entity_type_id" character varying NULL, "status" character varying NULL DEFAULT 'active', PRIMARY KEY ("id"));
+-- create index "entityhistory_history_time" to table: "entity_history"
+CREATE INDEX "entityhistory_history_time" ON "entity_history" ("history_time");
+-- create "entity_type_history" table
+CREATE TABLE "entity_type_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" citext NOT NULL, PRIMARY KEY ("id"));
+-- create index "entitytypehistory_history_time" to table: "entity_type_history"
+CREATE INDEX "entitytypehistory_history_time" ON "entity_type_history" ("history_time");
+-- create "evidence_history" table
+CREATE TABLE "evidence_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "workflow_eligible_marker" boolean NULL DEFAULT true, "name" character varying NOT NULL, "description" character varying NULL, "collection_procedure" text NULL, "creation_date" timestamptz NOT NULL, "renewal_date" timestamptz NULL, "source" character varying NULL, "is_automated" boolean NULL DEFAULT false, "url" character varying NULL, "status" character varying NULL, PRIMARY KEY ("id"));
+-- create index "evidencehistory_history_time" to table: "evidence_history"
+CREATE INDEX "evidencehistory_history_time" ON "evidence_history" ("history_time");
+-- create "file_history" table
+CREATE TABLE "file_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "provided_file_name" character varying NOT NULL, "provided_file_extension" character varying NOT NULL, "provided_file_size" bigint NULL, "persisted_file_size" bigint NULL, "detected_mime_type" character varying NULL, "md5_hash" character varying NULL, "detected_content_type" character varying NOT NULL, "store_key" character varying NULL, "category_type" character varying NULL, "uri" character varying NULL, "storage_scheme" character varying NULL, "storage_volume" character varying NULL, "storage_path" character varying NULL, "file_contents" bytea NULL, "metadata" jsonb NULL, "storage_region" character varying NULL, "storage_provider" character varying NULL, "last_accessed_at" timestamptz NULL, PRIMARY KEY ("id"));
+-- create index "filehistory_history_time" to table: "file_history"
+CREATE INDEX "filehistory_history_time" ON "file_history" ("history_time");
+-- create "finding_control_history" table
+CREATE TABLE "finding_control_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "finding_id" character varying NOT NULL, "control_id" character varying NOT NULL, "standard_id" character varying NULL, "external_standard" character varying NULL, "external_standard_version" character varying NULL, "external_control_id" character varying NULL, "source" character varying NULL, "metadata" jsonb NULL, "discovered_at" timestamptz NULL, PRIMARY KEY ("id"));
+-- create index "findingcontrolhistory_history_time" to table: "finding_control_history"
+CREATE INDEX "findingcontrolhistory_history_time" ON "finding_control_history" ("history_time");
+-- create "finding_history" table
+CREATE TABLE "finding_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "external_id" character varying NULL, "external_owner_id" character varying NULL, "source" character varying NULL, "resource_name" character varying NULL, "display_name" character varying NULL, "state" character varying NULL, "category" character varying NULL, "categories" jsonb NULL, "finding_class" character varying NULL, "severity" character varying NULL, "numeric_severity" double precision NULL, "score" double precision NULL, "impact" double precision NULL, "exploitability" double precision NULL, "priority" character varying NULL, "open" boolean NULL DEFAULT true, "blocks_production" boolean NULL, "production" boolean NULL, "public" boolean NULL, "validated" boolean NULL, "assessment_id" character varying NULL, "description" text NULL, "recommendation" text NULL, "recommended_actions" text NULL, "references" jsonb NULL, "steps_to_reproduce" jsonb NULL, "targets" jsonb NULL, "target_details" jsonb NULL, "vector" character varying NULL, "remediation_sla" bigint NULL, "status" character varying NULL, "event_time" timestamptz NULL, "reported_at" timestamptz NULL, "source_updated_at" timestamptz NULL, "external_uri" character varying NULL, "metadata" jsonb NULL, "raw_payload" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "findinghistory_history_time" to table: "finding_history"
+CREATE INDEX "findinghistory_history_time" ON "finding_history" ("history_time");
+-- create "group_history" table
+CREATE TABLE "group_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "name" citext NOT NULL, "description" character varying NULL, "is_managed" boolean NULL DEFAULT false, "gravatar_logo_url" character varying NULL, "logo_url" character varying NULL, "display_name" character varying NOT NULL DEFAULT '', "scim_external_id" character varying NULL, "scim_display_name" character varying NULL, "scim_active" boolean NULL DEFAULT true, "scim_group_mailing" character varying NULL, PRIMARY KEY ("id"));
+-- create index "grouphistory_history_time" to table: "group_history"
+CREATE INDEX "grouphistory_history_time" ON "group_history" ("history_time");
+-- create "group_membership_history" table
+CREATE TABLE "group_membership_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "role" character varying NOT NULL DEFAULT 'MEMBER', "group_id" character varying NOT NULL, "user_id" character varying NOT NULL, PRIMARY KEY ("id"));
+-- create index "groupmembershiphistory_history_time" to table: "group_membership_history"
+CREATE INDEX "groupmembershiphistory_history_time" ON "group_membership_history" ("history_time");
+-- create "group_setting_history" table
+CREATE TABLE "group_setting_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "visibility" character varying NOT NULL DEFAULT 'PUBLIC', "join_policy" character varying NOT NULL DEFAULT 'INVITE_OR_APPLICATION', "sync_to_slack" boolean NULL DEFAULT false, "sync_to_github" boolean NULL DEFAULT false, "group_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "groupsettinghistory_history_time" to table: "group_setting_history"
+CREATE INDEX "groupsettinghistory_history_time" ON "group_setting_history" ("history_time");
+-- create "hush_history" table
+CREATE TABLE "hush_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "description" character varying NULL, "kind" character varying NULL, "secret_name" character varying NULL, "secret_value" character varying NULL, "credential_set" jsonb NULL, "metadata" jsonb NULL, "last_used_at" timestamptz NULL, "expires_at" timestamptz NULL, PRIMARY KEY ("id"));
+-- create index "hushhistory_history_time" to table: "hush_history"
+CREATE INDEX "hushhistory_history_time" ON "hush_history" ("history_time");
+-- create "integration_history" table
+CREATE TABLE "integration_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "description" character varying NULL, "kind" character varying NULL, "integration_type" character varying NULL, "metadata" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "integrationhistory_history_time" to table: "integration_history"
+CREATE INDEX "integrationhistory_history_time" ON "integration_history" ("history_time");
+-- create "internal_policy_history" table
+CREATE TABLE "internal_policy_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "revision" character varying NULL DEFAULT 'v0.0.1', "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "status" character varying NULL DEFAULT 'DRAFT', "policy_type" character varying NULL, "details" text NULL, "details_json" jsonb NULL, "approval_required" boolean NULL DEFAULT true, "review_due" timestamptz NULL, "review_frequency" character varying NULL DEFAULT 'YEARLY', "approver_id" character varying NULL, "delegate_id" character varying NULL, "summary" character varying NULL, "tag_suggestions" jsonb NULL, "dismissed_tag_suggestions" jsonb NULL, "control_suggestions" jsonb NULL, "dismissed_control_suggestions" jsonb NULL, "improvement_suggestions" jsonb NULL, "dismissed_improvement_suggestions" jsonb NULL, "url" character varying NULL, "file_id" character varying NULL, "internal_policy_kind_name" character varying NULL, "internal_policy_kind_id" character varying NULL, "workflow_eligible_marker" boolean NULL DEFAULT true, PRIMARY KEY ("id"));
+-- create index "internalpolicyhistory_history_time" to table: "internal_policy_history"
+CREATE INDEX "internalpolicyhistory_history_time" ON "internal_policy_history" ("history_time");
+-- create "job_template_history" table
+CREATE TABLE "job_template_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "title" character varying NOT NULL, "description" character varying NULL, "platform" character varying NOT NULL, "windmill_path" character varying NULL, "download_url" character varying NOT NULL, "configuration" jsonb NULL, "cron" character varying NULL, PRIMARY KEY ("id"));
+-- create index "jobtemplatehistory_history_time" to table: "job_template_history"
+CREATE INDEX "jobtemplatehistory_history_time" ON "job_template_history" ("history_time");
+-- create "mappable_domain_history" table
+CREATE TABLE "mappable_domain_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "name" character varying NOT NULL, "zone_id" character varying NOT NULL, PRIMARY KEY ("id"));
+-- create index "mappabledomainhistory_history_time" to table: "mappable_domain_history"
+CREATE INDEX "mappabledomainhistory_history_time" ON "mappable_domain_history" ("history_time");
+-- create "mapped_control_history" table
+CREATE TABLE "mapped_control_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "owner_id" character varying NULL, "mapping_type" character varying NOT NULL DEFAULT 'EQUAL', "relation" character varying NULL, "confidence" bigint NULL, "source" character varying NULL DEFAULT 'MANUAL', PRIMARY KEY ("id"));
+-- create index "mappedcontrolhistory_history_time" to table: "mapped_control_history"
+CREATE INDEX "mappedcontrolhistory_history_time" ON "mapped_control_history" ("history_time");
+-- create "narrative_history" table
+CREATE TABLE "narrative_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "description" text NULL, "details" text NULL, PRIMARY KEY ("id"));
+-- create index "narrativehistory_history_time" to table: "narrative_history"
+CREATE INDEX "narrativehistory_history_time" ON "narrative_history" ("history_time");
+-- create "note_history" table
+CREATE TABLE "note_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "owner_id" character varying NULL, "text" text NOT NULL, "text_json" jsonb NULL, "note_ref" character varying NULL, "discussion_id" character varying NULL, "is_edited" boolean NOT NULL DEFAULT false, PRIMARY KEY ("id"));
+-- create index "notehistory_history_time" to table: "note_history"
+CREATE INDEX "notehistory_history_time" ON "note_history" ("history_time");
+-- create "org_membership_history" table
+CREATE TABLE "org_membership_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "role" character varying NOT NULL DEFAULT 'MEMBER', "organization_id" character varying NOT NULL, "user_id" character varying NOT NULL, PRIMARY KEY ("id"));
+-- create index "orgmembershiphistory_history_time" to table: "org_membership_history"
+CREATE INDEX "orgmembershiphistory_history_time" ON "org_membership_history" ("history_time");
+-- create "org_subscription_history" table
+CREATE TABLE "org_subscription_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "stripe_subscription_id" character varying NULL, "stripe_subscription_status" character varying NULL, "active" boolean NOT NULL DEFAULT true, "expires_at" timestamptz NULL, "trial_expires_at" timestamptz NULL, "days_until_due" character varying NULL, PRIMARY KEY ("id"));
+-- create index "orgsubscriptionhistory_history_time" to table: "org_subscription_history"
+CREATE INDEX "orgsubscriptionhistory_history_time" ON "org_subscription_history" ("history_time");
+-- create "organization_history" table
+CREATE TABLE "organization_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "name" citext NOT NULL, "display_name" character varying NOT NULL DEFAULT '', "description" character varying NULL, "parent_organization_id" character varying NULL, "personal_org" boolean NULL DEFAULT false, "avatar_remote_url" character varying NULL, "avatar_local_file_id" character varying NULL, "avatar_updated_at" timestamptz NULL, "dedicated_db" boolean NOT NULL DEFAULT false, "stripe_customer_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "organizationhistory_history_time" to table: "organization_history"
+CREATE INDEX "organizationhistory_history_time" ON "organization_history" ("history_time");
+-- create "organization_setting_history" table
+CREATE TABLE "organization_setting_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "domains" jsonb NULL, "billing_contact" character varying NULL, "billing_email" character varying NULL, "billing_phone" character varying NULL, "billing_address" jsonb NULL, "tax_identifier" character varying NULL, "geo_location" character varying NULL DEFAULT 'AMER', "organization_id" character varying NULL, "billing_notifications_enabled" boolean NOT NULL DEFAULT true, "allowed_email_domains" jsonb NULL, "allow_matching_domains_autojoin" boolean NULL DEFAULT false, "identity_provider" character varying NULL DEFAULT 'NONE', "identity_provider_client_id" character varying NULL, "identity_provider_client_secret" character varying NULL, "identity_provider_metadata_endpoint" character varying NULL, "identity_provider_auth_tested" boolean NOT NULL DEFAULT false, "identity_provider_entity_id" character varying NULL, "oidc_discovery_endpoint" character varying NULL, "saml_signin_url" character varying NULL, "saml_issuer" character varying NULL, "saml_cert" text NULL, "identity_provider_login_enforced" boolean NOT NULL DEFAULT false, "multifactor_auth_enforced" boolean NULL DEFAULT false, "compliance_webhook_token" character varying NULL, "payment_method_added" boolean NOT NULL DEFAULT false, PRIMARY KEY ("id"));
+-- create index "organizationsettinghistory_history_time" to table: "organization_setting_history"
+CREATE INDEX "organizationsettinghistory_history_time" ON "organization_setting_history" ("history_time");
+-- create "procedure_history" table
+CREATE TABLE "procedure_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "revision" character varying NULL DEFAULT 'v0.0.1', "owner_id" character varying NULL, "name" character varying NOT NULL, "status" character varying NULL DEFAULT 'DRAFT', "procedure_type" character varying NULL, "details" text NULL, "details_json" jsonb NULL, "approval_required" boolean NULL DEFAULT true, "review_due" timestamptz NULL, "review_frequency" character varying NULL DEFAULT 'YEARLY', "approver_id" character varying NULL, "delegate_id" character varying NULL, "summary" character varying NULL, "tag_suggestions" jsonb NULL, "dismissed_tag_suggestions" jsonb NULL, "control_suggestions" jsonb NULL, "dismissed_control_suggestions" jsonb NULL, "improvement_suggestions" jsonb NULL, "dismissed_improvement_suggestions" jsonb NULL, "url" character varying NULL, "file_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "procedure_kind_name" character varying NULL, "procedure_kind_id" character varying NULL, "workflow_eligible_marker" boolean NULL DEFAULT true, PRIMARY KEY ("id"));
+-- create index "procedurehistory_history_time" to table: "procedure_history"
+CREATE INDEX "procedurehistory_history_time" ON "procedure_history" ("history_time");
+-- create "program_history" table
+CREATE TABLE "program_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "program_kind_name" character varying NULL, "program_kind_id" character varying NULL, "name" character varying NOT NULL, "description" character varying NULL, "status" character varying NOT NULL DEFAULT 'NOT_STARTED', "program_type" character varying NOT NULL DEFAULT 'FRAMEWORK', "framework_name" character varying NULL, "start_date" timestamptz NULL, "end_date" timestamptz NULL, "auditor_ready" boolean NOT NULL DEFAULT false, "auditor_write_comments" boolean NOT NULL DEFAULT false, "auditor_read_comments" boolean NOT NULL DEFAULT false, "audit_firm" character varying NULL, "auditor" character varying NULL, "auditor_email" character varying NULL, "program_owner_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "programhistory_history_time" to table: "program_history"
+CREATE INDEX "programhistory_history_time" ON "program_history" ("history_time");
+-- create "program_membership_history" table
+CREATE TABLE "program_membership_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "role" character varying NOT NULL DEFAULT 'MEMBER', "program_id" character varying NOT NULL, "user_id" character varying NOT NULL, PRIMARY KEY ("id"));
+-- create index "programmembershiphistory_history_time" to table: "program_membership_history"
+CREATE INDEX "programmembershiphistory_history_time" ON "program_membership_history" ("history_time");
+-- create "remediation_history" table
+CREATE TABLE "remediation_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "external_id" character varying NULL, "external_owner_id" character varying NULL, "title" character varying NULL, "state" character varying NULL, "intent" character varying NULL, "summary" text NULL, "explanation" text NULL, "instructions" text NULL, "owner_reference" character varying NULL, "repository_uri" character varying NULL, "pull_request_uri" character varying NULL, "ticket_reference" character varying NULL, "due_at" timestamptz NULL, "completed_at" timestamptz NULL, "pr_generated_at" timestamptz NULL, "error" text NULL, "source" character varying NULL, "external_uri" character varying NULL, "metadata" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "remediationhistory_history_time" to table: "remediation_history"
+CREATE INDEX "remediationhistory_history_time" ON "remediation_history" ("history_time");
+-- create "review_history" table
+CREATE TABLE "review_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "external_id" character varying NULL, "external_owner_id" character varying NULL, "title" character varying NOT NULL, "state" character varying NULL, "category" character varying NULL, "classification" character varying NULL, "summary" text NULL, "details" text NULL, "reporter" character varying NULL, "approved" boolean NULL DEFAULT false, "reviewed_at" timestamptz NULL, "reported_at" timestamptz NULL, "approved_at" timestamptz NULL, "reviewer_id" character varying NULL, "source" character varying NULL, "external_uri" character varying NULL, "metadata" jsonb NULL, "raw_payload" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "reviewhistory_history_time" to table: "review_history"
+CREATE INDEX "reviewhistory_history_time" ON "review_history" ("history_time");
+-- create "risk_history" table
+CREATE TABLE "risk_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "risk_kind_name" character varying NULL, "risk_kind_id" character varying NULL, "risk_category_name" character varying NULL, "risk_category_id" character varying NULL, "name" character varying NOT NULL, "status" character varying NULL DEFAULT 'IDENTIFIED', "risk_type" character varying NULL, "category" character varying NULL, "impact" character varying NULL DEFAULT 'MODERATE', "likelihood" character varying NULL DEFAULT 'LIKELY', "score" bigint NULL, "mitigation" text NULL, "mitigation_json" jsonb NULL, "details" text NULL, "details_json" jsonb NULL, "business_costs" text NULL, "business_costs_json" jsonb NULL, "stakeholder_id" character varying NULL, "delegate_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "riskhistory_history_time" to table: "risk_history"
+CREATE INDEX "riskhistory_history_time" ON "risk_history" ("history_time");
+-- create "scan_history" table
+CREATE TABLE "scan_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "target" character varying NOT NULL, "scan_type" character varying NOT NULL DEFAULT 'DOMAIN', "metadata" jsonb NULL, "status" character varying NOT NULL DEFAULT 'PROCESSING', PRIMARY KEY ("id"));
+-- create index "scanhistory_history_time" to table: "scan_history"
+CREATE INDEX "scanhistory_history_time" ON "scan_history" ("history_time");
+-- create "scheduled_job_history" table
+CREATE TABLE "scheduled_job_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "owner_id" character varying NULL, "job_id" character varying NOT NULL, "active" boolean NOT NULL DEFAULT true, "configuration" jsonb NULL, "cron" character varying NULL, "job_runner_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "scheduledjobhistory_history_time" to table: "scheduled_job_history"
+CREATE INDEX "scheduledjobhistory_history_time" ON "scheduled_job_history" ("history_time");
+-- create "standard_history" table
+CREATE TABLE "standard_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "revision" character varying NULL DEFAULT 'v0.0.1', "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "short_name" character varying NULL, "framework" text NULL, "description" text NULL, "governing_body_logo_url" character varying NULL, "governing_body" character varying NULL, "domains" jsonb NULL, "link" character varying NULL, "status" character varying NULL DEFAULT 'ACTIVE', "is_public" boolean NULL DEFAULT false, "free_to_use" boolean NULL DEFAULT false, "standard_type" character varying NULL, "version" character varying NULL, "logo_file_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "standardhistory_history_time" to table: "standard_history"
+CREATE INDEX "standardhistory_history_time" ON "standard_history" ("history_time");
+-- create "subcontrol_history" table
+CREATE TABLE "subcontrol_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "title" character varying NULL, "description" text NULL, "description_json" jsonb NULL, "aliases" jsonb NULL, "reference_id" character varying NULL, "auditor_reference_id" character varying NULL, "responsible_party_id" character varying NULL, "status" character varying NULL DEFAULT 'NOT_IMPLEMENTED', "source" character varying NULL DEFAULT 'USER_DEFINED', "reference_framework" character varying NULL, "reference_framework_revision" character varying NULL, "control_type" character varying NULL DEFAULT 'PREVENTATIVE', "category" character varying NULL, "category_id" character varying NULL, "subcategory" character varying NULL, "mapped_categories" jsonb NULL, "assessment_objectives" jsonb NULL, "assessment_methods" jsonb NULL, "control_questions" jsonb NULL, "implementation_guidance" jsonb NULL, "example_evidence" jsonb NULL, "references" jsonb NULL, "testing_procedures" jsonb NULL, "evidence_requests" jsonb NULL, "control_owner_id" character varying NULL, "delegate_id" character varying NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "subcontrol_kind_name" character varying NULL, "subcontrol_kind_id" character varying NULL, "workflow_eligible_marker" boolean NULL DEFAULT true, "ref_code" character varying NOT NULL, "control_id" character varying NOT NULL, PRIMARY KEY ("id"));
+-- create index "subcontrolhistory_history_time" to table: "subcontrol_history"
+CREATE INDEX "subcontrolhistory_history_time" ON "subcontrol_history" ("history_time");
+-- create "subprocessor_history" table
+CREATE TABLE "subprocessor_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "description" text NULL, "logo_remote_url" character varying NULL, "logo_file_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "subprocessorhistory_history_time" to table: "subprocessor_history"
+CREATE INDEX "subprocessorhistory_history_time" ON "subprocessor_history" ("history_time");
+-- create "task_history" table
+CREATE TABLE "task_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "task_kind_name" character varying NULL, "task_kind_id" character varying NULL, "title" character varying NOT NULL, "details" text NULL, "details_json" jsonb NULL, "status" character varying NOT NULL DEFAULT 'OPEN', "category" character varying NULL, "due" timestamptz NULL, "completed" timestamptz NULL, "assignee_id" character varying NULL, "assigner_id" character varying NULL, "system_generated" boolean NOT NULL DEFAULT false, "idempotency_key" character varying NULL, "external_reference_url" jsonb NULL, "parent_task_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "taskhistory_history_time" to table: "task_history"
+CREATE INDEX "taskhistory_history_time" ON "task_history" ("history_time");
+-- create "template_history" table
+CREATE TABLE "template_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "template_type" character varying NOT NULL DEFAULT 'DOCUMENT', "description" character varying NULL, "kind" character varying NULL DEFAULT 'QUESTIONNAIRE', "jsonconfig" jsonb NOT NULL, "uischema" jsonb NULL, "trust_center_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "templatehistory_history_time" to table: "template_history"
+CREATE INDEX "templatehistory_history_time" ON "template_history" ("history_time");
+-- create "trust_center_compliance_history" table
+CREATE TABLE "trust_center_compliance_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "standard_id" character varying NOT NULL, "trust_center_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "trustcentercompliancehistory_history_time" to table: "trust_center_compliance_history"
+CREATE INDEX "trustcentercompliancehistory_history_time" ON "trust_center_compliance_history" ("history_time");
+-- create "trust_center_doc_history" table
+CREATE TABLE "trust_center_doc_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "trust_center_id" character varying NULL, "title" character varying NOT NULL, "category" character varying NOT NULL, "file_id" character varying NULL, "original_file_id" character varying NULL, "watermarking_enabled" boolean NULL, "watermark_status" character varying NULL DEFAULT 'DISABLED', "visibility" character varying NULL DEFAULT 'NOT_VISIBLE', "standard_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "trustcenterdochistory_history_time" to table: "trust_center_doc_history"
+CREATE INDEX "trustcenterdochistory_history_time" ON "trust_center_doc_history" ("history_time");
+-- create "trust_center_history" table
+CREATE TABLE "trust_center_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "slug" character varying NULL, "custom_domain_id" character varying NULL, "preview_domain_id" character varying NULL, "pirsch_domain_id" character varying NULL, "pirsch_identification_code" character varying NULL, "preview_status" character varying NULL DEFAULT 'NONE', PRIMARY KEY ("id"));
+-- create index "trustcenterhistory_history_time" to table: "trust_center_history"
+CREATE INDEX "trustcenterhistory_history_time" ON "trust_center_history" ("history_time");
+-- create "trust_center_setting_history" table
+CREATE TABLE "trust_center_setting_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "trust_center_id" character varying NULL, "title" character varying NULL, "overview" character varying NULL, "logo_remote_url" character varying NULL, "logo_local_file_id" character varying NULL, "favicon_remote_url" character varying NULL, "favicon_local_file_id" character varying NULL, "theme_mode" character varying NULL DEFAULT 'EASY', "primary_color" character varying NULL, "font" character varying NULL, "foreground_color" character varying NULL, "background_color" character varying NULL, "accent_color" character varying NULL, "secondary_background_color" character varying NULL, "secondary_foreground_color" character varying NULL, "environment" character varying NULL DEFAULT 'LIVE', PRIMARY KEY ("id"));
+-- create index "trustcentersettinghistory_history_time" to table: "trust_center_setting_history"
+CREATE INDEX "trustcentersettinghistory_history_time" ON "trust_center_setting_history" ("history_time");
+-- create "trust_center_subprocessor_history" table
+CREATE TABLE "trust_center_subprocessor_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "subprocessor_id" character varying NOT NULL, "trust_center_id" character varying NULL, "countries" jsonb NULL, "category" character varying NOT NULL, PRIMARY KEY ("id"));
+-- create index "trustcentersubprocessorhistory_history_time" to table: "trust_center_subprocessor_history"
+CREATE INDEX "trustcentersubprocessorhistory_history_time" ON "trust_center_subprocessor_history" ("history_time");
+-- create "trust_center_watermark_config_history" table
+CREATE TABLE "trust_center_watermark_config_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "owner_id" character varying NULL, "trust_center_id" character varying NULL, "is_enabled" boolean NULL DEFAULT true, "logo_id" character varying NULL, "text" character varying NULL, "font_size" double precision NULL DEFAULT 48, "opacity" double precision NULL DEFAULT 0.3, "rotation" double precision NULL DEFAULT 45, "color" character varying NULL DEFAULT '#808080', "font" character varying NULL DEFAULT 'HELVETICA', PRIMARY KEY ("id"));
+-- create index "trustcenterwatermarkconfighistory_history_time" to table: "trust_center_watermark_config_history"
+CREATE INDEX "trustcenterwatermarkconfighistory_history_time" ON "trust_center_watermark_config_history" ("history_time");
+-- create "trustcenter_entity_history" table
+CREATE TABLE "trustcenter_entity_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "logo_file_id" character varying NULL, "url" character varying NULL, "trust_center_id" character varying NULL, "name" character varying NOT NULL, "entity_type_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "trustcenterentityhistory_history_time" to table: "trustcenter_entity_history"
+CREATE INDEX "trustcenterentityhistory_history_time" ON "trustcenter_entity_history" ("history_time");
+-- create "user_history" table
+CREATE TABLE "user_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "email" character varying NOT NULL, "first_name" character varying NULL, "last_name" character varying NULL, "display_name" character varying NOT NULL, "avatar_remote_url" character varying NULL, "avatar_local_file_id" character varying NULL, "avatar_updated_at" timestamptz NULL, "last_seen" timestamptz NULL, "last_login_provider" character varying NULL, "password" character varying NULL, "sub" character varying NULL, "auth_provider" character varying NOT NULL DEFAULT 'CREDENTIALS', "role" character varying NULL DEFAULT 'USER', "scim_external_id" character varying NULL, "scim_username" character varying NULL, "scim_active" boolean NULL DEFAULT true, "scim_preferred_language" character varying NULL, "scim_locale" character varying NULL, PRIMARY KEY ("id"));
+-- create index "userhistory_history_time" to table: "user_history"
+CREATE INDEX "userhistory_history_time" ON "user_history" ("history_time");
+-- create "user_setting_history" table
+CREATE TABLE "user_setting_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "user_id" character varying NULL, "locked" boolean NOT NULL DEFAULT false, "silenced_at" timestamptz NULL, "suspended_at" timestamptz NULL, "status" character varying NOT NULL DEFAULT 'ACTIVE', "email_confirmed" boolean NOT NULL DEFAULT false, "is_webauthn_allowed" boolean NULL DEFAULT false, "is_tfa_enabled" boolean NULL DEFAULT false, "phone_number" character varying NULL, PRIMARY KEY ("id"));
+-- create index "usersettinghistory_history_time" to table: "user_setting_history"
+CREATE INDEX "usersettinghistory_history_time" ON "user_setting_history" ("history_time");
+-- create "vulnerability_history" table
+CREATE TABLE "vulnerability_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "external_owner_id" character varying NULL, "external_id" character varying NOT NULL, "cve_id" character varying NULL, "source" character varying NULL, "display_name" character varying NULL, "category" character varying NULL, "severity" character varying NULL, "score" double precision NULL, "impact" double precision NULL, "exploitability" double precision NULL, "priority" character varying NULL, "status" character varying NULL, "summary" text NULL, "description" text NULL, "vector" character varying NULL, "remediation_sla" bigint NULL, "open" boolean NULL DEFAULT true, "blocking" boolean NULL DEFAULT false, "production" boolean NULL, "public" boolean NULL, "validated" boolean NULL, "references" jsonb NULL, "impacts" jsonb NULL, "published_at" timestamptz NULL, "discovered_at" timestamptz NULL, "source_updated_at" timestamptz NULL, "external_uri" character varying NULL, "metadata" jsonb NULL, "raw_payload" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "vulnerabilityhistory_history_time" to table: "vulnerability_history"
+CREATE INDEX "vulnerabilityhistory_history_time" ON "vulnerability_history" ("history_time");
+-- create "workflow_assignment_history" table
+CREATE TABLE "workflow_assignment_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "workflow_instance_id" character varying NOT NULL, "assignment_key" character varying NOT NULL, "role" character varying NOT NULL DEFAULT 'APPROVER', "label" character varying NULL, "required" boolean NOT NULL DEFAULT true, "status" character varying NOT NULL DEFAULT 'PENDING', "metadata" jsonb NULL, "decided_at" timestamptz NULL, "actor_user_id" character varying NULL, "actor_group_id" character varying NULL, "notes" text NULL, PRIMARY KEY ("id"));
+-- create index "workflowassignmenthistory_history_time" to table: "workflow_assignment_history"
+CREATE INDEX "workflowassignmenthistory_history_time" ON "workflow_assignment_history" ("history_time");
+-- create "workflow_assignment_target_history" table
+CREATE TABLE "workflow_assignment_target_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "workflow_assignment_id" character varying NOT NULL, "target_type" character varying NOT NULL, "target_user_id" character varying NULL, "target_group_id" character varying NULL, "resolver_key" character varying NULL, PRIMARY KEY ("id"));
+-- create index "workflowassignmenttargethistory_history_time" to table: "workflow_assignment_target_history"
+CREATE INDEX "workflowassignmenttargethistory_history_time" ON "workflow_assignment_target_history" ("history_time");
+-- create "workflow_definition_history" table
+CREATE TABLE "workflow_definition_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "system_owned" boolean NULL DEFAULT false, "internal_notes" character varying NULL, "system_internal_id" character varying NULL, "name" character varying NOT NULL, "description" text NULL, "workflow_kind" character varying NOT NULL, "schema_type" character varying NOT NULL, "revision" bigint NOT NULL DEFAULT 1, "draft" boolean NOT NULL DEFAULT true, "published_at" timestamptz NULL, "cooldown_seconds" bigint NOT NULL DEFAULT 0, "is_default" boolean NOT NULL DEFAULT false, "active" boolean NOT NULL DEFAULT true, "trigger_operations" jsonb NULL, "trigger_fields" jsonb NULL, "approval_fields" jsonb NULL, "approval_edges" jsonb NULL, "approval_submission_mode" character varying NULL DEFAULT 'MANUAL_SUBMIT', "definition_json" jsonb NULL, "tracked_fields" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "workflowdefinitionhistory_history_time" to table: "workflow_definition_history"
+CREATE INDEX "workflowdefinitionhistory_history_time" ON "workflow_definition_history" ("history_time");
+-- create "workflow_event_history" table
+CREATE TABLE "workflow_event_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "workflow_instance_id" character varying NOT NULL, "event_type" character varying NOT NULL, "payload" jsonb NULL, PRIMARY KEY ("id"));
+-- create index "workfloweventhistory_history_time" to table: "workflow_event_history"
+CREATE INDEX "workfloweventhistory_history_time" ON "workflow_event_history" ("history_time");
+-- create "workflow_instance_history" table
+CREATE TABLE "workflow_instance_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "display_id" character varying NOT NULL, "tags" jsonb NULL, "owner_id" character varying NULL, "workflow_definition_id" character varying NOT NULL, "workflow_proposal_id" character varying NULL, "state" character varying NOT NULL DEFAULT 'RUNNING', "context" jsonb NULL, "last_evaluated_at" timestamptz NULL, "definition_snapshot" jsonb NULL, "current_action_index" bigint NOT NULL DEFAULT 0, "control_id" character varying NULL, "internal_policy_id" character varying NULL, "evidence_id" character varying NULL, "subcontrol_id" character varying NULL, "action_plan_id" character varying NULL, "procedure_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "workflowinstancehistory_history_time" to table: "workflow_instance_history"
+CREATE INDEX "workflowinstancehistory_history_time" ON "workflow_instance_history" ("history_time");
+-- create "workflow_object_ref_history" table
+CREATE TABLE "workflow_object_ref_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "display_id" character varying NOT NULL, "owner_id" character varying NULL, "workflow_instance_id" character varying NOT NULL, "control_id" character varying NULL, "task_id" character varying NULL, "internal_policy_id" character varying NULL, "finding_id" character varying NULL, "directory_account_id" character varying NULL, "directory_group_id" character varying NULL, "directory_membership_id" character varying NULL, "evidence_id" character varying NULL, "subcontrol_id" character varying NULL, "action_plan_id" character varying NULL, "procedure_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "workflowobjectrefhistory_history_time" to table: "workflow_object_ref_history"
+CREATE INDEX "workflowobjectrefhistory_history_time" ON "workflow_object_ref_history" ("history_time");
+
+-- +goose Down
+-- reverse: create index "workflowobjectrefhistory_history_time" to table: "workflow_object_ref_history"
+DROP INDEX "workflowobjectrefhistory_history_time";
+-- reverse: create "workflow_object_ref_history" table
+DROP TABLE "workflow_object_ref_history";
+-- reverse: create index "workflowinstancehistory_history_time" to table: "workflow_instance_history"
+DROP INDEX "workflowinstancehistory_history_time";
+-- reverse: create "workflow_instance_history" table
+DROP TABLE "workflow_instance_history";
+-- reverse: create index "workfloweventhistory_history_time" to table: "workflow_event_history"
+DROP INDEX "workfloweventhistory_history_time";
+-- reverse: create "workflow_event_history" table
+DROP TABLE "workflow_event_history";
+-- reverse: create index "workflowdefinitionhistory_history_time" to table: "workflow_definition_history"
+DROP INDEX "workflowdefinitionhistory_history_time";
+-- reverse: create "workflow_definition_history" table
+DROP TABLE "workflow_definition_history";
+-- reverse: create index "workflowassignmenttargethistory_history_time" to table: "workflow_assignment_target_history"
+DROP INDEX "workflowassignmenttargethistory_history_time";
+-- reverse: create "workflow_assignment_target_history" table
+DROP TABLE "workflow_assignment_target_history";
+-- reverse: create index "workflowassignmenthistory_history_time" to table: "workflow_assignment_history"
+DROP INDEX "workflowassignmenthistory_history_time";
+-- reverse: create "workflow_assignment_history" table
+DROP TABLE "workflow_assignment_history";
+-- reverse: create index "vulnerabilityhistory_history_time" to table: "vulnerability_history"
+DROP INDEX "vulnerabilityhistory_history_time";
+-- reverse: create "vulnerability_history" table
+DROP TABLE "vulnerability_history";
+-- reverse: create index "usersettinghistory_history_time" to table: "user_setting_history"
+DROP INDEX "usersettinghistory_history_time";
+-- reverse: create "user_setting_history" table
+DROP TABLE "user_setting_history";
+-- reverse: create index "userhistory_history_time" to table: "user_history"
+DROP INDEX "userhistory_history_time";
+-- reverse: create "user_history" table
+DROP TABLE "user_history";
+-- reverse: create index "trustcenterentityhistory_history_time" to table: "trustcenter_entity_history"
+DROP INDEX "trustcenterentityhistory_history_time";
+-- reverse: create "trustcenter_entity_history" table
+DROP TABLE "trustcenter_entity_history";
+-- reverse: create index "trustcenterwatermarkconfighistory_history_time" to table: "trust_center_watermark_config_history"
+DROP INDEX "trustcenterwatermarkconfighistory_history_time";
+-- reverse: create "trust_center_watermark_config_history" table
+DROP TABLE "trust_center_watermark_config_history";
+-- reverse: create index "trustcentersubprocessorhistory_history_time" to table: "trust_center_subprocessor_history"
+DROP INDEX "trustcentersubprocessorhistory_history_time";
+-- reverse: create "trust_center_subprocessor_history" table
+DROP TABLE "trust_center_subprocessor_history";
+-- reverse: create index "trustcentersettinghistory_history_time" to table: "trust_center_setting_history"
+DROP INDEX "trustcentersettinghistory_history_time";
+-- reverse: create "trust_center_setting_history" table
+DROP TABLE "trust_center_setting_history";
+-- reverse: create index "trustcenterhistory_history_time" to table: "trust_center_history"
+DROP INDEX "trustcenterhistory_history_time";
+-- reverse: create "trust_center_history" table
+DROP TABLE "trust_center_history";
+-- reverse: create index "trustcenterdochistory_history_time" to table: "trust_center_doc_history"
+DROP INDEX "trustcenterdochistory_history_time";
+-- reverse: create "trust_center_doc_history" table
+DROP TABLE "trust_center_doc_history";
+-- reverse: create index "trustcentercompliancehistory_history_time" to table: "trust_center_compliance_history"
+DROP INDEX "trustcentercompliancehistory_history_time";
+-- reverse: create "trust_center_compliance_history" table
+DROP TABLE "trust_center_compliance_history";
+-- reverse: create index "templatehistory_history_time" to table: "template_history"
+DROP INDEX "templatehistory_history_time";
+-- reverse: create "template_history" table
+DROP TABLE "template_history";
+-- reverse: create index "taskhistory_history_time" to table: "task_history"
+DROP INDEX "taskhistory_history_time";
+-- reverse: create "task_history" table
+DROP TABLE "task_history";
+-- reverse: create index "subprocessorhistory_history_time" to table: "subprocessor_history"
+DROP INDEX "subprocessorhistory_history_time";
+-- reverse: create "subprocessor_history" table
+DROP TABLE "subprocessor_history";
+-- reverse: create index "subcontrolhistory_history_time" to table: "subcontrol_history"
+DROP INDEX "subcontrolhistory_history_time";
+-- reverse: create "subcontrol_history" table
+DROP TABLE "subcontrol_history";
+-- reverse: create index "standardhistory_history_time" to table: "standard_history"
+DROP INDEX "standardhistory_history_time";
+-- reverse: create "standard_history" table
+DROP TABLE "standard_history";
+-- reverse: create index "scheduledjobhistory_history_time" to table: "scheduled_job_history"
+DROP INDEX "scheduledjobhistory_history_time";
+-- reverse: create "scheduled_job_history" table
+DROP TABLE "scheduled_job_history";
+-- reverse: create index "scanhistory_history_time" to table: "scan_history"
+DROP INDEX "scanhistory_history_time";
+-- reverse: create "scan_history" table
+DROP TABLE "scan_history";
+-- reverse: create index "riskhistory_history_time" to table: "risk_history"
+DROP INDEX "riskhistory_history_time";
+-- reverse: create "risk_history" table
+DROP TABLE "risk_history";
+-- reverse: create index "reviewhistory_history_time" to table: "review_history"
+DROP INDEX "reviewhistory_history_time";
+-- reverse: create "review_history" table
+DROP TABLE "review_history";
+-- reverse: create index "remediationhistory_history_time" to table: "remediation_history"
+DROP INDEX "remediationhistory_history_time";
+-- reverse: create "remediation_history" table
+DROP TABLE "remediation_history";
+-- reverse: create index "programmembershiphistory_history_time" to table: "program_membership_history"
+DROP INDEX "programmembershiphistory_history_time";
+-- reverse: create "program_membership_history" table
+DROP TABLE "program_membership_history";
+-- reverse: create index "programhistory_history_time" to table: "program_history"
+DROP INDEX "programhistory_history_time";
+-- reverse: create "program_history" table
+DROP TABLE "program_history";
+-- reverse: create index "procedurehistory_history_time" to table: "procedure_history"
+DROP INDEX "procedurehistory_history_time";
+-- reverse: create "procedure_history" table
+DROP TABLE "procedure_history";
+-- reverse: create index "organizationsettinghistory_history_time" to table: "organization_setting_history"
+DROP INDEX "organizationsettinghistory_history_time";
+-- reverse: create "organization_setting_history" table
+DROP TABLE "organization_setting_history";
+-- reverse: create index "organizationhistory_history_time" to table: "organization_history"
+DROP INDEX "organizationhistory_history_time";
+-- reverse: create "organization_history" table
+DROP TABLE "organization_history";
+-- reverse: create index "orgsubscriptionhistory_history_time" to table: "org_subscription_history"
+DROP INDEX "orgsubscriptionhistory_history_time";
+-- reverse: create "org_subscription_history" table
+DROP TABLE "org_subscription_history";
+-- reverse: create index "orgmembershiphistory_history_time" to table: "org_membership_history"
+DROP INDEX "orgmembershiphistory_history_time";
+-- reverse: create "org_membership_history" table
+DROP TABLE "org_membership_history";
+-- reverse: create index "notehistory_history_time" to table: "note_history"
+DROP INDEX "notehistory_history_time";
+-- reverse: create "note_history" table
+DROP TABLE "note_history";
+-- reverse: create index "narrativehistory_history_time" to table: "narrative_history"
+DROP INDEX "narrativehistory_history_time";
+-- reverse: create "narrative_history" table
+DROP TABLE "narrative_history";
+-- reverse: create index "mappedcontrolhistory_history_time" to table: "mapped_control_history"
+DROP INDEX "mappedcontrolhistory_history_time";
+-- reverse: create "mapped_control_history" table
+DROP TABLE "mapped_control_history";
+-- reverse: create index "mappabledomainhistory_history_time" to table: "mappable_domain_history"
+DROP INDEX "mappabledomainhistory_history_time";
+-- reverse: create "mappable_domain_history" table
+DROP TABLE "mappable_domain_history";
+-- reverse: create index "jobtemplatehistory_history_time" to table: "job_template_history"
+DROP INDEX "jobtemplatehistory_history_time";
+-- reverse: create "job_template_history" table
+DROP TABLE "job_template_history";
+-- reverse: create index "internalpolicyhistory_history_time" to table: "internal_policy_history"
+DROP INDEX "internalpolicyhistory_history_time";
+-- reverse: create "internal_policy_history" table
+DROP TABLE "internal_policy_history";
+-- reverse: create index "integrationhistory_history_time" to table: "integration_history"
+DROP INDEX "integrationhistory_history_time";
+-- reverse: create "integration_history" table
+DROP TABLE "integration_history";
+-- reverse: create index "hushhistory_history_time" to table: "hush_history"
+DROP INDEX "hushhistory_history_time";
+-- reverse: create "hush_history" table
+DROP TABLE "hush_history";
+-- reverse: create index "groupsettinghistory_history_time" to table: "group_setting_history"
+DROP INDEX "groupsettinghistory_history_time";
+-- reverse: create "group_setting_history" table
+DROP TABLE "group_setting_history";
+-- reverse: create index "groupmembershiphistory_history_time" to table: "group_membership_history"
+DROP INDEX "groupmembershiphistory_history_time";
+-- reverse: create "group_membership_history" table
+DROP TABLE "group_membership_history";
+-- reverse: create index "grouphistory_history_time" to table: "group_history"
+DROP INDEX "grouphistory_history_time";
+-- reverse: create "group_history" table
+DROP TABLE "group_history";
+-- reverse: create index "findinghistory_history_time" to table: "finding_history"
+DROP INDEX "findinghistory_history_time";
+-- reverse: create "finding_history" table
+DROP TABLE "finding_history";
+-- reverse: create index "findingcontrolhistory_history_time" to table: "finding_control_history"
+DROP INDEX "findingcontrolhistory_history_time";
+-- reverse: create "finding_control_history" table
+DROP TABLE "finding_control_history";
+-- reverse: create index "filehistory_history_time" to table: "file_history"
+DROP INDEX "filehistory_history_time";
+-- reverse: create "file_history" table
+DROP TABLE "file_history";
+-- reverse: create index "evidencehistory_history_time" to table: "evidence_history"
+DROP INDEX "evidencehistory_history_time";
+-- reverse: create "evidence_history" table
+DROP TABLE "evidence_history";
+-- reverse: create index "entitytypehistory_history_time" to table: "entity_type_history"
+DROP INDEX "entitytypehistory_history_time";
+-- reverse: create "entity_type_history" table
+DROP TABLE "entity_type_history";
+-- reverse: create index "entityhistory_history_time" to table: "entity_history"
+DROP INDEX "entityhistory_history_time";
+-- reverse: create "entity_history" table
+DROP TABLE "entity_history";
+-- reverse: create index "documentdatahistory_history_time" to table: "document_data_history"
+DROP INDEX "documentdatahistory_history_time";
+-- reverse: create "document_data_history" table
+DROP TABLE "document_data_history";
+-- reverse: create index "discussionhistory_history_time" to table: "discussion_history"
+DROP INDEX "discussionhistory_history_time";
+-- reverse: create "discussion_history" table
+DROP TABLE "discussion_history";
+-- reverse: create index "directorymembershiphistory_history_time" to table: "directory_membership_history"
+DROP INDEX "directorymembershiphistory_history_time";
+-- reverse: create "directory_membership_history" table
+DROP TABLE "directory_membership_history";
+-- reverse: create index "directorygrouphistory_history_time" to table: "directory_group_history"
+DROP INDEX "directorygrouphistory_history_time";
+-- reverse: create "directory_group_history" table
+DROP TABLE "directory_group_history";
+-- reverse: create index "directoryaccounthistory_history_time" to table: "directory_account_history"
+DROP INDEX "directoryaccounthistory_history_time";
+-- reverse: create "directory_account_history" table
+DROP TABLE "directory_account_history";
+-- reverse: create index "dnsverificationhistory_history_time" to table: "dns_verification_history"
+DROP INDEX "dnsverificationhistory_history_time";
+-- reverse: create "dns_verification_history" table
+DROP TABLE "dns_verification_history";
+-- reverse: create index "customdomainhistory_history_time" to table: "custom_domain_history"
+DROP INDEX "customdomainhistory_history_time";
+-- reverse: create "custom_domain_history" table
+DROP TABLE "custom_domain_history";
+-- reverse: create index "controlobjectivehistory_history_time" to table: "control_objective_history"
+DROP INDEX "controlobjectivehistory_history_time";
+-- reverse: create "control_objective_history" table
+DROP TABLE "control_objective_history";
+-- reverse: create index "controlimplementationhistory_history_time" to table: "control_implementation_history"
+DROP INDEX "controlimplementationhistory_history_time";
+-- reverse: create "control_implementation_history" table
+DROP TABLE "control_implementation_history";
+-- reverse: create index "controlhistory_history_time" to table: "control_history"
+DROP INDEX "controlhistory_history_time";
+-- reverse: create "control_history" table
+DROP TABLE "control_history";
+-- reverse: create index "contacthistory_history_time" to table: "contact_history"
+DROP INDEX "contacthistory_history_time";
+-- reverse: create "contact_history" table
+DROP TABLE "contact_history";
+-- reverse: create index "assethistory_history_time" to table: "asset_history"
+DROP INDEX "assethistory_history_time";
+-- reverse: create "asset_history" table
+DROP TABLE "asset_history";
+-- reverse: create index "assessmentresponsehistory_history_time" to table: "assessment_response_history"
+DROP INDEX "assessmentresponsehistory_history_time";
+-- reverse: create "assessment_response_history" table
+DROP TABLE "assessment_response_history";
+-- reverse: create index "assessmenthistory_history_time" to table: "assessment_history"
+DROP INDEX "assessmenthistory_history_time";
+-- reverse: create "assessment_history" table
+DROP TABLE "assessment_history";
+-- reverse: create index "actionplanhistory_history_time" to table: "action_plan_history"
+DROP INDEX "actionplanhistory_history_time";
+-- reverse: create "action_plan_history" table
+DROP TABLE "action_plan_history";
