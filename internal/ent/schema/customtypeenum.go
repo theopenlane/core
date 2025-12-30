@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
@@ -53,14 +54,18 @@ func (CustomTypeEnum) Fields() []ent.Field {
 			Validate(validateObjectType).
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("object_type"),
 			),
 		field.String("field").
 			Comment("the field on the object the type applies to, for example kind or category").
 			Default("kind").
+			Annotations(
+				entgql.OrderField("field"),
+			).
 			Immutable(),
 		field.String("name").
 			Comment("The name of the enum value, for example evidence request").
-			Annotations(entx.FieldSearchable()).
+			Annotations(entx.FieldSearchable(), entgql.OrderField("name")).
 			NotEmpty().
 			Immutable().
 			SchemaType(map[string]string{

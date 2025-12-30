@@ -11736,6 +11736,9 @@ Properties by which CustomTypeEnum connections can be ordered.
 enum CustomTypeEnumOrderField {
 	created_at
 	updated_at
+	object_type
+	field
+	name
 }
 """
 Return response for updateCustomTypeEnum mutation
@@ -54185,6 +54188,8 @@ Properties by which TagDefinition connections can be ordered.
 enum TagDefinitionOrderField {
 	created_at
 	updated_at
+	name
+	slug
 }
 """
 Return response for updateTagDefinition mutation
