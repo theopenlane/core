@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
@@ -137,6 +138,11 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 
 	for _, m := range s.config.DefaultMiddleware {
 		s.Router.Echo.Use(m)
+	}
+
+	// set local file path for uploads if in dev mode
+	if s.config.Settings.ObjectStorage.DevMode {
+		s.Router.LocalFilePath = objects.DefaultDevStorageBucket
 	}
 
 	s.Router.Handler = &s.config.Handler
