@@ -1,6 +1,7 @@
 package notifications
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -21,6 +22,21 @@ var (
 	// ErrEntityIDNotFound is returned when entity ID is not found in props
 	ErrEntityIDNotFound = errors.New("entity ID not found in props")
 )
+
+// jsonSliceToString converts a []any slice to a JSON string for parsing.
+// Returns an empty string if the slice is empty or serialization fails.
+func jsonSliceToString(data []any) string {
+	if len(data) == 0 {
+		return ""
+	}
+
+	bytes, err := json.Marshal(data)
+	if err != nil {
+		return ""
+	}
+
+	return string(bytes)
+}
 
 type taskFields struct {
 	title    string
@@ -48,7 +64,7 @@ type policyNotificationInput struct {
 	ownerID    string
 }
 
-// handleTaskMutation processes task mutations and creates notifications when assignee changes
+// handleTaskMutation processes task mutations and creates notifications when assignee changes or mentions are added
 func handleTaskMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	props := ctx.Properties()
 	if props == nil {
@@ -57,31 +73,33 @@ func handleTaskMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 
 	// Check if assignee_id field changed - only trigger notification if this field was updated
 	assigneeIDVal := props.GetKey(task.FieldAssigneeID)
-	if assigneeIDVal == nil {
-		return nil
+	if assigneeIDVal != nil {
+		assigneeID, ok := assigneeIDVal.(string)
+		if ok && assigneeID != "" {
+			// Get other fields from props and payload, fallback to database query if missing
+			fields, err := fetchTaskFields(ctx, props, payload)
+			if err != nil {
+				logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get task fields")
+				return err
+			}
+
+			input := taskNotificationInput{
+				assigneeID: assigneeID,
+				taskTitle:  fields.title,
+				taskID:     fields.entityID,
+				ownerID:    fields.ownerID,
+			}
+
+			if err := addTaskAssigneeNotification(ctx, input); err != nil {
+				logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add task assignee notification")
+				return err
+			}
+		}
 	}
 
-	assigneeID, ok := assigneeIDVal.(string)
-	if !ok || assigneeID == "" {
-		return nil
-	}
-
-	// Get other fields from props and payload, fallback to database query if missing
-	fields, err := fetchTaskFields(ctx, props, payload)
-	if err != nil {
-		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get task fields")
-		return err
-	}
-
-	input := taskNotificationInput{
-		assigneeID: assigneeID,
-		taskTitle:  fields.title,
-		taskID:     fields.entityID,
-		ownerID:    fields.ownerID,
-	}
-
-	if err := addTaskAssigneeNotification(ctx, input); err != nil {
-		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add task assignee notification")
+	// Check for mentions in task details
+	if err := handleObjectMentions(ctx, payload); err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to handle task mentions")
 		return err
 	}
 
@@ -182,7 +200,7 @@ func queryTaskFromDB(ctx *soiree.EventContext, fields *taskFields) error {
 	return nil
 }
 
-// handleInternalPolicyMutation processes internal policy mutations and creates notifications when status = NEEDS_APPROVAL
+// handleInternalPolicyMutation processes internal policy mutations and creates notifications when status = NEEDS_APPROVAL or mentions are added
 func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	props := ctx.Properties()
 	if props == nil {
@@ -191,47 +209,56 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.Muta
 
 	// Check if status field changed - only trigger notification if this field was updated
 	statusVal := props.GetKey(internalpolicy.FieldStatus)
-	if statusVal == nil {
-		return nil
+	if statusVal != nil {
+		status, ok := statusVal.(string)
+		if ok {
+			statusEnum := enums.ToDocumentStatus(status)
+
+			// Check if status is NEEDS_APPROVAL
+			if statusEnum == &enums.DocumentNeedsApproval {
+				// Get approver_id from payload and props, fallback to database query if missing
+				fields, err := fetchPolicyFields(ctx, props, payload)
+				if err != nil {
+					logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get internal policy fields")
+					return err
+				}
+
+				if fields.approverID == "" {
+					logx.FromContext(ctx.Context()).Warn().Msg("approver_id not set for internal policy with NEEDS_APPROVAL status")
+				} else {
+					input := policyNotificationInput{
+						approverID: fields.approverID,
+						policyName: fields.name,
+						policyID:   fields.entityID,
+						ownerID:    fields.ownerID,
+					}
+
+					if err := addInternalPolicyNotification(ctx, input); err != nil {
+						logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add internal policy notification")
+						return err
+					}
+				}
+			}
+		}
 	}
 
-	status, ok := statusVal.(string)
-	if !ok {
-		return nil
-	}
-
-	statusEnum := enums.ToDocumentStatus(status)
-
-	// Check if status is NEEDS_APPROVAL
-	if statusEnum != &enums.DocumentNeedsApproval {
-		return nil
-	}
-
-	// Get approver_id from payload and props, fallback to database query if missing
-	fields, err := fetchPolicyFields(ctx, props, payload)
-	if err != nil {
-		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get internal policy fields")
-		return err
-	}
-
-	if fields.approverID == "" {
-		logx.FromContext(ctx.Context()).Warn().Msg("approver_id not set for internal policy with NEEDS_APPROVAL status")
-		return nil
-	}
-
-	input := policyNotificationInput{
-		approverID: fields.approverID,
-		policyName: fields.name,
-		policyID:   fields.entityID,
-		ownerID:    fields.ownerID,
-	}
-
-	if err := addInternalPolicyNotification(ctx, input); err != nil {
-		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add internal policy notification")
+	// Check for mentions in policy details
+	if err := handleObjectMentions(ctx, payload); err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to handle internal policy mentions")
 		return err
 	}
 
 	return nil
+}
+
+// handleRiskMutation processes risk mutations and creates notifications for mentions
+func handleRiskMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	return handleObjectMentions(ctx, payload)
+}
+
+// handleProcedureMutation processes procedure mutations and creates notifications for mentions
+func handleProcedureMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	return handleObjectMentions(ctx, payload)
 }
 
 // fetchPolicyFields retrieves internal policy fields from payload, props, or queries database if missing
@@ -351,7 +378,7 @@ func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificatio
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
 
 	// create the data map with the URL
-	dataMap := map[string]interface{}{
+	dataMap := map[string]any{
 		"url": fmt.Sprintf("%s/tasks?id=%s", consoleURL, input.taskID),
 	}
 
@@ -399,8 +426,8 @@ func addInternalPolicyNotification(ctx *soiree.EventContext, input policyNotific
 	consoleURL := client.EntConfig.Notifications.ConsoleURL
 
 	// create the data map with the URL
-	dataMap := map[string]interface{}{
-		"url": fmt.Sprintf("%s/policies/%s/view", consoleURL, input.policyID),
+	dataMap := map[string]any{
+		"url": fmt.Sprintf("%s/policies/%s", consoleURL, input.policyID),
 	}
 
 	topic := "policy_approval"
@@ -444,4 +471,7 @@ func newNotificationCreation(ctx *soiree.EventContext, userIDs []string, input *
 func RegisterListeners(addListener func(entityType string, handler func(*soiree.EventContext, *events.MutationPayload) error)) {
 	addListener(generated.TypeTask, handleTaskMutation)
 	addListener(generated.TypeInternalPolicy, handleInternalPolicyMutation)
+	addListener(generated.TypeRisk, handleRiskMutation)
+	addListener(generated.TypeProcedure, handleProcedureMutation)
+	addListener(generated.TypeNote, handleNoteMutation)
 }
