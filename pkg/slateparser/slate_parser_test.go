@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestCheckForMentions(t *testing.T) {
@@ -167,24 +168,36 @@ func TestGetNewMentions(t *testing.T) {
 }
 
 func TestExtractMentionedUserIDs(t *testing.T) {
+	// Generate valid ULIDs for testing
+	validUserID1 := ulids.New().String()
+	validUserID2 := ulids.New().String()
+	invalidUserID := "not-a-valid-ulid"
+
 	mentions := map[string]Mention{
 		"mention001": {
-			UserID:          "user123",
+			UserID:          validUserID1,
 			UserDisplayName: "John Doe",
 			ObjectType:      "Task",
 			ObjectID:        "task001",
 			ObjectName:      "Test Task",
 		},
 		"mention002": {
-			UserID:          "user456",
+			UserID:          validUserID2,
 			UserDisplayName: "Jane Smith",
 			ObjectType:      "Task",
 			ObjectID:        "task001",
 			ObjectName:      "Test Task",
 		},
 		"mention003": {
-			UserID:          "user123", // Duplicate user
+			UserID:          validUserID1, // Duplicate user
 			UserDisplayName: "John Doe",
+			ObjectType:      "Task",
+			ObjectID:        "task001",
+			ObjectName:      "Test Task",
+		},
+		"mention004": {
+			UserID:          invalidUserID, // Invalid ULID - should be skipped
+			UserDisplayName: "Invalid User",
 			ObjectType:      "Task",
 			ObjectID:        "task001",
 			ObjectName:      "Test Task",
@@ -193,9 +206,10 @@ func TestExtractMentionedUserIDs(t *testing.T) {
 
 	userIDs := ExtractMentionedUserIDs(mentions)
 
-	assert.Equal(t, 2, len(userIDs), "should have 2 unique user IDs")
-	assert.Contains(t, userIDs, "user123")
-	assert.Contains(t, userIDs, "user456")
+	assert.Equal(t, 2, len(userIDs), "should have 2 unique valid user IDs")
+	assert.Contains(t, userIDs, validUserID1)
+	assert.Contains(t, userIDs, validUserID2)
+	assert.NotContains(t, userIDs, invalidUserID, "invalid ULID should be filtered out")
 }
 
 func TestIsValidSlateText(t *testing.T) {
