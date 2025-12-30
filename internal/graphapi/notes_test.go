@@ -240,10 +240,43 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	assert.Assert(t, updateResp != nil)
 	assert.Assert(t, updateResp.UpdateControl.Control.Discussions.Edges != nil)
 	assert.Assert(t, len(updateResp.UpdateControl.Control.Discussions.Edges) != 0)
+	assert.Assert(t, updateResp.UpdateControl.Control.Discussions.Edges[0].Node.Comments.Edges != nil)
+	assert.Assert(t, len(updateResp.UpdateControl.Control.Discussions.Edges[0].Node.Comments.Edges) == 2)
+
+	// make sure the control also has the comments linked
+	assert.Assert(t, updateResp.UpdateControl.Control.Comments.Edges != nil)
+	assert.Assert(t, len(updateResp.UpdateControl.Control.Comments.Edges) == 2)
 
 	updatedDiscussion := updateResp.UpdateControl.Control.Discussions.Edges[0].Node
 	assert.Assert(t, len(updatedDiscussion.Comments.Edges) == 2)
 	assert.Check(t, is.Equal("This is an additional comment in the discussion", updatedDiscussion.Comments.Edges[1].Node.Text))
+
+	// now lets try to update the second comment in the discussion
+	noteToUpdateID := updatedDiscussion.Comments.Edges[1].Node.ID
+	updatedText := "This is an updated additional comment in the discussion"
+	updateComment, err := suite.client.api.UpdateControlComment(testUser1.UserCtx, noteToUpdateID, testclient.UpdateNoteInput{
+		Text: &updatedText,
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateComment != nil)
+	assert.Assert(t, updateComment.UpdateControlComment.Control.Comments.Edges != nil)
+	for _, edge := range updateComment.UpdateControlComment.Control.Comments.Edges {
+		if edge.Node.ID == noteToUpdateID {
+			assert.Check(t, is.Equal(updatedText, edge.Node.Text))
+		}
+	}
+
+	// ensure its the same on the discussion side
+	for _, discEdge := range updateComment.UpdateControlComment.Control.Discussions.Edges {
+		if discEdge.Node.ID == discussionID {
+			for _, commentEdge := range discEdge.Node.Comments.Edges {
+				if commentEdge.Node.ID == noteToUpdateID {
+					assert.Check(t, is.Equal(updatedText, commentEdge.Node.Text))
+				}
+			}
+		}
+	}
 
 	// now lets try to remove a comment from the discussion
 	noteToRemoveID := updatedDiscussion.Comments.Edges[0].Node.ID
@@ -264,7 +297,8 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 
 	updatedDiscussion2 := updateResp2.UpdateControl.Control.Discussions.Edges[0].Node
 	assert.Assert(t, len(updatedDiscussion2.Comments.Edges) == 1)
-	assert.Check(t, is.Equal("This is an additional comment in the discussion", updatedDiscussion2.Comments.Edges[0].Node.Text))
+	// this will be the updated comment
+	assert.Check(t, is.Equal(updatedText, updatedDiscussion2.Comments.Edges[0].Node.Text))
 
 	// clean up
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)

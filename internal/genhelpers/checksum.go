@@ -69,8 +69,8 @@ func calculateDirChecksum(paths ...string) (string, error) {
 				return nil
 			}
 
-			// Only process .go files
-			if filepath.Ext(filePath) != ".go" {
+			// Only process .go files and .graphql files
+			if filepath.Ext(filePath) != ".go" && filepath.Ext(filePath) != ".graphql" {
 				return nil
 			}
 

@@ -206,6 +206,12 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 				data.SubcontrolID = parentID
 			case "UpdateRisk":
 				data.RiskID = parentID
+			case "UpdateTask":
+				data.TaskID = parentID
+			case "UpdateEvidence":
+				data.EvidenceID = parentID
+			case "UpdateTrustCenter":
+				data.TrustCenterID = parentID
 			}
 		}
 	}
@@ -218,12 +224,9 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		}
 	}
 
-	_, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
-
-	// obj.AddCommentIDs = []string{comment.ID}
 
 	return nil
 }

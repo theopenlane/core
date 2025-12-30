@@ -43,7 +43,7 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "taskcomment"})
 	}
 
@@ -68,11 +68,14 @@ func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, 
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).Control.Query().Where(control.HasCommentsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).Control.Query().Where(control.HasCommentsWith(note.ID(id))).
+		WithComments().
+		WithDiscussions().
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
 	}
@@ -92,11 +95,13 @@ func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id strin
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.HasCommentsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.HasCommentsWith(note.ID(id))).
+		WithComments().
+		WithDiscussions().Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "subcontrol"})
 	}
@@ -116,11 +121,14 @@ func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.HasCommentsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.HasCommentsWith(note.ID(id))).
+		WithComments().
+		WithDiscussions().
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "procedure"})
 	}
@@ -140,11 +148,14 @@ func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, inp
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.HasCommentsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.HasCommentsWith(note.ID(id))).
+		WithComments().
+		WithDiscussions().
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "risk"})
 	}
@@ -164,11 +175,14 @@ func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id s
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.HasCommentsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.HasCommentsWith(note.ID(id))).
+		WithComments().
+		WithDiscussions().
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "internalpolicy"})
 	}
@@ -188,11 +202,11 @@ func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string,
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).TrustCenter.Query().Where(trustcenter.HasPostsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).TrustCenter.Query().Where(trustcenter.HasPostsWith(note.ID(id))).WithPosts().Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenter"})
 	}
@@ -212,11 +226,13 @@ func (r *mutationResolver) UpdateEvidenceComment(ctx context.Context, id string,
 	// setup update request
 	req := res.Update().SetInput(input)
 
-	if err = req.Exec(ctx); err != nil {
+	if err := req.Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})
 	}
 
-	objectRes, err := withTransactionalMutation(ctx).Evidence.Query().Where(evidence.HasCommentsWith(note.ID(id))).Only(ctx)
+	objectRes, err := withTransactionalMutation(ctx).Evidence.Query().Where(evidence.HasCommentsWith(note.ID(id))).
+		WithComments().
+		Only(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "evidence"})
 	}
