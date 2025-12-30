@@ -7,6 +7,7 @@ package graphapi
 
 import (
 	"context"
+	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -171,18 +172,41 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	// get the operation context
+	opCtx := graphql.GetOperationContext(ctx)
+	parentType := opCtx.OperationName
+
 	// get the discussion id from the input, this can be used when its a sub-input
 	// like updateXObject -> updateDiscussion -> addComment
-	dataInput := graphutils.GetMapInputVariableByName(ctx, "input")
-	if dataInput != nil {
-		d := *dataInput
-		input, ok := d["updateDiscussion"].(map[string]any)
-		if ok {
-			idVal, ok := input["id"].(string)
-			if ok && idVal != "" {
-				data.DiscussionID = &idVal
-			}
+	if !strings.Contains(strings.ToLower(parentType), "discussion") {
+		dataInput := graphutils.GetMapInputVariableByName(ctx, "input")
+		if dataInput != nil {
+			d := *dataInput
+			input, ok := d["updateDiscussion"].(map[string]any)
+			if ok {
+				idVal, ok := input["id"].(string)
+				if ok && idVal != "" {
+					data.DiscussionID = &idVal
+				}
 
+			}
+		}
+
+		// get the parent id
+		parentID := graphutils.GetStringInputVariableByName(ctx, "id")
+		if parentID != nil {
+			switch parentType {
+			case "UpdateInternalPolicy":
+				data.InternalPolicyID = parentID
+			case "UpdateProcedure":
+				data.ProcedureID = parentID
+			case "UpdateControl":
+				data.ControlID = parentID
+			case "UpdateSubControl":
+				data.SubcontrolID = parentID
+			case "UpdateRisk":
+				data.RiskID = parentID
+			}
 		}
 	}
 
@@ -194,9 +218,12 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		}
 	}
 
-	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+	_, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
 	}
+
+	// obj.AddCommentIDs = []string{comment.ID}
 
 	return nil
 }
