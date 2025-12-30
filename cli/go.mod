@@ -17,7 +17,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v0.50.0
+	github.com/theopenlane/core v0.52.3
 	github.com/theopenlane/core/common v0.0.0-20251226231451-1392578dd846
 	github.com/theopenlane/go-client v0.3.0
 	github.com/theopenlane/httpsling v0.3.0
