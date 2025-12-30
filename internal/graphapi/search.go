@@ -1571,8 +1571,13 @@ func searchTagDefinitions(ctx context.Context, query string, after *entgql.Curso
 	request := withTransactionalMutation(ctx).TagDefinition.Query().
 		Where(
 			tagdefinition.Or(
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(aliases)::text LIKE $1", likeQuery)) // search by Aliases
+				},
 				tagdefinition.ID(query),               // search equal to ID
 				tagdefinition.NameContainsFold(query), // search by Name
+				tagdefinition.SlugContainsFold(query), // search by Slug
 			),
 		)
 

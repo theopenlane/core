@@ -507,8 +507,10 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          aliases
           id
           name
+          slug
         }
       }
     }

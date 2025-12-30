@@ -5013,6 +5013,48 @@ var (
 			}
 		},
 	}
+	// CustomTypeEnumOrderFieldObjectType orders CustomTypeEnum by object_type.
+	CustomTypeEnumOrderFieldObjectType = &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.ObjectType, nil
+		},
+		column: customtypeenum.FieldObjectType,
+		toTerm: customtypeenum.ByObjectType,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObjectType,
+			}
+		},
+	}
+	// CustomTypeEnumOrderFieldField orders CustomTypeEnum by field.
+	CustomTypeEnumOrderFieldField = &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.Field, nil
+		},
+		column: customtypeenum.FieldField,
+		toTerm: customtypeenum.ByField,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Field,
+			}
+		},
+	}
+	// CustomTypeEnumOrderFieldName orders CustomTypeEnum by name.
+	CustomTypeEnumOrderFieldName = &CustomTypeEnumOrderField{
+		Value: func(_m *CustomTypeEnum) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: customtypeenum.FieldName,
+		toTerm: customtypeenum.ByName,
+		toCursor: func(_m *CustomTypeEnum) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -5023,6 +5065,12 @@ func (f CustomTypeEnumOrderField) String() string {
 		str = "created_at"
 	case CustomTypeEnumOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case CustomTypeEnumOrderFieldObjectType.column:
+		str = "object_type"
+	case CustomTypeEnumOrderFieldField.column:
+		str = "field"
+	case CustomTypeEnumOrderFieldName.column:
+		str = "name"
 	}
 	return str
 }
@@ -5043,6 +5091,12 @@ func (f *CustomTypeEnumOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CustomTypeEnumOrderFieldCreatedAt
 	case "updated_at":
 		*f = *CustomTypeEnumOrderFieldUpdatedAt
+	case "object_type":
+		*f = *CustomTypeEnumOrderFieldObjectType
+	case "field":
+		*f = *CustomTypeEnumOrderFieldField
+	case "name":
+		*f = *CustomTypeEnumOrderFieldName
 	default:
 		return fmt.Errorf("%s is not a valid CustomTypeEnumOrderField", str)
 	}
@@ -25926,6 +25980,34 @@ var (
 			}
 		},
 	}
+	// TagDefinitionOrderFieldName orders TagDefinition by name.
+	TagDefinitionOrderFieldName = &TagDefinitionOrderField{
+		Value: func(_m *TagDefinition) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: tagdefinition.FieldName,
+		toTerm: tagdefinition.ByName,
+		toCursor: func(_m *TagDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// TagDefinitionOrderFieldSlug orders TagDefinition by slug.
+	TagDefinitionOrderFieldSlug = &TagDefinitionOrderField{
+		Value: func(_m *TagDefinition) (ent.Value, error) {
+			return _m.Slug, nil
+		},
+		column: tagdefinition.FieldSlug,
+		toTerm: tagdefinition.BySlug,
+		toCursor: func(_m *TagDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Slug,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -25936,6 +26018,10 @@ func (f TagDefinitionOrderField) String() string {
 		str = "created_at"
 	case TagDefinitionOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case TagDefinitionOrderFieldName.column:
+		str = "name"
+	case TagDefinitionOrderFieldSlug.column:
+		str = "slug"
 	}
 	return str
 }
@@ -25956,6 +26042,10 @@ func (f *TagDefinitionOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TagDefinitionOrderFieldCreatedAt
 	case "updated_at":
 		*f = *TagDefinitionOrderFieldUpdatedAt
+	case "name":
+		*f = *TagDefinitionOrderFieldName
+	case "slug":
+		*f = *TagDefinitionOrderFieldSlug
 	default:
 		return fmt.Errorf("%s is not a valid TagDefinitionOrderField", str)
 	}

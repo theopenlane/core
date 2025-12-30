@@ -50579,6 +50579,9 @@ Properties by which CustomTypeEnum connections can be ordered.
 enum CustomTypeEnumOrderField {
   created_at
   updated_at
+  object_type
+  field
+  name
 }
 """
 CustomTypeEnumWhereInput is used for filtering CustomTypeEnum objects.
@@ -84454,6 +84457,8 @@ Properties by which TagDefinition connections can be ordered.
 enum TagDefinitionOrderField {
   created_at
   updated_at
+  name
+  slug
 }
 """
 TagDefinitionWhereInput is used for filtering TagDefinition objects.

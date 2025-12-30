@@ -51,13 +51,14 @@ func (TagDefinition) Fields() []ent.Field {
 		field.String("name").
 			Comment("The name of the tag definition").
 			Immutable().
-			Annotations(entx.FieldSearchable()).
+			Annotations(entx.FieldSearchable(), entgql.OrderField("name")).
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}).
 			NotEmpty(),
 		field.Strings("aliases").
 			Comment("common aliases or misspellings for the tag definition").
+			Annotations(entx.FieldSearchable()).
 			Optional(),
 		field.String("slug").
 			Comment("The slug of the tag definition, derived from the name, unique per organization").
@@ -67,6 +68,8 @@ func (TagDefinition) Fields() []ent.Field {
 			}).
 			Annotations(
 				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+				entx.FieldSearchable(),
+				entgql.OrderField("slug"),
 			).
 			Optional(),
 		field.String("description").
