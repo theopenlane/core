@@ -98,7 +98,7 @@ func handleTaskMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	}
 
 	// Check for mentions in task details
-	if err := handleObjectMentions(ctx, payload, "Task"); err != nil {
+	if err := handleObjectMentions(ctx, payload); err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to handle task mentions")
 		return err
 	}
@@ -243,7 +243,7 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.Muta
 	}
 
 	// Check for mentions in policy details
-	if err := handleObjectMentions(ctx, payload, "InternalPolicy"); err != nil {
+	if err := handleObjectMentions(ctx, payload); err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to handle internal policy mentions")
 		return err
 	}
@@ -253,12 +253,12 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload *events.Muta
 
 // handleRiskMutation processes risk mutations and creates notifications for mentions
 func handleRiskMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	return handleObjectMentions(ctx, payload, "Risk")
+	return handleObjectMentions(ctx, payload)
 }
 
 // handleProcedureMutation processes procedure mutations and creates notifications for mentions
 func handleProcedureMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	return handleObjectMentions(ctx, payload, "Procedure")
+	return handleObjectMentions(ctx, payload)
 }
 
 // fetchPolicyFields retrieves internal policy fields from payload, props, or queries database if missing

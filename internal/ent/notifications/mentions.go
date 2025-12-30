@@ -470,7 +470,8 @@ type oldDocumentDetails struct {
 
 // handleObjectMentions is a generic handler for checking mentions in object details fields.
 // It uses type switching on the mutation to handle different object types.
-func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayload, objectType string) error {
+func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	var objectType string
 	if payload == nil {
 		return nil
 	}
@@ -488,7 +489,7 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 	switch mut := payload.Mutation.(type) {
 	case *generated.TaskMutation:
 		// Task is special - it has Title instead of Name
-		details = extractTaskMentionDetails(client, allowCtx, payload, mut)
+		details = extractTaskMentionDetails(allowCtx, client, payload, mut)
 		objectType = "Task"
 	case *generated.RiskMutation:
 		details = extractDocumentMentionDetails(payload, mut, func() (*oldDocumentDetails, error) {
@@ -567,7 +568,7 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 
 // extractTaskMentionDetails extracts mention details from a task mutation.
 // Task is handled separately because it has Title instead of Name.
-func extractTaskMentionDetails(client *generated.Client, allowCtx context.Context, payload *events.MutationPayload, taskMut *generated.TaskMutation) objectMentionDetails {
+func extractTaskMentionDetails(allowCtx context.Context, client *generated.Client, payload *events.MutationPayload, taskMut *generated.TaskMutation) objectMentionDetails {
 	details := objectMentionDetails{
 		objectID: payload.EntityID,
 		valid:    true,

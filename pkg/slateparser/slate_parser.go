@@ -20,7 +20,6 @@ type Mention struct {
 	ObjectName string
 }
 
-
 // mentionMatchGroups is the expected number of elements in a regex match result.
 // match[0] = entire matched string (the full div element, not used)
 // match[1] = data-slate-key (userID)
