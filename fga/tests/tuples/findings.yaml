@@ -1,0 +1,26 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to findings
+############################################
+
+# finding-1 is owned by openlane organization
+- user: organization:openlane
+  relation: parent
+  object: finding:finding-1
+# org owner has editor access via organization
+- user: organization:openlane#owner
+  relation: editor
+  object: finding:finding-1
+# blocked user
+- user: user:ulid-blocked
+  relation: blocked
+  object: finding:finding-1
+
+# finding-2 is associated with a program
+- user: program:program-1
+  relation: parent
+  object: finding:finding-2
+# org owner has editor access via organization (program is under openlane)
+- user: organization:openlane#owner
+  relation: editor
+  object: finding:finding-2

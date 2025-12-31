@@ -1,0 +1,26 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to vulnerabilities
+############################################
+
+# vulnerability-1 is owned by openlane organization
+- user: organization:openlane
+  relation: parent
+  object: vulnerability:vulnerability-1
+# org owner has editor access via organization
+- user: organization:openlane#owner
+  relation: editor
+  object: vulnerability:vulnerability-1
+# blocked user
+- user: user:ulid-blocked
+  relation: blocked
+  object: vulnerability:vulnerability-1
+
+# vulnerability-2 is associated with a program
+- user: program:program-1
+  relation: parent
+  object: vulnerability:vulnerability-2
+# org owner has editor access via organization (program is under openlane)
+- user: organization:openlane#owner
+  relation: editor
+  object: vulnerability:vulnerability-2

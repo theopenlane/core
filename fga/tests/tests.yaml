@@ -743,6 +743,111 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: entity
+    description: entities are always assigned to an organization and permissions are inherited from the organization
+    tuple_file: tuples/entities.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: entity:entity-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: entity:entity-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: entity:entity-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: entity:entity-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+  - name: finding
+    description: findings can be associated with organizations or programs and permissions are inherited accordingly
+    tuple_file: tuples/findings.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: finding:finding-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: finding:finding-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: finding:finding-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: finding:finding-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # org owner has full access to program-associated finding
+        object: finding:finding-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+  - name: vulnerability
+    description: vulnerabilities can be associated with organizations or programs and permissions are inherited accordingly
+    tuple_file: tuples/vulnerabilities.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: vulnerability:vulnerability-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: vulnerability:vulnerability-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: vulnerability:vulnerability-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: vulnerability:vulnerability-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner # org owner has full access to program-associated vulnerability
+        object: vulnerability:vulnerability-2
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
   - name: evidence
     description: evidence are always with an organization, and can be linked to many objects within the system
     tuple_file: tuples/evidence.yaml
