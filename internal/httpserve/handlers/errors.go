@@ -223,7 +223,7 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 	errorResponse := rout.ErrorResponse(err)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Internal Server Error").
@@ -248,7 +248,7 @@ func (h *Handler) Unauthorized(ctx echo.Context, err error, openapi ...*OpenAPIC
 	errorResponse := rout.ErrorResponse(err)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Unauthorized").
@@ -273,7 +273,7 @@ func (h *Handler) NotFound(ctx echo.Context, err error, openapi ...*OpenAPIConte
 	errorResponse := rout.ErrorResponse(err)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Not Found").
@@ -298,7 +298,7 @@ func (h *Handler) BadRequest(ctx echo.Context, err error, openapi ...*OpenAPICon
 	errorResponse := rout.ErrorResponse(err)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Bad Request").
@@ -323,7 +323,7 @@ func (h *Handler) BadRequestWithCode(ctx echo.Context, err error, code rout.Erro
 	errorResponse := rout.ErrorResponseWithCode(err, code)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Bad Request").
@@ -348,7 +348,7 @@ func (h *Handler) InvalidInput(ctx echo.Context, err error, openapi ...*OpenAPIC
 	errorResponse := rout.ErrorResponseWithCode(err, InvalidInputErrCode)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Invalid Input").
@@ -373,7 +373,7 @@ func (h *Handler) Conflict(ctx echo.Context, err string, code rout.ErrorCode, op
 	errorResponse := rout.ErrorResponseWithCode(err, code)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Conflict").
@@ -402,7 +402,7 @@ func (h *Handler) TooManyRequests(ctx echo.Context, err error, openapi ...*OpenA
 	errorResponse := rout.ErrorResponse(err)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Too Many Requests").
@@ -424,7 +424,7 @@ func (h *Handler) Success(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 	metrics.RecordHandlerResult("Success", true)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		var exampleObject = rep
 
 		// If the response implements ExampleProvider, use its example for the OpenAPI spec
@@ -453,7 +453,7 @@ func (h *Handler) Created(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 	metrics.RecordHandlerResult("Created", true)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		var exampleObject = rep
 
 		// If the response implements ExampleProvider, use its example for the OpenAPI spec
@@ -482,7 +482,7 @@ func (h *Handler) SuccessBlob(ctx echo.Context, rep any, openapi ...*OpenAPICont
 	metrics.RecordHandlerResult("SuccessBlob", true)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, err := openapi[0].Registry.GetOrRegister(rep); err == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Success").
@@ -514,7 +514,7 @@ func (h *Handler) Forbidden(ctx echo.Context, err error, openapi ...*OpenAPICont
 	errorResponse := rout.ErrorResponse(err)
 
 	// Automatically register response schema if OpenAPI context is provided
-	if len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
+	if isRegistrationContext(ctx) && len(openapi) > 0 && openapi[0] != nil && openapi[0].Operation != nil && openapi[0].Registry != nil {
 		if schemaRef, schemaErr := openapi[0].Registry.GetOrRegister(errorResponse); schemaErr == nil {
 			response := openapi3.NewResponse().
 				WithDescription("Forbidden").

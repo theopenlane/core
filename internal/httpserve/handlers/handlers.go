@@ -189,7 +189,7 @@ var opMutex sync.Mutex
 func BindAndValidateWithAutoRegistry[T any, R any](ctx echo.Context, _ *Handler, op *openapi3.Operation, requestExample T, responseExample R, registry interface {
 	GetOrRegister(any) (*openapi3.SchemaRef, error)
 }) (*T, error) {
-	if op != nil && registry != nil {
+	if isRegistrationContext(ctx) && op != nil && registry != nil {
 		// lock to prevent concurrent map writes
 		opMutex.Lock()
 		defer opMutex.Unlock()
@@ -360,7 +360,7 @@ func BindAndValidateQueryParams[T any](ctx echo.Context, op *openapi3.Operation,
 // BindAndValidateQueryParamsWithResponse binds and validates query parameters and registers both request and response schemas
 func BindAndValidateQueryParamsWithResponse[T any, R any](ctx echo.Context, op *openapi3.Operation, requestExample T, responseExample R, registry SchemaRegistry) (*T, error) {
 	// Register query parameters and response schema in OpenAPI schema during registration
-	if op != nil && registry != nil {
+	if isRegistrationContext(ctx) && op != nil && registry != nil {
 		// lock to prevent concurrent map writes
 		opMutex.Lock()
 		defer opMutex.Unlock()
