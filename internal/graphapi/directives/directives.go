@@ -138,9 +138,7 @@ var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Re
 	}
 
 	fieldSet := checkFieldSet(ctx, skipCreateOperations)
-	allowed := checkSourceAllowed(ctx, source)
-
-	if fieldSet && !allowed {
+	if fieldSet && !checkSourceAllowed(ctx, source) {
 		return nil, ErrReadOnlyField
 	}
 
@@ -227,7 +225,8 @@ func checkSourceAllowed(ctx context.Context, restrictedSource *enums.ControlSour
 
 	id := graphutils.GetStringInputVariableByName(ctx, "id")
 	if id == nil {
-		logx.FromContext(ctx).Error().Msg("no id found in context for externalReadOnly directive")
+		// there are no IDs provided on creation, only update; don't log as error
+		logx.FromContext(ctx).Debug().Msg("no id found in context for externalReadOnly directive")
 		return true
 	}
 

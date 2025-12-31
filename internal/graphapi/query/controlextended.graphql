@@ -26,6 +26,8 @@ mutation CloneBulkCSVControl($input: Upload!) {
       status
       subcategory
       tags
+      testingProcedures
+      evidenceRequests
       title
       updatedAt
       updatedBy
@@ -86,6 +88,8 @@ mutation CreateControlsByClone($input: CloneControlInput!) {
       subcategory
       title
       tags
+      testingProcedures
+      evidenceRequests
       updatedAt
       updatedBy
       subcontrols {

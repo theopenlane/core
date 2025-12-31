@@ -15,9 +15,17 @@ func TrialMonthlyPriceIDs(useSandbox bool) []string {
 	}, useSandbox)
 }
 
+// TrialMonthlyPrices returns prices for monthly modules included with trial subscriptions
 func TrialMonthlyPrices(useSandbox bool) []entitlements.Price {
 	return monthlyPrices(func(f catalog.Feature) bool {
 		return f.IncludeWithTrial
+	}, useSandbox)
+}
+
+// AllMonthlyPrices returns prices for all monthly modules regardless of trial status
+func AllMonthlyPrices(useSandbox bool) []entitlements.Price {
+	return monthlyPrices(func(_ catalog.Feature) bool {
+		return true
 	}, useSandbox)
 }
 

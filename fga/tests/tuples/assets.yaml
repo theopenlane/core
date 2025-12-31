@@ -1,0 +1,17 @@
+############################################
+# Tuples for testing the FGA implementation
+# This file is specific to assets
+############################################
+
+# asset-1 is owned by openlane organization
+- user: organization:openlane
+  relation: parent
+  object: asset:asset-1
+# org owner has editor access via organization
+- user: organization:openlane#owner
+  relation: editor
+  object: asset:asset-1
+# blocked user
+- user: user:ulid-blocked
+  relation: blocked
+  object: asset:asset-1

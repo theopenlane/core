@@ -8,11 +8,14 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
 )
 
@@ -60,7 +63,10 @@ func (Asset) Fields() []ent.Field {
 func (a Asset) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(a),
+			newObjectOwnedMixin[generated.Asset](a,
+				withParents(Organization{}),
+				withOrganizationOwner(true),
+			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(),
 		},
@@ -85,14 +91,18 @@ func (a Asset) Modules() []models.OrgModule {
 func (a Asset) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			rule.AllowMutationIfSystemAdmin(),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.AssetMutation](),
 		),
 	)
 }
 
 // Annotations of the Asset
 func (a Asset) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }
 
 // Indexes of the Asset

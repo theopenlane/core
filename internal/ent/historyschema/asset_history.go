@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // AssetHistory holds the schema definition for the AssetHistory entity.
@@ -36,6 +37,11 @@ func (AssetHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "asset",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -108,6 +114,6 @@ func (AssetHistory) Policy() ent.Policy {
 // Interceptors of the AssetHistory
 func (AssetHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.FilterListQuery(),
 	}
 }

@@ -17387,7 +17387,7 @@ type AssetHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -22557,7 +22557,7 @@ type EntityHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """

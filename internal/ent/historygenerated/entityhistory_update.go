@@ -124,26 +124,6 @@ func (_u *EntityHistoryUpdate) ClearTags() *EntityHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *EntityHistoryUpdate) SetOwnerID(v string) *EntityHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *EntityHistoryUpdate) SetNillableOwnerID(v *string) *EntityHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *EntityHistoryUpdate) ClearOwnerID() *EntityHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *EntityHistoryUpdate) SetInternalNotes(v string) *EntityHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -408,9 +388,6 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entityhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entityhistory.FieldOwnerID, field.TypeString)
 	}
@@ -581,26 +558,6 @@ func (_u *EntityHistoryUpdateOne) AppendTags(v []string) *EntityHistoryUpdateOne
 // ClearTags clears the value of the "tags" field.
 func (_u *EntityHistoryUpdateOne) ClearTags() *EntityHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *EntityHistoryUpdateOne) SetOwnerID(v string) *EntityHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *EntityHistoryUpdateOne) SetNillableOwnerID(v *string) *EntityHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *EntityHistoryUpdateOne) ClearOwnerID() *EntityHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -897,9 +854,6 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(entityhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(entityhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entityhistory.FieldOwnerID, field.TypeString)

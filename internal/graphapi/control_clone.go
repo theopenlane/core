@@ -353,6 +353,8 @@ func createCloneControlInput(c *generated.Control, programID *string, orgID stri
 		ImplementationGuidance: c.ImplementationGuidance,
 		ExampleEvidence:        c.ExampleEvidence,
 		References:             c.References,
+		TestingProcedures:      c.TestingProcedures,
+		EvidenceRequests:       c.EvidenceRequests,
 		// set default status to not implemented
 		Status:  &enums.ControlStatusNotImplemented,
 		OwnerID: &orgID,
@@ -487,6 +489,8 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 			ControlQuestions:           subcontrol.ControlQuestions,
 			ImplementationGuidance:     subcontrol.ImplementationGuidance,
 			ExampleEvidence:            subcontrol.ExampleEvidence,
+			TestingProcedures:          subcontrol.TestingProcedures,
+			EvidenceRequests:           subcontrol.EvidenceRequests,
 			References:                 subcontrol.References,
 			Status:                     &enums.ControlStatusNotImplemented,
 			ReferenceFramework:         subcontrol.ReferenceFramework,

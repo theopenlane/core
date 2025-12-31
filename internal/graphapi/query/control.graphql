@@ -26,6 +26,8 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       status
       subcategory
       tags
+      testingProcedures
+      evidenceRequests
       updatedAt
       updatedBy
     }
@@ -60,6 +62,8 @@ mutation CreateBulkCSVControl($input: Upload!) {
       status
       subcategory
       tags
+      testingProcedures
+      evidenceRequests
       updatedAt
       updatedBy
     }
@@ -89,6 +93,8 @@ mutation CreateControl($input: CreateControlInput!) {
       refCode
       references
       referenceFramework
+      testingProcedures
+      evidenceRequests
       source
       standardID
       status
@@ -185,6 +191,8 @@ query GetAllControls {
         refCode
         references
         referenceFramework
+        testingProcedures
+        evidenceRequests
         source
         standardID
         status
@@ -281,6 +289,8 @@ query GetControlByID($controlId: ID!) {
     status
     subcategory
     tags
+    testingProcedures
+    evidenceRequests
     updatedAt
     updatedBy
     controlOwner {
@@ -386,6 +396,8 @@ query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $whe
         status
         subcategory
         tags
+        testingProcedures
+        evidenceRequests
         updatedAt
         updatedBy
         controlOwner {
@@ -478,6 +490,8 @@ mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
       status
       subcategory
       tags
+      testingProcedures
+      evidenceRequests
       updatedAt
       updatedBy
       controlOwner {
@@ -555,6 +569,8 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       status
       subcategory
       tags
+      testingProcedures
+      evidenceRequests
       updatedAt
       updatedBy
       controlOwner {

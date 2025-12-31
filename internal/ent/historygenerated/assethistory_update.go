@@ -125,26 +125,6 @@ func (_u *AssetHistoryUpdate) ClearTags() *AssetHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssetHistoryUpdate) SetOwnerID(v string) *AssetHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssetHistoryUpdate) SetNillableOwnerID(v *string) *AssetHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssetHistoryUpdate) ClearOwnerID() *AssetHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *AssetHistoryUpdate) SetInternalNotes(v string) *AssetHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -430,9 +410,6 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assethistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)
 	}
@@ -603,26 +580,6 @@ func (_u *AssetHistoryUpdateOne) AppendTags(v []string) *AssetHistoryUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssetHistoryUpdateOne) ClearTags() *AssetHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssetHistoryUpdateOne) SetOwnerID(v string) *AssetHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssetHistoryUpdateOne) SetNillableOwnerID(v *string) *AssetHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssetHistoryUpdateOne) ClearOwnerID() *AssetHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -940,9 +897,6 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assethistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assethistory.FieldOwnerID, field.TypeString)

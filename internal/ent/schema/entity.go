@@ -5,13 +5,16 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -95,10 +98,10 @@ func (Entity) Fields() []ent.Field {
 func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(e),
-			// TODO: this was added but there is no corresponding
-			// fga type for entity so its not actually used
-			// until that is added and the policy on the schema is updated
+			newObjectOwnedMixin[generated.Entity](e,
+				withParents(Organization{}),
+				withOrganizationOwner(true),
+			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(),
 		},
@@ -141,11 +144,18 @@ func (Entity) Hooks() []ent.Hook {
 // Policy of the Entity
 func (e Entity) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			entfga.CheckEditAccess[*generated.EntityMutation](),
 		),
 	)
+}
+
+// Annotations of the Entity
+func (e Entity) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
 }
 
 func (Entity) Modules() []models.OrgModule {

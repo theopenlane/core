@@ -484,6 +484,11 @@ func (_c *EntityCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *EntityCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := entity.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Entity.owner_id": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Name(); ok {
 		if err := entity.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Entity.name": %w`, err)}

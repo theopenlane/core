@@ -129,6 +129,7 @@ entConfig:
     # this will use the catalog-sandbox.yaml, otherwise it will use catalog.yaml
     # this should allow you to use the sandbox without requiring seeding new price data
     usesandbox: true
+    devmode: true
   entitytypes:
     - vendor
     - account

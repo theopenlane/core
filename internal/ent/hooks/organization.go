@@ -332,7 +332,12 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 			return err
 		}
 
-		_, err = reconciler.CreateDefaultOrgModulesProductsPrices(ctx, m.Client(), orgSubs, orgCreated.ID, reconciler.WithTrial())
+		opts := []reconciler.OrgModuleOption{reconciler.WithTrial()}
+		if m.Client().EntConfig != nil && m.Client().EntConfig.Modules.DevMode {
+			opts = append(opts, reconciler.WithAllModules())
+		}
+
+		_, err = reconciler.CreateDefaultOrgModulesProductsPrices(ctx, m.Client(), orgSubs, orgCreated.ID, opts...)
 		if err != nil {
 			return err
 		}

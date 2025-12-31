@@ -1411,7 +1411,7 @@ type Asset struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -8856,7 +8856,7 @@ type Entity struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -26529,8 +26529,6 @@ type UpdateAssetInput struct {
 	Categories            []string `json:"categories,omitempty"`
 	AppendCategories      []string `json:"appendCategories,omitempty"`
 	ClearCategories       *bool    `json:"clearCategories,omitempty"`
-	OwnerID               *string  `json:"ownerID,omitempty"`
-	ClearOwner            *bool    `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
@@ -27246,8 +27244,6 @@ type UpdateEntityInput struct {
 	// status of the entity
 	Status                *string          `json:"status,omitempty"`
 	ClearStatus           *bool            `json:"clearStatus,omitempty"`
-	OwnerID               *string          `json:"ownerID,omitempty"`
-	ClearOwner            *bool            `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs    []string         `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs []string         `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups    *bool            `json:"clearBlockedGroups,omitempty"`

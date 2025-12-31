@@ -438,6 +438,11 @@ func (_c *AssetCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *AssetCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := asset.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Asset.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.AssetType(); !ok {
 		return &ValidationError{Name: "asset_type", err: errors.New(`generated: missing required field "Asset.asset_type"`)}
 	}
