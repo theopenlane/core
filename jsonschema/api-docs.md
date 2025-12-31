@@ -552,6 +552,7 @@ Modules settings for features access
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
 |**usesandbox**|`boolean`|UseSandbox indicates whether to use the sandbox catalog for module access checks<br/>||
+|**devmode**|`boolean`|DevMode enables all modules for local development regardless of trial status<br/>||
 
 **Additional Properties:** not allowed  
 <a name="entconfigemailvalidation"></a>

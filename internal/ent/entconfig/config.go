@@ -31,6 +31,8 @@ type Modules struct {
 	Enabled bool `json:"enabled" koanf:"enabled" default:"true"`
 	// UseSandbox indicates whether to use the sandbox catalog for module access checks
 	UseSandbox bool `json:"usesandbox" koanf:"usesandbox" default:"false"`
+	// DevMode enables all modules for local development regardless of trial status
+	DevMode bool `json:"devmode" koanf:"devmode" default:"false"`
 }
 
 // Billing settings for feature access

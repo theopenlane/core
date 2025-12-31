@@ -127,6 +127,7 @@ entconfig:
     maxpoolsize: 100
     maxschemaimportsize: 262144
     modules:
+        devmode: false
         enabled: true
         usesandbox: false
     notifications:

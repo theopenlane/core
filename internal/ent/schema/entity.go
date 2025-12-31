@@ -99,6 +99,7 @@ func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Entity](e,
+				withParents(Organization{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),

@@ -195,7 +195,11 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		modules := &r.db.EntConfig.Modules
 		useSandbox := modules.UseSandbox
 
-		cust.Prices = internalentitlements.TrialMonthlyPrices(useSandbox)
+		if modules.DevMode {
+			cust.Prices = internalentitlements.AllMonthlyPrices(useSandbox)
+		} else {
+			cust.Prices = internalentitlements.TrialMonthlyPrices(useSandbox)
+		}
 	}
 
 	// Set metadata for personal organizations
@@ -259,7 +263,12 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 	if len(cust.Prices) == 0 && r.db != nil && r.db.EntConfig != nil {
 		// Ensure a deterministic subscription payload even when Stripe did not return prices.
 		// This keeps the reconciler idempotent across retries.
-		cust.Prices = internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+		modules := &r.db.EntConfig.Modules
+		if modules.DevMode {
+			cust.Prices = internalentitlements.AllMonthlyPrices(modules.UseSandbox)
+		} else {
+			cust.Prices = internalentitlements.TrialMonthlyPrices(modules.UseSandbox)
+		}
 	}
 	if len(cust.Prices) == 0 {
 		return ErrMissingPrice
@@ -354,7 +363,13 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 	case customerMissing:
 		return "create stripe customer", nil
 	case !customerMissing && org.StripeCustomerID == nil && subscriptionMissing:
-		prices := internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+		var prices []entitlements.Price
+		modules := &r.db.EntConfig.Modules
+		if modules.DevMode {
+			prices = internalentitlements.AllMonthlyPrices(modules.UseSandbox)
+		} else {
+			prices = internalentitlements.TrialMonthlyPrices(modules.UseSandbox)
+		}
 		if len(prices) == 0 {
 			return "", ErrMissingPrice
 		}
@@ -371,7 +386,8 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 
 // orgModuleConfig controls which modules are selected when creating default module records - small functional options wrapper
 type orgModuleConfig struct {
-	trial bool
+	trial      bool
+	allModules bool
 }
 
 // OrgModuleOption sets fields on orgModuleConfig
@@ -381,6 +397,13 @@ type OrgModuleOption func(*orgModuleConfig)
 func WithTrial() OrgModuleOption {
 	return func(c *orgModuleConfig) {
 		c.trial = true
+	}
+}
+
+// WithAllModules enables all modules regardless of trial status, useful for local development
+func WithAllModules() OrgModuleOption {
+	return func(c *orgModuleConfig) {
+		c.allModules = true
 	}
 }
 
@@ -399,7 +422,7 @@ func CreateDefaultOrgModulesProductsPrices(ctx context.Context, db *ent.Client, 
 	}
 
 	for moduleName, mod := range gencatalog.GetModules(db.EntConfig.Modules.UseSandbox) {
-		if !cfg.trial || !mod.IncludeWithTrial {
+		if !cfg.allModules && (!cfg.trial || !mod.IncludeWithTrial) {
 			continue
 		}
 

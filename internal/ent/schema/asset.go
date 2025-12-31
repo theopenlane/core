@@ -64,6 +64,7 @@ func (a Asset) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Asset](a,
+				withParents(Organization{}),
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),

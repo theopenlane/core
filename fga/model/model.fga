@@ -145,6 +145,18 @@ type organization
 
     define workflow_object_ref_creator: [group#member]
     define can_create_workflow_object_ref: can_edit or workflow_object_ref_creator
+
+    define entity_creator: [group#member]
+    define can_create_entity: can_edit or entity_creator
+
+    define asset_creator: [group#member]
+    define can_create_asset: can_edit or asset_creator
+
+    define finding_creator: [group#member]
+    define can_create_finding: can_edit or finding_creator
+
+    define vulnerability_creator: [group#member]
+    define can_create_vulnerability: can_edit or vulnerability_creator
     # additional relations
     define user_in_context: [user]
 
@@ -427,53 +439,53 @@ type document_data
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
 # entities are always assigned to an organization and permissions are inherited from the organization
-# individual users or groups can also be given permission to an entity but they must be a member of the organization
+# individual users or groups can also be given permission to an entity
 type entity
   relations
-    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
-    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
-    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define editor: [group#member, organization#owner] or can_edit from parent
-    define viewer: [group#member] or editor or can_view from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [organization]
+    define parent: [user, service, organization]
 # assets are always assigned to an organization and permissions are inherited from the organization
-# individual users or groups can also be given permission to an asset but they must be a member of the organization
+# individual users or groups can also be given permission to an asset
 type asset
   relations
-    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
-    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
-    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define editor: [group#member, organization#owner] or can_edit from parent
-    define viewer: [group#member] or editor or can_view from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [organization]
+    define parent: [user, service, organization]
 # findings can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
 # permissions are inherited from the parent object or organization
 type finding
   relations
-    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
-    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
-    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define editor: [group#member, organization#owner] or can_edit from parent
-    define viewer: [group#member] or editor or can_view from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [organization, program, control, subcontrol, risk, asset, entity]
+    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity]
 # vulnerabilities can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
 # permissions are inherited from the parent object or organization
 type vulnerability
   relations
-    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
-    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
-    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_edit: [user, service] or (editor but not blocked)
+    define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define editor: [group#member, organization#owner] or can_edit from parent
-    define viewer: [group#member] or editor or can_view from parent
+    define viewer: [group#member] or editor or can_view from parent or member from parent
     define blocked: [user, group#member]
-    define parent: [organization, program, control, subcontrol, risk, asset, entity]
+    define parent: [user, service, organization, program, control, subcontrol, risk, asset, entity]
 # contacts are always assigned to an organization and permissions are inherited from the organization
 # individual users or groups can also be given permission to a contact but they must be a member of the organization
 type contact

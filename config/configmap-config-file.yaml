@@ -274,6 +274,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.entconfig.modules.usesandbox }}
         usesandbox: {{ .Values.openlane.coreConfiguration.entconfig.modules.usesandbox }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.entconfig.modules.devmode }}
+        devmode: {{ .Values.openlane.coreConfiguration.entconfig.modules.devmode }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.entconfig.maxschemaimportsize }}
       maxschemaimportsize: {{ .Values.openlane.coreConfiguration.entconfig.maxschemaimportsize }}
