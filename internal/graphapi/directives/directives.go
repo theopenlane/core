@@ -138,9 +138,7 @@ var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Re
 	}
 
 	fieldSet := checkFieldSet(ctx, skipCreateOperations)
-	allowed := checkSourceAllowed(ctx, source)
-
-	if fieldSet && !allowed {
+	if fieldSet && !checkSourceAllowed(ctx, source) {
 		return nil, ErrReadOnlyField
 	}
 

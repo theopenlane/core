@@ -24,7 +24,7 @@ func TrialMonthlyPrices(useSandbox bool) []entitlements.Price {
 
 // AllMonthlyPrices returns prices for all monthly modules regardless of trial status
 func AllMonthlyPrices(useSandbox bool) []entitlements.Price {
-	return monthlyPrices(func(f catalog.Feature) bool {
+	return monthlyPrices(func(_ catalog.Feature) bool {
 		return true
 	}, useSandbox)
 }
