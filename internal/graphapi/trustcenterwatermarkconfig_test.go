@@ -41,12 +41,12 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		}
 	}
 	testCases := []struct {
-		name            string
-		input           testclient.CreateTrustCenterWatermarkConfigInput
-		watermarkFile   *graphql.Upload
-		client          *testclient.TestClient
-		ctx             context.Context
-		expectedErr     string
+		name          string
+		input         testclient.CreateTrustCenterWatermarkConfigInput
+		watermarkFile *graphql.Upload
+		client        *testclient.TestClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, minimal, text",
@@ -251,12 +251,12 @@ func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 		}
 	}
 	testCases := []struct {
-		name            string
-		input           testclient.UpdateTrustCenterWatermarkConfigInput
-		watermarkFile   *graphql.Upload
-		client          *testclient.TestClient
-		ctx             context.Context
-		expectedErr     string
+		name          string
+		input         testclient.UpdateTrustCenterWatermarkConfigInput
+		watermarkFile *graphql.Upload
+		client        *testclient.TestClient
+		ctx           context.Context
+		expectedErr   string
 	}{
 		{
 			name: "happy path, update text",

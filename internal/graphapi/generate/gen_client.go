@@ -42,7 +42,7 @@ func main() {
 	}
 
 	if !hasChanges {
-		log.Info().Msg("no schema changes detected, skipping gqlgen server generation")
+		log.Info().Msg("no schema changes detected, skipping gqlgen client generation")
 		return
 	}
 
