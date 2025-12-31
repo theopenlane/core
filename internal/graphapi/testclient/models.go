@@ -1411,7 +1411,7 @@ type Asset struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -8856,7 +8856,7 @@ type Entity struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -26529,8 +26529,6 @@ type UpdateAssetInput struct {
 	Categories            []string `json:"categories,omitempty"`
 	AppendCategories      []string `json:"appendCategories,omitempty"`
 	ClearCategories       *bool    `json:"clearCategories,omitempty"`
-	OwnerID               *string  `json:"ownerID,omitempty"`
-	ClearOwner            *bool    `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs    []string `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs []string `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups    *bool    `json:"clearBlockedGroups,omitempty"`
@@ -27246,8 +27244,6 @@ type UpdateEntityInput struct {
 	// status of the entity
 	Status                *string          `json:"status,omitempty"`
 	ClearStatus           *bool            `json:"clearStatus,omitempty"`
-	OwnerID               *string          `json:"ownerID,omitempty"`
-	ClearOwner            *bool            `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs    []string         `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs []string         `json:"removeBlockedGroupIDs,omitempty"`
 	ClearBlockedGroups    *bool            `json:"clearBlockedGroups,omitempty"`
@@ -34680,18 +34676,24 @@ func (e CustomDomainOrderField) MarshalJSON() ([]byte, error) {
 type CustomTypeEnumOrderField string
 
 const (
-	CustomTypeEnumOrderFieldCreatedAt CustomTypeEnumOrderField = "created_at"
-	CustomTypeEnumOrderFieldUpdatedAt CustomTypeEnumOrderField = "updated_at"
+	CustomTypeEnumOrderFieldCreatedAt  CustomTypeEnumOrderField = "created_at"
+	CustomTypeEnumOrderFieldUpdatedAt  CustomTypeEnumOrderField = "updated_at"
+	CustomTypeEnumOrderFieldObjectType CustomTypeEnumOrderField = "object_type"
+	CustomTypeEnumOrderFieldField      CustomTypeEnumOrderField = "field"
+	CustomTypeEnumOrderFieldName       CustomTypeEnumOrderField = "name"
 )
 
 var AllCustomTypeEnumOrderField = []CustomTypeEnumOrderField{
 	CustomTypeEnumOrderFieldCreatedAt,
 	CustomTypeEnumOrderFieldUpdatedAt,
+	CustomTypeEnumOrderFieldObjectType,
+	CustomTypeEnumOrderFieldField,
+	CustomTypeEnumOrderFieldName,
 }
 
 func (e CustomTypeEnumOrderField) IsValid() bool {
 	switch e {
-	case CustomTypeEnumOrderFieldCreatedAt, CustomTypeEnumOrderFieldUpdatedAt:
+	case CustomTypeEnumOrderFieldCreatedAt, CustomTypeEnumOrderFieldUpdatedAt, CustomTypeEnumOrderFieldObjectType, CustomTypeEnumOrderFieldField, CustomTypeEnumOrderFieldName:
 		return true
 	}
 	return false
@@ -37894,16 +37896,20 @@ type TagDefinitionOrderField string
 const (
 	TagDefinitionOrderFieldCreatedAt TagDefinitionOrderField = "created_at"
 	TagDefinitionOrderFieldUpdatedAt TagDefinitionOrderField = "updated_at"
+	TagDefinitionOrderFieldName      TagDefinitionOrderField = "name"
+	TagDefinitionOrderFieldSlug      TagDefinitionOrderField = "slug"
 )
 
 var AllTagDefinitionOrderField = []TagDefinitionOrderField{
 	TagDefinitionOrderFieldCreatedAt,
 	TagDefinitionOrderFieldUpdatedAt,
+	TagDefinitionOrderFieldName,
+	TagDefinitionOrderFieldSlug,
 }
 
 func (e TagDefinitionOrderField) IsValid() bool {
 	switch e {
-	case TagDefinitionOrderFieldCreatedAt, TagDefinitionOrderFieldUpdatedAt:
+	case TagDefinitionOrderFieldCreatedAt, TagDefinitionOrderFieldUpdatedAt, TagDefinitionOrderFieldName, TagDefinitionOrderFieldSlug:
 		return true
 	}
 	return false

@@ -426,6 +426,54 @@ type document_data
     define viewer: [group#member] or editor or can_view from parent
     # allow users or groups to be blocked from view + edit access
     define blocked: [user, group#member]
+# entities are always assigned to an organization and permissions are inherited from the organization
+# individual users or groups can also be given permission to an entity but they must be a member of the organization
+type entity
+  relations
+    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
+    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
+    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+    define parent: [organization]
+# assets are always assigned to an organization and permissions are inherited from the organization
+# individual users or groups can also be given permission to an asset but they must be a member of the organization
+type asset
+  relations
+    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
+    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
+    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+    define parent: [organization]
+# findings can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
+# permissions are inherited from the parent object or organization
+type finding
+  relations
+    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
+    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
+    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+    define parent: [organization, program, control, subcontrol, risk, asset, entity]
+# vulnerabilities can be associated with programs, controls, subcontrols, risks, assets, entities, or scans
+# permissions are inherited from the parent object or organization
+type vulnerability
+  relations
+    define can_view: ([user, service] and member from parent) or can_edit or (viewer but not blocked)
+    define can_edit: ([user, service] and member from parent) or (editor but not blocked)
+    define can_delete: ([user] and member from parent) or (editor but not blocked)
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: [group#member] or editor or can_view from parent
+    define blocked: [user, group#member]
+    define parent: [organization, program, control, subcontrol, risk, asset, entity]
 # contacts are always assigned to an organization and permissions are inherited from the organization
 # individual users or groups can also be given permission to a contact but they must be a member of the organization
 type contact

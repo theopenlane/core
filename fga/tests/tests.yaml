@@ -712,6 +712,37 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+  - name: asset
+    description: assets are always assigned to an organization and permissions are inherited from the organization
+    tuple_file: tuples/assets.yaml
+    check:
+      - user: user:ulid-of-owner # org owner has full access
+        object: asset:asset-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+          audit_log_viewer: true
+      - user: user:ulid-of-member # org member can view
+        object: asset:asset-1
+        context:
+          email_domain: "example.com"
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-blocked # blocked user has no access
+        object: asset:asset-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar # user of another org has no access
+        object: asset:asset-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
   - name: evidence
     description: evidence are always with an organization, and can be linked to many objects within the system
     tuple_file: tuples/evidence.yaml

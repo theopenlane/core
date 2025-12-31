@@ -290,7 +290,6 @@ func (Finding) Annotations() []schema.Annotation {
 func (f Finding) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.FindingMutation](),
 		),

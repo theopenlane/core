@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 
@@ -125,26 +124,6 @@ func (_u *AssetUpdate) AppendTags(v []string) *AssetUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssetUpdate) ClearTags() *AssetUpdate {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssetUpdate) SetOwnerID(v string) *AssetUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssetUpdate) SetNillableOwnerID(v *string) *AssetUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssetUpdate) ClearOwnerID() *AssetUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -314,11 +293,6 @@ func (_u *AssetUpdate) ClearCategories() *AssetUpdate {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *AssetUpdate) SetOwner(v *Organization) *AssetUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *AssetUpdate) AddBlockedGroupIDs(ids ...string) *AssetUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -412,12 +386,6 @@ func (_u *AssetUpdate) AddControls(v ...*Control) *AssetUpdate {
 // Mutation returns the AssetMutation object of the builder.
 func (_u *AssetUpdate) Mutation() *AssetMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *AssetUpdate) ClearOwner() *AssetUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -717,37 +685,6 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(asset.FieldCategories, field.TypeJSON)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   asset.OwnerTable,
-			Columns: []string{asset.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Asset
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   asset.OwnerTable,
-			Columns: []string{asset.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Asset
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1151,26 +1088,6 @@ func (_u *AssetUpdateOne) ClearTags() *AssetUpdateOne {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *AssetUpdateOne) SetOwnerID(v string) *AssetUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *AssetUpdateOne) SetNillableOwnerID(v *string) *AssetUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *AssetUpdateOne) ClearOwnerID() *AssetUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *AssetUpdateOne) SetInternalNotes(v string) *AssetUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -1337,11 +1254,6 @@ func (_u *AssetUpdateOne) ClearCategories() *AssetUpdateOne {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *AssetUpdateOne) SetOwner(v *Organization) *AssetUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *AssetUpdateOne) AddBlockedGroupIDs(ids ...string) *AssetUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1435,12 +1347,6 @@ func (_u *AssetUpdateOne) AddControls(v ...*Control) *AssetUpdateOne {
 // Mutation returns the AssetMutation object of the builder.
 func (_u *AssetUpdateOne) Mutation() *AssetMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *AssetUpdateOne) ClearOwner() *AssetUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1770,37 +1676,6 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if _u.mutation.CategoriesCleared() {
 		_spec.ClearField(asset.FieldCategories, field.TypeJSON)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   asset.OwnerTable,
-			Columns: []string{asset.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Asset
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   asset.OwnerTable,
-			Columns: []string{asset.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Asset
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

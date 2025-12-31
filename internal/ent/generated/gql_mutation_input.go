@@ -1143,8 +1143,6 @@ type UpdateAssetInput struct {
 	ClearCategories       bool
 	Categories            []string
 	AppendCategories      []string
-	ClearOwner            bool
-	OwnerID               *string
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -1226,12 +1224,6 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if i.AppendCategories != nil {
 		m.AppendCategories(i.Categories)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()
@@ -4577,8 +4569,6 @@ type UpdateEntityInput struct {
 	AppendDomains         []string
 	ClearStatus           bool
 	Status                *string
-	ClearOwner            bool
-	OwnerID               *string
 	ClearBlockedGroups    bool
 	AddBlockedGroupIDs    []string
 	RemoveBlockedGroupIDs []string
@@ -4665,12 +4655,6 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

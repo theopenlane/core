@@ -41880,7 +41880,7 @@ type Asset implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -53997,7 +53997,7 @@ type Entity implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -88927,8 +88927,6 @@ input UpdateAssetInput {
   categories: [String!]
   appendCategories: [String!]
   clearCategories: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -89901,8 +89899,6 @@ input UpdateEntityInput {
   """
   status: String
   clearStatus: Boolean
-  ownerID: ID
-  clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean

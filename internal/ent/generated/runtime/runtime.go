@@ -502,23 +502,28 @@ func init() {
 
 	asset.Hooks[4] = assetMixinHooks5[0]
 
-	asset.Hooks[5] = assetMixinHooks6[0]
+	asset.Hooks[5] = assetMixinHooks5[1]
 
-	asset.Hooks[6] = assetMixinHooks6[1]
+	asset.Hooks[6] = assetMixinHooks6[0]
 
-	asset.Hooks[7] = assetMixinHooks6[2]
+	asset.Hooks[7] = assetMixinHooks6[1]
 
-	asset.Hooks[8] = assetMixinHooks7[0]
+	asset.Hooks[8] = assetMixinHooks6[2]
+
+	asset.Hooks[9] = assetMixinHooks7[0]
 	assetMixinInters1 := assetMixin[1].Interceptors()
 	assetMixinInters5 := assetMixin[5].Interceptors()
 	asset.Interceptors[0] = assetMixinInters1[0]
 	asset.Interceptors[1] = assetMixinInters5[0]
+	asset.Interceptors[2] = assetMixinInters5[1]
 	assetMixinFields0 := assetMixin[0].Fields()
 	_ = assetMixinFields0
 	assetMixinFields2 := assetMixin[2].Fields()
 	_ = assetMixinFields2
 	assetMixinFields3 := assetMixin[3].Fields()
 	_ = assetMixinFields3
+	assetMixinFields5 := assetMixin[5].Fields()
+	_ = assetMixinFields5
 	assetMixinFields7 := assetMixin[7].Fields()
 	_ = assetMixinFields7
 	assetFields := schema.Asset{}.Fields()
@@ -537,6 +542,10 @@ func init() {
 	assetDescTags := assetMixinFields3[0].Descriptor()
 	// asset.DefaultTags holds the default value on creation for the tags field.
 	asset.DefaultTags = assetDescTags.Default.([]string)
+	// assetDescOwnerID is the schema descriptor for owner_id field.
+	assetDescOwnerID := assetMixinFields5[0].Descriptor()
+	// asset.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	asset.OwnerIDValidator = assetDescOwnerID.Validators[0].(func(string) error)
 	// assetDescSystemOwned is the schema descriptor for system_owned field.
 	assetDescSystemOwned := assetMixinFields7[0].Descriptor()
 	// asset.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -1727,25 +1736,30 @@ func init() {
 
 	entity.Hooks[4] = entityMixinHooks5[0]
 
-	entity.Hooks[5] = entityMixinHooks6[0]
+	entity.Hooks[5] = entityMixinHooks5[1]
 
-	entity.Hooks[6] = entityMixinHooks6[1]
+	entity.Hooks[6] = entityMixinHooks6[0]
 
-	entity.Hooks[7] = entityMixinHooks6[2]
+	entity.Hooks[7] = entityMixinHooks6[1]
 
-	entity.Hooks[8] = entityMixinHooks7[0]
+	entity.Hooks[8] = entityMixinHooks6[2]
 
-	entity.Hooks[9] = entityHooks[0]
+	entity.Hooks[9] = entityMixinHooks7[0]
+
+	entity.Hooks[10] = entityHooks[0]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
 	entity.Interceptors[1] = entityMixinInters5[0]
+	entity.Interceptors[2] = entityMixinInters5[1]
 	entityMixinFields0 := entityMixin[0].Fields()
 	_ = entityMixinFields0
 	entityMixinFields2 := entityMixin[2].Fields()
 	_ = entityMixinFields2
 	entityMixinFields3 := entityMixin[3].Fields()
 	_ = entityMixinFields3
+	entityMixinFields5 := entityMixin[5].Fields()
+	_ = entityMixinFields5
 	entityMixinFields7 := entityMixin[7].Fields()
 	_ = entityMixinFields7
 	entityFields := schema.Entity{}.Fields()
@@ -1764,6 +1778,10 @@ func init() {
 	entityDescTags := entityMixinFields3[0].Descriptor()
 	// entity.DefaultTags holds the default value on creation for the tags field.
 	entity.DefaultTags = entityDescTags.Default.([]string)
+	// entityDescOwnerID is the schema descriptor for owner_id field.
+	entityDescOwnerID := entityMixinFields5[0].Descriptor()
+	// entity.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	entity.OwnerIDValidator = entityDescOwnerID.Validators[0].(func(string) error)
 	// entityDescSystemOwned is the schema descriptor for system_owned field.
 	entityDescSystemOwned := entityMixinFields7[0].Descriptor()
 	// entity.DefaultSystemOwned holds the default value on creation for the system_owned field.
