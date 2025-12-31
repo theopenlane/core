@@ -155,9 +155,20 @@ query GetCustomDomains($first: Int, $last: Int, $where: CustomDomainWhereInput) 
           dnsTxtRecord
           dnsTxtValue
           dnsVerificationStatus
+          dnsVerificationStatusReason
+          acmeChallengePath
+          expectedAcmeChallengeValue
+          acmeChallengeStatus
+          acmeChallengeStatusReason
+          cloudflareHostnameID
         }
         id
         mappableDomainID
+        mappableDomain {
+          id
+          name
+          zoneID
+        }
         ownerID
         tags
         updatedAt
