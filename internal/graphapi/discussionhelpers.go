@@ -52,6 +52,8 @@ func getParentObjectTypeFromContext(ctx context.Context) string {
 	return rootFieldCtx.Object
 }
 
+// setParentObjectIDInInput sets the parent object ID in the CreateNoteInput based on the context of the mutation
+// and the parent object type
 func setParentObjectIDInInput(ctx context.Context, dataInput *generated.CreateNoteInput) error {
 	parentID := graphutils.GetStringInputVariableByName(ctx, "id")
 	parentOperation := getParentObjectTypeFromContext(ctx)
@@ -72,9 +74,10 @@ func setParentObjectIDInInput(ctx context.Context, dataInput *generated.CreateNo
 	parentType := strings.TrimPrefix(parentOperation, "update")
 	parentField := parentType + "ID"
 
+	// set the parent ID in the input map
 	mapInput[parentField] = *parentID
 
-	// remarshal back to the input struct
+	// convert back to input struct
 	if err := convertToInput(ctx, mapInput, dataInput); err != nil {
 		return err
 	}
@@ -82,6 +85,7 @@ func setParentObjectIDInInput(ctx context.Context, dataInput *generated.CreateNo
 	return nil
 }
 
+// convertToMap converts a generic input struct to a map[string]any
 func convertToMap[T any](ctx context.Context, input T) (map[string]any, error) {
 	byteInput, err := json.Marshal(input)
 	if err != nil {
@@ -100,6 +104,7 @@ func convertToMap[T any](ctx context.Context, input T) (map[string]any, error) {
 	return mapInput, nil
 }
 
+// convertToInput converts a map[string]any to a generic input struct
 func convertToInput[T any](ctx context.Context, mapInput map[string]any, output T) error {
 	byteInput, err := json.Marshal(mapInput)
 	if err != nil {
