@@ -178,3 +178,36 @@ query GetControlSubcategoriesWithFramework($where: ControlWhereInput) {
     }
   }
 }
+
+mutation UpdateControlComment($updateControlCommentId: ID!, $input: UpdateNoteInput!) {
+  updateControlComment(id: $updateControlCommentId, input: $input) {
+    control {
+      id
+      comments {
+        edges {
+          node {
+            id
+            text
+            textJSON
+          }
+        }
+      }
+      discussions {
+        edges {
+          node {
+            id
+            comments {
+              edges {
+                node {
+                  id
+                  text
+                  textJSON
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

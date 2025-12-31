@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -171,27 +170,14 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 
-	// get the discussion id from the input, this can be used when its a sub-input
-	// like updateXObject -> updateDiscussion -> addComment
-	dataInput := graphutils.GetMapInputVariableByName(ctx, "input")
-	if dataInput != nil {
-		d := *dataInput
-		input, ok := d["updateDiscussion"].(map[string]any)
-		if ok {
-			idVal, ok := input["id"].(string)
-			if ok && idVal != "" {
-				data.DiscussionID = &idVal
-			}
-
-		}
+	// get the operation context
+	data.DiscussionID = getDiscussionIDFromUpdate(ctx)
+	if data.DiscussionID == nil {
+		return common.NewNotFoundError("discussion")
 	}
 
-	// otherwise fall back to the main id argument
-	if data.DiscussionID == nil {
-		data.DiscussionID = graphutils.GetStringInputVariableByName(ctx, "id")
-		if data.DiscussionID == nil {
-			return common.NewNotFoundError("discussion")
-		}
+	if err := setParentObjectIDInInput(ctx, data); err != nil {
+		return err
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {

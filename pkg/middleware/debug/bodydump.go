@@ -34,7 +34,7 @@ func BodyDump() echo.MiddlewareFunc {
 		}
 
 		if (c.Request().Method == http.MethodPost || c.Request().Method == http.MethodPatch) && len(resBody) > 0 {
-			var bodymap map[string]interface{}
+			var bodymap map[string]any
 			if err := json.Unmarshal(resBody, &bodymap); err == nil {
 				bodymap = redactSecretFields(bodymap)
 

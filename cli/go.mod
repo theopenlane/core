@@ -18,8 +18,8 @@ require (
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v0.50.0
-	github.com/theopenlane/core/common v0.0.0-20251226231451-1392578dd846
-	github.com/theopenlane/go-client v0.3.0
+	github.com/theopenlane/core/common v0.1.0
+	github.com/theopenlane/go-client v0.3.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.2
 	github.com/theopenlane/utils v0.6.2
@@ -49,8 +49,8 @@ require (
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
-	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/google/go-tpm v0.9.7 // indirect
+	github.com/google/go-querystring v1.2.0 // indirect
+	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect

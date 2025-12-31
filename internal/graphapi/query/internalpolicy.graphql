@@ -428,6 +428,73 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
         id
         name
       }
+      discussions {
+        edges {
+          node {
+            id
+            externalID
+            comments {
+              edges {
+                node {
+                  id
+                  displayID
+                  text
+                  createdAt
+                  createdBy
+                  updatedAt
+                  updatedBy
+                }
+              }
+            }
+          }
+        }
+      }
+      comments {
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateInternalPolicyComment($updatePolicyCommentId: ID!, $input: UpdateNoteInput!) {
+  updateInternalPolicyComment(id: $updatePolicyCommentId, input: $input) {
+    internalPolicy {
+      id
+      comments {
+        edges {
+          node {
+            id
+            text
+            textJSON
+          }
+        }
+      }
+      discussions {
+        edges {
+          node {
+            id
+            comments {
+              edges {
+                node {
+                  id
+                  text
+                  textJSON
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

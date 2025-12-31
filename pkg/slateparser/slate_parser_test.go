@@ -19,8 +19,8 @@ func TestCheckForMentions(t *testing.T) {
 		expectedName   string
 	}{
 		{
-			name: "single mention",
-			text: `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
+			name:           "single mention",
+			text:           `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
 			objectType:     "Task",
 			objectID:       "task001",
 			objectName:     "Test Task",
@@ -40,8 +40,8 @@ func TestCheckForMentions(t *testing.T) {
 			expectedName:   "John Doe",
 		},
 		{
-			name: "alternative attribute order",
-			text: `<div data-slate-key="user789" data-slate-id="mention003" data-slate-value="Bob Wilson" data-slate-node="element" data-slate-inline="true"></div>`,
+			name:           "alternative attribute order",
+			text:           `<div data-slate-key="user789" data-slate-id="mention003" data-slate-value="Bob Wilson" data-slate-node="element" data-slate-inline="true"></div>`,
 			objectType:     "Risk",
 			objectID:       "risk001",
 			objectName:     "Test Risk",
@@ -102,25 +102,25 @@ func TestCheckForNewMentions(t *testing.T) {
 		expectedCount int
 	}{
 		{
-			name:    "new mention added",
-			oldText: `<p>No mentions here</p>`,
-			newText: `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
+			name:          "new mention added",
+			oldText:       `<p>No mentions here</p>`,
+			newText:       `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
 			objectType:    "Task",
 			objectID:      "task001",
 			objectName:    "Test Task",
 			expectedCount: 1,
 		},
 		{
-			name: "existing mention unchanged",
-			oldText: `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
-			newText: `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
+			name:          "existing mention unchanged",
+			oldText:       `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
+			newText:       `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
 			objectType:    "Task",
 			objectID:      "task002",
 			objectName:    "Test Task 2",
 			expectedCount: 0,
 		},
 		{
-			name: "one old, one new mention",
+			name:    "one old, one new mention",
 			oldText: `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>`,
 			newText: `<div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe"></div>
 			          <div data-slate-node="element" data-slate-inline="true" data-slate-void="true" data-slate-key="user456" data-slate-id="mention002" data-slate-value="Jane Smith"></div>`,
