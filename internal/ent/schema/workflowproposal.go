@@ -116,7 +116,7 @@ func (WorkflowProposal) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("workflow_object_ref_id", "domain_key").
 			Unique().
-			Annotations(entsql.IndexWhere("state IN ('DRAFT', 'SUBMITTED')")),
+			Annotations(entsql.IndexWhere("((state)::text = ANY ((ARRAY['DRAFT'::character varying, 'SUBMITTED'::character varying])::text[]))")),
 	}
 }
 

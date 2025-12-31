@@ -6395,7 +6395,7 @@ var (
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowProposalsColumns[14], WorkflowProposalsColumns[6]},
 				Annotation: &entsql.IndexAnnotation{
-					Where: "state IN ('DRAFT', 'SUBMITTED')",
+					Where: "((state)::text = ANY ((ARRAY['DRAFT'::character varying, 'SUBMITTED'::character varying])::text[]))",
 				},
 			},
 		},
