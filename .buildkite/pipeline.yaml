@@ -731,4 +731,6 @@ steps:
               config: "file://db/atlas.hcl"
       - label: ":go: go-client schema update"
         trigger: go-client
+        depends_on: "apollo-publish-schema"
         if: build.tag != null
+        soft_fail: true
