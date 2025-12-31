@@ -34680,18 +34680,24 @@ func (e CustomDomainOrderField) MarshalJSON() ([]byte, error) {
 type CustomTypeEnumOrderField string
 
 const (
-	CustomTypeEnumOrderFieldCreatedAt CustomTypeEnumOrderField = "created_at"
-	CustomTypeEnumOrderFieldUpdatedAt CustomTypeEnumOrderField = "updated_at"
+	CustomTypeEnumOrderFieldCreatedAt  CustomTypeEnumOrderField = "created_at"
+	CustomTypeEnumOrderFieldUpdatedAt  CustomTypeEnumOrderField = "updated_at"
+	CustomTypeEnumOrderFieldObjectType CustomTypeEnumOrderField = "object_type"
+	CustomTypeEnumOrderFieldField      CustomTypeEnumOrderField = "field"
+	CustomTypeEnumOrderFieldName       CustomTypeEnumOrderField = "name"
 )
 
 var AllCustomTypeEnumOrderField = []CustomTypeEnumOrderField{
 	CustomTypeEnumOrderFieldCreatedAt,
 	CustomTypeEnumOrderFieldUpdatedAt,
+	CustomTypeEnumOrderFieldObjectType,
+	CustomTypeEnumOrderFieldField,
+	CustomTypeEnumOrderFieldName,
 }
 
 func (e CustomTypeEnumOrderField) IsValid() bool {
 	switch e {
-	case CustomTypeEnumOrderFieldCreatedAt, CustomTypeEnumOrderFieldUpdatedAt:
+	case CustomTypeEnumOrderFieldCreatedAt, CustomTypeEnumOrderFieldUpdatedAt, CustomTypeEnumOrderFieldObjectType, CustomTypeEnumOrderFieldField, CustomTypeEnumOrderFieldName:
 		return true
 	}
 	return false
@@ -37894,16 +37900,20 @@ type TagDefinitionOrderField string
 const (
 	TagDefinitionOrderFieldCreatedAt TagDefinitionOrderField = "created_at"
 	TagDefinitionOrderFieldUpdatedAt TagDefinitionOrderField = "updated_at"
+	TagDefinitionOrderFieldName      TagDefinitionOrderField = "name"
+	TagDefinitionOrderFieldSlug      TagDefinitionOrderField = "slug"
 )
 
 var AllTagDefinitionOrderField = []TagDefinitionOrderField{
 	TagDefinitionOrderFieldCreatedAt,
 	TagDefinitionOrderFieldUpdatedAt,
+	TagDefinitionOrderFieldName,
+	TagDefinitionOrderFieldSlug,
 }
 
 func (e TagDefinitionOrderField) IsValid() bool {
 	switch e {
-	case TagDefinitionOrderFieldCreatedAt, TagDefinitionOrderFieldUpdatedAt:
+	case TagDefinitionOrderFieldCreatedAt, TagDefinitionOrderFieldUpdatedAt, TagDefinitionOrderFieldName, TagDefinitionOrderFieldSlug:
 		return true
 	}
 	return false
