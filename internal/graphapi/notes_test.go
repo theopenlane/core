@@ -304,6 +304,112 @@ func TestMutationUpdateDiscussionForControl(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
+func TestMutationUpdateDiscussionForPolicy(t *testing.T) {
+	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// add initial discussion to update
+	resp, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+		AddDiscussion: &testclient.CreateDiscussionInput{
+			ExternalID: lo.ToPtr("DISC-22402"),
+			IsResolved: lo.ToPtr(false),
+			AddComment: &testclient.CreateNoteInput{
+				Text: "This is a test note as part of a discussion",
+			},
+		},
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Assert(t, resp.UpdateInternalPolicy.InternalPolicy.Comments.Edges != nil)
+	assert.Assert(t, len(resp.UpdateInternalPolicy.InternalPolicy.Comments.Edges) == 1)
+
+	assert.Assert(t, resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges != nil)
+	assert.Assert(t, len(resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges) != 0)
+	assert.Assert(t, len(resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.Comments.Edges) != 0)
+	assert.Check(t, is.Equal("This is a test note as part of a discussion", resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.Comments.Edges[0].Node.Text))
+
+	discussionID := resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.ID
+
+	// now update the discussion by adding another comment
+	updateResp, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
+			ID: discussionID,
+			Input: &testclient.UpdateDiscussionInput{
+				AddComment: &testclient.CreateNoteInput{
+					Text: "This is an additional comment in the discussion for the policy",
+				},
+			},
+		},
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateResp != nil)
+	assert.Assert(t, updateResp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges != nil)
+	assert.Assert(t, len(updateResp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges) != 0)
+	assert.Assert(t, updateResp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.Comments.Edges != nil)
+	assert.Assert(t, len(updateResp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.Comments.Edges) == 2)
+
+	// make sure the policy also has the comments linked
+	assert.Assert(t, updateResp.UpdateInternalPolicy.InternalPolicy.Comments.Edges != nil)
+	assert.Assert(t, len(updateResp.UpdateInternalPolicy.InternalPolicy.Comments.Edges) == 2)
+
+	updatedDiscussion := updateResp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node
+	assert.Assert(t, len(updatedDiscussion.Comments.Edges) == 2)
+	assert.Check(t, is.Equal("This is an additional comment in the discussion for the policy", updatedDiscussion.Comments.Edges[1].Node.Text))
+
+	// now lets try to update the second comment in the discussion
+	noteToUpdateID := updatedDiscussion.Comments.Edges[1].Node.ID
+	updatedText := "This is an updated additional comment in the discussion for the policy"
+	updateComment, err := suite.client.api.UpdateInternalPolicyComment(testUser1.UserCtx, noteToUpdateID, testclient.UpdateNoteInput{
+		Text: &updatedText,
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateComment != nil)
+	assert.Assert(t, updateComment.UpdateInternalPolicyComment.InternalPolicy.Comments.Edges != nil)
+	for _, edge := range updateComment.UpdateInternalPolicyComment.InternalPolicy.Comments.Edges {
+		if edge.Node.ID == noteToUpdateID {
+			assert.Check(t, is.Equal(updatedText, edge.Node.Text))
+		}
+	}
+
+	// ensure its the same on the discussion side
+	for _, discEdge := range updateComment.UpdateInternalPolicyComment.InternalPolicy.Discussions.Edges {
+		if discEdge.Node.ID == discussionID {
+			for _, commentEdge := range discEdge.Node.Comments.Edges {
+				if commentEdge.Node.ID == noteToUpdateID {
+					assert.Check(t, is.Equal(updatedText, commentEdge.Node.Text))
+				}
+			}
+		}
+	}
+
+	// now lets try to remove a comment from the discussion
+	noteToRemoveID := updatedDiscussion.Comments.Edges[0].Node.ID
+
+	updateResp2, err := suite.client.api.UpdateInternalPolicy(testUser1.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+		UpdateDiscussion: &testclient.UpdateDiscussionsInput{
+			ID: discussionID,
+			Input: &testclient.UpdateDiscussionInput{
+				RemoveCommentIDs: []string{noteToRemoveID},
+			},
+		},
+	})
+
+	assert.NilError(t, err)
+	assert.Assert(t, updateResp2 != nil)
+	assert.Assert(t, updateResp2.UpdateInternalPolicy.InternalPolicy.Discussions.Edges != nil)
+	assert.Assert(t, len(updateResp2.UpdateInternalPolicy.InternalPolicy.Discussions.Edges) != 0)
+
+	updatedDiscussion2 := updateResp2.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node
+	assert.Assert(t, len(updatedDiscussion2.Comments.Edges) == 1)
+	// this will be the updated comment
+	assert.Check(t, is.Equal(updatedText, updatedDiscussion2.Comments.Edges[0].Node.Text))
+
+	// clean up
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
 func TestMutationDeleteNoteForTask(t *testing.T) {
 	userTask := (&TaskBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 

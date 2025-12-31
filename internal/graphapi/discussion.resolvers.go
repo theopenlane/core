@@ -7,7 +7,6 @@ package graphapi
 
 import (
 	"context"
-	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -15,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -173,55 +171,13 @@ func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 	}
 
 	// get the operation context
-	opCtx := graphql.GetOperationContext(ctx)
-	parentType := opCtx.OperationName
-
-	// get the discussion id from the input, this can be used when its a sub-input
-	// like updateXObject -> updateDiscussion -> addComment
-	if !strings.Contains(strings.ToLower(parentType), "discussion") {
-		dataInput := graphutils.GetMapInputVariableByName(ctx, "input")
-		if dataInput != nil {
-			d := *dataInput
-			input, ok := d["updateDiscussion"].(map[string]any)
-			if ok {
-				idVal, ok := input["id"].(string)
-				if ok && idVal != "" {
-					data.DiscussionID = &idVal
-				}
-
-			}
-		}
-
-		// get the parent id
-		parentID := graphutils.GetStringInputVariableByName(ctx, "id")
-		if parentID != nil {
-			switch parentType {
-			case "UpdateInternalPolicy":
-				data.InternalPolicyID = parentID
-			case "UpdateProcedure":
-				data.ProcedureID = parentID
-			case "UpdateControl":
-				data.ControlID = parentID
-			case "UpdateSubControl":
-				data.SubcontrolID = parentID
-			case "UpdateRisk":
-				data.RiskID = parentID
-			case "UpdateTask":
-				data.TaskID = parentID
-			case "UpdateEvidence":
-				data.EvidenceID = parentID
-			case "UpdateTrustCenter":
-				data.TrustCenterID = parentID
-			}
-		}
+	data.DiscussionID = getDiscussionIDFromUpdate(ctx)
+	if data.DiscussionID == nil {
+		return common.NewNotFoundError("discussion")
 	}
 
-	// otherwise fall back to the main id argument
-	if data.DiscussionID == nil {
-		data.DiscussionID = graphutils.GetStringInputVariableByName(ctx, "id")
-		if data.DiscussionID == nil {
-			return common.NewNotFoundError("discussion")
-		}
+	if err := setParentObjectIDInInput(ctx, data); err != nil {
+		return err
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
