@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -648,6 +649,51 @@ func (_u *GroupUpdate) AddEntityViewers(v ...*Entity) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEntityViewerIDs(ids...)
+}
+
+// AddActionPlanEditorIDs adds the "action_plan_editors" edge to the ActionPlan entity by IDs.
+func (_u *GroupUpdate) AddActionPlanEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddActionPlanEditorIDs(ids...)
+	return _u
+}
+
+// AddActionPlanEditors adds the "action_plan_editors" edges to the ActionPlan entity.
+func (_u *GroupUpdate) AddActionPlanEditors(v ...*ActionPlan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanEditorIDs(ids...)
+}
+
+// AddActionPlanBlockedGroupIDs adds the "action_plan_blocked_groups" edge to the ActionPlan entity by IDs.
+func (_u *GroupUpdate) AddActionPlanBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddActionPlanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddActionPlanBlockedGroups adds the "action_plan_blocked_groups" edges to the ActionPlan entity.
+func (_u *GroupUpdate) AddActionPlanBlockedGroups(v ...*ActionPlan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanBlockedGroupIDs(ids...)
+}
+
+// AddActionPlanViewerIDs adds the "action_plan_viewers" edge to the ActionPlan entity by IDs.
+func (_u *GroupUpdate) AddActionPlanViewerIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddActionPlanViewerIDs(ids...)
+	return _u
+}
+
+// AddActionPlanViewers adds the "action_plan_viewers" edges to the ActionPlan entity.
+func (_u *GroupUpdate) AddActionPlanViewers(v ...*ActionPlan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1344,6 +1390,69 @@ func (_u *GroupUpdate) RemoveEntityViewers(v ...*Entity) *GroupUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityViewerIDs(ids...)
+}
+
+// ClearActionPlanEditors clears all "action_plan_editors" edges to the ActionPlan entity.
+func (_u *GroupUpdate) ClearActionPlanEditors() *GroupUpdate {
+	_u.mutation.ClearActionPlanEditors()
+	return _u
+}
+
+// RemoveActionPlanEditorIDs removes the "action_plan_editors" edge to ActionPlan entities by IDs.
+func (_u *GroupUpdate) RemoveActionPlanEditorIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveActionPlanEditorIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlanEditors removes "action_plan_editors" edges to ActionPlan entities.
+func (_u *GroupUpdate) RemoveActionPlanEditors(v ...*ActionPlan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanEditorIDs(ids...)
+}
+
+// ClearActionPlanBlockedGroups clears all "action_plan_blocked_groups" edges to the ActionPlan entity.
+func (_u *GroupUpdate) ClearActionPlanBlockedGroups() *GroupUpdate {
+	_u.mutation.ClearActionPlanBlockedGroups()
+	return _u
+}
+
+// RemoveActionPlanBlockedGroupIDs removes the "action_plan_blocked_groups" edge to ActionPlan entities by IDs.
+func (_u *GroupUpdate) RemoveActionPlanBlockedGroupIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveActionPlanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlanBlockedGroups removes "action_plan_blocked_groups" edges to ActionPlan entities.
+func (_u *GroupUpdate) RemoveActionPlanBlockedGroups(v ...*ActionPlan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanBlockedGroupIDs(ids...)
+}
+
+// ClearActionPlanViewers clears all "action_plan_viewers" edges to the ActionPlan entity.
+func (_u *GroupUpdate) ClearActionPlanViewers() *GroupUpdate {
+	_u.mutation.ClearActionPlanViewers()
+	return _u
+}
+
+// RemoveActionPlanViewerIDs removes the "action_plan_viewers" edge to ActionPlan entities by IDs.
+func (_u *GroupUpdate) RemoveActionPlanViewerIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveActionPlanViewerIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlanViewers removes "action_plan_viewers" edges to ActionPlan entities.
+func (_u *GroupUpdate) RemoveActionPlanViewers(v ...*ActionPlan) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -2888,6 +2997,150 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ActionPlanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlanEditorsIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlanBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlanViewersIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ProcedureEditorsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4282,6 +4535,51 @@ func (_u *GroupUpdateOne) AddEntityViewers(v ...*Entity) *GroupUpdateOne {
 	return _u.AddEntityViewerIDs(ids...)
 }
 
+// AddActionPlanEditorIDs adds the "action_plan_editors" edge to the ActionPlan entity by IDs.
+func (_u *GroupUpdateOne) AddActionPlanEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddActionPlanEditorIDs(ids...)
+	return _u
+}
+
+// AddActionPlanEditors adds the "action_plan_editors" edges to the ActionPlan entity.
+func (_u *GroupUpdateOne) AddActionPlanEditors(v ...*ActionPlan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanEditorIDs(ids...)
+}
+
+// AddActionPlanBlockedGroupIDs adds the "action_plan_blocked_groups" edge to the ActionPlan entity by IDs.
+func (_u *GroupUpdateOne) AddActionPlanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddActionPlanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddActionPlanBlockedGroups adds the "action_plan_blocked_groups" edges to the ActionPlan entity.
+func (_u *GroupUpdateOne) AddActionPlanBlockedGroups(v ...*ActionPlan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanBlockedGroupIDs(ids...)
+}
+
+// AddActionPlanViewerIDs adds the "action_plan_viewers" edge to the ActionPlan entity by IDs.
+func (_u *GroupUpdateOne) AddActionPlanViewerIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddActionPlanViewerIDs(ids...)
+	return _u
+}
+
+// AddActionPlanViewers adds the "action_plan_viewers" edges to the ActionPlan entity.
+func (_u *GroupUpdateOne) AddActionPlanViewers(v ...*ActionPlan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddActionPlanViewerIDs(ids...)
+}
+
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
 func (_u *GroupUpdateOne) AddProcedureEditorIDs(ids ...string) *GroupUpdateOne {
 	_u.mutation.AddProcedureEditorIDs(ids...)
@@ -4976,6 +5274,69 @@ func (_u *GroupUpdateOne) RemoveEntityViewers(v ...*Entity) *GroupUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityViewerIDs(ids...)
+}
+
+// ClearActionPlanEditors clears all "action_plan_editors" edges to the ActionPlan entity.
+func (_u *GroupUpdateOne) ClearActionPlanEditors() *GroupUpdateOne {
+	_u.mutation.ClearActionPlanEditors()
+	return _u
+}
+
+// RemoveActionPlanEditorIDs removes the "action_plan_editors" edge to ActionPlan entities by IDs.
+func (_u *GroupUpdateOne) RemoveActionPlanEditorIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveActionPlanEditorIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlanEditors removes "action_plan_editors" edges to ActionPlan entities.
+func (_u *GroupUpdateOne) RemoveActionPlanEditors(v ...*ActionPlan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanEditorIDs(ids...)
+}
+
+// ClearActionPlanBlockedGroups clears all "action_plan_blocked_groups" edges to the ActionPlan entity.
+func (_u *GroupUpdateOne) ClearActionPlanBlockedGroups() *GroupUpdateOne {
+	_u.mutation.ClearActionPlanBlockedGroups()
+	return _u
+}
+
+// RemoveActionPlanBlockedGroupIDs removes the "action_plan_blocked_groups" edge to ActionPlan entities by IDs.
+func (_u *GroupUpdateOne) RemoveActionPlanBlockedGroupIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveActionPlanBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlanBlockedGroups removes "action_plan_blocked_groups" edges to ActionPlan entities.
+func (_u *GroupUpdateOne) RemoveActionPlanBlockedGroups(v ...*ActionPlan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanBlockedGroupIDs(ids...)
+}
+
+// ClearActionPlanViewers clears all "action_plan_viewers" edges to the ActionPlan entity.
+func (_u *GroupUpdateOne) ClearActionPlanViewers() *GroupUpdateOne {
+	_u.mutation.ClearActionPlanViewers()
+	return _u
+}
+
+// RemoveActionPlanViewerIDs removes the "action_plan_viewers" edge to ActionPlan entities by IDs.
+func (_u *GroupUpdateOne) RemoveActionPlanViewerIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveActionPlanViewerIDs(ids...)
+	return _u
+}
+
+// RemoveActionPlanViewers removes "action_plan_viewers" edges to ActionPlan entities.
+func (_u *GroupUpdateOne) RemoveActionPlanViewers(v ...*ActionPlan) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveActionPlanViewerIDs(ids...)
 }
 
 // ClearProcedureEditors clears all "procedure_editors" edges to the Procedure entity.
@@ -6545,6 +6906,150 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanEditors
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlanEditorsIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanEditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanBlockedGroups
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlanBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanBlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ActionPlanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanViewers
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedActionPlanViewersIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanViewersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ActionPlanViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.ActionPlanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

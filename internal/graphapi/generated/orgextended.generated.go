@@ -90,6 +90,12 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_controlObjectiveCreators(ctx, field)
 			case "evidenceCreators":
 				return ec.fieldContext_Organization_evidenceCreators(ctx, field)
+			case "assetCreators":
+				return ec.fieldContext_Organization_assetCreators(ctx, field)
+			case "findingCreators":
+				return ec.fieldContext_Organization_findingCreators(ctx, field)
+			case "vulnerabilityCreators":
+				return ec.fieldContext_Organization_vulnerabilityCreators(ctx, field)
 			case "groupCreators":
 				return ec.fieldContext_Organization_groupCreators(ctx, field)
 			case "internalPolicyCreators":
@@ -116,6 +122,8 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
 			case "trustCenterSubprocessorCreators":
 				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
+			case "actionPlanCreators":
+				return ec.fieldContext_Organization_actionPlanCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -614,6 +615,51 @@ func (_c *GroupCreate) AddEntityViewers(v ...*Entity) *GroupCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEntityViewerIDs(ids...)
+}
+
+// AddActionPlanEditorIDs adds the "action_plan_editors" edge to the ActionPlan entity by IDs.
+func (_c *GroupCreate) AddActionPlanEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddActionPlanEditorIDs(ids...)
+	return _c
+}
+
+// AddActionPlanEditors adds the "action_plan_editors" edges to the ActionPlan entity.
+func (_c *GroupCreate) AddActionPlanEditors(v ...*ActionPlan) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanEditorIDs(ids...)
+}
+
+// AddActionPlanBlockedGroupIDs adds the "action_plan_blocked_groups" edge to the ActionPlan entity by IDs.
+func (_c *GroupCreate) AddActionPlanBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddActionPlanBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddActionPlanBlockedGroups adds the "action_plan_blocked_groups" edges to the ActionPlan entity.
+func (_c *GroupCreate) AddActionPlanBlockedGroups(v ...*ActionPlan) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanBlockedGroupIDs(ids...)
+}
+
+// AddActionPlanViewerIDs adds the "action_plan_viewers" edge to the ActionPlan entity by IDs.
+func (_c *GroupCreate) AddActionPlanViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddActionPlanViewerIDs(ids...)
+	return _c
+}
+
+// AddActionPlanViewers adds the "action_plan_viewers" edges to the ActionPlan entity.
+func (_c *GroupCreate) AddActionPlanViewers(v ...*ActionPlan) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1456,6 +1502,57 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EntityViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlanEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanEditorsTable,
+			Columns: group.ActionPlanEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlanEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlanBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanBlockedGroupsTable,
+			Columns: group.ActionPlanBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlanBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlanViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.ActionPlanViewersTable,
+			Columns: group.ActionPlanViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

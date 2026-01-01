@@ -150,5 +150,10 @@ func PaymentMethodCheckRequired(client *generated.Client) bool {
 		return false
 	}
 
+	// In dev mode, bypass payment method checks to keep local workflows unblocked.
+	if client.EntConfig.Modules.DevMode {
+		return false
+	}
+
 	return client.EntConfig.Billing.RequirePaymentMethod
 }

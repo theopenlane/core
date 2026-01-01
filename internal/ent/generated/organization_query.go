@@ -104,6 +104,9 @@ type OrganizationQuery struct {
 	withControlImplementationCreators        *GroupQuery
 	withControlObjectiveCreators             *GroupQuery
 	withEvidenceCreators                     *GroupQuery
+	withAssetCreators                        *GroupQuery
+	withFindingCreators                      *GroupQuery
+	withVulnerabilityCreators                *GroupQuery
 	withGroupCreators                        *GroupQuery
 	withInternalPolicyCreators               *GroupQuery
 	withMappedControlCreators                *GroupQuery
@@ -117,6 +120,7 @@ type OrganizationQuery struct {
 	withSubprocessorCreators                 *GroupQuery
 	withTrustCenterDocCreators               *GroupQuery
 	withTrustCenterSubprocessorCreators      *GroupQuery
+	withActionPlanCreators                   *GroupQuery
 	withParent                               *OrganizationQuery
 	withChildren                             *OrganizationQuery
 	withSetting                              *OrganizationSettingQuery
@@ -199,6 +203,9 @@ type OrganizationQuery struct {
 	withNamedControlImplementationCreators   map[string]*GroupQuery
 	withNamedControlObjectiveCreators        map[string]*GroupQuery
 	withNamedEvidenceCreators                map[string]*GroupQuery
+	withNamedAssetCreators                   map[string]*GroupQuery
+	withNamedFindingCreators                 map[string]*GroupQuery
+	withNamedVulnerabilityCreators           map[string]*GroupQuery
 	withNamedGroupCreators                   map[string]*GroupQuery
 	withNamedInternalPolicyCreators          map[string]*GroupQuery
 	withNamedMappedControlCreators           map[string]*GroupQuery
@@ -212,6 +219,7 @@ type OrganizationQuery struct {
 	withNamedSubprocessorCreators            map[string]*GroupQuery
 	withNamedTrustCenterDocCreators          map[string]*GroupQuery
 	withNamedTrustCenterSubprocessorCreators map[string]*GroupQuery
+	withNamedActionPlanCreators              map[string]*GroupQuery
 	withNamedChildren                        map[string]*OrganizationQuery
 	withNamedPersonalAccessTokens            map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                       map[string]*APITokenQuery
@@ -411,6 +419,81 @@ func (_q *OrganizationQuery) QueryEvidenceCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceCreatorsTable, organization.EvidenceCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssetCreators chains the current query on the "asset_creators" edge.
+func (_q *OrganizationQuery) QueryAssetCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssetCreatorsTable, organization.AssetCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindingCreators chains the current query on the "finding_creators" edge.
+func (_q *OrganizationQuery) QueryFindingCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingCreatorsTable, organization.FindingCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilityCreators chains the current query on the "vulnerability_creators" edge.
+func (_q *OrganizationQuery) QueryVulnerabilityCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.VulnerabilityCreatorsTable, organization.VulnerabilityCreatorsColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -736,6 +819,31 @@ func (_q *OrganizationQuery) QueryTrustCenterSubprocessorCreators() *GroupQuery 
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterSubprocessorCreatorsTable, organization.TrustCenterSubprocessorCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryActionPlanCreators chains the current query on the "action_plan_creators" edge.
+func (_q *OrganizationQuery) QueryActionPlanCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.ActionPlanCreatorsTable, organization.ActionPlanCreatorsColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -2842,6 +2950,9 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withControlImplementationCreators:   _q.withControlImplementationCreators.Clone(),
 		withControlObjectiveCreators:        _q.withControlObjectiveCreators.Clone(),
 		withEvidenceCreators:                _q.withEvidenceCreators.Clone(),
+		withAssetCreators:                   _q.withAssetCreators.Clone(),
+		withFindingCreators:                 _q.withFindingCreators.Clone(),
+		withVulnerabilityCreators:           _q.withVulnerabilityCreators.Clone(),
 		withGroupCreators:                   _q.withGroupCreators.Clone(),
 		withInternalPolicyCreators:          _q.withInternalPolicyCreators.Clone(),
 		withMappedControlCreators:           _q.withMappedControlCreators.Clone(),
@@ -2855,6 +2966,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withSubprocessorCreators:            _q.withSubprocessorCreators.Clone(),
 		withTrustCenterDocCreators:          _q.withTrustCenterDocCreators.Clone(),
 		withTrustCenterSubprocessorCreators: _q.withTrustCenterSubprocessorCreators.Clone(),
+		withActionPlanCreators:              _q.withActionPlanCreators.Clone(),
 		withParent:                          _q.withParent.Clone(),
 		withChildren:                        _q.withChildren.Clone(),
 		withSetting:                         _q.withSetting.Clone(),
@@ -2979,6 +3091,39 @@ func (_q *OrganizationQuery) WithEvidenceCreators(opts ...func(*GroupQuery)) *Or
 		opt(query)
 	}
 	_q.withEvidenceCreators = query
+	return _q
+}
+
+// WithAssetCreators tells the query-builder to eager-load the nodes that are connected to
+// the "asset_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAssetCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssetCreators = query
+	return _q
+}
+
+// WithFindingCreators tells the query-builder to eager-load the nodes that are connected to
+// the "finding_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithFindingCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindingCreators = query
+	return _q
+}
+
+// WithVulnerabilityCreators tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerability_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithVulnerabilityCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilityCreators = query
 	return _q
 }
 
@@ -3122,6 +3267,17 @@ func (_q *OrganizationQuery) WithTrustCenterSubprocessorCreators(opts ...func(*G
 		opt(query)
 	}
 	_q.withTrustCenterSubprocessorCreators = query
+	return _q
+}
+
+// WithActionPlanCreators tells the query-builder to eager-load the nodes that are connected to
+// the "action_plan_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithActionPlanCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withActionPlanCreators = query
 	return _q
 }
 
@@ -4045,11 +4201,14 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [93]bool{
+		loadedTypes = [97]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
 			_q.withEvidenceCreators != nil,
+			_q.withAssetCreators != nil,
+			_q.withFindingCreators != nil,
+			_q.withVulnerabilityCreators != nil,
 			_q.withGroupCreators != nil,
 			_q.withInternalPolicyCreators != nil,
 			_q.withMappedControlCreators != nil,
@@ -4063,6 +4222,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSubprocessorCreators != nil,
 			_q.withTrustCenterDocCreators != nil,
 			_q.withTrustCenterSubprocessorCreators != nil,
+			_q.withActionPlanCreators != nil,
 			_q.withParent != nil,
 			_q.withChildren != nil,
 			_q.withSetting != nil,
@@ -4196,6 +4356,29 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withAssetCreators; query != nil {
+		if err := _q.loadAssetCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AssetCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.AssetCreators = append(n.Edges.AssetCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindingCreators; query != nil {
+		if err := _q.loadFindingCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.FindingCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.FindingCreators = append(n.Edges.FindingCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilityCreators; query != nil {
+		if err := _q.loadVulnerabilityCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.VulnerabilityCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.VulnerabilityCreators = append(n.Edges.VulnerabilityCreators, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withGroupCreators; query != nil {
 		if err := _q.loadGroupCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.GroupCreators = []*Group{} },
@@ -4296,6 +4479,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *Group) {
 				n.Edges.TrustCenterSubprocessorCreators = append(n.Edges.TrustCenterSubprocessorCreators, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withActionPlanCreators; query != nil {
+		if err := _q.loadActionPlanCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.ActionPlanCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.ActionPlanCreators = append(n.Edges.ActionPlanCreators, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4896,6 +5086,27 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedAssetCreators {
+		if err := _q.loadAssetCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAssetCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedAssetCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindingCreators {
+		if err := _q.loadFindingCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedFindingCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedFindingCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilityCreators {
+		if err := _q.loadVulnerabilityCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedVulnerabilityCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedVulnerabilityCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedGroupCreators {
 		if err := _q.loadGroupCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedGroupCreators(name) },
@@ -4984,6 +5195,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadTrustCenterSubprocessorCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTrustCenterSubprocessorCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedTrustCenterSubprocessorCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedActionPlanCreators {
+		if err := _q.loadActionPlanCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedActionPlanCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedActionPlanCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5634,6 +5852,99 @@ func (_q *OrganizationQuery) loadEvidenceCreators(ctx context.Context, query *Gr
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadAssetCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AssetCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_asset_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_asset_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_asset_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadFindingCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.FindingCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_finding_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_finding_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_finding_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadVulnerabilityCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.VulnerabilityCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_vulnerability_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_vulnerability_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_vulnerability_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadGroupCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -6032,6 +6343,37 @@ func (_q *OrganizationQuery) loadTrustCenterSubprocessorCreators(ctx context.Con
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_trust_center_subprocessor_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadActionPlanCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.ActionPlanCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_action_plan_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_action_plan_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_action_plan_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -8638,6 +8980,48 @@ func (_q *OrganizationQuery) WithNamedEvidenceCreators(name string, opts ...func
 	return _q
 }
 
+// WithNamedAssetCreators tells the query-builder to eager-load the nodes that are connected to the "asset_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAssetCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssetCreators == nil {
+		_q.withNamedAssetCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedAssetCreators[name] = query
+	return _q
+}
+
+// WithNamedFindingCreators tells the query-builder to eager-load the nodes that are connected to the "finding_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedFindingCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindingCreators == nil {
+		_q.withNamedFindingCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedFindingCreators[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilityCreators tells the query-builder to eager-load the nodes that are connected to the "vulnerability_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedVulnerabilityCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilityCreators == nil {
+		_q.withNamedVulnerabilityCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedVulnerabilityCreators[name] = query
+	return _q
+}
+
 // WithNamedGroupCreators tells the query-builder to eager-load the nodes that are connected to the "group_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedGroupCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -8817,6 +9201,20 @@ func (_q *OrganizationQuery) WithNamedTrustCenterSubprocessorCreators(name strin
 		_q.withNamedTrustCenterSubprocessorCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedTrustCenterSubprocessorCreators[name] = query
+	return _q
+}
+
+// WithNamedActionPlanCreators tells the query-builder to eager-load the nodes that are connected to the "action_plan_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedActionPlanCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedActionPlanCreators == nil {
+		_q.withNamedActionPlanCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedActionPlanCreators[name] = query
 	return _q
 }
 

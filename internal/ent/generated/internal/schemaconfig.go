@@ -9,6 +9,9 @@ import "context"
 type SchemaConfig struct {
 	APIToken                           string // APIToken table.
 	ActionPlan                         string // ActionPlan table.
+	ActionPlanBlockedGroups            string // ActionPlan-blocked_groups->Group table.
+	ActionPlanEditors                  string // ActionPlan-editors->Group table.
+	ActionPlanViewers                  string // ActionPlan-viewers->Group table.
 	ActionPlanTasks                    string // ActionPlan-tasks->Task table.
 	Assessment                         string // Assessment table.
 	AssessmentResponse                 string // AssessmentResponse table.

@@ -77,7 +77,7 @@ type ActionPlan struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this action_plan was created from a file
 	FileID *string `json:"file_id,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
@@ -130,6 +130,12 @@ type ActionPlanEdges struct {
 	Delegate *Group `json:"delegate,omitempty"`
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// ActionPlanKind holds the value of the action_plan_kind edge.
 	ActionPlanKind *CustomTypeEnum `json:"action_plan_kind,omitempty"`
 	// Risks holds the value of the risks edge.
@@ -156,10 +162,13 @@ type ActionPlanEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [18]map[string]int
 
+	namedBlockedGroups      map[string][]*Group
+	namedEditors            map[string][]*Group
+	namedViewers            map[string][]*Group
 	namedRisks              map[string][]*Risk
 	namedControls           map[string][]*Control
 	namedPrograms           map[string][]*Program
@@ -205,12 +214,39 @@ func (e ActionPlanEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[4] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[5] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // ActionPlanKindOrErr returns the ActionPlanKind value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ActionPlanEdges) ActionPlanKindOrErr() (*CustomTypeEnum, error) {
 	if e.ActionPlanKind != nil {
 		return e.ActionPlanKind, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "action_plan_kind"}
@@ -219,7 +255,7 @@ func (e ActionPlanEdges) ActionPlanKindOrErr() (*CustomTypeEnum, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[7] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -228,7 +264,7 @@ func (e ActionPlanEdges) RisksOrErr() ([]*Risk, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[8] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -237,7 +273,7 @@ func (e ActionPlanEdges) ControlsOrErr() ([]*Control, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[9] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -246,7 +282,7 @@ func (e ActionPlanEdges) ProgramsOrErr() ([]*Program, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[10] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -255,7 +291,7 @@ func (e ActionPlanEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[11] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -264,7 +300,7 @@ func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[12] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -273,7 +309,7 @@ func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[13] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -282,7 +318,7 @@ func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[14] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -291,7 +327,7 @@ func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[15] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -302,7 +338,7 @@ func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
 func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[13] {
+	} else if e.loadedTypes[16] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -311,7 +347,7 @@ func (e ActionPlanEdges) FileOrErr() (*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -701,6 +737,21 @@ func (_m *ActionPlan) QueryOwner() *OrganizationQuery {
 	return NewActionPlanClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryBlockedGroups() *GroupQuery {
+	return NewActionPlanClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryEditors() *GroupQuery {
+	return NewActionPlanClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryViewers() *GroupQuery {
+	return NewActionPlanClient(_m.config).QueryViewers(_m)
+}
+
 // QueryActionPlanKind queries the "action_plan_kind" edge of the ActionPlan entity.
 func (_m *ActionPlan) QueryActionPlanKind() *CustomTypeEnumQuery {
 	return NewActionPlanClient(_m.config).QueryActionPlanKind(_m)
@@ -930,6 +981,78 @@ func (_m *ActionPlan) String() string {
 	builder.WriteString(_m.Source)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedRisks returns the Risks named value or an error if the edge was not

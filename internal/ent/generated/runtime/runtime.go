@@ -185,7 +185,7 @@ func init() {
 	// apitoken.DefaultID holds the default value on creation for the id field.
 	apitoken.DefaultID = apitokenDescID.Default.(func() string)
 	actionplanMixin := schema.ActionPlan{}.Mixin()
-	actionplan.Policy = privacy.NewPolicies(actionplanMixin[8], schema.ActionPlan{})
+	actionplan.Policy = privacy.NewPolicies(actionplanMixin[9], schema.ActionPlan{})
 	actionplan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := actionplan.Policy.EvalMutation(ctx, m); err != nil {
@@ -202,6 +202,7 @@ func init() {
 	actionplanMixinHooks7 := actionplanMixin[7].Hooks()
 	actionplanMixinHooks8 := actionplanMixin[8].Hooks()
 	actionplanMixinHooks9 := actionplanMixin[9].Hooks()
+	actionplanMixinHooks10 := actionplanMixin[10].Hooks()
 
 	actionplan.Hooks[1] = actionplanMixinHooks0[0]
 
@@ -223,13 +224,22 @@ func init() {
 
 	actionplan.Hooks[10] = actionplanMixinHooks7[0]
 
-	actionplan.Hooks[11] = actionplanMixinHooks8[0]
+	actionplan.Hooks[11] = actionplanMixinHooks7[1]
 
-	actionplan.Hooks[12] = actionplanMixinHooks9[0]
+	actionplan.Hooks[12] = actionplanMixinHooks8[0]
+
+	actionplan.Hooks[13] = actionplanMixinHooks8[1]
+
+	actionplan.Hooks[14] = actionplanMixinHooks8[2]
+
+	actionplan.Hooks[15] = actionplanMixinHooks9[0]
+
+	actionplan.Hooks[16] = actionplanMixinHooks10[0]
 	actionplanMixinInters1 := actionplanMixin[1].Interceptors()
 	actionplanMixinInters7 := actionplanMixin[7].Interceptors()
 	actionplan.Interceptors[0] = actionplanMixinInters1[0]
 	actionplan.Interceptors[1] = actionplanMixinInters7[0]
+	actionplan.Interceptors[2] = actionplanMixinInters7[1]
 	actionplanMixinFields0 := actionplanMixin[0].Fields()
 	_ = actionplanMixinFields0
 	actionplanMixinFields2 := actionplanMixin[2].Fields()
@@ -240,10 +250,12 @@ func init() {
 	_ = actionplanMixinFields4
 	actionplanMixinFields6 := actionplanMixin[6].Fields()
 	_ = actionplanMixinFields6
-	actionplanMixinFields8 := actionplanMixin[8].Fields()
-	_ = actionplanMixinFields8
-	actionplanMixinFields10 := actionplanMixin[10].Fields()
-	_ = actionplanMixinFields10
+	actionplanMixinFields7 := actionplanMixin[7].Fields()
+	_ = actionplanMixinFields7
+	actionplanMixinFields9 := actionplanMixin[9].Fields()
+	_ = actionplanMixinFields9
+	actionplanMixinFields11 := actionplanMixin[11].Fields()
+	_ = actionplanMixinFields11
 	actionplanFields := schema.ActionPlan{}.Fields()
 	_ = actionplanFields
 	// actionplanDescCreatedAt is the schema descriptor for created_at field.
@@ -302,12 +314,16 @@ func init() {
 	actionplanDescDismissedImprovementSuggestions := actionplanMixinFields6[16].Descriptor()
 	// actionplan.DefaultDismissedImprovementSuggestions holds the default value on creation for the dismissed_improvement_suggestions field.
 	actionplan.DefaultDismissedImprovementSuggestions = actionplanDescDismissedImprovementSuggestions.Default.([]string)
+	// actionplanDescOwnerID is the schema descriptor for owner_id field.
+	actionplanDescOwnerID := actionplanMixinFields7[0].Descriptor()
+	// actionplan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	actionplan.OwnerIDValidator = actionplanDescOwnerID.Validators[0].(func(string) error)
 	// actionplanDescSystemOwned is the schema descriptor for system_owned field.
-	actionplanDescSystemOwned := actionplanMixinFields8[0].Descriptor()
+	actionplanDescSystemOwned := actionplanMixinFields9[0].Descriptor()
 	// actionplan.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	actionplan.DefaultSystemOwned = actionplanDescSystemOwned.Default.(bool)
 	// actionplanDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	actionplanDescWorkflowEligibleMarker := actionplanMixinFields10[0].Descriptor()
+	actionplanDescWorkflowEligibleMarker := actionplanMixinFields11[0].Descriptor()
 	// actionplan.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	actionplan.DefaultWorkflowEligibleMarker = actionplanDescWorkflowEligibleMarker.Default.(bool)
 	// actionplanDescTitle is the schema descriptor for title field.
@@ -4057,11 +4073,19 @@ func init() {
 
 	organization.Hooks[20] = organizationMixinHooks5[16]
 
-	organization.Hooks[21] = organizationHooks[0]
+	organization.Hooks[21] = organizationMixinHooks5[17]
 
-	organization.Hooks[22] = organizationHooks[1]
+	organization.Hooks[22] = organizationMixinHooks5[18]
 
-	organization.Hooks[23] = organizationHooks[2]
+	organization.Hooks[23] = organizationMixinHooks5[19]
+
+	organization.Hooks[24] = organizationMixinHooks5[20]
+
+	organization.Hooks[25] = organizationHooks[0]
+
+	organization.Hooks[26] = organizationHooks[1]
+
+	organization.Hooks[27] = organizationHooks[2]
 	organizationMixinInters1 := organizationMixin[1].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters1[0]

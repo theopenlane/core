@@ -97,6 +97,12 @@ const (
 	EdgeEntityBlockedGroups = "entity_blocked_groups"
 	// EdgeEntityViewers holds the string denoting the entity_viewers edge name in mutations.
 	EdgeEntityViewers = "entity_viewers"
+	// EdgeActionPlanEditors holds the string denoting the action_plan_editors edge name in mutations.
+	EdgeActionPlanEditors = "action_plan_editors"
+	// EdgeActionPlanBlockedGroups holds the string denoting the action_plan_blocked_groups edge name in mutations.
+	EdgeActionPlanBlockedGroups = "action_plan_blocked_groups"
+	// EdgeActionPlanViewers holds the string denoting the action_plan_viewers edge name in mutations.
+	EdgeActionPlanViewers = "action_plan_viewers"
 	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
 	EdgeProcedureEditors = "procedure_editors"
 	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
@@ -243,6 +249,21 @@ const (
 	// EntityViewersInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntityViewersInverseTable = "entities"
+	// ActionPlanEditorsTable is the table that holds the action_plan_editors relation/edge. The primary key declared below.
+	ActionPlanEditorsTable = "action_plan_editors"
+	// ActionPlanEditorsInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlanEditorsInverseTable = "action_plans"
+	// ActionPlanBlockedGroupsTable is the table that holds the action_plan_blocked_groups relation/edge. The primary key declared below.
+	ActionPlanBlockedGroupsTable = "action_plan_blocked_groups"
+	// ActionPlanBlockedGroupsInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlanBlockedGroupsInverseTable = "action_plans"
+	// ActionPlanViewersTable is the table that holds the action_plan_viewers relation/edge. The primary key declared below.
+	ActionPlanViewersTable = "action_plan_viewers"
+	// ActionPlanViewersInverseTable is the table name for the ActionPlan entity.
+	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
+	ActionPlanViewersInverseTable = "action_plans"
 	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
 	ProcedureEditorsTable = "procedure_editors"
 	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
@@ -371,6 +392,9 @@ var ForeignKeys = []string{
 	"organization_control_implementation_creators",
 	"organization_control_objective_creators",
 	"organization_evidence_creators",
+	"organization_asset_creators",
+	"organization_finding_creators",
+	"organization_vulnerability_creators",
 	"organization_group_creators",
 	"organization_internal_policy_creators",
 	"organization_mapped_control_creators",
@@ -384,6 +408,7 @@ var ForeignKeys = []string{
 	"organization_subprocessor_creators",
 	"organization_trust_center_doc_creators",
 	"organization_trust_center_subprocessor_creators",
+	"organization_action_plan_creators",
 	"remediation_blocked_groups",
 	"remediation_editors",
 	"remediation_viewers",
@@ -460,6 +485,15 @@ var (
 	// EntityViewersPrimaryKey and EntityViewersColumn2 are the table columns denoting the
 	// primary key for the entity_viewers relation (M2M).
 	EntityViewersPrimaryKey = []string{"entity_id", "group_id"}
+	// ActionPlanEditorsPrimaryKey and ActionPlanEditorsColumn2 are the table columns denoting the
+	// primary key for the action_plan_editors relation (M2M).
+	ActionPlanEditorsPrimaryKey = []string{"action_plan_id", "group_id"}
+	// ActionPlanBlockedGroupsPrimaryKey and ActionPlanBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the action_plan_blocked_groups relation (M2M).
+	ActionPlanBlockedGroupsPrimaryKey = []string{"action_plan_id", "group_id"}
+	// ActionPlanViewersPrimaryKey and ActionPlanViewersColumn2 are the table columns denoting the
+	// primary key for the action_plan_viewers relation (M2M).
+	ActionPlanViewersPrimaryKey = []string{"action_plan_id", "group_id"}
 	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
 	// primary key for the procedure_editors relation (M2M).
 	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
@@ -954,6 +988,48 @@ func ByEntityViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByActionPlanEditorsCount orders the results by action_plan_editors count.
+func ByActionPlanEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlanEditorsStep(), opts...)
+	}
+}
+
+// ByActionPlanEditors orders the results by action_plan_editors terms.
+func ByActionPlanEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlanEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByActionPlanBlockedGroupsCount orders the results by action_plan_blocked_groups count.
+func ByActionPlanBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlanBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByActionPlanBlockedGroups orders the results by action_plan_blocked_groups terms.
+func ByActionPlanBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlanBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByActionPlanViewersCount orders the results by action_plan_viewers count.
+func ByActionPlanViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlanViewersStep(), opts...)
+	}
+}
+
+// ByActionPlanViewers orders the results by action_plan_viewers terms.
+func ByActionPlanViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlanViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProcedureEditorsCount orders the results by procedure_editors count.
 func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1322,6 +1398,27 @@ func newEntityViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntityViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EntityViewersTable, EntityViewersPrimaryKey...),
+	)
+}
+func newActionPlanEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlanEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanEditorsTable, ActionPlanEditorsPrimaryKey...),
+	)
+}
+func newActionPlanBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlanBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanBlockedGroupsTable, ActionPlanBlockedGroupsPrimaryKey...),
+	)
+}
+func newActionPlanViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlanViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanViewersTable, ActionPlanViewersPrimaryKey...),
 	)
 }
 func newProcedureEditorsStep() *sqlgraph.Step {

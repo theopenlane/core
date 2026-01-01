@@ -115,6 +115,24 @@ func (c *Client) resolveActionPlanNotificationTargets(ctx context.Context, objec
 			return c.resolveGroupMemberIDs(ctx, obj.DelegateID)
 		}
 		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
 	default:
 		return nil, nil
 	}
