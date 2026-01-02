@@ -23,6 +23,9 @@ var createObjectTypes = []string{
 	"control_implementation",
 	"control_objective",
 	"evidence",
+	"asset",
+	"finding",
+	"vulnerability",
 	"group",
 	"internal_policy",
 	"mapped_control",
@@ -36,6 +39,7 @@ var createObjectTypes = []string{
 	"subprocessor",
 	"trust_center_doc",
 	"trust_center_subprocessor",
+	"action_plan",
 }
 
 // GroupBasedCreateAccessMixin is a mixin for group permissions for creation of an entity

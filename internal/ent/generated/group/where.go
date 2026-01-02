@@ -1940,6 +1940,93 @@ func HasEntityViewersWith(preds ...predicate.Entity) predicate.Group {
 	})
 }
 
+// HasActionPlanEditors applies the HasEdge predicate on the "action_plan_editors" edge.
+func HasActionPlanEditors() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanEditorsTable, ActionPlanEditorsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanEditors
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlanEditorsWith applies the HasEdge predicate on the "action_plan_editors" edge with a given conditions (other predicates).
+func HasActionPlanEditorsWith(preds ...predicate.ActionPlan) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newActionPlanEditorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanEditors
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasActionPlanBlockedGroups applies the HasEdge predicate on the "action_plan_blocked_groups" edge.
+func HasActionPlanBlockedGroups() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanBlockedGroupsTable, ActionPlanBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanBlockedGroups
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlanBlockedGroupsWith applies the HasEdge predicate on the "action_plan_blocked_groups" edge with a given conditions (other predicates).
+func HasActionPlanBlockedGroupsWith(preds ...predicate.ActionPlan) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newActionPlanBlockedGroupsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanBlockedGroups
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasActionPlanViewers applies the HasEdge predicate on the "action_plan_viewers" edge.
+func HasActionPlanViewers() predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ActionPlanViewersTable, ActionPlanViewersPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanViewers
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasActionPlanViewersWith applies the HasEdge predicate on the "action_plan_viewers" edge with a given conditions (other predicates).
+func HasActionPlanViewersWith(preds ...predicate.ActionPlan) predicate.Group {
+	return predicate.Group(func(s *sql.Selector) {
+		step := newActionPlanViewersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanViewers
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasProcedureEditors applies the HasEdge predicate on the "procedure_editors" edge.
 func HasProcedureEditors() predicate.Group {
 	return predicate.Group(func(s *sql.Selector) {

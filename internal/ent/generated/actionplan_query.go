@@ -44,6 +44,9 @@ type ActionPlanQuery struct {
 	withApprover                *GroupQuery
 	withDelegate                *GroupQuery
 	withOwner                   *OrganizationQuery
+	withBlockedGroups           *GroupQuery
+	withEditors                 *GroupQuery
+	withViewers                 *GroupQuery
 	withActionPlanKind          *CustomTypeEnumQuery
 	withRisks                   *RiskQuery
 	withControls                *ControlQuery
@@ -59,6 +62,9 @@ type ActionPlanQuery struct {
 	withFKs                     bool
 	loadTotal                   []func(context.Context, []*ActionPlan) error
 	modifiers                   []func(*sql.Selector)
+	withNamedBlockedGroups      map[string]*GroupQuery
+	withNamedEditors            map[string]*GroupQuery
+	withNamedViewers            map[string]*GroupQuery
 	withNamedRisks              map[string]*RiskQuery
 	withNamedControls           map[string]*ControlQuery
 	withNamedPrograms           map[string]*ProgramQuery
@@ -174,6 +180,81 @@ func (_q *ActionPlanQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.ActionPlan
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (_q *ActionPlanQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.BlockedGroupsTable, actionplan.BlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlanBlockedGroups
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (_q *ActionPlanQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.EditorsTable, actionplan.EditorsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlanEditors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryViewers chains the current query on the "viewers" edge.
+func (_q *ActionPlanQuery) QueryViewers() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.ViewersTable, actionplan.ViewersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.ActionPlanViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -675,6 +756,9 @@ func (_q *ActionPlanQuery) Clone() *ActionPlanQuery {
 		withApprover:           _q.withApprover.Clone(),
 		withDelegate:           _q.withDelegate.Clone(),
 		withOwner:              _q.withOwner.Clone(),
+		withBlockedGroups:      _q.withBlockedGroups.Clone(),
+		withEditors:            _q.withEditors.Clone(),
+		withViewers:            _q.withViewers.Clone(),
 		withActionPlanKind:     _q.withActionPlanKind.Clone(),
 		withRisks:              _q.withRisks.Clone(),
 		withControls:           _q.withControls.Clone(),
@@ -724,6 +808,39 @@ func (_q *ActionPlanQuery) WithOwner(opts ...func(*OrganizationQuery)) *ActionPl
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBlockedGroups = query
+	return _q
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithEditors(opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEditors = query
+	return _q
+}
+
+// WithViewers tells the query-builder to eager-load the nodes that are connected to
+// the "viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithViewers(opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withViewers = query
 	return _q
 }
 
@@ -944,10 +1061,13 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		nodes       = []*ActionPlan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [18]bool{
 			_q.withApprover != nil,
 			_q.withDelegate != nil,
 			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
+			_q.withViewers != nil,
 			_q.withActionPlanKind != nil,
 			_q.withRisks != nil,
 			_q.withControls != nil,
@@ -1003,6 +1123,27 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *ActionPlan, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *ActionPlan, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Editors = []*Group{} },
+			func(n *ActionPlan, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withViewers; query != nil {
+		if err := _q.loadViewers(ctx, query, nodes,
+			func(n *ActionPlan) { n.Edges.Viewers = []*Group{} },
+			func(n *ActionPlan, e *Group) { n.Edges.Viewers = append(n.Edges.Viewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1087,6 +1228,27 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			func(n *ActionPlan, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedBlockedGroups(name) },
+			func(n *ActionPlan, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedEditors(name) },
+			func(n *ActionPlan, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedViewers {
+		if err := _q.loadViewers(ctx, query, nodes,
+			func(n *ActionPlan) { n.appendNamedViewers(name) },
+			func(n *ActionPlan, e *Group) { n.appendNamedViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1251,6 +1413,192 @@ func (_q *ActionPlanQuery) loadOwner(ctx context.Context, query *OrganizationQue
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.BlockedGroupsTable)
+		joinT.Schema(_q.schemaConfig.ActionPlanBlockedGroups)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(actionplan.BlockedGroupsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(actionplan.BlockedGroupsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.BlockedGroupsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.EditorsTable)
+		joinT.Schema(_q.schemaConfig.ActionPlanEditors)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(actionplan.EditorsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(actionplan.EditorsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.EditorsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *ActionPlanQuery) loadViewers(ctx context.Context, query *GroupQuery, nodes []*ActionPlan, init func(*ActionPlan), assign func(*ActionPlan, *Group)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*ActionPlan)
+	nids := make(map[string]map[*ActionPlan]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(actionplan.ViewersTable)
+		joinT.Schema(_q.schemaConfig.ActionPlanViewers)
+		s.Join(joinT).On(s.C(group.FieldID), joinT.C(actionplan.ViewersPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(actionplan.ViewersPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(actionplan.ViewersPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*ActionPlan]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Group](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
 		}
 	}
 	return nil
@@ -2017,6 +2365,48 @@ func (_q *ActionPlanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *ActionPlanQuery) Modify(modifiers ...func(s *sql.Selector)) *ActionPlanSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	_q.withNamedBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	_q.withNamedEditors[name] = query
+	return _q
+}
+
+// WithNamedViewers tells the query-builder to eager-load the nodes that are connected to the "viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ActionPlanQuery) WithNamedViewers(name string, opts ...func(*GroupQuery)) *ActionPlanQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedViewers == nil {
+		_q.withNamedViewers = make(map[string]*GroupQuery)
+	}
+	_q.withNamedViewers[name] = query
+	return _q
 }
 
 // WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"

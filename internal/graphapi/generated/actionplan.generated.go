@@ -5949,6 +5949,12 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ActionPlan_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ActionPlan_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ActionPlan_viewers(ctx, field)
 			case "actionPlanKind":
 				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
@@ -6131,6 +6137,12 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ActionPlan_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ActionPlan_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ActionPlan_viewers(ctx, field)
 			case "actionPlanKind":
 				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
@@ -6313,6 +6325,12 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ActionPlan_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ActionPlan_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ActionPlan_viewers(ctx, field)
 			case "actionPlanKind":
 				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":
@@ -6495,6 +6513,12 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_delegate(ctx, field)
 			case "owner":
 				return ec.fieldContext_ActionPlan_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_ActionPlan_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_ActionPlan_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_ActionPlan_viewers(ctx, field)
 			case "actionPlanKind":
 				return ec.fieldContext_ActionPlan_actionPlanKind(ctx, field)
 			case "risks":

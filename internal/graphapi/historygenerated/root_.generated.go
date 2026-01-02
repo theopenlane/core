@@ -16025,7 +16025,7 @@ type ActionPlanHistory implements Node {
   """
   fileID: String
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """

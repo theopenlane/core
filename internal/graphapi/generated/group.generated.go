@@ -132,6 +132,12 @@ func (ec *executionContext) fieldContext_GroupBulkCreatePayload_groups(_ context
 				return ec.fieldContext_Group_entityBlockedGroups(ctx, field)
 			case "entityViewers":
 				return ec.fieldContext_Group_entityViewers(ctx, field)
+			case "actionPlanEditors":
+				return ec.fieldContext_Group_actionPlanEditors(ctx, field)
+			case "actionPlanBlockedGroups":
+				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
+			case "actionPlanViewers":
+				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -304,6 +310,12 @@ func (ec *executionContext) fieldContext_GroupCreatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_entityBlockedGroups(ctx, field)
 			case "entityViewers":
 				return ec.fieldContext_Group_entityViewers(ctx, field)
+			case "actionPlanEditors":
+				return ec.fieldContext_Group_actionPlanEditors(ctx, field)
+			case "actionPlanBlockedGroups":
+				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
+			case "actionPlanViewers":
+				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":
@@ -476,6 +488,12 @@ func (ec *executionContext) fieldContext_GroupUpdatePayload_group(_ context.Cont
 				return ec.fieldContext_Group_entityBlockedGroups(ctx, field)
 			case "entityViewers":
 				return ec.fieldContext_Group_entityViewers(ctx, field)
+			case "actionPlanEditors":
+				return ec.fieldContext_Group_actionPlanEditors(ctx, field)
+			case "actionPlanBlockedGroups":
+				return ec.fieldContext_Group_actionPlanBlockedGroups(ctx, field)
+			case "actionPlanViewers":
+				return ec.fieldContext_Group_actionPlanViewers(ctx, field)
 			case "procedureEditors":
 				return ec.fieldContext_Group_procedureEditors(ctx, field)
 			case "procedureBlockedGroups":

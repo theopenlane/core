@@ -505,26 +505,6 @@ func (_u *ActionPlanHistoryUpdate) ClearFileID() *ActionPlanHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *ActionPlanHistoryUpdate) SetOwnerID(v string) *ActionPlanHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ActionPlanHistoryUpdate) SetNillableOwnerID(v *string) *ActionPlanHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ActionPlanHistoryUpdate) ClearOwnerID() *ActionPlanHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *ActionPlanHistoryUpdate) SetInternalNotes(v string) *ActionPlanHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -1091,9 +1071,6 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)
@@ -1679,26 +1656,6 @@ func (_u *ActionPlanHistoryUpdateOne) SetNillableFileID(v *string) *ActionPlanHi
 // ClearFileID clears the value of the "file_id" field.
 func (_u *ActionPlanHistoryUpdateOne) ClearFileID() *ActionPlanHistoryUpdateOne {
 	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ActionPlanHistoryUpdateOne) SetOwnerID(v string) *ActionPlanHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ActionPlanHistoryUpdateOne) SetNillableOwnerID(v *string) *ActionPlanHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ActionPlanHistoryUpdateOne) ClearOwnerID() *ActionPlanHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -2298,9 +2255,6 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(actionplanhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldOwnerID, field.TypeString)

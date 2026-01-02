@@ -133,7 +133,11 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 		includeRevision: true,
 		additionalMixins: []ent.Mixin{
 			NewDocumentMixin(a),
-			newOrgOwnedMixin(a, withWorkflowOwnedEdges()),
+			newObjectOwnedMixin[generated.ActionPlan](a,
+				withOrganizationOwner(true),
+				withWorkflowOwnedEdges(),
+			),
+			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(),
 			newCustomEnumMixin(a, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},

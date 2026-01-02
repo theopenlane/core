@@ -398,7 +398,7 @@ type ActionPlan implements Node {
   """
   fileID: ID
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: ID
   """
@@ -478,6 +478,99 @@ type ActionPlan implements Node {
   """
   delegate: Group
   owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   actionPlanKind: CustomTypeEnum
   risks(
     """
@@ -1375,6 +1468,21 @@ input ActionPlanWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
   """
   action_plan_kind edge predicates
   """
@@ -6246,6 +6354,9 @@ input CreateActionPlanInput {
   approverID: ID
   delegateID: ID
   ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
   actionPlanKindID: ID
   riskIDs: [ID!]
   controlIDs: [ID!]
@@ -7614,6 +7725,9 @@ input CreateGroupInput {
   entityEditorIDs: [ID!]
   entityBlockedGroupIDs: [ID!]
   entityViewerIDs: [ID!]
+  actionPlanEditorIDs: [ID!]
+  actionPlanBlockedGroupIDs: [ID!]
+  actionPlanViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -8265,6 +8379,9 @@ input CreateOrganizationInput {
   controlImplementationCreatorIDs: [ID!]
   controlObjectiveCreatorIDs: [ID!]
   evidenceCreatorIDs: [ID!]
+  assetCreatorIDs: [ID!]
+  findingCreatorIDs: [ID!]
+  vulnerabilityCreatorIDs: [ID!]
   groupCreatorIDs: [ID!]
   internalPolicyCreatorIDs: [ID!]
   mappedControlCreatorIDs: [ID!]
@@ -8278,6 +8395,7 @@ input CreateOrganizationInput {
   subprocessorCreatorIDs: [ID!]
   trustCenterDocCreatorIDs: [ID!]
   trustCenterSubprocessorCreatorIDs: [ID!]
+  actionPlanCreatorIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -20259,6 +20377,99 @@ type Group implements Node {
     """
     where: EntityWhereInput
   ): EntityConnection!
+  actionPlanEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  actionPlanBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
+  actionPlanViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for ActionPlans returned from the connection.
+    """
+    orderBy: [ActionPlanOrder!]
+
+    """
+    Filtering options for ActionPlans returned from the connection.
+    """
+    where: ActionPlanWhereInput
+  ): ActionPlanConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -21495,6 +21706,21 @@ input GroupWhereInput {
   """
   hasEntityViewers: Boolean
   hasEntityViewersWith: [EntityWhereInput!]
+  """
+  action_plan_editors edge predicates
+  """
+  hasActionPlanEditors: Boolean
+  hasActionPlanEditorsWith: [ActionPlanWhereInput!]
+  """
+  action_plan_blocked_groups edge predicates
+  """
+  hasActionPlanBlockedGroups: Boolean
+  hasActionPlanBlockedGroupsWith: [ActionPlanWhereInput!]
+  """
+  action_plan_viewers edge predicates
+  """
+  hasActionPlanViewers: Boolean
+  hasActionPlanViewersWith: [ActionPlanWhereInput!]
   """
   procedure_editors edge predicates
   """
@@ -28409,6 +28635,99 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  assetCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  findingCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  vulnerabilityCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   groupCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -28782,6 +29101,37 @@ type Organization implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   trustCenterSubprocessorCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  actionPlanCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -31716,6 +32066,21 @@ input OrganizationWhereInput {
   hasEvidenceCreators: Boolean
   hasEvidenceCreatorsWith: [GroupWhereInput!]
   """
+  asset_creators edge predicates
+  """
+  hasAssetCreators: Boolean
+  hasAssetCreatorsWith: [GroupWhereInput!]
+  """
+  finding_creators edge predicates
+  """
+  hasFindingCreators: Boolean
+  hasFindingCreatorsWith: [GroupWhereInput!]
+  """
+  vulnerability_creators edge predicates
+  """
+  hasVulnerabilityCreators: Boolean
+  hasVulnerabilityCreatorsWith: [GroupWhereInput!]
+  """
   group_creators edge predicates
   """
   hasGroupCreators: Boolean
@@ -31780,6 +32145,11 @@ input OrganizationWhereInput {
   """
   hasTrustCenterSubprocessorCreators: Boolean
   hasTrustCenterSubprocessorCreatorsWith: [GroupWhereInput!]
+  """
+  action_plan_creators edge predicates
+  """
+  hasActionPlanCreators: Boolean
+  hasActionPlanCreatorsWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -49097,8 +49467,15 @@ input UpdateActionPlanInput {
   clearApprover: Boolean
   delegateID: ID
   clearDelegate: Boolean
-  ownerID: ID
-  clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
   actionPlanKindID: ID
   clearActionPlanKind: Boolean
   addRiskIDs: [ID!]
@@ -50983,6 +51360,15 @@ input UpdateGroupInput {
   addEntityViewerIDs: [ID!]
   removeEntityViewerIDs: [ID!]
   clearEntityViewers: Boolean
+  addActionPlanEditorIDs: [ID!]
+  removeActionPlanEditorIDs: [ID!]
+  clearActionPlanEditors: Boolean
+  addActionPlanBlockedGroupIDs: [ID!]
+  removeActionPlanBlockedGroupIDs: [ID!]
+  clearActionPlanBlockedGroups: Boolean
+  addActionPlanViewerIDs: [ID!]
+  removeActionPlanViewerIDs: [ID!]
+  clearActionPlanViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean
@@ -51732,6 +52118,15 @@ input UpdateOrganizationInput {
   addEvidenceCreatorIDs: [ID!]
   removeEvidenceCreatorIDs: [ID!]
   clearEvidenceCreators: Boolean
+  addAssetCreatorIDs: [ID!]
+  removeAssetCreatorIDs: [ID!]
+  clearAssetCreators: Boolean
+  addFindingCreatorIDs: [ID!]
+  removeFindingCreatorIDs: [ID!]
+  clearFindingCreators: Boolean
+  addVulnerabilityCreatorIDs: [ID!]
+  removeVulnerabilityCreatorIDs: [ID!]
+  clearVulnerabilityCreators: Boolean
   addGroupCreatorIDs: [ID!]
   removeGroupCreatorIDs: [ID!]
   clearGroupCreators: Boolean
@@ -51771,6 +52166,9 @@ input UpdateOrganizationInput {
   addTrustCenterSubprocessorCreatorIDs: [ID!]
   removeTrustCenterSubprocessorCreatorIDs: [ID!]
   clearTrustCenterSubprocessorCreators: Boolean
+  addActionPlanCreatorIDs: [ID!]
+  removeActionPlanCreatorIDs: [ID!]
+  clearActionPlanCreators: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]

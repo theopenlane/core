@@ -57,6 +57,12 @@ const (
 	EdgeControlObjectiveCreators = "control_objective_creators"
 	// EdgeEvidenceCreators holds the string denoting the evidence_creators edge name in mutations.
 	EdgeEvidenceCreators = "evidence_creators"
+	// EdgeAssetCreators holds the string denoting the asset_creators edge name in mutations.
+	EdgeAssetCreators = "asset_creators"
+	// EdgeFindingCreators holds the string denoting the finding_creators edge name in mutations.
+	EdgeFindingCreators = "finding_creators"
+	// EdgeVulnerabilityCreators holds the string denoting the vulnerability_creators edge name in mutations.
+	EdgeVulnerabilityCreators = "vulnerability_creators"
 	// EdgeGroupCreators holds the string denoting the group_creators edge name in mutations.
 	EdgeGroupCreators = "group_creators"
 	// EdgeInternalPolicyCreators holds the string denoting the internal_policy_creators edge name in mutations.
@@ -83,6 +89,8 @@ const (
 	EdgeTrustCenterDocCreators = "trust_center_doc_creators"
 	// EdgeTrustCenterSubprocessorCreators holds the string denoting the trust_center_subprocessor_creators edge name in mutations.
 	EdgeTrustCenterSubprocessorCreators = "trust_center_subprocessor_creators"
+	// EdgeActionPlanCreators holds the string denoting the action_plan_creators edge name in mutations.
+	EdgeActionPlanCreators = "action_plan_creators"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -265,6 +273,27 @@ const (
 	EvidenceCreatorsInverseTable = "groups"
 	// EvidenceCreatorsColumn is the table column denoting the evidence_creators relation/edge.
 	EvidenceCreatorsColumn = "organization_evidence_creators"
+	// AssetCreatorsTable is the table that holds the asset_creators relation/edge.
+	AssetCreatorsTable = "groups"
+	// AssetCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AssetCreatorsInverseTable = "groups"
+	// AssetCreatorsColumn is the table column denoting the asset_creators relation/edge.
+	AssetCreatorsColumn = "organization_asset_creators"
+	// FindingCreatorsTable is the table that holds the finding_creators relation/edge.
+	FindingCreatorsTable = "groups"
+	// FindingCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	FindingCreatorsInverseTable = "groups"
+	// FindingCreatorsColumn is the table column denoting the finding_creators relation/edge.
+	FindingCreatorsColumn = "organization_finding_creators"
+	// VulnerabilityCreatorsTable is the table that holds the vulnerability_creators relation/edge.
+	VulnerabilityCreatorsTable = "groups"
+	// VulnerabilityCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	VulnerabilityCreatorsInverseTable = "groups"
+	// VulnerabilityCreatorsColumn is the table column denoting the vulnerability_creators relation/edge.
+	VulnerabilityCreatorsColumn = "organization_vulnerability_creators"
 	// GroupCreatorsTable is the table that holds the group_creators relation/edge.
 	GroupCreatorsTable = "groups"
 	// GroupCreatorsInverseTable is the table name for the Group entity.
@@ -356,6 +385,13 @@ const (
 	TrustCenterSubprocessorCreatorsInverseTable = "groups"
 	// TrustCenterSubprocessorCreatorsColumn is the table column denoting the trust_center_subprocessor_creators relation/edge.
 	TrustCenterSubprocessorCreatorsColumn = "organization_trust_center_subprocessor_creators"
+	// ActionPlanCreatorsTable is the table that holds the action_plan_creators relation/edge.
+	ActionPlanCreatorsTable = "groups"
+	// ActionPlanCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ActionPlanCreatorsInverseTable = "groups"
+	// ActionPlanCreatorsColumn is the table column denoting the action_plan_creators relation/edge.
+	ActionPlanCreatorsColumn = "organization_action_plan_creators"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -929,7 +965,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [24]ent.Hook
+	Hooks        [28]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1101,6 +1137,48 @@ func ByEvidenceCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEvidenceCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEvidenceCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssetCreatorsCount orders the results by asset_creators count.
+func ByAssetCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssetCreatorsStep(), opts...)
+	}
+}
+
+// ByAssetCreators orders the results by asset_creators terms.
+func ByAssetCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingCreatorsCount orders the results by finding_creators count.
+func ByFindingCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingCreatorsStep(), opts...)
+	}
+}
+
+// ByFindingCreators orders the results by finding_creators terms.
+func ByFindingCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVulnerabilityCreatorsCount orders the results by vulnerability_creators count.
+func ByVulnerabilityCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilityCreatorsStep(), opts...)
+	}
+}
+
+// ByVulnerabilityCreators orders the results by vulnerability_creators terms.
+func ByVulnerabilityCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilityCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1283,6 +1361,20 @@ func ByTrustCenterSubprocessorCreatorsCount(opts ...sql.OrderTermOption) OrderOp
 func ByTrustCenterSubprocessorCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByActionPlanCreatorsCount orders the results by action_plan_creators count.
+func ByActionPlanCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newActionPlanCreatorsStep(), opts...)
+	}
+}
+
+// ByActionPlanCreators orders the results by action_plan_creators terms.
+func ByActionPlanCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newActionPlanCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2356,6 +2448,27 @@ func newEvidenceCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, EvidenceCreatorsTable, EvidenceCreatorsColumn),
 	)
 }
+func newAssetCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssetCreatorsTable, AssetCreatorsColumn),
+	)
+}
+func newFindingCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FindingCreatorsTable, FindingCreatorsColumn),
+	)
+}
+func newVulnerabilityCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilityCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilityCreatorsTable, VulnerabilityCreatorsColumn),
+	)
+}
 func newGroupCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -2445,6 +2558,13 @@ func newTrustCenterSubprocessorCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterSubprocessorCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorCreatorsTable, TrustCenterSubprocessorCreatorsColumn),
+	)
+}
+func newActionPlanCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ActionPlanCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ActionPlanCreatorsTable, ActionPlanCreatorsColumn),
 	)
 }
 func newParentStep() *sqlgraph.Step {

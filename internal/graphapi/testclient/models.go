@@ -326,7 +326,7 @@ type ActionPlan struct {
 	URL *string `json:"url,omitempty"`
 	// This will contain the most recent file id if this action_plan was created from a file
 	FileID *string `json:"fileID,omitempty"`
-	// the organization id that owns the object
+	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned *bool `json:"systemOwned,omitempty"`
@@ -367,6 +367,9 @@ type ActionPlan struct {
 	// temporary delegates for the action_plan, used for temporary approval
 	Delegate           *Group                       `json:"delegate,omitempty"`
 	Owner              *Organization                `json:"owner,omitempty"`
+	BlockedGroups      *GroupConnection             `json:"blockedGroups"`
+	Editors            *GroupConnection             `json:"editors"`
+	Viewers            *GroupConnection             `json:"viewers"`
 	ActionPlanKind     *CustomTypeEnum              `json:"actionPlanKind,omitempty"`
 	Risks              *RiskConnection              `json:"risks"`
 	Controls           *ControlConnection           `json:"controls"`
@@ -874,6 +877,15 @@ type ActionPlanWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// action_plan_kind edge predicates
 	HasActionPlanKind     *bool                       `json:"hasActionPlanKind,omitempty"`
 	HasActionPlanKindWith []*CustomTypeEnumWhereInput `json:"hasActionPlanKindWith,omitempty"`
@@ -3566,6 +3578,9 @@ type CreateActionPlanInput struct {
 	ApproverID           *string  `json:"approverID,omitempty"`
 	DelegateID           *string  `json:"delegateID,omitempty"`
 	OwnerID              *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs      []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs            []string `json:"editorIDs,omitempty"`
+	ViewerIDs            []string `json:"viewerIDs,omitempty"`
 	ActionPlanKindID     *string  `json:"actionPlanKindID,omitempty"`
 	RiskIDs              []string `json:"riskIDs,omitempty"`
 	ControlIDs           []string `json:"controlIDs,omitempty"`
@@ -4430,6 +4445,9 @@ type CreateGroupInput struct {
 	EntityEditorIDs                      []string                 `json:"entityEditorIDs,omitempty"`
 	EntityBlockedGroupIDs                []string                 `json:"entityBlockedGroupIDs,omitempty"`
 	EntityViewerIDs                      []string                 `json:"entityViewerIDs,omitempty"`
+	ActionPlanEditorIDs                  []string                 `json:"actionPlanEditorIDs,omitempty"`
+	ActionPlanBlockedGroupIDs            []string                 `json:"actionPlanBlockedGroupIDs,omitempty"`
+	ActionPlanViewerIDs                  []string                 `json:"actionPlanViewerIDs,omitempty"`
 	ProcedureEditorIDs                   []string                 `json:"procedureEditorIDs,omitempty"`
 	ProcedureBlockedGroupIDs             []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalPolicyEditorIDs              []string                 `json:"internalPolicyEditorIDs,omitempty"`
@@ -4853,6 +4871,9 @@ type CreateOrganizationInput struct {
 	ControlImplementationCreatorIDs   []string                        `json:"controlImplementationCreatorIDs,omitempty"`
 	ControlObjectiveCreatorIDs        []string                        `json:"controlObjectiveCreatorIDs,omitempty"`
 	EvidenceCreatorIDs                []string                        `json:"evidenceCreatorIDs,omitempty"`
+	AssetCreatorIDs                   []string                        `json:"assetCreatorIDs,omitempty"`
+	FindingCreatorIDs                 []string                        `json:"findingCreatorIDs,omitempty"`
+	VulnerabilityCreatorIDs           []string                        `json:"vulnerabilityCreatorIDs,omitempty"`
 	GroupCreatorIDs                   []string                        `json:"groupCreatorIDs,omitempty"`
 	InternalPolicyCreatorIDs          []string                        `json:"internalPolicyCreatorIDs,omitempty"`
 	MappedControlCreatorIDs           []string                        `json:"mappedControlCreatorIDs,omitempty"`
@@ -4866,6 +4887,7 @@ type CreateOrganizationInput struct {
 	SubprocessorCreatorIDs            []string                        `json:"subprocessorCreatorIDs,omitempty"`
 	TrustCenterDocCreatorIDs          []string                        `json:"trustCenterDocCreatorIDs,omitempty"`
 	TrustCenterSubprocessorCreatorIDs []string                        `json:"trustCenterSubprocessorCreatorIDs,omitempty"`
+	ActionPlanCreatorIDs              []string                        `json:"actionPlanCreatorIDs,omitempty"`
 	ParentID                          *string                         `json:"parentID,omitempty"`
 	SettingID                         *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs            []string                        `json:"personalAccessTokenIDs,omitempty"`
@@ -11752,6 +11774,9 @@ type Group struct {
 	EntityEditors                      *EntityConnection                `json:"entityEditors"`
 	EntityBlockedGroups                *EntityConnection                `json:"entityBlockedGroups"`
 	EntityViewers                      *EntityConnection                `json:"entityViewers"`
+	ActionPlanEditors                  *ActionPlanConnection            `json:"actionPlanEditors"`
+	ActionPlanBlockedGroups            *ActionPlanConnection            `json:"actionPlanBlockedGroups"`
+	ActionPlanViewers                  *ActionPlanConnection            `json:"actionPlanViewers"`
 	ProcedureEditors                   *ProcedureConnection             `json:"procedureEditors"`
 	ProcedureBlockedGroups             *ProcedureConnection             `json:"procedureBlockedGroups"`
 	InternalPolicyEditors              *InternalPolicyConnection        `json:"internalPolicyEditors"`
@@ -12527,6 +12552,15 @@ type GroupWhereInput struct {
 	// entity_viewers edge predicates
 	HasEntityViewers     *bool               `json:"hasEntityViewers,omitempty"`
 	HasEntityViewersWith []*EntityWhereInput `json:"hasEntityViewersWith,omitempty"`
+	// action_plan_editors edge predicates
+	HasActionPlanEditors     *bool                   `json:"hasActionPlanEditors,omitempty"`
+	HasActionPlanEditorsWith []*ActionPlanWhereInput `json:"hasActionPlanEditorsWith,omitempty"`
+	// action_plan_blocked_groups edge predicates
+	HasActionPlanBlockedGroups     *bool                   `json:"hasActionPlanBlockedGroups,omitempty"`
+	HasActionPlanBlockedGroupsWith []*ActionPlanWhereInput `json:"hasActionPlanBlockedGroupsWith,omitempty"`
+	// action_plan_viewers edge predicates
+	HasActionPlanViewers     *bool                   `json:"hasActionPlanViewers,omitempty"`
+	HasActionPlanViewersWith []*ActionPlanWhereInput `json:"hasActionPlanViewersWith,omitempty"`
 	// procedure_editors edge predicates
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -16745,6 +16779,9 @@ type Organization struct {
 	ControlImplementationCreators   *GroupConnection                      `json:"controlImplementationCreators"`
 	ControlObjectiveCreators        *GroupConnection                      `json:"controlObjectiveCreators"`
 	EvidenceCreators                *GroupConnection                      `json:"evidenceCreators"`
+	AssetCreators                   *GroupConnection                      `json:"assetCreators"`
+	FindingCreators                 *GroupConnection                      `json:"findingCreators"`
+	VulnerabilityCreators           *GroupConnection                      `json:"vulnerabilityCreators"`
 	GroupCreators                   *GroupConnection                      `json:"groupCreators"`
 	InternalPolicyCreators          *GroupConnection                      `json:"internalPolicyCreators"`
 	MappedControlCreators           *GroupConnection                      `json:"mappedControlCreators"`
@@ -16758,6 +16795,7 @@ type Organization struct {
 	SubprocessorCreators            *GroupConnection                      `json:"subprocessorCreators"`
 	TrustCenterDocCreators          *GroupConnection                      `json:"trustCenterDocCreators"`
 	TrustCenterSubprocessorCreators *GroupConnection                      `json:"trustCenterSubprocessorCreators"`
+	ActionPlanCreators              *GroupConnection                      `json:"actionPlanCreators"`
 	Parent                          *Organization                         `json:"parent,omitempty"`
 	Children                        *OrganizationConnection               `json:"children"`
 	Setting                         *OrganizationSetting                  `json:"setting,omitempty"`
@@ -17507,6 +17545,15 @@ type OrganizationWhereInput struct {
 	// evidence_creators edge predicates
 	HasEvidenceCreators     *bool              `json:"hasEvidenceCreators,omitempty"`
 	HasEvidenceCreatorsWith []*GroupWhereInput `json:"hasEvidenceCreatorsWith,omitempty"`
+	// asset_creators edge predicates
+	HasAssetCreators     *bool              `json:"hasAssetCreators,omitempty"`
+	HasAssetCreatorsWith []*GroupWhereInput `json:"hasAssetCreatorsWith,omitempty"`
+	// finding_creators edge predicates
+	HasFindingCreators     *bool              `json:"hasFindingCreators,omitempty"`
+	HasFindingCreatorsWith []*GroupWhereInput `json:"hasFindingCreatorsWith,omitempty"`
+	// vulnerability_creators edge predicates
+	HasVulnerabilityCreators     *bool              `json:"hasVulnerabilityCreators,omitempty"`
+	HasVulnerabilityCreatorsWith []*GroupWhereInput `json:"hasVulnerabilityCreatorsWith,omitempty"`
 	// group_creators edge predicates
 	HasGroupCreators     *bool              `json:"hasGroupCreators,omitempty"`
 	HasGroupCreatorsWith []*GroupWhereInput `json:"hasGroupCreatorsWith,omitempty"`
@@ -17546,6 +17593,9 @@ type OrganizationWhereInput struct {
 	// trust_center_subprocessor_creators edge predicates
 	HasTrustCenterSubprocessorCreators     *bool              `json:"hasTrustCenterSubprocessorCreators,omitempty"`
 	HasTrustCenterSubprocessorCreatorsWith []*GroupWhereInput `json:"hasTrustCenterSubprocessorCreatorsWith,omitempty"`
+	// action_plan_creators edge predicates
+	HasActionPlanCreators     *bool              `json:"hasActionPlanCreators,omitempty"`
+	HasActionPlanCreatorsWith []*GroupWhereInput `json:"hasActionPlanCreatorsWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -26422,8 +26472,15 @@ type UpdateActionPlanInput struct {
 	ClearApprover              *bool               `json:"clearApprover,omitempty"`
 	DelegateID                 *string             `json:"delegateID,omitempty"`
 	ClearDelegate              *bool               `json:"clearDelegate,omitempty"`
-	OwnerID                    *string             `json:"ownerID,omitempty"`
-	ClearOwner                 *bool               `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs         []string            `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs      []string            `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups         *bool               `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs               []string            `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs            []string            `json:"removeEditorIDs,omitempty"`
+	ClearEditors               *bool               `json:"clearEditors,omitempty"`
+	AddViewerIDs               []string            `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs            []string            `json:"removeViewerIDs,omitempty"`
+	ClearViewers               *bool               `json:"clearViewers,omitempty"`
 	ActionPlanKindID           *string             `json:"actionPlanKindID,omitempty"`
 	ClearActionPlanKind        *bool               `json:"clearActionPlanKind,omitempty"`
 	AddRiskIDs                 []string            `json:"addRiskIDs,omitempty"`
@@ -27835,6 +27892,15 @@ type UpdateGroupInput struct {
 	AddEntityViewerIDs                         []string                      `json:"addEntityViewerIDs,omitempty"`
 	RemoveEntityViewerIDs                      []string                      `json:"removeEntityViewerIDs,omitempty"`
 	ClearEntityViewers                         *bool                         `json:"clearEntityViewers,omitempty"`
+	AddActionPlanEditorIDs                     []string                      `json:"addActionPlanEditorIDs,omitempty"`
+	RemoveActionPlanEditorIDs                  []string                      `json:"removeActionPlanEditorIDs,omitempty"`
+	ClearActionPlanEditors                     *bool                         `json:"clearActionPlanEditors,omitempty"`
+	AddActionPlanBlockedGroupIDs               []string                      `json:"addActionPlanBlockedGroupIDs,omitempty"`
+	RemoveActionPlanBlockedGroupIDs            []string                      `json:"removeActionPlanBlockedGroupIDs,omitempty"`
+	ClearActionPlanBlockedGroups               *bool                         `json:"clearActionPlanBlockedGroups,omitempty"`
+	AddActionPlanViewerIDs                     []string                      `json:"addActionPlanViewerIDs,omitempty"`
+	RemoveActionPlanViewerIDs                  []string                      `json:"removeActionPlanViewerIDs,omitempty"`
+	ClearActionPlanViewers                     *bool                         `json:"clearActionPlanViewers,omitempty"`
 	AddProcedureEditorIDs                      []string                      `json:"addProcedureEditorIDs,omitempty"`
 	RemoveProcedureEditorIDs                   []string                      `json:"removeProcedureEditorIDs,omitempty"`
 	ClearProcedureEditors                      *bool                         `json:"clearProcedureEditors,omitempty"`
@@ -28410,6 +28476,15 @@ type UpdateOrganizationInput struct {
 	AddEvidenceCreatorIDs                   []string                        `json:"addEvidenceCreatorIDs,omitempty"`
 	RemoveEvidenceCreatorIDs                []string                        `json:"removeEvidenceCreatorIDs,omitempty"`
 	ClearEvidenceCreators                   *bool                           `json:"clearEvidenceCreators,omitempty"`
+	AddAssetCreatorIDs                      []string                        `json:"addAssetCreatorIDs,omitempty"`
+	RemoveAssetCreatorIDs                   []string                        `json:"removeAssetCreatorIDs,omitempty"`
+	ClearAssetCreators                      *bool                           `json:"clearAssetCreators,omitempty"`
+	AddFindingCreatorIDs                    []string                        `json:"addFindingCreatorIDs,omitempty"`
+	RemoveFindingCreatorIDs                 []string                        `json:"removeFindingCreatorIDs,omitempty"`
+	ClearFindingCreators                    *bool                           `json:"clearFindingCreators,omitempty"`
+	AddVulnerabilityCreatorIDs              []string                        `json:"addVulnerabilityCreatorIDs,omitempty"`
+	RemoveVulnerabilityCreatorIDs           []string                        `json:"removeVulnerabilityCreatorIDs,omitempty"`
+	ClearVulnerabilityCreators              *bool                           `json:"clearVulnerabilityCreators,omitempty"`
 	AddGroupCreatorIDs                      []string                        `json:"addGroupCreatorIDs,omitempty"`
 	RemoveGroupCreatorIDs                   []string                        `json:"removeGroupCreatorIDs,omitempty"`
 	ClearGroupCreators                      *bool                           `json:"clearGroupCreators,omitempty"`
@@ -28449,6 +28524,9 @@ type UpdateOrganizationInput struct {
 	AddTrustCenterSubprocessorCreatorIDs    []string                        `json:"addTrustCenterSubprocessorCreatorIDs,omitempty"`
 	RemoveTrustCenterSubprocessorCreatorIDs []string                        `json:"removeTrustCenterSubprocessorCreatorIDs,omitempty"`
 	ClearTrustCenterSubprocessorCreators    *bool                           `json:"clearTrustCenterSubprocessorCreators,omitempty"`
+	AddActionPlanCreatorIDs                 []string                        `json:"addActionPlanCreatorIDs,omitempty"`
+	RemoveActionPlanCreatorIDs              []string                        `json:"removeActionPlanCreatorIDs,omitempty"`
+	ClearActionPlanCreators                 *bool                           `json:"clearActionPlanCreators,omitempty"`
 	SettingID                               *string                         `json:"settingID,omitempty"`
 	ClearSetting                            *bool                           `json:"clearSetting,omitempty"`
 	AddPersonalAccessTokenIDs               []string                        `json:"addPersonalAccessTokenIDs,omitempty"`
