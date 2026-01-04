@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -173,12 +172,5 @@ func (n Note) Policy() ent.Policy {
 func (Note) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNoteFiles(),
-	}
-}
-
-// Interceptors of the Note
-func (Note) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.InterceptorTrustCenterChild(),
 	}
 }
