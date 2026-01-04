@@ -16024,7 +16024,9 @@ type Note struct {
 	// the external discussion id this note is associated with
 	DiscussionID *string `json:"discussionID,omitempty"`
 	// whether the note has been edited
-	IsEdited       bool            `json:"isEdited"`
+	IsEdited bool `json:"isEdited"`
+	// the trust center this note belongs to, if applicable
+	TrustCenterID  *string         `json:"trustCenterID,omitempty"`
 	Owner          *Organization   `json:"owner,omitempty"`
 	Task           *Task           `json:"task,omitempty"`
 	Control        *Control        `json:"control,omitempty"`
@@ -16222,6 +16224,22 @@ type NoteWhereInput struct {
 	// is_edited field predicates
 	IsEdited    *bool `json:"isEdited,omitempty"`
 	IsEditedNeq *bool `json:"isEditedNEQ,omitempty"`
+	// trust_center_id field predicates
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`

@@ -200,6 +200,26 @@ func (_u *NoteUpdate) SetNillableIsEdited(v *bool) *NoteUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *NoteUpdate) SetTrustCenterID(v string) *NoteUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableTrustCenterID(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *NoteUpdate) ClearTrustCenterID() *NoteUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // SetTaskID sets the "task" edge to the Task entity by ID.
 func (_u *NoteUpdate) SetTaskID(id string) *NoteUpdate {
 	_u.mutation.SetTaskID(id)
@@ -331,20 +351,6 @@ func (_u *NoteUpdate) SetNillableEvidenceID(id *string) *NoteUpdate {
 // SetEvidence sets the "evidence" edge to the Evidence entity.
 func (_u *NoteUpdate) SetEvidence(v *Evidence) *NoteUpdate {
 	return _u.SetEvidenceID(v.ID)
-}
-
-// SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
-func (_u *NoteUpdate) SetTrustCenterID(id string) *NoteUpdate {
-	_u.mutation.SetTrustCenterID(id)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID if the given value is not nil.
-func (_u *NoteUpdate) SetNillableTrustCenterID(id *string) *NoteUpdate {
-	if id != nil {
-		_u = _u.SetTrustCenterID(*id)
-	}
-	return _u
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
@@ -1084,6 +1090,26 @@ func (_u *NoteUpdateOne) SetNillableIsEdited(v *bool) *NoteUpdateOne {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *NoteUpdateOne) SetTrustCenterID(v string) *NoteUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableTrustCenterID(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *NoteUpdateOne) ClearTrustCenterID() *NoteUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // SetTaskID sets the "task" edge to the Task entity by ID.
 func (_u *NoteUpdateOne) SetTaskID(id string) *NoteUpdateOne {
 	_u.mutation.SetTaskID(id)
@@ -1215,20 +1241,6 @@ func (_u *NoteUpdateOne) SetNillableEvidenceID(id *string) *NoteUpdateOne {
 // SetEvidence sets the "evidence" edge to the Evidence entity.
 func (_u *NoteUpdateOne) SetEvidence(v *Evidence) *NoteUpdateOne {
 	return _u.SetEvidenceID(v.ID)
-}
-
-// SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
-func (_u *NoteUpdateOne) SetTrustCenterID(id string) *NoteUpdateOne {
-	_u.mutation.SetTrustCenterID(id)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID if the given value is not nil.
-func (_u *NoteUpdateOne) SetNillableTrustCenterID(id *string) *NoteUpdateOne {
-	if id != nil {
-		_u = _u.SetTrustCenterID(*id)
-	}
-	return _u
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.

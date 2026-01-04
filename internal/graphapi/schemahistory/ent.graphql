@@ -13112,6 +13112,10 @@ type NoteHistory implements Node {
   whether the note has been edited
   """
   isEdited: Boolean!
+  """
+  the trust center this note belongs to, if applicable
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -13382,6 +13386,24 @@ input NoteHistoryWhereInput {
   """
   isEdited: Boolean
   isEditedNEQ: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Possible directions in which to order a list of items when provided an `orderBy` argument.

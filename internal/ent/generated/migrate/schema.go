@@ -3134,7 +3134,7 @@ var (
 		{Name: "risk_comments", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
-		{Name: "trust_center_posts", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.

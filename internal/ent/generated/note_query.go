@@ -794,7 +794,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withFiles != nil,
 		}
 	)
-	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withEvidence != nil || _q.withTrustCenter != nil {
+	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withEvidence != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -1162,10 +1162,7 @@ func (_q *NoteQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuer
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Note)
 	for i := range nodes {
-		if nodes[i].trust_center_posts == nil {
-			continue
-		}
-		fk := *nodes[i].trust_center_posts
+		fk := nodes[i].TrustCenterID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -1182,7 +1179,7 @@ func (_q *NoteQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuer
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "trust_center_posts" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -1283,6 +1280,9 @@ func (_q *NoteQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(note.FieldOwnerID)
+		}
+		if _q.withTrustCenter != nil {
+			_spec.Node.AddColumnOnce(note.FieldTrustCenterID)
 		}
 		if _q.withDiscussion != nil {
 			_spec.Node.AddColumnOnce(note.FieldDiscussionID)

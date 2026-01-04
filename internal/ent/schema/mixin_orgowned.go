@@ -212,7 +212,7 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 				return nil
 			}
 		} else if !o.AllowAnonymousTrustCenterAccess && hasAnonUser {
-			return privacy.Deny
+			return privacy.Denyf("anonymous trust center access not allowed")
 		}
 
 		// add owner id(s) to the query

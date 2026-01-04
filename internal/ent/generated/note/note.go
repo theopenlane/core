@@ -41,6 +41,8 @@ const (
 	FieldDiscussionID = "discussion_id"
 	// FieldIsEdited holds the string denoting the is_edited field in the database.
 	FieldIsEdited = "is_edited"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeTask holds the string denoting the task edge name in mutations.
@@ -127,7 +129,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
-	TrustCenterColumn = "trust_center_posts"
+	TrustCenterColumn = "trust_center_id"
 	// DiscussionTable is the table that holds the discussion relation/edge.
 	DiscussionTable = "notes"
 	// DiscussionInverseTable is the table name for the Discussion entity.
@@ -160,6 +162,7 @@ var Columns = []string{
 	FieldNoteRef,
 	FieldDiscussionID,
 	FieldIsEdited,
+	FieldTrustCenterID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "notes"
@@ -177,7 +180,6 @@ var ForeignKeys = []string{
 	"risk_comments",
 	"subcontrol_comments",
 	"task_comments",
-	"trust_center_posts",
 	"vulnerability_comments",
 }
 
@@ -289,6 +291,11 @@ func ByDiscussionID(opts ...sql.OrderTermOption) OrderOption {
 // ByIsEdited orders the results by the is_edited field.
 func ByIsEdited(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsEdited, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
