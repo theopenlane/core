@@ -2941,6 +2941,7 @@ type ComplexityRoot struct {
 		Text           func(childComplexity int) int
 		TextJSON       func(childComplexity int) int
 		TrustCenter    func(childComplexity int) int
+		TrustCenterID  func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 		UpdatedBy      func(childComplexity int) int
 	}
@@ -22338,6 +22339,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.TrustCenter(childComplexity), true
+
+	case "Note.trustCenterID":
+		if e.complexity.Note.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.Note.TrustCenterID(childComplexity), true
 
 	case "Note.updatedAt":
 		if e.complexity.Note.UpdatedAt == nil {
@@ -67293,6 +67301,10 @@ type Note implements Node {
   whether the note has been edited
   """
   isEdited: Boolean!
+  """
+  the trust center this note belongs to, if applicable
+  """
+  trustCenterID: ID
   owner: Organization
   task: Task
   control: Control
@@ -67559,6 +67571,24 @@ input NoteWhereInput {
   """
   isEdited: Boolean
   isEditedNEQ: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
   """
   owner edge predicates
   """

@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
@@ -61,6 +62,9 @@ func (Note) Fields() []ent.Field {
 		field.Bool("is_edited").
 			Comment("whether the note has been edited").
 			Default(false),
+		field.String("trust_center_id").
+			Comment("the trust center this note belongs to, if applicable").
+			Optional(),
 	}
 }
 
@@ -75,6 +79,7 @@ func (n Note) Mixin() []ent.Mixin {
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}, Discussion{}),
 				withOrganizationOwner(false),
 				withOwnerRelation(fgax.OwnerRelation),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 		},
 	}.getMixins(n)
@@ -121,6 +126,7 @@ func (n Note) Edges() []ent.Edge {
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: TrustCenter{},
+			field:      "trust_center_id",
 			ref:        "posts",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -167,5 +173,12 @@ func (n Note) Policy() ent.Policy {
 func (Note) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNoteFiles(),
+	}
+}
+
+// Interceptors of the Note
+func (Note) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterChild(),
 	}
 }

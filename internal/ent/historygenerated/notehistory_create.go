@@ -215,6 +215,20 @@ func (_c *NoteHistoryCreate) SetNillableIsEdited(v *bool) *NoteHistoryCreate {
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *NoteHistoryCreate) SetTrustCenterID(v string) *NoteHistoryCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableTrustCenterID(v *string) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NoteHistoryCreate) SetID(v string) *NoteHistoryCreate {
 	_c.mutation.SetID(v)
@@ -422,6 +436,10 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IsEdited(); ok {
 		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
 		_node.IsEdited = value
+	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(notehistory.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
 	}
 	return _node, _spec
 }

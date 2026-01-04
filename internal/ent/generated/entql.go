@@ -1486,19 +1486,20 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Note",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			note.FieldCreatedAt:    {Type: field.TypeTime, Column: note.FieldCreatedAt},
-			note.FieldUpdatedAt:    {Type: field.TypeTime, Column: note.FieldUpdatedAt},
-			note.FieldCreatedBy:    {Type: field.TypeString, Column: note.FieldCreatedBy},
-			note.FieldUpdatedBy:    {Type: field.TypeString, Column: note.FieldUpdatedBy},
-			note.FieldDeletedAt:    {Type: field.TypeTime, Column: note.FieldDeletedAt},
-			note.FieldDeletedBy:    {Type: field.TypeString, Column: note.FieldDeletedBy},
-			note.FieldDisplayID:    {Type: field.TypeString, Column: note.FieldDisplayID},
-			note.FieldOwnerID:      {Type: field.TypeString, Column: note.FieldOwnerID},
-			note.FieldText:         {Type: field.TypeString, Column: note.FieldText},
-			note.FieldTextJSON:     {Type: field.TypeJSON, Column: note.FieldTextJSON},
-			note.FieldNoteRef:      {Type: field.TypeString, Column: note.FieldNoteRef},
-			note.FieldDiscussionID: {Type: field.TypeString, Column: note.FieldDiscussionID},
-			note.FieldIsEdited:     {Type: field.TypeBool, Column: note.FieldIsEdited},
+			note.FieldCreatedAt:     {Type: field.TypeTime, Column: note.FieldCreatedAt},
+			note.FieldUpdatedAt:     {Type: field.TypeTime, Column: note.FieldUpdatedAt},
+			note.FieldCreatedBy:     {Type: field.TypeString, Column: note.FieldCreatedBy},
+			note.FieldUpdatedBy:     {Type: field.TypeString, Column: note.FieldUpdatedBy},
+			note.FieldDeletedAt:     {Type: field.TypeTime, Column: note.FieldDeletedAt},
+			note.FieldDeletedBy:     {Type: field.TypeString, Column: note.FieldDeletedBy},
+			note.FieldDisplayID:     {Type: field.TypeString, Column: note.FieldDisplayID},
+			note.FieldOwnerID:       {Type: field.TypeString, Column: note.FieldOwnerID},
+			note.FieldText:          {Type: field.TypeString, Column: note.FieldText},
+			note.FieldTextJSON:      {Type: field.TypeJSON, Column: note.FieldTextJSON},
+			note.FieldNoteRef:       {Type: field.TypeString, Column: note.FieldNoteRef},
+			note.FieldDiscussionID:  {Type: field.TypeString, Column: note.FieldDiscussionID},
+			note.FieldIsEdited:      {Type: field.TypeBool, Column: note.FieldIsEdited},
+			note.FieldTrustCenterID: {Type: field.TypeString, Column: note.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[45] = &sqlgraph.Node{
@@ -22502,6 +22503,11 @@ func (f *NoteFilter) WhereDiscussionID(p entql.StringP) {
 // WhereIsEdited applies the entql bool predicate on the is_edited field.
 func (f *NoteFilter) WhereIsEdited(p entql.BoolP) {
 	f.Where(p.Field(note.FieldIsEdited))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *NoteFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(note.FieldTrustCenterID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

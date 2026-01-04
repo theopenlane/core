@@ -54,6 +54,8 @@ type Note struct {
 	DiscussionID string `json:"discussion_id,omitempty"`
 	// whether the note has been edited
 	IsEdited bool `json:"is_edited,omitempty"`
+	// the trust center this note belongs to, if applicable
+	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NoteQuery when eager-loading is set.
 	Edges                    NoteEdges `json:"edges"`
@@ -69,7 +71,6 @@ type Note struct {
 	risk_comments            *string
 	subcontrol_comments      *string
 	task_comments            *string
-	trust_center_posts       *string
 	vulnerability_comments   *string
 	selectValues             sql.SelectValues
 }
@@ -235,7 +236,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case note.FieldIsEdited:
 			values[i] = new(sql.NullBool)
-		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID:
+		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID, note.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -263,9 +264,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case note.ForeignKeys[11]: // task_comments
 			values[i] = new(sql.NullString)
-		case note.ForeignKeys[12]: // trust_center_posts
-			values[i] = new(sql.NullString)
-		case note.ForeignKeys[13]: // vulnerability_comments
+		case note.ForeignKeys[12]: // vulnerability_comments
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -368,6 +367,12 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IsEdited = value.Bool
 			}
+		case note.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		case note.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field control_comments", values[i])
@@ -453,13 +458,6 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 				*_m.task_comments = value.String
 			}
 		case note.ForeignKeys[12]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field trust_center_posts", values[i])
-			} else if value.Valid {
-				_m.trust_center_posts = new(string)
-				*_m.trust_center_posts = value.String
-			}
-		case note.ForeignKeys[13]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_comments", values[i])
 			} else if value.Valid {
@@ -595,6 +593,9 @@ func (_m *Note) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_edited=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsEdited))
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }

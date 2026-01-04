@@ -6006,6 +6006,11 @@ func (_q *NoteHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, notehistory.FieldIsEdited)
 				fieldSeen[notehistory.FieldIsEdited] = struct{}{}
 			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[notehistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, notehistory.FieldTrustCenterID)
+				fieldSeen[notehistory.FieldTrustCenterID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

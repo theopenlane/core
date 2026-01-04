@@ -1259,6 +1259,7 @@ var (
 		{Name: "note_ref", Type: field.TypeString, Nullable: true},
 		{Name: "discussion_id", Type: field.TypeString, Nullable: true},
 		{Name: "is_edited", Type: field.TypeBool, Default: false},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 	}
 	// NoteHistoryTable holds the schema information for the "note_history" table.
 	NoteHistoryTable = &schema.Table{

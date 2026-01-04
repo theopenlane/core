@@ -1159,21 +1159,22 @@ type ComplexityRoot struct {
 	}
 
 	NoteHistory struct {
-		CreatedAt    func(childComplexity int) int
-		CreatedBy    func(childComplexity int) int
-		DiscussionID func(childComplexity int) int
-		DisplayID    func(childComplexity int) int
-		HistoryTime  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		IsEdited     func(childComplexity int) int
-		NoteRef      func(childComplexity int) int
-		Operation    func(childComplexity int) int
-		OwnerID      func(childComplexity int) int
-		Ref          func(childComplexity int) int
-		Text         func(childComplexity int) int
-		TextJSON     func(childComplexity int) int
-		UpdatedAt    func(childComplexity int) int
-		UpdatedBy    func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		DiscussionID  func(childComplexity int) int
+		DisplayID     func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		IsEdited      func(childComplexity int) int
+		NoteRef       func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		OwnerID       func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Text          func(childComplexity int) int
+		TextJSON      func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
 	}
 
 	NoteHistoryConnection struct {
@@ -8403,6 +8404,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.NoteHistory.TextJSON(childComplexity), true
+
+	case "NoteHistory.trustCenterID":
+		if e.complexity.NoteHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.TrustCenterID(childComplexity), true
 
 	case "NoteHistory.updatedAt":
 		if e.complexity.NoteHistory.UpdatedAt == nil {
@@ -29046,6 +29054,10 @@ type NoteHistory implements Node {
   whether the note has been edited
   """
   isEdited: Boolean!
+  """
+  the trust center this note belongs to, if applicable
+  """
+  trustCenterID: String
 }
 """
 A connection to a list of items.
@@ -29316,6 +29328,24 @@ input NoteHistoryWhereInput {
   """
   isEdited: Boolean
   isEditedNEQ: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
 }
 """
 Possible directions in which to order a list of items when provided an ` + "`" + `orderBy` + "`" + ` argument.

@@ -192,6 +192,26 @@ func (_u *NoteHistoryUpdate) SetNillableIsEdited(v *bool) *NoteHistoryUpdate {
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *NoteHistoryUpdate) SetTrustCenterID(v string) *NoteHistoryUpdate {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableTrustCenterID(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *NoteHistoryUpdate) ClearTrustCenterID() *NoteHistoryUpdate {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the NoteHistoryMutation object of the builder.
 func (_u *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
 	return _u.mutation
@@ -318,6 +338,12 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.IsEdited(); ok {
 		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(notehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(notehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -501,6 +527,26 @@ func (_u *NoteHistoryUpdateOne) SetNillableIsEdited(v *bool) *NoteHistoryUpdateO
 	return _u
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_u *NoteHistoryUpdateOne) SetTrustCenterID(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetTrustCenterID(v)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableTrustCenterID(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterID clears the value of the "trust_center_id" field.
+func (_u *NoteHistoryUpdateOne) ClearTrustCenterID() *NoteHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
 // Mutation returns the NoteHistoryMutation object of the builder.
 func (_u *NoteHistoryUpdateOne) Mutation() *NoteHistoryMutation {
 	return _u.mutation
@@ -657,6 +703,12 @@ func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory
 	}
 	if value, ok := _u.mutation.IsEdited(); ok {
 		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(notehistory.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(notehistory.FieldTrustCenterID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

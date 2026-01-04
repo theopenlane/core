@@ -3626,9 +3626,11 @@ func init() {
 	note.Hooks[6] = noteHooks[0]
 	noteMixinInters1 := noteMixin[1].Interceptors()
 	noteMixinInters4 := noteMixin[4].Interceptors()
+	noteInters := schema.Note{}.Interceptors()
 	note.Interceptors[0] = noteMixinInters1[0]
 	note.Interceptors[1] = noteMixinInters4[0]
 	note.Interceptors[2] = noteMixinInters4[1]
+	note.Interceptors[3] = noteInters[0]
 	noteMixinFields0 := noteMixin[0].Fields()
 	_ = noteMixinFields0
 	noteMixinFields2 := noteMixin[2].Fields()

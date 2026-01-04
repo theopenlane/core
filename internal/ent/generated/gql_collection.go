@@ -30062,6 +30062,10 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				return err
 			}
 			_q.withTrustCenter = query
+			if _, ok := fieldSeen[note.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, note.FieldTrustCenterID)
+				fieldSeen[note.FieldTrustCenterID] = struct{}{}
+			}
 
 		case "discussion":
 			var (
@@ -30220,6 +30224,11 @@ func (_q *NoteQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[note.FieldIsEdited]; !ok {
 				selectedFields = append(selectedFields, note.FieldIsEdited)
 				fieldSeen[note.FieldIsEdited] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[note.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, note.FieldTrustCenterID)
+				fieldSeen[note.FieldTrustCenterID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -54929,7 +54938,7 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 							ids[i] = nodes[i].ID
 						}
 						var v []struct {
-							NodeID string `sql:"trust_center_posts"`
+							NodeID string `sql:"trust_center_id"`
 							Count  int    `sql:"count"`
 						}
 						query.Where(func(s *sql.Selector) {

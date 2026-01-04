@@ -189,6 +189,20 @@ func (_c *NoteCreate) SetNillableIsEdited(v *bool) *NoteCreate {
 	return _c
 }
 
+// SetTrustCenterID sets the "trust_center_id" field.
+func (_c *NoteCreate) SetTrustCenterID(v string) *NoteCreate {
+	_c.mutation.SetTrustCenterID(v)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
+func (_c *NoteCreate) SetNillableTrustCenterID(v *string) *NoteCreate {
+	if v != nil {
+		_c.SetTrustCenterID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NoteCreate) SetID(v string) *NoteCreate {
 	_c.mutation.SetID(v)
@@ -339,20 +353,6 @@ func (_c *NoteCreate) SetNillableEvidenceID(id *string) *NoteCreate {
 // SetEvidence sets the "evidence" edge to the Evidence entity.
 func (_c *NoteCreate) SetEvidence(v *Evidence) *NoteCreate {
 	return _c.SetEvidenceID(v.ID)
-}
-
-// SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
-func (_c *NoteCreate) SetTrustCenterID(id string) *NoteCreate {
-	_c.mutation.SetTrustCenterID(id)
-	return _c
-}
-
-// SetNillableTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID if the given value is not nil.
-func (_c *NoteCreate) SetNillableTrustCenterID(id *string) *NoteCreate {
-	if id != nil {
-		_c = _c.SetTrustCenterID(*id)
-	}
-	return _c
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
@@ -710,7 +710,7 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.trust_center_posts = &nodes[0]
+		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.DiscussionIDs(); len(nodes) > 0 {

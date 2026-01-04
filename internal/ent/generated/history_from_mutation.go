@@ -9618,6 +9618,10 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetIsEdited(isEdited)
 	}
 
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -9727,6 +9731,12 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIsEdited(note.IsEdited)
 		}
 
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(note.TrustCenterID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -9775,6 +9785,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetNoteRef(note.NoteRef).
 			SetDiscussionID(note.DiscussionID).
 			SetIsEdited(note.IsEdited).
+			SetTrustCenterID(note.TrustCenterID).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -148,7 +148,7 @@ const (
 	// It exists in this package in order to avoid circular dependency with the "note" package.
 	PostsInverseTable = "notes"
 	// PostsColumn is the table column denoting the posts relation/edge.
-	PostsColumn = "trust_center_posts"
+	PostsColumn = "trust_center_id"
 	// TrustcenterEntitiesTable is the table that holds the trustcenter_entities relation/edge.
 	TrustcenterEntitiesTable = "trustcenter_entities"
 	// TrustcenterEntitiesInverseTable is the table name for the TrustcenterEntity entity.
