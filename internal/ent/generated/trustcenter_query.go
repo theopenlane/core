@@ -1317,6 +1317,9 @@ func (_q *TrustCenterQuery) loadPosts(ctx context.Context, query *NoteQuery, nod
 		}
 	}
 	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(note.FieldTrustCenterID)
+	}
 	query.Where(predicate.Note(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(trustcenter.PostsColumn), fks...))
 	}))
@@ -1325,13 +1328,10 @@ func (_q *TrustCenterQuery) loadPosts(ctx context.Context, query *NoteQuery, nod
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.trust_center_posts
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "trust_center_posts" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		fk := n.TrustCenterID
+		node, ok := nodeids[fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_posts" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
 	}

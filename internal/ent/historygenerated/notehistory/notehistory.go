@@ -51,6 +51,8 @@ const (
 	FieldDiscussionID = "discussion_id"
 	// FieldIsEdited holds the string denoting the is_edited field in the database.
 	FieldIsEdited = "is_edited"
+	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
+	FieldTrustCenterID = "trust_center_id"
 	// Table holds the table name of the notehistory in the database.
 	Table = "note_history"
 )
@@ -74,6 +76,7 @@ var Columns = []string{
 	FieldNoteRef,
 	FieldDiscussionID,
 	FieldIsEdited,
+	FieldTrustCenterID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -200,6 +203,11 @@ func ByDiscussionID(opts ...sql.OrderTermOption) OrderOption {
 // ByIsEdited orders the results by the is_edited field.
 func ByIsEdited(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsEdited, opts...).ToFunc()
+}
+
+// ByTrustCenterID orders the results by the trust_center_id field.
+func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
 }
 
 var (

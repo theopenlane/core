@@ -1196,22 +1196,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "NoteHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			notehistory.FieldHistoryTime:  {Type: field.TypeTime, Column: notehistory.FieldHistoryTime},
-			notehistory.FieldRef:          {Type: field.TypeString, Column: notehistory.FieldRef},
-			notehistory.FieldOperation:    {Type: field.TypeEnum, Column: notehistory.FieldOperation},
-			notehistory.FieldCreatedAt:    {Type: field.TypeTime, Column: notehistory.FieldCreatedAt},
-			notehistory.FieldUpdatedAt:    {Type: field.TypeTime, Column: notehistory.FieldUpdatedAt},
-			notehistory.FieldCreatedBy:    {Type: field.TypeString, Column: notehistory.FieldCreatedBy},
-			notehistory.FieldUpdatedBy:    {Type: field.TypeString, Column: notehistory.FieldUpdatedBy},
-			notehistory.FieldDeletedAt:    {Type: field.TypeTime, Column: notehistory.FieldDeletedAt},
-			notehistory.FieldDeletedBy:    {Type: field.TypeString, Column: notehistory.FieldDeletedBy},
-			notehistory.FieldDisplayID:    {Type: field.TypeString, Column: notehistory.FieldDisplayID},
-			notehistory.FieldOwnerID:      {Type: field.TypeString, Column: notehistory.FieldOwnerID},
-			notehistory.FieldText:         {Type: field.TypeString, Column: notehistory.FieldText},
-			notehistory.FieldTextJSON:     {Type: field.TypeJSON, Column: notehistory.FieldTextJSON},
-			notehistory.FieldNoteRef:      {Type: field.TypeString, Column: notehistory.FieldNoteRef},
-			notehistory.FieldDiscussionID: {Type: field.TypeString, Column: notehistory.FieldDiscussionID},
-			notehistory.FieldIsEdited:     {Type: field.TypeBool, Column: notehistory.FieldIsEdited},
+			notehistory.FieldHistoryTime:   {Type: field.TypeTime, Column: notehistory.FieldHistoryTime},
+			notehistory.FieldRef:           {Type: field.TypeString, Column: notehistory.FieldRef},
+			notehistory.FieldOperation:     {Type: field.TypeEnum, Column: notehistory.FieldOperation},
+			notehistory.FieldCreatedAt:     {Type: field.TypeTime, Column: notehistory.FieldCreatedAt},
+			notehistory.FieldUpdatedAt:     {Type: field.TypeTime, Column: notehistory.FieldUpdatedAt},
+			notehistory.FieldCreatedBy:     {Type: field.TypeString, Column: notehistory.FieldCreatedBy},
+			notehistory.FieldUpdatedBy:     {Type: field.TypeString, Column: notehistory.FieldUpdatedBy},
+			notehistory.FieldDeletedAt:     {Type: field.TypeTime, Column: notehistory.FieldDeletedAt},
+			notehistory.FieldDeletedBy:     {Type: field.TypeString, Column: notehistory.FieldDeletedBy},
+			notehistory.FieldDisplayID:     {Type: field.TypeString, Column: notehistory.FieldDisplayID},
+			notehistory.FieldOwnerID:       {Type: field.TypeString, Column: notehistory.FieldOwnerID},
+			notehistory.FieldText:          {Type: field.TypeString, Column: notehistory.FieldText},
+			notehistory.FieldTextJSON:      {Type: field.TypeJSON, Column: notehistory.FieldTextJSON},
+			notehistory.FieldNoteRef:       {Type: field.TypeString, Column: notehistory.FieldNoteRef},
+			notehistory.FieldDiscussionID:  {Type: field.TypeString, Column: notehistory.FieldDiscussionID},
+			notehistory.FieldIsEdited:      {Type: field.TypeBool, Column: notehistory.FieldIsEdited},
+			notehistory.FieldTrustCenterID: {Type: field.TypeString, Column: notehistory.FieldTrustCenterID},
 		},
 	}
 	graph.Nodes[32] = &sqlgraph.Node{
@@ -7291,6 +7292,11 @@ func (f *NoteHistoryFilter) WhereDiscussionID(p entql.StringP) {
 // WhereIsEdited applies the entql bool predicate on the is_edited field.
 func (f *NoteHistoryFilter) WhereIsEdited(p entql.BoolP) {
 	f.Where(p.Field(notehistory.FieldIsEdited))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *NoteHistoryFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(notehistory.FieldTrustCenterID))
 }
 
 // addPredicate implements the predicateAdder interface.

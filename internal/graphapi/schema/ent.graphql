@@ -27469,6 +27469,10 @@ type Note implements Node {
   whether the note has been edited
   """
   isEdited: Boolean!
+  """
+  the trust center this note belongs to, if applicable
+  """
+  trustCenterID: ID
   owner: Organization
   task: Task
   control: Control
@@ -27735,6 +27739,24 @@ input NoteWhereInput {
   """
   isEdited: Boolean
   isEditedNEQ: Boolean
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
   """
   owner edge predicates
   """

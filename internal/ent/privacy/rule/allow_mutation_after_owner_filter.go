@@ -20,7 +20,7 @@ func AllowMutationAfterApplyingOwnerFilter() privacy.MutationRule {
 		func(ctx context.Context, f privacy.Filter) error {
 			ownerFilter, ok := f.(OwnerFilter)
 			if !ok {
-				return privacy.Deny
+				return privacy.Denyf("unable to cast to owner filter")
 			}
 
 			viewerID, err := auth.GetSubjectIDFromContext(ctx)

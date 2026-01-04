@@ -1,0 +1,23 @@
+-- +goose Up
+-- modify "groups" table
+ALTER TABLE "groups" ADD COLUMN "organization_asset_creators" character varying NULL, ADD COLUMN "organization_finding_creators" character varying NULL, ADD COLUMN "organization_vulnerability_creators" character varying NULL, ADD COLUMN "organization_action_plan_creators" character varying NULL, ADD CONSTRAINT "groups_organizations_action_plan_creators" FOREIGN KEY ("organization_action_plan_creators") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_organizations_asset_creators" FOREIGN KEY ("organization_asset_creators") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_organizations_finding_creators" FOREIGN KEY ("organization_finding_creators") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_organizations_vulnerability_creators" FOREIGN KEY ("organization_vulnerability_creators") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+-- create "action_plan_blocked_groups" table
+CREATE TABLE "action_plan_blocked_groups" ("action_plan_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("action_plan_id", "group_id"), CONSTRAINT "action_plan_blocked_groups_action_plan_id" FOREIGN KEY ("action_plan_id") REFERENCES "action_plans" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "action_plan_blocked_groups_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "action_plan_editors" table
+CREATE TABLE "action_plan_editors" ("action_plan_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("action_plan_id", "group_id"), CONSTRAINT "action_plan_editors_action_plan_id" FOREIGN KEY ("action_plan_id") REFERENCES "action_plans" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "action_plan_editors_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- create "action_plan_viewers" table
+CREATE TABLE "action_plan_viewers" ("action_plan_id" character varying NOT NULL, "group_id" character varying NOT NULL, PRIMARY KEY ("action_plan_id", "group_id"), CONSTRAINT "action_plan_viewers_action_plan_id" FOREIGN KEY ("action_plan_id") REFERENCES "action_plans" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "action_plan_viewers_group_id" FOREIGN KEY ("group_id") REFERENCES "groups" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- modify "notes" table
+ALTER TABLE "notes" DROP CONSTRAINT "notes_trust_centers_posts", DROP COLUMN "trust_center_posts", ADD COLUMN "trust_center_id" character varying NULL, ADD CONSTRAINT "notes_trust_centers_posts" FOREIGN KEY ("trust_center_id") REFERENCES "trust_centers" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- +goose Down
+-- reverse: modify "notes" table
+ALTER TABLE "notes" DROP CONSTRAINT "notes_trust_centers_posts", DROP COLUMN "trust_center_id", ADD COLUMN "trust_center_posts" character varying NULL, ADD CONSTRAINT "notes_trust_centers_posts" FOREIGN KEY ("trust_center_posts") REFERENCES "trust_centers" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+-- reverse: create "action_plan_viewers" table
+DROP TABLE "action_plan_viewers";
+-- reverse: create "action_plan_editors" table
+DROP TABLE "action_plan_editors";
+-- reverse: create "action_plan_blocked_groups" table
+DROP TABLE "action_plan_blocked_groups";
+-- reverse: modify "groups" table
+ALTER TABLE "groups" DROP CONSTRAINT "groups_organizations_vulnerability_creators", DROP CONSTRAINT "groups_organizations_finding_creators", DROP CONSTRAINT "groups_organizations_asset_creators", DROP CONSTRAINT "groups_organizations_action_plan_creators", DROP COLUMN "organization_action_plan_creators", DROP COLUMN "organization_vulnerability_creators", DROP COLUMN "organization_finding_creators", DROP COLUMN "organization_asset_creators";

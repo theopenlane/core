@@ -52,8 +52,10 @@ type NoteHistory struct {
 	// the external discussion id this note is associated with
 	DiscussionID string `json:"discussion_id,omitempty"`
 	// whether the note has been edited
-	IsEdited     bool `json:"is_edited,omitempty"`
-	selectValues sql.SelectValues
+	IsEdited bool `json:"is_edited,omitempty"`
+	// the trust center this note belongs to, if applicable
+	TrustCenterID string `json:"trust_center_id,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -67,7 +69,7 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case notehistory.FieldIsEdited:
 			values[i] = new(sql.NullBool)
-		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldText, notehistory.FieldNoteRef, notehistory.FieldDiscussionID:
+		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldText, notehistory.FieldNoteRef, notehistory.FieldDiscussionID, notehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -190,6 +192,12 @@ func (_m *NoteHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.IsEdited = value.Bool
 			}
+		case notehistory.FieldTrustCenterID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -273,6 +281,9 @@ func (_m *NoteHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_edited=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsEdited))
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_id=")
+	builder.WriteString(_m.TrustCenterID)
 	builder.WriteByte(')')
 	return builder.String()
 }
