@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects/storage"
 
 	openlane "github.com/theopenlane/go-client"
+	"github.com/theopenlane/go-client/graphclient"
 )
 
 type registerResponse struct {
@@ -88,10 +89,8 @@ func VerifyUser(ctx context.Context, baseURL *url.URL, token string) error {
 }
 
 // LoginUser logs in a user and returns an authenticated Openlane client
-func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*openlane.OpenlaneClient, error) {
-	config := openlane.NewDefaultConfig()
-
-	client, err := openlane.New(config, openlane.WithBaseURL(baseURL))
+func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*openlane.Client, error) {
+	client, err := openlane.New(openlane.WithBaseURL(baseURL.String()))
 	if err != nil {
 		return nil, fmt.Errorf("create initial client: %w", err)
 	}
@@ -112,8 +111,7 @@ func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*
 	}
 
 	authClient, err := openlane.New(
-		config,
-		openlane.WithBaseURL(baseURL),
+		openlane.WithBaseURL(baseURL.String()),
 		openlane.WithCredentials(openlane.Authorization{
 			BearerToken: resp.AccessToken,
 			Session:     session,
@@ -127,8 +125,8 @@ func LoginUser(ctx context.Context, baseURL *url.URL, email, password string) (*
 }
 
 // CreateOrganization creates a new organization
-func CreateOrganization(ctx context.Context, client *openlane.OpenlaneClient, name, description string) (string, error) {
-	input := openlane.CreateOrganizationInput{
+func CreateOrganization(ctx context.Context, client *openlane.Client, name, description string) (string, error) {
+	input := graphclient.CreateOrganizationInput{
 		Name:        name,
 		Description: &description,
 	}
@@ -142,8 +140,8 @@ func CreateOrganization(ctx context.Context, client *openlane.OpenlaneClient, na
 }
 
 // GetOrganizationID retrieves the first organization ID for the current user
-func GetOrganizationID(ctx context.Context, client *openlane.OpenlaneClient) (string, error) {
-	orgs, err := client.GetOrganizations(ctx, nil, nil, nil)
+func GetOrganizationID(ctx context.Context, client *openlane.Client) (string, error) {
+	orgs, err := client.GetOrganizations(ctx, nil, nil, nil, nil, nil, nil)
 	if err != nil {
 		return "", fmt.Errorf("get organizations: %w", err)
 	}
@@ -156,8 +154,8 @@ func GetOrganizationID(ctx context.Context, client *openlane.OpenlaneClient) (st
 }
 
 // CreatePAT creates a personal access token for the specified organization
-func CreatePAT(ctx context.Context, client *openlane.OpenlaneClient, orgID, name, description string) (string, error) {
-	input := openlane.CreatePersonalAccessTokenInput{
+func CreatePAT(ctx context.Context, client *openlane.Client, orgID, name, description string) (string, error) {
+	input := graphclient.CreatePersonalAccessTokenInput{
 		Name:            name,
 		Description:     &description,
 		OrganizationIDs: []string{orgID},
@@ -172,20 +170,19 @@ func CreatePAT(ctx context.Context, client *openlane.OpenlaneClient, orgID, name
 }
 
 // InitializeClient creates an Openlane client with the given token and optional organization ID
-func InitializeClient(baseURL *url.URL, token, orgID string) (*openlane.OpenlaneClient, error) {
-	config := openlane.NewDefaultConfig()
-
-	if orgID != "" {
-		config.Interceptors = append(config.Interceptors, openlane.WithOrganizationHeader(orgID))
-	}
-
-	client, err := openlane.New(
-		config,
-		openlane.WithBaseURL(baseURL),
+func InitializeClient(baseURL *url.URL, token, orgID string) (*openlane.Client, error) {
+	opts := []openlane.ClientOption{
+		openlane.WithBaseURL(baseURL.String()),
 		openlane.WithCredentials(openlane.Authorization{
 			BearerToken: token,
 		}),
-	)
+	}
+
+	if orgID != "" {
+		opts = append(opts, openlane.WithInterceptors(openlane.WithOrganizationHeader(orgID)))
+	}
+
+	client, err := openlane.New(opts...)
 	if err != nil {
 		return nil, fmt.Errorf("create client: %w", err)
 	}
@@ -209,10 +206,10 @@ func CreateUpload(filePath string) (*graphql.Upload, error) {
 }
 
 // CreateEvidenceWithFile creates evidence with an attached file
-func CreateEvidenceWithFile(ctx context.Context, client *openlane.OpenlaneClient, name, desc string, upload *graphql.Upload) (*openlane.CreateEvidence, error) {
+func CreateEvidenceWithFile(ctx context.Context, client *openlane.Client, name, desc string, upload *graphql.Upload) (*graphclient.CreateEvidence, error) {
 	status := enums.EvidenceStatusSubmitted
 
-	input := openlane.CreateEvidenceInput{
+	input := graphclient.CreateEvidenceInput{
 		Name:        name,
 		Description: &desc,
 		Status:      &status,

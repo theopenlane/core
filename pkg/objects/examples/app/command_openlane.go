@@ -4,12 +4,10 @@ package app
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/url"
 	"os"
-	"path/filepath"
 
 	"github.com/urfave/cli/v3"
 
@@ -139,35 +137,6 @@ func runOpenlane(ctx context.Context, out io.Writer, cfg openlaneConfig) error {
 					fmt.Fprintf(out, "      Presigned URL: %s\n", *edge.Node.PresignedURL)
 				}
 			}
-		}
-
-		if fileID != "" {
-			base64Response, err := openlane.FetchFileBase64(ctx, client, fileID)
-			if err != nil {
-				return fmt.Errorf("fetch base64 response: %w", err)
-			}
-
-			outputPath := cfg.Base64Output
-			if outputPath == "" {
-				outputPath = resolvePath(filepath.Join("tmp", fmt.Sprintf("file-base64-%s.json", fileID)))
-			} else {
-				outputPath = resolvePath(outputPath)
-			}
-
-			if err := os.MkdirAll(filepath.Dir(outputPath), 0o755); err != nil {
-				return fmt.Errorf("create base64 output directory: %w", err)
-			}
-
-			payload, err := json.MarshalIndent(base64Response, "", "  ")
-			if err != nil {
-				return fmt.Errorf("marshal base64 response: %w", err)
-			}
-
-			if err := os.WriteFile(outputPath, payload, 0o644); err != nil {
-				return fmt.Errorf("write base64 response: %w", err)
-			}
-
-			fmt.Fprintf(out, "  Base64 response written to: %s\n", outputPath)
 		}
 	}
 
