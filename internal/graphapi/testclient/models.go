@@ -930,6 +930,24 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Input for applying framework upgrade
+type ApplyFrameworkUpgradeInput struct {
+	// standardID is the ID of the current standard to upgrade from
+	StandardID string `json:"standardID"`
+	// targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+	TargetRevision *string `json:"targetRevision,omitempty"`
+}
+
+// Response for applying framework upgrade
+type ApplyFrameworkUpgradePayload struct {
+	// Indicates if the upgrade was successful
+	Success bool `json:"success"`
+	// Summary of changes applied
+	Summary *FrameworkUpgradeSummary `json:"summary"`
+	// Message describing the result
+	Message *string `json:"message,omitempty"`
+}
+
 type Assessment struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
@@ -2975,6 +2993,16 @@ type ControlOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order Controls.
 	Field ControlOrderField `json:"field"`
+}
+
+// Represents a control that has changed between revisions
+type ControlUpdateChange struct {
+	// The control currently in the organization
+	CurrentControl *Control `json:"currentControl"`
+	// The control from the new standard revision
+	TargetControl *Control `json:"targetControl"`
+	// List of field names that have changed
+	Changes []string `json:"changes"`
 }
 
 // Return response for updateControl mutation
@@ -11718,6 +11746,46 @@ type FindingWhereInput struct {
 	// control_mappings edge predicates
 	HasControlMappings     *bool                       `json:"hasControlMappings,omitempty"`
 	HasControlMappingsWith []*FindingControlWhereInput `json:"hasControlMappingsWith,omitempty"`
+}
+
+// Represents the diff between current and target framework revisions
+type FrameworkUpgradeDiff struct {
+	// The current standard revision in the organization
+	CurrentStandard *Standard `json:"currentStandard"`
+	// The target standard revision to upgrade to
+	TargetStandard *Standard `json:"targetStandard"`
+	// Controls that will be added (exist in target but not in org)
+	AddedControls []*Control `json:"addedControls"`
+	// Controls that will be updated (exist in both but have changed)
+	UpdatedControls []*ControlUpdateChange `json:"updatedControls"`
+	// Controls that will be removed (exist in org but not in target)
+	RemovedControls []*Control `json:"removedControls"`
+	// Controls that are unchanged between revisions
+	UnchangedControls []*Control `json:"unchangedControls"`
+	// Summary counts
+	Summary *FrameworkUpgradeSummary `json:"summary"`
+}
+
+// Input for calculating framework upgrade diff
+type FrameworkUpgradeDiffInput struct {
+	// standardID is the ID of the current standard to upgrade from
+	StandardID string `json:"standardID"`
+	// targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+	TargetRevision *string `json:"targetRevision,omitempty"`
+}
+
+// Summary statistics for framework upgrade
+type FrameworkUpgradeSummary struct {
+	// Number of controls to be added
+	AddedCount int64 `json:"addedCount"`
+	// Number of controls to be updated
+	UpdatedCount int64 `json:"updatedCount"`
+	// Number of controls to be removed
+	RemovedCount int64 `json:"removedCount"`
+	// Number of controls that are unchanged
+	UnchangedCount int64 `json:"unchangedCount"`
+	// Total number of controls affected
+	TotalAffected int64 `json:"totalAffected"`
 }
 
 type Group struct {

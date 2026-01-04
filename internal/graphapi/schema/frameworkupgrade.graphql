@@ -1,0 +1,141 @@
+"""
+Input for calculating framework upgrade diff
+"""
+input FrameworkUpgradeDiffInput {
+    """
+    standardID is the ID of the current standard to upgrade from
+    """
+    standardID: ID!
+    """
+    targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+    """
+    targetRevision: String
+}
+
+"""
+Input for applying framework upgrade
+"""
+input ApplyFrameworkUpgradeInput {
+    """
+    standardID is the ID of the current standard to upgrade from
+    """
+    standardID: ID!
+    """
+    targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+    """
+    targetRevision: String
+}
+
+"""
+Represents a control that has changed between revisions
+"""
+type ControlUpdateChange {
+    """
+    The control currently in the organization
+    """
+    currentControl: Control!
+    """
+    The control from the new standard revision
+    """
+    targetControl: Control!
+    """
+    List of field names that have changed
+    """
+    changes: [String!]!
+}
+
+"""
+Represents the diff between current and target framework revisions
+"""
+type FrameworkUpgradeDiff {
+    """
+    The current standard revision in the organization
+    """
+    currentStandard: Standard!
+    """
+    The target standard revision to upgrade to
+    """
+    targetStandard: Standard!
+    """
+    Controls that will be added (exist in target but not in org)
+    """
+    addedControls: [Control!]!
+    """
+    Controls that will be updated (exist in both but have changed)
+    """
+    updatedControls: [ControlUpdateChange!]!
+    """
+    Controls that will be removed (exist in org but not in target)
+    """
+    removedControls: [Control!]!
+    """
+    Controls that are unchanged between revisions
+    """
+    unchangedControls: [Control!]!
+    """
+    Summary counts
+    """
+    summary: FrameworkUpgradeSummary!
+}
+
+"""
+Summary statistics for framework upgrade
+"""
+type FrameworkUpgradeSummary {
+    """
+    Number of controls to be added
+    """
+    addedCount: Int!
+    """
+    Number of controls to be updated
+    """
+    updatedCount: Int!
+    """
+    Number of controls to be removed
+    """
+    removedCount: Int!
+    """
+    Number of controls that are unchanged
+    """
+    unchangedCount: Int!
+    """
+    Total number of controls affected
+    """
+    totalAffected: Int!
+}
+
+"""
+Response for applying framework upgrade
+"""
+type ApplyFrameworkUpgradePayload {
+    """
+    Indicates if the upgrade was successful
+    """
+    success: Boolean!
+    """
+    Summary of changes applied
+    """
+    summary: FrameworkUpgradeSummary!
+    """
+    Message describing the result
+    """
+    message: String
+}
+
+extend type Query {
+    """
+    Calculate the diff between the current framework revision and a target revision
+    """
+    frameworkUpgradeDiff(
+        input: FrameworkUpgradeDiffInput!
+    ): FrameworkUpgradeDiff!
+}
+
+extend type Mutation {
+    """
+    Apply framework upgrade to migrate controls to a new revision
+    """
+    applyFrameworkUpgrade(
+        input: ApplyFrameworkUpgradeInput!
+    ): ApplyFrameworkUpgradePayload!
+}

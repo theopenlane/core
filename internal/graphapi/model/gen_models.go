@@ -88,6 +88,24 @@ type AddProgramMembershipInput struct {
 	UserID string      `json:"userID"`
 }
 
+// Input for applying framework upgrade
+type ApplyFrameworkUpgradeInput struct {
+	// standardID is the ID of the current standard to upgrade from
+	StandardID string `json:"standardID"`
+	// targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+	TargetRevision *string `json:"targetRevision,omitempty"`
+}
+
+// Response for applying framework upgrade
+type ApplyFrameworkUpgradePayload struct {
+	// Indicates if the upgrade was successful
+	Success bool `json:"success"`
+	// Summary of changes applied
+	Summary *FrameworkUpgradeSummary `json:"summary"`
+	// Message describing the result
+	Message *string `json:"message,omitempty"`
+}
+
 // Return response for deleteBulkAssessment mutation
 type AssessmentBulkDeletePayload struct {
 	// Deleted assessment IDs
@@ -376,6 +394,16 @@ type ControlObjectiveDeletePayload struct {
 type ControlObjectiveUpdatePayload struct {
 	// Updated controlObjective
 	ControlObjective *generated.ControlObjective `json:"controlObjective"`
+}
+
+// Represents a control that has changed between revisions
+type ControlUpdateChange struct {
+	// The control currently in the organization
+	CurrentControl *generated.Control `json:"currentControl"`
+	// The control from the new standard revision
+	TargetControl *generated.Control `json:"targetControl"`
+	// List of field names that have changed
+	Changes []string `json:"changes"`
 }
 
 // Return response for updateControl mutation
@@ -892,6 +920,46 @@ type FindingDeletePayload struct {
 type FindingUpdatePayload struct {
 	// Updated finding
 	Finding *generated.Finding `json:"finding"`
+}
+
+// Represents the diff between current and target framework revisions
+type FrameworkUpgradeDiff struct {
+	// The current standard revision in the organization
+	CurrentStandard *generated.Standard `json:"currentStandard"`
+	// The target standard revision to upgrade to
+	TargetStandard *generated.Standard `json:"targetStandard"`
+	// Controls that will be added (exist in target but not in org)
+	AddedControls []*generated.Control `json:"addedControls"`
+	// Controls that will be updated (exist in both but have changed)
+	UpdatedControls []*ControlUpdateChange `json:"updatedControls"`
+	// Controls that will be removed (exist in org but not in target)
+	RemovedControls []*generated.Control `json:"removedControls"`
+	// Controls that are unchanged between revisions
+	UnchangedControls []*generated.Control `json:"unchangedControls"`
+	// Summary counts
+	Summary *FrameworkUpgradeSummary `json:"summary"`
+}
+
+// Input for calculating framework upgrade diff
+type FrameworkUpgradeDiffInput struct {
+	// standardID is the ID of the current standard to upgrade from
+	StandardID string `json:"standardID"`
+	// targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+	TargetRevision *string `json:"targetRevision,omitempty"`
+}
+
+// Summary statistics for framework upgrade
+type FrameworkUpgradeSummary struct {
+	// Number of controls to be added
+	AddedCount int `json:"addedCount"`
+	// Number of controls to be updated
+	UpdatedCount int `json:"updatedCount"`
+	// Number of controls to be removed
+	RemovedCount int `json:"removedCount"`
+	// Number of controls that are unchanged
+	UnchangedCount int `json:"unchangedCount"`
+	// Total number of controls affected
+	TotalAffected int `json:"totalAffected"`
 }
 
 // Return response for createBulkGroup mutation

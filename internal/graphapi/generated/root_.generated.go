@@ -237,6 +237,12 @@ type ComplexityRoot struct {
 		ActionPlan func(childComplexity int) int
 	}
 
+	ApplyFrameworkUpgradePayload struct {
+		Message func(childComplexity int) int
+		Success func(childComplexity int) int
+		Summary func(childComplexity int) int
+	}
+
 	Assessment struct {
 		AssessmentResponses func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		AssessmentType      func(childComplexity int) int
@@ -697,6 +703,12 @@ type ComplexityRoot struct {
 
 	ControlObjectiveUpdatePayload struct {
 		ControlObjective func(childComplexity int) int
+	}
+
+	ControlUpdateChange struct {
+		Changes        func(childComplexity int) int
+		CurrentControl func(childComplexity int) int
+		TargetControl  func(childComplexity int) int
 	}
 
 	ControlUpdatePayload struct {
@@ -1663,6 +1675,24 @@ type ComplexityRoot struct {
 		Finding func(childComplexity int) int
 	}
 
+	FrameworkUpgradeDiff struct {
+		AddedControls     func(childComplexity int) int
+		CurrentStandard   func(childComplexity int) int
+		RemovedControls   func(childComplexity int) int
+		Summary           func(childComplexity int) int
+		TargetStandard    func(childComplexity int) int
+		UnchangedControls func(childComplexity int) int
+		UpdatedControls   func(childComplexity int) int
+	}
+
+	FrameworkUpgradeSummary struct {
+		AddedCount     func(childComplexity int) int
+		RemovedCount   func(childComplexity int) int
+		TotalAffected  func(childComplexity int) int
+		UnchangedCount func(childComplexity int) int
+		UpdatedCount   func(childComplexity int) int
+	}
+
 	Group struct {
 		ActionPlanBlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		ActionPlanEditors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
@@ -2436,6 +2466,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		ApplyFrameworkUpgrade                 func(childComplexity int, input model.ApplyFrameworkUpgradeInput) int
 		CloneBulkCSVControl                   func(childComplexity int, input graphql.Upload) int
 		CreateAPIToken                        func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                      func(childComplexity int, input generated.CreateActionPlanInput) int
@@ -3618,6 +3649,7 @@ type ComplexityRoot struct {
 		FindingControls                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
 		FindingSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		FrameworkUpgradeDiff            func(childComplexity int, input model.FrameworkUpgradeDiffInput) int
 		Group                           func(childComplexity int, id string) int
 		GroupMembership                 func(childComplexity int, id string) int
 		GroupMemberships                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
@@ -6420,6 +6452,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanUpdatePayload.ActionPlan(childComplexity), true
 
+	case "ApplyFrameworkUpgradePayload.message":
+		if e.complexity.ApplyFrameworkUpgradePayload.Message == nil {
+			break
+		}
+
+		return e.complexity.ApplyFrameworkUpgradePayload.Message(childComplexity), true
+
+	case "ApplyFrameworkUpgradePayload.success":
+		if e.complexity.ApplyFrameworkUpgradePayload.Success == nil {
+			break
+		}
+
+		return e.complexity.ApplyFrameworkUpgradePayload.Success(childComplexity), true
+
+	case "ApplyFrameworkUpgradePayload.summary":
+		if e.complexity.ApplyFrameworkUpgradePayload.Summary == nil {
+			break
+		}
+
+		return e.complexity.ApplyFrameworkUpgradePayload.Summary(childComplexity), true
+
 	case "Assessment.assessmentResponses":
 		if e.complexity.Assessment.AssessmentResponses == nil {
 			break
@@ -8669,6 +8722,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlObjectiveUpdatePayload.ControlObjective(childComplexity), true
+
+	case "ControlUpdateChange.changes":
+		if e.complexity.ControlUpdateChange.Changes == nil {
+			break
+		}
+
+		return e.complexity.ControlUpdateChange.Changes(childComplexity), true
+
+	case "ControlUpdateChange.currentControl":
+		if e.complexity.ControlUpdateChange.CurrentControl == nil {
+			break
+		}
+
+		return e.complexity.ControlUpdateChange.CurrentControl(childComplexity), true
+
+	case "ControlUpdateChange.targetControl":
+		if e.complexity.ControlUpdateChange.TargetControl == nil {
+			break
+		}
+
+		return e.complexity.ControlUpdateChange.TargetControl(childComplexity), true
 
 	case "ControlUpdatePayload.control":
 		if e.complexity.ControlUpdatePayload.Control == nil {
@@ -13224,6 +13298,90 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.FindingUpdatePayload.Finding(childComplexity), true
 
+	case "FrameworkUpgradeDiff.addedControls":
+		if e.complexity.FrameworkUpgradeDiff.AddedControls == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.AddedControls(childComplexity), true
+
+	case "FrameworkUpgradeDiff.currentStandard":
+		if e.complexity.FrameworkUpgradeDiff.CurrentStandard == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.CurrentStandard(childComplexity), true
+
+	case "FrameworkUpgradeDiff.removedControls":
+		if e.complexity.FrameworkUpgradeDiff.RemovedControls == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.RemovedControls(childComplexity), true
+
+	case "FrameworkUpgradeDiff.summary":
+		if e.complexity.FrameworkUpgradeDiff.Summary == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.Summary(childComplexity), true
+
+	case "FrameworkUpgradeDiff.targetStandard":
+		if e.complexity.FrameworkUpgradeDiff.TargetStandard == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.TargetStandard(childComplexity), true
+
+	case "FrameworkUpgradeDiff.unchangedControls":
+		if e.complexity.FrameworkUpgradeDiff.UnchangedControls == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.UnchangedControls(childComplexity), true
+
+	case "FrameworkUpgradeDiff.updatedControls":
+		if e.complexity.FrameworkUpgradeDiff.UpdatedControls == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeDiff.UpdatedControls(childComplexity), true
+
+	case "FrameworkUpgradeSummary.addedCount":
+		if e.complexity.FrameworkUpgradeSummary.AddedCount == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeSummary.AddedCount(childComplexity), true
+
+	case "FrameworkUpgradeSummary.removedCount":
+		if e.complexity.FrameworkUpgradeSummary.RemovedCount == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeSummary.RemovedCount(childComplexity), true
+
+	case "FrameworkUpgradeSummary.totalAffected":
+		if e.complexity.FrameworkUpgradeSummary.TotalAffected == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeSummary.TotalAffected(childComplexity), true
+
+	case "FrameworkUpgradeSummary.unchangedCount":
+		if e.complexity.FrameworkUpgradeSummary.UnchangedCount == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeSummary.UnchangedCount(childComplexity), true
+
+	case "FrameworkUpgradeSummary.updatedCount":
+		if e.complexity.FrameworkUpgradeSummary.UpdatedCount == nil {
+			break
+		}
+
+		return e.complexity.FrameworkUpgradeSummary.UpdatedCount(childComplexity), true
+
 	case "Group.actionPlanBlockedGroups":
 		if e.complexity.Group.ActionPlanBlockedGroups == nil {
 			break
@@ -16832,6 +16990,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.MappedControlUpdatePayload.MappedControl(childComplexity), true
+
+	case "Mutation.applyFrameworkUpgrade":
+		if e.complexity.Mutation.ApplyFrameworkUpgrade == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_applyFrameworkUpgrade_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ApplyFrameworkUpgrade(childComplexity, args["input"].(model.ApplyFrameworkUpgradeInput)), true
 
 	case "Mutation.cloneBulkCSVControl":
 		if e.complexity.Mutation.CloneBulkCSVControl == nil {
@@ -26605,6 +26775,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
+	case "Query.frameworkUpgradeDiff":
+		if e.complexity.Query.FrameworkUpgradeDiff == nil {
+			break
+		}
+
+		args, err := ec.field_Query_frameworkUpgradeDiff_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.FrameworkUpgradeDiff(childComplexity, args["input"].(model.FrameworkUpgradeDiffInput)), true
 
 	case "Query.group":
 		if e.complexity.Query.Group == nil {
@@ -36894,6 +37076,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputActionPlanOrder,
 		ec.unmarshalInputActionPlanWhereInput,
 		ec.unmarshalInputAddProgramMembershipInput,
+		ec.unmarshalInputApplyFrameworkUpgradeInput,
 		ec.unmarshalInputAssessmentOrder,
 		ec.unmarshalInputAssessmentResponseOrder,
 		ec.unmarshalInputAssessmentResponseWhereInput,
@@ -37032,6 +37215,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputFindingControlWhereInput,
 		ec.unmarshalInputFindingOrder,
 		ec.unmarshalInputFindingWhereInput,
+		ec.unmarshalInputFrameworkUpgradeDiffInput,
 		ec.unmarshalInputGroupMembersInput,
 		ec.unmarshalInputGroupMembershipOrder,
 		ec.unmarshalInputGroupMembershipWhereInput,
@@ -101088,6 +101272,148 @@ type FindingControlBulkCreatePayload {
     """
     findingControls: [FindingControl!]
 }`, BuiltIn: false},
+	{Name: "../schema/frameworkupgrade.graphql", Input: `"""
+Input for calculating framework upgrade diff
+"""
+input FrameworkUpgradeDiffInput {
+    """
+    standardID is the ID of the current standard to upgrade from
+    """
+    standardID: ID!
+    """
+    targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+    """
+    targetRevision: String
+}
+
+"""
+Input for applying framework upgrade
+"""
+input ApplyFrameworkUpgradeInput {
+    """
+    standardID is the ID of the current standard to upgrade from
+    """
+    standardID: ID!
+    """
+    targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+    """
+    targetRevision: String
+}
+
+"""
+Represents a control that has changed between revisions
+"""
+type ControlUpdateChange {
+    """
+    The control currently in the organization
+    """
+    currentControl: Control!
+    """
+    The control from the new standard revision
+    """
+    targetControl: Control!
+    """
+    List of field names that have changed
+    """
+    changes: [String!]!
+}
+
+"""
+Represents the diff between current and target framework revisions
+"""
+type FrameworkUpgradeDiff {
+    """
+    The current standard revision in the organization
+    """
+    currentStandard: Standard!
+    """
+    The target standard revision to upgrade to
+    """
+    targetStandard: Standard!
+    """
+    Controls that will be added (exist in target but not in org)
+    """
+    addedControls: [Control!]!
+    """
+    Controls that will be updated (exist in both but have changed)
+    """
+    updatedControls: [ControlUpdateChange!]!
+    """
+    Controls that will be removed (exist in org but not in target)
+    """
+    removedControls: [Control!]!
+    """
+    Controls that are unchanged between revisions
+    """
+    unchangedControls: [Control!]!
+    """
+    Summary counts
+    """
+    summary: FrameworkUpgradeSummary!
+}
+
+"""
+Summary statistics for framework upgrade
+"""
+type FrameworkUpgradeSummary {
+    """
+    Number of controls to be added
+    """
+    addedCount: Int!
+    """
+    Number of controls to be updated
+    """
+    updatedCount: Int!
+    """
+    Number of controls to be removed
+    """
+    removedCount: Int!
+    """
+    Number of controls that are unchanged
+    """
+    unchangedCount: Int!
+    """
+    Total number of controls affected
+    """
+    totalAffected: Int!
+}
+
+"""
+Response for applying framework upgrade
+"""
+type ApplyFrameworkUpgradePayload {
+    """
+    Indicates if the upgrade was successful
+    """
+    success: Boolean!
+    """
+    Summary of changes applied
+    """
+    summary: FrameworkUpgradeSummary!
+    """
+    Message describing the result
+    """
+    message: String
+}
+
+extend type Query {
+    """
+    Calculate the diff between the current framework revision and a target revision
+    """
+    frameworkUpgradeDiff(
+        input: FrameworkUpgradeDiffInput!
+    ): FrameworkUpgradeDiff!
+}
+
+extend type Mutation {
+    """
+    Apply framework upgrade to migrate controls to a new revision
+    """
+    applyFrameworkUpgrade(
+        input: ApplyFrameworkUpgradeInput!
+    ): ApplyFrameworkUpgradePayload!
+}
+`, BuiltIn: false},
 	{Name: "../schema/group.graphql", Input: `extend type Query {
     """
     Look up group by ID

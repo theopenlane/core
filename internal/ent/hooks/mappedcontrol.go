@@ -10,13 +10,21 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 )
+
+// SuggestedMappingContextKey allows system workflows to create suggested mappings.
+type SuggestedMappingContextKey struct{}
 
 // HookMappedControl runs on mapped control create and update mutations to restrict certain fields to system admins only
 func HookMappedControl() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return hook.MappedControlFunc(func(ctx context.Context, m *generated.MappedControlMutation) (generated.Value, error) {
 			if auth.IsSystemAdminFromContext(ctx) {
+				return next.Mutate(ctx, m)
+			}
+
+			if _, ok := contextx.From[SuggestedMappingContextKey](ctx); ok {
 				return next.Mutate(ctx, m)
 			}
 

@@ -1,0 +1,83 @@
+mutation ApplyFrameworkUpgrade($input: ApplyFrameworkUpgradeInput!) {
+  applyFrameworkUpgrade(input: $input) {
+    success
+    summary {
+      addedCount
+      updatedCount
+      removedCount
+      unchangedCount
+      totalAffected
+    }
+    message
+  }
+}
+
+query GetFrameworkUpgradeDiffs($input: FrameworkUpgradeDiffInput!) {
+  frameworkUpgradeDiff(input: $input) {
+    currentStandard {
+      id
+      name
+      shortName
+      revision
+      version
+    }
+    targetStandard {
+      id
+      name
+      shortName
+      revision
+      version
+    }
+    addedControls {
+      id
+      refCode
+      title
+      description
+      category
+      subcategory
+      controlType
+      source
+    }
+    updatedControls {
+      currentControl {
+        id
+        refCode
+        title
+        description
+        category
+        subcategory
+        controlType
+      }
+      targetControl {
+        id
+        refCode
+        title
+        description
+        category
+        subcategory
+        controlType
+      }
+      changes
+    }
+    removedControls {
+      id
+      refCode
+      title
+      description
+      category
+      subcategory
+    }
+    unchangedControls {
+      id
+      refCode
+      title
+    }
+    summary {
+      addedCount
+      updatedCount
+      removedCount
+      unchangedCount
+      totalAffected
+    }
+  }
+}

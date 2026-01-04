@@ -1695,6 +1695,36 @@ It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
 """
 scalar Address
 scalar Any
+"""
+Input for applying framework upgrade
+"""
+input ApplyFrameworkUpgradeInput {
+	"""
+	standardID is the ID of the current standard to upgrade from
+	"""
+	standardID: ID!
+	"""
+	targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+	"""
+	targetRevision: String
+}
+"""
+Response for applying framework upgrade
+"""
+type ApplyFrameworkUpgradePayload {
+	"""
+	Indicates if the upgrade was successful
+	"""
+	success: Boolean!
+	"""
+	Summary of changes applied
+	"""
+	summary: FrameworkUpgradeSummary!
+	"""
+	Message describing the result
+	"""
+	message: String
+}
 type Assessment implements Node {
 	id: ID!
 	createdAt: Time
@@ -6186,6 +6216,23 @@ enum ControlOrderField {
 	CONTROL_OWNER_name
 	DELEGATE_name
 	RESPONSIBLE_PARTY_name
+}
+"""
+Represents a control that has changed between revisions
+"""
+type ControlUpdateChange {
+	"""
+	The control currently in the organization
+	"""
+	currentControl: Control!
+	"""
+	The control from the new standard revision
+	"""
+	targetControl: Control!
+	"""
+	List of field names that have changed
+	"""
+	changes: [String!]!
 }
 """
 Return response for updateControl mutation
@@ -21116,6 +21163,77 @@ input FindingWhereInput {
 	hasControlMappings: Boolean
 	hasControlMappingsWith: [FindingControlWhereInput!]
 }
+"""
+Represents the diff between current and target framework revisions
+"""
+type FrameworkUpgradeDiff {
+	"""
+	The current standard revision in the organization
+	"""
+	currentStandard: Standard!
+	"""
+	The target standard revision to upgrade to
+	"""
+	targetStandard: Standard!
+	"""
+	Controls that will be added (exist in target but not in org)
+	"""
+	addedControls: [Control!]!
+	"""
+	Controls that will be updated (exist in both but have changed)
+	"""
+	updatedControls: [ControlUpdateChange!]!
+	"""
+	Controls that will be removed (exist in org but not in target)
+	"""
+	removedControls: [Control!]!
+	"""
+	Controls that are unchanged between revisions
+	"""
+	unchangedControls: [Control!]!
+	"""
+	Summary counts
+	"""
+	summary: FrameworkUpgradeSummary!
+}
+"""
+Input for calculating framework upgrade diff
+"""
+input FrameworkUpgradeDiffInput {
+	"""
+	standardID is the ID of the current standard to upgrade from
+	"""
+	standardID: ID!
+	"""
+	targetRevision is the specific revision to upgrade to (optional, defaults to latest)
+	"""
+	targetRevision: String
+}
+"""
+Summary statistics for framework upgrade
+"""
+type FrameworkUpgradeSummary {
+	"""
+	Number of controls to be added
+	"""
+	addedCount: Int!
+	"""
+	Number of controls to be updated
+	"""
+	updatedCount: Int!
+	"""
+	Number of controls to be removed
+	"""
+	removedCount: Int!
+	"""
+	Number of controls that are unchanged
+	"""
+	unchangedCount: Int!
+	"""
+	Total number of controls affected
+	"""
+	totalAffected: Int!
+}
 type Group implements Node {
 	id: ID!
 	createdAt: Time
@@ -30418,6 +30536,10 @@ type Mutation {
 		"""
 		id: ID!
 	): FindingControlDeletePayload!
+	"""
+	Apply framework upgrade to migrate controls to a new revision
+	"""
+	applyFrameworkUpgrade(input: ApplyFrameworkUpgradeInput!): ApplyFrameworkUpgradePayload!
 	"""
 	Create a new group
 	"""
@@ -45079,6 +45201,10 @@ type Query {
 		"""
 		id: ID!
 	): FindingControl!
+	"""
+	Calculate the diff between the current framework revision and a target revision
+	"""
+	frameworkUpgradeDiff(input: FrameworkUpgradeDiffInput!): FrameworkUpgradeDiff!
 	"""
 	Look up group by ID
 	"""

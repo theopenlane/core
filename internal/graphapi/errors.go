@@ -108,3 +108,5 @@ func (e NotAuthorizedError) Module() models.OrgModule {
 func newPermissionDeniedError() NotAuthorizedError {
 	return NotAuthorizedError{}
 }
+
+var ErrStandardNotFound = errors.New("standard not found")
