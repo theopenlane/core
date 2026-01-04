@@ -16,31 +16,28 @@ func defaultTopic() TypedTopic[Event] {
 	)
 }
 
-func subscribeDefaultTopic(pool *EventPool, listener TypedListener[Event], opts ...ListenerOption) (string, error) {
-	return BindListener(defaultTopic(), listener, opts...).Register(pool)
+func subscribeDefaultTopic(bus *EventBus, listener TypedListener[Event]) (string, error) {
+	return BindListener(defaultTopic(), listener).Register(bus)
 }
 
-func emitDefaultTopicSync(pool *EventPool, payload any) []error {
+func emitDefaultTopicSync(bus *EventBus, payload any) []error {
 	topic := defaultTopic()
-	return pool.EmitSync(topic.Name(), NewBaseEvent(topic.Name(), payload))
+	return bus.EmitSync(topic.Name(), NewBaseEvent(topic.Name(), payload))
 }
 
-func emitDefaultTopicAsync(pool *EventPool, payload any) <-chan error {
+func emitDefaultTopicAsync(bus *EventBus, payload any) <-chan error {
 	topic := defaultTopic()
-	return pool.Emit(topic.Name(), NewBaseEvent(topic.Name(), payload))
+	return bus.Emit(topic.Name(), NewBaseEvent(topic.Name(), payload))
 }
 
 const errorMessage = "On() failed with error: %v"
 
-// TestWithErrorHandler tests that the custom error handler is called on error
-func TestWithErrorHandler(t *testing.T) {
-	// Define a variable to determine if the custom error handler was called
+// TestErrorHandler tests that the custom error handler is called on error
+func TestErrorHandler(t *testing.T) {
 	var handlerCalled bool
 
-	// Define a custom error to be returned by a listener
 	customError := errors.New("custom error") //nolint:err113
 
-	// Define a custom error handler that sets handlerCalled to true
 	customErrorHandler := func(event Event, err error) error {
 		if errors.Is(err, customError) {
 			handlerCalled = true
@@ -48,13 +45,11 @@ func TestWithErrorHandler(t *testing.T) {
 			t.Logf("Custom error handler called with event: %s and error: %s", event.Topic(), err.Error())
 		}
 
-		return nil // Returning nil to indicate the error is handled
+		return nil
 	}
 
-	// Create a new EventPool with the custom error handler
-	soiree := NewEventPool(WithErrorHandler(customErrorHandler))
+	soiree := New(ErrorHandler(customErrorHandler))
 
-	// Define a listener that returns the custom error
 	listener := func(_ *EventContext, e Event) error {
 		return customError
 	}
@@ -63,25 +58,19 @@ func TestWithErrorHandler(t *testing.T) {
 		t.Fatalf(errorMessage, err)
 	}
 
-	// Emit the event synchronously to trigger the error
 	emitDefaultTopicSync(soiree, "testPayload")
 
-	// Check if the custom error handler was called
 	if !handlerCalled {
 		t.Fatalf("Custom error handler was not called on listener error")
 	}
 }
 
-func TestWithErrorHandlerAsync(t *testing.T) {
-	// Define a variable to determine if the custom error handler was called
+func TestErrorHandlerAsync(t *testing.T) {
 	var handlerCalled bool
-	// To safely update handlerCalled from different goroutines
 	var handlerMutex sync.Mutex
 
-	// Define a custom error to be returned by a listener
 	customError := errors.New("custom error") //nolint:err113
 
-	// Define a custom error handler that sets handlerCalled to true
 	customErrorHandler := func(event Event, err error) error {
 		handlerMutex.Lock()
 
@@ -91,33 +80,27 @@ func TestWithErrorHandlerAsync(t *testing.T) {
 			handlerCalled = true
 		}
 
-		return nil // Assume the error is handled and return nil
+		return nil
 	}
 
-	// Create a new EventPool with the custom error handler
-	soiree := NewEventPool(WithErrorHandler(customErrorHandler))
+	soiree := New(ErrorHandler(customErrorHandler))
 
-	// Define a listener that returns the custom error
 	listener := func(_ *EventContext, e Event) error {
 		return customError
 	}
 
-	// Subscribe the listener to a topic
 	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf("Error occurred: %v", err)
 	}
 
-	// Emit the event asynchronously to trigger the error
 	errChan := emitDefaultTopicAsync(soiree, "testPayload")
 
-	// Wait for all errors to be processed
 	for err := range errChan {
 		if err != nil {
 			t.Errorf("Expected nil error due to custom handler, got: %v", err)
 		}
 	}
 
-	// Check if the custom error handler was called
 	handlerMutex.Lock()
 	wasHandlerCalled := handlerCalled
 	handlerMutex.Unlock()
@@ -127,54 +110,43 @@ func TestWithErrorHandlerAsync(t *testing.T) {
 	}
 }
 
-func TestWithPanicHandlerSync(t *testing.T) {
-	// Flag to indicate panic handler invocation
+func TestPanicHandlerSync(t *testing.T) {
 	var panicHandlerInvoked bool
 
-	// Define a custom panic handler
 	customPanicHandler := func(p any) {
 		if p == "test panic" {
 			panicHandlerInvoked = true
 		}
 	}
 
-	// Create a new EventPool with the custom panic handler
-	soiree := NewEventPool(WithPanicHandler(customPanicHandler))
+	soiree := New(Panics(customPanicHandler))
 
-	// Define a listener that panics
 	listener := func(_ *EventContext, e Event) error {
 		panic("test panic")
 	}
 
-	// Subscribe the listener to a topic
 	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf("errorMessage: %v", err)
 	}
 
-	// Recover from panic to prevent test failure
 	defer func() {
 		if r := recover(); r != nil {
-			// This is expected
 			t.Logf("Recovered from panic: %v", r)
 		}
 	}()
 
-	// Emit the event synchronously to trigger the panic
 	emitDefaultTopicSync(soiree, "testPayload")
 
-	// Verify that the custom panic handler was invoked
 	if !panicHandlerInvoked {
 		t.Fatalf("Custom panic handler was not called on listener panic")
 	}
 }
 
-func TestWithPanicHandlerAsync(t *testing.T) {
-	// Flag to indicate panic handler invocation
+func TestPanicHandlerAsync(t *testing.T) {
 	var panicHandlerInvoked bool
 
-	var panicHandlerMutex sync.Mutex // To safely update panicHandlerInvoked from different goroutines
+	var panicHandlerMutex sync.Mutex
 
-	// Define a custom panic handler
 	customPanicHandler := func(p any) {
 		panicHandlerMutex.Lock()
 		defer panicHandlerMutex.Unlock()
@@ -184,28 +156,21 @@ func TestWithPanicHandlerAsync(t *testing.T) {
 		}
 	}
 
-	// Create a new EventPool with the custom panic handler.
-	soiree := NewEventPool(WithPanicHandler(customPanicHandler))
+	soiree := New(Panics(customPanicHandler))
 
-	// Define a listener that panics
 	listener := func(_ *EventContext, e Event) error {
 		panic("test panic")
 	}
 
-	// Subscribe the listener to a topic
 	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf(errorMessage, err)
 	}
 
-	// Emit the event asynchronously to trigger the panic
 	errChan := emitDefaultTopicAsync(soiree, "testPayload")
 
-	// Wait for all events to be processed (which includes recovering from panic)
 	for range errChan {
-		// Normally, you'd check for errors here, but in this case, we expect a panic, not an error
 	}
 
-	// Verify that the custom panic handler was invoked
 	panicHandlerMutex.Lock()
 	wasPanicHandlerInvoked := panicHandlerInvoked
 	panicHandlerMutex.Unlock()
@@ -215,68 +180,55 @@ func TestWithPanicHandlerAsync(t *testing.T) {
 	}
 }
 
-func TestWithIDGenerator(t *testing.T) {
-	// Custom ID to be returned by the custom ID generator
+func TestIDGenerator(t *testing.T) {
 	customID := "customID"
 
-	// Define a custom ID generator that returns the custom ID
 	customIDGenerator := func() string {
 		return customID
 	}
 
-	// Create a new EventPool with the custom ID generator
-	soiree := NewEventPool(WithIDGenerator(customIDGenerator))
+	soiree := New(IDGenerator(customIDGenerator))
 
-	// Define a no-op listener
 	listener := func(_ *EventContext, e Event) error {
 		return nil
 	}
 
-	// Subscribe the listener to a topic and capture the returned ID
 	returnedID, err := subscribeDefaultTopic(soiree, listener)
 	if err != nil {
 		t.Fatalf(errorMessage, err)
 	}
 
-	// Check if the returned ID matches the custom ID
 	if returnedID != customID {
 		t.Fatalf("Expected ID to be '%s', but got '%s'", customID, returnedID)
 	}
 }
 
-func TestAllEventPoolOptions(t *testing.T) {
-	// Dummy implementations for required interfaces
-	dummyPool := NewPondPool(WithMaxWorkers(1))
+func TestAllEventBusOptions(t *testing.T) {
 	dummyRedis := newTestRedis(t)
 	dummyClient := struct{}{}
 
-	// Test WithPool
-	soiree := NewEventPool(WithPool(dummyPool))
-	if soiree == nil {
-		t.Fatal("WithPool option failed")
+	bus1 := New(Workers(10))
+	if bus1 == nil {
+		t.Fatal("Workers option failed")
 	}
 
-	// Test WithRedisStore
-	soiree2 := NewEventPool(WithRedisStore(dummyRedis))
-	if soiree2 == nil {
+	bus2 := New(WithRedisStore(dummyRedis))
+	if bus2 == nil {
 		t.Fatal("WithRedisStore option failed")
 	}
 
-	// Test WithRetry
-	soiree3 := NewEventPool(WithRetry(2, func() backoff.BackOff { return backoff.NewConstantBackOff(1) }))
-	if soiree3 == nil {
-		t.Fatal("WithRetry option failed")
+	bus3 := New(Retry(2, func() backoff.BackOff { return backoff.NewConstantBackOff(1) }))
+	if bus3 == nil {
+		t.Fatal("Retry option failed")
 	}
 
-	// Test WithErrChanBufferSize
-	soiree4 := NewEventPool(WithErrChanBufferSize(5))
-	if soiree4 == nil {
-		t.Fatal("WithErrChanBufferSize option failed")
+	bus4 := New(ErrChanBufferSize(5))
+	if bus4 == nil {
+		t.Fatal("ErrChanBufferSize option failed")
 	}
 
-	// Test WithClient
-	soiree5 := NewEventPool(WithClient(dummyClient))
-	if soiree5 == nil {
-		t.Fatal("WithClient option failed")
+	bus5 := New(Client(dummyClient))
+	if bus5 == nil {
+		t.Fatal("Client option failed")
 	}
 }

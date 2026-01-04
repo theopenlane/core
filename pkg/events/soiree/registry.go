@@ -6,26 +6,26 @@ var (
 	registry sync.Map
 )
 
-// register adds an event pool to the global registry
-func register(pool *EventPool) {
-	if pool != nil {
-		registry.Store(pool, struct{}{})
+// register adds an event bus to the global registry
+func register(bus *EventBus) {
+	if bus != nil {
+		registry.Store(bus, struct{}{})
 	}
 }
 
-// deregister removes an event pool from the global registry
-func deregister(pool *EventPool) {
-	registry.Delete(pool)
+// deregister removes an event bus from the global registry
+func deregister(bus *EventBus) {
+	registry.Delete(bus)
 }
 
-// ShutdownAll gracefully closes all registered event pools
+// ShutdownAll gracefully closes all registered event buses
 func ShutdownAll() error {
 	var err error
 
 	registry.Range(func(key, _ any) bool {
-		pool := key.(*EventPool)
+		bus := key.(*EventBus)
 
-		if closeErr := pool.Close(); closeErr != nil && err == nil {
+		if closeErr := bus.Close(); closeErr != nil && err == nil {
 			err = closeErr
 		}
 

@@ -12,7 +12,7 @@ import (
 )
 
 func TestEmitEventOnHonoursEmitterRegistrations(t *testing.T) {
-	emitter := soiree.NewEventPool()
+	emitter := soiree.New()
 	t.Cleanup(func() {
 		require.NoError(t, emitter.Close())
 	})

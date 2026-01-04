@@ -7,27 +7,26 @@ import (
 	"time"
 )
 
-func mustOnTopic(pool *EventPool, topic string, listener TypedListener[Event], opts ...ListenerOption) string {
-	id, err := BindListener(typedEventTopic(topic), listener, opts...).Register(pool)
+func mustOnTopic(pool *EventBus, topic string, listener TypedListener[Event]) string {
+	id, err := BindListener(typedEventTopic(topic), listener).Register(pool)
 	if err != nil {
 		panic(err)
 	}
-
 	return id
 }
 
-func emitTopicWithPayload(pool *EventPool, topic string, payload any) <-chan error {
+func emitTopicWithPayload(pool *EventBus, topic string, payload any) <-chan error {
 	return pool.Emit(topic, Event(NewBaseEvent(topic, payload)))
 }
 
-func emitExistingEvent(pool *EventPool, event Event) <-chan error {
+func emitExistingEvent(pool *EventBus, event Event) <-chan error {
 	return pool.Emit(event.Topic(), event)
 }
 
 func TestEventPoolBasics(t *testing.T) {
-	pool := NewEventPool()
+	pool := New()
 	if pool == nil {
-		t.Fatal("NewEventPool() should not return nil")
+		t.Fatal("New() should not return nil")
 	}
 
 	topic := "testTopic"
@@ -40,20 +39,6 @@ func TestEventPoolBasics(t *testing.T) {
 
 	if err := pool.Off(topic, id); err != nil {
 		t.Fatalf("Off() failed with error: %v", err)
-	}
-
-	// EnsureTopic should always return the same instance.
-	created := pool.EnsureTopic("newTopic")
-	if created == nil {
-		t.Fatal("EnsureTopic() should not return nil")
-	}
-
-	retrieved, err := pool.GetTopic("newTopic")
-	if err != nil {
-		t.Fatalf("GetTopic() failed with error: %v", err)
-	}
-	if created != retrieved {
-		t.Fatal("EnsureTopic() should return the same topic instance")
 	}
 }
 
@@ -68,7 +53,7 @@ func NewTestEvent(topic string, payload any) *TestEvent {
 }
 
 func TestEmitSync(t *testing.T) {
-	pool := NewEventPool()
+	pool := New()
 	topic := "testTopic"
 	event := NewTestEvent(topic, "testPayload")
 
@@ -116,7 +101,7 @@ func TestEmitSync(t *testing.T) {
 }
 
 func TestWildcardSubscriptionAndEmitting(t *testing.T) {
-	soiree := NewEventPool()
+	soiree := New()
 
 	topics := []string{
 		"event.some.*.*",
@@ -186,46 +171,22 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 }
 
 func TestEventPoolClose(t *testing.T) {
-	soiree := NewEventPool()
+	pool := New(Workers(10))
 
-	// Set up topics and listeners
 	topic1 := "topic1"
 	listener1 := func(_ *EventContext, e Event) error { return nil }
-	mustOnTopic(soiree, topic1, listener1)
+	mustOnTopic(pool, topic1, listener1)
 
 	topic2 := "topic2"
 	listener2 := func(_ *EventContext, e Event) error { return nil }
-	mustOnTopic(soiree, topic2, listener2)
+	mustOnTopic(pool, topic2, listener2)
 
-	var err error
-
-	// Use a Pool
-	pool := NewPondPool(WithMaxWorkers(10))
-	soiree.SetPool(pool)
-
-	// Close the soiree
-	if err := soiree.Close(); err != nil {
+	if err := pool.Close(); err != nil {
 		t.Fatalf("Close() failed with error: %v", err)
 	}
 
-	// Verify topics have been removed
-	_, err = soiree.GetTopic(topic1)
-	if err == nil {
-		t.Errorf("GetTopic() should return an error after Close()")
-	}
-
-	_, err = soiree.GetTopic(topic2)
-	if err == nil {
-		t.Errorf("GetTopic() should return an error after Close()")
-	}
-
-	// Verify the pool has been released
-	if pool.Running() > 0 {
-		t.Errorf("Pool should be released and have no running workers after Close()")
-	}
-
 	// Verify that no new events can be emitted
-	errChan := emitTopicWithPayload(soiree, topic1, "payload")
+	errChan := emitTopicWithPayload(pool, topic1, "payload")
 	select {
 	case err := <-errChan:
 		if err == nil {

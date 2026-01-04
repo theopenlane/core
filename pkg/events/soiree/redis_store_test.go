@@ -13,10 +13,10 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func mustRegisterListener(t *testing.T, pool *EventPool, topic TypedTopic[Event], listener TypedListener[Event], opts ...ListenerOption) string {
+func mustRegisterListener(t *testing.T, bus *EventBus, topic TypedTopic[Event], listener TypedListener[Event]) string {
 	t.Helper()
 
-	id, err := BindListener(topic, listener, opts...).Register(pool)
+	id, err := BindListener(topic, listener).Register(bus)
 	if err != nil {
 		t.Fatalf("failed to register listener: %v", err)
 	}
@@ -38,7 +38,7 @@ func newTestRedis(t *testing.T) *redis.Client {
 func TestRedisEventPersistence(t *testing.T) {
 	client := newTestRedis(t)
 	store := NewRedisStore(client)
-	soiree := NewEventPool(WithEventStore(store))
+	soiree := New(EventStore(store))
 	topic := typedEventTopic("topic")
 
 	done := make(chan struct{}, 1)
@@ -51,9 +51,7 @@ func TestRedisEventPersistence(t *testing.T) {
 
 	select {
 	case <-done:
-		// Give the result time to persist
 		time.Sleep(10 * time.Millisecond)
-		// Now safe to check for results
 		evts, err := store.Events(context.Background())
 		if err != nil || len(evts) == 0 {
 			t.Fatalf("expected stored event, err=%v", err)
@@ -73,9 +71,9 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 
 	store := NewRedisStore(client)
 
-	soiree := NewEventPool(
-		WithEventStore(store),
-		WithRetry(2, func() backoff.BackOff { return backoff.NewConstantBackOff(10 * time.Millisecond) }),
+	soiree := New(
+		EventStore(store),
+		Retry(2, func() backoff.BackOff { return backoff.NewConstantBackOff(10 * time.Millisecond) }),
 	)
 
 	attempts := 0
@@ -100,11 +98,10 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 func TestRedisMetrics(t *testing.T) {
 	client := newTestRedis(t)
 
-	// Use a custom Prometheus registry for this test
 	reg := prometheus.NewRegistry()
 	metrics := newRedisMetrics(reg)
 	store := NewRedisStoreWithMetrics(client, metrics)
-	soiree := NewEventPool(WithEventStore(store))
+	soiree := New(EventStore(store))
 	topic := typedEventTopic("topic")
 
 	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error { return nil })

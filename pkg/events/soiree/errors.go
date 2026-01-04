@@ -7,20 +7,22 @@ var (
 	ErrNilListener = errors.New("listener cannot be nil")
 	// ErrInvalidTopicName is returned when a topic name is invalid
 	ErrInvalidTopicName = errors.New("invalid topic name")
-	// ErrInvalidPriority is returned when a priority is invalid
-	ErrInvalidPriority = errors.New("invalid priority")
-	// ErrTopicNotFound is returned when a listener option is invalid
+	// ErrTopicNotFound is returned when a topic is not found
 	ErrTopicNotFound = errors.New("topic not found")
 	// ErrListenerNotFound is returned when a listener is not found
 	ErrListenerNotFound = errors.New("listener not found")
-	// ErrEventProcessingAborted is returned when event processing is aborted
-	ErrEventProcessingAborted = errors.New("event processing aborted")
-	// ErrEmitterClosed is returned when the soiree is closed
-	ErrEmitterClosed = errors.New("soiree is closed")
-	// ErrEmitterAlreadyClosed is returned when the soiree is already closed
-	ErrEmitterAlreadyClosed = errors.New("soiree is already closed")
-	// errNilEventPool is returned when an event pool is nil
-	errNilEventPool = errors.New("event pool is nil")
+	// ErrEmitterClosed is returned when the event bus is closed
+	ErrEmitterClosed = errors.New("event bus is closed")
+	// ErrEmitterAlreadyClosed is returned when the event bus is already closed
+	ErrEmitterAlreadyClosed = errors.New("event bus is already closed")
+	// errNilEventBus is returned when an event bus is nil
+	errNilEventBus = errors.New("event bus is nil")
 	// errMissingTypedUnwrap is returned when a typed topic is missing an unwrap helper
 	errMissingTypedUnwrap = errors.New("soiree: missing unwrap helper for typed topic")
+	// ErrNilPayload is returned when an event payload is nil
+	ErrNilPayload = errors.New("nil payload")
+	// ErrPayloadTypeMismatch is returned when an event payload type does not match the expected type
+	ErrPayloadTypeMismatch = errors.New("payload type mismatch")
+	// ErrEventTopicMismatch is returned when the emitted topic name disagrees with the Event.Topic() value
+	ErrEventTopicMismatch = errors.New("event topic mismatch")
 )

@@ -29,15 +29,15 @@ func (t TypedTopic[T]) Name() string {
 
 // ListenerBinding encapsulates the registration of a listener against a topic
 type ListenerBinding struct {
-	register func(*EventPool) (string, error)
+	register func(*EventBus) (string, error)
 }
 
-// BindListener produces a binding that can be registered on an EventPool in a batch
-func BindListener[T any](topic TypedTopic[T], listener TypedListener[T], opts ...ListenerOption) ListenerBinding {
+// BindListener produces a binding that can be registered on an EventBus
+func BindListener[T any](topic TypedTopic[T], listener TypedListener[T]) ListenerBinding {
 	return ListenerBinding{
-		register: func(pool *EventPool) (string, error) {
-			if pool == nil {
-				return "", errNilEventPool
+		register: func(bus *EventBus) (string, error) {
+			if bus == nil {
+				return "", errNilEventBus
 			}
 
 			if listener == nil {
@@ -53,34 +53,31 @@ func BindListener[T any](topic TypedTopic[T], listener TypedListener[T], opts ..
 			}
 
 			wrapped := func(ctx *EventContext) error {
-				payload, err := topic.unwrap(ctx.Event())
+				payload, err := topic.unwrap(ctx.event)
 				if err != nil {
 					return err
 				}
-
-				ctx.setPayload(payload)
-
 				return listener(ctx, payload)
 			}
 
-			return pool.On(topic.Name(), wrapped, opts...)
+			return bus.On(topic.Name(), wrapped)
 		},
 	}
 }
 
-// registerWith registers the listener binding on the provided pool
-func (b ListenerBinding) registerWith(pool *EventPool) (string, error) {
-	if pool == nil {
-		return "", errNilEventPool
+// registerWith registers the listener binding on the provided bus
+func (b ListenerBinding) registerWith(bus *EventBus) (string, error) {
+	if bus == nil {
+		return "", errNilEventBus
 	}
 	if b.register == nil {
 		return "", ErrNilListener
 	}
 
-	return b.register(pool)
+	return b.register(bus)
 }
 
-// Register registers the listener binding on the provided pool
-func (b ListenerBinding) Register(pool *EventPool) (string, error) {
-	return b.registerWith(pool)
+// Register registers the listener binding on the provided bus
+func (b ListenerBinding) Register(bus *EventBus) (string, error) {
+	return b.registerWith(bus)
 }

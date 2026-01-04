@@ -4,8 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Event is an interface representing the structure of an instance of an event
@@ -150,6 +149,10 @@ func (e *BaseEvent) Context() context.Context {
 	e.mu.RLock() // Read lock
 	defer e.mu.RUnlock()
 
+	if e.ctx == nil {
+		return context.Background()
+	}
+
 	return e.ctx
 }
 
@@ -158,13 +161,13 @@ func (e *BaseEvent) SetContext(ctx context.Context) {
 	e.mu.Lock() // Write lock
 	defer e.mu.Unlock()
 
-	logger := log.Logger.With().Logger()
+	if ctx == nil {
+		ctx = context.Background()
+	}
 
-	logger.UpdateContext(func(c zerolog.Context) zerolog.Context {
-		return c.Str("event-topic", e.Topic())
-	})
+	logger := logx.FromContext(ctx).With().Str("event-topic", e.Topic()).Logger()
 
-	e.ctx = ctx
+	e.ctx = logger.WithContext(ctx)
 }
 
 // Client returns the event's client
