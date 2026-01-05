@@ -29,6 +29,11 @@ type CustomErrorType interface {
 	Module() models.OrgModule
 }
 
+// FieldErrorType provides field-level details for validation errors
+type FieldErrorType interface {
+	Fields() []string
+}
+
 var _ CustomErrorType = (*CustomError)(nil)
 
 // CustomError is a struct that implements the CustomErrorType interface
@@ -121,6 +126,12 @@ func ErrorPresenter(ctx context.Context, e error) *gqlerror.Error {
 	// add the module
 	if customError.Module().String() != "" {
 		err.Extensions[ExtensionModuleKey] = customError.Module()
+	}
+
+	if fieldError, ok := customError.(FieldErrorType); ok {
+		if fields := fieldError.Fields(); len(fields) > 0 {
+			err.Extensions["fields"] = fields
+		}
 	}
 
 	return err

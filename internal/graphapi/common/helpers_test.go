@@ -2,14 +2,19 @@ package common //nolint:revive
 
 import (
 	"context"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gocarina/gocsv"
 	"github.com/samber/lo"
 	"github.com/vektah/gqlparser/v2/ast"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
@@ -306,6 +311,102 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 			assert.Check(t, is.DeepEqual(tt.expected, result))
 		})
 	}
+}
+
+func TestNormalizeCSVEnumInputs(t *testing.T) {
+	t.Parallel()
+
+	type csvEnumInput struct {
+		Status *enums.TaskStatus
+		Role   enums.Role
+		State  enums.TaskStatus
+	}
+
+	statusMixed := enums.TaskStatus("In Review")
+	statusEmpty := enums.TaskStatus("  ")
+	stateMixed := enums.TaskStatus("in progress")
+	stateEmpty := enums.TaskStatus(" ")
+	roleLower := enums.Role("member")
+
+	data := []*csvEnumInput{
+		{
+			Status: &statusMixed,
+			Role:   roleLower,
+			State:  stateMixed,
+		},
+		{
+			Status: &statusEmpty,
+			Role:   enums.Role("ADMIN"),
+			State:  stateEmpty,
+		},
+		{
+			Status: nil,
+			Role:   enums.Role("OWNER"),
+			State:  enums.TaskStatus("completed"),
+		},
+	}
+
+	normalizeCSVEnumInputs(data)
+
+	assert.Assert(t, data[0].Status != nil)
+	assert.Check(t, is.Equal(enums.TaskStatusInReview, *data[0].Status))
+	assert.Check(t, is.Equal(enums.RoleMember, data[0].Role))
+	assert.Check(t, is.Equal(enums.TaskStatusInProgress, data[0].State))
+	assert.Check(t, is.Nil(data[1].Status))
+	assert.Check(t, is.Equal(enums.TaskStatusOpen, data[1].State))
+	assert.Check(t, is.Nil(data[2].Status))
+	assert.Check(t, is.Equal(enums.RoleOwner, data[2].Role))
+	assert.Check(t, is.Equal(enums.TaskStatusCompleted, data[2].State))
+}
+
+func TestNormalizeCSVDateTimePointers(t *testing.T) {
+	t.Parallel()
+
+	type csvDateTimeInput struct {
+		Due       *models.DateTime
+		Completed *models.DateTime
+	}
+
+	zero := models.DateTime{}
+	nonZero := models.DateTime(time.Date(2025, 1, 2, 3, 4, 5, 0, time.UTC))
+
+	data := []*csvDateTimeInput{
+		{
+			Due:       &zero,
+			Completed: &nonZero,
+		},
+		{
+			Due:       nil,
+			Completed: &zero,
+		},
+	}
+
+	normalizeCSVEnumInputs(data)
+
+	assert.Check(t, is.Nil(data[0].Due))
+	assert.Assert(t, data[0].Completed != nil)
+	assert.Check(t, is.Equal(false, data[0].Completed.IsZero()))
+	assert.Check(t, is.Nil(data[1].Completed))
+}
+
+func TestWrapCSVUnmarshalErrorAddsHeader(t *testing.T) {
+	t.Parallel()
+
+	type csvRow struct {
+		Tags []string
+	}
+
+	csvData := []byte("Tags\nsecurity\n")
+	var rows []*csvRow
+	err := gocsv.UnmarshalBytes(csvData, &rows)
+	assert.Assert(t, err != nil)
+
+	wrapped := wrapCSVUnmarshalError(err, csvData)
+	vErr, ok := wrapped.(*ValidationError)
+	assert.Assert(t, ok)
+	assert.Check(t, is.DeepEqual([]string{"Tags"}, vErr.Fields()))
+	assert.Check(t, strings.Contains(vErr.Message(), "Tags"))
+	assert.Check(t, strings.Contains(strings.ToLower(vErr.Message()), "json"))
 }
 
 func TestIsEmpty(t *testing.T) {

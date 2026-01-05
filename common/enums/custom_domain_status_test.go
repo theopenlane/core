@@ -48,14 +48,14 @@ func TestToDNSVerificationStatus(t *testing.T) {
 		input    string
 		expected *DNSVerificationStatus
 	}{
-		{"active", &DNSVerificationStatusActive},
-		{"pending", &DNSVerificationStatusPending},
-		{"active_redeploying", &DNSVerificationStatusActiveRedeploying},
-		{"moved", &DNSVerificationStatusMoved},
-		{"pending_deletion", &DNSVerificationStatusPendingDeletion},
-		{"deleted", &DNSVerificationStatusDeleted},
 		{"ACTIVE", &DNSVerificationStatusActive},
 		{"PENDING", &DNSVerificationStatusPending},
+		{"ACTIVE_REDEPLOYING", &DNSVerificationStatusActiveRedeploying},
+		{"MOVED", &DNSVerificationStatusMoved},
+		{"PENDING_DELETION", &DNSVerificationStatusPendingDeletion},
+		{"DELETED", &DNSVerificationStatusDeleted},
+		{"active", &DNSVerificationStatusActive},
+		{"pending", &DNSVerificationStatusPending},
 		{"unknown", &DNSVerificationStatusInvalid},
 		{"", &DNSVerificationStatusInvalid},
 	}
@@ -153,14 +153,14 @@ func TestToSSLVerificationStatus(t *testing.T) {
 		input    string
 		expected *SSLVerificationStatus
 	}{
-		{"initializing", &SSLVerificationStatusInitializing},
-		{"pending_validation", &SSLVerificationStatusPendingValidation},
-		{"deleted", &SSLVerificationStatusDeleted},
-		{"pending_issuance", &SSLVerificationStatusPendingIssuance},
-		{"active", &SSLVerificationStatusActive},
-		{"expired", &SSLVerificationStatusExpired},
 		{"INITIALIZING", &SSLVerificationStatusInitializing},
+		{"PENDING_VALIDATION", &SSLVerificationStatusPendingValidation},
+		{"DELETED", &SSLVerificationStatusDeleted},
+		{"PENDING_ISSUANCE", &SSLVerificationStatusPendingIssuance},
 		{"ACTIVE", &SSLVerificationStatusActive},
+		{"EXPIRED", &SSLVerificationStatusExpired},
+		{"initializing", &SSLVerificationStatusInitializing},
+		{"active", &SSLVerificationStatusActive},
 		{"unknown", &SSLVerificationStatusInvalid},
 		{"", &SSLVerificationStatusInvalid},
 	}
