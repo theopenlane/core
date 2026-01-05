@@ -10,18 +10,14 @@ import (
 
 func TestDNSVerificationStatusValues(t *testing.T) {
 	expected := []string{
-		"active", "pending", "active_redeploying", "moved", "pending_deletion",
-		"deleted", "pending_blocked", "pending_migration", "pending_provisioned",
-		"test_pending", "test_active", "test_active_apex", "test_blocked",
-		"test_failed", "provisioned", "blocked",
+		"ACTIVE", "PENDING", "ACTIVE_REDEPLOYING", "MOVED", "PENDING_DELETION",
+		"DELETED", "PENDING_BLOCKED", "PENDING_MIGRATION", "PENDING_PROVISIONED",
+		"TEST_PENDING", "TEST_ACTIVE", "TEST_ACTIVE_APEX", "TEST_BLOCKED",
+		"TEST_FAILED", "PROVISIONED", "BLOCKED",
 	}
+
 	values := DNSVerificationStatus("").Values()
-
-	assert.Equal(t, len(expected), len(values))
-
-	for i, v := range values {
-		assert.Equal(t, expected[i], v)
-	}
+	assert.Equal(t, expected, values)
 }
 
 func TestDNSVerificationStatusString(t *testing.T) {
@@ -29,13 +25,13 @@ func TestDNSVerificationStatusString(t *testing.T) {
 		status   DNSVerificationStatus
 		expected string
 	}{
-		{DNSVerificationStatusActive, "active"},
-		{DNSVerificationStatusPending, "pending"},
-		{DNSVerificationStatusActiveRedeploying, "active_redeploying"},
-		{DNSVerificationStatusMoved, "moved"},
-		{DNSVerificationStatusPendingDeletion, "pending_deletion"},
-		{DNSVerificationStatusDeleted, "deleted"},
-		{DNSVerificationStatusInvalid, "invalid"},
+		{DNSVerificationStatusActive, "ACTIVE"},
+		{DNSVerificationStatusPending, "PENDING"},
+		{DNSVerificationStatusActiveRedeploying, "ACTIVE_REDEPLOYING"},
+		{DNSVerificationStatusMoved, "MOVED"},
+		{DNSVerificationStatusPendingDeletion, "PENDING_DELETION"},
+		{DNSVerificationStatusDeleted, "DELETED"},
+		{DNSVerificationStatusInvalid, "INVALID"},
 	}
 
 	for _, test := range tests {
@@ -71,11 +67,11 @@ func TestDNSVerificationStatusMarshalGQL(t *testing.T) {
 		status   DNSVerificationStatus
 		expected string
 	}{
-		{DNSVerificationStatusActive, `"active"`},
-		{DNSVerificationStatusPending, `"pending"`},
-		{DNSVerificationStatusActiveRedeploying, `"active_redeploying"`},
-		{DNSVerificationStatusMoved, `"moved"`},
-		{DNSVerificationStatusInvalid, `"invalid"`},
+		{DNSVerificationStatusActive, `"ACTIVE"`},
+		{DNSVerificationStatusPending, `"PENDING"`},
+		{DNSVerificationStatusActiveRedeploying, `"ACTIVE_REDEPLOYING"`},
+		{DNSVerificationStatusMoved, `"MOVED"`},
+		{DNSVerificationStatusInvalid, `"INVALID"`},
 	}
 
 	for _, test := range tests {
@@ -92,11 +88,11 @@ func TestDNSVerificationStatusUnmarshalGQL(t *testing.T) {
 		expected DNSVerificationStatus
 		hasError bool
 	}{
-		{"active", DNSVerificationStatusActive, false},
-		{"pending", DNSVerificationStatusPending, false},
-		{"active_redeploying", DNSVerificationStatusActiveRedeploying, false},
-		{"moved", DNSVerificationStatusMoved, false},
-		{"invalid", DNSVerificationStatusInvalid, false},
+		{"ACTIVE", DNSVerificationStatusActive, false},
+		{"PENDING", DNSVerificationStatusPending, false},
+		{"ACTIVE_REDEPLOYING", DNSVerificationStatusActiveRedeploying, false},
+		{"MOVED", DNSVerificationStatusMoved, false},
+		{"INVALID", DNSVerificationStatusInvalid, false},
 		{123, "", true},
 	}
 
@@ -114,11 +110,11 @@ func TestDNSVerificationStatusUnmarshalGQL(t *testing.T) {
 
 func TestSSLVerificationStatusValues(t *testing.T) {
 	expected := []string{
-		"initializing", "pending_validation", "deleted", "pending_issuance",
-		"pending_deployment", "pending_deletion", "pending_expiration", "expired",
-		"active", "initializing_timed_out", "validation_timed_out", "issuance_timed_out",
-		"deployment_timed_out", "deletion_timed_out", "pending_cleanup", "staging_deployment",
-		"staging_active", "deactivating", "inactive", "backup_issued", "holding_deployment",
+		"INITIALIZING", "PENDING_VALIDATION", "DELETED", "PENDING_ISSUANCE",
+		"PENDING_DEPLOYMENT", "PENDING_DELETION", "PENDING_EXPIRATION", "EXPIRED",
+		"ACTIVE", "INITIALIZING_TIMED_OUT", "VALIDATION_TIMED_OUT", "ISSUANCE_TIMED_OUT",
+		"DEPLOYMENT_TIMED_OUT", "DELETION_TIMED_OUT", "PENDING_CLEANUP", "STAGING_DEPLOYMENT",
+		"STAGING_ACTIVE", "DEACTIVATING", "INACTIVE", "BACKUP_ISSUED", "HOLDING_DEPLOYMENT",
 	}
 	values := SSLVerificationStatus("").Values()
 
@@ -134,13 +130,13 @@ func TestSSLVerificationStatusString(t *testing.T) {
 		status   SSLVerificationStatus
 		expected string
 	}{
-		{SSLVerificationStatusInitializing, "initializing"},
-		{SSLVerificationStatusPendingValidation, "pending_validation"},
-		{SSLVerificationStatusDeleted, "deleted"},
-		{SSLVerificationStatusPendingIssuance, "pending_issuance"},
-		{SSLVerificationStatusActive, "active"},
-		{SSLVerificationStatusExpired, "expired"},
-		{SSLVerificationStatusInvalid, "invalid"},
+		{SSLVerificationStatusInitializing, "INITIALIZING"},
+		{SSLVerificationStatusPendingValidation, "PENDING_VALIDATION"},
+		{SSLVerificationStatusDeleted, "DELETED"},
+		{SSLVerificationStatusPendingIssuance, "PENDING_ISSUANCE"},
+		{SSLVerificationStatusActive, "ACTIVE"},
+		{SSLVerificationStatusExpired, "EXPIRED"},
+		{SSLVerificationStatusInvalid, "INVALID"},
 	}
 
 	for _, test := range tests {
@@ -176,11 +172,11 @@ func TestSSLVerificationStatusMarshalGQL(t *testing.T) {
 		status   SSLVerificationStatus
 		expected string
 	}{
-		{SSLVerificationStatusInitializing, `"initializing"`},
-		{SSLVerificationStatusPendingValidation, `"pending_validation"`},
-		{SSLVerificationStatusDeleted, `"deleted"`},
-		{SSLVerificationStatusActive, `"active"`},
-		{SSLVerificationStatusInvalid, `"invalid"`},
+		{SSLVerificationStatusInitializing, `"INITIALIZING"`},
+		{SSLVerificationStatusPendingValidation, `"PENDING_VALIDATION"`},
+		{SSLVerificationStatusDeleted, `"DELETED"`},
+		{SSLVerificationStatusActive, `"ACTIVE"`},
+		{SSLVerificationStatusInvalid, `"INVALID"`},
 	}
 
 	for _, test := range tests {
@@ -197,11 +193,11 @@ func TestSSLVerificationStatusUnmarshalGQL(t *testing.T) {
 		expected SSLVerificationStatus
 		hasError bool
 	}{
-		{"initializing", SSLVerificationStatusInitializing, false},
-		{"pending_validation", SSLVerificationStatusPendingValidation, false},
-		{"deleted", SSLVerificationStatusDeleted, false},
-		{"active", SSLVerificationStatusActive, false},
-		{"invalid", SSLVerificationStatusInvalid, false},
+		{"INITIALIZING", SSLVerificationStatusInitializing, false},
+		{"PENDING_VALIDATION", SSLVerificationStatusPendingValidation, false},
+		{"DELETED", SSLVerificationStatusDeleted, false},
+		{"ACTIVE", SSLVerificationStatusActive, false},
+		{"INVALID", SSLVerificationStatusInvalid, false},
 		{123, "", true},
 	}
 
