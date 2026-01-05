@@ -337,10 +337,11 @@ func normalizeEnumPointerField(field reflect.Value, cache map[reflect.Type]enumI
 
 	// Enum values are string-backed; normalize the raw string representation
 	raw := field.Elem().String()
-	normalized, clear := normalizeEnumValue(raw, info)
-	if clear {
+	normalized, needsClear := normalizeEnumValue(raw, info)
+	if needsClear {
 		// Treat empty CSV cells as "unset" so ent defaults can apply
 		field.Set(reflect.Zero(field.Type()))
+
 		return
 	}
 
@@ -383,8 +384,8 @@ func normalizeEnumStringField(field reflect.Value, cache map[reflect.Type]enumIn
 	}
 
 	raw := field.String()
-	normalized, clear := normalizeEnumValue(raw, info)
-	if clear {
+	normalized, needsClear := normalizeEnumValue(raw, info)
+	if needsClear {
 		// Value enums cannot be nil; use the enum's default if available
 		if info.defaultValue != "" {
 			field.SetString(info.defaultValue)
@@ -416,8 +417,8 @@ func normalizeEnumSliceField(field reflect.Value, cache map[reflect.Type]enumInf
 			continue
 		}
 		raw := elem.String()
-		normalized, clear := normalizeEnumValue(raw, info)
-		if clear {
+		normalized, needsClear := normalizeEnumValue(raw, info)
+		if needsClear {
 			// Preserve empty entries rather than removing them
 			elem.SetString("")
 			continue
