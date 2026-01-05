@@ -9,7 +9,9 @@ env:
   RUNNER_LARGE: "large"
   RUNNER_SMALL: "small"
   GRAPHQL_SCHEMA_LOCATION: "internal/graphapi/clientschema/schema.graphql"
+  GRAPHQL_HISTORY_SCHEMA_LOCATION: "internal/graphapi/historyschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
+  GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
   GOFLAGS: -buildvcs=false
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
@@ -706,6 +708,22 @@ steps:
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
+        plugins:
+          - cluster-secrets#v1.0.0:
+              variables:
+                APOLLO_KEY: APOLLO_KEY
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              propagate-environment: true
+              environment:
+                - "APOLLO_KEY"
+      - label: ":graphql: publish history graphql schema"
+        key: "apollo-publish-history-schema"
+        skip: false
+        if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
+        cancel_on_build_failing: true
+        command: "rover graph publish --schema $$GRAPHQL_HISTORY_SCHEMA_LOCATION $$GRAPHQL_HISTORY_SCHEMA_NAME"
         plugins:
           - cluster-secrets#v1.0.0:
               variables:

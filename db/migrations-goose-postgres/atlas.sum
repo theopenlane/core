@@ -1,6 +1,8 @@
-h1:1NBeanyYEpOllSy2BINymCANw+ogtxmTUX4Jdq2ohrY=
+h1:Koy1mU2kTfw/cy/Hc5D+28Pu/Lj9BFDUP6BRY+kGyds=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
 20260104060928_trust_center_posts.sql h1:Q9GauKVqV+x66eGrSdn4bLJj4aAR6lv/FCiAMGMsLYI=
 20260104060932_trust_center_posts_history.sql h1:To8voPuGftXnrbD4EtkYnnnUkvu5fpcEIYZUe9Ge82g=
+20260105202219_watermark_status.sql h1:3ZKsYrufvjR6XyZ6EiPHKXRbv7vcGuJXhTTH4+8NnxU=
+20260105202221_watermark_status_history.sql h1:DGJF9Z+cn+/4t/6D55k3vUd90OnAgeUL8zVlsh04+IU=
