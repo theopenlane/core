@@ -150,7 +150,7 @@ var (
 	DefaultID func() string
 )
 
-const DefaultWatermarkStatus enums.WatermarkStatus = "DISABLED"
+const DefaultWatermarkStatus enums.WatermarkStatus = "PENDING"
 
 // WatermarkStatusValidator is a validator for the "watermark_status" field enum values. It is called by the builders before save.
 func WatermarkStatusValidator(ws enums.WatermarkStatus) error {

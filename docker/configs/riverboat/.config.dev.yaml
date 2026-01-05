@@ -5,47 +5,51 @@ river:
     - name: email
       maxWorkers: 100
   workers:
-    createCustomDomainWorker:
+    openlaneconfig:
+      openlaneapihost: "http://host.docker.internal:17608"
+      openlaneapitoken: "tolp_REDACTED"
+    emailWorker:
       config:
-        cloudflareApiKey: ""
-        databaseHost: ""
-        openlaneAPIHost: ""
-        openlaneAPIToken: ""
-    databaseWorker:
-      config:
-        baseUrl: "http://host.docker.internal:1337"
-        debug: false
-        enabled: false
-        endpoint: query
-    deleteCustomDomainWorker:
-      config:
-        cloudflareApiKey: ""
-        databaseHost: ""
-        openlaneAPIHost: "http://host.docker.internal:17608"
-        openlaneAPIToken: ""
+        enabled: true
+        devMode: true
+        fromEmail: no-reply@example.com
+        testDir: fixtures/email
+        token: ""
     deleteExportContentWorker:
       config:
         enabled: false
         cutoffDuration: 1800000000000
         interval: 600000000000
-        openlaneAPIHost: "http://host.docker.internal:17608"
-        openlaneAPIToken: ""
-    emailWorker:
-      config:
-        devMode: true
-        fromEmail: no-reply@example.com
-        testDir: fixtures/email
-        token: ""
     exportContentWorker:
       config:
         enabled: true
-        openlaneAPIHost: "http://host.docker.internal:17608"
-        openlaneAPIToken: "tolp__token"
-    validateCustomDomainWorker:
+  trustcenterworkers:
+    openlaneconfig:
+      openlaneapihost: "http://host.docker.internal:17608"
+      openlaneapitoken: "tolp_REDACTED"
+    createCustomDomainWorker:
       config:
+        enabled: false
         cloudflareApiKey: ""
         databaseHost: ""
-        openlaneAPIHost: "http://host.docker.internal:17608"
-        openlaneAPIToken: ""
-
+        openlaneapihost: "http://host.docker.internal:17608"
+        openlaneapitoken: "tolp_REDACTED"
+    deleteCustomDomainWorker:
+      config:
+        enabled: false
+        cloudflareApiKey: ""
+        databaseHost: ""
+        openlaneapihost: "http://host.docker.internal:17608"
+        openlaneapitoken: "tolp_REDACTED"
+    validateCustomDomainWorker:
+      config:
+        enabled: false
+        cloudflareApiKey: ""
+        openlaneapihost: "http://host.docker.internal:17608"
+        openlaneapitoken: "tolp_REDACTED"
+    watermarkDocWorker:
+      config:
+        enabled: false
+        openlaneapihost: "http://host.docker.internal:17608"
+        openlaneapitoken: "tolp_REDACTED"
 refreshInterval: 600000000000

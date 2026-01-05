@@ -76,7 +76,7 @@ func (TrustCenterDoc) Fields() []ent.Field {
 			Comment("whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center"),
 		field.Enum("watermark_status").
 			GoType(enums.WatermarkStatus("")).
-			Default(enums.WatermarkStatusDisabled.String()).
+			Default(enums.WatermarkStatusPending.String()).
 			Optional().
 			Comment("status of the watermarking"),
 		field.Enum("visibility").
