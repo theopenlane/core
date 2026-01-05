@@ -63,37 +63,37 @@ func (r DNSVerificationStatus) String() string {
 func ToDNSVerificationStatus(r string) *DNSVerificationStatus {
 	rUpper := strings.ToUpper(r)
 	switch rUpper {
-	case string(DNSVerificationStatusActive):
+	case DNSVerificationStatusActive.String():
 		return &DNSVerificationStatusActive
-	case string(DNSVerificationStatusPending):
+	case DNSVerificationStatusPending.String():
 		return &DNSVerificationStatusPending
-	case string(DNSVerificationStatusActiveRedeploying):
+	case DNSVerificationStatusActiveRedeploying.String():
 		return &DNSVerificationStatusActiveRedeploying
-	case string(DNSVerificationStatusMoved):
+	case DNSVerificationStatusMoved.String():
 		return &DNSVerificationStatusMoved
-	case string(DNSVerificationStatusPendingDeletion):
+	case DNSVerificationStatusPendingDeletion.String():
 		return &DNSVerificationStatusPendingDeletion
-	case string(DNSVerificationStatusDeleted):
+	case DNSVerificationStatusDeleted.String():
 		return &DNSVerificationStatusDeleted
-	case string(DNSVerificationStatusPendingBlocked):
+	case DNSVerificationStatusPendingBlocked.String():
 		return &DNSVerificationStatusPendingBlocked
-	case string(DNSVerificationStatusPendingMigration):
+	case DNSVerificationStatusPendingMigration.String():
 		return &DNSVerificationStatusPendingMigration
-	case string(DNSVerificationStatusPendingProvisioned):
+	case DNSVerificationStatusPendingProvisioned.String():
 		return &DNSVerificationStatusPendingProvisioned
-	case string(DNSVerificationStatusTestPending):
+	case DNSVerificationStatusTestPending.String():
 		return &DNSVerificationStatusTestPending
-	case string(DNSVerificationStatusTestActive):
+	case DNSVerificationStatusTestActive.String():
 		return &DNSVerificationStatusTestActive
-	case string(DNSVerificationStatusTestActiveApex):
+	case DNSVerificationStatusTestActiveApex.String():
 		return &DNSVerificationStatusTestActiveApex
-	case string(DNSVerificationStatusTestBlocked):
+	case DNSVerificationStatusTestBlocked.String():
 		return &DNSVerificationStatusTestBlocked
-	case string(DNSVerificationStatusTestFailed):
+	case DNSVerificationStatusTestFailed.String():
 		return &DNSVerificationStatusTestFailed
-	case string(DNSVerificationStatusProvisioned):
+	case DNSVerificationStatusProvisioned.String():
 		return &DNSVerificationStatusProvisioned
-	case string(DNSVerificationStatusBlocked):
+	case DNSVerificationStatusBlocked.String():
 		return &DNSVerificationStatusBlocked
 	default:
 		return &DNSVerificationStatusInvalid
@@ -184,47 +184,47 @@ func (r SSLVerificationStatus) String() string {
 func ToSSLVerificationStatus(r string) *SSLVerificationStatus {
 	rUpper := strings.ToUpper(r)
 	switch rUpper {
-	case string(SSLVerificationStatusInitializing):
+	case SSLVerificationStatusInitializing.String():
 		return &SSLVerificationStatusInitializing
-	case string(SSLVerificationStatusPendingValidation):
+	case SSLVerificationStatusPendingValidation.String():
 		return &SSLVerificationStatusPendingValidation
-	case string(SSLVerificationStatusDeleted):
+	case SSLVerificationStatusDeleted.String():
 		return &SSLVerificationStatusDeleted
-	case string(SSLVerificationStatusPendingIssuance):
+	case SSLVerificationStatusPendingIssuance.String():
 		return &SSLVerificationStatusPendingIssuance
-	case string(SSLVerificationStatusPendingDeployment):
+	case SSLVerificationStatusPendingDeployment.String():
 		return &SSLVerificationStatusPendingDeployment
-	case string(SSLVerificationStatusPendingDeletion):
+	case SSLVerificationStatusPendingDeletion.String():
 		return &SSLVerificationStatusPendingDeletion
-	case string(SSLVerificationStatusPendingExpiration):
+	case SSLVerificationStatusPendingExpiration.String():
 		return &SSLVerificationStatusPendingExpiration
-	case string(SSLVerificationStatusExpired):
+	case SSLVerificationStatusExpired.String():
 		return &SSLVerificationStatusExpired
-	case string(SSLVerificationStatusActive):
+	case SSLVerificationStatusActive.String():
 		return &SSLVerificationStatusActive
-	case string(SSLVerificationStatusInitializingTimedOut):
+	case SSLVerificationStatusInitializingTimedOut.String():
 		return &SSLVerificationStatusInitializingTimedOut
-	case string(SSLVerificationStatusValidationTimedOut):
+	case SSLVerificationStatusValidationTimedOut.String():
 		return &SSLVerificationStatusValidationTimedOut
-	case string(SSLVerificationStatusIssuanceTimedOut):
+	case SSLVerificationStatusIssuanceTimedOut.String():
 		return &SSLVerificationStatusIssuanceTimedOut
-	case string(SSLVerificationStatusDeploymentTimedOut):
+	case SSLVerificationStatusDeploymentTimedOut.String():
 		return &SSLVerificationStatusDeploymentTimedOut
-	case string(SSLVerificationStatusDeletionTimedOut):
+	case SSLVerificationStatusDeletionTimedOut.String():
 		return &SSLVerificationStatusDeletionTimedOut
-	case string(SSLVerificationStatusPendingCleanup):
+	case SSLVerificationStatusPendingCleanup.String():
 		return &SSLVerificationStatusPendingCleanup
-	case string(SSLVerificationStatusStagingDeployment):
+	case SSLVerificationStatusStagingDeployment.String():
 		return &SSLVerificationStatusStagingDeployment
-	case string(SSLVerificationStatusStagingActive):
+	case SSLVerificationStatusStagingActive.String():
 		return &SSLVerificationStatusStagingActive
-	case string(SSLVerificationStatusDeactivating):
+	case SSLVerificationStatusDeactivating.String():
 		return &SSLVerificationStatusDeactivating
-	case string(SSLVerificationStatusInactive):
+	case SSLVerificationStatusInactive.String():
 		return &SSLVerificationStatusInactive
-	case string(SSLVerificationStatusBackupIssued):
+	case SSLVerificationStatusBackupIssued.String():
 		return &SSLVerificationStatusBackupIssued
-	case string(SSLVerificationStatusHoldingDeployment):
+	case SSLVerificationStatusHoldingDeployment.String():
 		return &SSLVerificationStatusHoldingDeployment
 	default:
 		return &SSLVerificationStatusInvalid
