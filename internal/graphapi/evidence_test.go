@@ -588,11 +588,11 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 
 	evidences := []string{}
 	testCases := []struct {
-		name      string
-		client    *testclient.TestClient
-		fileInput graphql.Upload
-		ctx       context.Context
-		wantErr   bool
+		name        string
+		client      *testclient.TestClient
+		fileInput   graphql.Upload
+		ctx         context.Context
+		expectedErr string
 	}{
 		{
 			name:   "happy path, valid file",
@@ -604,7 +604,6 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 				Size:        bulkFile.Size,
 				ContentType: bulkFile.ContentType,
 			},
-			wantErr: false,
 		},
 		{
 			name:   "happy path, invalid tag column",
@@ -616,15 +615,15 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 				Size:        invalidBulkFile.Size,
 				ContentType: invalidBulkFile.ContentType,
 			},
-			wantErr: true,
+			expectedErr: "record on line", // bad csv format error
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateBulkCSVEvidence(tc.ctx, tc.fileInput)
-			if tc.wantErr {
-				assert.ErrorContains(t, err, "failed to create evidence")
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
 
 				return
 			}
