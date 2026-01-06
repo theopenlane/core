@@ -583,7 +583,7 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 	bulkFile, err := storage.NewUploadFile("testdata/uploads/evidence.csv")
 	assert.NilError(t, err)
 
-	invalidBulkFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalide.csv")
+	invalidBulkFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalid.csv")
 	assert.NilError(t, err)
 
 	evidences := []string{}
