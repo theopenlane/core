@@ -615,12 +615,12 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 				Size:        invalidBulkFile.Size,
 				ContentType: invalidBulkFile.ContentType,
 			},
-			expectedErr: "record on line", // bad csv format error
+			expectedErr: "invalid input provided for Tags",
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run("Create "+tc.name, func(t *testing.T) {
+		t.Run("Bulk Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateBulkCSVEvidence(tc.ctx, tc.fileInput)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)

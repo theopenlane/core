@@ -132,24 +132,24 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultDNSVerificationStatus enums.DNSVerificationStatus = "pending"
+const DefaultDNSVerificationStatus enums.DNSVerificationStatus = "PENDING"
 
 // DNSVerificationStatusValidator is a validator for the "dns_verification_status" field enum values. It is called by the builders before save.
 func DNSVerificationStatusValidator(dvs enums.DNSVerificationStatus) error {
 	switch dvs.String() {
-	case "active", "pending", "active_redeploying", "moved", "pending_deletion", "deleted", "pending_blocked", "pending_migration", "pending_provisioned", "test_pending", "test_active", "test_active_apex", "test_blocked", "test_failed", "provisioned", "blocked":
+	case "ACTIVE", "PENDING", "ACTIVE_REDEPLOYING", "MOVED", "PENDING_DELETION", "DELETED", "PENDING_BLOCKED", "PENDING_MIGRATION", "PENDING_PROVISIONED", "TEST_PENDING", "TEST_ACTIVE", "TEST_ACTIVE_APEX", "TEST_BLOCKED", "TEST_FAILED", "PROVISIONED", "BLOCKED":
 		return nil
 	default:
 		return fmt.Errorf("dnsverificationhistory: invalid enum value for dns_verification_status field: %q", dvs)
 	}
 }
 
-const DefaultAcmeChallengeStatus enums.SSLVerificationStatus = "initializing"
+const DefaultAcmeChallengeStatus enums.SSLVerificationStatus = "INITIALIZING"
 
 // AcmeChallengeStatusValidator is a validator for the "acme_challenge_status" field enum values. It is called by the builders before save.
 func AcmeChallengeStatusValidator(acs enums.SSLVerificationStatus) error {
 	switch acs.String() {
-	case "initializing", "pending_validation", "deleted", "pending_issuance", "pending_deployment", "pending_deletion", "pending_expiration", "expired", "active", "initializing_timed_out", "validation_timed_out", "issuance_timed_out", "deployment_timed_out", "deletion_timed_out", "pending_cleanup", "staging_deployment", "staging_active", "deactivating", "inactive", "backup_issued", "holding_deployment":
+	case "INITIALIZING", "PENDING_VALIDATION", "DELETED", "PENDING_ISSUANCE", "PENDING_DEPLOYMENT", "PENDING_DELETION", "PENDING_EXPIRATION", "EXPIRED", "ACTIVE", "INITIALIZING_TIMED_OUT", "VALIDATION_TIMED_OUT", "ISSUANCE_TIMED_OUT", "DEPLOYMENT_TIMED_OUT", "DELETION_TIMED_OUT", "PENDING_CLEANUP", "STAGING_DEPLOYMENT", "STAGING_ACTIVE", "DEACTIVATING", "INACTIVE", "BACKUP_ISSUED", "HOLDING_DEPLOYMENT":
 		return nil
 	default:
 		return fmt.Errorf("dnsverificationhistory: invalid enum value for acme_challenge_status field: %q", acs)

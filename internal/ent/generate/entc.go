@@ -60,6 +60,7 @@ const (
 	historySchemaPath    = "./internal/ent/historyschema"
 	entTemplatesPath     = "./internal/ent/generate/templates"
 	entGenerateConfigDir = "./internal/ent/generate"
+	enumsDir             = "./common/enums"
 
 	templateDir   = "./internal/ent/generate/templates/ent"
 	featureMapDir = "./internal/entitlements/features/"
@@ -80,6 +81,7 @@ var (
 		mixinPath,
 		entTemplatesPath,
 		entGenerateConfigDir,
+		enumsDir,
 	}
 
 	// changes to these paths should trigger history schema generation
@@ -87,6 +89,7 @@ var (
 		schemaPath,
 		entGeneratedPath,
 		entGenerateConfigDir,
+		enumsDir,
 	}
 )
 
@@ -294,7 +297,7 @@ func schemaGenerate(extensions ...entc.Extension) {
 	workflowGenExt := workflowgen.New(
 		workflowgen.WithHooksOutputDir(entGeneratedWorkflowPath),
 		workflowgen.WithHooksPackageName("workflowgenerated"),
-		workflowgen.WithEnumsOutputDir("common/enums"),
+		workflowgen.WithEnumsOutputDir(enumsDir),
 		workflowgen.WithEnumsPackageName("enums"),
 	)
 	if err := entc.Generate(schemaPath, &gen.Config{
