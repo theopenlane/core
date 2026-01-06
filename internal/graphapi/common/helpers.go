@@ -444,7 +444,7 @@ func enumInfoForType(t reflect.Type, cache map[reflect.Type]enumInfo) enumInfo {
 	}
 
 	method, ok := t.MethodByName("Values")
-	receiver := reflect.Value{}
+	receiver := reflect.Value{} //nolint:ineffassign
 	if ok {
 		// Value receiver provides Values()
 		receiver = reflect.Zero(t)
