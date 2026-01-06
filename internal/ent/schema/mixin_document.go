@@ -12,10 +12,11 @@ import (
 
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/entx/accessmap"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // DocumentMixin implements the document pattern with approver for schemas.
@@ -87,14 +88,6 @@ func getDocumentFields(documentType string) []ent.Field {
 			).
 			Optional().
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
-		field.String(fmt.Sprintf("%s_type", documentType)).
-			Optional().
-			Annotations(
-				entgql.Directives(
-					entgql.Deprecated(fmt.Sprintf("Use `%s_kind_name` instead.", documentType)),
-				),
-			).
-			Comment(fmt.Sprintf("type of the %s, e.g. compliance, operational, health and safety, etc.", documentType)),
 		field.Text("details").
 			Optional().
 			Annotations(
