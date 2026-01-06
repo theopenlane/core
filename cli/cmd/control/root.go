@@ -8,9 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/cli/tables"
+
+	"github.com/theopenlane/core/cli/cmd"
 )
 
 // command represents the base control command when called without any subcommands
@@ -89,7 +90,7 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []graphclient.Control) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Source", "Category", "CategoryID", "Subcategory", "Status", "ControlType", "MappedCategories", "Standard")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Description", "Source", "Category", "CategoryID", "Subcategory", "Status", "MappedCategories", "Standard")
 
 	for _, i := range out {
 		refFramework := "-"
@@ -112,7 +113,7 @@ func tableOutput(out []graphclient.Control) {
 			subcat = *i.Subcategory
 		}
 
-		writer.AddRow(i.ID, i.RefCode, *i.Description, i.Source, cat, catID, subcat, i.Status.String(), i.ControlType, strings.Join(i.MappedCategories, ", "), refFramework)
+		writer.AddRow(i.ID, i.RefCode, *i.Description, i.Source, cat, catID, subcat, i.Status.String(), strings.Join(i.MappedCategories, ", "), refFramework)
 	}
 
 	writer.Render()

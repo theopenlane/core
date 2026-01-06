@@ -719,7 +719,6 @@ func TestMutationCreateTask(t *testing.T) {
 				Title:             "test-task",
 				Details:           lo.ToPtr("test details of the task"),
 				Status:            &enums.TaskStatusInProgress,
-				Category:          lo.ToPtr("evidence upload"),
 				Due:               lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
 				ControlIDs:        []string{control.ID},
 				InternalPolicyIDs: []string{internalPolicy.ID},
@@ -734,7 +733,6 @@ func TestMutationCreateTask(t *testing.T) {
 				Title:      "test-task",
 				Details:    lo.ToPtr("test details of the task"),
 				Status:     &enums.TaskStatusInProgress,
-				Category:   lo.ToPtr("evidence upload"),
 				Due:        lo.ToPtr(models.DateTime(time.Now().Add(time.Hour * 24))),
 				AssigneeID: &om.UserID, // assign the task to another user
 			},
@@ -834,12 +832,6 @@ func TestMutationCreateTask(t *testing.T) {
 				assert.Check(t, is.Equal(*resp.CreateTask.Task.Details, ""))
 			} else {
 				assert.Check(t, is.Equal(*tc.request.Details, *resp.CreateTask.Task.Details))
-			}
-
-			if tc.request.Category == nil {
-				assert.Check(t, is.Equal(*resp.CreateTask.Task.Category, ""))
-			} else {
-				assert.Check(t, is.Equal(*tc.request.Category, *resp.CreateTask.Task.Category))
 			}
 
 			if tc.request.Due == nil {
@@ -1014,13 +1006,11 @@ func TestMutationUpdateTask(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		{
-			name:   "update category using pat of owner",
-			taskID: task.ID,
-			request: &testclient.UpdateTaskInput{
-				Category: lo.ToPtr("risk review"),
-			},
-			client: suite.client.apiWithPAT,
-			ctx:    context.Background(),
+			name:    "update category using pat of owner",
+			taskID:  task.ID,
+			request: &testclient.UpdateTaskInput{},
+			client:  suite.client.apiWithPAT,
+			ctx:     context.Background(),
 		},
 		{
 			name:   "update assignee to user not in org should fail",
@@ -1137,10 +1127,6 @@ func TestMutationUpdateTask(t *testing.T) {
 
 				if tc.request.Details != nil {
 					assert.Check(t, is.DeepEqual(tc.request.Details, resp.UpdateTask.Task.Details))
-				}
-
-				if tc.request.Category != nil {
-					assert.Check(t, is.Equal(*tc.request.Category, *resp.UpdateTask.Task.Category))
 				}
 
 				if tc.request.ClearAssignee != nil {
@@ -1392,10 +1378,6 @@ func TestMutationUpdateBulkTask(t *testing.T) {
 				if tc.input.Status != nil {
 					assert.Check(t, task.GetStatus() != nil)
 					assert.Check(t, is.Equal(*tc.input.Status, *task.GetStatus()))
-				}
-
-				if tc.input.Category != nil {
-					assert.Check(t, is.Equal(*tc.input.Category, *task.Category))
 				}
 
 				if tc.input.AssigneeID != nil {

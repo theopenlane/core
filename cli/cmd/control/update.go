@@ -7,9 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/go-client/graphclient"
+
 	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/go-client/graphclient"
 )
 
 var updateCmd = &cobra.Command{
@@ -85,11 +86,6 @@ func updateValidation() (id string, input graphclient.UpdateControlInput, err er
 	status := cmd.Config.String("status")
 	if status != "" {
 		input.Status = enums.ToControlStatus(status)
-	}
-
-	controlType := cmd.Config.String("control-type")
-	if controlType != "" {
-		input.ControlType = enums.ToControlType(controlType)
 	}
 
 	mappedCategories := cmd.Config.Strings("mapped-categories")

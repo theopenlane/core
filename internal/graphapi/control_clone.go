@@ -8,6 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -20,9 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/rout"
 )
 
 type createProgramRequest interface {
@@ -342,7 +343,6 @@ func createCloneControlInput(c *generated.Control, programID *string, orgID stri
 		Aliases:                c.Aliases,
 		Description:            &c.Description,
 		Source:                 &c.Source,
-		ControlType:            &c.ControlType,
 		Category:               &c.Category,
 		CategoryID:             &c.CategoryID,
 		Subcategory:            &c.Subcategory,
@@ -479,7 +479,6 @@ func (r *mutationResolver) cloneSubcontrols(ctx context.Context, subcontrolsToCr
 			Description:                &subcontrol.Description,
 			Source:                     &subcontrol.Source,
 			ControlID:                  subcontrol.ControlID,
-			ControlType:                &subcontrol.ControlType,
 			Category:                   &subcontrol.Category,
 			CategoryID:                 &subcontrol.CategoryID,
 			Subcategory:                &subcontrol.Subcategory,

@@ -8,8 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/utils/cli/tables"
+
+	"github.com/theopenlane/core/cli/cmd"
 
 	"github.com/theopenlane/go-client/graphclient"
 )
@@ -90,10 +91,10 @@ func jsonOutput(out any) error {
 // tableOutput prints the output in a table format
 func tableOutput(out []graphclient.Risk) {
 	// create a table writer
-	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Details", "Status", "Type", "BusinessCosts", "Impact", "Likelihood", "Score", "Mitigation")
+	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Details", "Status", "BusinessCosts", "Impact", "Likelihood", "Score", "Mitigation")
 
 	for _, i := range out {
-		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.RiskType, *i.BusinessCosts, *i.Impact, *i.Likelihood, *i.Score, *i.Mitigation)
+		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.BusinessCosts, *i.Impact, *i.Likelihood, *i.Score, *i.Mitigation)
 	}
 
 	writer.Render()

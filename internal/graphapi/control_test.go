@@ -377,7 +377,6 @@ func TestMutationCreateControl(t *testing.T) {
 				Description:      lo.ToPtr("A description of the Control"),
 				Status:           &enums.ControlStatusPreparing,
 				Tags:             []string{"tag1", "tag2"},
-				ControlType:      &enums.ControlTypeDetective,
 				Category:         lo.ToPtr("Availability"),
 				CategoryID:       lo.ToPtr("A"),
 				Subcategory:      lo.ToPtr("Additional Criteria for Availability"),
@@ -553,12 +552,6 @@ func TestMutationCreateControl(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateControl.Control.Status))
 			} else {
 				assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *resp.CreateControl.Control.Status))
-			}
-
-			if tc.request.ControlType != nil {
-				assert.Check(t, is.Equal(*tc.request.ControlType, *resp.CreateControl.Control.ControlType))
-			} else {
-				assert.Check(t, is.Equal(enums.ControlTypePreventative, *resp.CreateControl.Control.ControlType)) // default value
 			}
 
 			if tc.request.Source != nil {
@@ -943,7 +936,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 
 				// check the cloned control fields are set and match the original control
 				assert.Check(t, is.Equal(tc.expectedControls[i].RefCode, control.RefCode))
-				assert.Check(t, is.Equal(tc.expectedControls[i].ControlType, *control.ControlType))
 				assert.Check(t, is.Equal(tc.expectedControls[i].Category, *control.Category))
 				assert.Check(t, is.Equal(tc.expectedControls[i].CategoryID, *control.CategoryID))
 				assert.Check(t, is.Equal(tc.expectedControls[i].Subcategory, *control.Subcategory))
@@ -951,7 +943,6 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 				assert.Check(t, is.DeepEqual(tc.expectedControls[i].ControlQuestions, control.ControlQuestions))
 				assert.Check(t, is.DeepEqual(tc.expectedControls[i].Tags, control.Tags))
 				assert.Check(t, is.Equal(enums.ControlStatusNotImplemented, *control.Status))
-				assert.Check(t, is.Equal(tc.expectedControls[i].ControlType, *control.ControlType))
 				assert.Check(t, is.Equal(tc.expectedControls[i].Source, *control.Source))
 				assert.Check(t, is.Equal(tc.expectedControls[i].StandardID, *control.StandardID))
 
@@ -1451,7 +1442,6 @@ func TestMutationUpdateControl(t *testing.T) {
 			request: testclient.UpdateControlInput{
 				Status:          &enums.ControlStatusPreparing,
 				Tags:            []string{"tag1", "tag2"},
-				ControlType:     &enums.ControlTypeDetective,
 				ControlKindName: &kind.Name,
 				Category:        lo.ToPtr("Availability"),
 				CategoryID:      lo.ToPtr("A"),
@@ -1597,10 +1587,6 @@ func TestMutationUpdateControl(t *testing.T) {
 
 			if tc.request.Source != nil {
 				assert.Check(t, is.Equal(*tc.request.Source, *resp.UpdateControl.Control.Source))
-			}
-
-			if tc.request.ControlType != nil {
-				assert.Check(t, is.Equal(*tc.request.ControlType, *resp.UpdateControl.Control.ControlType))
 			}
 
 			if tc.request.ControlKindName != nil {
@@ -2530,7 +2516,6 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 			name: "update control type and category on multiple controls",
 			ids:  []string{control1.ID, control2.ID, control3.ID},
 			input: testclient.UpdateControlInput{
-				ControlType:    &enums.ControlTypeDetective,
 				Category:       lo.ToPtr("Availability"),
 				ControlOwnerID: &ownerGroup.ID,
 			},
@@ -2578,10 +2563,6 @@ func TestMutationUpdateBulkControl(t *testing.T) {
 
 				if tc.input.Tags != nil {
 					assert.Check(t, is.DeepEqual(tc.input.Tags, control.Tags))
-				}
-
-				if tc.input.ControlType != nil {
-					assert.Check(t, is.Equal(*tc.input.ControlType, *control.ControlType))
 				}
 
 				if tc.input.Category != nil {

@@ -8,11 +8,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryRisk(t *testing.T) {
@@ -217,7 +218,6 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:          "Another Risk",
 				Details:       lo.ToPtr("details of the Risk"),
 				Status:        &enums.RiskMitigated,
-				RiskType:      lo.ToPtr("operational"),
 				BusinessCosts: lo.ToPtr("much money"),
 				Impact:        &enums.RiskImpactLow,
 				Likelihood:    &enums.RiskLikelihoodHigh,
@@ -356,12 +356,6 @@ func TestMutationCreateRisk(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateRisk.Risk.Status))
 			} else {
 				assert.Check(t, is.Equal(enums.RiskIdentified, *resp.CreateRisk.Risk.Status))
-			}
-
-			if tc.request.RiskType != nil {
-				assert.Check(t, is.Equal(*tc.request.RiskType, *resp.CreateRisk.Risk.RiskType))
-			} else {
-				assert.Check(t, is.Len(*resp.CreateRisk.Risk.RiskType, 0))
 			}
 
 			if tc.request.BusinessCosts != nil {
@@ -695,8 +689,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			name: "happy path, update risk type and score",
 			ids:  []string{risk1.ID, risk2.ID},
 			input: testclient.UpdateRiskInput{
-				RiskType: lo.ToPtr("Financial"),
-				Score:    lo.ToPtr(int64(8)),
+				Score: lo.ToPtr(int64(8)),
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -798,10 +791,6 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 				if tc.input.DelegateID != nil {
 					assert.Check(t, responseRisk.Delegate != nil)
 					assert.Check(t, is.Equal(*tc.input.DelegateID, responseRisk.Delegate.ID))
-				}
-
-				if tc.input.RiskType != nil {
-					assert.Check(t, is.Equal(*tc.input.RiskType, *responseRisk.RiskType))
 				}
 			}
 
