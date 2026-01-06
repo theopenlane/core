@@ -727,13 +727,13 @@ steps:
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
-                APOLLO_KEY: APOLLO_KEY
+                APOLLO_KEY: APOLLO_HISTORY_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
               environment:
-                - "APOLLO_KEY"
+                - "APOLLO_HISTORY_KEY"
       - label: ":rocket: atlas push"
         if: build.branch == "main" && build.tag == null
         key: "atlas_migrate"
