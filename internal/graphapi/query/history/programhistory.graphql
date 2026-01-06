@@ -31,7 +31,6 @@ query GetAllProgramHistories {
         programKindID
         programKindName
         programOwnerID
-        programType
         ref
         startDate
         status
@@ -74,7 +73,6 @@ query GetProgramHistories($first: Int, $last: Int, $where: ProgramHistoryWhereIn
         programKindID
         programKindName
         programOwnerID
-        programType
         ref
         startDate
         status

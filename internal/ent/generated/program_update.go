@@ -248,20 +248,6 @@ func (_u *ProgramUpdate) SetNillableStatus(v *enums.ProgramStatus) *ProgramUpdat
 	return _u
 }
 
-// SetProgramType sets the "program_type" field.
-func (_u *ProgramUpdate) SetProgramType(v enums.ProgramType) *ProgramUpdate {
-	_u.mutation.SetProgramType(v)
-	return _u
-}
-
-// SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (_u *ProgramUpdate) SetNillableProgramType(v *enums.ProgramType) *ProgramUpdate {
-	if v != nil {
-		_u.SetProgramType(*v)
-	}
-	return _u
-}
-
 // SetFrameworkName sets the "framework_name" field.
 func (_u *ProgramUpdate) SetFrameworkName(v string) *ProgramUpdate {
 	_u.mutation.SetFrameworkName(v)
@@ -1153,11 +1139,6 @@ func (_u *ProgramUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ProgramType(); ok {
-		if err := program.ProgramTypeValidator(v); err != nil {
-			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.AuditorEmail(); ok {
 		if err := program.AuditorEmailValidator(v); err != nil {
 			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
@@ -1242,9 +1223,6 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ProgramType(); ok {
-		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)
@@ -2443,20 +2421,6 @@ func (_u *ProgramUpdateOne) SetNillableStatus(v *enums.ProgramStatus) *ProgramUp
 	return _u
 }
 
-// SetProgramType sets the "program_type" field.
-func (_u *ProgramUpdateOne) SetProgramType(v enums.ProgramType) *ProgramUpdateOne {
-	_u.mutation.SetProgramType(v)
-	return _u
-}
-
-// SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (_u *ProgramUpdateOne) SetNillableProgramType(v *enums.ProgramType) *ProgramUpdateOne {
-	if v != nil {
-		_u.SetProgramType(*v)
-	}
-	return _u
-}
-
 // SetFrameworkName sets the "framework_name" field.
 func (_u *ProgramUpdateOne) SetFrameworkName(v string) *ProgramUpdateOne {
 	_u.mutation.SetFrameworkName(v)
@@ -3361,11 +3325,6 @@ func (_u *ProgramUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ProgramType(); ok {
-		if err := program.ProgramTypeValidator(v); err != nil {
-			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.AuditorEmail(); ok {
 		if err := program.AuditorEmailValidator(v); err != nil {
 			return &ValidationError{Name: "auditor_email", err: fmt.Errorf(`generated: validator failed for field "Program.auditor_email": %w`, err)}
@@ -3467,9 +3426,6 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ProgramType(); ok {
-		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)

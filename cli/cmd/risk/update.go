@@ -7,9 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/go-client/graphclient"
+
 	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/go-client/graphclient"
 )
 
 var updateCmd = &cobra.Command{
@@ -30,7 +31,6 @@ func init() {
 	updateCmd.Flags().StringP("name", "n", "", "name of the risk")
 	updateCmd.Flags().StringP("details", "d", "", "details of the risk")
 	updateCmd.Flags().StringP("status", "s", "", "status of the risk")
-	updateCmd.Flags().StringP("type", "t", "", "type of the risk")
 	updateCmd.Flags().StringP("business-costs", "b", "", "business costs associated with the risk")
 	updateCmd.Flags().StringP("impact", "m", "", "impact of the risk")
 	updateCmd.Flags().StringP("likelihood", "l", "", "likelihood of the risk")
@@ -63,11 +63,6 @@ func updateValidation() (id string, input graphclient.UpdateRiskInput, err error
 	status := cmd.Config.String("status")
 	if status != "" {
 		input.Status = enums.ToRiskStatus(status)
-	}
-
-	riskType := cmd.Config.String("type")
-	if riskType != "" {
-		input.RiskType = &riskType
 	}
 
 	businessCosts := cmd.Config.String("business-costs")

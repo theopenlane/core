@@ -12,7 +12,6 @@ query GetAllRiskHistories {
     edges {
       node {
         businessCosts
-        category
         createdAt
         createdBy
         delegateID
@@ -31,7 +30,6 @@ query GetAllRiskHistories {
         riskCategoryName
         riskKindID
         riskKindName
-        riskType
         score
         stakeholderID
         status
@@ -55,7 +53,6 @@ query GetRiskHistories($first: Int, $last: Int, $where: RiskHistoryWhereInput) {
     edges {
       node {
         businessCosts
-        category
         createdAt
         createdBy
         delegateID
@@ -74,7 +71,6 @@ query GetRiskHistories($first: Int, $last: Int, $where: RiskHistoryWhereInput) {
         riskCategoryName
         riskKindID
         riskKindName
-        riskType
         score
         stakeholderID
         status

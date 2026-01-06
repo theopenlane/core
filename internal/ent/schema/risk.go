@@ -63,24 +63,6 @@ func (Risk) Fields() []ent.Field {
 			).
 			Optional().
 			Comment("status of the risk - identified, mitigated, accepted, closed, transferred, and archived."),
-		field.String("risk_type").
-			Annotations(
-				entgql.OrderField("risk_type"),
-				entgql.Directives(
-					entgql.Deprecated("Use `risk_kind_name` instead."),
-				),
-			).
-			Optional().
-			Comment("type of the risk, e.g. strategic, operational, financial, external, etc."),
-		field.String("category").
-			Optional().
-			Annotations(
-				entgql.OrderField("category"),
-				entgql.Directives(
-					entgql.Deprecated("Use `risk_category_name` instead."),
-				),
-			).
-			Comment("category of the risk, e.g. human resources, operations, IT, etc."),
 		field.Enum("impact").
 			GoType(enums.RiskImpact("")).
 			Default(enums.RiskImpactModerate.String()).

@@ -86,10 +86,6 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetStatus(status)
 	}
 
-	if actionPlanType, exists := m.ActionPlanType(); exists {
-		create = create.SetActionPlanType(actionPlanType)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -315,12 +311,6 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetStatus(status)
 		} else {
 			create = create.SetStatus(actionplan.Status)
-		}
-
-		if actionPlanType, exists := m.ActionPlanType(); exists {
-			create = create.SetActionPlanType(actionPlanType)
-		} else {
-			create = create.SetActionPlanType(actionplan.ActionPlanType)
 		}
 
 		if details, exists := m.Details(); exists {
@@ -572,7 +562,6 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetRevision(actionplan.Revision).
 			SetName(actionplan.Name).
 			SetStatus(actionplan.Status).
-			SetActionPlanType(actionplan.ActionPlanType).
 			SetDetails(actionplan.Details).
 			SetDetailsJSON(actionplan.DetailsJSON).
 			SetApprovalRequired(actionplan.ApprovalRequired).
@@ -1765,10 +1754,6 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetNillableReferenceFrameworkRevision(&referenceFrameworkRevision)
 	}
 
-	if controlType, exists := m.ControlType(); exists {
-		create = create.SetControlType(controlType)
-	}
-
 	if category, exists := m.Category(); exists {
 		create = create.SetCategory(category)
 	}
@@ -2006,12 +1991,6 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetNillableReferenceFrameworkRevision(control.ReferenceFrameworkRevision)
 		}
 
-		if controlType, exists := m.ControlType(); exists {
-			create = create.SetControlType(controlType)
-		} else {
-			create = create.SetControlType(control.ControlType)
-		}
-
 		if category, exists := m.Category(); exists {
 			create = create.SetCategory(category)
 		} else {
@@ -2204,7 +2183,6 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetSource(control.Source).
 			SetNillableReferenceFramework(control.ReferenceFramework).
 			SetNillableReferenceFrameworkRevision(control.ReferenceFrameworkRevision).
-			SetControlType(control.ControlType).
 			SetCategory(control.Category).
 			SetCategoryID(control.CategoryID).
 			SetSubcategory(control.Subcategory).
@@ -8148,10 +8126,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetStatus(status)
 	}
 
-	if policyType, exists := m.PolicyType(); exists {
-		create = create.SetPolicyType(policyType)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -8349,12 +8323,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetStatus(internalpolicy.Status)
 		}
 
-		if policyType, exists := m.PolicyType(); exists {
-			create = create.SetPolicyType(policyType)
-		} else {
-			create = create.SetPolicyType(internalpolicy.PolicyType)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -8519,7 +8487,6 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetNillableSystemInternalID(internalpolicy.SystemInternalID).
 			SetName(internalpolicy.Name).
 			SetStatus(internalpolicy.Status).
-			SetPolicyType(internalpolicy.PolicyType).
 			SetDetails(internalpolicy.Details).
 			SetDetailsJSON(internalpolicy.DetailsJSON).
 			SetApprovalRequired(internalpolicy.ApprovalRequired).
@@ -10993,10 +10960,6 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
-	if procedureType, exists := m.ProcedureType(); exists {
-		create = create.SetProcedureType(procedureType)
-	}
-
 	if details, exists := m.Details(); exists {
 		create = create.SetDetails(details)
 	}
@@ -11188,12 +11151,6 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(procedure.Status)
 		}
 
-		if procedureType, exists := m.ProcedureType(); exists {
-			create = create.SetProcedureType(procedureType)
-		} else {
-			create = create.SetProcedureType(procedure.ProcedureType)
-		}
-
 		if details, exists := m.Details(); exists {
 			create = create.SetDetails(details)
 		} else {
@@ -11373,7 +11330,6 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetOwnerID(procedure.OwnerID).
 			SetName(procedure.Name).
 			SetStatus(procedure.Status).
-			SetProcedureType(procedure.ProcedureType).
 			SetDetails(procedure.Details).
 			SetDetailsJSON(procedure.DetailsJSON).
 			SetApprovalRequired(procedure.ApprovalRequired).
@@ -11475,10 +11431,6 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
-	}
-
-	if programType, exists := m.ProgramType(); exists {
-		create = create.SetProgramType(programType)
 	}
 
 	if frameworkName, exists := m.FrameworkName(); exists {
@@ -11636,12 +11588,6 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(program.Status)
 		}
 
-		if programType, exists := m.ProgramType(); exists {
-			create = create.SetProgramType(programType)
-		} else {
-			create = create.SetProgramType(program.ProgramType)
-		}
-
 		if frameworkName, exists := m.FrameworkName(); exists {
 			create = create.SetFrameworkName(frameworkName)
 		} else {
@@ -11751,7 +11697,6 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetName(program.Name).
 			SetDescription(program.Description).
 			SetStatus(program.Status).
-			SetProgramType(program.ProgramType).
 			SetFrameworkName(program.FrameworkName).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
@@ -12857,14 +12802,6 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
-	if riskType, exists := m.RiskType(); exists {
-		create = create.SetRiskType(riskType)
-	}
-
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
-	}
-
 	if impact, exists := m.Impact(); exists {
 		create = create.SetImpact(impact)
 	}
@@ -13030,18 +12967,6 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(risk.Status)
 		}
 
-		if riskType, exists := m.RiskType(); exists {
-			create = create.SetRiskType(riskType)
-		} else {
-			create = create.SetRiskType(risk.RiskType)
-		}
-
-		if category, exists := m.Category(); exists {
-			create = create.SetCategory(category)
-		} else {
-			create = create.SetCategory(risk.Category)
-		}
-
 		if impact, exists := m.Impact(); exists {
 			create = create.SetImpact(impact)
 		} else {
@@ -13158,8 +13083,6 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetRiskCategoryID(risk.RiskCategoryID).
 			SetName(risk.Name).
 			SetStatus(risk.Status).
-			SetRiskType(risk.RiskType).
-			SetCategory(risk.Category).
 			SetImpact(risk.Impact).
 			SetLikelihood(risk.Likelihood).
 			SetScore(risk.Score).
@@ -14106,10 +14029,6 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetNillableReferenceFrameworkRevision(&referenceFrameworkRevision)
 	}
 
-	if controlType, exists := m.ControlType(); exists {
-		create = create.SetControlType(controlType)
-	}
-
 	if category, exists := m.Category(); exists {
 		create = create.SetCategory(category)
 	}
@@ -14347,12 +14266,6 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetNillableReferenceFrameworkRevision(subcontrol.ReferenceFrameworkRevision)
 		}
 
-		if controlType, exists := m.ControlType(); exists {
-			create = create.SetControlType(controlType)
-		} else {
-			create = create.SetControlType(subcontrol.ControlType)
-		}
-
 		if category, exists := m.Category(); exists {
 			create = create.SetCategory(category)
 		} else {
@@ -14545,7 +14458,6 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetSource(subcontrol.Source).
 			SetNillableReferenceFramework(subcontrol.ReferenceFramework).
 			SetNillableReferenceFrameworkRevision(subcontrol.ReferenceFrameworkRevision).
-			SetControlType(subcontrol.ControlType).
 			SetCategory(subcontrol.Category).
 			SetCategoryID(subcontrol.CategoryID).
 			SetSubcategory(subcontrol.Subcategory).
@@ -14910,10 +14822,6 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStatus(status)
 	}
 
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
-	}
-
 	if due, exists := m.Due(); exists {
 		create = create.SetNillableDue(&due)
 	}
@@ -15067,12 +14975,6 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStatus(task.Status)
 		}
 
-		if category, exists := m.Category(); exists {
-			create = create.SetCategory(category)
-		} else {
-			create = create.SetCategory(task.Category)
-		}
-
 		if due, exists := m.Due(); exists {
 			create = create.SetNillableDue(&due)
 		} else {
@@ -15171,7 +15073,6 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDetails(task.Details).
 			SetDetailsJSON(task.DetailsJSON).
 			SetStatus(task.Status).
-			SetCategory(task.Category).
 			SetNillableDue(task.Due).
 			SetNillableCompleted(task.Completed).
 			SetAssigneeID(task.AssigneeID).

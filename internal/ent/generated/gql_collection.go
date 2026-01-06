@@ -1626,11 +1626,6 @@ func (_q *ActionPlanQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, actionplan.FieldStatus)
 				fieldSeen[actionplan.FieldStatus] = struct{}{}
 			}
-		case "actionPlanType":
-			if _, ok := fieldSeen[actionplan.FieldActionPlanType]; !ok {
-				selectedFields = append(selectedFields, actionplan.FieldActionPlanType)
-				fieldSeen[actionplan.FieldActionPlanType] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[actionplan.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, actionplan.FieldDetails)
@@ -5822,11 +5817,6 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[control.FieldReferenceFrameworkRevision]; !ok {
 				selectedFields = append(selectedFields, control.FieldReferenceFrameworkRevision)
 				fieldSeen[control.FieldReferenceFrameworkRevision] = struct{}{}
-			}
-		case "controlType":
-			if _, ok := fieldSeen[control.FieldControlType]; !ok {
-				selectedFields = append(selectedFields, control.FieldControlType)
-				fieldSeen[control.FieldControlType] = struct{}{}
 			}
 		case "category":
 			if _, ok := fieldSeen[control.FieldCategory]; !ok {
@@ -26475,11 +26465,6 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, internalpolicy.FieldStatus)
 				fieldSeen[internalpolicy.FieldStatus] = struct{}{}
 			}
-		case "policyType":
-			if _, ok := fieldSeen[internalpolicy.FieldPolicyType]; !ok {
-				selectedFields = append(selectedFields, internalpolicy.FieldPolicyType)
-				fieldSeen[internalpolicy.FieldPolicyType] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[internalpolicy.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, internalpolicy.FieldDetails)
@@ -41019,11 +41004,6 @@ func (_q *ProcedureQuery) collectField(ctx context.Context, oneNode bool, opCtx 
 				selectedFields = append(selectedFields, procedure.FieldStatus)
 				fieldSeen[procedure.FieldStatus] = struct{}{}
 			}
-		case "procedureType":
-			if _, ok := fieldSeen[procedure.FieldProcedureType]; !ok {
-				selectedFields = append(selectedFields, procedure.FieldProcedureType)
-				fieldSeen[procedure.FieldProcedureType] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[procedure.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, procedure.FieldDetails)
@@ -42897,11 +42877,6 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 			if _, ok := fieldSeen[program.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, program.FieldStatus)
 				fieldSeen[program.FieldStatus] = struct{}{}
-			}
-		case "programType":
-			if _, ok := fieldSeen[program.FieldProgramType]; !ok {
-				selectedFields = append(selectedFields, program.FieldProgramType)
-				fieldSeen[program.FieldProgramType] = struct{}{}
 			}
 		case "frameworkName":
 			if _, ok := fieldSeen[program.FieldFrameworkName]; !ok {
@@ -48260,16 +48235,6 @@ func (_q *RiskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, risk.FieldStatus)
 				fieldSeen[risk.FieldStatus] = struct{}{}
 			}
-		case "riskType":
-			if _, ok := fieldSeen[risk.FieldRiskType]; !ok {
-				selectedFields = append(selectedFields, risk.FieldRiskType)
-				fieldSeen[risk.FieldRiskType] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[risk.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, risk.FieldCategory)
-				fieldSeen[risk.FieldCategory] = struct{}{}
-			}
 		case "impact":
 			if _, ok := fieldSeen[risk.FieldImpact]; !ok {
 				selectedFields = append(selectedFields, risk.FieldImpact)
@@ -51463,11 +51428,6 @@ func (_q *SubcontrolQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, subcontrol.FieldReferenceFrameworkRevision)
 				fieldSeen[subcontrol.FieldReferenceFrameworkRevision] = struct{}{}
 			}
-		case "controlType":
-			if _, ok := fieldSeen[subcontrol.FieldControlType]; !ok {
-				selectedFields = append(selectedFields, subcontrol.FieldControlType)
-				fieldSeen[subcontrol.FieldControlType] = struct{}{}
-			}
 		case "category":
 			if _, ok := fieldSeen[subcontrol.FieldCategory]; !ok {
 				selectedFields = append(selectedFields, subcontrol.FieldCategory)
@@ -53868,11 +53828,6 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[task.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, task.FieldStatus)
 				fieldSeen[task.FieldStatus] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[task.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, task.FieldCategory)
-				fieldSeen[task.FieldCategory] = struct{}{}
 			}
 		case "due":
 			if _, ok := fieldSeen[task.FieldDue]; !ok {

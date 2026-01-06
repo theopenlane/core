@@ -10,7 +10,6 @@ mutation CreateBulkCSVProgram($input: Upload!) {
       createdAt
       createdBy
       description
-      programType
       frameworkName
       endDate
       id
@@ -38,7 +37,6 @@ mutation CreateBulkProgram($input: [CreateProgramInput!]) {
       createdAt
       createdBy
       description
-      programType
       frameworkName
       endDate
       id
@@ -77,7 +75,6 @@ mutation CreateFullProgram($input: CreateFullProgramInput!) {
       name
       id
       displayID
-      programType
       frameworkName
       auditFirm
       auditor
@@ -164,7 +161,6 @@ mutation CreateProgram($input: CreateProgramInput!) {
       createdAt
       createdBy
       description
-      programType
       frameworkName
       endDate
       id
@@ -185,7 +181,6 @@ mutation CreateProgram($input: CreateProgramInput!) {
             id
             displayID
             name
-            procedureType
             status
             tags
             updatedAt
@@ -203,7 +198,6 @@ mutation CreateProgram($input: CreateProgramInput!) {
             id
             displayID
             name
-            policyType
             status
             tags
             updatedAt
@@ -246,7 +240,6 @@ mutation CreateProgramWithMembers($input: CreateProgramWithMembersInput!) {
       name
       id
       displayID
-      programType
       frameworkName
       auditFirm
       auditor
@@ -286,7 +279,6 @@ query GetAllPrograms {
         createdAt
         createdBy
         description
-        programType
         frameworkName
         endDate
         id
@@ -307,7 +299,6 @@ query GetAllPrograms {
               id
               displayID
               name
-              procedureType
               status
               tags
               updatedAt
@@ -325,7 +316,6 @@ query GetAllPrograms {
               id
               displayID
               name
-              policyType
               status
               tags
               updatedAt
@@ -386,7 +376,6 @@ query GetProgramByID($programId: ID!) {
     createdAt
     createdBy
     description
-    programType
     frameworkName
     endDate
     id
@@ -407,7 +396,6 @@ query GetProgramByID($programId: ID!) {
           id
           displayID
           name
-          procedureType
           status
           tags
           updatedAt
@@ -425,7 +413,6 @@ query GetProgramByID($programId: ID!) {
           id
           displayID
           name
-          policyType
           status
           tags
           updatedAt
@@ -486,7 +473,6 @@ query GetPrograms($where: ProgramWhereInput) {
         createdAt
         createdBy
         description
-        programType
         frameworkName
         endDate
         id
@@ -507,7 +493,6 @@ query GetPrograms($where: ProgramWhereInput) {
               id
               displayID
               name
-              procedureType
               status
               tags
               updatedAt
@@ -525,7 +510,6 @@ query GetPrograms($where: ProgramWhereInput) {
               id
               displayID
               name
-              policyType
               status
               tags
               updatedAt
@@ -587,7 +571,6 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
       createdAt
       createdBy
       description
-      programType
       frameworkName
       endDate
       id
@@ -607,7 +590,6 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
             id
             displayID
             name
-            procedureType
             status
             tags
             updatedAt
@@ -625,7 +607,6 @@ mutation UpdateProgram($updateProgramId: ID!, $input: UpdateProgramInput!) {
             id
             displayID
             name
-            policyType
             status
             tags
             updatedAt

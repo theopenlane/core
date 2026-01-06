@@ -32,7 +32,6 @@ query GetAllProcedureHistories {
         ownerID
         procedureKindID
         procedureKindName
-        procedureType
         ref
         reviewDue
         reviewFrequency
@@ -83,7 +82,6 @@ query GetProcedureHistories($first: Int, $last: Int, $where: ProcedureHistoryWhe
         ownerID
         procedureKindID
         procedureKindName
-        procedureType
         ref
         reviewDue
         reviewFrequency

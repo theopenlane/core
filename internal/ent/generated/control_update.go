@@ -364,26 +364,6 @@ func (_u *ControlUpdate) ClearReferenceFrameworkRevision() *ControlUpdate {
 	return _u
 }
 
-// SetControlType sets the "control_type" field.
-func (_u *ControlUpdate) SetControlType(v enums.ControlType) *ControlUpdate {
-	_u.mutation.SetControlType(v)
-	return _u
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_u *ControlUpdate) SetNillableControlType(v *enums.ControlType) *ControlUpdate {
-	if v != nil {
-		_u.SetControlType(*v)
-	}
-	return _u
-}
-
-// ClearControlType clears the value of the "control_type" field.
-func (_u *ControlUpdate) ClearControlType() *ControlUpdate {
-	_u.mutation.ClearControlType()
-	return _u
-}
-
 // SetCategory sets the "category" field.
 func (_u *ControlUpdate) SetCategory(v string) *ControlUpdate {
 	_u.mutation.SetCategory(v)
@@ -1722,11 +1702,6 @@ func (_u *ControlUpdate) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ControlType(); ok {
-		if err := control.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "Control.control_type": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.RefCode(); ok {
 		if err := control.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
@@ -1863,12 +1838,6 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ReferenceFrameworkRevisionCleared() {
 		_spec.ClearField(control.FieldReferenceFrameworkRevision, field.TypeString)
-	}
-	if value, ok := _u.mutation.ControlType(); ok {
-		_spec.SetField(control.FieldControlType, field.TypeEnum, value)
-	}
-	if _u.mutation.ControlTypeCleared() {
-		_spec.ClearField(control.FieldControlType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(control.FieldCategory, field.TypeString, value)
@@ -3627,26 +3596,6 @@ func (_u *ControlUpdateOne) ClearReferenceFrameworkRevision() *ControlUpdateOne 
 	return _u
 }
 
-// SetControlType sets the "control_type" field.
-func (_u *ControlUpdateOne) SetControlType(v enums.ControlType) *ControlUpdateOne {
-	_u.mutation.SetControlType(v)
-	return _u
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_u *ControlUpdateOne) SetNillableControlType(v *enums.ControlType) *ControlUpdateOne {
-	if v != nil {
-		_u.SetControlType(*v)
-	}
-	return _u
-}
-
-// ClearControlType clears the value of the "control_type" field.
-func (_u *ControlUpdateOne) ClearControlType() *ControlUpdateOne {
-	_u.mutation.ClearControlType()
-	return _u
-}
-
 // SetCategory sets the "category" field.
 func (_u *ControlUpdateOne) SetCategory(v string) *ControlUpdateOne {
 	_u.mutation.SetCategory(v)
@@ -4998,11 +4947,6 @@ func (_u *ControlUpdateOne) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ControlType(); ok {
-		if err := control.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`generated: validator failed for field "Control.control_type": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.RefCode(); ok {
 		if err := control.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
@@ -5156,12 +5100,6 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 	}
 	if _u.mutation.ReferenceFrameworkRevisionCleared() {
 		_spec.ClearField(control.FieldReferenceFrameworkRevision, field.TypeString)
-	}
-	if value, ok := _u.mutation.ControlType(); ok {
-		_spec.SetField(control.FieldControlType, field.TypeEnum, value)
-	}
-	if _u.mutation.ControlTypeCleared() {
-		_spec.ClearField(control.FieldControlType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(control.FieldCategory, field.TypeString, value)

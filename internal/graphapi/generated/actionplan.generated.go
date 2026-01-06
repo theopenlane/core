@@ -5926,8 +5926,6 @@ func (ec *executionContext) fieldContext_ActionPlanBulkCreatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
-			case "actionPlanType":
-				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
 			case "detailsJSON":
@@ -6114,8 +6112,6 @@ func (ec *executionContext) fieldContext_ActionPlanBulkUpdatePayload_actionPlans
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
-			case "actionPlanType":
-				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
 			case "detailsJSON":
@@ -6302,8 +6298,6 @@ func (ec *executionContext) fieldContext_ActionPlanCreatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
-			case "actionPlanType":
-				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
 			case "detailsJSON":
@@ -6490,8 +6484,6 @@ func (ec *executionContext) fieldContext_ActionPlanUpdatePayload_actionPlan(_ co
 				return ec.fieldContext_ActionPlan_name(ctx, field)
 			case "status":
 				return ec.fieldContext_ActionPlan_status(ctx, field)
-			case "actionPlanType":
-				return ec.fieldContext_ActionPlan_actionPlanType(ctx, field)
 			case "details":
 				return ec.fieldContext_ActionPlan_details(ctx, field)
 			case "detailsJSON":

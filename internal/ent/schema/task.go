@@ -74,15 +74,6 @@ func (Task) Fields() []ent.Field {
 				entgql.OrderField("STATUS"),
 			).
 			Default(enums.TaskStatusOpen.String()),
-		field.String("category").
-			Comment("the category of the task, e.g. evidence upload, risk review, policy review, etc.").
-			Annotations(
-				entgql.OrderField("category"),
-				entgql.Directives(
-					entgql.Deprecated("Use `task_kind_name` instead."),
-				),
-			).
-			Optional(),
 		field.Time("due").
 			GoType(models.DateTime{}).
 			Comment("the due date of the task").

@@ -158,7 +158,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldRevision:                        {Type: field.TypeString, Column: actionplan.FieldRevision},
 			actionplan.FieldName:                            {Type: field.TypeString, Column: actionplan.FieldName},
 			actionplan.FieldStatus:                          {Type: field.TypeEnum, Column: actionplan.FieldStatus},
-			actionplan.FieldActionPlanType:                  {Type: field.TypeString, Column: actionplan.FieldActionPlanType},
 			actionplan.FieldDetails:                         {Type: field.TypeString, Column: actionplan.FieldDetails},
 			actionplan.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: actionplan.FieldDetailsJSON},
 			actionplan.FieldApprovalRequired:                {Type: field.TypeBool, Column: actionplan.FieldApprovalRequired},
@@ -340,7 +339,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			control.FieldSource:                     {Type: field.TypeEnum, Column: control.FieldSource},
 			control.FieldReferenceFramework:         {Type: field.TypeString, Column: control.FieldReferenceFramework},
 			control.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: control.FieldReferenceFrameworkRevision},
-			control.FieldControlType:                {Type: field.TypeEnum, Column: control.FieldControlType},
 			control.FieldCategory:                   {Type: field.TypeString, Column: control.FieldCategory},
 			control.FieldCategoryID:                 {Type: field.TypeString, Column: control.FieldCategoryID},
 			control.FieldSubcategory:                {Type: field.TypeString, Column: control.FieldSubcategory},
@@ -1203,7 +1201,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldSystemInternalID:                {Type: field.TypeString, Column: internalpolicy.FieldSystemInternalID},
 			internalpolicy.FieldName:                            {Type: field.TypeString, Column: internalpolicy.FieldName},
 			internalpolicy.FieldStatus:                          {Type: field.TypeEnum, Column: internalpolicy.FieldStatus},
-			internalpolicy.FieldPolicyType:                      {Type: field.TypeString, Column: internalpolicy.FieldPolicyType},
 			internalpolicy.FieldDetails:                         {Type: field.TypeString, Column: internalpolicy.FieldDetails},
 			internalpolicy.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: internalpolicy.FieldDetailsJSON},
 			internalpolicy.FieldApprovalRequired:                {Type: field.TypeBool, Column: internalpolicy.FieldApprovalRequired},
@@ -1836,7 +1833,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldOwnerID:                         {Type: field.TypeString, Column: procedure.FieldOwnerID},
 			procedure.FieldName:                            {Type: field.TypeString, Column: procedure.FieldName},
 			procedure.FieldStatus:                          {Type: field.TypeEnum, Column: procedure.FieldStatus},
-			procedure.FieldProcedureType:                   {Type: field.TypeString, Column: procedure.FieldProcedureType},
 			procedure.FieldDetails:                         {Type: field.TypeString, Column: procedure.FieldDetails},
 			procedure.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: procedure.FieldDetailsJSON},
 			procedure.FieldApprovalRequired:                {Type: field.TypeBool, Column: procedure.FieldApprovalRequired},
@@ -1886,7 +1882,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldName:                 {Type: field.TypeString, Column: program.FieldName},
 			program.FieldDescription:          {Type: field.TypeString, Column: program.FieldDescription},
 			program.FieldStatus:               {Type: field.TypeEnum, Column: program.FieldStatus},
-			program.FieldProgramType:          {Type: field.TypeEnum, Column: program.FieldProgramType},
 			program.FieldFrameworkName:        {Type: field.TypeString, Column: program.FieldFrameworkName},
 			program.FieldStartDate:            {Type: field.TypeTime, Column: program.FieldStartDate},
 			program.FieldEndDate:              {Type: field.TypeTime, Column: program.FieldEndDate},
@@ -2031,8 +2026,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldRiskCategoryID:    {Type: field.TypeString, Column: risk.FieldRiskCategoryID},
 			risk.FieldName:              {Type: field.TypeString, Column: risk.FieldName},
 			risk.FieldStatus:            {Type: field.TypeEnum, Column: risk.FieldStatus},
-			risk.FieldRiskType:          {Type: field.TypeString, Column: risk.FieldRiskType},
-			risk.FieldCategory:          {Type: field.TypeString, Column: risk.FieldCategory},
 			risk.FieldImpact:            {Type: field.TypeEnum, Column: risk.FieldImpact},
 			risk.FieldLikelihood:        {Type: field.TypeEnum, Column: risk.FieldLikelihood},
 			risk.FieldScore:             {Type: field.TypeInt, Column: risk.FieldScore},
@@ -2191,7 +2184,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldSource:                     {Type: field.TypeEnum, Column: subcontrol.FieldSource},
 			subcontrol.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrol.FieldReferenceFramework},
 			subcontrol.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrol.FieldReferenceFrameworkRevision},
-			subcontrol.FieldControlType:                {Type: field.TypeEnum, Column: subcontrol.FieldControlType},
 			subcontrol.FieldCategory:                   {Type: field.TypeString, Column: subcontrol.FieldCategory},
 			subcontrol.FieldCategoryID:                 {Type: field.TypeString, Column: subcontrol.FieldCategoryID},
 			subcontrol.FieldSubcategory:                {Type: field.TypeString, Column: subcontrol.FieldSubcategory},
@@ -2356,7 +2348,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldDetails:              {Type: field.TypeString, Column: task.FieldDetails},
 			task.FieldDetailsJSON:          {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
 			task.FieldStatus:               {Type: field.TypeEnum, Column: task.FieldStatus},
-			task.FieldCategory:             {Type: field.TypeString, Column: task.FieldCategory},
 			task.FieldDue:                  {Type: field.TypeTime, Column: task.FieldDue},
 			task.FieldCompleted:            {Type: field.TypeTime, Column: task.FieldCompleted},
 			task.FieldAssigneeID:           {Type: field.TypeString, Column: task.FieldAssigneeID},
@@ -12255,11 +12246,6 @@ func (f *ActionPlanFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldStatus))
 }
 
-// WhereActionPlanType applies the entql string predicate on the action_plan_type field.
-func (f *ActionPlanFilter) WhereActionPlanType(p entql.StringP) {
-	f.Where(p.Field(actionplan.FieldActionPlanType))
-}
-
 // WhereDetails applies the entql string predicate on the details field.
 func (f *ActionPlanFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldDetails))
@@ -13556,11 +13542,6 @@ func (f *ControlFilter) WhereReferenceFramework(p entql.StringP) {
 // WhereReferenceFrameworkRevision applies the entql string predicate on the reference_framework_revision field.
 func (f *ControlFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
 	f.Where(p.Field(control.FieldReferenceFrameworkRevision))
-}
-
-// WhereControlType applies the entql string predicate on the control_type field.
-func (f *ControlFilter) WhereControlType(p entql.StringP) {
-	f.Where(p.Field(control.FieldControlType))
 }
 
 // WhereCategory applies the entql string predicate on the category field.
@@ -20589,11 +20570,6 @@ func (f *InternalPolicyFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldStatus))
 }
 
-// WherePolicyType applies the entql string predicate on the policy_type field.
-func (f *InternalPolicyFilter) WherePolicyType(p entql.StringP) {
-	f.Where(p.Field(internalpolicy.FieldPolicyType))
-}
-
 // WhereDetails applies the entql string predicate on the details field.
 func (f *InternalPolicyFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(internalpolicy.FieldDetails))
@@ -25808,11 +25784,6 @@ func (f *ProcedureFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldStatus))
 }
 
-// WhereProcedureType applies the entql string predicate on the procedure_type field.
-func (f *ProcedureFilter) WhereProcedureType(p entql.StringP) {
-	f.Where(p.Field(procedure.FieldProcedureType))
-}
-
 // WhereDetails applies the entql string predicate on the details field.
 func (f *ProcedureFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(procedure.FieldDetails))
@@ -26269,11 +26240,6 @@ func (f *ProgramFilter) WhereDescription(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ProgramFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(program.FieldStatus))
-}
-
-// WhereProgramType applies the entql string predicate on the program_type field.
-func (f *ProgramFilter) WhereProgramType(p entql.StringP) {
-	f.Where(p.Field(program.FieldProgramType))
 }
 
 // WhereFrameworkName applies the entql string predicate on the framework_name field.
@@ -27736,16 +27702,6 @@ func (f *RiskFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(risk.FieldStatus))
 }
 
-// WhereRiskType applies the entql string predicate on the risk_type field.
-func (f *RiskFilter) WhereRiskType(p entql.StringP) {
-	f.Where(p.Field(risk.FieldRiskType))
-}
-
-// WhereCategory applies the entql string predicate on the category field.
-func (f *RiskFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(risk.FieldCategory))
-}
-
 // WhereImpact applies the entql string predicate on the impact field.
 func (f *RiskFilter) WhereImpact(p entql.StringP) {
 	f.Where(p.Field(risk.FieldImpact))
@@ -28957,11 +28913,6 @@ func (f *SubcontrolFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldReferenceFrameworkRevision))
 }
 
-// WhereControlType applies the entql string predicate on the control_type field.
-func (f *SubcontrolFilter) WhereControlType(p entql.StringP) {
-	f.Where(p.Field(subcontrol.FieldControlType))
-}
-
 // WhereCategory applies the entql string predicate on the category field.
 func (f *SubcontrolFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(subcontrol.FieldCategory))
@@ -30047,11 +29998,6 @@ func (f *TaskFilter) WhereDetailsJSON(p entql.BytesP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(task.FieldStatus))
-}
-
-// WhereCategory applies the entql string predicate on the category field.
-func (f *TaskFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(task.FieldCategory))
 }
 
 // WhereDue applies the entql time.Time predicate on the due field.

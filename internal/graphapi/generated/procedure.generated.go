@@ -74,8 +74,6 @@ func (ec *executionContext) fieldContext_ProcedureBulkCreatePayload_procedures(_
 				return ec.fieldContext_Procedure_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
-			case "procedureType":
-				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
 			case "detailsJSON":
@@ -240,8 +238,6 @@ func (ec *executionContext) fieldContext_ProcedureBulkUpdatePayload_procedures(_
 				return ec.fieldContext_Procedure_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
-			case "procedureType":
-				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
 			case "detailsJSON":
@@ -406,8 +402,6 @@ func (ec *executionContext) fieldContext_ProcedureCreatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
-			case "procedureType":
-				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
 			case "detailsJSON":
@@ -572,8 +566,6 @@ func (ec *executionContext) fieldContext_ProcedureUpdatePayload_procedure(_ cont
 				return ec.fieldContext_Procedure_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Procedure_status(ctx, field)
-			case "procedureType":
-				return ec.fieldContext_Procedure_procedureType(ctx, field)
 			case "details":
 				return ec.fieldContext_Procedure_details(ctx, field)
 			case "detailsJSON":

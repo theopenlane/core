@@ -223,20 +223,6 @@ func (_c *InternalPolicyCreate) SetNillableStatus(v *enums.DocumentStatus) *Inte
 	return _c
 }
 
-// SetPolicyType sets the "policy_type" field.
-func (_c *InternalPolicyCreate) SetPolicyType(v string) *InternalPolicyCreate {
-	_c.mutation.SetPolicyType(v)
-	return _c
-}
-
-// SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (_c *InternalPolicyCreate) SetNillablePolicyType(v *string) *InternalPolicyCreate {
-	if v != nil {
-		_c.SetPolicyType(*v)
-	}
-	return _c
-}
-
 // SetDetails sets the "details" field.
 func (_c *InternalPolicyCreate) SetDetails(v string) *InternalPolicyCreate {
 	_c.mutation.SetDetails(v)
@@ -937,10 +923,6 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(internalpolicy.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.PolicyType(); ok {
-		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
-		_node.PolicyType = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)

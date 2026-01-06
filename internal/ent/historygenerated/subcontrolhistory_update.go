@@ -342,26 +342,6 @@ func (_u *SubcontrolHistoryUpdate) ClearReferenceFrameworkRevision() *Subcontrol
 	return _u
 }
 
-// SetControlType sets the "control_type" field.
-func (_u *SubcontrolHistoryUpdate) SetControlType(v enums.ControlType) *SubcontrolHistoryUpdate {
-	_u.mutation.SetControlType(v)
-	return _u
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_u *SubcontrolHistoryUpdate) SetNillableControlType(v *enums.ControlType) *SubcontrolHistoryUpdate {
-	if v != nil {
-		_u.SetControlType(*v)
-	}
-	return _u
-}
-
-// ClearControlType clears the value of the "control_type" field.
-func (_u *SubcontrolHistoryUpdate) ClearControlType() *SubcontrolHistoryUpdate {
-	_u.mutation.ClearControlType()
-	return _u
-}
-
 // SetCategory sets the "category" field.
 func (_u *SubcontrolHistoryUpdate) SetCategory(v string) *SubcontrolHistoryUpdate {
 	_u.mutation.SetCategory(v)
@@ -811,11 +791,6 @@ func (_u *SubcontrolHistoryUpdate) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ControlType(); ok {
-		if err := subcontrolhistory.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.control_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -956,12 +931,6 @@ func (_u *SubcontrolHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.ReferenceFrameworkRevisionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldReferenceFrameworkRevision, field.TypeString)
-	}
-	if value, ok := _u.mutation.ControlType(); ok {
-		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)
-	}
-	if _u.mutation.ControlTypeCleared() {
-		_spec.ClearField(subcontrolhistory.FieldControlType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(subcontrolhistory.FieldCategory, field.TypeString, value)
@@ -1464,26 +1433,6 @@ func (_u *SubcontrolHistoryUpdateOne) ClearReferenceFrameworkRevision() *Subcont
 	return _u
 }
 
-// SetControlType sets the "control_type" field.
-func (_u *SubcontrolHistoryUpdateOne) SetControlType(v enums.ControlType) *SubcontrolHistoryUpdateOne {
-	_u.mutation.SetControlType(v)
-	return _u
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_u *SubcontrolHistoryUpdateOne) SetNillableControlType(v *enums.ControlType) *SubcontrolHistoryUpdateOne {
-	if v != nil {
-		_u.SetControlType(*v)
-	}
-	return _u
-}
-
-// ClearControlType clears the value of the "control_type" field.
-func (_u *SubcontrolHistoryUpdateOne) ClearControlType() *SubcontrolHistoryUpdateOne {
-	_u.mutation.ClearControlType()
-	return _u
-}
-
 // SetCategory sets the "category" field.
 func (_u *SubcontrolHistoryUpdateOne) SetCategory(v string) *SubcontrolHistoryUpdateOne {
 	_u.mutation.SetCategory(v)
@@ -1946,11 +1895,6 @@ func (_u *SubcontrolHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ControlType(); ok {
-		if err := subcontrolhistory.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.control_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -2108,12 +2052,6 @@ func (_u *SubcontrolHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Subco
 	}
 	if _u.mutation.ReferenceFrameworkRevisionCleared() {
 		_spec.ClearField(subcontrolhistory.FieldReferenceFrameworkRevision, field.TypeString)
-	}
-	if value, ok := _u.mutation.ControlType(); ok {
-		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)
-	}
-	if _u.mutation.ControlTypeCleared() {
-		_spec.ClearField(subcontrolhistory.FieldControlType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(subcontrolhistory.FieldCategory, field.TypeString, value)

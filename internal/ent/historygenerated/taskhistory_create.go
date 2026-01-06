@@ -237,20 +237,6 @@ func (_c *TaskHistoryCreate) SetNillableStatus(v *enums.TaskStatus) *TaskHistory
 	return _c
 }
 
-// SetCategory sets the "category" field.
-func (_c *TaskHistoryCreate) SetCategory(v string) *TaskHistoryCreate {
-	_c.mutation.SetCategory(v)
-	return _c
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_c *TaskHistoryCreate) SetNillableCategory(v *string) *TaskHistoryCreate {
-	if v != nil {
-		_c.SetCategory(*v)
-	}
-	return _c
-}
-
 // SetDue sets the "due" field.
 func (_c *TaskHistoryCreate) SetDue(v models.DateTime) *TaskHistoryCreate {
 	_c.mutation.SetDue(v)
@@ -586,10 +572,6 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.Category(); ok {
-		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
-		_node.Category = value
 	}
 	if value, ok := _c.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)

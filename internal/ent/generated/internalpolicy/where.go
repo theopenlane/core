@@ -133,11 +133,6 @@ func Name(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldName, v))
 }
 
-// PolicyType applies equality check predicate on the "policy_type" field. It's identical to PolicyTypeEQ.
-func PolicyType(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldPolicyType, v))
-}
-
 // Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
 func Details(v string) predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldEQ(FieldDetails, v))
@@ -1066,81 +1061,6 @@ func StatusIsNil() predicate.InternalPolicy {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.InternalPolicy {
 	return predicate.InternalPolicy(sql.FieldNotNull(FieldStatus))
-}
-
-// PolicyTypeEQ applies the EQ predicate on the "policy_type" field.
-func PolicyTypeEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEQ(FieldPolicyType, v))
-}
-
-// PolicyTypeNEQ applies the NEQ predicate on the "policy_type" field.
-func PolicyTypeNEQ(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNEQ(FieldPolicyType, v))
-}
-
-// PolicyTypeIn applies the In predicate on the "policy_type" field.
-func PolicyTypeIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIn(FieldPolicyType, vs...))
-}
-
-// PolicyTypeNotIn applies the NotIn predicate on the "policy_type" field.
-func PolicyTypeNotIn(vs ...string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotIn(FieldPolicyType, vs...))
-}
-
-// PolicyTypeGT applies the GT predicate on the "policy_type" field.
-func PolicyTypeGT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGT(FieldPolicyType, v))
-}
-
-// PolicyTypeGTE applies the GTE predicate on the "policy_type" field.
-func PolicyTypeGTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldGTE(FieldPolicyType, v))
-}
-
-// PolicyTypeLT applies the LT predicate on the "policy_type" field.
-func PolicyTypeLT(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLT(FieldPolicyType, v))
-}
-
-// PolicyTypeLTE applies the LTE predicate on the "policy_type" field.
-func PolicyTypeLTE(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldLTE(FieldPolicyType, v))
-}
-
-// PolicyTypeContains applies the Contains predicate on the "policy_type" field.
-func PolicyTypeContains(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContains(FieldPolicyType, v))
-}
-
-// PolicyTypeHasPrefix applies the HasPrefix predicate on the "policy_type" field.
-func PolicyTypeHasPrefix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasPrefix(FieldPolicyType, v))
-}
-
-// PolicyTypeHasSuffix applies the HasSuffix predicate on the "policy_type" field.
-func PolicyTypeHasSuffix(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldHasSuffix(FieldPolicyType, v))
-}
-
-// PolicyTypeIsNil applies the IsNil predicate on the "policy_type" field.
-func PolicyTypeIsNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldIsNull(FieldPolicyType))
-}
-
-// PolicyTypeNotNil applies the NotNil predicate on the "policy_type" field.
-func PolicyTypeNotNil() predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldNotNull(FieldPolicyType))
-}
-
-// PolicyTypeEqualFold applies the EqualFold predicate on the "policy_type" field.
-func PolicyTypeEqualFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldEqualFold(FieldPolicyType, v))
-}
-
-// PolicyTypeContainsFold applies the ContainsFold predicate on the "policy_type" field.
-func PolicyTypeContainsFold(v string) predicate.InternalPolicy {
-	return predicate.InternalPolicy(sql.FieldContainsFold(FieldPolicyType, v))
 }
 
 // DetailsEQ applies the EQ predicate on the "details" field.

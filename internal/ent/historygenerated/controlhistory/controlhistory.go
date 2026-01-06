@@ -64,8 +64,6 @@ const (
 	FieldReferenceFramework = "reference_framework"
 	// FieldReferenceFrameworkRevision holds the string denoting the reference_framework_revision field in the database.
 	FieldReferenceFrameworkRevision = "reference_framework_revision"
-	// FieldControlType holds the string denoting the control_type field in the database.
-	FieldControlType = "control_type"
 	// FieldCategory holds the string denoting the category field in the database.
 	FieldCategory = "category"
 	// FieldCategoryID holds the string denoting the category_id field in the database.
@@ -141,7 +139,6 @@ var Columns = []string{
 	FieldSource,
 	FieldReferenceFramework,
 	FieldReferenceFrameworkRevision,
-	FieldControlType,
 	FieldCategory,
 	FieldCategoryID,
 	FieldSubcategory,
@@ -235,18 +232,6 @@ func SourceValidator(s enums.ControlSource) error {
 		return nil
 	default:
 		return fmt.Errorf("controlhistory: invalid enum value for source field: %q", s)
-	}
-}
-
-const DefaultControlType enums.ControlType = "PREVENTATIVE"
-
-// ControlTypeValidator is a validator for the "control_type" field enum values. It is called by the builders before save.
-func ControlTypeValidator(ct enums.ControlType) error {
-	switch ct.String() {
-	case "PREVENTATIVE", "DETECTIVE", "CORRECTIVE", "DETERRENT":
-		return nil
-	default:
-		return fmt.Errorf("controlhistory: invalid enum value for control_type field: %q", ct)
 	}
 }
 
@@ -353,11 +338,6 @@ func ByReferenceFrameworkRevision(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReferenceFrameworkRevision, opts...).ToFunc()
 }
 
-// ByControlType orders the results by the control_type field.
-func ByControlType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldControlType, opts...).ToFunc()
-}
-
 // ByCategory orders the results by the category field.
 func ByCategory(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCategory, opts...).ToFunc()
@@ -447,11 +427,4 @@ var (
 	_ graphql.Marshaler = (*enums.ControlSource)(nil)
 	// enums.ControlSource must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ControlSource)(nil)
-)
-
-var (
-	// enums.ControlType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.ControlType)(nil)
-	// enums.ControlType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.ControlType)(nil)
 )

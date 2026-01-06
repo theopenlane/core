@@ -11,10 +11,11 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/common/models"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -71,16 +72,6 @@ func (Program) Fields() []ent.Field {
 				entgql.OrderField("STATUS"),
 			).
 			Default(enums.ProgramStatusNotStarted.String()),
-		field.Enum("program_type").
-			Comment("the type of the program").
-			GoType(enums.ProgramType("")).
-			Annotations(
-				entgql.OrderField("PROGRAM_TYPE"),
-				entgql.Directives(
-					entgql.Deprecated("Use `program_kind` instead."),
-				),
-			).
-			Default(enums.ProgramTypeFramework.String()),
 		field.String("framework_name").
 			Comment("the short name of the compliance standard the program is based on, only used for framework type programs").
 			Optional().

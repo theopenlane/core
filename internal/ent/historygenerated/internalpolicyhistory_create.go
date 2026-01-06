@@ -244,20 +244,6 @@ func (_c *InternalPolicyHistoryCreate) SetNillableStatus(v *enums.DocumentStatus
 	return _c
 }
 
-// SetPolicyType sets the "policy_type" field.
-func (_c *InternalPolicyHistoryCreate) SetPolicyType(v string) *InternalPolicyHistoryCreate {
-	_c.mutation.SetPolicyType(v)
-	return _c
-}
-
-// SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (_c *InternalPolicyHistoryCreate) SetNillablePolicyType(v *string) *InternalPolicyHistoryCreate {
-	if v != nil {
-		_c.SetPolicyType(*v)
-	}
-	return _c
-}
-
 // SetDetails sets the "details" field.
 func (_c *InternalPolicyHistoryCreate) SetDetails(v string) *InternalPolicyHistoryCreate {
 	_c.mutation.SetDetails(v)
@@ -742,10 +728,6 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(internalpolicyhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.PolicyType(); ok {
-		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
-		_node.PolicyType = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)

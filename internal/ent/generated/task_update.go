@@ -245,26 +245,6 @@ func (_u *TaskUpdate) SetNillableStatus(v *enums.TaskStatus) *TaskUpdate {
 	return _u
 }
 
-// SetCategory sets the "category" field.
-func (_u *TaskUpdate) SetCategory(v string) *TaskUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TaskUpdate) SetNillableCategory(v *string) *TaskUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *TaskUpdate) ClearCategory() *TaskUpdate {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
 // SetDue sets the "due" field.
 func (_u *TaskUpdate) SetDue(v models.DateTime) *TaskUpdate {
 	_u.mutation.SetDue(v)
@@ -1133,12 +1113,6 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(task.FieldCategory, field.TypeString, value)
-	}
-	if _u.mutation.CategoryCleared() {
-		_spec.ClearField(task.FieldCategory, field.TypeString)
 	}
 	if value, ok := _u.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)
@@ -2188,26 +2162,6 @@ func (_u *TaskUpdateOne) SetNillableStatus(v *enums.TaskStatus) *TaskUpdateOne {
 	return _u
 }
 
-// SetCategory sets the "category" field.
-func (_u *TaskUpdateOne) SetCategory(v string) *TaskUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TaskUpdateOne) SetNillableCategory(v *string) *TaskUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *TaskUpdateOne) ClearCategory() *TaskUpdateOne {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
 // SetDue sets the "due" field.
 func (_u *TaskUpdateOne) SetDue(v models.DateTime) *TaskUpdateOne {
 	_u.mutation.SetDue(v)
@@ -3106,12 +3060,6 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(task.FieldCategory, field.TypeString, value)
-	}
-	if _u.mutation.CategoryCleared() {
-		_spec.ClearField(task.FieldCategory, field.TypeString)
 	}
 	if value, ok := _u.mutation.Due(); ok {
 		_spec.SetField(task.FieldDue, field.TypeTime, value)

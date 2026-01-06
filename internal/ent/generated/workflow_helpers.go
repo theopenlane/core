@@ -133,18 +133,6 @@ func (c *ControlClient) ApplyFieldUpdates(ctx context.Context, id string, update
 			}
 			update.SetReferenceFrameworkRevision(v)
 			applied++
-		case "control_type":
-			if value == nil {
-				update.ClearControlType()
-				applied++
-				continue
-			}
-			v, err := coerceWorkflowValue[enums.ControlType](value)
-			if err != nil {
-				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
-			}
-			update.SetControlType(v)
-			applied++
 		case "category":
 			if value == nil {
 				update.ClearCategory()
@@ -400,18 +388,6 @@ func (c *SubcontrolClient) ApplyFieldUpdates(ctx context.Context, id string, upd
 				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
 			}
 			update.SetReferenceFrameworkRevision(v)
-			applied++
-		case "control_type":
-			if value == nil {
-				update.ClearControlType()
-				applied++
-				continue
-			}
-			v, err := coerceWorkflowValue[enums.ControlType](value)
-			if err != nil {
-				return fmt.Errorf("workflow: invalid field update for %s: %w", field, err)
-			}
-			update.SetControlType(v)
 			applied++
 		case "category":
 			if value == nil {

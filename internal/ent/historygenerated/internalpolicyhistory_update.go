@@ -239,26 +239,6 @@ func (_u *InternalPolicyHistoryUpdate) ClearStatus() *InternalPolicyHistoryUpdat
 	return _u
 }
 
-// SetPolicyType sets the "policy_type" field.
-func (_u *InternalPolicyHistoryUpdate) SetPolicyType(v string) *InternalPolicyHistoryUpdate {
-	_u.mutation.SetPolicyType(v)
-	return _u
-}
-
-// SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (_u *InternalPolicyHistoryUpdate) SetNillablePolicyType(v *string) *InternalPolicyHistoryUpdate {
-	if v != nil {
-		_u.SetPolicyType(*v)
-	}
-	return _u
-}
-
-// ClearPolicyType clears the value of the "policy_type" field.
-func (_u *InternalPolicyHistoryUpdate) ClearPolicyType() *InternalPolicyHistoryUpdate {
-	_u.mutation.ClearPolicyType()
-	return _u
-}
-
 // SetDetails sets the "details" field.
 func (_u *InternalPolicyHistoryUpdate) SetDetails(v string) *InternalPolicyHistoryUpdate {
 	_u.mutation.SetDetails(v)
@@ -785,12 +765,6 @@ func (_u *InternalPolicyHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.PolicyType(); ok {
-		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
-	}
-	if _u.mutation.PolicyTypeCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldPolicyType, field.TypeString)
-	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)
 	}
@@ -1165,26 +1139,6 @@ func (_u *InternalPolicyHistoryUpdateOne) SetNillableStatus(v *enums.DocumentSta
 // ClearStatus clears the value of the "status" field.
 func (_u *InternalPolicyHistoryUpdateOne) ClearStatus() *InternalPolicyHistoryUpdateOne {
 	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetPolicyType sets the "policy_type" field.
-func (_u *InternalPolicyHistoryUpdateOne) SetPolicyType(v string) *InternalPolicyHistoryUpdateOne {
-	_u.mutation.SetPolicyType(v)
-	return _u
-}
-
-// SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (_u *InternalPolicyHistoryUpdateOne) SetNillablePolicyType(v *string) *InternalPolicyHistoryUpdateOne {
-	if v != nil {
-		_u.SetPolicyType(*v)
-	}
-	return _u
-}
-
-// ClearPolicyType clears the value of the "policy_type" field.
-func (_u *InternalPolicyHistoryUpdateOne) ClearPolicyType() *InternalPolicyHistoryUpdateOne {
-	_u.mutation.ClearPolicyType()
 	return _u
 }
 
@@ -1743,12 +1697,6 @@ func (_u *InternalPolicyHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicyhistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.PolicyType(); ok {
-		_spec.SetField(internalpolicyhistory.FieldPolicyType, field.TypeString, value)
-	}
-	if _u.mutation.PolicyTypeCleared() {
-		_spec.ClearField(internalpolicyhistory.FieldPolicyType, field.TypeString)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicyhistory.FieldDetails, field.TypeString, value)

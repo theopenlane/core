@@ -293,8 +293,6 @@ type ActionPlan struct {
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
-	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
-	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
 	// structured details of the action_plan in JSON format
@@ -562,22 +560,6 @@ type ActionPlanWhereInput struct {
 	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
-	// action_plan_type field predicates
-	ActionPlanType             *string  `json:"actionPlanType,omitempty"`
-	ActionPlanTypeNeq          *string  `json:"actionPlanTypeNEQ,omitempty"`
-	ActionPlanTypeIn           []string `json:"actionPlanTypeIn,omitempty"`
-	ActionPlanTypeNotIn        []string `json:"actionPlanTypeNotIn,omitempty"`
-	ActionPlanTypeGt           *string  `json:"actionPlanTypeGT,omitempty"`
-	ActionPlanTypeGte          *string  `json:"actionPlanTypeGTE,omitempty"`
-	ActionPlanTypeLt           *string  `json:"actionPlanTypeLT,omitempty"`
-	ActionPlanTypeLte          *string  `json:"actionPlanTypeLTE,omitempty"`
-	ActionPlanTypeContains     *string  `json:"actionPlanTypeContains,omitempty"`
-	ActionPlanTypeHasPrefix    *string  `json:"actionPlanTypeHasPrefix,omitempty"`
-	ActionPlanTypeHasSuffix    *string  `json:"actionPlanTypeHasSuffix,omitempty"`
-	ActionPlanTypeIsNil        *bool    `json:"actionPlanTypeIsNil,omitempty"`
-	ActionPlanTypeNotNil       *bool    `json:"actionPlanTypeNotNil,omitempty"`
-	ActionPlanTypeEqualFold    *string  `json:"actionPlanTypeEqualFold,omitempty"`
-	ActionPlanTypeContainsFold *string  `json:"actionPlanTypeContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -2102,8 +2084,6 @@ type Control struct {
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// category id of the control
@@ -3194,13 +3174,6 @@ type ControlWhereInput struct {
 	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
 	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
 	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
-	// control_type field predicates
-	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
-	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
-	ControlTypeIn     []enums.ControlType `json:"controlTypeIn,omitempty"`
-	ControlTypeNotIn  []enums.ControlType `json:"controlTypeNotIn,omitempty"`
-	ControlTypeIsNil  *bool               `json:"controlTypeIsNil,omitempty"`
-	ControlTypeNotNil *bool               `json:"controlTypeNotNil,omitempty"`
 	// category field predicates
 	Category             *string  `json:"category,omitempty"`
 	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
@@ -3519,8 +3492,6 @@ type CreateActionPlanInput struct {
 	Name string `json:"name"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
-	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
-	ActionPlanType *string `json:"actionPlanType,omitempty"`
 	// details of the action_plan
 	Details *string `json:"details,omitempty"`
 	// structured details of the action_plan in JSON format
@@ -3739,8 +3710,6 @@ type CreateControlInput struct {
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// category id of the control
@@ -4532,8 +4501,6 @@ type CreateInternalPolicyInput struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
-	// type of the policy, e.g. compliance, operational, health and safety, etc.
-	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
 	// structured details of the policy in JSON format
@@ -5041,8 +5008,6 @@ type CreateProcedureInput struct {
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
-	// type of the procedure, e.g. compliance, operational, health and safety, etc.
-	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
 	// structured details of the procedure in JSON format
@@ -5107,8 +5072,6 @@ type CreateProgramInput struct {
 	Description *string `json:"description,omitempty"`
 	// the status of the program
 	Status *enums.ProgramStatus `json:"status,omitempty"`
-	// the type of the program
-	ProgramType *enums.ProgramType `json:"programType,omitempty"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
 	FrameworkName *string `json:"frameworkName,omitempty"`
 	// the start date of the period
@@ -5314,10 +5277,6 @@ type CreateRiskInput struct {
 	Name string `json:"name"`
 	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status *enums.RiskStatus `json:"status,omitempty"`
-	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType *string `json:"riskType,omitempty"`
-	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category *string `json:"category,omitempty"`
 	// impact of the risk -critical, high, medium, low
 	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
@@ -5480,8 +5439,6 @@ type CreateSubcontrolInput struct {
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// category id of the control
@@ -5610,8 +5567,6 @@ type CreateTaskInput struct {
 	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
-	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category *string `json:"category,omitempty"`
 	// the due date of the task
 	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
@@ -13243,8 +13198,6 @@ type InternalPolicy struct {
 	Name string `json:"name"`
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
-	// type of the policy, e.g. compliance, operational, health and safety, etc.
-	PolicyType *string `json:"policyType,omitempty"`
 	// details of the policy
 	Details *string `json:"details,omitempty"`
 	// structured details of the policy in JSON format
@@ -13550,22 +13503,6 @@ type InternalPolicyWhereInput struct {
 	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
-	// policy_type field predicates
-	PolicyType             *string  `json:"policyType,omitempty"`
-	PolicyTypeNeq          *string  `json:"policyTypeNEQ,omitempty"`
-	PolicyTypeIn           []string `json:"policyTypeIn,omitempty"`
-	PolicyTypeNotIn        []string `json:"policyTypeNotIn,omitempty"`
-	PolicyTypeGt           *string  `json:"policyTypeGT,omitempty"`
-	PolicyTypeGte          *string  `json:"policyTypeGTE,omitempty"`
-	PolicyTypeLt           *string  `json:"policyTypeLT,omitempty"`
-	PolicyTypeLte          *string  `json:"policyTypeLTE,omitempty"`
-	PolicyTypeContains     *string  `json:"policyTypeContains,omitempty"`
-	PolicyTypeHasPrefix    *string  `json:"policyTypeHasPrefix,omitempty"`
-	PolicyTypeHasSuffix    *string  `json:"policyTypeHasSuffix,omitempty"`
-	PolicyTypeIsNil        *bool    `json:"policyTypeIsNil,omitempty"`
-	PolicyTypeNotNil       *bool    `json:"policyTypeNotNil,omitempty"`
-	PolicyTypeEqualFold    *string  `json:"policyTypeEqualFold,omitempty"`
-	PolicyTypeContainsFold *string  `json:"policyTypeContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -18121,8 +18058,6 @@ type Procedure struct {
 	Name string `json:"name"`
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status *enums.DocumentStatus `json:"status,omitempty"`
-	// type of the procedure, e.g. compliance, operational, health and safety, etc.
-	ProcedureType *string `json:"procedureType,omitempty"`
 	// details of the procedure
 	Details *string `json:"details,omitempty"`
 	// structured details of the procedure in JSON format
@@ -18395,22 +18330,6 @@ type ProcedureWhereInput struct {
 	StatusNotIn  []enums.DocumentStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                  `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                  `json:"statusNotNil,omitempty"`
-	// procedure_type field predicates
-	ProcedureType             *string  `json:"procedureType,omitempty"`
-	ProcedureTypeNeq          *string  `json:"procedureTypeNEQ,omitempty"`
-	ProcedureTypeIn           []string `json:"procedureTypeIn,omitempty"`
-	ProcedureTypeNotIn        []string `json:"procedureTypeNotIn,omitempty"`
-	ProcedureTypeGt           *string  `json:"procedureTypeGT,omitempty"`
-	ProcedureTypeGte          *string  `json:"procedureTypeGTE,omitempty"`
-	ProcedureTypeLt           *string  `json:"procedureTypeLT,omitempty"`
-	ProcedureTypeLte          *string  `json:"procedureTypeLTE,omitempty"`
-	ProcedureTypeContains     *string  `json:"procedureTypeContains,omitempty"`
-	ProcedureTypeHasPrefix    *string  `json:"procedureTypeHasPrefix,omitempty"`
-	ProcedureTypeHasSuffix    *string  `json:"procedureTypeHasSuffix,omitempty"`
-	ProcedureTypeIsNil        *bool    `json:"procedureTypeIsNil,omitempty"`
-	ProcedureTypeNotNil       *bool    `json:"procedureTypeNotNil,omitempty"`
-	ProcedureTypeEqualFold    *string  `json:"procedureTypeEqualFold,omitempty"`
-	ProcedureTypeContainsFold *string  `json:"procedureTypeContainsFold,omitempty"`
 	// details field predicates
 	Details             *string  `json:"details,omitempty"`
 	DetailsNeq          *string  `json:"detailsNEQ,omitempty"`
@@ -18663,8 +18582,6 @@ type Program struct {
 	Description *string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status"`
-	// the type of the program
-	ProgramType enums.ProgramType `json:"programType"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
 	FrameworkName *string `json:"frameworkName,omitempty"`
 	// the start date of the period
@@ -19084,11 +19001,6 @@ type ProgramWhereInput struct {
 	StatusNeq   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
-	// program_type field predicates
-	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
-	ProgramTypeNeq   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
-	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
-	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
 	// framework_name field predicates
 	FrameworkName             *string  `json:"frameworkName,omitempty"`
 	FrameworkNameNeq          *string  `json:"frameworkNameNEQ,omitempty"`
@@ -20421,10 +20333,6 @@ type Risk struct {
 	Name string `json:"name"`
 	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status *enums.RiskStatus `json:"status,omitempty"`
-	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType *string `json:"riskType,omitempty"`
-	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category *string `json:"category,omitempty"`
 	// impact of the risk -critical, high, medium, low
 	Impact *enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
@@ -20723,38 +20631,6 @@ type RiskWhereInput struct {
 	StatusNotIn  []enums.RiskStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool              `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool              `json:"statusNotNil,omitempty"`
-	// risk_type field predicates
-	RiskType             *string  `json:"riskType,omitempty"`
-	RiskTypeNeq          *string  `json:"riskTypeNEQ,omitempty"`
-	RiskTypeIn           []string `json:"riskTypeIn,omitempty"`
-	RiskTypeNotIn        []string `json:"riskTypeNotIn,omitempty"`
-	RiskTypeGt           *string  `json:"riskTypeGT,omitempty"`
-	RiskTypeGte          *string  `json:"riskTypeGTE,omitempty"`
-	RiskTypeLt           *string  `json:"riskTypeLT,omitempty"`
-	RiskTypeLte          *string  `json:"riskTypeLTE,omitempty"`
-	RiskTypeContains     *string  `json:"riskTypeContains,omitempty"`
-	RiskTypeHasPrefix    *string  `json:"riskTypeHasPrefix,omitempty"`
-	RiskTypeHasSuffix    *string  `json:"riskTypeHasSuffix,omitempty"`
-	RiskTypeIsNil        *bool    `json:"riskTypeIsNil,omitempty"`
-	RiskTypeNotNil       *bool    `json:"riskTypeNotNil,omitempty"`
-	RiskTypeEqualFold    *string  `json:"riskTypeEqualFold,omitempty"`
-	RiskTypeContainsFold *string  `json:"riskTypeContainsFold,omitempty"`
-	// category field predicates
-	Category             *string  `json:"category,omitempty"`
-	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGt           *string  `json:"categoryGT,omitempty"`
-	CategoryGte          *string  `json:"categoryGTE,omitempty"`
-	CategoryLt           *string  `json:"categoryLT,omitempty"`
-	CategoryLte          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
-	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// impact field predicates
 	Impact       *enums.RiskImpact  `json:"impact,omitempty"`
 	ImpactNeq    *enums.RiskImpact  `json:"impactNEQ,omitempty"`
@@ -22147,8 +22023,6 @@ type Subcontrol struct {
 	ReferenceFramework *string `json:"referenceFramework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision *string `json:"referenceFrameworkRevision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType *enums.ControlType `json:"controlType,omitempty"`
 	// category of the control
 	Category *string `json:"category,omitempty"`
 	// category id of the control
@@ -22492,13 +22366,6 @@ type SubcontrolWhereInput struct {
 	ReferenceFrameworkRevisionNotNil       *bool    `json:"referenceFrameworkRevisionNotNil,omitempty"`
 	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
 	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
-	// control_type field predicates
-	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
-	ControlTypeNeq    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
-	ControlTypeIn     []enums.ControlType `json:"controlTypeIn,omitempty"`
-	ControlTypeNotIn  []enums.ControlType `json:"controlTypeNotIn,omitempty"`
-	ControlTypeIsNil  *bool               `json:"controlTypeIsNil,omitempty"`
-	ControlTypeNotNil *bool               `json:"controlTypeNotNil,omitempty"`
 	// category field predicates
 	Category             *string  `json:"category,omitempty"`
 	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
@@ -23724,8 +23591,6 @@ type Task struct {
 	DetailsJSON []any `json:"detailsJSON,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
-	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category *string `json:"category,omitempty"`
 	// the due date of the task
 	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
@@ -23997,22 +23862,6 @@ type TaskWhereInput struct {
 	StatusNeq   *enums.TaskStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.TaskStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.TaskStatus `json:"statusNotIn,omitempty"`
-	// category field predicates
-	Category             *string  `json:"category,omitempty"`
-	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGt           *string  `json:"categoryGT,omitempty"`
-	CategoryGte          *string  `json:"categoryGTE,omitempty"`
-	CategoryLt           *string  `json:"categoryLT,omitempty"`
-	CategoryLte          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryIsNil        *bool    `json:"categoryIsNil,omitempty"`
-	CategoryNotNil       *bool    `json:"categoryNotNil,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// due field predicates
 	Due       *models.DateTime   `json:"due,omitempty"`
 	DueNeq    *models.DateTime   `json:"dueNEQ,omitempty"`
@@ -26412,9 +26261,6 @@ type UpdateActionPlanInput struct {
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
-	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
-	ActionPlanType      *string `json:"actionPlanType,omitempty"`
-	ClearActionPlanType *bool   `json:"clearActionPlanType,omitempty"`
 	// details of the action_plan
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -26763,9 +26609,6 @@ type UpdateControlInput struct {
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
 	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType      *enums.ControlType `json:"controlType,omitempty"`
-	ClearControlType *bool              `json:"clearControlType,omitempty"`
 	// category of the control
 	Category      *string `json:"category,omitempty"`
 	ClearCategory *bool   `json:"clearCategory,omitempty"`
@@ -28067,9 +27910,6 @@ type UpdateInternalPolicyInput struct {
 	// status of the policy, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
-	// type of the policy, e.g. compliance, operational, health and safety, etc.
-	PolicyType      *string `json:"policyType,omitempty"`
-	ClearPolicyType *bool   `json:"clearPolicyType,omitempty"`
 	// details of the policy
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -28886,9 +28726,6 @@ type UpdateProcedureInput struct {
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status      *enums.DocumentStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
-	// type of the procedure, e.g. compliance, operational, health and safety, etc.
-	ProcedureType      *string `json:"procedureType,omitempty"`
-	ClearProcedureType *bool   `json:"clearProcedureType,omitempty"`
 	// details of the procedure
 	Details      *string `json:"details,omitempty"`
 	ClearDetails *bool   `json:"clearDetails,omitempty"`
@@ -29015,8 +28852,6 @@ type UpdateProgramInput struct {
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// the status of the program
 	Status *enums.ProgramStatus `json:"status,omitempty"`
-	// the type of the program
-	ProgramType *enums.ProgramType `json:"programType,omitempty"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
 	FrameworkName      *string `json:"frameworkName,omitempty"`
 	ClearFrameworkName *bool   `json:"clearFrameworkName,omitempty"`
@@ -29361,12 +29196,6 @@ type UpdateRiskInput struct {
 	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status      *enums.RiskStatus `json:"status,omitempty"`
 	ClearStatus *bool             `json:"clearStatus,omitempty"`
-	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType      *string `json:"riskType,omitempty"`
-	ClearRiskType *bool   `json:"clearRiskType,omitempty"`
-	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category      *string `json:"category,omitempty"`
-	ClearCategory *bool   `json:"clearCategory,omitempty"`
 	// impact of the risk -critical, high, medium, low
 	Impact      *enums.RiskImpact `json:"impact,omitempty"`
 	ClearImpact *bool             `json:"clearImpact,omitempty"`
@@ -29634,9 +29463,6 @@ type UpdateSubcontrolInput struct {
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision      *string `json:"referenceFrameworkRevision,omitempty"`
 	ClearReferenceFrameworkRevision *bool   `json:"clearReferenceFrameworkRevision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType      *enums.ControlType `json:"controlType,omitempty"`
-	ClearControlType *bool              `json:"clearControlType,omitempty"`
 	// category of the control
 	Category      *string `json:"category,omitempty"`
 	ClearCategory *bool   `json:"clearCategory,omitempty"`
@@ -29858,9 +29684,6 @@ type UpdateTaskInput struct {
 	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
-	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category      *string `json:"category,omitempty"`
-	ClearCategory *bool   `json:"clearCategory,omitempty"`
 	// the due date of the task
 	Due      *models.DateTime `json:"due,omitempty"`
 	ClearDue *bool            `json:"clearDue,omitempty"`
@@ -34656,7 +34479,6 @@ const (
 	ControlOrderFieldStatus               ControlOrderField = "STATUS"
 	ControlOrderFieldSource               ControlOrderField = "SOURCE"
 	ControlOrderFieldReferenceFramework   ControlOrderField = "REFERENCE_FRAMEWORK"
-	ControlOrderFieldControlType          ControlOrderField = "CONTROL_TYPE"
 	ControlOrderFieldCategory             ControlOrderField = "category"
 	ControlOrderFieldSubcategory          ControlOrderField = "subcategory"
 	ControlOrderFieldRefCode              ControlOrderField = "ref_code"
@@ -34672,7 +34494,6 @@ var AllControlOrderField = []ControlOrderField{
 	ControlOrderFieldStatus,
 	ControlOrderFieldSource,
 	ControlOrderFieldReferenceFramework,
-	ControlOrderFieldControlType,
 	ControlOrderFieldCategory,
 	ControlOrderFieldSubcategory,
 	ControlOrderFieldRefCode,
@@ -34683,7 +34504,7 @@ var AllControlOrderField = []ControlOrderField{
 
 func (e ControlOrderField) IsValid() bool {
 	switch e {
-	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldTitle, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldControlType, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName, ControlOrderFieldResponsiblePartyName:
+	case ControlOrderFieldCreatedAt, ControlOrderFieldUpdatedAt, ControlOrderFieldTitle, ControlOrderFieldStatus, ControlOrderFieldSource, ControlOrderFieldReferenceFramework, ControlOrderFieldCategory, ControlOrderFieldSubcategory, ControlOrderFieldRefCode, ControlOrderFieldControlOwnerName, ControlOrderFieldDelegateName, ControlOrderFieldResponsiblePartyName:
 		return true
 	}
 	return false
@@ -37238,14 +37059,13 @@ func (e ProgramMembershipOrderField) MarshalJSON() ([]byte, error) {
 type ProgramOrderField string
 
 const (
-	ProgramOrderFieldCreatedAt   ProgramOrderField = "created_at"
-	ProgramOrderFieldUpdatedAt   ProgramOrderField = "updated_at"
-	ProgramOrderFieldName        ProgramOrderField = "name"
-	ProgramOrderFieldStatus      ProgramOrderField = "STATUS"
-	ProgramOrderFieldProgramType ProgramOrderField = "PROGRAM_TYPE"
-	ProgramOrderFieldFramework   ProgramOrderField = "framework"
-	ProgramOrderFieldStartDate   ProgramOrderField = "start_date"
-	ProgramOrderFieldEndDate     ProgramOrderField = "end_date"
+	ProgramOrderFieldCreatedAt ProgramOrderField = "created_at"
+	ProgramOrderFieldUpdatedAt ProgramOrderField = "updated_at"
+	ProgramOrderFieldName      ProgramOrderField = "name"
+	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
+	ProgramOrderFieldFramework ProgramOrderField = "framework"
+	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
+	ProgramOrderFieldEndDate   ProgramOrderField = "end_date"
 )
 
 var AllProgramOrderField = []ProgramOrderField{
@@ -37253,7 +37073,6 @@ var AllProgramOrderField = []ProgramOrderField{
 	ProgramOrderFieldUpdatedAt,
 	ProgramOrderFieldName,
 	ProgramOrderFieldStatus,
-	ProgramOrderFieldProgramType,
 	ProgramOrderFieldFramework,
 	ProgramOrderFieldStartDate,
 	ProgramOrderFieldEndDate,
@@ -37261,7 +37080,7 @@ var AllProgramOrderField = []ProgramOrderField{
 
 func (e ProgramOrderField) IsValid() bool {
 	switch e {
-	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldProgramType, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
 		return true
 	}
 	return false
@@ -37438,8 +37257,6 @@ const (
 	RiskOrderFieldUpdatedAt     RiskOrderField = "updated_at"
 	RiskOrderFieldName          RiskOrderField = "name"
 	RiskOrderFieldStatus        RiskOrderField = "STATUS"
-	RiskOrderFieldRiskType      RiskOrderField = "risk_type"
-	RiskOrderFieldCategory      RiskOrderField = "category"
 	RiskOrderFieldImpact        RiskOrderField = "IMPACT"
 	RiskOrderFieldLikelihood    RiskOrderField = "LIKELIHOOD"
 	RiskOrderFieldScore         RiskOrderField = "score"
@@ -37451,8 +37268,6 @@ var AllRiskOrderField = []RiskOrderField{
 	RiskOrderFieldUpdatedAt,
 	RiskOrderFieldName,
 	RiskOrderFieldStatus,
-	RiskOrderFieldRiskType,
-	RiskOrderFieldCategory,
 	RiskOrderFieldImpact,
 	RiskOrderFieldLikelihood,
 	RiskOrderFieldScore,
@@ -37461,7 +37276,7 @@ var AllRiskOrderField = []RiskOrderField{
 
 func (e RiskOrderField) IsValid() bool {
 	switch e {
-	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldRiskType, RiskOrderFieldCategory, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
+	case RiskOrderFieldCreatedAt, RiskOrderFieldUpdatedAt, RiskOrderFieldName, RiskOrderFieldStatus, RiskOrderFieldImpact, RiskOrderFieldLikelihood, RiskOrderFieldScore, RiskOrderFieldBusinessCosts:
 		return true
 	}
 	return false
@@ -37754,7 +37569,6 @@ const (
 	SubcontrolOrderFieldStatus               SubcontrolOrderField = "STATUS"
 	SubcontrolOrderFieldSource               SubcontrolOrderField = "SOURCE"
 	SubcontrolOrderFieldReferenceFramework   SubcontrolOrderField = "REFERENCE_FRAMEWORK"
-	SubcontrolOrderFieldControlType          SubcontrolOrderField = "CONTROL_TYPE"
 	SubcontrolOrderFieldCategory             SubcontrolOrderField = "category"
 	SubcontrolOrderFieldSubcategory          SubcontrolOrderField = "subcategory"
 	SubcontrolOrderFieldRefCode              SubcontrolOrderField = "ref_code"
@@ -37770,7 +37584,6 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 	SubcontrolOrderFieldStatus,
 	SubcontrolOrderFieldSource,
 	SubcontrolOrderFieldReferenceFramework,
-	SubcontrolOrderFieldControlType,
 	SubcontrolOrderFieldCategory,
 	SubcontrolOrderFieldSubcategory,
 	SubcontrolOrderFieldRefCode,
@@ -37781,7 +37594,7 @@ var AllSubcontrolOrderField = []SubcontrolOrderField{
 
 func (e SubcontrolOrderField) IsValid() bool {
 	switch e {
-	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldTitle, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldControlType, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName, SubcontrolOrderFieldResponsiblePartyName:
+	case SubcontrolOrderFieldCreatedAt, SubcontrolOrderFieldUpdatedAt, SubcontrolOrderFieldTitle, SubcontrolOrderFieldStatus, SubcontrolOrderFieldSource, SubcontrolOrderFieldReferenceFramework, SubcontrolOrderFieldCategory, SubcontrolOrderFieldSubcategory, SubcontrolOrderFieldRefCode, SubcontrolOrderFieldControlOwnerName, SubcontrolOrderFieldDelegateName, SubcontrolOrderFieldResponsiblePartyName:
 		return true
 	}
 	return false
@@ -38068,7 +37881,6 @@ const (
 	TaskOrderFieldUpdatedAt TaskOrderField = "updated_at"
 	TaskOrderFieldTitle     TaskOrderField = "title"
 	TaskOrderFieldStatus    TaskOrderField = "STATUS"
-	TaskOrderFieldCategory  TaskOrderField = "category"
 	TaskOrderFieldDue       TaskOrderField = "due"
 	TaskOrderFieldCompleted TaskOrderField = "completed"
 )
@@ -38078,14 +37890,13 @@ var AllTaskOrderField = []TaskOrderField{
 	TaskOrderFieldUpdatedAt,
 	TaskOrderFieldTitle,
 	TaskOrderFieldStatus,
-	TaskOrderFieldCategory,
 	TaskOrderFieldDue,
 	TaskOrderFieldCompleted,
 }
 
 func (e TaskOrderField) IsValid() bool {
 	switch e {
-	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldCategory, TaskOrderFieldDue, TaskOrderFieldCompleted:
+	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted:
 		return true
 	}
 	return false

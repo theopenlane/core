@@ -104,7 +104,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldRevision:                        {Type: field.TypeString, Column: actionplanhistory.FieldRevision},
 			actionplanhistory.FieldName:                            {Type: field.TypeString, Column: actionplanhistory.FieldName},
 			actionplanhistory.FieldStatus:                          {Type: field.TypeEnum, Column: actionplanhistory.FieldStatus},
-			actionplanhistory.FieldActionPlanType:                  {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanType},
 			actionplanhistory.FieldDetails:                         {Type: field.TypeString, Column: actionplanhistory.FieldDetails},
 			actionplanhistory.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: actionplanhistory.FieldDetailsJSON},
 			actionplanhistory.FieldApprovalRequired:                {Type: field.TypeBool, Column: actionplanhistory.FieldApprovalRequired},
@@ -301,7 +300,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldSource:                     {Type: field.TypeEnum, Column: controlhistory.FieldSource},
 			controlhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: controlhistory.FieldReferenceFramework},
 			controlhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: controlhistory.FieldReferenceFrameworkRevision},
-			controlhistory.FieldControlType:                {Type: field.TypeEnum, Column: controlhistory.FieldControlType},
 			controlhistory.FieldCategory:                   {Type: field.TypeString, Column: controlhistory.FieldCategory},
 			controlhistory.FieldCategoryID:                 {Type: field.TypeString, Column: controlhistory.FieldCategoryID},
 			controlhistory.FieldSubcategory:                {Type: field.TypeString, Column: controlhistory.FieldSubcategory},
@@ -1041,7 +1039,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldSystemInternalID:                {Type: field.TypeString, Column: internalpolicyhistory.FieldSystemInternalID},
 			internalpolicyhistory.FieldName:                            {Type: field.TypeString, Column: internalpolicyhistory.FieldName},
 			internalpolicyhistory.FieldStatus:                          {Type: field.TypeEnum, Column: internalpolicyhistory.FieldStatus},
-			internalpolicyhistory.FieldPolicyType:                      {Type: field.TypeString, Column: internalpolicyhistory.FieldPolicyType},
 			internalpolicyhistory.FieldDetails:                         {Type: field.TypeString, Column: internalpolicyhistory.FieldDetails},
 			internalpolicyhistory.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: internalpolicyhistory.FieldDetailsJSON},
 			internalpolicyhistory.FieldApprovalRequired:                {Type: field.TypeBool, Column: internalpolicyhistory.FieldApprovalRequired},
@@ -1375,7 +1372,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldOwnerID:                         {Type: field.TypeString, Column: procedurehistory.FieldOwnerID},
 			procedurehistory.FieldName:                            {Type: field.TypeString, Column: procedurehistory.FieldName},
 			procedurehistory.FieldStatus:                          {Type: field.TypeEnum, Column: procedurehistory.FieldStatus},
-			procedurehistory.FieldProcedureType:                   {Type: field.TypeString, Column: procedurehistory.FieldProcedureType},
 			procedurehistory.FieldDetails:                         {Type: field.TypeString, Column: procedurehistory.FieldDetails},
 			procedurehistory.FieldDetailsJSON:                     {Type: field.TypeJSON, Column: procedurehistory.FieldDetailsJSON},
 			procedurehistory.FieldApprovalRequired:                {Type: field.TypeBool, Column: procedurehistory.FieldApprovalRequired},
@@ -1428,7 +1424,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldName:                 {Type: field.TypeString, Column: programhistory.FieldName},
 			programhistory.FieldDescription:          {Type: field.TypeString, Column: programhistory.FieldDescription},
 			programhistory.FieldStatus:               {Type: field.TypeEnum, Column: programhistory.FieldStatus},
-			programhistory.FieldProgramType:          {Type: field.TypeEnum, Column: programhistory.FieldProgramType},
 			programhistory.FieldFrameworkName:        {Type: field.TypeString, Column: programhistory.FieldFrameworkName},
 			programhistory.FieldStartDate:            {Type: field.TypeTime, Column: programhistory.FieldStartDate},
 			programhistory.FieldEndDate:              {Type: field.TypeTime, Column: programhistory.FieldEndDate},
@@ -1585,8 +1580,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldRiskCategoryID:    {Type: field.TypeString, Column: riskhistory.FieldRiskCategoryID},
 			riskhistory.FieldName:              {Type: field.TypeString, Column: riskhistory.FieldName},
 			riskhistory.FieldStatus:            {Type: field.TypeEnum, Column: riskhistory.FieldStatus},
-			riskhistory.FieldRiskType:          {Type: field.TypeString, Column: riskhistory.FieldRiskType},
-			riskhistory.FieldCategory:          {Type: field.TypeString, Column: riskhistory.FieldCategory},
 			riskhistory.FieldImpact:            {Type: field.TypeEnum, Column: riskhistory.FieldImpact},
 			riskhistory.FieldLikelihood:        {Type: field.TypeEnum, Column: riskhistory.FieldLikelihood},
 			riskhistory.FieldScore:             {Type: field.TypeInt, Column: riskhistory.FieldScore},
@@ -1732,7 +1725,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldSource:                     {Type: field.TypeEnum, Column: subcontrolhistory.FieldSource},
 			subcontrolhistory.FieldReferenceFramework:         {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFramework},
 			subcontrolhistory.FieldReferenceFrameworkRevision: {Type: field.TypeString, Column: subcontrolhistory.FieldReferenceFrameworkRevision},
-			subcontrolhistory.FieldControlType:                {Type: field.TypeEnum, Column: subcontrolhistory.FieldControlType},
 			subcontrolhistory.FieldCategory:                   {Type: field.TypeString, Column: subcontrolhistory.FieldCategory},
 			subcontrolhistory.FieldCategoryID:                 {Type: field.TypeString, Column: subcontrolhistory.FieldCategoryID},
 			subcontrolhistory.FieldSubcategory:                {Type: field.TypeString, Column: subcontrolhistory.FieldSubcategory},
@@ -1818,7 +1810,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldDetails:              {Type: field.TypeString, Column: taskhistory.FieldDetails},
 			taskhistory.FieldDetailsJSON:          {Type: field.TypeJSON, Column: taskhistory.FieldDetailsJSON},
 			taskhistory.FieldStatus:               {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
-			taskhistory.FieldCategory:             {Type: field.TypeString, Column: taskhistory.FieldCategory},
 			taskhistory.FieldDue:                  {Type: field.TypeTime, Column: taskhistory.FieldDue},
 			taskhistory.FieldCompleted:            {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
 			taskhistory.FieldAssigneeID:           {Type: field.TypeString, Column: taskhistory.FieldAssigneeID},
@@ -2527,11 +2518,6 @@ func (f *ActionPlanHistoryFilter) WhereName(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ActionPlanHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldStatus))
-}
-
-// WhereActionPlanType applies the entql string predicate on the action_plan_type field.
-func (f *ActionPlanHistoryFilter) WhereActionPlanType(p entql.StringP) {
-	f.Where(p.Field(actionplanhistory.FieldActionPlanType))
 }
 
 // WhereDetails applies the entql string predicate on the details field.
@@ -3387,11 +3373,6 @@ func (f *ControlHistoryFilter) WhereReferenceFramework(p entql.StringP) {
 // WhereReferenceFrameworkRevision applies the entql string predicate on the reference_framework_revision field.
 func (f *ControlHistoryFilter) WhereReferenceFrameworkRevision(p entql.StringP) {
 	f.Where(p.Field(controlhistory.FieldReferenceFrameworkRevision))
-}
-
-// WhereControlType applies the entql string predicate on the control_type field.
-func (f *ControlHistoryFilter) WhereControlType(p entql.StringP) {
-	f.Where(p.Field(controlhistory.FieldControlType))
 }
 
 // WhereCategory applies the entql string predicate on the category field.
@@ -6564,11 +6545,6 @@ func (f *InternalPolicyHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldStatus))
 }
 
-// WherePolicyType applies the entql string predicate on the policy_type field.
-func (f *InternalPolicyHistoryFilter) WherePolicyType(p entql.StringP) {
-	f.Where(p.Field(internalpolicyhistory.FieldPolicyType))
-}
-
 // WhereDetails applies the entql string predicate on the details field.
 func (f *InternalPolicyHistoryFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(internalpolicyhistory.FieldDetails))
@@ -7984,11 +7960,6 @@ func (f *ProcedureHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldStatus))
 }
 
-// WhereProcedureType applies the entql string predicate on the procedure_type field.
-func (f *ProcedureHistoryFilter) WhereProcedureType(p entql.StringP) {
-	f.Where(p.Field(procedurehistory.FieldProcedureType))
-}
-
 // WhereDetails applies the entql string predicate on the details field.
 func (f *ProcedureHistoryFilter) WhereDetails(p entql.StringP) {
 	f.Where(p.Field(procedurehistory.FieldDetails))
@@ -8222,11 +8193,6 @@ func (f *ProgramHistoryFilter) WhereDescription(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ProgramHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(programhistory.FieldStatus))
-}
-
-// WhereProgramType applies the entql string predicate on the program_type field.
-func (f *ProgramHistoryFilter) WhereProgramType(p entql.StringP) {
-	f.Where(p.Field(programhistory.FieldProgramType))
 }
 
 // WhereFrameworkName applies the entql string predicate on the framework_name field.
@@ -8909,16 +8875,6 @@ func (f *RiskHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldStatus))
 }
 
-// WhereRiskType applies the entql string predicate on the risk_type field.
-func (f *RiskHistoryFilter) WhereRiskType(p entql.StringP) {
-	f.Where(p.Field(riskhistory.FieldRiskType))
-}
-
-// WhereCategory applies the entql string predicate on the category field.
-func (f *RiskHistoryFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(riskhistory.FieldCategory))
-}
-
 // WhereImpact applies the entql string predicate on the impact field.
 func (f *RiskHistoryFilter) WhereImpact(p entql.StringP) {
 	f.Where(p.Field(riskhistory.FieldImpact))
@@ -9544,11 +9500,6 @@ func (f *SubcontrolHistoryFilter) WhereReferenceFrameworkRevision(p entql.String
 	f.Where(p.Field(subcontrolhistory.FieldReferenceFrameworkRevision))
 }
 
-// WhereControlType applies the entql string predicate on the control_type field.
-func (f *SubcontrolHistoryFilter) WhereControlType(p entql.StringP) {
-	f.Where(p.Field(subcontrolhistory.FieldControlType))
-}
-
 // WhereCategory applies the entql string predicate on the category field.
 func (f *SubcontrolHistoryFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(subcontrolhistory.FieldCategory))
@@ -9922,11 +9873,6 @@ func (f *TaskHistoryFilter) WhereDetailsJSON(p entql.BytesP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldStatus))
-}
-
-// WhereCategory applies the entql string predicate on the category field.
-func (f *TaskHistoryFilter) WhereCategory(p entql.StringP) {
-	f.Where(p.Field(taskhistory.FieldCategory))
 }
 
 // WhereDue applies the entql time.Time predicate on the due field.

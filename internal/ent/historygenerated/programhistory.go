@@ -56,8 +56,6 @@ type ProgramHistory struct {
 	Description string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status,omitempty"`
-	// the type of the program
-	ProgramType enums.ProgramType `json:"program_type,omitempty"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
 	FrameworkName string `json:"framework_name,omitempty"`
 	// the start date of the period
@@ -92,7 +90,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case programhistory.FieldAuditorReady, programhistory.FieldAuditorWriteComments, programhistory.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldProgramKindName, programhistory.FieldProgramKindID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldProgramType, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail, programhistory.FieldProgramOwnerID:
+		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldProgramKindName, programhistory.FieldProgramKindID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail, programhistory.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -220,12 +218,6 @@ func (_m *ProgramHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.ProgramStatus(value.String)
-			}
-		case programhistory.FieldProgramType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field program_type", values[i])
-			} else if value.Valid {
-				_m.ProgramType = enums.ProgramType(value.String)
 			}
 		case programhistory.FieldFrameworkName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -373,9 +365,6 @@ func (_m *ProgramHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("program_type=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProgramType))
 	builder.WriteString(", ")
 	builder.WriteString("framework_name=")
 	builder.WriteString(_m.FrameworkName)

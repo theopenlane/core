@@ -10,13 +10,14 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/entx/accessmap"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/graphapi/directives"
-	"github.com/theopenlane/entx/accessmap"
 )
 
 // ControlMixin implements the control pattern fields for different schemas.
@@ -268,18 +269,6 @@ var controlFields = []ent.Field{
 			entx.FieldWorkflowEligible(),
 		).
 		Optional(),
-	field.Enum("control_type").
-		GoType(enums.ControlType("")).
-		Default(enums.ControlTypePreventative.String()).
-		Annotations(
-			entx.FieldWorkflowEligible(),
-			entgql.OrderField("CONTROL_TYPE"),
-			entgql.Directives(
-				entgql.Deprecated("Use `control_kind_name` instead."),
-			),
-		).
-		Optional().
-		Comment("type of the control e.g. preventive, detective, corrective, or deterrent."),
 	field.String("category").
 		Optional().
 		Annotations(

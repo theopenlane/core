@@ -245,7 +245,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
-				PolicyType: lo.ToPtr("sop"),
 				Revision:   lo.ToPtr("v1.1.0"),
 				Details:    lo.ToPtr("do stuff"),
 				ApproverID: &approverGroup.ID,
@@ -259,7 +258,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name:       "Releasing a new version",
 				Status:     &enums.DocumentDraft,
-				PolicyType: lo.ToPtr("sop"),
 				Revision:   lo.ToPtr("v1.1.0"),
 				Details:    lo.ToPtr(gofakeit.Sentence()),
 				ApproverID: &approverGroup.ID,
@@ -273,7 +271,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name:          "Releasing a new version",
 				Status:        &enums.DocumentDraft,
-				PolicyType:    lo.ToPtr("sop"),
 				Revision:      lo.ToPtr("v1.1.0"),
 				Details:       lo.ToPtr("do stuff"),
 				ControlIDs:    []string{control.ID},
@@ -420,12 +417,6 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.CreateInternalPolicy.InternalPolicy.Status))
 			} else {
 				assert.Check(t, is.Equal(enums.DocumentDraft, *resp.CreateInternalPolicy.InternalPolicy.Status))
-			}
-
-			if tc.request.PolicyType != nil {
-				assert.Check(t, is.Equal(*tc.request.PolicyType, *resp.CreateInternalPolicy.InternalPolicy.PolicyType))
-			} else {
-				assert.Check(t, is.Equal(*resp.CreateInternalPolicy.InternalPolicy.PolicyType, ""))
 			}
 
 			if tc.request.Revision != nil {
@@ -664,10 +655,6 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateInternalPolicy.InternalPolicy.Status))
 			}
 
-			if tc.request.PolicyType != nil {
-				assert.Check(t, is.Equal(*tc.request.PolicyType, *resp.UpdateInternalPolicy.InternalPolicy.PolicyType))
-			}
-
 			if tc.request.Revision != nil {
 				assert.Check(t, is.Equal(*tc.request.Revision, *resp.UpdateInternalPolicy.InternalPolicy.Revision))
 			}
@@ -794,8 +781,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 			name: "happy path, update status on multiple policies",
 			ids:  []string{policy1.ID, policy2.ID, policy3.ID},
 			input: testclient.UpdateInternalPolicyInput{
-				Status:     &enums.DocumentPublished,
-				PolicyType: lo.ToPtr("Security"),
+				Status: &enums.DocumentPublished,
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -882,10 +868,6 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 
 				if tc.input.Tags != nil {
 					assert.Check(t, is.DeepEqual(tc.input.Tags, policy.Tags))
-				}
-
-				if tc.input.PolicyType != nil {
-					assert.Check(t, is.Equal(*tc.input.PolicyType, *policy.PolicyType))
 				}
 
 				if tc.input.RevisionBump == &models.Minor {

@@ -244,34 +244,6 @@ func (_c *RiskHistoryCreate) SetNillableStatus(v *enums.RiskStatus) *RiskHistory
 	return _c
 }
 
-// SetRiskType sets the "risk_type" field.
-func (_c *RiskHistoryCreate) SetRiskType(v string) *RiskHistoryCreate {
-	_c.mutation.SetRiskType(v)
-	return _c
-}
-
-// SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (_c *RiskHistoryCreate) SetNillableRiskType(v *string) *RiskHistoryCreate {
-	if v != nil {
-		_c.SetRiskType(*v)
-	}
-	return _c
-}
-
-// SetCategory sets the "category" field.
-func (_c *RiskHistoryCreate) SetCategory(v string) *RiskHistoryCreate {
-	_c.mutation.SetCategory(v)
-	return _c
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_c *RiskHistoryCreate) SetNillableCategory(v *string) *RiskHistoryCreate {
-	if v != nil {
-		_c.SetCategory(*v)
-	}
-	return _c
-}
-
 // SetImpact sets the "impact" field.
 func (_c *RiskHistoryCreate) SetImpact(v enums.RiskImpact) *RiskHistoryCreate {
 	_c.mutation.SetImpact(v)
@@ -641,14 +613,6 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(riskhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.RiskType(); ok {
-		_spec.SetField(riskhistory.FieldRiskType, field.TypeString, value)
-		_node.RiskType = value
-	}
-	if value, ok := _c.mutation.Category(); ok {
-		_spec.SetField(riskhistory.FieldCategory, field.TypeString, value)
-		_node.Category = value
 	}
 	if value, ok := _c.mutation.Impact(); ok {
 		_spec.SetField(riskhistory.FieldImpact, field.TypeEnum, value)

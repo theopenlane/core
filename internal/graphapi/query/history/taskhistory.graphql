@@ -11,7 +11,6 @@ query GetAllTaskHistories {
       node {
         assigneeID
         assignerID
-        category
         completed
         createdAt
         createdBy
@@ -52,7 +51,6 @@ query GetTaskHistories($first: Int, $last: Int, $where: TaskHistoryWhereInput) {
       node {
         assigneeID
         assignerID
-        category
         completed
         createdAt
         createdBy

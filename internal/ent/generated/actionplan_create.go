@@ -159,20 +159,6 @@ func (_c *ActionPlanCreate) SetNillableStatus(v *enums.DocumentStatus) *ActionPl
 	return _c
 }
 
-// SetActionPlanType sets the "action_plan_type" field.
-func (_c *ActionPlanCreate) SetActionPlanType(v string) *ActionPlanCreate {
-	_c.mutation.SetActionPlanType(v)
-	return _c
-}
-
-// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
-func (_c *ActionPlanCreate) SetNillableActionPlanType(v *string) *ActionPlanCreate {
-	if v != nil {
-		_c.SetActionPlanType(*v)
-	}
-	return _c
-}
-
 // SetDetails sets the "details" field.
 func (_c *ActionPlanCreate) SetDetails(v string) *ActionPlanCreate {
 	_c.mutation.SetDetails(v)
@@ -1052,10 +1038,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(actionplan.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.ActionPlanType(); ok {
-		_spec.SetField(actionplan.FieldActionPlanType, field.TypeString, value)
-		_node.ActionPlanType = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(actionplan.FieldDetails, field.TypeString, value)

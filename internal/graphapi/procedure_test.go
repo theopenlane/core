@@ -184,13 +184,12 @@ func TestMutationCreateProcedure(t *testing.T) {
 		{
 			name: "happy path, all input except edges, you should have to have view access to a group to add it as an edge on this object",
 			request: testclient.CreateProcedureInput{
-				Name:          "Releasing a new version",
-				Details:       lo.ToPtr("instructions on how to release a new version"),
-				Status:        &enums.DocumentDraft,
-				ProcedureType: lo.ToPtr("sop"),
-				Revision:      lo.ToPtr("v1.0.0"),
-				ApproverID:    &approverGroup.ID,
-				DelegateID:    &delegateGroup.ID,
+				Name:       "Releasing a new version",
+				Details:    lo.ToPtr("instructions on how to release a new version"),
+				Status:     &enums.DocumentDraft,
+				Revision:   lo.ToPtr("v1.0.0"),
+				ApproverID: &approverGroup.ID,
+				DelegateID: &delegateGroup.ID,
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
@@ -303,12 +302,6 @@ func TestMutationCreateProcedure(t *testing.T) {
 			} else {
 				// default status is draft
 				assert.Check(t, is.Equal(enums.DocumentDraft, *resp.CreateProcedure.Procedure.Status))
-			}
-
-			if tc.request.ProcedureType != nil {
-				assert.Check(t, is.Equal(*tc.request.ProcedureType, *resp.CreateProcedure.Procedure.ProcedureType))
-			} else {
-				assert.Check(t, is.Len(*resp.CreateProcedure.Procedure.ProcedureType, 0))
 			}
 
 			if tc.request.Revision != nil {
@@ -528,10 +521,6 @@ func TestMutationUpdateProcedure(t *testing.T) {
 
 			if tc.request.Status != nil {
 				assert.Check(t, is.Equal(*tc.request.Status, *resp.UpdateProcedure.Procedure.Status))
-			}
-
-			if tc.request.ProcedureType != nil {
-				assert.Check(t, is.Equal(*tc.request.ProcedureType, *resp.UpdateProcedure.Procedure.ProcedureType))
 			}
 
 			if tc.request.Revision != nil {
@@ -754,10 +743,6 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 
 				if tc.input.Tags != nil {
 					assert.Check(t, is.DeepEqual(tc.input.Tags, responseProcedure.Tags))
-				}
-
-				if tc.input.ProcedureType != nil {
-					assert.Check(t, is.Equal(*tc.input.ProcedureType, *responseProcedure.ProcedureType))
 				}
 
 				if tc.input.Details != nil {

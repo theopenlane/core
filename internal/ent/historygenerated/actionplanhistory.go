@@ -48,8 +48,6 @@ type ActionPlanHistory struct {
 	Name string `json:"name,omitempty"`
 	// status of the action_plan, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
-	// type of the action_plan, e.g. compliance, operational, health and safety, etc.
-	ActionPlanType string `json:"action_plan_type,omitempty"`
 	// details of the action_plan
 	Details string `json:"details,omitempty"`
 	// structured details of the action_plan in JSON format
@@ -132,7 +130,7 @@ func (*ActionPlanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case actionplanhistory.FieldApprovalRequired, actionplanhistory.FieldSystemOwned, actionplanhistory.FieldWorkflowEligibleMarker, actionplanhistory.FieldRequiresApproval, actionplanhistory.FieldBlocked:
 			values[i] = new(sql.NullBool)
-		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldActionPlanType, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
+		case actionplanhistory.FieldID, actionplanhistory.FieldRef, actionplanhistory.FieldCreatedBy, actionplanhistory.FieldUpdatedBy, actionplanhistory.FieldDeletedBy, actionplanhistory.FieldRevision, actionplanhistory.FieldName, actionplanhistory.FieldStatus, actionplanhistory.FieldDetails, actionplanhistory.FieldReviewFrequency, actionplanhistory.FieldApproverID, actionplanhistory.FieldDelegateID, actionplanhistory.FieldSummary, actionplanhistory.FieldURL, actionplanhistory.FieldFileID, actionplanhistory.FieldOwnerID, actionplanhistory.FieldInternalNotes, actionplanhistory.FieldSystemInternalID, actionplanhistory.FieldActionPlanKindName, actionplanhistory.FieldActionPlanKindID, actionplanhistory.FieldTitle, actionplanhistory.FieldDescription, actionplanhistory.FieldPriority, actionplanhistory.FieldBlockerReason, actionplanhistory.FieldSource:
 			values[i] = new(sql.NullString)
 		case actionplanhistory.FieldHistoryTime, actionplanhistory.FieldCreatedAt, actionplanhistory.FieldUpdatedAt, actionplanhistory.FieldDeletedAt, actionplanhistory.FieldReviewDue, actionplanhistory.FieldDueDate, actionplanhistory.FieldCompletedAt:
 			values[i] = new(sql.NullTime)
@@ -236,12 +234,6 @@ func (_m *ActionPlanHistory) assignValues(columns []string, values []any) error 
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.DocumentStatus(value.String)
-			}
-		case actionplanhistory.FieldActionPlanType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field action_plan_type", values[i])
-			} else if value.Valid {
-				_m.ActionPlanType = value.String
 			}
 		case actionplanhistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -544,9 +536,6 @@ func (_m *ActionPlanHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("action_plan_type=")
-	builder.WriteString(_m.ActionPlanType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)

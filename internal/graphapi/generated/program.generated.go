@@ -78,8 +78,6 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Program_status(ctx, field)
-			case "programType":
-				return ec.fieldContext_Program_programType(ctx, field)
 			case "frameworkName":
 				return ec.fieldContext_Program_frameworkName(ctx, field)
 			case "startDate":
@@ -226,8 +224,6 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Program_status(ctx, field)
-			case "programType":
-				return ec.fieldContext_Program_programType(ctx, field)
 			case "frameworkName":
 				return ec.fieldContext_Program_frameworkName(ctx, field)
 			case "startDate":
@@ -374,8 +370,6 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_description(ctx, field)
 			case "status":
 				return ec.fieldContext_Program_status(ctx, field)
-			case "programType":
-				return ec.fieldContext_Program_programType(ctx, field)
 			case "frameworkName":
 				return ec.fieldContext_Program_frameworkName(ctx, field)
 			case "startDate":

@@ -7,9 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/go-client/graphclient"
+
 	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/go-client/graphclient"
 )
 
 var createCmd = &cobra.Command{
@@ -82,11 +83,6 @@ func createValidation() (input graphclient.CreateSubcontrolInput, err error) {
 		input.Status = enums.ToControlStatus(status)
 	} else {
 		input.Status = &enums.ControlStatusNotImplemented
-	}
-
-	controlType := cmd.Config.String("control-type")
-	if controlType != "" {
-		input.ControlType = enums.ToControlType(controlType)
 	}
 
 	mappedCategories := cmd.Config.Strings("mapped-categories")

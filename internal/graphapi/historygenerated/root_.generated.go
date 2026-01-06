@@ -49,7 +49,6 @@ type ComplexityRoot struct {
 	ActionPlanHistory struct {
 		ActionPlanKindID                func(childComplexity int) int
 		ActionPlanKindName              func(childComplexity int) int
-		ActionPlanType                  func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		ApproverID                      func(childComplexity int) int
 		Blocked                         func(childComplexity int) int
@@ -245,7 +244,6 @@ type ComplexityRoot struct {
 		ControlKindName            func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
-		ControlType                func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
@@ -1009,7 +1007,6 @@ type ComplexityRoot struct {
 		Name                            func(childComplexity int) int
 		Operation                       func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
-		PolicyType                      func(childComplexity int) int
 		Ref                             func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
@@ -1353,7 +1350,6 @@ type ComplexityRoot struct {
 		OwnerID                         func(childComplexity int) int
 		ProcedureKindID                 func(childComplexity int) int
 		ProcedureKindName               func(childComplexity int) int
-		ProcedureType                   func(childComplexity int) int
 		Ref                             func(childComplexity int) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
@@ -1402,7 +1398,6 @@ type ComplexityRoot struct {
 		ProgramKindID        func(childComplexity int) int
 		ProgramKindName      func(childComplexity int) int
 		ProgramOwnerID       func(childComplexity int) int
-		ProgramType          func(childComplexity int) int
 		Ref                  func(childComplexity int) int
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
@@ -1612,7 +1607,6 @@ type ComplexityRoot struct {
 	RiskHistory struct {
 		BusinessCosts     func(childComplexity int) int
 		BusinessCostsJSON func(childComplexity int) int
-		Category          func(childComplexity int) int
 		CreatedAt         func(childComplexity int) int
 		CreatedBy         func(childComplexity int) int
 		DelegateID        func(childComplexity int) int
@@ -1633,7 +1627,6 @@ type ComplexityRoot struct {
 		RiskCategoryName  func(childComplexity int) int
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
-		RiskType          func(childComplexity int) int
 		Score             func(childComplexity int) int
 		StakeholderID     func(childComplexity int) int
 		Status            func(childComplexity int) int
@@ -1762,7 +1755,6 @@ type ComplexityRoot struct {
 		ControlID                  func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
-		ControlType                func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		DelegateID                 func(childComplexity int) int
@@ -1845,7 +1837,6 @@ type ComplexityRoot struct {
 	TaskHistory struct {
 		AssigneeID           func(childComplexity int) int
 		AssignerID           func(childComplexity int) int
-		Category             func(childComplexity int) int
 		Completed            func(childComplexity int) int
 		CreatedAt            func(childComplexity int) int
 		CreatedBy            func(childComplexity int) int
@@ -2496,13 +2487,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlanHistory.ActionPlanKindName(childComplexity), true
-
-	case "ActionPlanHistory.actionPlanType":
-		if e.complexity.ActionPlanHistory.ActionPlanType == nil {
-			break
-		}
-
-		return e.complexity.ActionPlanHistory.ActionPlanType(childComplexity), true
 
 	case "ActionPlanHistory.approvalRequired":
 		if e.complexity.ActionPlanHistory.ApprovalRequired == nil {
@@ -3553,13 +3537,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ControlHistory.ControlQuestions(childComplexity), true
-
-	case "ControlHistory.controlType":
-		if e.complexity.ControlHistory.ControlType == nil {
-			break
-		}
-
-		return e.complexity.ControlHistory.ControlType(childComplexity), true
 
 	case "ControlHistory.createdAt":
 		if e.complexity.ControlHistory.CreatedAt == nil {
@@ -7579,13 +7556,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InternalPolicyHistory.OwnerID(childComplexity), true
 
-	case "InternalPolicyHistory.policyType":
-		if e.complexity.InternalPolicyHistory.PolicyType == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicyHistory.PolicyType(childComplexity), true
-
 	case "InternalPolicyHistory.ref":
 		if e.complexity.InternalPolicyHistory.Ref == nil {
 			break
@@ -9336,13 +9306,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ProcedureHistory.ProcedureKindName(childComplexity), true
 
-	case "ProcedureHistory.procedureType":
-		if e.complexity.ProcedureHistory.ProcedureType == nil {
-			break
-		}
-
-		return e.complexity.ProcedureHistory.ProcedureType(childComplexity), true
-
 	case "ProcedureHistory.ref":
 		if e.complexity.ProcedureHistory.Ref == nil {
 			break
@@ -9615,13 +9578,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ProgramHistory.ProgramOwnerID(childComplexity), true
-
-	case "ProgramHistory.programType":
-		if e.complexity.ProgramHistory.ProgramType == nil {
-			break
-		}
-
-		return e.complexity.ProgramHistory.ProgramType(childComplexity), true
 
 	case "ProgramHistory.ref":
 		if e.complexity.ProgramHistory.Ref == nil {
@@ -11148,13 +11104,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.RiskHistory.BusinessCostsJSON(childComplexity), true
 
-	case "RiskHistory.category":
-		if e.complexity.RiskHistory.Category == nil {
-			break
-		}
-
-		return e.complexity.RiskHistory.Category(childComplexity), true
-
 	case "RiskHistory.createdAt":
 		if e.complexity.RiskHistory.CreatedAt == nil {
 			break
@@ -11294,13 +11243,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.RiskHistory.RiskKindName(childComplexity), true
-
-	case "RiskHistory.riskType":
-		if e.complexity.RiskHistory.RiskType == nil {
-			break
-		}
-
-		return e.complexity.RiskHistory.RiskType(childComplexity), true
 
 	case "RiskHistory.score":
 		if e.complexity.RiskHistory.Score == nil {
@@ -11946,13 +11888,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubcontrolHistory.ControlQuestions(childComplexity), true
 
-	case "SubcontrolHistory.controlType":
-		if e.complexity.SubcontrolHistory.ControlType == nil {
-			break
-		}
-
-		return e.complexity.SubcontrolHistory.ControlType(childComplexity), true
-
 	case "SubcontrolHistory.createdAt":
 		if e.complexity.SubcontrolHistory.CreatedAt == nil {
 			break
@@ -12400,13 +12335,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TaskHistory.AssignerID(childComplexity), true
-
-	case "TaskHistory.category":
-		if e.complexity.TaskHistory.Category == nil {
-			break
-		}
-
-		return e.complexity.TaskHistory.Category(childComplexity), true
 
 	case "TaskHistory.completed":
 		if e.complexity.TaskHistory.Completed == nil {
@@ -15968,10 +15896,6 @@ type ActionPlanHistory implements Node {
   """
   status: ActionPlanHistoryDocumentStatus
   """
-  type of the action_plan, e.g. compliance, operational, health and safety, etc.
-  """
-  actionPlanType: String @deprecated(reason: "Use ` + "`" + `action_plan_kind_name` + "`" + ` instead.")
-  """
   details of the action_plan
   """
   details: String
@@ -16363,24 +16287,6 @@ input ActionPlanHistoryWhereInput {
   statusNotIn: [ActionPlanHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  """
-  action_plan_type field predicates
-  """
-  actionPlanType: String
-  actionPlanTypeNEQ: String
-  actionPlanTypeIn: [String!]
-  actionPlanTypeNotIn: [String!]
-  actionPlanTypeGT: String
-  actionPlanTypeGTE: String
-  actionPlanTypeLT: String
-  actionPlanTypeLTE: String
-  actionPlanTypeContains: String
-  actionPlanTypeHasPrefix: String
-  actionPlanTypeHasSuffix: String
-  actionPlanTypeIsNil: Boolean
-  actionPlanTypeNotNil: Boolean
-  actionPlanTypeEqualFold: String
-  actionPlanTypeContainsFold: String
   """
   details field predicates
   """
@@ -18199,10 +18105,6 @@ type ControlHistory implements Node {
   """
   referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: ControlHistoryControlType @deprecated(reason: "Use ` + "`" + `control_kind_name` + "`" + ` instead.")
-  """
   category of the control
   """
   category: String @externalSource(source: FRAMEWORK)
@@ -18334,15 +18236,6 @@ enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/co
   NOT_APPLICABLE
 }
 """
-ControlHistoryControlType is enum for the field control_type
-"""
-enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
-  PREVENTATIVE
-  DETECTIVE
-  CORRECTIVE
-  DETERRENT
-}
-"""
 An edge in a connection.
 """
 type ControlHistoryEdge {
@@ -18387,7 +18280,6 @@ enum ControlHistoryOrderField {
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
-  CONTROL_TYPE
   category
   subcategory
   ref_code
@@ -18671,15 +18563,6 @@ input ControlHistoryWhereInput {
   referenceFrameworkRevisionNotNil: Boolean
   referenceFrameworkRevisionEqualFold: String
   referenceFrameworkRevisionContainsFold: String
-  """
-  control_type field predicates
-  """
-  controlType: ControlHistoryControlType
-  controlTypeNEQ: ControlHistoryControlType
-  controlTypeIn: [ControlHistoryControlType!]
-  controlTypeNotIn: [ControlHistoryControlType!]
-  controlTypeIsNil: Boolean
-  controlTypeNotNil: Boolean
   """
   category field predicates
   """
@@ -27117,10 +27000,6 @@ type InternalPolicyHistory implements Node {
   """
   status: InternalPolicyHistoryDocumentStatus
   """
-  type of the policy, e.g. compliance, operational, health and safety, etc.
-  """
-  policyType: String @deprecated(reason: "Use ` + "`" + `policy_kind_name` + "`" + ` instead.")
-  """
   details of the policy
   """
   details: String
@@ -27516,24 +27395,6 @@ input InternalPolicyHistoryWhereInput {
   statusNotIn: [InternalPolicyHistoryDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  """
-  policy_type field predicates
-  """
-  policyType: String
-  policyTypeNEQ: String
-  policyTypeIn: [String!]
-  policyTypeNotIn: [String!]
-  policyTypeGT: String
-  policyTypeGTE: String
-  policyTypeLT: String
-  policyTypeLTE: String
-  policyTypeContains: String
-  policyTypeHasPrefix: String
-  policyTypeHasSuffix: String
-  policyTypeIsNil: Boolean
-  policyTypeNotNil: Boolean
-  policyTypeEqualFold: String
-  policyTypeContainsFold: String
   """
   details field predicates
   """
@@ -30919,10 +30780,6 @@ type ProcedureHistory implements Node {
   """
   status: ProcedureHistoryDocumentStatus
   """
-  type of the procedure, e.g. compliance, operational, health and safety, etc.
-  """
-  procedureType: String @deprecated(reason: "Use ` + "`" + `procedure_kind_name` + "`" + ` instead.")
-  """
   details of the procedure
   """
   details: String
@@ -31288,24 +31145,6 @@ input ProcedureHistoryWhereInput {
   statusIsNil: Boolean
   statusNotNil: Boolean
   """
-  procedure_type field predicates
-  """
-  procedureType: String
-  procedureTypeNEQ: String
-  procedureTypeIn: [String!]
-  procedureTypeNotIn: [String!]
-  procedureTypeGT: String
-  procedureTypeGTE: String
-  procedureTypeLT: String
-  procedureTypeLTE: String
-  procedureTypeContains: String
-  procedureTypeHasPrefix: String
-  procedureTypeHasSuffix: String
-  procedureTypeIsNil: Boolean
-  procedureTypeNotNil: Boolean
-  procedureTypeEqualFold: String
-  procedureTypeContainsFold: String
-  """
   details field predicates
   """
   details: String
@@ -31553,10 +31392,6 @@ type ProgramHistory implements Node {
   """
   status: ProgramHistoryProgramStatus!
   """
-  the type of the program
-  """
-  programType: ProgramHistoryProgramType! @deprecated(reason: "Use ` + "`" + `program_kind` + "`" + ` instead.")
-  """
   the short name of the compliance standard the program is based on, only used for framework type programs
   """
   frameworkName: String
@@ -31657,7 +31492,6 @@ enum ProgramHistoryOrderField {
   updated_at
   name
   STATUS
-  PROGRAM_TYPE
   framework
   start_date
   end_date
@@ -31672,15 +31506,6 @@ enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/co
   READY_FOR_AUDITOR
   COMPLETED
   ARCHIVED
-}
-"""
-ProgramHistoryProgramType is enum for the field program_type
-"""
-enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/common/enums.ProgramType") {
-  FRAMEWORK
-  GAP_ANALYSIS
-  RISK_ASSESSMENT
-  OTHER
 }
 """
 ProgramHistoryWhereInput is used for filtering ProgramHistory objects.
@@ -31912,13 +31737,6 @@ input ProgramHistoryWhereInput {
   statusNEQ: ProgramHistoryProgramStatus
   statusIn: [ProgramHistoryProgramStatus!]
   statusNotIn: [ProgramHistoryProgramStatus!]
-  """
-  program_type field predicates
-  """
-  programType: ProgramHistoryProgramType
-  programTypeNEQ: ProgramHistoryProgramType
-  programTypeIn: [ProgramHistoryProgramType!]
-  programTypeNotIn: [ProgramHistoryProgramType!]
   """
   framework_name field predicates
   """
@@ -35656,14 +35474,6 @@ type RiskHistory implements Node {
   """
   status: RiskHistoryRiskStatus
   """
-  type of the risk, e.g. strategic, operational, financial, external, etc.
-  """
-  riskType: String @deprecated(reason: "Use ` + "`" + `risk_kind_name` + "`" + ` instead.")
-  """
-  category of the risk, e.g. human resources, operations, IT, etc.
-  """
-  category: String @deprecated(reason: "Use ` + "`" + `risk_category_name` + "`" + ` instead.")
-  """
   impact of the risk -critical, high, medium, low
   """
   impact: RiskHistoryRiskImpact
@@ -35768,8 +35578,6 @@ enum RiskHistoryOrderField {
   updated_at
   name
   STATUS
-  risk_type
-  category
   IMPACT
   LIKELIHOOD
   score
@@ -36056,42 +35864,6 @@ input RiskHistoryWhereInput {
   statusNotIn: [RiskHistoryRiskStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  """
-  risk_type field predicates
-  """
-  riskType: String
-  riskTypeNEQ: String
-  riskTypeIn: [String!]
-  riskTypeNotIn: [String!]
-  riskTypeGT: String
-  riskTypeGTE: String
-  riskTypeLT: String
-  riskTypeLTE: String
-  riskTypeContains: String
-  riskTypeHasPrefix: String
-  riskTypeHasSuffix: String
-  riskTypeIsNil: Boolean
-  riskTypeNotNil: Boolean
-  riskTypeEqualFold: String
-  riskTypeContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   impact field predicates
   """
@@ -37411,10 +37183,6 @@ type SubcontrolHistory implements Node {
   """
   referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: SubcontrolHistoryControlType @deprecated(reason: "Use ` + "`" + `control_kind_name` + "`" + ` instead.")
-  """
   category of the control
   """
   category: String @externalSource(source: FRAMEWORK)
@@ -37546,15 +37314,6 @@ enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core
   NOT_APPLICABLE
 }
 """
-SubcontrolHistoryControlType is enum for the field control_type
-"""
-enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
-  PREVENTATIVE
-  DETECTIVE
-  CORRECTIVE
-  DETERRENT
-}
-"""
 An edge in a connection.
 """
 type SubcontrolHistoryEdge {
@@ -37599,7 +37358,6 @@ enum SubcontrolHistoryOrderField {
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
-  CONTROL_TYPE
   category
   subcategory
   ref_code
@@ -37883,15 +37641,6 @@ input SubcontrolHistoryWhereInput {
   referenceFrameworkRevisionNotNil: Boolean
   referenceFrameworkRevisionEqualFold: String
   referenceFrameworkRevisionContainsFold: String
-  """
-  control_type field predicates
-  """
-  controlType: SubcontrolHistoryControlType
-  controlTypeNEQ: SubcontrolHistoryControlType
-  controlTypeIn: [SubcontrolHistoryControlType!]
-  controlTypeNotIn: [SubcontrolHistoryControlType!]
-  controlTypeIsNil: Boolean
-  controlTypeNotNil: Boolean
   """
   category field predicates
   """
@@ -38522,10 +38271,6 @@ type TaskHistory implements Node {
   """
   status: TaskHistoryTaskStatus!
   """
-  the category of the task, e.g. evidence upload, risk review, policy review, etc.
-  """
-  category: String @deprecated(reason: "Use ` + "`" + `task_kind_name` + "`" + ` instead.")
-  """
   the due date of the task
   """
   due: DateTime
@@ -38618,7 +38363,6 @@ enum TaskHistoryOrderField {
   updated_at
   title
   STATUS
-  category
   due
   completed
 }
@@ -38862,24 +38606,6 @@ input TaskHistoryWhereInput {
   statusNEQ: TaskHistoryTaskStatus
   statusIn: [TaskHistoryTaskStatus!]
   statusNotIn: [TaskHistoryTaskStatus!]
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   due field predicates
   """

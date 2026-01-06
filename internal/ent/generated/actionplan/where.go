@@ -108,11 +108,6 @@ func Name(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldName, v))
 }
 
-// ActionPlanType applies equality check predicate on the "action_plan_type" field. It's identical to ActionPlanTypeEQ.
-func ActionPlanType(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEQ(FieldActionPlanType, v))
-}
-
 // Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
 func Details(v string) predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldEQ(FieldDetails, v))
@@ -791,81 +786,6 @@ func StatusIsNil() predicate.ActionPlan {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.ActionPlan {
 	return predicate.ActionPlan(sql.FieldNotNull(FieldStatus))
-}
-
-// ActionPlanTypeEQ applies the EQ predicate on the "action_plan_type" field.
-func ActionPlanTypeEQ(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEQ(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeNEQ applies the NEQ predicate on the "action_plan_type" field.
-func ActionPlanTypeNEQ(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNEQ(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeIn applies the In predicate on the "action_plan_type" field.
-func ActionPlanTypeIn(vs ...string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIn(FieldActionPlanType, vs...))
-}
-
-// ActionPlanTypeNotIn applies the NotIn predicate on the "action_plan_type" field.
-func ActionPlanTypeNotIn(vs ...string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotIn(FieldActionPlanType, vs...))
-}
-
-// ActionPlanTypeGT applies the GT predicate on the "action_plan_type" field.
-func ActionPlanTypeGT(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldGT(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeGTE applies the GTE predicate on the "action_plan_type" field.
-func ActionPlanTypeGTE(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldGTE(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeLT applies the LT predicate on the "action_plan_type" field.
-func ActionPlanTypeLT(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldLT(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeLTE applies the LTE predicate on the "action_plan_type" field.
-func ActionPlanTypeLTE(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldLTE(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeContains applies the Contains predicate on the "action_plan_type" field.
-func ActionPlanTypeContains(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContains(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeHasPrefix applies the HasPrefix predicate on the "action_plan_type" field.
-func ActionPlanTypeHasPrefix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasPrefix(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeHasSuffix applies the HasSuffix predicate on the "action_plan_type" field.
-func ActionPlanTypeHasSuffix(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldHasSuffix(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeIsNil applies the IsNil predicate on the "action_plan_type" field.
-func ActionPlanTypeIsNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldIsNull(FieldActionPlanType))
-}
-
-// ActionPlanTypeNotNil applies the NotNil predicate on the "action_plan_type" field.
-func ActionPlanTypeNotNil() predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldNotNull(FieldActionPlanType))
-}
-
-// ActionPlanTypeEqualFold applies the EqualFold predicate on the "action_plan_type" field.
-func ActionPlanTypeEqualFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldEqualFold(FieldActionPlanType, v))
-}
-
-// ActionPlanTypeContainsFold applies the ContainsFold predicate on the "action_plan_type" field.
-func ActionPlanTypeContainsFold(v string) predicate.ActionPlan {
-	return predicate.ActionPlan(sql.FieldContainsFold(FieldActionPlanType, v))
 }
 
 // DetailsEQ applies the EQ predicate on the "details" field.

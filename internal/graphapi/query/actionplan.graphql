@@ -2,7 +2,6 @@
 mutation CreateBulkCSVActionPlan($input: Upload!) {
   createBulkCSVActionPlan(input: $input) {
     actionPlans {
-      actionPlanType
       approvalRequired
       createdAt
       createdBy
@@ -26,7 +25,6 @@ mutation CreateBulkCSVActionPlan($input: Upload!) {
 mutation CreateBulkActionPlan($input: [CreateActionPlanInput!]) {
   createBulkActionPlan(input: $input) {
     actionPlans {
-      actionPlanType
       approvalRequired
       createdAt
       createdBy
@@ -50,7 +48,6 @@ mutation CreateBulkActionPlan($input: [CreateActionPlanInput!]) {
 mutation UpdateBulkActionPlan($ids: [ID!]!, $input: UpdateActionPlanInput!) {
   updateBulkActionPlan(ids: $ids, input: $input) {
     actionPlans {
-      actionPlanType
       approvalRequired
       createdAt
       createdBy
@@ -75,7 +72,6 @@ mutation UpdateBulkActionPlan($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 mutation CreateActionPlan($input: CreateActionPlanInput!) {
   createActionPlan(input: $input) {
     actionPlan {
-      actionPlanType
       approvalRequired
       createdAt
       createdBy
@@ -106,7 +102,6 @@ query GetAllActionPlans {
   actionPlans {
     edges {
       node {
-        actionPlanType
         approvalRequired
         createdAt
         createdBy
@@ -129,7 +124,6 @@ query GetAllActionPlans {
 }
 query GetActionPlanByID($actionPlanId: ID!) {
   actionPlan(id: $actionPlanId) {
-    actionPlanType
     approvalRequired
     createdAt
     createdBy
@@ -153,7 +147,6 @@ query GetActionPlans($where: ActionPlanWhereInput) {
   actionPlans(where: $where) {
     edges {
       node {
-        actionPlanType
         approvalRequired
         createdAt
         createdBy
@@ -177,7 +170,6 @@ query GetActionPlans($where: ActionPlanWhereInput) {
 mutation UpdateActionPlan($updateActionPlanId: ID!, $input: UpdateActionPlanInput!) {
   updateActionPlan(id: $updateActionPlanId, input: $input) {
     actionPlan {
-      actionPlanType
       approvalRequired
       createdAt
       createdBy

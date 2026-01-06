@@ -2615,20 +2615,6 @@ var (
 			}
 		},
 	}
-	// ControlHistoryOrderFieldControlType orders ControlHistory by control_type.
-	ControlHistoryOrderFieldControlType = &ControlHistoryOrderField{
-		Value: func(_m *ControlHistory) (ent.Value, error) {
-			return _m.ControlType, nil
-		},
-		column: controlhistory.FieldControlType,
-		toTerm: controlhistory.ByControlType,
-		toCursor: func(_m *ControlHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ControlType,
-			}
-		},
-	}
 	// ControlHistoryOrderFieldCategory orders ControlHistory by category.
 	ControlHistoryOrderFieldCategory = &ControlHistoryOrderField{
 		Value: func(_m *ControlHistory) (ent.Value, error) {
@@ -2691,8 +2677,6 @@ func (f ControlHistoryOrderField) String() string {
 		str = "SOURCE"
 	case ControlHistoryOrderFieldReferenceFramework.column:
 		str = "REFERENCE_FRAMEWORK"
-	case ControlHistoryOrderFieldControlType.column:
-		str = "CONTROL_TYPE"
 	case ControlHistoryOrderFieldCategory.column:
 		str = "category"
 	case ControlHistoryOrderFieldSubcategory.column:
@@ -2729,8 +2713,6 @@ func (f *ControlHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlHistoryOrderFieldSource
 	case "REFERENCE_FRAMEWORK":
 		*f = *ControlHistoryOrderFieldReferenceFramework
-	case "CONTROL_TYPE":
-		*f = *ControlHistoryOrderFieldControlType
 	case "category":
 		*f = *ControlHistoryOrderFieldCategory
 	case "subcategory":
@@ -14629,20 +14611,6 @@ var (
 			}
 		},
 	}
-	// ProgramHistoryOrderFieldProgramType orders ProgramHistory by program_type.
-	ProgramHistoryOrderFieldProgramType = &ProgramHistoryOrderField{
-		Value: func(_m *ProgramHistory) (ent.Value, error) {
-			return _m.ProgramType, nil
-		},
-		column: programhistory.FieldProgramType,
-		toTerm: programhistory.ByProgramType,
-		toCursor: func(_m *ProgramHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ProgramType,
-			}
-		},
-	}
 	// ProgramHistoryOrderFieldFrameworkName orders ProgramHistory by framework_name.
 	ProgramHistoryOrderFieldFrameworkName = &ProgramHistoryOrderField{
 		Value: func(_m *ProgramHistory) (ent.Value, error) {
@@ -14701,8 +14669,6 @@ func (f ProgramHistoryOrderField) String() string {
 		str = "name"
 	case ProgramHistoryOrderFieldStatus.column:
 		str = "STATUS"
-	case ProgramHistoryOrderFieldProgramType.column:
-		str = "PROGRAM_TYPE"
 	case ProgramHistoryOrderFieldFrameworkName.column:
 		str = "framework"
 	case ProgramHistoryOrderFieldStartDate.column:
@@ -14735,8 +14701,6 @@ func (f *ProgramHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramHistoryOrderFieldName
 	case "STATUS":
 		*f = *ProgramHistoryOrderFieldStatus
-	case "PROGRAM_TYPE":
-		*f = *ProgramHistoryOrderFieldProgramType
 	case "framework":
 		*f = *ProgramHistoryOrderFieldFrameworkName
 	case "start_date":
@@ -16227,34 +16191,6 @@ var (
 			}
 		},
 	}
-	// RiskHistoryOrderFieldRiskType orders RiskHistory by risk_type.
-	RiskHistoryOrderFieldRiskType = &RiskHistoryOrderField{
-		Value: func(_m *RiskHistory) (ent.Value, error) {
-			return _m.RiskType, nil
-		},
-		column: riskhistory.FieldRiskType,
-		toTerm: riskhistory.ByRiskType,
-		toCursor: func(_m *RiskHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.RiskType,
-			}
-		},
-	}
-	// RiskHistoryOrderFieldCategory orders RiskHistory by category.
-	RiskHistoryOrderFieldCategory = &RiskHistoryOrderField{
-		Value: func(_m *RiskHistory) (ent.Value, error) {
-			return _m.Category, nil
-		},
-		column: riskhistory.FieldCategory,
-		toTerm: riskhistory.ByCategory,
-		toCursor: func(_m *RiskHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Category,
-			}
-		},
-	}
 	// RiskHistoryOrderFieldImpact orders RiskHistory by impact.
 	RiskHistoryOrderFieldImpact = &RiskHistoryOrderField{
 		Value: func(_m *RiskHistory) (ent.Value, error) {
@@ -16327,10 +16263,6 @@ func (f RiskHistoryOrderField) String() string {
 		str = "name"
 	case RiskHistoryOrderFieldStatus.column:
 		str = "STATUS"
-	case RiskHistoryOrderFieldRiskType.column:
-		str = "risk_type"
-	case RiskHistoryOrderFieldCategory.column:
-		str = "category"
 	case RiskHistoryOrderFieldImpact.column:
 		str = "IMPACT"
 	case RiskHistoryOrderFieldLikelihood.column:
@@ -16365,10 +16297,6 @@ func (f *RiskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskHistoryOrderFieldName
 	case "STATUS":
 		*f = *RiskHistoryOrderFieldStatus
-	case "risk_type":
-		*f = *RiskHistoryOrderFieldRiskType
-	case "category":
-		*f = *RiskHistoryOrderFieldCategory
 	case "IMPACT":
 		*f = *RiskHistoryOrderFieldImpact
 	case "LIKELIHOOD":
@@ -17902,20 +17830,6 @@ var (
 			}
 		},
 	}
-	// SubcontrolHistoryOrderFieldControlType orders SubcontrolHistory by control_type.
-	SubcontrolHistoryOrderFieldControlType = &SubcontrolHistoryOrderField{
-		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
-			return _m.ControlType, nil
-		},
-		column: subcontrolhistory.FieldControlType,
-		toTerm: subcontrolhistory.ByControlType,
-		toCursor: func(_m *SubcontrolHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ControlType,
-			}
-		},
-	}
 	// SubcontrolHistoryOrderFieldCategory orders SubcontrolHistory by category.
 	SubcontrolHistoryOrderFieldCategory = &SubcontrolHistoryOrderField{
 		Value: func(_m *SubcontrolHistory) (ent.Value, error) {
@@ -17978,8 +17892,6 @@ func (f SubcontrolHistoryOrderField) String() string {
 		str = "SOURCE"
 	case SubcontrolHistoryOrderFieldReferenceFramework.column:
 		str = "REFERENCE_FRAMEWORK"
-	case SubcontrolHistoryOrderFieldControlType.column:
-		str = "CONTROL_TYPE"
 	case SubcontrolHistoryOrderFieldCategory.column:
 		str = "category"
 	case SubcontrolHistoryOrderFieldSubcategory.column:
@@ -18016,8 +17928,6 @@ func (f *SubcontrolHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolHistoryOrderFieldSource
 	case "REFERENCE_FRAMEWORK":
 		*f = *SubcontrolHistoryOrderFieldReferenceFramework
-	case "CONTROL_TYPE":
-		*f = *SubcontrolHistoryOrderFieldControlType
 	case "category":
 		*f = *SubcontrolHistoryOrderFieldCategory
 	case "subcategory":
@@ -18700,20 +18610,6 @@ var (
 			}
 		},
 	}
-	// TaskHistoryOrderFieldCategory orders TaskHistory by category.
-	TaskHistoryOrderFieldCategory = &TaskHistoryOrderField{
-		Value: func(_m *TaskHistory) (ent.Value, error) {
-			return _m.Category, nil
-		},
-		column: taskhistory.FieldCategory,
-		toTerm: taskhistory.ByCategory,
-		toCursor: func(_m *TaskHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Category,
-			}
-		},
-	}
 	// TaskHistoryOrderFieldDue orders TaskHistory by due.
 	TaskHistoryOrderFieldDue = &TaskHistoryOrderField{
 		Value: func(_m *TaskHistory) (ent.Value, error) {
@@ -18784,8 +18680,6 @@ func (f TaskHistoryOrderField) String() string {
 		str = "title"
 	case TaskHistoryOrderFieldStatus.column:
 		str = "STATUS"
-	case TaskHistoryOrderFieldCategory.column:
-		str = "category"
 	case TaskHistoryOrderFieldDue.column:
 		str = "due"
 	case TaskHistoryOrderFieldCompleted.column:
@@ -18816,8 +18710,6 @@ func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskHistoryOrderFieldTitle
 	case "STATUS":
 		*f = *TaskHistoryOrderFieldStatus
-	case "category":
-		*f = *TaskHistoryOrderFieldCategory
 	case "due":
 		*f = *TaskHistoryOrderFieldDue
 	case "completed":

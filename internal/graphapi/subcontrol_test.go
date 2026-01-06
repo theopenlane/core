@@ -8,11 +8,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQuerySubcontrol(t *testing.T) {
@@ -260,7 +261,6 @@ func TestMutationCreateSubcontrol(t *testing.T) {
 				Status:      &enums.ControlStatusPreparing,
 				Tags:        []string{"tag1", "tag2"},
 				Source:      &enums.ControlSourceFramework,
-				ControlType: &enums.ControlTypeDetective,
 				Category:    lo.ToPtr("Availability"),
 				Subcategory: lo.ToPtr("Availability-1"),
 				MappedCategories: []string{

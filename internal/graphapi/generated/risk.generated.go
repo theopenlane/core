@@ -80,10 +80,6 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
-			case "riskType":
-				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "category":
-				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
@@ -234,10 +230,6 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
-			case "riskType":
-				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "category":
-				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
@@ -388,10 +380,6 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
-			case "riskType":
-				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "category":
-				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":
@@ -542,10 +530,6 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
 				return ec.fieldContext_Risk_status(ctx, field)
-			case "riskType":
-				return ec.fieldContext_Risk_riskType(ctx, field)
-			case "category":
-				return ec.fieldContext_Risk_category(ctx, field)
 			case "impact":
 				return ec.fieldContext_Risk_impact(ctx, field)
 			case "likelihood":

@@ -1220,7 +1220,6 @@ func (c *ControlBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Control
 			SetCategory(gofakeit.Adjective() + ulids.New().String()).
 			SetCategoryID(ulids.New().String()).
 			SetSubcategory(gofakeit.Adjective() + ulids.New().String()).
-			SetControlType(enums.ControlTypeDetective).
 			SetExampleEvidence([]models.ExampleEvidence{
 				{
 					DocumentationType: "Documentation",

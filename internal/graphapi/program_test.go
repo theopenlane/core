@@ -6,13 +6,14 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/utils/ulids"
-	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryProgram(t *testing.T) {
@@ -279,7 +280,6 @@ func TestMutationCreateProgram(t *testing.T) {
 			request: testclient.CreateProgramInput{
 				Name:                 "mitb program",
 				Description:          lo.ToPtr("being the best"),
-				ProgramType:          &enums.ProgramTypeFramework,
 				FrameworkName:        lo.ToPtr("SOC 2"),
 				ProgramOwnerID:       &testUser1.ID,
 				Status:               &enums.ProgramStatusInProgress,
@@ -333,7 +333,6 @@ func TestMutationCreateProgram(t *testing.T) {
 			request: testclient.CreateProgramInput{
 				Name:        "mitb program",
 				Description: lo.ToPtr("being the best"),
-				ProgramType: &enums.ProgramTypeGapAnalysis,
 				OwnerID:     &testUser1.OrganizationID,
 			},
 			client: suite.client.apiWithPAT,
@@ -425,12 +424,6 @@ func TestMutationCreateProgram(t *testing.T) {
 				assert.Check(t, is.Len(*resp.CreateProgram.Program.Description, 0))
 			} else {
 				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateProgram.Program.Description))
-			}
-
-			if tc.request.ProgramType == nil {
-				assert.Check(t, is.Equal(enums.ProgramTypeFramework, resp.CreateProgram.Program.ProgramType))
-			} else {
-				assert.Check(t, is.Equal(*tc.request.ProgramType, resp.CreateProgram.Program.ProgramType))
 			}
 
 			if tc.request.FrameworkName == nil {
@@ -625,7 +618,6 @@ func TestMutationUpdateProgram(t *testing.T) {
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Description:  lo.ToPtr("new description"),
-				ProgramType:  &enums.ProgramTypeRiskAssessment,
 				AddEditorIDs: []string{testUser1.GroupID}, // add the group to the editor groups for the subsequent tests
 				AddViewerIDs: []string{viewerGroup.ID},    // add the group to the viewer groups and ensure the user has access to the program
 			},
@@ -637,7 +629,6 @@ func TestMutationUpdateProgram(t *testing.T) {
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Status:               &enums.ProgramStatusReadyForAuditor,
-				ProgramType:          &enums.ProgramTypeFramework,
 				FrameworkName:        lo.ToPtr("SOC 2"),
 				AuditFirm:            lo.ToPtr("Meow Audit, LLC."),
 				Auditor:              lo.ToPtr("Meowz Meow"),
@@ -847,10 +838,6 @@ func TestMutationUpdateProgram(t *testing.T) {
 
 			if tc.request.Status != nil {
 				assert.Check(t, is.Equal(*tc.request.Status, resp.UpdateProgram.Program.Status))
-			}
-
-			if tc.request.ProgramType != nil {
-				assert.Check(t, is.Equal(*tc.request.ProgramType, resp.UpdateProgram.Program.ProgramType))
 			}
 
 			if tc.request.FrameworkName != nil {

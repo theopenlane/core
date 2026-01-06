@@ -32,7 +32,6 @@ query GetAllInternalPolicyHistories {
         name
         operation
         ownerID
-        policyType
         ref
         reviewDue
         reviewFrequency
@@ -83,7 +82,6 @@ query GetInternalPolicyHistories($first: Int, $last: Int, $where: InternalPolicy
         name
         operation
         ownerID
-        policyType
         ref
         reviewDue
         reviewFrequency

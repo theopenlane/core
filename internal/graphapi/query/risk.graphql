@@ -11,7 +11,6 @@ mutation CreateBulkCSVRisk($input: Upload!) {
       likelihood
       mitigation
       name
-      riskType
       status
       score
       tags
@@ -42,7 +41,6 @@ mutation CreateBulkRisk($input: [CreateRiskInput!]) {
       likelihood
       mitigation
       name
-      riskType
       status
       score
       tags
@@ -73,7 +71,6 @@ mutation UpdateBulkRisk($ids: [ID!]!, $input: UpdateRiskInput!) {
       likelihood
       mitigation
       name
-      riskType
       status
       score
       tags
@@ -105,7 +102,6 @@ mutation CreateRisk($input: CreateRiskInput!) {
       likelihood
       mitigation
       name
-      riskType
       status
       score
       tags
@@ -183,7 +179,6 @@ query GetAllRisks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $ord
         score
         mitigation
         name
-        riskType
         status
         score
         tags
@@ -247,7 +242,6 @@ query GetRiskByID($riskId: ID!) {
     likelihood
     mitigation
     name
-    riskType
     status
     score
     tags
@@ -318,7 +312,6 @@ query GetRisks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where:
         likelihood
         mitigation
         name
-        riskType
         status
         score
         tags
@@ -383,7 +376,6 @@ mutation UpdateRisk($updateRiskId: ID!, $input: UpdateRiskInput!) {
       likelihood
       mitigation
       name
-      riskType
       status
       score
       tags
