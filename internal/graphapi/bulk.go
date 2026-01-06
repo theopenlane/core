@@ -1169,6 +1169,114 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 	}, nil
 }
 
+// bulkCreateEvidence uses the CreateBulk function to create multiple Evidence entities
+func (r *mutationResolver) bulkCreateEvidence(ctx context.Context, input []*generated.CreateEvidenceInput) (*model.EvidenceBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.EvidenceCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Evidence.Create().SetInput(*data)
+	}
+
+	res, err := c.Evidence.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "evidence"})
+	}
+
+	// return response
+	return &model.EvidenceBulkCreatePayload{
+		Evidences: res,
+	}, nil
+}
+
+// bulkUpdateEvidence updates multiple Evidence entities
+func (r *mutationResolver) bulkUpdateEvidence(ctx context.Context, ids []string, input generated.UpdateEvidenceInput) (*model.EvidenceBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Evidence, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each evidence individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for evidence")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Evidence.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to get evidence in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to update evidence in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.EvidenceBulkUpdatePayload{
+		Evidences:  results,
+		UpdatedIDs: updatedIDs,
+	}, nil
+}
+
+// bulkDeleteEvidence deletes multiple Evidence entities by their IDs
+func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string) (*model.EvidenceBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	deletedIDs := make([]string, 0, len(ids))
+	errors := make([]error, 0, len(ids))
+
+	var mu sync.Mutex
+
+	funcs := make([]func(), 0, len(ids))
+	for _, id := range ids {
+		funcs = append(funcs, func() {
+			// delete each evidence individually to ensure proper cleanup
+			if err := r.db.Evidence.DeleteOneID(id).Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to delete evidence in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			if err := generated.EvidenceEdgeCleanup(ctx, id); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("evidence_id", id).Msg("failed to cleanup evidence edges in bulk operation")
+				mu.Lock()
+				errors = append(errors, err)
+				mu.Unlock()
+				return
+			}
+
+			mu.Lock()
+			deletedIDs = append(deletedIDs, id)
+			mu.Unlock()
+		})
+	}
+
+	r.withPool().SubmitMultipleAndWait(funcs)
+
+	if len(errors) > 0 {
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some evidence deletions failed")
+	}
+
+	return &model.EvidenceBulkDeletePayload{
+		DeletedIDs: deletedIDs,
+	}, nil
+}
+
 // bulkDeleteExport deletes multiple Export entities by their IDs
 func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (*model.ExportBulkDeletePayload, error) {
 	if len(ids) == 0 {

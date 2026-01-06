@@ -119,6 +119,155 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 	return fc, nil
 }
 
+func (ec *executionContext) _EvidenceBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceBulkDeletePayload_deletedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		ec.marshalNID2ᚕstringᚄ,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_EvidenceBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EvidenceBulkDeletePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EvidenceBulkUpdatePayload_evidences(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceBulkUpdatePayload_evidences,
+		func(ctx context.Context) (any, error) {
+			return obj.Evidences, nil
+		},
+		nil,
+		ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_evidences(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EvidenceBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Evidence_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Evidence_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Evidence_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_Evidence_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_Evidence_updatedBy(ctx, field)
+			case "displayID":
+				return ec.fieldContext_Evidence_displayID(ctx, field)
+			case "tags":
+				return ec.fieldContext_Evidence_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_Evidence_ownerID(ctx, field)
+			case "workflowEligibleMarker":
+				return ec.fieldContext_Evidence_workflowEligibleMarker(ctx, field)
+			case "name":
+				return ec.fieldContext_Evidence_name(ctx, field)
+			case "description":
+				return ec.fieldContext_Evidence_description(ctx, field)
+			case "collectionProcedure":
+				return ec.fieldContext_Evidence_collectionProcedure(ctx, field)
+			case "creationDate":
+				return ec.fieldContext_Evidence_creationDate(ctx, field)
+			case "renewalDate":
+				return ec.fieldContext_Evidence_renewalDate(ctx, field)
+			case "source":
+				return ec.fieldContext_Evidence_source(ctx, field)
+			case "isAutomated":
+				return ec.fieldContext_Evidence_isAutomated(ctx, field)
+			case "url":
+				return ec.fieldContext_Evidence_url(ctx, field)
+			case "status":
+				return ec.fieldContext_Evidence_status(ctx, field)
+			case "owner":
+				return ec.fieldContext_Evidence_owner(ctx, field)
+			case "controls":
+				return ec.fieldContext_Evidence_controls(ctx, field)
+			case "subcontrols":
+				return ec.fieldContext_Evidence_subcontrols(ctx, field)
+			case "controlObjectives":
+				return ec.fieldContext_Evidence_controlObjectives(ctx, field)
+			case "controlImplementations":
+				return ec.fieldContext_Evidence_controlImplementations(ctx, field)
+			case "files":
+				return ec.fieldContext_Evidence_files(ctx, field)
+			case "programs":
+				return ec.fieldContext_Evidence_programs(ctx, field)
+			case "tasks":
+				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Evidence_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Evidence_workflowObjectRefs(ctx, field)
+			case "hasPendingWorkflow":
+				return ec.fieldContext_Evidence_hasPendingWorkflow(ctx, field)
+			case "activeWorkflowInstance":
+				return ec.fieldContext_Evidence_activeWorkflowInstance(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EvidenceBulkUpdatePayload_updatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_EvidenceBulkUpdatePayload_updatedIDs,
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedIDs, nil
+		},
+		nil,
+		ec.marshalOID2ᚕstringᚄ,
+		true,
+		false,
+	)
+}
+
+func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EvidenceBulkUpdatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type ID does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _EvidenceCreatePayload_evidence(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -378,6 +527,83 @@ func (ec *executionContext) _EvidenceBulkCreatePayload(ctx context.Context, sel 
 	return out
 }
 
+var evidenceBulkDeletePayloadImplementors = []string{"EvidenceBulkDeletePayload"}
+
+func (ec *executionContext) _EvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.EvidenceBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, evidenceBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EvidenceBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._EvidenceBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var evidenceBulkUpdatePayloadImplementors = []string{"EvidenceBulkUpdatePayload"}
+
+func (ec *executionContext) _EvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.EvidenceBulkUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, evidenceBulkUpdatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EvidenceBulkUpdatePayload")
+		case "evidences":
+			out.Values[i] = ec._EvidenceBulkUpdatePayload_evidences(ctx, field, obj)
+		case "updatedIDs":
+			out.Values[i] = ec._EvidenceBulkUpdatePayload_updatedIDs(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 var evidenceCreatePayloadImplementors = []string{"EvidenceCreatePayload"}
 
 func (ec *executionContext) _EvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.EvidenceCreatePayload) graphql.Marshaler {
@@ -498,6 +724,48 @@ func (ec *executionContext) _EvidenceUpdatePayload(ctx context.Context, sel ast.
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) marshalNEvidenceBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkCreatePayload) graphql.Marshaler {
+	return ec._EvidenceBulkCreatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkCreatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EvidenceBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEvidenceBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkDeletePayload) graphql.Marshaler {
+	return ec._EvidenceBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EvidenceBulkDeletePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkUpdatePayload) graphql.Marshaler {
+	return ec._EvidenceBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._EvidenceBulkUpdatePayload(ctx, sel, v)
+}
 
 func (ec *executionContext) marshalNEvidenceCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceCreatePayload) graphql.Marshaler {
 	return ec._EvidenceCreatePayload(ctx, sel, &v)
