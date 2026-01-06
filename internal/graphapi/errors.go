@@ -32,16 +32,22 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 			Str("field", validationError.Name).
 			Msg("validation error")
 
-		if strings.Contains(strings.ToLower(validationError.Error()), "generated:") {
+		errMsg := validationError.Error()
+		if strings.Contains(strings.ToLower(errMsg), "generated:") {
 			numParts := 2
 
-			errMsg := strings.SplitN(validationError.Error(), "generated: ", numParts)
-			if len(errMsg) == numParts {
-				return common.NewValidationError(errMsg[1])
+			msgParts := strings.SplitN(errMsg, "generated: ", numParts)
+			if len(msgParts) == numParts {
+				errMsg = msgParts[1]
 			}
 		}
 
-		return common.NewValidationError(validationError.Error())
+		fieldName := strings.TrimSpace(validationError.Name)
+		if fieldName != "" {
+			return common.NewValidationErrorWithFields(errMsg, fieldName)
+		}
+
+		return common.NewValidationError(errMsg)
 	case generated.IsConstraintError(err):
 		constraintError := err.(*generated.ConstraintError)
 

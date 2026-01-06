@@ -1,11 +1,14 @@
 package common //nolint:revive
 
 import (
+	"bytes"
 	"context"
 	"encoding/csv"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"reflect"
 	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -19,6 +22,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/objects"
@@ -179,10 +183,347 @@ func UnmarshalBulkData[T any](input graphql.Upload) ([]*T, error) {
 	})
 
 	if err := gocsv.UnmarshalBytes(stream, &data); err != nil {
-		return nil, err
+		return nil, wrapCSVUnmarshalError(err, stream)
 	}
+	normalizeCSVEnumInputs(data)
 
 	return data, nil
+}
+
+// wrapCSVUnmarshalError adds row, column, and header context for CSV parse errors
+func wrapCSVUnmarshalError(err error, data []byte) error {
+	var parseErr *csv.ParseError
+	if !errors.As(err, &parseErr) {
+		return err
+	}
+
+	headerName := csvHeaderForColumn(data, parseErr.Column)
+	message := fmt.Sprintf("csv parse error on line %d, column %d", parseErr.Line, parseErr.Column)
+	if headerName != "" {
+		message = fmt.Sprintf("%s (header %q)", message, headerName)
+	}
+	if parseErr.Err != nil {
+		message = fmt.Sprintf("%s: %s", message, parseErr.Err.Error())
+	}
+
+	if hint := jsonColumnHint(parseErr.Err); hint != "" {
+		message = fmt.Sprintf("%s %s", message, hint)
+	}
+
+	if headerName != "" {
+		return NewValidationErrorWithFields(message, headerName)
+	}
+
+	return NewValidationError(message)
+}
+
+// csvHeaderForColumn returns the header name for a 1-based column index
+func csvHeaderForColumn(data []byte, column int) string {
+	if column <= 0 {
+		return ""
+	}
+
+	reader := csv.NewReader(bytes.NewReader(data))
+	reader.LazyQuotes = true
+	reader.FieldsPerRecord = -1
+	reader.TrimLeadingSpace = true
+
+	headers, err := reader.Read()
+	if err != nil {
+		return ""
+	}
+
+	index := column - 1
+	if index < 0 || index >= len(headers) {
+		return ""
+	}
+
+	return strings.TrimSpace(headers[index])
+}
+
+// jsonColumnHint adds guidance when a CSV value fails JSON parsing
+func jsonColumnHint(err error) string {
+	if err == nil {
+		return ""
+	}
+
+	var syntaxErr *json.SyntaxError
+	var typeErr *json.UnmarshalTypeError
+	if !errors.As(err, &syntaxErr) && !errors.As(err, &typeErr) {
+		return ""
+	}
+
+	return "list or object values must be valid JSON and the cell should be quoted, e.g. \"[\\\"security\\\",\\\"compliance\\\"]\""
+}
+
+type enumInfo struct {
+	defaultValue string
+	normalized   map[string]string
+	ok           bool
+}
+
+// dateTimeType caches the DateTime reflect type for pointer checks
+var dateTimeType = reflect.TypeOf(models.DateTime{})
+
+// normalizeCSVEnumInputs walks decoded CSV rows and normalizes enum values
+func normalizeCSVEnumInputs(data any) {
+	v := reflect.ValueOf(data)
+	if v.Kind() != reflect.Slice {
+		// Only CSV row slices are expected here; skip anything else to avoid panics
+		return
+	}
+
+	cache := map[reflect.Type]enumInfo{}
+	for i := 0; i < v.Len(); i++ {
+		// Normalize each row independently while sharing enum metadata cache
+		normalizeCSVEnumValue(v.Index(i), cache)
+	}
+}
+
+// normalizeCSVEnumValue recursively normalizes enum fields on a struct value
+func normalizeCSVEnumValue(v reflect.Value, cache map[reflect.Type]enumInfo) {
+	if v.Kind() == reflect.Pointer {
+		if v.IsNil() {
+			// Nil rows are allowed (e.g., failed CSV parse); nothing to normalize
+			return
+		}
+		// Work with the concrete struct value for field traversal
+		v = v.Elem()
+	}
+
+	if v.Kind() != reflect.Struct {
+		// Only structs contain named fields to normalize
+		return
+	}
+
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		if !field.CanSet() {
+			// Skip unexported or non-settable fields to avoid reflection panics
+			continue
+		}
+
+		switch field.Kind() {
+		case reflect.Pointer:
+			// Pointer enums are treated differently to allow nil/default handling
+			normalizeEnumPointerField(field, cache)
+			// DateTime pointers from CSV can be zero when the cell is blank, so clear them
+			normalizeDateTimePointerField(field)
+		case reflect.String:
+			// Value enums are normalized in place
+			normalizeEnumStringField(field, cache)
+		case reflect.Slice:
+			// Normalize slices of enum values (e.g., []enums.Channel)
+			normalizeEnumSliceField(field, cache)
+		case reflect.Struct:
+			// Recurse into nested structs to normalize embedded inputs
+			normalizeCSVEnumValue(field, cache)
+		}
+	}
+}
+
+// normalizeEnumPointerField handles pointer enum fields, clearing empty inputs to allow defaults
+func normalizeEnumPointerField(field reflect.Value, cache map[reflect.Type]enumInfo) {
+	if field.IsNil() {
+		// No value provided, so nothing to normalize
+		return
+	}
+
+	info := enumInfoForType(field.Type().Elem(), cache)
+	if !info.ok {
+		// Not an enum type (no Values method), skip normalization
+		return
+	}
+
+	// Enum values are string-backed; normalize the raw string representation
+	raw := field.Elem().String()
+	normalized, needsClear := normalizeEnumValue(raw, info)
+	if needsClear {
+		// Treat empty CSV cells as "unset" so ent defaults can apply
+		field.Set(reflect.Zero(field.Type()))
+
+		return
+	}
+
+	if normalized == raw {
+		// Already canonical
+		return
+	}
+
+	// Assign the normalized enum value back into the pointer
+	next := reflect.New(field.Type().Elem()).Elem()
+	next.SetString(normalized)
+	field.Set(next.Addr())
+}
+
+// normalizeDateTimePointerField clears zero DateTime pointers so empty CSV cells stay unset
+func normalizeDateTimePointerField(field reflect.Value) {
+	if field.IsNil() {
+		// No value provided, so nothing to normalize
+		return
+	}
+
+	if field.Type().Elem() != dateTimeType {
+		// Only DateTime pointers need this normalization
+		return
+	}
+
+	dt := field.Elem().Interface().(models.DateTime)
+	if dt.IsZero() {
+		// gocsv allocates DateTime pointers even for empty cells, so clear them for defaults
+		field.Set(reflect.Zero(field.Type()))
+	}
+}
+
+// normalizeEnumStringField handles value enum fields and applies defaults for empty inputs
+func normalizeEnumStringField(field reflect.Value, cache map[reflect.Type]enumInfo) {
+	info := enumInfoForType(field.Type(), cache)
+	if !info.ok {
+		// Not an enum type (no Values method), skip normalization
+		return
+	}
+
+	raw := field.String()
+	normalized, needsClear := normalizeEnumValue(raw, info)
+	if needsClear {
+		// Value enums cannot be nil; use the enum's default if available
+		if info.defaultValue != "" {
+			field.SetString(info.defaultValue)
+		} else {
+			// Fall back to empty string if no default exists
+			field.SetString("")
+		}
+		return
+	}
+
+	if normalized != raw {
+		// Normalize user input (spacing/case) to the canonical enum string
+		field.SetString(normalized)
+	}
+}
+
+// normalizeEnumSliceField normalizes slices of enum values while preserving positions
+func normalizeEnumSliceField(field reflect.Value, cache map[reflect.Type]enumInfo) {
+	info := enumInfoForType(field.Type().Elem(), cache)
+	if !info.ok {
+		// Not a slice of enums; skip
+		return
+	}
+
+	for i := 0; i < field.Len(); i++ {
+		elem := field.Index(i)
+		if !elem.CanSet() {
+			// Skip non-settable elements to avoid reflection panics
+			continue
+		}
+		raw := elem.String()
+		normalized, needsClear := normalizeEnumValue(raw, info)
+		if needsClear {
+			// Preserve empty entries rather than removing them
+			elem.SetString("")
+			continue
+		}
+		if normalized != raw {
+			// Normalize each element independently
+			elem.SetString(normalized)
+		}
+	}
+}
+
+// enumInfoForType extracts enum metadata using the Values method and caches it by type
+func enumInfoForType(t reflect.Type, cache map[reflect.Type]enumInfo) enumInfo {
+	if info, ok := cache[t]; ok {
+		return info
+	}
+
+	info := enumInfo{}
+	if t.Kind() != reflect.String {
+		// Enums are string-backed; skip non-string types
+		cache[t] = info
+		return info
+	}
+
+	method, ok := t.MethodByName("Values")
+	var receiver reflect.Value
+	if ok {
+		// Value receiver provides Values()
+		receiver = reflect.Zero(t)
+	} else {
+		// Pointer receiver provides Values()
+		ptrType := reflect.PointerTo(t)
+		method, ok = ptrType.MethodByName("Values")
+		if !ok {
+			// No Values method means this is not an enum type
+			cache[t] = info
+			return info
+		}
+		receiver = reflect.New(t)
+	}
+
+	if method.Type.NumIn() != 1 || method.Type.NumOut() != 1 {
+		// Values must be func() []string; otherwise skip
+		cache[t] = info
+		return info
+	}
+	out := method.Type.Out(0)
+	if out.Kind() != reflect.Slice || out.Elem().Kind() != reflect.String {
+		// Values must return []string to be considered an enum
+		cache[t] = info
+		return info
+	}
+
+	results := method.Func.Call([]reflect.Value{receiver})
+	values, ok := results[0].Interface().([]string)
+	if !ok {
+		// Defensive: unexpected Values return type
+		cache[t] = info
+		return info
+	}
+
+	// Build a lookup of normalized token -> canonical enum value
+	info.normalized = lo.Associate(values, func(value string) (string, string) {
+		return normalizeEnumToken(value), value
+	})
+	delete(info.normalized, "")
+	if len(values) > 0 {
+		// Default to the first enum entry when value enums are left blank
+		info.defaultValue = values[0]
+	}
+	info.ok = true
+	cache[t] = info
+
+	return info
+}
+
+// normalizeEnumValue maps raw CSV input to a canonical enum value and signals when it is empty
+func normalizeEnumValue(raw string, info enumInfo) (string, bool) {
+	// Normalize once so blanks and human-friendly input have a consistent shape
+	normalized := normalizeEnumToken(raw)
+	if normalized == "" {
+		// Empty cells should not fail validation; they either clear pointers or use defaults
+		return "", true
+	}
+
+	if len(info.normalized) > 0 {
+		// Prefer exact known values to avoid over-normalizing unusual enum strings
+		if canonical, ok := info.normalized[normalized]; ok {
+			return canonical, false
+		}
+	}
+
+	// Fall back to the normalized token for user-friendly inputs like "In Review"
+	return normalized, false
+}
+
+// normalizeEnumToken trims, snake-cases, and uppercases a value to align user input with enum constants
+func normalizeEnumToken(value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		// Skip empty values to avoid bogus keys
+		return ""
+	}
+	// SnakeCase unifies "In Review" and "IN_REVIEW", then uppercase matches enum constants
+	return strings.ToUpper(lo.SnakeCase(value))
 }
 
 // inputWithOwnerID is a struct that contains the owner id
@@ -260,7 +601,7 @@ func SetOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 		return nil
 	}
 
-	// If no input provided, fallback to a single authorized org (e.g., API token with one org).
+	// If no input provided, fallback to a single authorized org (e.g., API token with one org)
 	if inputOrgID == nil {
 		if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil {
 			if len(au.OrganizationIDs) == 1 && au.OrganizationIDs[0] != "" {

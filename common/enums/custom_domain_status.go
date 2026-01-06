@@ -9,23 +9,23 @@ import (
 type DNSVerificationStatus string
 
 var (
-	DNSVerificationStatusActive             DNSVerificationStatus = "active"
-	DNSVerificationStatusPending            DNSVerificationStatus = "pending"
-	DNSVerificationStatusActiveRedeploying  DNSVerificationStatus = "active_redeploying"
-	DNSVerificationStatusMoved              DNSVerificationStatus = "moved"
-	DNSVerificationStatusPendingDeletion    DNSVerificationStatus = "pending_deletion"
-	DNSVerificationStatusDeleted            DNSVerificationStatus = "deleted"
-	DNSVerificationStatusPendingBlocked     DNSVerificationStatus = "pending_blocked"
-	DNSVerificationStatusPendingMigration   DNSVerificationStatus = "pending_migration"
-	DNSVerificationStatusPendingProvisioned DNSVerificationStatus = "pending_provisioned"
-	DNSVerificationStatusTestPending        DNSVerificationStatus = "test_pending"
-	DNSVerificationStatusTestActive         DNSVerificationStatus = "test_active"
-	DNSVerificationStatusTestActiveApex     DNSVerificationStatus = "test_active_apex"
-	DNSVerificationStatusTestBlocked        DNSVerificationStatus = "test_blocked"
-	DNSVerificationStatusTestFailed         DNSVerificationStatus = "test_failed"
-	DNSVerificationStatusProvisioned        DNSVerificationStatus = "provisioned"
-	DNSVerificationStatusBlocked            DNSVerificationStatus = "blocked"
-	DNSVerificationStatusInvalid            DNSVerificationStatus = "invalid"
+	DNSVerificationStatusActive             DNSVerificationStatus = "ACTIVE"
+	DNSVerificationStatusPending            DNSVerificationStatus = "PENDING"
+	DNSVerificationStatusActiveRedeploying  DNSVerificationStatus = "ACTIVE_REDEPLOYING"
+	DNSVerificationStatusMoved              DNSVerificationStatus = "MOVED"
+	DNSVerificationStatusPendingDeletion    DNSVerificationStatus = "PENDING_DELETION"
+	DNSVerificationStatusDeleted            DNSVerificationStatus = "DELETED"
+	DNSVerificationStatusPendingBlocked     DNSVerificationStatus = "PENDING_BLOCKED"
+	DNSVerificationStatusPendingMigration   DNSVerificationStatus = "PENDING_MIGRATION"
+	DNSVerificationStatusPendingProvisioned DNSVerificationStatus = "PENDING_PROVISIONED"
+	DNSVerificationStatusTestPending        DNSVerificationStatus = "TEST_PENDING"
+	DNSVerificationStatusTestActive         DNSVerificationStatus = "TEST_ACTIVE"
+	DNSVerificationStatusTestActiveApex     DNSVerificationStatus = "TEST_ACTIVE_APEX"
+	DNSVerificationStatusTestBlocked        DNSVerificationStatus = "TEST_BLOCKED"
+	DNSVerificationStatusTestFailed         DNSVerificationStatus = "TEST_FAILED"
+	DNSVerificationStatusProvisioned        DNSVerificationStatus = "PROVISIONED"
+	DNSVerificationStatusBlocked            DNSVerificationStatus = "BLOCKED"
+	DNSVerificationStatusInvalid            DNSVerificationStatus = "INVALID"
 )
 
 func (DNSVerificationStatus) Values() (kinds []string) {
@@ -61,11 +61,12 @@ func (r DNSVerificationStatus) String() string {
 
 // ToDNSVerificationStatus returns the user status enum based on string input
 func ToDNSVerificationStatus(r string) *DNSVerificationStatus {
-	switch r := strings.ToLower(r); r {
-	case DNSVerificationStatusPending.String():
-		return &DNSVerificationStatusPending
+	rUpper := strings.ToUpper(r)
+	switch rUpper {
 	case DNSVerificationStatusActive.String():
 		return &DNSVerificationStatusActive
+	case DNSVerificationStatusPending.String():
+		return &DNSVerificationStatusPending
 	case DNSVerificationStatusActiveRedeploying.String():
 		return &DNSVerificationStatusActiveRedeploying
 	case DNSVerificationStatusMoved.String():
@@ -119,28 +120,28 @@ func (r *DNSVerificationStatus) UnmarshalGQL(v interface{}) error {
 type SSLVerificationStatus string
 
 var (
-	SSLVerificationStatusInitializing         SSLVerificationStatus = "initializing"
-	SSLVerificationStatusPendingValidation    SSLVerificationStatus = "pending_validation"
-	SSLVerificationStatusDeleted              SSLVerificationStatus = "deleted"
-	SSLVerificationStatusPendingIssuance      SSLVerificationStatus = "pending_issuance"
-	SSLVerificationStatusPendingDeployment    SSLVerificationStatus = "pending_deployment"
-	SSLVerificationStatusPendingDeletion      SSLVerificationStatus = "pending_deletion"
-	SSLVerificationStatusPendingExpiration    SSLVerificationStatus = "pending_expiration"
-	SSLVerificationStatusExpired              SSLVerificationStatus = "expired"
-	SSLVerificationStatusActive               SSLVerificationStatus = "active"
-	SSLVerificationStatusInitializingTimedOut SSLVerificationStatus = "initializing_timed_out"
-	SSLVerificationStatusValidationTimedOut   SSLVerificationStatus = "validation_timed_out"
-	SSLVerificationStatusIssuanceTimedOut     SSLVerificationStatus = "issuance_timed_out"
-	SSLVerificationStatusDeploymentTimedOut   SSLVerificationStatus = "deployment_timed_out"
-	SSLVerificationStatusDeletionTimedOut     SSLVerificationStatus = "deletion_timed_out"
-	SSLVerificationStatusPendingCleanup       SSLVerificationStatus = "pending_cleanup"
-	SSLVerificationStatusStagingDeployment    SSLVerificationStatus = "staging_deployment"
-	SSLVerificationStatusStagingActive        SSLVerificationStatus = "staging_active"
-	SSLVerificationStatusDeactivating         SSLVerificationStatus = "deactivating"
-	SSLVerificationStatusInactive             SSLVerificationStatus = "inactive"
-	SSLVerificationStatusBackupIssued         SSLVerificationStatus = "backup_issued"
-	SSLVerificationStatusHoldingDeployment    SSLVerificationStatus = "holding_deployment"
-	SSLVerificationStatusInvalid              SSLVerificationStatus = "invalid"
+	SSLVerificationStatusInitializing         SSLVerificationStatus = "INITIALIZING"
+	SSLVerificationStatusPendingValidation    SSLVerificationStatus = "PENDING_VALIDATION"
+	SSLVerificationStatusDeleted              SSLVerificationStatus = "DELETED"
+	SSLVerificationStatusPendingIssuance      SSLVerificationStatus = "PENDING_ISSUANCE"
+	SSLVerificationStatusPendingDeployment    SSLVerificationStatus = "PENDING_DEPLOYMENT"
+	SSLVerificationStatusPendingDeletion      SSLVerificationStatus = "PENDING_DELETION"
+	SSLVerificationStatusPendingExpiration    SSLVerificationStatus = "PENDING_EXPIRATION"
+	SSLVerificationStatusExpired              SSLVerificationStatus = "EXPIRED"
+	SSLVerificationStatusActive               SSLVerificationStatus = "ACTIVE"
+	SSLVerificationStatusInitializingTimedOut SSLVerificationStatus = "INITIALIZING_TIMED_OUT"
+	SSLVerificationStatusValidationTimedOut   SSLVerificationStatus = "VALIDATION_TIMED_OUT"
+	SSLVerificationStatusIssuanceTimedOut     SSLVerificationStatus = "ISSUANCE_TIMED_OUT"
+	SSLVerificationStatusDeploymentTimedOut   SSLVerificationStatus = "DEPLOYMENT_TIMED_OUT"
+	SSLVerificationStatusDeletionTimedOut     SSLVerificationStatus = "DELETION_TIMED_OUT"
+	SSLVerificationStatusPendingCleanup       SSLVerificationStatus = "PENDING_CLEANUP"
+	SSLVerificationStatusStagingDeployment    SSLVerificationStatus = "STAGING_DEPLOYMENT"
+	SSLVerificationStatusStagingActive        SSLVerificationStatus = "STAGING_ACTIVE"
+	SSLVerificationStatusDeactivating         SSLVerificationStatus = "DEACTIVATING"
+	SSLVerificationStatusInactive             SSLVerificationStatus = "INACTIVE"
+	SSLVerificationStatusBackupIssued         SSLVerificationStatus = "BACKUP_ISSUED"
+	SSLVerificationStatusHoldingDeployment    SSLVerificationStatus = "HOLDING_DEPLOYMENT"
+	SSLVerificationStatusInvalid              SSLVerificationStatus = "INVALID"
 )
 
 func (SSLVerificationStatus) Values() (kinds []string) {
@@ -181,7 +182,8 @@ func (r SSLVerificationStatus) String() string {
 
 // ToSSLVerificationStatus returns the user status enum based on string input
 func ToSSLVerificationStatus(r string) *SSLVerificationStatus {
-	switch r := strings.ToLower(r); r {
+	rUpper := strings.ToUpper(r)
+	switch rUpper {
 	case SSLVerificationStatusInitializing.String():
 		return &SSLVerificationStatusInitializing
 	case SSLVerificationStatusPendingValidation.String():

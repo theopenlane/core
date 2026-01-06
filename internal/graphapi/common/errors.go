@@ -178,7 +178,8 @@ var _ gqlerrors.CustomErrorType = (*ValidationError)(nil)
 
 // ValidationError is returned when a field fails validation
 type ValidationError struct {
-	ErrMsg string
+	ErrMsg     string
+	FieldNames []string
 }
 
 // Code returns the ValidationError code
@@ -188,6 +189,10 @@ func (e *ValidationError) Code() string {
 
 // Message returns the ValidationError message
 func (e *ValidationError) Message() string {
+	if len(e.FieldNames) > 0 {
+		return fmt.Sprintf("invalid input provided for %s: %s", strings.Join(e.FieldNames, ", "), e.ErrMsg)
+	}
+
 	return fmt.Sprintf("invalid input provided: %s", e.ErrMsg)
 }
 
@@ -201,10 +206,21 @@ func (e *ValidationError) Module() models.OrgModule {
 	return ""
 }
 
+// Fields returns the fields that failed validation
+func (e *ValidationError) Fields() []string {
+	return e.FieldNames
+}
+
 // NewValidationError returns a ValidationError
 func NewValidationError(errMsg string) *ValidationError {
+	return NewValidationErrorWithFields(errMsg)
+}
+
+// NewValidationErrorWithFields returns a ValidationError with field details
+func NewValidationErrorWithFields(errMsg string, fields ...string) *ValidationError {
 	return &ValidationError{
-		ErrMsg: errMsg,
+		ErrMsg:     errMsg,
+		FieldNames: fields,
 	}
 }
 
