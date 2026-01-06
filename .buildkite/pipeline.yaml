@@ -733,7 +733,7 @@ steps:
               always_pull: true
               propagate-environment: true
               environment:
-                - "APOLLO_HISTORY_KEY"
+                - "APOLLO_KEY"
       - label: ":rocket: atlas push"
         if: build.branch == "main" && build.tag == null
         key: "atlas_migrate"
