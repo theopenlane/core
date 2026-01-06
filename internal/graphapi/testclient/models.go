@@ -9709,8 +9709,22 @@ func (Evidence) IsNode() {}
 
 // Return response for createBulkEvidence mutation
 type EvidenceBulkCreatePayload struct {
-	// Created evidences
+	// Created evidence
 	Evidences []*Evidence `json:"evidences,omitempty"`
+}
+
+// Return response for deleteBulkEvidence mutation
+type EvidenceBulkDeletePayload struct {
+	// Deleted evidence IDs
+	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkEvidence mutation
+type EvidenceBulkUpdatePayload struct {
+	// Updated evidences
+	Evidences []*Evidence `json:"evidences,omitempty"`
+	// IDs of the updated evidence
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

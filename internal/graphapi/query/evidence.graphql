@@ -1,3 +1,27 @@
+mutation CreateBulkCSVEvidence($input: Upload!) {
+  createBulkCSVEvidence(input: $input) {
+    evidences {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+    }
+  }
+}
+
 mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
   createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
     evidence {

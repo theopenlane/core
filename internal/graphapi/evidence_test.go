@@ -579,6 +579,79 @@ func TestMutationCreateEvidence(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemOwnedControl.ID, systemOwnedSubcontrol.ControlID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
+func TestMutationCreateBulkCSVEvidence(t *testing.T) {
+	bulkFile, err := storage.NewUploadFile("testdata/uploads/evidence.csv")
+	assert.NilError(t, err)
+
+	invalidBulkFile, err := storage.NewUploadFile("testdata/uploads/evidence_invalid.csv")
+	assert.NilError(t, err)
+
+	evidences := []string{}
+	testCases := []struct {
+		name        string
+		client      *testclient.TestClient
+		fileInput   graphql.Upload
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name:   "happy path, valid file",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			fileInput: graphql.Upload{
+				File:        bulkFile.RawFile,
+				Filename:    bulkFile.OriginalName,
+				Size:        bulkFile.Size,
+				ContentType: bulkFile.ContentType,
+			},
+		},
+		{
+			name:   "happy path, invalid tag column",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+			fileInput: graphql.Upload{
+				File:        invalidBulkFile.RawFile,
+				Filename:    invalidBulkFile.OriginalName,
+				Size:        invalidBulkFile.Size,
+				ContentType: invalidBulkFile.ContentType,
+			},
+			expectedErr: "record on line", // bad csv format error
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateBulkCSVEvidence(tc.ctx, tc.fileInput)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			// we expect 2 evidences to be created from the valid csv file
+			assert.Check(t, is.Len(resp.CreateBulkCSVEvidence.Evidences, 2))
+
+			for _, evidence := range resp.CreateBulkCSVEvidence.Evidences {
+				assert.Check(t, is.Len(evidence.Tags, 3)) // each evidence should have 3 tags
+				assert.Check(t, evidence.Name != "")
+				assert.Check(t, evidence.Description != nil)
+				assert.Check(t, evidence.CollectionProcedure != nil)
+			}
+
+			// delete created evidence
+			evidences := []string{}
+			for _, evidence := range resp.CreateBulkCSVEvidence.Evidences {
+				evidences = append(evidences, evidence.ID)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: evidences}).MustDelete(testUser1.UserCtx, t)
+}
+
 func TestMutationUpdateEvidence(t *testing.T) {
 	evidence := (&EvidenceBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 

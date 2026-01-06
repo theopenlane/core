@@ -1384,6 +1384,15 @@ type ComplexityRoot struct {
 		Evidences func(childComplexity int) int
 	}
 
+	EvidenceBulkDeletePayload struct {
+		DeletedIDs func(childComplexity int) int
+	}
+
+	EvidenceBulkUpdatePayload struct {
+		Evidences  func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
 	EvidenceConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -2464,6 +2473,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVEntity                   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEntityType               func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVEvent                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEvidence                 func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVFinding                  func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVFindingControl           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVGroup                    func(childComplexity int, input graphql.Upload) int
@@ -2520,6 +2530,7 @@ type ComplexityRoot struct {
 		CreateBulkEntity                      func(childComplexity int, input []*generated.CreateEntityInput) int
 		CreateBulkEntityType                  func(childComplexity int, input []*generated.CreateEntityTypeInput) int
 		CreateBulkEvent                       func(childComplexity int, input []*generated.CreateEventInput) int
+		CreateBulkEvidence                    func(childComplexity int, input []*generated.CreateEvidenceInput) int
 		CreateBulkFinding                     func(childComplexity int, input []*generated.CreateFindingInput) int
 		CreateBulkFindingControl              func(childComplexity int, input []*generated.CreateFindingControlInput) int
 		CreateBulkGroup                       func(childComplexity int, input []*generated.CreateGroupInput) int
@@ -2663,6 +2674,7 @@ type ComplexityRoot struct {
 		DeleteBulkEntity                      func(childComplexity int, ids []string) int
 		DeleteBulkEntityType                  func(childComplexity int, ids []string) int
 		DeleteBulkEvent                       func(childComplexity int, ids []string) int
+		DeleteBulkEvidence                    func(childComplexity int, ids []string) int
 		DeleteBulkExport                      func(childComplexity int, ids []string) int
 		DeleteBulkGroup                       func(childComplexity int, ids []string) int
 		DeleteBulkGroupMembership             func(childComplexity int, ids []string) int
@@ -2774,6 +2786,7 @@ type ComplexityRoot struct {
 		UpdateBulkActionPlan                  func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
 		UpdateBulkContact                     func(childComplexity int, ids []string, input generated.UpdateContactInput) int
 		UpdateBulkControl                     func(childComplexity int, ids []string, input generated.UpdateControlInput) int
+		UpdateBulkEvidence                    func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
 		UpdateBulkHush                        func(childComplexity int, ids []string, input generated.UpdateHushInput) int
 		UpdateBulkInternalPolicy              func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
 		UpdateBulkProcedure                   func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
@@ -11788,6 +11801,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.EvidenceBulkCreatePayload.Evidences(childComplexity), true
 
+	case "EvidenceBulkDeletePayload.deletedIDs":
+		if e.complexity.EvidenceBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.complexity.EvidenceBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "EvidenceBulkUpdatePayload.evidences":
+		if e.complexity.EvidenceBulkUpdatePayload.Evidences == nil {
+			break
+		}
+
+		return e.complexity.EvidenceBulkUpdatePayload.Evidences(childComplexity), true
+
+	case "EvidenceBulkUpdatePayload.updatedIDs":
+		if e.complexity.EvidenceBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.EvidenceBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "EvidenceConnection.edges":
 		if e.complexity.EvidenceConnection.Edges == nil {
 			break
@@ -17170,6 +17204,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVEvent(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVEvidence":
+		if e.complexity.Mutation.CreateBulkCSVEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVEvidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVEvidence(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVFinding":
 		if e.complexity.Mutation.CreateBulkCSVFinding == nil {
 			break
@@ -17841,6 +17887,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkEvent(childComplexity, args["input"].([]*generated.CreateEventInput)), true
+
+	case "Mutation.createBulkEvidence":
+		if e.complexity.Mutation.CreateBulkEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkEvidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkEvidence(childComplexity, args["input"].([]*generated.CreateEvidenceInput)), true
 
 	case "Mutation.createBulkFinding":
 		if e.complexity.Mutation.CreateBulkFinding == nil {
@@ -19558,6 +19616,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteBulkEvent(childComplexity, args["ids"].([]string)), true
 
+	case "Mutation.deleteBulkEvidence":
+		if e.complexity.Mutation.DeleteBulkEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkEvidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteBulkEvidence(childComplexity, args["ids"].([]string)), true
+
 	case "Mutation.deleteBulkExport":
 		if e.complexity.Mutation.DeleteBulkExport == nil {
 			break
@@ -20884,6 +20954,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkControl(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateControlInput)), true
+
+	case "Mutation.updateBulkEvidence":
+		if e.complexity.Mutation.UpdateBulkEvidence == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkEvidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkEvidence(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateEvidenceInput)), true
 
 	case "Mutation.updateBulkHush":
 		if e.complexity.Mutation.UpdateBulkHush == nil {
@@ -100700,6 +100782,37 @@ extend type Mutation{
         evidenceFiles: [Upload!]
     ): EvidenceCreatePayload!
     """
+    Create multiple new evidence
+    """
+    createBulkEvidence(
+        """
+        values of the evidence
+        """
+        input: [CreateEvidenceInput!]
+    ): EvidenceBulkCreatePayload!
+    """
+    Create multiple new evidence via file upload
+    """
+    createBulkCSVEvidence(
+        """
+        csv file containing values of the evidence
+        """
+        input: Upload!
+    ): EvidenceBulkCreatePayload!
+    """
+    Update multiple existing evidence
+    """
+    updateBulkEvidence(
+        """
+        IDs of the evidence to update
+        """
+        ids: [ID!]!
+        """
+        values to update the evidence with
+        """
+        input: UpdateEvidenceInput!
+    ): EvidenceBulkUpdatePayload!
+    """
     Update an existing evidence
     """
     updateEvidence(
@@ -100722,6 +100835,15 @@ extend type Mutation{
         """
         id: ID!
     ): EvidenceDeletePayload!
+    """
+    Delete multiple evidence
+    """
+    deleteBulkEvidence(
+        """
+        IDs of the evidence to delete
+        """
+        ids: [ID!]!
+    ): EvidenceBulkDeletePayload!
 }
 
 """
@@ -100754,14 +100876,39 @@ type EvidenceDeletePayload {
     deletedID: ID!
 }
 
+
 """
 Return response for createBulkEvidence mutation
 """
 type EvidenceBulkCreatePayload {
     """
-    Created evidences
+    Created evidence
     """
     evidences: [Evidence!]
+}
+
+"""
+Return response for updateBulkEvidence mutation
+"""
+type EvidenceBulkUpdatePayload {
+    """
+    Updated evidences
+    """
+    evidences: [Evidence!]
+    """
+    IDs of the updated evidence
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkEvidence mutation
+"""
+type EvidenceBulkDeletePayload {
+    """
+    Deleted evidence IDs
+    """
+    deletedIDs: [ID!]!
 }`, BuiltIn: false},
 	{Name: "../schema/export.graphql", Input: `extend type Query {
     """

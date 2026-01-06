@@ -17606,9 +17606,31 @@ Return response for createBulkEvidence mutation
 """
 type EvidenceBulkCreatePayload {
 	"""
-	Created evidences
+	Created evidence
 	"""
 	evidences: [Evidence!]
+}
+"""
+Return response for deleteBulkEvidence mutation
+"""
+type EvidenceBulkDeletePayload {
+	"""
+	Deleted evidence IDs
+	"""
+	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkEvidence mutation
+"""
+type EvidenceBulkUpdatePayload {
+	"""
+	Updated evidences
+	"""
+	evidences: [Evidence!]
+	"""
+	IDs of the updated evidence
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
@@ -30241,6 +30263,38 @@ type Mutation {
 		input: CreateEvidenceInput!
 	evidenceFiles: [Upload!]): EvidenceCreatePayload!
 	"""
+	Create multiple new evidence
+	"""
+	createBulkEvidence(
+		"""
+		values of the evidence
+		"""
+		input: [CreateEvidenceInput!]
+	): EvidenceBulkCreatePayload!
+	"""
+	Create multiple new evidence via file upload
+	"""
+	createBulkCSVEvidence(
+		"""
+		csv file containing values of the evidence
+		"""
+		input: Upload!
+	): EvidenceBulkCreatePayload!
+	"""
+	Update multiple existing evidence
+	"""
+	updateBulkEvidence(
+		"""
+		IDs of the evidence to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the evidence with
+		"""
+		input: UpdateEvidenceInput!
+	): EvidenceBulkUpdatePayload!
+	"""
 	Update an existing evidence
 	"""
 	updateEvidence(
@@ -30263,6 +30317,15 @@ type Mutation {
 		"""
 		id: ID!
 	): EvidenceDeletePayload!
+	"""
+	Delete multiple evidence
+	"""
+	deleteBulkEvidence(
+		"""
+		IDs of the evidence to delete
+		"""
+		ids: [ID!]!
+	): EvidenceBulkDeletePayload!
 	"""
 	Create a new export
 	"""
