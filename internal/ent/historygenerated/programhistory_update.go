@@ -233,20 +233,6 @@ func (_u *ProgramHistoryUpdate) SetNillableStatus(v *enums.ProgramStatus) *Progr
 	return _u
 }
 
-// SetProgramType sets the "program_type" field.
-func (_u *ProgramHistoryUpdate) SetProgramType(v enums.ProgramType) *ProgramHistoryUpdate {
-	_u.mutation.SetProgramType(v)
-	return _u
-}
-
-// SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (_u *ProgramHistoryUpdate) SetNillableProgramType(v *enums.ProgramType) *ProgramHistoryUpdate {
-	if v != nil {
-		_u.SetProgramType(*v)
-	}
-	return _u
-}
-
 // SetFrameworkName sets the "framework_name" field.
 func (_u *ProgramHistoryUpdate) SetFrameworkName(v string) *ProgramHistoryUpdate {
 	_u.mutation.SetFrameworkName(v)
@@ -483,11 +469,6 @@ func (_u *ProgramHistoryUpdate) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ProgramType(); ok {
-		if err := programhistory.ProgramTypeValidator(v); err != nil {
-			return &ValidationError{Name: "program_type", err: fmt.Errorf(`historygenerated: validator failed for field "ProgramHistory.program_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -582,9 +563,6 @@ func (_u *ProgramHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ProgramType(); ok {
-		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)
@@ -859,20 +837,6 @@ func (_u *ProgramHistoryUpdateOne) SetNillableStatus(v *enums.ProgramStatus) *Pr
 	return _u
 }
 
-// SetProgramType sets the "program_type" field.
-func (_u *ProgramHistoryUpdateOne) SetProgramType(v enums.ProgramType) *ProgramHistoryUpdateOne {
-	_u.mutation.SetProgramType(v)
-	return _u
-}
-
-// SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (_u *ProgramHistoryUpdateOne) SetNillableProgramType(v *enums.ProgramType) *ProgramHistoryUpdateOne {
-	if v != nil {
-		_u.SetProgramType(*v)
-	}
-	return _u
-}
-
 // SetFrameworkName sets the "framework_name" field.
 func (_u *ProgramHistoryUpdateOne) SetFrameworkName(v string) *ProgramHistoryUpdateOne {
 	_u.mutation.SetFrameworkName(v)
@@ -1122,11 +1086,6 @@ func (_u *ProgramHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProgramHistory.status": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ProgramType(); ok {
-		if err := programhistory.ProgramTypeValidator(v); err != nil {
-			return &ValidationError{Name: "program_type", err: fmt.Errorf(`historygenerated: validator failed for field "ProgramHistory.program_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -1238,9 +1197,6 @@ func (_u *ProgramHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProgramH
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ProgramType(); ok {
-		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.FrameworkName(); ok {
 		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)

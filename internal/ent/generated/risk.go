@@ -52,10 +52,6 @@ type Risk struct {
 	Name string `json:"name,omitempty"`
 	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status enums.RiskStatus `json:"status,omitempty"`
-	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType string `json:"risk_type,omitempty"`
-	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category string `json:"category,omitempty"`
 	// impact of the risk -critical, high, medium, low
 	Impact enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
@@ -355,7 +351,7 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case risk.FieldScore:
 			values[i] = new(sql.NullInt64)
-		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldName, risk.FieldStatus, risk.FieldRiskType, risk.FieldCategory, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID:
+		case risk.FieldID, risk.FieldCreatedBy, risk.FieldUpdatedBy, risk.FieldDeletedBy, risk.FieldDisplayID, risk.FieldOwnerID, risk.FieldRiskKindName, risk.FieldRiskKindID, risk.FieldRiskCategoryName, risk.FieldRiskCategoryID, risk.FieldName, risk.FieldStatus, risk.FieldImpact, risk.FieldLikelihood, risk.FieldMitigation, risk.FieldDetails, risk.FieldBusinessCosts, risk.FieldStakeholderID, risk.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case risk.FieldCreatedAt, risk.FieldUpdatedAt, risk.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -485,18 +481,6 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.RiskStatus(value.String)
-			}
-		case risk.FieldRiskType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field risk_type", values[i])
-			} else if value.Valid {
-				_m.RiskType = value.String
-			}
-		case risk.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
 			}
 		case risk.FieldImpact:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -799,12 +783,6 @@ func (_m *Risk) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("risk_type=")
-	builder.WriteString(_m.RiskType)
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Impact))

@@ -1428,46 +1428,6 @@ func ReferenceFrameworkRevisionContainsFold(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldContainsFold(FieldReferenceFrameworkRevision, v))
 }
 
-// ControlTypeEQ applies the EQ predicate on the "control_type" field.
-func ControlTypeEQ(v enums.ControlType) predicate.ControlHistory {
-	vc := v
-	return predicate.ControlHistory(sql.FieldEQ(FieldControlType, vc))
-}
-
-// ControlTypeNEQ applies the NEQ predicate on the "control_type" field.
-func ControlTypeNEQ(v enums.ControlType) predicate.ControlHistory {
-	vc := v
-	return predicate.ControlHistory(sql.FieldNEQ(FieldControlType, vc))
-}
-
-// ControlTypeIn applies the In predicate on the "control_type" field.
-func ControlTypeIn(vs ...enums.ControlType) predicate.ControlHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ControlHistory(sql.FieldIn(FieldControlType, v...))
-}
-
-// ControlTypeNotIn applies the NotIn predicate on the "control_type" field.
-func ControlTypeNotIn(vs ...enums.ControlType) predicate.ControlHistory {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ControlHistory(sql.FieldNotIn(FieldControlType, v...))
-}
-
-// ControlTypeIsNil applies the IsNil predicate on the "control_type" field.
-func ControlTypeIsNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldIsNull(FieldControlType))
-}
-
-// ControlTypeNotNil applies the NotNil predicate on the "control_type" field.
-func ControlTypeNotNil() predicate.ControlHistory {
-	return predicate.ControlHistory(sql.FieldNotNull(FieldControlType))
-}
-
 // CategoryEQ applies the EQ predicate on the "category" field.
 func CategoryEQ(v string) predicate.ControlHistory {
 	return predicate.ControlHistory(sql.FieldEQ(FieldCategory, v))

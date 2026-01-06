@@ -53,8 +53,6 @@ type Task struct {
 	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
-	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category string `json:"category,omitempty"`
 	// the due date of the task
 	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
@@ -337,7 +335,7 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case task.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldCategory, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -467,12 +465,6 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.TaskStatus(value.String)
-			}
-		case task.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
 			}
 		case task.FieldDue:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -744,9 +736,6 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	if v := _m.Due; v != nil {
 		builder.WriteString("due=")

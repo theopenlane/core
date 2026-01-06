@@ -232,26 +232,6 @@ func (_u *TaskHistoryUpdate) SetNillableStatus(v *enums.TaskStatus) *TaskHistory
 	return _u
 }
 
-// SetCategory sets the "category" field.
-func (_u *TaskHistoryUpdate) SetCategory(v string) *TaskHistoryUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableCategory(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *TaskHistoryUpdate) ClearCategory() *TaskHistoryUpdate {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
 // SetDue sets the "due" field.
 func (_u *TaskHistoryUpdate) SetDue(v models.DateTime) *TaskHistoryUpdate {
 	_u.mutation.SetDue(v)
@@ -561,12 +541,6 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
 	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
-	}
-	if _u.mutation.CategoryCleared() {
-		_spec.ClearField(taskhistory.FieldCategory, field.TypeString)
-	}
 	if value, ok := _u.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 	}
@@ -834,26 +808,6 @@ func (_u *TaskHistoryUpdateOne) SetNillableStatus(v *enums.TaskStatus) *TaskHist
 	if v != nil {
 		_u.SetStatus(*v)
 	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TaskHistoryUpdateOne) SetCategory(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableCategory(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *TaskHistoryUpdateOne) ClearCategory() *TaskHistoryUpdateOne {
-	_u.mutation.ClearCategory()
 	return _u
 }
 
@@ -1195,12 +1149,6 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(taskhistory.FieldCategory, field.TypeString, value)
-	}
-	if _u.mutation.CategoryCleared() {
-		_spec.ClearField(taskhistory.FieldCategory, field.TypeString)
 	}
 	if value, ok := _u.mutation.Due(); ok {
 		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)

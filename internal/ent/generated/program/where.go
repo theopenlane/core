@@ -1023,36 +1023,6 @@ func StatusNotIn(vs ...enums.ProgramStatus) predicate.Program {
 	return predicate.Program(sql.FieldNotIn(FieldStatus, v...))
 }
 
-// ProgramTypeEQ applies the EQ predicate on the "program_type" field.
-func ProgramTypeEQ(v enums.ProgramType) predicate.Program {
-	vc := v
-	return predicate.Program(sql.FieldEQ(FieldProgramType, vc))
-}
-
-// ProgramTypeNEQ applies the NEQ predicate on the "program_type" field.
-func ProgramTypeNEQ(v enums.ProgramType) predicate.Program {
-	vc := v
-	return predicate.Program(sql.FieldNEQ(FieldProgramType, vc))
-}
-
-// ProgramTypeIn applies the In predicate on the "program_type" field.
-func ProgramTypeIn(vs ...enums.ProgramType) predicate.Program {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Program(sql.FieldIn(FieldProgramType, v...))
-}
-
-// ProgramTypeNotIn applies the NotIn predicate on the "program_type" field.
-func ProgramTypeNotIn(vs ...enums.ProgramType) predicate.Program {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Program(sql.FieldNotIn(FieldProgramType, v...))
-}
-
 // FrameworkNameEQ applies the EQ predicate on the "framework_name" field.
 func FrameworkNameEQ(v string) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldFrameworkName, v))

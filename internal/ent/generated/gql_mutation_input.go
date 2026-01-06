@@ -183,7 +183,6 @@ type CreateActionPlanInput struct {
 	Revision                        *string
 	Name                            string
 	Status                          *enums.DocumentStatus
-	ActionPlanType                  *string
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -242,9 +241,6 @@ func (i *CreateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.ActionPlanType; v != nil {
-		m.SetActionPlanType(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -397,8 +393,6 @@ type UpdateActionPlanInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
-	ClearActionPlanType                   bool
-	ActionPlanType                        *string
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -531,12 +525,6 @@ func (i *UpdateActionPlanInput) Mutate(m *ActionPlanMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearActionPlanType {
-		m.ClearActionPlanType()
-	}
-	if v := i.ActionPlanType; v != nil {
-		m.SetActionPlanType(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -1520,7 +1508,6 @@ type CreateControlInput struct {
 	Source                     *enums.ControlSource
 	ReferenceFramework         *string
 	ReferenceFrameworkRevision *string
-	ControlType                *enums.ControlType
 	Category                   *string
 	CategoryID                 *string
 	Subcategory                *string
@@ -1600,9 +1587,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ReferenceFrameworkRevision; v != nil {
 		m.SetReferenceFrameworkRevision(*v)
-	}
-	if v := i.ControlType; v != nil {
-		m.SetControlType(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -1764,8 +1748,6 @@ type UpdateControlInput struct {
 	Source                          *enums.ControlSource
 	ClearReferenceFrameworkRevision bool
 	ReferenceFrameworkRevision      *string
-	ClearControlType                bool
-	ControlType                     *enums.ControlType
 	ClearCategory                   bool
 	Category                        *string
 	ClearCategoryID                 bool
@@ -1950,12 +1932,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.ReferenceFrameworkRevision; v != nil {
 		m.SetReferenceFrameworkRevision(*v)
-	}
-	if i.ClearControlType {
-		m.ClearControlType()
-	}
-	if v := i.ControlType; v != nil {
-		m.SetControlType(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -8105,7 +8081,6 @@ type CreateInternalPolicyInput struct {
 	SystemInternalID                *string
 	Name                            string
 	Status                          *enums.DocumentStatus
-	PolicyType                      *string
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -8158,9 +8133,6 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.PolicyType; v != nil {
-		m.SetPolicyType(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -8283,8 +8255,6 @@ type UpdateInternalPolicyInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
-	ClearPolicyType                       bool
-	PolicyType                            *string
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -8411,12 +8381,6 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearPolicyType {
-		m.ClearPolicyType()
-	}
-	if v := i.PolicyType; v != nil {
-		m.SetPolicyType(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -12307,7 +12271,6 @@ type CreateProcedureInput struct {
 	Revision                        *string
 	Name                            string
 	Status                          *enums.DocumentStatus
-	ProcedureType                   *string
 	Details                         *string
 	DetailsJSON                     []interface{}
 	ApprovalRequired                *bool
@@ -12354,9 +12317,6 @@ func (i *CreateProcedureInput) Mutate(m *ProcedureMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.ProcedureType; v != nil {
-		m.SetProcedureType(*v)
 	}
 	if v := i.Details; v != nil {
 		m.SetDetails(*v)
@@ -12475,8 +12435,6 @@ type UpdateProcedureInput struct {
 	Name                                  *string
 	ClearStatus                           bool
 	Status                                *enums.DocumentStatus
-	ClearProcedureType                    bool
-	ProcedureType                         *string
 	ClearDetails                          bool
 	Details                               *string
 	ClearDetailsJSON                      bool
@@ -12589,12 +12547,6 @@ func (i *UpdateProcedureInput) Mutate(m *ProcedureMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearProcedureType {
-		m.ClearProcedureType()
-	}
-	if v := i.ProcedureType; v != nil {
-		m.SetProcedureType(*v)
 	}
 	if i.ClearDetails {
 		m.ClearDetails()
@@ -12872,7 +12824,6 @@ type CreateProgramInput struct {
 	Name                 string
 	Description          *string
 	Status               *enums.ProgramStatus
-	ProgramType          *enums.ProgramType
 	FrameworkName        *string
 	StartDate            *time.Time
 	EndDate              *time.Time
@@ -12916,9 +12867,6 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.ProgramType; v != nil {
-		m.SetProgramType(*v)
 	}
 	if v := i.FrameworkName; v != nil {
 		m.SetFrameworkName(*v)
@@ -13020,7 +12968,6 @@ type UpdateProgramInput struct {
 	ClearDescription          bool
 	Description               *string
 	Status                    *enums.ProgramStatus
-	ProgramType               *enums.ProgramType
 	ClearFrameworkName        bool
 	FrameworkName             *string
 	ClearStartDate            bool
@@ -13117,9 +13064,6 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.ProgramType; v != nil {
-		m.SetProgramType(*v)
 	}
 	if i.ClearFrameworkName {
 		m.ClearFrameworkName()
@@ -14524,8 +14468,6 @@ type CreateRiskInput struct {
 	RiskCategoryName  *string
 	Name              string
 	Status            *enums.RiskStatus
-	RiskType          *string
-	Category          *string
 	Impact            *enums.RiskImpact
 	Likelihood        *enums.RiskLikelihood
 	Score             *int
@@ -14571,12 +14513,6 @@ func (i *CreateRiskInput) Mutate(m *RiskMutation) {
 	m.SetName(i.Name)
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.RiskType; v != nil {
-		m.SetRiskType(*v)
-	}
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
 	}
 	if v := i.Impact; v != nil {
 		m.SetImpact(*v)
@@ -14685,10 +14621,6 @@ type UpdateRiskInput struct {
 	Name                    *string
 	ClearStatus             bool
 	Status                  *enums.RiskStatus
-	ClearRiskType           bool
-	RiskType                *string
-	ClearCategory           bool
-	Category                *string
 	ClearImpact             bool
 	Impact                  *enums.RiskImpact
 	ClearLikelihood         bool
@@ -14796,18 +14728,6 @@ func (i *UpdateRiskInput) Mutate(m *RiskMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearRiskType {
-		m.ClearRiskType()
-	}
-	if v := i.RiskType; v != nil {
-		m.SetRiskType(*v)
-	}
-	if i.ClearCategory {
-		m.ClearCategory()
-	}
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
 	}
 	if i.ClearImpact {
 		m.ClearImpact()
@@ -15740,7 +15660,6 @@ type CreateSubcontrolInput struct {
 	Source                     *enums.ControlSource
 	ReferenceFramework         *string
 	ReferenceFrameworkRevision *string
-	ControlType                *enums.ControlType
 	Category                   *string
 	CategoryID                 *string
 	Subcategory                *string
@@ -15813,9 +15732,6 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.ReferenceFrameworkRevision; v != nil {
 		m.SetReferenceFrameworkRevision(*v)
-	}
-	if v := i.ControlType; v != nil {
-		m.SetControlType(*v)
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
@@ -15954,8 +15870,6 @@ type UpdateSubcontrolInput struct {
 	Source                          *enums.ControlSource
 	ClearReferenceFrameworkRevision bool
 	ReferenceFrameworkRevision      *string
-	ClearControlType                bool
-	ControlType                     *enums.ControlType
 	ClearCategory                   bool
 	Category                        *string
 	ClearCategoryID                 bool
@@ -16118,12 +16032,6 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.ReferenceFrameworkRevision; v != nil {
 		m.SetReferenceFrameworkRevision(*v)
-	}
-	if i.ClearControlType {
-		m.ClearControlType()
-	}
-	if v := i.ControlType; v != nil {
-		m.SetControlType(*v)
 	}
 	if i.ClearCategory {
 		m.ClearCategory()
@@ -16823,7 +16731,6 @@ type CreateTaskInput struct {
 	Details                  *string
 	DetailsJSON              []interface{}
 	Status                   *enums.TaskStatus
-	Category                 *string
 	Due                      *models.DateTime
 	Completed                *models.DateTime
 	SystemGenerated          *bool
@@ -16866,9 +16773,6 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
 	}
 	if v := i.Due; v != nil {
 		m.SetDue(*v)
@@ -16961,8 +16865,6 @@ type UpdateTaskInput struct {
 	DetailsJSON                    []interface{}
 	AppendDetailsJSON              []interface{}
 	Status                         *enums.TaskStatus
-	ClearCategory                  bool
-	Category                       *string
 	ClearDue                       bool
 	Due                            *models.DateTime
 	ClearCompleted                 bool
@@ -17060,12 +16962,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
-	}
-	if i.ClearCategory {
-		m.ClearCategory()
-	}
-	if v := i.Category; v != nil {
-		m.SetCategory(*v)
 	}
 	if i.ClearDue {
 		m.ClearDue()

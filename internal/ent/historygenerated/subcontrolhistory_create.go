@@ -293,20 +293,6 @@ func (_c *SubcontrolHistoryCreate) SetNillableReferenceFrameworkRevision(v *stri
 	return _c
 }
 
-// SetControlType sets the "control_type" field.
-func (_c *SubcontrolHistoryCreate) SetControlType(v enums.ControlType) *SubcontrolHistoryCreate {
-	_c.mutation.SetControlType(v)
-	return _c
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_c *SubcontrolHistoryCreate) SetNillableControlType(v *enums.ControlType) *SubcontrolHistoryCreate {
-	if v != nil {
-		_c.SetControlType(*v)
-	}
-	return _c
-}
-
 // SetCategory sets the "category" field.
 func (_c *SubcontrolHistoryCreate) SetCategory(v string) *SubcontrolHistoryCreate {
 	_c.mutation.SetCategory(v)
@@ -625,10 +611,6 @@ func (_c *SubcontrolHistoryCreate) defaults() error {
 		v := subcontrolhistory.DefaultSource
 		_c.mutation.SetSource(v)
 	}
-	if _, ok := _c.mutation.ControlType(); !ok {
-		v := subcontrolhistory.DefaultControlType
-		_c.mutation.SetControlType(v)
-	}
 	if _, ok := _c.mutation.SystemOwned(); !ok {
 		v := subcontrolhistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
@@ -671,11 +653,6 @@ func (_c *SubcontrolHistoryCreate) check() error {
 	if v, ok := _c.mutation.Source(); ok {
 		if err := subcontrolhistory.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.source": %w`, err)}
-		}
-	}
-	if v, ok := _c.mutation.ControlType(); ok {
-		if err := subcontrolhistory.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`historygenerated: validator failed for field "SubcontrolHistory.control_type": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.RefCode(); !ok {
@@ -807,10 +784,6 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 	if value, ok := _c.mutation.ReferenceFrameworkRevision(); ok {
 		_spec.SetField(subcontrolhistory.FieldReferenceFrameworkRevision, field.TypeString, value)
 		_node.ReferenceFrameworkRevision = &value
-	}
-	if value, ok := _c.mutation.ControlType(); ok {
-		_spec.SetField(subcontrolhistory.FieldControlType, field.TypeEnum, value)
-		_node.ControlType = value
 	}
 	if value, ok := _c.mutation.Category(); ok {
 		_spec.SetField(subcontrolhistory.FieldCategory, field.TypeString, value)

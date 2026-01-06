@@ -211,26 +211,6 @@ func (_u *ProcedureUpdate) ClearStatus() *ProcedureUpdate {
 	return _u
 }
 
-// SetProcedureType sets the "procedure_type" field.
-func (_u *ProcedureUpdate) SetProcedureType(v string) *ProcedureUpdate {
-	_u.mutation.SetProcedureType(v)
-	return _u
-}
-
-// SetNillableProcedureType sets the "procedure_type" field if the given value is not nil.
-func (_u *ProcedureUpdate) SetNillableProcedureType(v *string) *ProcedureUpdate {
-	if v != nil {
-		_u.SetProcedureType(*v)
-	}
-	return _u
-}
-
-// ClearProcedureType clears the value of the "procedure_type" field.
-func (_u *ProcedureUpdate) ClearProcedureType() *ProcedureUpdate {
-	_u.mutation.ClearProcedureType()
-	return _u
-}
-
 // SetDetails sets the "details" field.
 func (_u *ProcedureUpdate) SetDetails(v string) *ProcedureUpdate {
 	_u.mutation.SetDetails(v)
@@ -1269,12 +1249,6 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedure.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ProcedureType(); ok {
-		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
-	}
-	if _u.mutation.ProcedureTypeCleared() {
-		_spec.ClearField(procedure.FieldProcedureType, field.TypeString)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedure.FieldDetails, field.TypeString, value)
@@ -2332,26 +2306,6 @@ func (_u *ProcedureUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *Proced
 // ClearStatus clears the value of the "status" field.
 func (_u *ProcedureUpdateOne) ClearStatus() *ProcedureUpdateOne {
 	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetProcedureType sets the "procedure_type" field.
-func (_u *ProcedureUpdateOne) SetProcedureType(v string) *ProcedureUpdateOne {
-	_u.mutation.SetProcedureType(v)
-	return _u
-}
-
-// SetNillableProcedureType sets the "procedure_type" field if the given value is not nil.
-func (_u *ProcedureUpdateOne) SetNillableProcedureType(v *string) *ProcedureUpdateOne {
-	if v != nil {
-		_u.SetProcedureType(*v)
-	}
-	return _u
-}
-
-// ClearProcedureType clears the value of the "procedure_type" field.
-func (_u *ProcedureUpdateOne) ClearProcedureType() *ProcedureUpdateOne {
-	_u.mutation.ClearProcedureType()
 	return _u
 }
 
@@ -3423,12 +3377,6 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedure.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ProcedureType(); ok {
-		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
-	}
-	if _u.mutation.ProcedureTypeCleared() {
-		_spec.ClearField(procedure.FieldProcedureType, field.TypeString)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(procedure.FieldDetails, field.TypeString, value)

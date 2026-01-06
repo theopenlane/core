@@ -138,7 +138,6 @@ type ComplexityRoot struct {
 		ActionPlanKind                  func(childComplexity int) int
 		ActionPlanKindID                func(childComplexity int) int
 		ActionPlanKindName              func(childComplexity int) int
-		ActionPlanType                  func(childComplexity int) int
 		ActiveWorkflowInstance          func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
 		Approver                        func(childComplexity int) int
@@ -461,7 +460,6 @@ type ComplexityRoot struct {
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
-		ControlType                func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		Delegate                   func(childComplexity int) int
@@ -2008,7 +2006,6 @@ type ComplexityRoot struct {
 		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
 		Owner                           func(childComplexity int) int
 		OwnerID                         func(childComplexity int) int
-		PolicyType                      func(childComplexity int) int
 		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue                       func(childComplexity int) int
@@ -3371,7 +3368,6 @@ type ComplexityRoot struct {
 		ProcedureKind                   func(childComplexity int) int
 		ProcedureKindID                 func(childComplexity int) int
 		ProcedureKindName               func(childComplexity int) int
-		ProcedureType                   func(childComplexity int) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		ReviewDue                       func(childComplexity int) int
 		ReviewFrequency                 func(childComplexity int) int
@@ -3462,7 +3458,6 @@ type ComplexityRoot struct {
 		ProgramKindName      func(childComplexity int) int
 		ProgramOwner         func(childComplexity int) int
 		ProgramOwnerID       func(childComplexity int) int
-		ProgramType          func(childComplexity int) int
 		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		StartDate            func(childComplexity int) int
 		Status               func(childComplexity int) int
@@ -3917,7 +3912,6 @@ type ComplexityRoot struct {
 		BlockedGroups     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		BusinessCosts     func(childComplexity int) int
 		BusinessCostsJSON func(childComplexity int) int
-		Category          func(childComplexity int) int
 		Comments          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Controls          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt         func(childComplexity int) int
@@ -3947,7 +3941,6 @@ type ComplexityRoot struct {
 		RiskKind          func(childComplexity int) int
 		RiskKindID        func(childComplexity int) int
 		RiskKindName      func(childComplexity int) int
-		RiskType          func(childComplexity int) int
 		Scans             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
 		Score             func(childComplexity int) int
 		Stakeholder       func(childComplexity int) int
@@ -4276,7 +4269,6 @@ type ComplexityRoot struct {
 		ControlOwner               func(childComplexity int) int
 		ControlOwnerID             func(childComplexity int) int
 		ControlQuestions           func(childComplexity int) int
-		ControlType                func(childComplexity int) int
 		CreatedAt                  func(childComplexity int) int
 		CreatedBy                  func(childComplexity int) int
 		Delegate                   func(childComplexity int) int
@@ -4552,7 +4544,6 @@ type ComplexityRoot struct {
 		AssigneeID             func(childComplexity int) int
 		Assigner               func(childComplexity int) int
 		AssignerID             func(childComplexity int) int
-		Category               func(childComplexity int) int
 		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Completed              func(childComplexity int) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -5844,13 +5835,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ActionPlan.ActionPlanKindName(childComplexity), true
-
-	case "ActionPlan.actionPlanType":
-		if e.complexity.ActionPlan.ActionPlanType == nil {
-			break
-		}
-
-		return e.complexity.ActionPlan.ActionPlanType(childComplexity), true
 
 	case "ActionPlan.activeWorkflowInstance":
 		if e.complexity.ActionPlan.ActiveWorkflowInstance == nil {
@@ -7467,13 +7451,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Control.ControlQuestions(childComplexity), true
-
-	case "Control.controlType":
-		if e.complexity.Control.ControlType == nil {
-			break
-		}
-
-		return e.complexity.Control.ControlType(childComplexity), true
 
 	case "Control.createdAt":
 		if e.complexity.Control.CreatedAt == nil {
@@ -15112,13 +15089,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.OwnerID(childComplexity), true
-
-	case "InternalPolicy.policyType":
-		if e.complexity.InternalPolicy.PolicyType == nil {
-			break
-		}
-
-		return e.complexity.InternalPolicy.PolicyType(childComplexity), true
 
 	case "InternalPolicy.procedures":
 		if e.complexity.InternalPolicy.Procedures == nil {
@@ -24963,13 +24933,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Procedure.ProcedureKindName(childComplexity), true
 
-	case "Procedure.procedureType":
-		if e.complexity.Procedure.ProcedureType == nil {
-			break
-		}
-
-		return e.complexity.Procedure.ProcedureType(childComplexity), true
-
 	case "Procedure.programs":
 		if e.complexity.Procedure.Programs == nil {
 			break
@@ -25495,13 +25458,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Program.ProgramOwnerID(childComplexity), true
-
-	case "Program.programType":
-		if e.complexity.Program.ProgramType == nil {
-			break
-		}
-
-		return e.complexity.Program.ProgramType(childComplexity), true
 
 	case "Program.risks":
 		if e.complexity.Program.Risks == nil {
@@ -29240,13 +29196,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Risk.BusinessCostsJSON(childComplexity), true
 
-	case "Risk.category":
-		if e.complexity.Risk.Category == nil {
-			break
-		}
-
-		return e.complexity.Risk.Category(childComplexity), true
-
 	case "Risk.comments":
 		if e.complexity.Risk.Comments == nil {
 			break
@@ -29489,13 +29438,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Risk.RiskKindName(childComplexity), true
-
-	case "Risk.riskType":
-		if e.complexity.Risk.RiskType == nil {
-			break
-		}
-
-		return e.complexity.Risk.RiskType(childComplexity), true
 
 	case "Risk.scans":
 		if e.complexity.Risk.Scans == nil {
@@ -30980,13 +30922,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subcontrol.ControlQuestions(childComplexity), true
 
-	case "Subcontrol.controlType":
-		if e.complexity.Subcontrol.ControlType == nil {
-			break
-		}
-
-		return e.complexity.Subcontrol.ControlType(childComplexity), true
-
 	case "Subcontrol.createdAt":
 		if e.complexity.Subcontrol.CreatedAt == nil {
 			break
@@ -32173,13 +32108,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.AssignerID(childComplexity), true
-
-	case "Task.category":
-		if e.complexity.Task.Category == nil {
-			break
-		}
-
-		return e.complexity.Task.Category(childComplexity), true
 
 	case "Task.comments":
 		if e.complexity.Task.Comments == nil {
@@ -40165,10 +40093,6 @@ type ActionPlan implements Node {
   """
   status: ActionPlanDocumentStatus
   """
-  type of the action_plan, e.g. compliance, operational, health and safety, etc.
-  """
-  actionPlanType: String @deprecated(reason: "Use ` + "`" + `action_plan_kind_name` + "`" + ` instead.")
-  """
   details of the action_plan
   """
   details: String
@@ -40929,24 +40853,6 @@ input ActionPlanWhereInput {
   statusNotIn: [ActionPlanDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  """
-  action_plan_type field predicates
-  """
-  actionPlanType: String
-  actionPlanTypeNEQ: String
-  actionPlanTypeIn: [String!]
-  actionPlanTypeNotIn: [String!]
-  actionPlanTypeGT: String
-  actionPlanTypeGTE: String
-  actionPlanTypeLT: String
-  actionPlanTypeLTE: String
-  actionPlanTypeContains: String
-  actionPlanTypeHasPrefix: String
-  actionPlanTypeHasSuffix: String
-  actionPlanTypeIsNil: Boolean
-  actionPlanTypeNotNil: Boolean
-  actionPlanTypeEqualFold: String
-  actionPlanTypeContainsFold: String
   """
   details field predicates
   """
@@ -43134,10 +43040,6 @@ type Control implements Node {
   """
   referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: ControlControlType @deprecated(reason: "Use ` + "`" + `control_kind_name` + "`" + ` instead.")
-  """
   category of the control
   """
   category: String @externalSource(source: FRAMEWORK)
@@ -43933,15 +43835,6 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/common/en
   ARCHIVED
   NOT_IMPLEMENTED
   NOT_APPLICABLE
-}
-"""
-ControlControlType is enum for the field control_type
-"""
-enum ControlControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
-  PREVENTATIVE
-  DETECTIVE
-  CORRECTIVE
-  DETERRENT
 }
 """
 An edge in a connection.
@@ -45385,7 +45278,6 @@ enum ControlOrderField {
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
-  CONTROL_TYPE
   category
   subcategory
   ref_code
@@ -45636,15 +45528,6 @@ input ControlWhereInput {
   referenceFrameworkRevisionNotNil: Boolean
   referenceFrameworkRevisionEqualFold: String
   referenceFrameworkRevisionContainsFold: String
-  """
-  control_type field predicates
-  """
-  controlType: ControlControlType
-  controlTypeNEQ: ControlControlType
-  controlTypeIn: [ControlControlType!]
-  controlTypeNotIn: [ControlControlType!]
-  controlTypeIsNil: Boolean
-  controlTypeNotNil: Boolean
   """
   category field predicates
   """
@@ -46072,10 +45955,6 @@ input CreateActionPlanInput {
   """
   status: ActionPlanDocumentStatus
   """
-  type of the action_plan, e.g. compliance, operational, health and safety, etc.
-  """
-  actionPlanType: String
-  """
   details of the action_plan
   """
   details: String
@@ -46441,10 +46320,6 @@ input CreateControlInput {
   the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
   """
   referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
-  """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: ControlControlType
   """
   category of the control
   """
@@ -47688,10 +47563,6 @@ input CreateInternalPolicyInput {
   """
   status: InternalPolicyDocumentStatus
   """
-  type of the policy, e.g. compliance, operational, health and safety, etc.
-  """
-  policyType: String
-  """
   details of the policy
   """
   details: String
@@ -48448,10 +48319,6 @@ input CreateProcedureInput {
   """
   status: ProcedureDocumentStatus
   """
-  type of the procedure, e.g. compliance, operational, health and safety, etc.
-  """
-  procedureType: String
-  """
   details of the procedure
   """
   details: String
@@ -48558,10 +48425,6 @@ input CreateProgramInput {
   the status of the program
   """
   status: ProgramProgramStatus
-  """
-  the type of the program
-  """
-  programType: ProgramProgramType
   """
   the short name of the compliance standard the program is based on, only used for framework type programs
   """
@@ -48869,14 +48732,6 @@ input CreateRiskInput {
   """
   status: RiskRiskStatus
   """
-  type of the risk, e.g. strategic, operational, financial, external, etc.
-  """
-  riskType: String
-  """
-  category of the risk, e.g. human resources, operations, IT, etc.
-  """
-  category: String
-  """
   impact of the risk -critical, high, medium, low
   """
   impact: RiskRiskImpact
@@ -49140,10 +48995,6 @@ input CreateSubcontrolInput {
   """
   referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: SubcontrolControlType
-  """
   category of the control
   """
   category: String @externalReadOnly(source: FRAMEWORK)
@@ -49354,10 +49205,6 @@ input CreateTaskInput {
   the status of the task
   """
   status: TaskTaskStatus
-  """
-  the category of the task, e.g. evidence upload, risk review, policy review, etc.
-  """
-  category: String
   """
   the due date of the task
   """
@@ -62886,10 +62733,6 @@ type InternalPolicy implements Node {
   """
   status: InternalPolicyDocumentStatus
   """
-  type of the policy, e.g. compliance, operational, health and safety, etc.
-  """
-  policyType: String @deprecated(reason: "Use ` + "`" + `policy_kind_name` + "`" + ` instead.")
-  """
   details of the policy
   """
   details: String
@@ -63685,24 +63528,6 @@ input InternalPolicyWhereInput {
   statusNotIn: [InternalPolicyDocumentStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  """
-  policy_type field predicates
-  """
-  policyType: String
-  policyTypeNEQ: String
-  policyTypeIn: [String!]
-  policyTypeNotIn: [String!]
-  policyTypeGT: String
-  policyTypeGTE: String
-  policyTypeLT: String
-  policyTypeLTE: String
-  policyTypeContains: String
-  policyTypeHasPrefix: String
-  policyTypeHasSuffix: String
-  policyTypeIsNil: Boolean
-  policyTypeNotNil: Boolean
-  policyTypeEqualFold: String
-  policyTypeContainsFold: String
   """
   details field predicates
   """
@@ -72768,10 +72593,6 @@ type Procedure implements Node {
   """
   status: ProcedureDocumentStatus
   """
-  type of the procedure, e.g. compliance, operational, health and safety, etc.
-  """
-  procedureType: String @deprecated(reason: "Use ` + "`" + `procedure_kind_name` + "`" + ` instead.")
-  """
   details of the procedure
   """
   details: String
@@ -73475,24 +73296,6 @@ input ProcedureWhereInput {
   statusIsNil: Boolean
   statusNotNil: Boolean
   """
-  procedure_type field predicates
-  """
-  procedureType: String
-  procedureTypeNEQ: String
-  procedureTypeIn: [String!]
-  procedureTypeNotIn: [String!]
-  procedureTypeGT: String
-  procedureTypeGTE: String
-  procedureTypeLT: String
-  procedureTypeLTE: String
-  procedureTypeContains: String
-  procedureTypeHasPrefix: String
-  procedureTypeHasSuffix: String
-  procedureTypeIsNil: Boolean
-  procedureTypeNotNil: Boolean
-  procedureTypeEqualFold: String
-  procedureTypeContainsFold: String
-  """
   details field predicates
   """
   details: String
@@ -73821,10 +73624,6 @@ type Program implements Node {
   the status of the program
   """
   status: ProgramProgramStatus!
-  """
-  the type of the program
-  """
-  programType: ProgramProgramType! @deprecated(reason: "Use ` + "`" + `program_kind` + "`" + ` instead.")
   """
   the short name of the compliance standard the program is based on, only used for framework type programs
   """
@@ -74608,7 +74407,6 @@ enum ProgramOrderField {
   updated_at
   name
   STATUS
-  PROGRAM_TYPE
   framework
   start_date
   end_date
@@ -74623,15 +74421,6 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/common/en
   READY_FOR_AUDITOR
   COMPLETED
   ARCHIVED
-}
-"""
-ProgramProgramType is enum for the field program_type
-"""
-enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/common/enums.ProgramType") {
-  FRAMEWORK
-  GAP_ANALYSIS
-  RISK_ASSESSMENT
-  OTHER
 }
 """
 ProgramWhereInput is used for filtering Program objects.
@@ -74827,13 +74616,6 @@ input ProgramWhereInput {
   statusNEQ: ProgramProgramStatus
   statusIn: [ProgramProgramStatus!]
   statusNotIn: [ProgramProgramStatus!]
-  """
-  program_type field predicates
-  """
-  programType: ProgramProgramType
-  programTypeNEQ: ProgramProgramType
-  programTypeIn: [ProgramProgramType!]
-  programTypeNotIn: [ProgramProgramType!]
   """
   framework_name field predicates
   """
@@ -80074,14 +79856,6 @@ type Risk implements Node {
   """
   status: RiskRiskStatus
   """
-  type of the risk, e.g. strategic, operational, financial, external, etc.
-  """
-  riskType: String @deprecated(reason: "Use ` + "`" + `risk_kind_name` + "`" + ` instead.")
-  """
-  category of the risk, e.g. human resources, operations, IT, etc.
-  """
-  category: String @deprecated(reason: "Use ` + "`" + `risk_category_name` + "`" + ` instead.")
-  """
   impact of the risk -critical, high, medium, low
   """
   impact: RiskRiskImpact
@@ -80653,8 +80427,6 @@ enum RiskOrderField {
   updated_at
   name
   STATUS
-  risk_type
-  category
   IMPACT
   LIKELIHOOD
   score
@@ -80905,42 +80677,6 @@ input RiskWhereInput {
   statusNotIn: [RiskRiskStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
-  """
-  risk_type field predicates
-  """
-  riskType: String
-  riskTypeNEQ: String
-  riskTypeIn: [String!]
-  riskTypeNotIn: [String!]
-  riskTypeGT: String
-  riskTypeGTE: String
-  riskTypeLT: String
-  riskTypeLTE: String
-  riskTypeContains: String
-  riskTypeHasPrefix: String
-  riskTypeHasSuffix: String
-  riskTypeIsNil: Boolean
-  riskTypeNotNil: Boolean
-  riskTypeEqualFold: String
-  riskTypeContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   impact field predicates
   """
@@ -82885,10 +82621,6 @@ type Subcontrol implements Node {
   """
   referenceFrameworkRevision: String @externalSource(source: FRAMEWORK)
   """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: SubcontrolControlType @deprecated(reason: "Use ` + "`" + `control_kind_name` + "`" + ` instead.")
-  """
   category of the control
   """
   category: String @externalSource(source: FRAMEWORK)
@@ -83438,15 +83170,6 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/common
   NOT_APPLICABLE
 }
 """
-SubcontrolControlType is enum for the field control_type
-"""
-enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/common/enums.ControlType") {
-  PREVENTATIVE
-  DETECTIVE
-  CORRECTIVE
-  DETERRENT
-}
-"""
 An edge in a connection.
 """
 type SubcontrolEdge {
@@ -83482,7 +83205,6 @@ enum SubcontrolOrderField {
   STATUS
   SOURCE
   REFERENCE_FRAMEWORK
-  CONTROL_TYPE
   category
   subcategory
   ref_code
@@ -83733,15 +83455,6 @@ input SubcontrolWhereInput {
   referenceFrameworkRevisionNotNil: Boolean
   referenceFrameworkRevisionEqualFold: String
   referenceFrameworkRevisionContainsFold: String
-  """
-  control_type field predicates
-  """
-  controlType: SubcontrolControlType
-  controlTypeNEQ: SubcontrolControlType
-  controlTypeIn: [SubcontrolControlType!]
-  controlTypeNotIn: [SubcontrolControlType!]
-  controlTypeIsNil: Boolean
-  controlTypeNotNil: Boolean
   """
   category field predicates
   """
@@ -85253,10 +84966,6 @@ type Task implements Node {
   """
   status: TaskTaskStatus!
   """
-  the category of the task, e.g. evidence upload, risk review, policy review, etc.
-  """
-  category: String @deprecated(reason: "Use ` + "`" + `task_kind_name` + "`" + ` instead.")
-  """
   the due date of the task
   """
   due: DateTime
@@ -85749,7 +85458,6 @@ enum TaskOrderField {
   updated_at
   title
   STATUS
-  category
   due
   completed
 }
@@ -85957,24 +85665,6 @@ input TaskWhereInput {
   statusNEQ: TaskTaskStatus
   statusIn: [TaskTaskStatus!]
   statusNotIn: [TaskTaskStatus!]
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryIsNil: Boolean
-  categoryNotNil: Boolean
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   due field predicates
   """
@@ -89174,11 +88864,6 @@ input UpdateActionPlanInput {
   status: ActionPlanDocumentStatus
   clearStatus: Boolean
   """
-  type of the action_plan, e.g. compliance, operational, health and safety, etc.
-  """
-  actionPlanType: String
-  clearActionPlanType: Boolean
-  """
   details of the action_plan
   """
   details: String
@@ -89666,11 +89351,6 @@ input UpdateControlInput {
   """
   referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
-  """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: ControlControlType
-  clearControlType: Boolean
   """
   category of the control
   """
@@ -91392,11 +91072,6 @@ input UpdateInternalPolicyInput {
   status: InternalPolicyDocumentStatus
   clearStatus: Boolean
   """
-  type of the policy, e.g. compliance, operational, health and safety, etc.
-  """
-  policyType: String
-  clearPolicyType: Boolean
-  """
   details of the policy
   """
   details: String
@@ -92415,11 +92090,6 @@ input UpdateProcedureInput {
   status: ProcedureDocumentStatus
   clearStatus: Boolean
   """
-  type of the procedure, e.g. compliance, operational, health and safety, etc.
-  """
-  procedureType: String
-  clearProcedureType: Boolean
-  """
   details of the procedure
   """
   details: String
@@ -92582,10 +92252,6 @@ input UpdateProgramInput {
   the status of the program
   """
   status: ProgramProgramStatus
-  """
-  the type of the program
-  """
-  programType: ProgramProgramType
   """
   the short name of the compliance standard the program is based on, only used for framework type programs
   """
@@ -93045,16 +92711,6 @@ input UpdateRiskInput {
   status: RiskRiskStatus
   clearStatus: Boolean
   """
-  type of the risk, e.g. strategic, operational, financial, external, etc.
-  """
-  riskType: String
-  clearRiskType: Boolean
-  """
-  category of the risk, e.g. human resources, operations, IT, etc.
-  """
-  category: String
-  clearCategory: Boolean
-  """
   impact of the risk -critical, high, medium, low
   """
   impact: RiskRiskImpact
@@ -93411,11 +93067,6 @@ input UpdateSubcontrolInput {
   referenceFrameworkRevision: String @externalReadOnly(source: FRAMEWORK)
   clearReferenceFrameworkRevision: Boolean @externalReadOnly(source: FRAMEWORK)
   """
-  type of the control e.g. preventive, detective, corrective, or deterrent.
-  """
-  controlType: SubcontrolControlType
-  clearControlType: Boolean
-  """
   category of the control
   """
   category: String @externalReadOnly(source: FRAMEWORK)
@@ -93714,11 +93365,6 @@ input UpdateTaskInput {
   the status of the task
   """
   status: TaskTaskStatus
-  """
-  the category of the task, e.g. evidence upload, risk review, policy review, etc.
-  """
-  category: String
-  clearCategory: Boolean
   """
   the due date of the task
   """

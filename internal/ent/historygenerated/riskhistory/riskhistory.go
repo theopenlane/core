@@ -56,10 +56,6 @@ const (
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldRiskType holds the string denoting the risk_type field in the database.
-	FieldRiskType = "risk_type"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
 	// FieldImpact holds the string denoting the impact field in the database.
 	FieldImpact = "impact"
 	// FieldLikelihood holds the string denoting the likelihood field in the database.
@@ -107,8 +103,6 @@ var Columns = []string{
 	FieldRiskCategoryID,
 	FieldName,
 	FieldStatus,
-	FieldRiskType,
-	FieldCategory,
 	FieldImpact,
 	FieldLikelihood,
 	FieldScore,
@@ -292,16 +286,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByRiskType orders the results by the risk_type field.
-func ByRiskType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRiskType, opts...).ToFunc()
-}
-
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
 // ByImpact orders the results by the impact field.

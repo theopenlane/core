@@ -118,11 +118,6 @@ func Name(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldName, v))
 }
 
-// ProcedureType applies equality check predicate on the "procedure_type" field. It's identical to ProcedureTypeEQ.
-func ProcedureType(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldProcedureType, v))
-}
-
 // Details applies equality check predicate on the "details" field. It's identical to DetailsEQ.
 func Details(v string) predicate.Procedure {
 	return predicate.Procedure(sql.FieldEQ(FieldDetails, v))
@@ -896,81 +891,6 @@ func StatusIsNil() predicate.Procedure {
 // StatusNotNil applies the NotNil predicate on the "status" field.
 func StatusNotNil() predicate.Procedure {
 	return predicate.Procedure(sql.FieldNotNull(FieldStatus))
-}
-
-// ProcedureTypeEQ applies the EQ predicate on the "procedure_type" field.
-func ProcedureTypeEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEQ(FieldProcedureType, v))
-}
-
-// ProcedureTypeNEQ applies the NEQ predicate on the "procedure_type" field.
-func ProcedureTypeNEQ(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNEQ(FieldProcedureType, v))
-}
-
-// ProcedureTypeIn applies the In predicate on the "procedure_type" field.
-func ProcedureTypeIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldIn(FieldProcedureType, vs...))
-}
-
-// ProcedureTypeNotIn applies the NotIn predicate on the "procedure_type" field.
-func ProcedureTypeNotIn(vs ...string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotIn(FieldProcedureType, vs...))
-}
-
-// ProcedureTypeGT applies the GT predicate on the "procedure_type" field.
-func ProcedureTypeGT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGT(FieldProcedureType, v))
-}
-
-// ProcedureTypeGTE applies the GTE predicate on the "procedure_type" field.
-func ProcedureTypeGTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldGTE(FieldProcedureType, v))
-}
-
-// ProcedureTypeLT applies the LT predicate on the "procedure_type" field.
-func ProcedureTypeLT(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLT(FieldProcedureType, v))
-}
-
-// ProcedureTypeLTE applies the LTE predicate on the "procedure_type" field.
-func ProcedureTypeLTE(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldLTE(FieldProcedureType, v))
-}
-
-// ProcedureTypeContains applies the Contains predicate on the "procedure_type" field.
-func ProcedureTypeContains(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContains(FieldProcedureType, v))
-}
-
-// ProcedureTypeHasPrefix applies the HasPrefix predicate on the "procedure_type" field.
-func ProcedureTypeHasPrefix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasPrefix(FieldProcedureType, v))
-}
-
-// ProcedureTypeHasSuffix applies the HasSuffix predicate on the "procedure_type" field.
-func ProcedureTypeHasSuffix(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldHasSuffix(FieldProcedureType, v))
-}
-
-// ProcedureTypeIsNil applies the IsNil predicate on the "procedure_type" field.
-func ProcedureTypeIsNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldIsNull(FieldProcedureType))
-}
-
-// ProcedureTypeNotNil applies the NotNil predicate on the "procedure_type" field.
-func ProcedureTypeNotNil() predicate.Procedure {
-	return predicate.Procedure(sql.FieldNotNull(FieldProcedureType))
-}
-
-// ProcedureTypeEqualFold applies the EqualFold predicate on the "procedure_type" field.
-func ProcedureTypeEqualFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldEqualFold(FieldProcedureType, v))
-}
-
-// ProcedureTypeContainsFold applies the ContainsFold predicate on the "procedure_type" field.
-func ProcedureTypeContainsFold(v string) predicate.Procedure {
-	return predicate.Procedure(sql.FieldContainsFold(FieldProcedureType, v))
 }
 
 // DetailsEQ applies the EQ predicate on the "details" field.

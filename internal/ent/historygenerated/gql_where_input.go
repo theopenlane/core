@@ -230,23 +230,6 @@ type ActionPlanHistoryWhereInput struct {
 	StatusIsNil  bool                   `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                   `json:"statusNotNil,omitempty"`
 
-	// "action_plan_type" field predicates.
-	ActionPlanType             *string  `json:"actionPlanType,omitempty"`
-	ActionPlanTypeNEQ          *string  `json:"actionPlanTypeNEQ,omitempty"`
-	ActionPlanTypeIn           []string `json:"actionPlanTypeIn,omitempty"`
-	ActionPlanTypeNotIn        []string `json:"actionPlanTypeNotIn,omitempty"`
-	ActionPlanTypeGT           *string  `json:"actionPlanTypeGT,omitempty"`
-	ActionPlanTypeGTE          *string  `json:"actionPlanTypeGTE,omitempty"`
-	ActionPlanTypeLT           *string  `json:"actionPlanTypeLT,omitempty"`
-	ActionPlanTypeLTE          *string  `json:"actionPlanTypeLTE,omitempty"`
-	ActionPlanTypeContains     *string  `json:"actionPlanTypeContains,omitempty"`
-	ActionPlanTypeHasPrefix    *string  `json:"actionPlanTypeHasPrefix,omitempty"`
-	ActionPlanTypeHasSuffix    *string  `json:"actionPlanTypeHasSuffix,omitempty"`
-	ActionPlanTypeIsNil        bool     `json:"actionPlanTypeIsNil,omitempty"`
-	ActionPlanTypeNotNil       bool     `json:"actionPlanTypeNotNil,omitempty"`
-	ActionPlanTypeEqualFold    *string  `json:"actionPlanTypeEqualFold,omitempty"`
-	ActionPlanTypeContainsFold *string  `json:"actionPlanTypeContainsFold,omitempty"`
-
 	// "details" field predicates.
 	Details             *string  `json:"details,omitempty"`
 	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
@@ -995,51 +978,6 @@ func (i *ActionPlanHistoryWhereInput) P() (predicate.ActionPlanHistory, error) {
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, actionplanhistory.StatusNotNil())
-	}
-	if i.ActionPlanType != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeEQ(*i.ActionPlanType))
-	}
-	if i.ActionPlanTypeNEQ != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeNEQ(*i.ActionPlanTypeNEQ))
-	}
-	if len(i.ActionPlanTypeIn) > 0 {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeIn(i.ActionPlanTypeIn...))
-	}
-	if len(i.ActionPlanTypeNotIn) > 0 {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeNotIn(i.ActionPlanTypeNotIn...))
-	}
-	if i.ActionPlanTypeGT != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeGT(*i.ActionPlanTypeGT))
-	}
-	if i.ActionPlanTypeGTE != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeGTE(*i.ActionPlanTypeGTE))
-	}
-	if i.ActionPlanTypeLT != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeLT(*i.ActionPlanTypeLT))
-	}
-	if i.ActionPlanTypeLTE != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeLTE(*i.ActionPlanTypeLTE))
-	}
-	if i.ActionPlanTypeContains != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeContains(*i.ActionPlanTypeContains))
-	}
-	if i.ActionPlanTypeHasPrefix != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeHasPrefix(*i.ActionPlanTypeHasPrefix))
-	}
-	if i.ActionPlanTypeHasSuffix != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeHasSuffix(*i.ActionPlanTypeHasSuffix))
-	}
-	if i.ActionPlanTypeIsNil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeIsNil())
-	}
-	if i.ActionPlanTypeNotNil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeNotNil())
-	}
-	if i.ActionPlanTypeEqualFold != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeEqualFold(*i.ActionPlanTypeEqualFold))
-	}
-	if i.ActionPlanTypeContainsFold != nil {
-		predicates = append(predicates, actionplanhistory.ActionPlanTypeContainsFold(*i.ActionPlanTypeContainsFold))
 	}
 	if i.Details != nil {
 		predicates = append(predicates, actionplanhistory.DetailsEQ(*i.Details))
@@ -5452,14 +5390,6 @@ type ControlHistoryWhereInput struct {
 	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
 	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 
-	// "control_type" field predicates.
-	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
-	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
-	ControlTypeIn     []enums.ControlType `json:"controlTypeIn,omitempty"`
-	ControlTypeNotIn  []enums.ControlType `json:"controlTypeNotIn,omitempty"`
-	ControlTypeIsNil  bool                `json:"controlTypeIsNil,omitempty"`
-	ControlTypeNotNil bool                `json:"controlTypeNotNil,omitempty"`
-
 	// "category" field predicates.
 	Category             *string  `json:"category,omitempty"`
 	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
@@ -6396,24 +6326,6 @@ func (i *ControlHistoryWhereInput) P() (predicate.ControlHistory, error) {
 	}
 	if i.ReferenceFrameworkRevisionContainsFold != nil {
 		predicates = append(predicates, controlhistory.ReferenceFrameworkRevisionContainsFold(*i.ReferenceFrameworkRevisionContainsFold))
-	}
-	if i.ControlType != nil {
-		predicates = append(predicates, controlhistory.ControlTypeEQ(*i.ControlType))
-	}
-	if i.ControlTypeNEQ != nil {
-		predicates = append(predicates, controlhistory.ControlTypeNEQ(*i.ControlTypeNEQ))
-	}
-	if len(i.ControlTypeIn) > 0 {
-		predicates = append(predicates, controlhistory.ControlTypeIn(i.ControlTypeIn...))
-	}
-	if len(i.ControlTypeNotIn) > 0 {
-		predicates = append(predicates, controlhistory.ControlTypeNotIn(i.ControlTypeNotIn...))
-	}
-	if i.ControlTypeIsNil {
-		predicates = append(predicates, controlhistory.ControlTypeIsNil())
-	}
-	if i.ControlTypeNotNil {
-		predicates = append(predicates, controlhistory.ControlTypeNotNil())
 	}
 	if i.Category != nil {
 		predicates = append(predicates, controlhistory.CategoryEQ(*i.Category))
@@ -26900,23 +26812,6 @@ type InternalPolicyHistoryWhereInput struct {
 	StatusIsNil  bool                   `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                   `json:"statusNotNil,omitempty"`
 
-	// "policy_type" field predicates.
-	PolicyType             *string  `json:"policyType,omitempty"`
-	PolicyTypeNEQ          *string  `json:"policyTypeNEQ,omitempty"`
-	PolicyTypeIn           []string `json:"policyTypeIn,omitempty"`
-	PolicyTypeNotIn        []string `json:"policyTypeNotIn,omitempty"`
-	PolicyTypeGT           *string  `json:"policyTypeGT,omitempty"`
-	PolicyTypeGTE          *string  `json:"policyTypeGTE,omitempty"`
-	PolicyTypeLT           *string  `json:"policyTypeLT,omitempty"`
-	PolicyTypeLTE          *string  `json:"policyTypeLTE,omitempty"`
-	PolicyTypeContains     *string  `json:"policyTypeContains,omitempty"`
-	PolicyTypeHasPrefix    *string  `json:"policyTypeHasPrefix,omitempty"`
-	PolicyTypeHasSuffix    *string  `json:"policyTypeHasSuffix,omitempty"`
-	PolicyTypeIsNil        bool     `json:"policyTypeIsNil,omitempty"`
-	PolicyTypeNotNil       bool     `json:"policyTypeNotNil,omitempty"`
-	PolicyTypeEqualFold    *string  `json:"policyTypeEqualFold,omitempty"`
-	PolicyTypeContainsFold *string  `json:"policyTypeContainsFold,omitempty"`
-
 	// "details" field predicates.
 	Details             *string  `json:"details,omitempty"`
 	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
@@ -27688,51 +27583,6 @@ func (i *InternalPolicyHistoryWhereInput) P() (predicate.InternalPolicyHistory, 
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, internalpolicyhistory.StatusNotNil())
-	}
-	if i.PolicyType != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeEQ(*i.PolicyType))
-	}
-	if i.PolicyTypeNEQ != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeNEQ(*i.PolicyTypeNEQ))
-	}
-	if len(i.PolicyTypeIn) > 0 {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeIn(i.PolicyTypeIn...))
-	}
-	if len(i.PolicyTypeNotIn) > 0 {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeNotIn(i.PolicyTypeNotIn...))
-	}
-	if i.PolicyTypeGT != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeGT(*i.PolicyTypeGT))
-	}
-	if i.PolicyTypeGTE != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeGTE(*i.PolicyTypeGTE))
-	}
-	if i.PolicyTypeLT != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeLT(*i.PolicyTypeLT))
-	}
-	if i.PolicyTypeLTE != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeLTE(*i.PolicyTypeLTE))
-	}
-	if i.PolicyTypeContains != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeContains(*i.PolicyTypeContains))
-	}
-	if i.PolicyTypeHasPrefix != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeHasPrefix(*i.PolicyTypeHasPrefix))
-	}
-	if i.PolicyTypeHasSuffix != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeHasSuffix(*i.PolicyTypeHasSuffix))
-	}
-	if i.PolicyTypeIsNil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeIsNil())
-	}
-	if i.PolicyTypeNotNil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeNotNil())
-	}
-	if i.PolicyTypeEqualFold != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeEqualFold(*i.PolicyTypeEqualFold))
-	}
-	if i.PolicyTypeContainsFold != nil {
-		predicates = append(predicates, internalpolicyhistory.PolicyTypeContainsFold(*i.PolicyTypeContainsFold))
 	}
 	if i.Details != nil {
 		predicates = append(predicates, internalpolicyhistory.DetailsEQ(*i.Details))
@@ -35808,23 +35658,6 @@ type ProcedureHistoryWhereInput struct {
 	StatusIsNil  bool                   `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                   `json:"statusNotNil,omitempty"`
 
-	// "procedure_type" field predicates.
-	ProcedureType             *string  `json:"procedureType,omitempty"`
-	ProcedureTypeNEQ          *string  `json:"procedureTypeNEQ,omitempty"`
-	ProcedureTypeIn           []string `json:"procedureTypeIn,omitempty"`
-	ProcedureTypeNotIn        []string `json:"procedureTypeNotIn,omitempty"`
-	ProcedureTypeGT           *string  `json:"procedureTypeGT,omitempty"`
-	ProcedureTypeGTE          *string  `json:"procedureTypeGTE,omitempty"`
-	ProcedureTypeLT           *string  `json:"procedureTypeLT,omitempty"`
-	ProcedureTypeLTE          *string  `json:"procedureTypeLTE,omitempty"`
-	ProcedureTypeContains     *string  `json:"procedureTypeContains,omitempty"`
-	ProcedureTypeHasPrefix    *string  `json:"procedureTypeHasPrefix,omitempty"`
-	ProcedureTypeHasSuffix    *string  `json:"procedureTypeHasSuffix,omitempty"`
-	ProcedureTypeIsNil        bool     `json:"procedureTypeIsNil,omitempty"`
-	ProcedureTypeNotNil       bool     `json:"procedureTypeNotNil,omitempty"`
-	ProcedureTypeEqualFold    *string  `json:"procedureTypeEqualFold,omitempty"`
-	ProcedureTypeContainsFold *string  `json:"procedureTypeContainsFold,omitempty"`
-
 	// "details" field predicates.
 	Details             *string  `json:"details,omitempty"`
 	DetailsNEQ          *string  `json:"detailsNEQ,omitempty"`
@@ -36534,51 +36367,6 @@ func (i *ProcedureHistoryWhereInput) P() (predicate.ProcedureHistory, error) {
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, procedurehistory.StatusNotNil())
-	}
-	if i.ProcedureType != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeEQ(*i.ProcedureType))
-	}
-	if i.ProcedureTypeNEQ != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeNEQ(*i.ProcedureTypeNEQ))
-	}
-	if len(i.ProcedureTypeIn) > 0 {
-		predicates = append(predicates, procedurehistory.ProcedureTypeIn(i.ProcedureTypeIn...))
-	}
-	if len(i.ProcedureTypeNotIn) > 0 {
-		predicates = append(predicates, procedurehistory.ProcedureTypeNotIn(i.ProcedureTypeNotIn...))
-	}
-	if i.ProcedureTypeGT != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeGT(*i.ProcedureTypeGT))
-	}
-	if i.ProcedureTypeGTE != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeGTE(*i.ProcedureTypeGTE))
-	}
-	if i.ProcedureTypeLT != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeLT(*i.ProcedureTypeLT))
-	}
-	if i.ProcedureTypeLTE != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeLTE(*i.ProcedureTypeLTE))
-	}
-	if i.ProcedureTypeContains != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeContains(*i.ProcedureTypeContains))
-	}
-	if i.ProcedureTypeHasPrefix != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeHasPrefix(*i.ProcedureTypeHasPrefix))
-	}
-	if i.ProcedureTypeHasSuffix != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeHasSuffix(*i.ProcedureTypeHasSuffix))
-	}
-	if i.ProcedureTypeIsNil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeIsNil())
-	}
-	if i.ProcedureTypeNotNil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeNotNil())
-	}
-	if i.ProcedureTypeEqualFold != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeEqualFold(*i.ProcedureTypeEqualFold))
-	}
-	if i.ProcedureTypeContainsFold != nil {
-		predicates = append(predicates, procedurehistory.ProcedureTypeContainsFold(*i.ProcedureTypeContainsFold))
 	}
 	if i.Details != nil {
 		predicates = append(predicates, procedurehistory.DetailsEQ(*i.Details))
@@ -37293,12 +37081,6 @@ type ProgramHistoryWhereInput struct {
 	StatusNEQ   *enums.ProgramStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ProgramStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ProgramStatus `json:"statusNotIn,omitempty"`
-
-	// "program_type" field predicates.
-	ProgramType      *enums.ProgramType  `json:"programType,omitempty"`
-	ProgramTypeNEQ   *enums.ProgramType  `json:"programTypeNEQ,omitempty"`
-	ProgramTypeIn    []enums.ProgramType `json:"programTypeIn,omitempty"`
-	ProgramTypeNotIn []enums.ProgramType `json:"programTypeNotIn,omitempty"`
 
 	// "framework_name" field predicates.
 	FrameworkName             *string  `json:"frameworkName,omitempty"`
@@ -38023,18 +37805,6 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, programhistory.StatusNotIn(i.StatusNotIn...))
-	}
-	if i.ProgramType != nil {
-		predicates = append(predicates, programhistory.ProgramTypeEQ(*i.ProgramType))
-	}
-	if i.ProgramTypeNEQ != nil {
-		predicates = append(predicates, programhistory.ProgramTypeNEQ(*i.ProgramTypeNEQ))
-	}
-	if len(i.ProgramTypeIn) > 0 {
-		predicates = append(predicates, programhistory.ProgramTypeIn(i.ProgramTypeIn...))
-	}
-	if len(i.ProgramTypeNotIn) > 0 {
-		predicates = append(predicates, programhistory.ProgramTypeNotIn(i.ProgramTypeNotIn...))
 	}
 	if i.FrameworkName != nil {
 		predicates = append(predicates, programhistory.FrameworkNameEQ(*i.FrameworkName))
@@ -42469,40 +42239,6 @@ type RiskHistoryWhereInput struct {
 	StatusIsNil  bool               `json:"statusIsNil,omitempty"`
 	StatusNotNil bool               `json:"statusNotNil,omitempty"`
 
-	// "risk_type" field predicates.
-	RiskType             *string  `json:"riskType,omitempty"`
-	RiskTypeNEQ          *string  `json:"riskTypeNEQ,omitempty"`
-	RiskTypeIn           []string `json:"riskTypeIn,omitempty"`
-	RiskTypeNotIn        []string `json:"riskTypeNotIn,omitempty"`
-	RiskTypeGT           *string  `json:"riskTypeGT,omitempty"`
-	RiskTypeGTE          *string  `json:"riskTypeGTE,omitempty"`
-	RiskTypeLT           *string  `json:"riskTypeLT,omitempty"`
-	RiskTypeLTE          *string  `json:"riskTypeLTE,omitempty"`
-	RiskTypeContains     *string  `json:"riskTypeContains,omitempty"`
-	RiskTypeHasPrefix    *string  `json:"riskTypeHasPrefix,omitempty"`
-	RiskTypeHasSuffix    *string  `json:"riskTypeHasSuffix,omitempty"`
-	RiskTypeIsNil        bool     `json:"riskTypeIsNil,omitempty"`
-	RiskTypeNotNil       bool     `json:"riskTypeNotNil,omitempty"`
-	RiskTypeEqualFold    *string  `json:"riskTypeEqualFold,omitempty"`
-	RiskTypeContainsFold *string  `json:"riskTypeContainsFold,omitempty"`
-
-	// "category" field predicates.
-	Category             *string  `json:"category,omitempty"`
-	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGT           *string  `json:"categoryGT,omitempty"`
-	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
-	CategoryLT           *string  `json:"categoryLT,omitempty"`
-	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryIsNil        bool     `json:"categoryIsNil,omitempty"`
-	CategoryNotNil       bool     `json:"categoryNotNil,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
-
 	// "impact" field predicates.
 	Impact       *enums.RiskImpact  `json:"impact,omitempty"`
 	ImpactNEQ    *enums.RiskImpact  `json:"impactNEQ,omitempty"`
@@ -43269,96 +43005,6 @@ func (i *RiskHistoryWhereInput) P() (predicate.RiskHistory, error) {
 	}
 	if i.StatusNotNil {
 		predicates = append(predicates, riskhistory.StatusNotNil())
-	}
-	if i.RiskType != nil {
-		predicates = append(predicates, riskhistory.RiskTypeEQ(*i.RiskType))
-	}
-	if i.RiskTypeNEQ != nil {
-		predicates = append(predicates, riskhistory.RiskTypeNEQ(*i.RiskTypeNEQ))
-	}
-	if len(i.RiskTypeIn) > 0 {
-		predicates = append(predicates, riskhistory.RiskTypeIn(i.RiskTypeIn...))
-	}
-	if len(i.RiskTypeNotIn) > 0 {
-		predicates = append(predicates, riskhistory.RiskTypeNotIn(i.RiskTypeNotIn...))
-	}
-	if i.RiskTypeGT != nil {
-		predicates = append(predicates, riskhistory.RiskTypeGT(*i.RiskTypeGT))
-	}
-	if i.RiskTypeGTE != nil {
-		predicates = append(predicates, riskhistory.RiskTypeGTE(*i.RiskTypeGTE))
-	}
-	if i.RiskTypeLT != nil {
-		predicates = append(predicates, riskhistory.RiskTypeLT(*i.RiskTypeLT))
-	}
-	if i.RiskTypeLTE != nil {
-		predicates = append(predicates, riskhistory.RiskTypeLTE(*i.RiskTypeLTE))
-	}
-	if i.RiskTypeContains != nil {
-		predicates = append(predicates, riskhistory.RiskTypeContains(*i.RiskTypeContains))
-	}
-	if i.RiskTypeHasPrefix != nil {
-		predicates = append(predicates, riskhistory.RiskTypeHasPrefix(*i.RiskTypeHasPrefix))
-	}
-	if i.RiskTypeHasSuffix != nil {
-		predicates = append(predicates, riskhistory.RiskTypeHasSuffix(*i.RiskTypeHasSuffix))
-	}
-	if i.RiskTypeIsNil {
-		predicates = append(predicates, riskhistory.RiskTypeIsNil())
-	}
-	if i.RiskTypeNotNil {
-		predicates = append(predicates, riskhistory.RiskTypeNotNil())
-	}
-	if i.RiskTypeEqualFold != nil {
-		predicates = append(predicates, riskhistory.RiskTypeEqualFold(*i.RiskTypeEqualFold))
-	}
-	if i.RiskTypeContainsFold != nil {
-		predicates = append(predicates, riskhistory.RiskTypeContainsFold(*i.RiskTypeContainsFold))
-	}
-	if i.Category != nil {
-		predicates = append(predicates, riskhistory.CategoryEQ(*i.Category))
-	}
-	if i.CategoryNEQ != nil {
-		predicates = append(predicates, riskhistory.CategoryNEQ(*i.CategoryNEQ))
-	}
-	if len(i.CategoryIn) > 0 {
-		predicates = append(predicates, riskhistory.CategoryIn(i.CategoryIn...))
-	}
-	if len(i.CategoryNotIn) > 0 {
-		predicates = append(predicates, riskhistory.CategoryNotIn(i.CategoryNotIn...))
-	}
-	if i.CategoryGT != nil {
-		predicates = append(predicates, riskhistory.CategoryGT(*i.CategoryGT))
-	}
-	if i.CategoryGTE != nil {
-		predicates = append(predicates, riskhistory.CategoryGTE(*i.CategoryGTE))
-	}
-	if i.CategoryLT != nil {
-		predicates = append(predicates, riskhistory.CategoryLT(*i.CategoryLT))
-	}
-	if i.CategoryLTE != nil {
-		predicates = append(predicates, riskhistory.CategoryLTE(*i.CategoryLTE))
-	}
-	if i.CategoryContains != nil {
-		predicates = append(predicates, riskhistory.CategoryContains(*i.CategoryContains))
-	}
-	if i.CategoryHasPrefix != nil {
-		predicates = append(predicates, riskhistory.CategoryHasPrefix(*i.CategoryHasPrefix))
-	}
-	if i.CategoryHasSuffix != nil {
-		predicates = append(predicates, riskhistory.CategoryHasSuffix(*i.CategoryHasSuffix))
-	}
-	if i.CategoryIsNil {
-		predicates = append(predicates, riskhistory.CategoryIsNil())
-	}
-	if i.CategoryNotNil {
-		predicates = append(predicates, riskhistory.CategoryNotNil())
-	}
-	if i.CategoryEqualFold != nil {
-		predicates = append(predicates, riskhistory.CategoryEqualFold(*i.CategoryEqualFold))
-	}
-	if i.CategoryContainsFold != nil {
-		predicates = append(predicates, riskhistory.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.Impact != nil {
 		predicates = append(predicates, riskhistory.ImpactEQ(*i.Impact))
@@ -46618,14 +46264,6 @@ type SubcontrolHistoryWhereInput struct {
 	ReferenceFrameworkRevisionEqualFold    *string  `json:"referenceFrameworkRevisionEqualFold,omitempty"`
 	ReferenceFrameworkRevisionContainsFold *string  `json:"referenceFrameworkRevisionContainsFold,omitempty"`
 
-	// "control_type" field predicates.
-	ControlType       *enums.ControlType  `json:"controlType,omitempty"`
-	ControlTypeNEQ    *enums.ControlType  `json:"controlTypeNEQ,omitempty"`
-	ControlTypeIn     []enums.ControlType `json:"controlTypeIn,omitempty"`
-	ControlTypeNotIn  []enums.ControlType `json:"controlTypeNotIn,omitempty"`
-	ControlTypeIsNil  bool                `json:"controlTypeIsNil,omitempty"`
-	ControlTypeNotNil bool                `json:"controlTypeNotNil,omitempty"`
-
 	// "category" field predicates.
 	Category             *string  `json:"category,omitempty"`
 	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
@@ -47560,24 +47198,6 @@ func (i *SubcontrolHistoryWhereInput) P() (predicate.SubcontrolHistory, error) {
 	}
 	if i.ReferenceFrameworkRevisionContainsFold != nil {
 		predicates = append(predicates, subcontrolhistory.ReferenceFrameworkRevisionContainsFold(*i.ReferenceFrameworkRevisionContainsFold))
-	}
-	if i.ControlType != nil {
-		predicates = append(predicates, subcontrolhistory.ControlTypeEQ(*i.ControlType))
-	}
-	if i.ControlTypeNEQ != nil {
-		predicates = append(predicates, subcontrolhistory.ControlTypeNEQ(*i.ControlTypeNEQ))
-	}
-	if len(i.ControlTypeIn) > 0 {
-		predicates = append(predicates, subcontrolhistory.ControlTypeIn(i.ControlTypeIn...))
-	}
-	if len(i.ControlTypeNotIn) > 0 {
-		predicates = append(predicates, subcontrolhistory.ControlTypeNotIn(i.ControlTypeNotIn...))
-	}
-	if i.ControlTypeIsNil {
-		predicates = append(predicates, subcontrolhistory.ControlTypeIsNil())
-	}
-	if i.ControlTypeNotNil {
-		predicates = append(predicates, subcontrolhistory.ControlTypeNotNil())
 	}
 	if i.Category != nil {
 		predicates = append(predicates, subcontrolhistory.CategoryEQ(*i.Category))
@@ -49254,23 +48874,6 @@ type TaskHistoryWhereInput struct {
 	StatusIn    []enums.TaskStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.TaskStatus `json:"statusNotIn,omitempty"`
 
-	// "category" field predicates.
-	Category             *string  `json:"category,omitempty"`
-	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGT           *string  `json:"categoryGT,omitempty"`
-	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
-	CategoryLT           *string  `json:"categoryLT,omitempty"`
-	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryIsNil        bool     `json:"categoryIsNil,omitempty"`
-	CategoryNotNil       bool     `json:"categoryNotNil,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
-
 	// "due" field predicates.
 	Due       *models.DateTime  `json:"due,omitempty"`
 	DueNEQ    *models.DateTime  `json:"dueNEQ,omitempty"`
@@ -49969,51 +49572,6 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, taskhistory.StatusNotIn(i.StatusNotIn...))
-	}
-	if i.Category != nil {
-		predicates = append(predicates, taskhistory.CategoryEQ(*i.Category))
-	}
-	if i.CategoryNEQ != nil {
-		predicates = append(predicates, taskhistory.CategoryNEQ(*i.CategoryNEQ))
-	}
-	if len(i.CategoryIn) > 0 {
-		predicates = append(predicates, taskhistory.CategoryIn(i.CategoryIn...))
-	}
-	if len(i.CategoryNotIn) > 0 {
-		predicates = append(predicates, taskhistory.CategoryNotIn(i.CategoryNotIn...))
-	}
-	if i.CategoryGT != nil {
-		predicates = append(predicates, taskhistory.CategoryGT(*i.CategoryGT))
-	}
-	if i.CategoryGTE != nil {
-		predicates = append(predicates, taskhistory.CategoryGTE(*i.CategoryGTE))
-	}
-	if i.CategoryLT != nil {
-		predicates = append(predicates, taskhistory.CategoryLT(*i.CategoryLT))
-	}
-	if i.CategoryLTE != nil {
-		predicates = append(predicates, taskhistory.CategoryLTE(*i.CategoryLTE))
-	}
-	if i.CategoryContains != nil {
-		predicates = append(predicates, taskhistory.CategoryContains(*i.CategoryContains))
-	}
-	if i.CategoryHasPrefix != nil {
-		predicates = append(predicates, taskhistory.CategoryHasPrefix(*i.CategoryHasPrefix))
-	}
-	if i.CategoryHasSuffix != nil {
-		predicates = append(predicates, taskhistory.CategoryHasSuffix(*i.CategoryHasSuffix))
-	}
-	if i.CategoryIsNil {
-		predicates = append(predicates, taskhistory.CategoryIsNil())
-	}
-	if i.CategoryNotNil {
-		predicates = append(predicates, taskhistory.CategoryNotNil())
-	}
-	if i.CategoryEqualFold != nil {
-		predicates = append(predicates, taskhistory.CategoryEqualFold(*i.CategoryEqualFold))
-	}
-	if i.CategoryContainsFold != nil {
-		predicates = append(predicates, taskhistory.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.Due != nil {
 		predicates = append(predicates, taskhistory.DueEQ(*i.Due))

@@ -210,20 +210,6 @@ func (_c *ProgramCreate) SetNillableStatus(v *enums.ProgramStatus) *ProgramCreat
 	return _c
 }
 
-// SetProgramType sets the "program_type" field.
-func (_c *ProgramCreate) SetProgramType(v enums.ProgramType) *ProgramCreate {
-	_c.mutation.SetProgramType(v)
-	return _c
-}
-
-// SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (_c *ProgramCreate) SetNillableProgramType(v *enums.ProgramType) *ProgramCreate {
-	if v != nil {
-		_c.SetProgramType(*v)
-	}
-	return _c
-}
-
 // SetFrameworkName sets the "framework_name" field.
 func (_c *ProgramCreate) SetFrameworkName(v string) *ProgramCreate {
 	_c.mutation.SetFrameworkName(v)
@@ -707,10 +693,6 @@ func (_c *ProgramCreate) defaults() error {
 		v := program.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.ProgramType(); !ok {
-		v := program.DefaultProgramType
-		_c.mutation.SetProgramType(v)
-	}
 	if _, ok := _c.mutation.AuditorReady(); !ok {
 		v := program.DefaultAuditorReady
 		_c.mutation.SetAuditorReady(v)
@@ -762,14 +744,6 @@ func (_c *ProgramCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := program.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Program.status": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.ProgramType(); !ok {
-		return &ValidationError{Name: "program_type", err: errors.New(`generated: missing required field "Program.program_type"`)}
-	}
-	if v, ok := _c.mutation.ProgramType(); ok {
-		if err := program.ProgramTypeValidator(v); err != nil {
-			return &ValidationError{Name: "program_type", err: fmt.Errorf(`generated: validator failed for field "Program.program_type": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.AuditorReady(); !ok {
@@ -869,10 +843,6 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(program.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.ProgramType(); ok {
-		_spec.SetField(program.FieldProgramType, field.TypeEnum, value)
-		_node.ProgramType = value
 	}
 	if value, ok := _c.mutation.FrameworkName(); ok {
 		_spec.SetField(program.FieldFrameworkName, field.TypeString, value)

@@ -179,20 +179,6 @@ func (_c *ProcedureCreate) SetNillableStatus(v *enums.DocumentStatus) *Procedure
 	return _c
 }
 
-// SetProcedureType sets the "procedure_type" field.
-func (_c *ProcedureCreate) SetProcedureType(v string) *ProcedureCreate {
-	_c.mutation.SetProcedureType(v)
-	return _c
-}
-
-// SetNillableProcedureType sets the "procedure_type" field if the given value is not nil.
-func (_c *ProcedureCreate) SetNillableProcedureType(v *string) *ProcedureCreate {
-	if v != nil {
-		_c.SetProcedureType(*v)
-	}
-	return _c
-}
-
 // SetDetails sets the "details" field.
 func (_c *ProcedureCreate) SetDetails(v string) *ProcedureCreate {
 	_c.mutation.SetDetails(v)
@@ -893,10 +879,6 @@ func (_c *ProcedureCreate) createSpec() (*Procedure, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(procedure.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.ProcedureType(); ok {
-		_spec.SetField(procedure.FieldProcedureType, field.TypeString, value)
-		_node.ProcedureType = value
 	}
 	if value, ok := _c.mutation.Details(); ok {
 		_spec.SetField(procedure.FieldDetails, field.TypeString, value)

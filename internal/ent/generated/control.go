@@ -63,8 +63,6 @@ type Control struct {
 	ReferenceFramework *string `json:"reference_framework,omitempty"`
 	// the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated
 	ReferenceFrameworkRevision *string `json:"reference_framework_revision,omitempty"`
-	// type of the control e.g. preventive, detective, corrective, or deterrent.
-	ControlType enums.ControlType `json:"control_type,omitempty"`
 	// category of the control
 	Category string `json:"category,omitempty"`
 	// category id of the control
@@ -494,7 +492,7 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case control.FieldSystemOwned, control.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldControlType, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldRefCode, control.FieldStandardID:
+		case control.FieldID, control.FieldCreatedBy, control.FieldUpdatedBy, control.FieldDeletedBy, control.FieldDisplayID, control.FieldTitle, control.FieldDescription, control.FieldReferenceID, control.FieldAuditorReferenceID, control.FieldResponsiblePartyID, control.FieldStatus, control.FieldSource, control.FieldReferenceFramework, control.FieldReferenceFrameworkRevision, control.FieldCategory, control.FieldCategoryID, control.FieldSubcategory, control.FieldControlOwnerID, control.FieldDelegateID, control.FieldOwnerID, control.FieldInternalNotes, control.FieldSystemInternalID, control.FieldControlKindName, control.FieldControlKindID, control.FieldRefCode, control.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case control.FieldCreatedAt, control.FieldUpdatedAt, control.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -648,12 +646,6 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ReferenceFrameworkRevision = new(string)
 				*_m.ReferenceFrameworkRevision = value.String
-			}
-		case control.FieldControlType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field control_type", values[i])
-			} else if value.Valid {
-				_m.ControlType = enums.ControlType(value.String)
 			}
 		case control.FieldCategory:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -1083,9 +1075,6 @@ func (_m *Control) String() string {
 		builder.WriteString("reference_framework_revision=")
 		builder.WriteString(*v)
 	}
-	builder.WriteString(", ")
-	builder.WriteString("control_type=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ControlType))
 	builder.WriteString(", ")
 	builder.WriteString("category=")
 	builder.WriteString(_m.Category)

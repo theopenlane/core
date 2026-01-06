@@ -46,8 +46,6 @@ const (
 	FieldDescription = "description"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldProgramType holds the string denoting the program_type field in the database.
-	FieldProgramType = "program_type"
 	// FieldFrameworkName holds the string denoting the framework_name field in the database.
 	FieldFrameworkName = "framework_name"
 	// FieldStartDate holds the string denoting the start_date field in the database.
@@ -241,7 +239,6 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldStatus,
-	FieldProgramType,
 	FieldFrameworkName,
 	FieldStartDate,
 	FieldEndDate,
@@ -371,18 +368,6 @@ func StatusValidator(s enums.ProgramStatus) error {
 	}
 }
 
-const DefaultProgramType enums.ProgramType = "FRAMEWORK"
-
-// ProgramTypeValidator is a validator for the "program_type" field enum values. It is called by the builders before save.
-func ProgramTypeValidator(pt enums.ProgramType) error {
-	switch pt.String() {
-	case "FRAMEWORK", "GAP_ANALYSIS", "RISK_ASSESSMENT", "OTHER":
-		return nil
-	default:
-		return fmt.Errorf("program: invalid enum value for program_type field: %q", pt)
-	}
-}
-
 // OrderOption defines the ordering options for the Program queries.
 type OrderOption func(*sql.Selector)
 
@@ -454,11 +439,6 @@ func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByProgramType orders the results by the program_type field.
-func ByProgramType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProgramType, opts...).ToFunc()
 }
 
 // ByFrameworkName orders the results by the framework_name field.
@@ -915,11 +895,4 @@ var (
 	_ graphql.Marshaler = (*enums.ProgramStatus)(nil)
 	// enums.ProgramStatus must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.ProgramStatus)(nil)
-)
-
-var (
-	// enums.ProgramType must implement graphql.Marshaler.
-	_ graphql.Marshaler = (*enums.ProgramType)(nil)
-	// enums.ProgramType must implement graphql.Unmarshaler.
-	_ graphql.Unmarshaler = (*enums.ProgramType)(nil)
 )

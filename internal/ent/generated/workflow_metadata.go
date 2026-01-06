@@ -78,11 +78,6 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 					Type:  "string",
 				},
 				{
-					Name:  "control_type",
-					Label: "ControlType",
-					Type:  "enums.ControlType",
-				},
-				{
 					Name:  "category",
 					Label: "Category",
 					Type:  "string",
@@ -184,11 +179,6 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 					Name:  "reference_framework_revision",
 					Label: "ReferenceFrameworkRevision",
 					Type:  "string",
-				},
-				{
-					Name:  "control_type",
-					Label: "ControlType",
-					Type:  "enums.ControlType",
 				},
 				{
 					Name:  "category",

@@ -251,46 +251,6 @@ func (_u *RiskUpdate) ClearStatus() *RiskUpdate {
 	return _u
 }
 
-// SetRiskType sets the "risk_type" field.
-func (_u *RiskUpdate) SetRiskType(v string) *RiskUpdate {
-	_u.mutation.SetRiskType(v)
-	return _u
-}
-
-// SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (_u *RiskUpdate) SetNillableRiskType(v *string) *RiskUpdate {
-	if v != nil {
-		_u.SetRiskType(*v)
-	}
-	return _u
-}
-
-// ClearRiskType clears the value of the "risk_type" field.
-func (_u *RiskUpdate) ClearRiskType() *RiskUpdate {
-	_u.mutation.ClearRiskType()
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *RiskUpdate) SetCategory(v string) *RiskUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *RiskUpdate) SetNillableCategory(v *string) *RiskUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *RiskUpdate) ClearCategory() *RiskUpdate {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
 // SetImpact sets the "impact" field.
 func (_u *RiskUpdate) SetImpact(v enums.RiskImpact) *RiskUpdate {
 	_u.mutation.SetImpact(v)
@@ -1247,18 +1207,6 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(risk.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.RiskType(); ok {
-		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
-	}
-	if _u.mutation.RiskTypeCleared() {
-		_spec.ClearField(risk.FieldRiskType, field.TypeString)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(risk.FieldCategory, field.TypeString, value)
-	}
-	if _u.mutation.CategoryCleared() {
-		_spec.ClearField(risk.FieldCategory, field.TypeString)
 	}
 	if value, ok := _u.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)
@@ -2404,46 +2352,6 @@ func (_u *RiskUpdateOne) ClearStatus() *RiskUpdateOne {
 	return _u
 }
 
-// SetRiskType sets the "risk_type" field.
-func (_u *RiskUpdateOne) SetRiskType(v string) *RiskUpdateOne {
-	_u.mutation.SetRiskType(v)
-	return _u
-}
-
-// SetNillableRiskType sets the "risk_type" field if the given value is not nil.
-func (_u *RiskUpdateOne) SetNillableRiskType(v *string) *RiskUpdateOne {
-	if v != nil {
-		_u.SetRiskType(*v)
-	}
-	return _u
-}
-
-// ClearRiskType clears the value of the "risk_type" field.
-func (_u *RiskUpdateOne) ClearRiskType() *RiskUpdateOne {
-	_u.mutation.ClearRiskType()
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *RiskUpdateOne) SetCategory(v string) *RiskUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *RiskUpdateOne) SetNillableCategory(v *string) *RiskUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *RiskUpdateOne) ClearCategory() *RiskUpdateOne {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
 // SetImpact sets the "impact" field.
 func (_u *RiskUpdateOne) SetImpact(v enums.RiskImpact) *RiskUpdateOne {
 	_u.mutation.SetImpact(v)
@@ -3430,18 +3338,6 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(risk.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.RiskType(); ok {
-		_spec.SetField(risk.FieldRiskType, field.TypeString, value)
-	}
-	if _u.mutation.RiskTypeCleared() {
-		_spec.ClearField(risk.FieldRiskType, field.TypeString)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(risk.FieldCategory, field.TypeString, value)
-	}
-	if _u.mutation.CategoryCleared() {
-		_spec.ClearField(risk.FieldCategory, field.TypeString)
 	}
 	if value, ok := _u.mutation.Impact(); ok {
 		_spec.SetField(risk.FieldImpact, field.TypeEnum, value)

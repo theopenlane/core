@@ -3225,20 +3225,6 @@ var (
 			}
 		},
 	}
-	// ControlOrderFieldControlType orders Control by control_type.
-	ControlOrderFieldControlType = &ControlOrderField{
-		Value: func(_m *Control) (ent.Value, error) {
-			return _m.ControlType, nil
-		},
-		column: control.FieldControlType,
-		toTerm: control.ByControlType,
-		toCursor: func(_m *Control) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ControlType,
-			}
-		},
-	}
 	// ControlOrderFieldCategory orders Control by category.
 	ControlOrderFieldCategory = &ControlOrderField{
 		Value: func(_m *Control) (ent.Value, error) {
@@ -3359,8 +3345,6 @@ func (f ControlOrderField) String() string {
 		str = "SOURCE"
 	case ControlOrderFieldReferenceFramework.column:
 		str = "REFERENCE_FRAMEWORK"
-	case ControlOrderFieldControlType.column:
-		str = "CONTROL_TYPE"
 	case ControlOrderFieldCategory.column:
 		str = "category"
 	case ControlOrderFieldSubcategory.column:
@@ -3401,8 +3385,6 @@ func (f *ControlOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ControlOrderFieldSource
 	case "REFERENCE_FRAMEWORK":
 		*f = *ControlOrderFieldReferenceFramework
-	case "CONTROL_TYPE":
-		*f = *ControlOrderFieldControlType
 	case "category":
 		*f = *ControlOrderFieldCategory
 	case "subcategory":
@@ -20511,20 +20493,6 @@ var (
 			}
 		},
 	}
-	// ProgramOrderFieldProgramType orders Program by program_type.
-	ProgramOrderFieldProgramType = &ProgramOrderField{
-		Value: func(_m *Program) (ent.Value, error) {
-			return _m.ProgramType, nil
-		},
-		column: program.FieldProgramType,
-		toTerm: program.ByProgramType,
-		toCursor: func(_m *Program) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ProgramType,
-			}
-		},
-	}
 	// ProgramOrderFieldFrameworkName orders Program by framework_name.
 	ProgramOrderFieldFrameworkName = &ProgramOrderField{
 		Value: func(_m *Program) (ent.Value, error) {
@@ -20581,8 +20549,6 @@ func (f ProgramOrderField) String() string {
 		str = "name"
 	case ProgramOrderFieldStatus.column:
 		str = "STATUS"
-	case ProgramOrderFieldProgramType.column:
-		str = "PROGRAM_TYPE"
 	case ProgramOrderFieldFrameworkName.column:
 		str = "framework"
 	case ProgramOrderFieldStartDate.column:
@@ -20613,8 +20579,6 @@ func (f *ProgramOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramOrderFieldName
 	case "STATUS":
 		*f = *ProgramOrderFieldStatus
-	case "PROGRAM_TYPE":
-		*f = *ProgramOrderFieldProgramType
 	case "framework":
 		*f = *ProgramOrderFieldFrameworkName
 	case "start_date":
@@ -22193,34 +22157,6 @@ var (
 			}
 		},
 	}
-	// RiskOrderFieldRiskType orders Risk by risk_type.
-	RiskOrderFieldRiskType = &RiskOrderField{
-		Value: func(_m *Risk) (ent.Value, error) {
-			return _m.RiskType, nil
-		},
-		column: risk.FieldRiskType,
-		toTerm: risk.ByRiskType,
-		toCursor: func(_m *Risk) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.RiskType,
-			}
-		},
-	}
-	// RiskOrderFieldCategory orders Risk by category.
-	RiskOrderFieldCategory = &RiskOrderField{
-		Value: func(_m *Risk) (ent.Value, error) {
-			return _m.Category, nil
-		},
-		column: risk.FieldCategory,
-		toTerm: risk.ByCategory,
-		toCursor: func(_m *Risk) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Category,
-			}
-		},
-	}
 	// RiskOrderFieldImpact orders Risk by impact.
 	RiskOrderFieldImpact = &RiskOrderField{
 		Value: func(_m *Risk) (ent.Value, error) {
@@ -22291,10 +22227,6 @@ func (f RiskOrderField) String() string {
 		str = "name"
 	case RiskOrderFieldStatus.column:
 		str = "STATUS"
-	case RiskOrderFieldRiskType.column:
-		str = "risk_type"
-	case RiskOrderFieldCategory.column:
-		str = "category"
 	case RiskOrderFieldImpact.column:
 		str = "IMPACT"
 	case RiskOrderFieldLikelihood.column:
@@ -22327,10 +22259,6 @@ func (f *RiskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *RiskOrderFieldName
 	case "STATUS":
 		*f = *RiskOrderFieldStatus
-	case "risk_type":
-		*f = *RiskOrderFieldRiskType
-	case "category":
-		*f = *RiskOrderFieldCategory
 	case "IMPACT":
 		*f = *RiskOrderFieldImpact
 	case "LIKELIHOOD":
@@ -24318,20 +24246,6 @@ var (
 			}
 		},
 	}
-	// SubcontrolOrderFieldControlType orders Subcontrol by control_type.
-	SubcontrolOrderFieldControlType = &SubcontrolOrderField{
-		Value: func(_m *Subcontrol) (ent.Value, error) {
-			return _m.ControlType, nil
-		},
-		column: subcontrol.FieldControlType,
-		toTerm: subcontrol.ByControlType,
-		toCursor: func(_m *Subcontrol) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.ControlType,
-			}
-		},
-	}
 	// SubcontrolOrderFieldCategory orders Subcontrol by category.
 	SubcontrolOrderFieldCategory = &SubcontrolOrderField{
 		Value: func(_m *Subcontrol) (ent.Value, error) {
@@ -24452,8 +24366,6 @@ func (f SubcontrolOrderField) String() string {
 		str = "SOURCE"
 	case SubcontrolOrderFieldReferenceFramework.column:
 		str = "REFERENCE_FRAMEWORK"
-	case SubcontrolOrderFieldControlType.column:
-		str = "CONTROL_TYPE"
 	case SubcontrolOrderFieldCategory.column:
 		str = "category"
 	case SubcontrolOrderFieldSubcategory.column:
@@ -24494,8 +24406,6 @@ func (f *SubcontrolOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *SubcontrolOrderFieldSource
 	case "REFERENCE_FRAMEWORK":
 		*f = *SubcontrolOrderFieldReferenceFramework
-	case "CONTROL_TYPE":
-		*f = *SubcontrolOrderFieldControlType
 	case "category":
 		*f = *SubcontrolOrderFieldCategory
 	case "subcategory":
@@ -26397,20 +26307,6 @@ var (
 			}
 		},
 	}
-	// TaskOrderFieldCategory orders Task by category.
-	TaskOrderFieldCategory = &TaskOrderField{
-		Value: func(_m *Task) (ent.Value, error) {
-			return _m.Category, nil
-		},
-		column: task.FieldCategory,
-		toTerm: task.ByCategory,
-		toCursor: func(_m *Task) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Category,
-			}
-		},
-	}
 	// TaskOrderFieldDue orders Task by due.
 	TaskOrderFieldDue = &TaskOrderField{
 		Value: func(_m *Task) (ent.Value, error) {
@@ -26479,8 +26375,6 @@ func (f TaskOrderField) String() string {
 		str = "title"
 	case TaskOrderFieldStatus.column:
 		str = "STATUS"
-	case TaskOrderFieldCategory.column:
-		str = "category"
 	case TaskOrderFieldDue.column:
 		str = "due"
 	case TaskOrderFieldCompleted.column:
@@ -26509,8 +26403,6 @@ func (f *TaskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskOrderFieldTitle
 	case "STATUS":
 		*f = *TaskOrderFieldStatus
-	case "category":
-		*f = *TaskOrderFieldCategory
 	case "due":
 		*f = *TaskOrderFieldDue
 	case "completed":

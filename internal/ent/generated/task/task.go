@@ -48,8 +48,6 @@ const (
 	FieldDetailsJSON = "details_json"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
 	// FieldDue holds the string denoting the due field in the database.
 	FieldDue = "due"
 	// FieldCompleted holds the string denoting the completed field in the database.
@@ -231,7 +229,6 @@ var Columns = []string{
 	FieldDetails,
 	FieldDetailsJSON,
 	FieldStatus,
-	FieldCategory,
 	FieldDue,
 	FieldCompleted,
 	FieldAssigneeID,
@@ -418,11 +415,6 @@ func ByDetails(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
 // ByDue orders the results by the due field.

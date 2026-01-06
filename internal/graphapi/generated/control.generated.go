@@ -88,8 +88,6 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
 				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "controlType":
-				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
 				return ec.fieldContext_Control_category(ctx, field)
 			case "categoryID":
@@ -290,8 +288,6 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
 				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "controlType":
-				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
 				return ec.fieldContext_Control_category(ctx, field)
 			case "categoryID":
@@ -492,8 +488,6 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
 				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "controlType":
-				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
 				return ec.fieldContext_Control_category(ctx, field)
 			case "categoryID":
@@ -694,8 +688,6 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_referenceFramework(ctx, field)
 			case "referenceFrameworkRevision":
 				return ec.fieldContext_Control_referenceFrameworkRevision(ctx, field)
-			case "controlType":
-				return ec.fieldContext_Control_controlType(ctx, field)
 			case "category":
 				return ec.fieldContext_Control_category(ctx, field)
 			case "categoryID":

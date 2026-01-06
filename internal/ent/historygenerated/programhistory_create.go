@@ -230,20 +230,6 @@ func (_c *ProgramHistoryCreate) SetNillableStatus(v *enums.ProgramStatus) *Progr
 	return _c
 }
 
-// SetProgramType sets the "program_type" field.
-func (_c *ProgramHistoryCreate) SetProgramType(v enums.ProgramType) *ProgramHistoryCreate {
-	_c.mutation.SetProgramType(v)
-	return _c
-}
-
-// SetNillableProgramType sets the "program_type" field if the given value is not nil.
-func (_c *ProgramHistoryCreate) SetNillableProgramType(v *enums.ProgramType) *ProgramHistoryCreate {
-	if v != nil {
-		_c.SetProgramType(*v)
-	}
-	return _c
-}
-
 // SetFrameworkName sets the "framework_name" field.
 func (_c *ProgramHistoryCreate) SetFrameworkName(v string) *ProgramHistoryCreate {
 	_c.mutation.SetFrameworkName(v)
@@ -464,10 +450,6 @@ func (_c *ProgramHistoryCreate) defaults() error {
 		v := programhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
-	if _, ok := _c.mutation.ProgramType(); !ok {
-		v := programhistory.DefaultProgramType
-		_c.mutation.SetProgramType(v)
-	}
 	if _, ok := _c.mutation.AuditorReady(); !ok {
 		v := programhistory.DefaultAuditorReady
 		_c.mutation.SetAuditorReady(v)
@@ -515,14 +497,6 @@ func (_c *ProgramHistoryCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := programhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProgramHistory.status": %w`, err)}
-		}
-	}
-	if _, ok := _c.mutation.ProgramType(); !ok {
-		return &ValidationError{Name: "program_type", err: errors.New(`historygenerated: missing required field "ProgramHistory.program_type"`)}
-	}
-	if v, ok := _c.mutation.ProgramType(); ok {
-		if err := programhistory.ProgramTypeValidator(v); err != nil {
-			return &ValidationError{Name: "program_type", err: fmt.Errorf(`historygenerated: validator failed for field "ProgramHistory.program_type": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.AuditorReady(); !ok {
@@ -637,10 +611,6 @@ func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(programhistory.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.ProgramType(); ok {
-		_spec.SetField(programhistory.FieldProgramType, field.TypeEnum, value)
-		_node.ProgramType = value
 	}
 	if value, ok := _c.mutation.FrameworkName(); ok {
 		_spec.SetField(programhistory.FieldFrameworkName, field.TypeString, value)

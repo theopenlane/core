@@ -1283,46 +1283,6 @@ func ReferenceFrameworkRevisionContainsFold(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldContainsFold(FieldReferenceFrameworkRevision, v))
 }
 
-// ControlTypeEQ applies the EQ predicate on the "control_type" field.
-func ControlTypeEQ(v enums.ControlType) predicate.Subcontrol {
-	vc := v
-	return predicate.Subcontrol(sql.FieldEQ(FieldControlType, vc))
-}
-
-// ControlTypeNEQ applies the NEQ predicate on the "control_type" field.
-func ControlTypeNEQ(v enums.ControlType) predicate.Subcontrol {
-	vc := v
-	return predicate.Subcontrol(sql.FieldNEQ(FieldControlType, vc))
-}
-
-// ControlTypeIn applies the In predicate on the "control_type" field.
-func ControlTypeIn(vs ...enums.ControlType) predicate.Subcontrol {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Subcontrol(sql.FieldIn(FieldControlType, v...))
-}
-
-// ControlTypeNotIn applies the NotIn predicate on the "control_type" field.
-func ControlTypeNotIn(vs ...enums.ControlType) predicate.Subcontrol {
-	v := make([]any, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Subcontrol(sql.FieldNotIn(FieldControlType, v...))
-}
-
-// ControlTypeIsNil applies the IsNil predicate on the "control_type" field.
-func ControlTypeIsNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldIsNull(FieldControlType))
-}
-
-// ControlTypeNotNil applies the NotNil predicate on the "control_type" field.
-func ControlTypeNotNil() predicate.Subcontrol {
-	return predicate.Subcontrol(sql.FieldNotNull(FieldControlType))
-}
-
 // CategoryEQ applies the EQ predicate on the "category" field.
 func CategoryEQ(v string) predicate.Subcontrol {
 	return predicate.Subcontrol(sql.FieldEQ(FieldCategory, v))

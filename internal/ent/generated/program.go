@@ -50,8 +50,6 @@ type Program struct {
 	Description string `json:"description,omitempty"`
 	// the status of the program
 	Status enums.ProgramStatus `json:"status,omitempty"`
-	// the type of the program
-	ProgramType enums.ProgramType `json:"program_type,omitempty"`
 	// the short name of the compliance standard the program is based on, only used for framework type programs
 	FrameworkName string `json:"framework_name,omitempty"`
 	// the start date of the period
@@ -345,7 +343,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case program.FieldAuditorReady, program.FieldAuditorWriteComments, program.FieldAuditorReadComments:
 			values[i] = new(sql.NullBool)
-		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldProgramType, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
+		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
 		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
 			values[i] = new(sql.NullTime)
@@ -465,12 +463,6 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.ProgramStatus(value.String)
-			}
-		case program.FieldProgramType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field program_type", values[i])
-			} else if value.Valid {
-				_m.ProgramType = enums.ProgramType(value.String)
 			}
 		case program.FieldFrameworkName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -744,9 +736,6 @@ func (_m *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("program_type=")
-	builder.WriteString(fmt.Sprintf("%v", _m.ProgramType))
 	builder.WriteString(", ")
 	builder.WriteString("framework_name=")
 	builder.WriteString(_m.FrameworkName)

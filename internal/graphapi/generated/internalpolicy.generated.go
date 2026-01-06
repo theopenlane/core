@@ -80,8 +80,6 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "policyType":
-				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
 			case "detailsJSON":
@@ -250,8 +248,6 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "policyType":
-				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
 			case "detailsJSON":
@@ -420,8 +416,6 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "policyType":
-				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
 			case "detailsJSON":
@@ -590,8 +584,6 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_name(ctx, field)
 			case "status":
 				return ec.fieldContext_InternalPolicy_status(ctx, field)
-			case "policyType":
-				return ec.fieldContext_InternalPolicy_policyType(ctx, field)
 			case "details":
 				return ec.fieldContext_InternalPolicy_details(ctx, field)
 			case "detailsJSON":

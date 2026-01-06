@@ -50,8 +50,6 @@ const (
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldProcedureType holds the string denoting the procedure_type field in the database.
-	FieldProcedureType = "procedure_type"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
 	// FieldDetailsJSON holds the string denoting the details_json field in the database.
@@ -118,7 +116,6 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldStatus,
-	FieldProcedureType,
 	FieldDetails,
 	FieldDetailsJSON,
 	FieldApprovalRequired,
@@ -308,11 +305,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByProcedureType orders the results by the procedure_type field.
-func ByProcedureType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProcedureType, opts...).ToFunc()
 }
 
 // ByDetails orders the results by the details field.

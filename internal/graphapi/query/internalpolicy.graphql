@@ -9,7 +9,6 @@ mutation CreateBulkCSVInternalPolicy($input: Upload!) {
       id
       name
       ownerID
-      policyType
       reviewDue
       reviewFrequency
       revision
@@ -40,7 +39,6 @@ mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
       id
       name
       ownerID
-      policyType
       reviewDue
       reviewFrequency
       revision
@@ -71,7 +69,6 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
       id
       name
       ownerID
-      policyType
       reviewDue
       reviewFrequency
       revision
@@ -130,7 +127,6 @@ mutation CreateUploadInternalPolicy($internalPolicyFile: Upload!, $ownerID: ID) 
       id
       name
       ownerID
-      policyType
       reviewDue
       reviewFrequency
       revision
@@ -206,7 +202,6 @@ query GetAllInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: C
         id
         name
         ownerID
-        policyType
         reviewDue
         reviewFrequency
         revision
@@ -270,7 +265,6 @@ query GetInternalPolicies($first: Int, $last: Int, $after: Cursor, $before: Curs
         id
         name
         ownerID
-        policyType
         reviewDue
         reviewFrequency
         revision
@@ -317,7 +311,6 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
     id
     name
     ownerID
-    policyType
     reviewDue
     reviewFrequency
     revision
@@ -363,7 +356,6 @@ mutation UpdateBulkInternalPolicy($ids: [ID!]!, $input: UpdateInternalPolicyInpu
       id
       name
       ownerID
-      policyType
       reviewDue
       reviewFrequency
       revision
@@ -395,7 +387,6 @@ mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateIntern
       id
       name
       ownerID
-      policyType
       reviewDue
       reviewFrequency
       revision

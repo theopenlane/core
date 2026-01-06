@@ -129,11 +129,6 @@ func Details(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDetails, v))
 }
 
-// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
-func Category(v string) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldCategory, v))
-}
-
 // Due applies equality check predicate on the "due" field. It's identical to DueEQ.
 func Due(v models.DateTime) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldDue, v))
@@ -1022,81 +1017,6 @@ func StatusNotIn(vs ...enums.TaskStatus) predicate.Task {
 		v[i] = vs[i]
 	}
 	return predicate.Task(sql.FieldNotIn(FieldStatus, v...))
-}
-
-// CategoryEQ applies the EQ predicate on the "category" field.
-func CategoryEQ(v string) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldCategory, v))
-}
-
-// CategoryNEQ applies the NEQ predicate on the "category" field.
-func CategoryNEQ(v string) predicate.Task {
-	return predicate.Task(sql.FieldNEQ(FieldCategory, v))
-}
-
-// CategoryIn applies the In predicate on the "category" field.
-func CategoryIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldIn(FieldCategory, vs...))
-}
-
-// CategoryNotIn applies the NotIn predicate on the "category" field.
-func CategoryNotIn(vs ...string) predicate.Task {
-	return predicate.Task(sql.FieldNotIn(FieldCategory, vs...))
-}
-
-// CategoryGT applies the GT predicate on the "category" field.
-func CategoryGT(v string) predicate.Task {
-	return predicate.Task(sql.FieldGT(FieldCategory, v))
-}
-
-// CategoryGTE applies the GTE predicate on the "category" field.
-func CategoryGTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldGTE(FieldCategory, v))
-}
-
-// CategoryLT applies the LT predicate on the "category" field.
-func CategoryLT(v string) predicate.Task {
-	return predicate.Task(sql.FieldLT(FieldCategory, v))
-}
-
-// CategoryLTE applies the LTE predicate on the "category" field.
-func CategoryLTE(v string) predicate.Task {
-	return predicate.Task(sql.FieldLTE(FieldCategory, v))
-}
-
-// CategoryContains applies the Contains predicate on the "category" field.
-func CategoryContains(v string) predicate.Task {
-	return predicate.Task(sql.FieldContains(FieldCategory, v))
-}
-
-// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
-func CategoryHasPrefix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasPrefix(FieldCategory, v))
-}
-
-// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
-func CategoryHasSuffix(v string) predicate.Task {
-	return predicate.Task(sql.FieldHasSuffix(FieldCategory, v))
-}
-
-// CategoryIsNil applies the IsNil predicate on the "category" field.
-func CategoryIsNil() predicate.Task {
-	return predicate.Task(sql.FieldIsNull(FieldCategory))
-}
-
-// CategoryNotNil applies the NotNil predicate on the "category" field.
-func CategoryNotNil() predicate.Task {
-	return predicate.Task(sql.FieldNotNull(FieldCategory))
-}
-
-// CategoryEqualFold applies the EqualFold predicate on the "category" field.
-func CategoryEqualFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldEqualFold(FieldCategory, v))
-}
-
-// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
-func CategoryContainsFold(v string) predicate.Task {
-	return predicate.Task(sql.FieldContainsFold(FieldCategory, v))
 }
 
 // DueEQ applies the EQ predicate on the "due" field.

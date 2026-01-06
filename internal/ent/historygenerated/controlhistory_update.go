@@ -342,26 +342,6 @@ func (_u *ControlHistoryUpdate) ClearReferenceFrameworkRevision() *ControlHistor
 	return _u
 }
 
-// SetControlType sets the "control_type" field.
-func (_u *ControlHistoryUpdate) SetControlType(v enums.ControlType) *ControlHistoryUpdate {
-	_u.mutation.SetControlType(v)
-	return _u
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_u *ControlHistoryUpdate) SetNillableControlType(v *enums.ControlType) *ControlHistoryUpdate {
-	if v != nil {
-		_u.SetControlType(*v)
-	}
-	return _u
-}
-
-// ClearControlType clears the value of the "control_type" field.
-func (_u *ControlHistoryUpdate) ClearControlType() *ControlHistoryUpdate {
-	_u.mutation.ClearControlType()
-	return _u
-}
-
 // SetCategory sets the "category" field.
 func (_u *ControlHistoryUpdate) SetCategory(v string) *ControlHistoryUpdate {
 	_u.mutation.SetCategory(v)
@@ -817,11 +797,6 @@ func (_u *ControlHistoryUpdate) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ControlType(); ok {
-		if err := controlhistory.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.control_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -962,12 +937,6 @@ func (_u *ControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.ReferenceFrameworkRevisionCleared() {
 		_spec.ClearField(controlhistory.FieldReferenceFrameworkRevision, field.TypeString)
-	}
-	if value, ok := _u.mutation.ControlType(); ok {
-		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)
-	}
-	if _u.mutation.ControlTypeCleared() {
-		_spec.ClearField(controlhistory.FieldControlType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(controlhistory.FieldCategory, field.TypeString, value)
@@ -1473,26 +1442,6 @@ func (_u *ControlHistoryUpdateOne) ClearReferenceFrameworkRevision() *ControlHis
 	return _u
 }
 
-// SetControlType sets the "control_type" field.
-func (_u *ControlHistoryUpdateOne) SetControlType(v enums.ControlType) *ControlHistoryUpdateOne {
-	_u.mutation.SetControlType(v)
-	return _u
-}
-
-// SetNillableControlType sets the "control_type" field if the given value is not nil.
-func (_u *ControlHistoryUpdateOne) SetNillableControlType(v *enums.ControlType) *ControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetControlType(*v)
-	}
-	return _u
-}
-
-// ClearControlType clears the value of the "control_type" field.
-func (_u *ControlHistoryUpdateOne) ClearControlType() *ControlHistoryUpdateOne {
-	_u.mutation.ClearControlType()
-	return _u
-}
-
 // SetCategory sets the "category" field.
 func (_u *ControlHistoryUpdateOne) SetCategory(v string) *ControlHistoryUpdateOne {
 	_u.mutation.SetCategory(v)
@@ -1961,11 +1910,6 @@ func (_u *ControlHistoryUpdateOne) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.source": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.ControlType(); ok {
-		if err := controlhistory.ControlTypeValidator(v); err != nil {
-			return &ValidationError{Name: "control_type", err: fmt.Errorf(`historygenerated: validator failed for field "ControlHistory.control_type": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -2123,12 +2067,6 @@ func (_u *ControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlH
 	}
 	if _u.mutation.ReferenceFrameworkRevisionCleared() {
 		_spec.ClearField(controlhistory.FieldReferenceFrameworkRevision, field.TypeString)
-	}
-	if value, ok := _u.mutation.ControlType(); ok {
-		_spec.SetField(controlhistory.FieldControlType, field.TypeEnum, value)
-	}
-	if _u.mutation.ControlTypeCleared() {
-		_spec.ClearField(controlhistory.FieldControlType, field.TypeEnum)
 	}
 	if value, ok := _u.mutation.Category(); ok {
 		_spec.SetField(controlhistory.FieldCategory, field.TypeString, value)

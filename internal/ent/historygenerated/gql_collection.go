@@ -152,11 +152,6 @@ func (_q *ActionPlanHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, actionplanhistory.FieldStatus)
 				fieldSeen[actionplanhistory.FieldStatus] = struct{}{}
 			}
-		case "actionPlanType":
-			if _, ok := fieldSeen[actionplanhistory.FieldActionPlanType]; !ok {
-				selectedFields = append(selectedFields, actionplanhistory.FieldActionPlanType)
-				fieldSeen[actionplanhistory.FieldActionPlanType] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[actionplanhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, actionplanhistory.FieldDetails)
@@ -1181,11 +1176,6 @@ func (_q *ControlHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[controlhistory.FieldReferenceFrameworkRevision]; !ok {
 				selectedFields = append(selectedFields, controlhistory.FieldReferenceFrameworkRevision)
 				fieldSeen[controlhistory.FieldReferenceFrameworkRevision] = struct{}{}
-			}
-		case "controlType":
-			if _, ok := fieldSeen[controlhistory.FieldControlType]; !ok {
-				selectedFields = append(selectedFields, controlhistory.FieldControlType)
-				fieldSeen[controlhistory.FieldControlType] = struct{}{}
 			}
 		case "category":
 			if _, ok := fieldSeen[controlhistory.FieldCategory]; !ok {
@@ -5111,11 +5101,6 @@ func (_q *InternalPolicyHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldStatus)
 				fieldSeen[internalpolicyhistory.FieldStatus] = struct{}{}
 			}
-		case "policyType":
-			if _, ok := fieldSeen[internalpolicyhistory.FieldPolicyType]; !ok {
-				selectedFields = append(selectedFields, internalpolicyhistory.FieldPolicyType)
-				fieldSeen[internalpolicyhistory.FieldPolicyType] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[internalpolicyhistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, internalpolicyhistory.FieldDetails)
@@ -6871,11 +6856,6 @@ func (_q *ProcedureHistoryQuery) collectField(ctx context.Context, oneNode bool,
 				selectedFields = append(selectedFields, procedurehistory.FieldStatus)
 				fieldSeen[procedurehistory.FieldStatus] = struct{}{}
 			}
-		case "procedureType":
-			if _, ok := fieldSeen[procedurehistory.FieldProcedureType]; !ok {
-				selectedFields = append(selectedFields, procedurehistory.FieldProcedureType)
-				fieldSeen[procedurehistory.FieldProcedureType] = struct{}{}
-			}
 		case "details":
 			if _, ok := fieldSeen[procedurehistory.FieldDetails]; !ok {
 				selectedFields = append(selectedFields, procedurehistory.FieldDetails)
@@ -7144,11 +7124,6 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[programhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldStatus)
 				fieldSeen[programhistory.FieldStatus] = struct{}{}
-			}
-		case "programType":
-			if _, ok := fieldSeen[programhistory.FieldProgramType]; !ok {
-				selectedFields = append(selectedFields, programhistory.FieldProgramType)
-				fieldSeen[programhistory.FieldProgramType] = struct{}{}
 			}
 		case "frameworkName":
 			if _, ok := fieldSeen[programhistory.FieldFrameworkName]; !ok {
@@ -7976,16 +7951,6 @@ func (_q *RiskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, riskhistory.FieldStatus)
 				fieldSeen[riskhistory.FieldStatus] = struct{}{}
 			}
-		case "riskType":
-			if _, ok := fieldSeen[riskhistory.FieldRiskType]; !ok {
-				selectedFields = append(selectedFields, riskhistory.FieldRiskType)
-				fieldSeen[riskhistory.FieldRiskType] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[riskhistory.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, riskhistory.FieldCategory)
-				fieldSeen[riskhistory.FieldCategory] = struct{}{}
-			}
 		case "impact":
 			if _, ok := fieldSeen[riskhistory.FieldImpact]; !ok {
 				selectedFields = append(selectedFields, riskhistory.FieldImpact)
@@ -8747,11 +8712,6 @@ func (_q *SubcontrolHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, subcontrolhistory.FieldReferenceFrameworkRevision)
 				fieldSeen[subcontrolhistory.FieldReferenceFrameworkRevision] = struct{}{}
 			}
-		case "controlType":
-			if _, ok := fieldSeen[subcontrolhistory.FieldControlType]; !ok {
-				selectedFields = append(selectedFields, subcontrolhistory.FieldControlType)
-				fieldSeen[subcontrolhistory.FieldControlType] = struct{}{}
-			}
 		case "category":
 			if _, ok := fieldSeen[subcontrolhistory.FieldCategory]; !ok {
 				selectedFields = append(selectedFields, subcontrolhistory.FieldCategory)
@@ -9194,11 +9154,6 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldStatus)
 				fieldSeen[taskhistory.FieldStatus] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[taskhistory.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldCategory)
-				fieldSeen[taskhistory.FieldCategory] = struct{}{}
 			}
 		case "due":
 			if _, ok := fieldSeen[taskhistory.FieldDue]; !ok {

@@ -13,7 +13,6 @@ query GetAllActionPlanHistories {
       node {
         actionPlanKindID
         actionPlanKindName
-        actionPlanType
         approvalRequired
         approverID
         blocked
@@ -74,7 +73,6 @@ query GetActionPlanHistories($first: Int, $last: Int, $where: ActionPlanHistoryW
       node {
         actionPlanKindID
         actionPlanKindName
-        actionPlanType
         approvalRequired
         approverID
         blocked

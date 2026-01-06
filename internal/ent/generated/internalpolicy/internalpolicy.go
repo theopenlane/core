@@ -48,8 +48,6 @@ const (
 	FieldName = "name"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldPolicyType holds the string denoting the policy_type field in the database.
-	FieldPolicyType = "policy_type"
 	// FieldDetails holds the string denoting the details field in the database.
 	FieldDetails = "details"
 	// FieldDetailsJSON holds the string denoting the details_json field in the database.
@@ -261,7 +259,6 @@ var Columns = []string{
 	FieldSystemInternalID,
 	FieldName,
 	FieldStatus,
-	FieldPolicyType,
 	FieldDetails,
 	FieldDetailsJSON,
 	FieldApprovalRequired,
@@ -486,11 +483,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByPolicyType orders the results by the policy_type field.
-func ByPolicyType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPolicyType, opts...).ToFunc()
 }
 
 // ByDetails orders the results by the details field.

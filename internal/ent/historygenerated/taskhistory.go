@@ -59,8 +59,6 @@ type TaskHistory struct {
 	DetailsJSON []interface{} `json:"details_json,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
-	// the category of the task, e.g. evidence upload, risk review, policy review, etc.
-	Category string `json:"category,omitempty"`
 	// the due date of the task
 	Due *models.DateTime `json:"due,omitempty"`
 	// the completion date of the task
@@ -93,7 +91,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case taskhistory.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldCategory, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -229,12 +227,6 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.TaskStatus(value.String)
-			}
-		case taskhistory.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
 			}
 		case taskhistory.FieldDue:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -378,9 +370,6 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	if v := _m.Due; v != nil {
 		builder.WriteString("due=")

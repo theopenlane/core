@@ -253,26 +253,6 @@ func (_u *InternalPolicyUpdate) ClearStatus() *InternalPolicyUpdate {
 	return _u
 }
 
-// SetPolicyType sets the "policy_type" field.
-func (_u *InternalPolicyUpdate) SetPolicyType(v string) *InternalPolicyUpdate {
-	_u.mutation.SetPolicyType(v)
-	return _u
-}
-
-// SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (_u *InternalPolicyUpdate) SetNillablePolicyType(v *string) *InternalPolicyUpdate {
-	if v != nil {
-		_u.SetPolicyType(*v)
-	}
-	return _u
-}
-
-// ClearPolicyType clears the value of the "policy_type" field.
-func (_u *InternalPolicyUpdate) ClearPolicyType() *InternalPolicyUpdate {
-	_u.mutation.ClearPolicyType()
-	return _u
-}
-
 // SetDetails sets the "details" field.
 func (_u *InternalPolicyUpdate) SetDetails(v string) *InternalPolicyUpdate {
 	_u.mutation.SetDetails(v)
@@ -1358,12 +1338,6 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.PolicyType(); ok {
-		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
-	}
-	if _u.mutation.PolicyTypeCleared() {
-		_spec.ClearField(internalpolicy.FieldPolicyType, field.TypeString)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)
@@ -2545,26 +2519,6 @@ func (_u *InternalPolicyUpdateOne) ClearStatus() *InternalPolicyUpdateOne {
 	return _u
 }
 
-// SetPolicyType sets the "policy_type" field.
-func (_u *InternalPolicyUpdateOne) SetPolicyType(v string) *InternalPolicyUpdateOne {
-	_u.mutation.SetPolicyType(v)
-	return _u
-}
-
-// SetNillablePolicyType sets the "policy_type" field if the given value is not nil.
-func (_u *InternalPolicyUpdateOne) SetNillablePolicyType(v *string) *InternalPolicyUpdateOne {
-	if v != nil {
-		_u.SetPolicyType(*v)
-	}
-	return _u
-}
-
-// ClearPolicyType clears the value of the "policy_type" field.
-func (_u *InternalPolicyUpdateOne) ClearPolicyType() *InternalPolicyUpdateOne {
-	_u.mutation.ClearPolicyType()
-	return _u
-}
-
 // SetDetails sets the "details" field.
 func (_u *InternalPolicyUpdateOne) SetDetails(v string) *InternalPolicyUpdateOne {
 	_u.mutation.SetDetails(v)
@@ -3680,12 +3634,6 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(internalpolicy.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.PolicyType(); ok {
-		_spec.SetField(internalpolicy.FieldPolicyType, field.TypeString, value)
-	}
-	if _u.mutation.PolicyTypeCleared() {
-		_spec.ClearField(internalpolicy.FieldPolicyType, field.TypeString)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(internalpolicy.FieldDetails, field.TypeString, value)

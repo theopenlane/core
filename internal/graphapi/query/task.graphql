@@ -15,7 +15,6 @@ mutation CreateBulkCSVTask($input: Upload!) {
       createdAt
       createdBy
       details
-      category
       comments {
         edges {
           node {
@@ -58,7 +57,6 @@ mutation CreateBulkTask($input: [CreateTaskInput!]) {
       createdAt
       createdBy
       details
-      category
       comments {
         edges {
           node {
@@ -101,7 +99,6 @@ mutation CreateTask($input: CreateTaskInput!) {
       createdAt
       createdBy
       details
-      category
       comments {
         edges {
           node {
@@ -169,7 +166,6 @@ query GetAllTasks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $ord
         createdAt
         createdBy
         details
-        category
         comments {
           edges {
             node {
@@ -226,7 +222,6 @@ query GetTaskByID($taskId: ID!) {
     createdAt
     createdBy
     details
-    category
     comments {
       edges {
         node {
@@ -293,7 +288,6 @@ query GetTasks($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where:
         createdAt
         createdBy
         details
-        category
         comments {
           edges {
             node {
@@ -347,7 +341,6 @@ mutation UpdateBulkTask($ids: [ID!]!, $input: UpdateTaskInput!) {
       createdAt
       createdBy
       details
-      category
       comments {
         edges {
           node {
@@ -391,7 +384,6 @@ mutation UpdateTask($updateTaskId: ID!, $input: UpdateTaskInput!) {
       createdAt
       createdBy
       details
-      category
       comments {
         edges {
           node {
@@ -438,7 +430,6 @@ mutation UpdateTaskComment($updateTaskCommentId: ID!, $input: UpdateNoteInput!, 
       createdAt
       createdBy
       details
-      category
       comments {
         edges {
           node {

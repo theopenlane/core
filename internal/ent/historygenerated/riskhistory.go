@@ -58,10 +58,6 @@ type RiskHistory struct {
 	Name string `json:"name,omitempty"`
 	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status enums.RiskStatus `json:"status,omitempty"`
-	// type of the risk, e.g. strategic, operational, financial, external, etc.
-	RiskType string `json:"risk_type,omitempty"`
-	// category of the risk, e.g. human resources, operations, IT, etc.
-	Category string `json:"category,omitempty"`
 	// impact of the risk -critical, high, medium, low
 	Impact enums.RiskImpact `json:"impact,omitempty"`
 	// likelihood of the risk occurring; unlikely, likely, highly likely
@@ -98,7 +94,7 @@ func (*RiskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case riskhistory.FieldScore:
 			values[i] = new(sql.NullInt64)
-		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldRiskType, riskhistory.FieldCategory, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID:
+		case riskhistory.FieldID, riskhistory.FieldRef, riskhistory.FieldCreatedBy, riskhistory.FieldUpdatedBy, riskhistory.FieldDeletedBy, riskhistory.FieldDisplayID, riskhistory.FieldOwnerID, riskhistory.FieldRiskKindName, riskhistory.FieldRiskKindID, riskhistory.FieldRiskCategoryName, riskhistory.FieldRiskCategoryID, riskhistory.FieldName, riskhistory.FieldStatus, riskhistory.FieldImpact, riskhistory.FieldLikelihood, riskhistory.FieldMitigation, riskhistory.FieldDetails, riskhistory.FieldBusinessCosts, riskhistory.FieldStakeholderID, riskhistory.FieldDelegateID:
 			values[i] = new(sql.NullString)
 		case riskhistory.FieldHistoryTime, riskhistory.FieldCreatedAt, riskhistory.FieldUpdatedAt, riskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -232,18 +228,6 @@ func (_m *RiskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.RiskStatus(value.String)
-			}
-		case riskhistory.FieldRiskType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field risk_type", values[i])
-			} else if value.Valid {
-				_m.RiskType = value.String
-			}
-		case riskhistory.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
 			}
 		case riskhistory.FieldImpact:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -406,12 +390,6 @@ func (_m *RiskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("risk_type=")
-	builder.WriteString(_m.RiskType)
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	builder.WriteString("impact=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Impact))

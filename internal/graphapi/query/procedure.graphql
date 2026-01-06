@@ -9,7 +9,6 @@ mutation CreateBulkCSVProcedure($input: Upload!) {
       id
       name
       ownerID
-      procedureType
       reviewDue
       reviewFrequency
       revision
@@ -40,7 +39,6 @@ mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
       id
       name
       ownerID
-      procedureType
       reviewDue
       reviewFrequency
       revision
@@ -71,7 +69,6 @@ mutation CreateProcedure($input: CreateProcedureInput!) {
       id
       name
       ownerID
-      procedureType
       reviewDue
       reviewFrequency
       revision
@@ -119,7 +116,6 @@ mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
       id
       name
       ownerID
-      procedureType
       reviewDue
       reviewFrequency
       revision
@@ -180,7 +176,6 @@ query GetAllProcedures {
         id
         name
         ownerID
-        procedureType
         reviewDue
         reviewFrequency
         revision
@@ -228,7 +223,6 @@ query GetProcedureByID($procedureId: ID!) {
     id
     name
     ownerID
-    procedureType
     reviewDue
     reviewFrequency
     revision
@@ -276,7 +270,6 @@ query GetProcedures($where: ProcedureWhereInput) {
         id
         name
         ownerID
-        procedureType
         reviewDue
         reviewFrequency
         revision
@@ -324,7 +317,6 @@ mutation UpdateBulkProcedure($ids: [ID!]!, $input: UpdateProcedureInput!) {
       id
       name
       ownerID
-      procedureType
       reviewDue
       reviewFrequency
       revision
@@ -356,7 +348,6 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
       id
       name
       ownerID
-      procedureType
       reviewDue
       reviewFrequency
       revision

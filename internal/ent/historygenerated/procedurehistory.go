@@ -52,8 +52,6 @@ type ProcedureHistory struct {
 	Name string `json:"name,omitempty"`
 	// status of the procedure, e.g. draft, published, archived, etc.
 	Status enums.DocumentStatus `json:"status,omitempty"`
-	// type of the procedure, e.g. compliance, operational, health and safety, etc.
-	ProcedureType string `json:"procedure_type,omitempty"`
 	// details of the procedure
 	Details string `json:"details,omitempty"`
 	// structured details of the procedure in JSON format
@@ -112,7 +110,7 @@ func (*ProcedureHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case procedurehistory.FieldApprovalRequired, procedurehistory.FieldSystemOwned, procedurehistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
-		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldProcedureType, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldURL, procedurehistory.FieldFileID, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID, procedurehistory.FieldProcedureKindName, procedurehistory.FieldProcedureKindID:
+		case procedurehistory.FieldID, procedurehistory.FieldRef, procedurehistory.FieldCreatedBy, procedurehistory.FieldUpdatedBy, procedurehistory.FieldDeletedBy, procedurehistory.FieldDisplayID, procedurehistory.FieldRevision, procedurehistory.FieldOwnerID, procedurehistory.FieldName, procedurehistory.FieldStatus, procedurehistory.FieldDetails, procedurehistory.FieldReviewFrequency, procedurehistory.FieldApproverID, procedurehistory.FieldDelegateID, procedurehistory.FieldSummary, procedurehistory.FieldURL, procedurehistory.FieldFileID, procedurehistory.FieldInternalNotes, procedurehistory.FieldSystemInternalID, procedurehistory.FieldProcedureKindName, procedurehistory.FieldProcedureKindID:
 			values[i] = new(sql.NullString)
 		case procedurehistory.FieldHistoryTime, procedurehistory.FieldCreatedAt, procedurehistory.FieldUpdatedAt, procedurehistory.FieldDeletedAt, procedurehistory.FieldReviewDue:
 			values[i] = new(sql.NullTime)
@@ -228,12 +226,6 @@ func (_m *ProcedureHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.DocumentStatus(value.String)
-			}
-		case procedurehistory.FieldProcedureType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field procedure_type", values[i])
-			} else if value.Valid {
-				_m.ProcedureType = value.String
 			}
 		case procedurehistory.FieldDetails:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -465,9 +457,6 @@ func (_m *ProcedureHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("procedure_type=")
-	builder.WriteString(_m.ProcedureType)
 	builder.WriteString(", ")
 	builder.WriteString("details=")
 	builder.WriteString(_m.Details)

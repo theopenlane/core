@@ -179,26 +179,6 @@ func (_u *ActionPlanHistoryUpdate) ClearStatus() *ActionPlanHistoryUpdate {
 	return _u
 }
 
-// SetActionPlanType sets the "action_plan_type" field.
-func (_u *ActionPlanHistoryUpdate) SetActionPlanType(v string) *ActionPlanHistoryUpdate {
-	_u.mutation.SetActionPlanType(v)
-	return _u
-}
-
-// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
-func (_u *ActionPlanHistoryUpdate) SetNillableActionPlanType(v *string) *ActionPlanHistoryUpdate {
-	if v != nil {
-		_u.SetActionPlanType(*v)
-	}
-	return _u
-}
-
-// ClearActionPlanType clears the value of the "action_plan_type" field.
-func (_u *ActionPlanHistoryUpdate) ClearActionPlanType() *ActionPlanHistoryUpdate {
-	_u.mutation.ClearActionPlanType()
-	return _u
-}
-
 // SetDetails sets the "details" field.
 func (_u *ActionPlanHistoryUpdate) SetDetails(v string) *ActionPlanHistoryUpdate {
 	_u.mutation.SetDetails(v)
@@ -935,12 +915,6 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ActionPlanType(); ok {
-		_spec.SetField(actionplanhistory.FieldActionPlanType, field.TypeString, value)
-	}
-	if _u.mutation.ActionPlanTypeCleared() {
-		_spec.ClearField(actionplanhistory.FieldActionPlanType, field.TypeString)
-	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
 	}
@@ -1330,26 +1304,6 @@ func (_u *ActionPlanHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus)
 // ClearStatus clears the value of the "status" field.
 func (_u *ActionPlanHistoryUpdateOne) ClearStatus() *ActionPlanHistoryUpdateOne {
 	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetActionPlanType sets the "action_plan_type" field.
-func (_u *ActionPlanHistoryUpdateOne) SetActionPlanType(v string) *ActionPlanHistoryUpdateOne {
-	_u.mutation.SetActionPlanType(v)
-	return _u
-}
-
-// SetNillableActionPlanType sets the "action_plan_type" field if the given value is not nil.
-func (_u *ActionPlanHistoryUpdateOne) SetNillableActionPlanType(v *string) *ActionPlanHistoryUpdateOne {
-	if v != nil {
-		_u.SetActionPlanType(*v)
-	}
-	return _u
-}
-
-// ClearActionPlanType clears the value of the "action_plan_type" field.
-func (_u *ActionPlanHistoryUpdateOne) ClearActionPlanType() *ActionPlanHistoryUpdateOne {
-	_u.mutation.ClearActionPlanType()
 	return _u
 }
 
@@ -2118,12 +2072,6 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(actionplanhistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ActionPlanType(); ok {
-		_spec.SetField(actionplanhistory.FieldActionPlanType, field.TypeString, value)
-	}
-	if _u.mutation.ActionPlanTypeCleared() {
-		_spec.ClearField(actionplanhistory.FieldActionPlanType, field.TypeString)
 	}
 	if value, ok := _u.mutation.Details(); ok {
 		_spec.SetField(actionplanhistory.FieldDetails, field.TypeString, value)
