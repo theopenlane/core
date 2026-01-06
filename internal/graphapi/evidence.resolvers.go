@@ -47,6 +47,56 @@ func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.C
 	}, nil
 }
 
+// CreateBulkEvidence is the resolver for the createBulkEvidence field.
+func (r *mutationResolver) CreateBulkEvidence(ctx context.Context, input []*generated.CreateEvidenceInput) (*model.EvidenceBulkCreatePayload, error) {
+	if len(input) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
+		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkCreateEvidence(ctx, input)
+}
+
+// CreateBulkCSVEvidence is the resolver for the createBulkCSVEvidence field.
+func (r *mutationResolver) CreateBulkCSVEvidence(ctx context.Context, input graphql.Upload) (*model.EvidenceBulkCreatePayload, error) {
+	data, err := common.UnmarshalBulkData[generated.CreateEvidenceInput](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "evidence"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	// set the organization in the auth context if its not done for us
+	// this will choose the first input OwnerID when using a personal access token
+	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	return r.bulkCreateEvidence(ctx, data)
+}
+
+// UpdateBulkEvidence is the resolver for the updateBulkEvidence field.
+func (r *mutationResolver) UpdateBulkEvidence(ctx context.Context, ids []string, input generated.UpdateEvidenceInput) (*model.EvidenceBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateEvidence(ctx, ids, input)
+}
+
 // UpdateEvidence is the resolver for the updateEvidence field.
 func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Evidence.Get(ctx, id)
@@ -87,6 +137,15 @@ func (r *mutationResolver) DeleteEvidence(ctx context.Context, id string) (*mode
 	return &model.EvidenceDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// DeleteBulkEvidence is the resolver for the deleteBulkEvidence field.
+func (r *mutationResolver) DeleteBulkEvidence(ctx context.Context, ids []string) (*model.EvidenceBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteEvidence(ctx, ids)
 }
 
 // Evidence is the resolver for the evidence field.
