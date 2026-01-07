@@ -162,8 +162,16 @@ func (s *Service) resolveUploadProvider(ctx context.Context, opts *storage.Uploa
 
 	// Get organization ID from auth context
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil || orgID == "" {
+	if err != nil {
 		return nil, ErrNoOrganizationID
+	}
+
+	if orgID == "" {
+		if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil && au.IsSystemAdmin {
+			orgID = "system-admin"
+		} else {
+			return nil, ErrNoOrganizationID
+		}
 	}
 
 	cacheKey := ProviderCacheKey{

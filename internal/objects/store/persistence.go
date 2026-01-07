@@ -168,12 +168,20 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 	}
 
 	if rows.Next() {
-		var ownerID string
+		var ownerID *string
 		if err := rows.Scan(&ownerID); err != nil {
 			return "", err
 		}
 
-		return ownerID, nil
+		if ownerID == nil {
+			if au.IsSystemAdmin {
+				return "", nil
+			}
+
+			return "", ErrMissingOrganizationID
+		}
+
+		return *ownerID, nil
 	}
 
 	return "", ErrMissingOrganizationID
