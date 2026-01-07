@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entintercept "github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -48,7 +49,13 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 		}
 
 		schemaFeatures, exists := features.FeatureOfType[q.Type()]
-		if !exists {
+		if !exists || len(schemaFeatures) == 0 {
+			logx.FromContext(ctx).Debug().Str("schema", q.Type()).Msg("no features associated with schema, skipping module check")
+			return nil
+		}
+
+		// return early if only the base module is required
+		if len(schemaFeatures) == 1 && schemaFeatures[0] == models.CatalogBaseModule {
 			return nil
 		}
 
@@ -62,7 +69,10 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				err = ErrFeatureNotEnabled
 			}
 
-			logx.FromContext(ctx).Info().Interface("required_features", schemaFeatures).Str("missing_module", module.String()).Msg("feature not enabled for organization")
+			logx.FromContext(ctx).Info().
+				Interface("required_features", schemaFeatures).
+				Str("missing_module", module.String()).
+				Msg("feature not enabled for organization")
 
 			// force an evaluation to false always
 			// so the data to be returned will always be empty or not found
