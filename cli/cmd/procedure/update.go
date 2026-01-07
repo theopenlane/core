@@ -61,7 +61,7 @@ func updateValidation() (id string, input graphclient.UpdateProcedureInput, err 
 
 	procedureType := cmd.Config.String("type")
 	if procedureType != "" {
-		input.ProcedureType = &procedureType
+		input.ProcedureKindName = &procedureType
 	}
 
 	revision := cmd.Config.String("revision")

@@ -73,7 +73,7 @@ func createValidation() (input graphclient.CreateProcedureInput, detailsFile *gr
 
 	procedureType := cmd.Config.String("type")
 	if procedureType != "" {
-		input.ProcedureType = &procedureType
+		input.ProcedureKindName = &procedureType
 	}
 
 	revision := cmd.Config.String("revision")

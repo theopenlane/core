@@ -114,7 +114,7 @@ func tableOutput(out []graphclient.Task) {
 			dueDate = i.Due.String()
 		}
 
-		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Details, *i.Category, assignee, assigner, i.Status, dueDate)
+		writer.AddRow(i.ID, i.DisplayID, i.Title, *i.Details, *i.TaskKindName, assignee, assigner, i.Status, dueDate)
 
 		if i.Comments != nil && len(i.Comments.Edges) > 0 {
 			writer.AddRow("----------------------------------------")
