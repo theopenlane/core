@@ -15,6 +15,13 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/samber/lo"
+	"github.com/theopenlane/emailtemplates"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -28,12 +35,6 @@ import (
 	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/emailtemplates"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/tokens"
-	"github.com/theopenlane/riverboat/pkg/jobs"
-	"github.com/theopenlane/utils/contextx"
-	"github.com/theopenlane/utils/rout"
 )
 
 //go:embed trustcenternda.json.tpl
@@ -328,7 +329,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		}
 	}
 
-	trustCenterURL.Path += "/sign-nda"
+	trustCenterURL.Path += "/access/sign-nda"
 
 	email, err := txnCtx.Emailer.NewTrustCenterNDARequestEmail(emailtemplates.Recipient{
 		Email: input.Email,

@@ -421,7 +421,7 @@ type template
     define can_edit: [user, service] or (editor but not blocked)
     define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [organization, user, trust_center]
+    define parent: [organization, user, trust_center, service]
     # allow a group to be assigned to add edit/view permissions for a set of users
     define editor: [group#member, organization#owner] or can_edit from parent
     define viewer: [group#member] or editor or can_view from parent
