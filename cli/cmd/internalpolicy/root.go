@@ -96,7 +96,7 @@ func tableOutput(out []graphclient.InternalPolicy) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Details", "Status", "Type", "Revision", "ReviewDue", "ReviewFrequency", "ApprovalRequired")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.PolicyType, *i.Revision, *i.ReviewDue, *i.ReviewFrequency, *i.ApprovalRequired)
+		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.InternalPolicyKindName, *i.Revision, *i.ReviewDue, *i.ReviewFrequency, *i.ApprovalRequired)
 	}
 
 	writer.Render()

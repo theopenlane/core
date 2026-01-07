@@ -68,7 +68,7 @@ func createValidation() (input graphclient.CreateInternalPolicyInput, detailsFil
 
 	policyType := cmd.Config.String("type")
 	if policyType != "" {
-		input.PolicyType = &policyType
+		input.InternalPolicyKindName = &policyType
 	}
 
 	revision := cmd.Config.String("revision")

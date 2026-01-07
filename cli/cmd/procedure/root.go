@@ -94,7 +94,7 @@ func tableOutput(out []graphclient.Procedure) {
 	// create a table writer
 	writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "DisplayID", "Name", "Details", "Status", "Type", "Revision", "ReviewDue", "ReviewFrequency", "ApprovalRequired")
 	for _, i := range out {
-		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.ProcedureType, *i.Revision, *i.ReviewDue, *i.ReviewFrequency, *i.ApprovalRequired)
+		writer.AddRow(i.ID, i.DisplayID, i.Name, *i.Details, *i.Status, *i.ProcedureKindName, *i.Revision, *i.ReviewDue, *i.ReviewFrequency, *i.ApprovalRequired)
 	}
 
 	writer.Render()
