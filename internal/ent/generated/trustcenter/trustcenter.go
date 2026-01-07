@@ -46,6 +46,8 @@ const (
 	FieldPirschIdentificationCode = "pirsch_identification_code"
 	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
 	FieldPreviewStatus = "preview_status"
+	// FieldSubprocessorURL holds the string denoting the subprocessor_url field in the database.
+	FieldSubprocessorURL = "subprocessor_url"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeCustomDomain holds the string denoting the custom_domain edge name in mutations.
@@ -175,6 +177,7 @@ var Columns = []string{
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
 	FieldPreviewStatus,
+	FieldSubprocessorURL,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "trust_centers"
@@ -219,6 +222,8 @@ var (
 	DefaultTags []string
 	// SlugValidator is a validator for the "slug" field. It is called by the builders before save.
 	SlugValidator func(string) error
+	// SubprocessorURLValidator is a validator for the "subprocessor_url" field. It is called by the builders before save.
+	SubprocessorURLValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -306,6 +311,11 @@ func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 // ByPreviewStatus orders the results by the preview_status field.
 func ByPreviewStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPreviewStatus, opts...).ToFunc()
+}
+
+// BySubprocessorURL orders the results by the subprocessor_url field.
+func BySubprocessorURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubprocessorURL, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

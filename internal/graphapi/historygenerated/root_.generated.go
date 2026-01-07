@@ -1978,6 +1978,7 @@ type ComplexityRoot struct {
 		PreviewStatus            func(childComplexity int) int
 		Ref                      func(childComplexity int) int
 		Slug                     func(childComplexity int) int
+		SubprocessorURL          func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
@@ -13070,6 +13071,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterHistory.Slug(childComplexity), true
+
+	case "TrustCenterHistory.subprocessorURL":
+		if e.complexity.TrustCenterHistory.SubprocessorURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterHistory.SubprocessorURL(childComplexity), true
 
 	case "TrustCenterHistory.tags":
 		if e.complexity.TrustCenterHistory.Tags == nil {
@@ -39749,6 +39757,10 @@ type TrustCenterHistory implements Node {
   preview status of the trust center
   """
   previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
 }
 """
 A connection to a list of items.
@@ -40055,6 +40067,24 @@ input TrustCenterHistoryWhereInput {
   previewStatusNotIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
   previewStatusIsNil: Boolean
   previewStatusNotNil: Boolean
+  """
+  subprocessor_url field predicates
+  """
+  subprocessorURL: String
+  subprocessorURLNEQ: String
+  subprocessorURLIn: [String!]
+  subprocessorURLNotIn: [String!]
+  subprocessorURLGT: String
+  subprocessorURLGTE: String
+  subprocessorURLLT: String
+  subprocessorURLLTE: String
+  subprocessorURLContains: String
+  subprocessorURLHasPrefix: String
+  subprocessorURLHasSuffix: String
+  subprocessorURLIsNil: Boolean
+  subprocessorURLNotNil: Boolean
+  subprocessorURLEqualFold: String
+  subprocessorURLContainsFold: String
 }
 type TrustCenterSettingHistory implements Node {
   id: ID!

@@ -2066,6 +2066,7 @@ var (
 		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
 		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
+		{Name: "subprocessor_url", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterHistoryTable holds the schema information for the "trust_center_history" table.
 	TrustCenterHistoryTable = &schema.Table{

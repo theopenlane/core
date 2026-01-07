@@ -246,6 +246,20 @@ func (_c *TrustCenterHistoryCreate) SetNillablePreviewStatus(v *enums.TrustCente
 	return _c
 }
 
+// SetSubprocessorURL sets the "subprocessor_url" field.
+func (_c *TrustCenterHistoryCreate) SetSubprocessorURL(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetSubprocessorURL(v)
+	return _c
+}
+
+// SetNillableSubprocessorURL sets the "subprocessor_url" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillableSubprocessorURL(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetSubprocessorURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterHistoryCreate) SetID(v string) *TrustCenterHistoryCreate {
 	_c.mutation.SetID(v)
@@ -457,6 +471,10 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	if value, ok := _c.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)
 		_node.PreviewStatus = value
+	}
+	if value, ok := _c.mutation.SubprocessorURL(); ok {
+		_spec.SetField(trustcenterhistory.FieldSubprocessorURL, field.TypeString, value)
+		_node.SubprocessorURL = value
 	}
 	return _node, _spec
 }

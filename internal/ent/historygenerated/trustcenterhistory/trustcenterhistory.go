@@ -54,6 +54,8 @@ const (
 	FieldPirschIdentificationCode = "pirsch_identification_code"
 	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
 	FieldPreviewStatus = "preview_status"
+	// FieldSubprocessorURL holds the string denoting the subprocessor_url field in the database.
+	FieldSubprocessorURL = "subprocessor_url"
 	// Table holds the table name of the trustcenterhistory in the database.
 	Table = "trust_center_history"
 )
@@ -78,6 +80,7 @@ var Columns = []string{
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
 	FieldPreviewStatus,
+	FieldSubprocessorURL,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -221,6 +224,11 @@ func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 // ByPreviewStatus orders the results by the preview_status field.
 func ByPreviewStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPreviewStatus, opts...).ToFunc()
+}
+
+// BySubprocessorURL orders the results by the subprocessor_url field.
+func BySubprocessorURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSubprocessorURL, opts...).ToFunc()
 }
 
 var (

@@ -68843,6 +68843,23 @@ type TrustCenterWhereInput struct {
 	PreviewStatusIsNil  bool                             `json:"previewStatusIsNil,omitempty"`
 	PreviewStatusNotNil bool                             `json:"previewStatusNotNil,omitempty"`
 
+	// "subprocessor_url" field predicates.
+	SubprocessorURL             *string  `json:"subprocessorURL,omitempty"`
+	SubprocessorURLNEQ          *string  `json:"subprocessorURLNEQ,omitempty"`
+	SubprocessorURLIn           []string `json:"subprocessorURLIn,omitempty"`
+	SubprocessorURLNotIn        []string `json:"subprocessorURLNotIn,omitempty"`
+	SubprocessorURLGT           *string  `json:"subprocessorURLGT,omitempty"`
+	SubprocessorURLGTE          *string  `json:"subprocessorURLGTE,omitempty"`
+	SubprocessorURLLT           *string  `json:"subprocessorURLLT,omitempty"`
+	SubprocessorURLLTE          *string  `json:"subprocessorURLLTE,omitempty"`
+	SubprocessorURLContains     *string  `json:"subprocessorURLContains,omitempty"`
+	SubprocessorURLHasPrefix    *string  `json:"subprocessorURLHasPrefix,omitempty"`
+	SubprocessorURLHasSuffix    *string  `json:"subprocessorURLHasSuffix,omitempty"`
+	SubprocessorURLIsNil        bool     `json:"subprocessorURLIsNil,omitempty"`
+	SubprocessorURLNotNil       bool     `json:"subprocessorURLNotNil,omitempty"`
+	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
+	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
+
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -69430,6 +69447,51 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if i.PreviewStatusNotNil {
 		predicates = append(predicates, trustcenter.PreviewStatusNotNil())
+	}
+	if i.SubprocessorURL != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLEQ(*i.SubprocessorURL))
+	}
+	if i.SubprocessorURLNEQ != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLNEQ(*i.SubprocessorURLNEQ))
+	}
+	if len(i.SubprocessorURLIn) > 0 {
+		predicates = append(predicates, trustcenter.SubprocessorURLIn(i.SubprocessorURLIn...))
+	}
+	if len(i.SubprocessorURLNotIn) > 0 {
+		predicates = append(predicates, trustcenter.SubprocessorURLNotIn(i.SubprocessorURLNotIn...))
+	}
+	if i.SubprocessorURLGT != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLGT(*i.SubprocessorURLGT))
+	}
+	if i.SubprocessorURLGTE != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLGTE(*i.SubprocessorURLGTE))
+	}
+	if i.SubprocessorURLLT != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLLT(*i.SubprocessorURLLT))
+	}
+	if i.SubprocessorURLLTE != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLLTE(*i.SubprocessorURLLTE))
+	}
+	if i.SubprocessorURLContains != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLContains(*i.SubprocessorURLContains))
+	}
+	if i.SubprocessorURLHasPrefix != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLHasPrefix(*i.SubprocessorURLHasPrefix))
+	}
+	if i.SubprocessorURLHasSuffix != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLHasSuffix(*i.SubprocessorURLHasSuffix))
+	}
+	if i.SubprocessorURLIsNil {
+		predicates = append(predicates, trustcenter.SubprocessorURLIsNil())
+	}
+	if i.SubprocessorURLNotNil {
+		predicates = append(predicates, trustcenter.SubprocessorURLNotNil())
+	}
+	if i.SubprocessorURLEqualFold != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLEqualFold(*i.SubprocessorURLEqualFold))
+	}
+	if i.SubprocessorURLContainsFold != nil {
+		predicates = append(predicates, trustcenter.SubprocessorURLContainsFold(*i.SubprocessorURLContainsFold))
 	}
 
 	if i.HasOwner != nil {

@@ -5672,20 +5672,22 @@ type CreateTrustCenterInput struct {
 	// Pirsch ID code
 	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
 	// preview status of the trust center
-	PreviewStatus              *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
-	OwnerID                    *string                         `json:"ownerID,omitempty"`
-	CustomDomainID             *string                         `json:"customDomainID,omitempty"`
-	PreviewDomainID            *string                         `json:"previewDomainID,omitempty"`
-	SettingID                  *string                         `json:"settingID,omitempty"`
-	PreviewSettingID           *string                         `json:"previewSettingID,omitempty"`
-	WatermarkConfigID          *string                         `json:"watermarkConfigID,omitempty"`
-	TrustCenterSubprocessorIDs []string                        `json:"trustCenterSubprocessorIDs,omitempty"`
-	TrustCenterDocIDs          []string                        `json:"trustCenterDocIDs,omitempty"`
-	TrustCenterComplianceIDs   []string                        `json:"trustCenterComplianceIDs,omitempty"`
-	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
-	PostIDs                    []string                        `json:"postIDs,omitempty"`
-	TrustcenterEntityIDs       []string                        `json:"trustcenterEntityIDs,omitempty"`
-	CreateTrustCenterSetting   *CreateTrustCenterSettingInput  `json:"createTrustCenterSetting,omitempty"`
+	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
+	// External URL for the trust center subprocessors
+	SubprocessorURL            *string                        `json:"subprocessorURL,omitempty"`
+	OwnerID                    *string                        `json:"ownerID,omitempty"`
+	CustomDomainID             *string                        `json:"customDomainID,omitempty"`
+	PreviewDomainID            *string                        `json:"previewDomainID,omitempty"`
+	SettingID                  *string                        `json:"settingID,omitempty"`
+	PreviewSettingID           *string                        `json:"previewSettingID,omitempty"`
+	WatermarkConfigID          *string                        `json:"watermarkConfigID,omitempty"`
+	TrustCenterSubprocessorIDs []string                       `json:"trustCenterSubprocessorIDs,omitempty"`
+	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
+	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
+	TemplateIDs                []string                       `json:"templateIDs,omitempty"`
+	PostIDs                    []string                       `json:"postIDs,omitempty"`
+	TrustcenterEntityIDs       []string                       `json:"trustcenterEntityIDs,omitempty"`
+	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
 }
 
 type CreateTrustCenterNDAInput struct {
@@ -24325,7 +24327,9 @@ type TrustCenter struct {
 	// Pirsch ID code
 	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
 	// preview status of the trust center
-	PreviewStatus            *enums.TrustCenterPreviewStatus    `json:"previewStatus,omitempty"`
+	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
+	// External URL for the trust center subprocessors
+	SubprocessorURL          *string                            `json:"subprocessorURL,omitempty"`
 	Owner                    *Organization                      `json:"owner,omitempty"`
 	CustomDomain             *CustomDomain                      `json:"customDomain,omitempty"`
 	PreviewDomain            *CustomDomain                      `json:"previewDomain,omitempty"`
@@ -25971,6 +25975,22 @@ type TrustCenterWhereInput struct {
 	PreviewStatusNotIn  []enums.TrustCenterPreviewStatus `json:"previewStatusNotIn,omitempty"`
 	PreviewStatusIsNil  *bool                            `json:"previewStatusIsNil,omitempty"`
 	PreviewStatusNotNil *bool                            `json:"previewStatusNotNil,omitempty"`
+	// subprocessor_url field predicates
+	SubprocessorURL             *string  `json:"subprocessorURL,omitempty"`
+	SubprocessorURLNeq          *string  `json:"subprocessorURLNEQ,omitempty"`
+	SubprocessorURLIn           []string `json:"subprocessorURLIn,omitempty"`
+	SubprocessorURLNotIn        []string `json:"subprocessorURLNotIn,omitempty"`
+	SubprocessorURLGt           *string  `json:"subprocessorURLGT,omitempty"`
+	SubprocessorURLGte          *string  `json:"subprocessorURLGTE,omitempty"`
+	SubprocessorURLLt           *string  `json:"subprocessorURLLT,omitempty"`
+	SubprocessorURLLte          *string  `json:"subprocessorURLLTE,omitempty"`
+	SubprocessorURLContains     *string  `json:"subprocessorURLContains,omitempty"`
+	SubprocessorURLHasPrefix    *string  `json:"subprocessorURLHasPrefix,omitempty"`
+	SubprocessorURLHasSuffix    *string  `json:"subprocessorURLHasSuffix,omitempty"`
+	SubprocessorURLIsNil        *bool    `json:"subprocessorURLIsNil,omitempty"`
+	SubprocessorURLNotNil       *bool    `json:"subprocessorURLNotNil,omitempty"`
+	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
+	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -29847,38 +29867,41 @@ type UpdateTrustCenterInput struct {
 	PirschIdentificationCode      *string `json:"pirschIdentificationCode,omitempty"`
 	ClearPirschIdentificationCode *bool   `json:"clearPirschIdentificationCode,omitempty"`
 	// preview status of the trust center
-	PreviewStatus                    *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
-	ClearPreviewStatus               *bool                           `json:"clearPreviewStatus,omitempty"`
-	OwnerID                          *string                         `json:"ownerID,omitempty"`
-	ClearOwner                       *bool                           `json:"clearOwner,omitempty"`
-	CustomDomainID                   *string                         `json:"customDomainID,omitempty"`
-	ClearCustomDomain                *bool                           `json:"clearCustomDomain,omitempty"`
-	PreviewDomainID                  *string                         `json:"previewDomainID,omitempty"`
-	ClearPreviewDomain               *bool                           `json:"clearPreviewDomain,omitempty"`
-	SettingID                        *string                         `json:"settingID,omitempty"`
-	ClearSetting                     *bool                           `json:"clearSetting,omitempty"`
-	PreviewSettingID                 *string                         `json:"previewSettingID,omitempty"`
-	ClearPreviewSetting              *bool                           `json:"clearPreviewSetting,omitempty"`
-	WatermarkConfigID                *string                         `json:"watermarkConfigID,omitempty"`
-	ClearWatermarkConfig             *bool                           `json:"clearWatermarkConfig,omitempty"`
-	AddTrustCenterSubprocessorIDs    []string                        `json:"addTrustCenterSubprocessorIDs,omitempty"`
-	RemoveTrustCenterSubprocessorIDs []string                        `json:"removeTrustCenterSubprocessorIDs,omitempty"`
-	ClearTrustCenterSubprocessors    *bool                           `json:"clearTrustCenterSubprocessors,omitempty"`
-	AddTrustCenterDocIDs             []string                        `json:"addTrustCenterDocIDs,omitempty"`
-	RemoveTrustCenterDocIDs          []string                        `json:"removeTrustCenterDocIDs,omitempty"`
-	ClearTrustCenterDocs             *bool                           `json:"clearTrustCenterDocs,omitempty"`
-	AddTrustCenterComplianceIDs      []string                        `json:"addTrustCenterComplianceIDs,omitempty"`
-	RemoveTrustCenterComplianceIDs   []string                        `json:"removeTrustCenterComplianceIDs,omitempty"`
-	ClearTrustCenterCompliances      *bool                           `json:"clearTrustCenterCompliances,omitempty"`
-	AddTemplateIDs                   []string                        `json:"addTemplateIDs,omitempty"`
-	RemoveTemplateIDs                []string                        `json:"removeTemplateIDs,omitempty"`
-	ClearTemplates                   *bool                           `json:"clearTemplates,omitempty"`
-	AddPostIDs                       []string                        `json:"addPostIDs,omitempty"`
-	RemovePostIDs                    []string                        `json:"removePostIDs,omitempty"`
-	ClearPosts                       *bool                           `json:"clearPosts,omitempty"`
-	AddTrustcenterEntityIDs          []string                        `json:"addTrustcenterEntityIDs,omitempty"`
-	RemoveTrustcenterEntityIDs       []string                        `json:"removeTrustcenterEntityIDs,omitempty"`
-	ClearTrustcenterEntities         *bool                           `json:"clearTrustcenterEntities,omitempty"`
+	PreviewStatus      *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
+	ClearPreviewStatus *bool                           `json:"clearPreviewStatus,omitempty"`
+	// External URL for the trust center subprocessors
+	SubprocessorURL                  *string  `json:"subprocessorURL,omitempty"`
+	ClearSubprocessorURL             *bool    `json:"clearSubprocessorURL,omitempty"`
+	OwnerID                          *string  `json:"ownerID,omitempty"`
+	ClearOwner                       *bool    `json:"clearOwner,omitempty"`
+	CustomDomainID                   *string  `json:"customDomainID,omitempty"`
+	ClearCustomDomain                *bool    `json:"clearCustomDomain,omitempty"`
+	PreviewDomainID                  *string  `json:"previewDomainID,omitempty"`
+	ClearPreviewDomain               *bool    `json:"clearPreviewDomain,omitempty"`
+	SettingID                        *string  `json:"settingID,omitempty"`
+	ClearSetting                     *bool    `json:"clearSetting,omitempty"`
+	PreviewSettingID                 *string  `json:"previewSettingID,omitempty"`
+	ClearPreviewSetting              *bool    `json:"clearPreviewSetting,omitempty"`
+	WatermarkConfigID                *string  `json:"watermarkConfigID,omitempty"`
+	ClearWatermarkConfig             *bool    `json:"clearWatermarkConfig,omitempty"`
+	AddTrustCenterSubprocessorIDs    []string `json:"addTrustCenterSubprocessorIDs,omitempty"`
+	RemoveTrustCenterSubprocessorIDs []string `json:"removeTrustCenterSubprocessorIDs,omitempty"`
+	ClearTrustCenterSubprocessors    *bool    `json:"clearTrustCenterSubprocessors,omitempty"`
+	AddTrustCenterDocIDs             []string `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs          []string `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs             *bool    `json:"clearTrustCenterDocs,omitempty"`
+	AddTrustCenterComplianceIDs      []string `json:"addTrustCenterComplianceIDs,omitempty"`
+	RemoveTrustCenterComplianceIDs   []string `json:"removeTrustCenterComplianceIDs,omitempty"`
+	ClearTrustCenterCompliances      *bool    `json:"clearTrustCenterCompliances,omitempty"`
+	AddTemplateIDs                   []string `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs                []string `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates                   *bool    `json:"clearTemplates,omitempty"`
+	AddPostIDs                       []string `json:"addPostIDs,omitempty"`
+	RemovePostIDs                    []string `json:"removePostIDs,omitempty"`
+	ClearPosts                       *bool    `json:"clearPosts,omitempty"`
+	AddTrustcenterEntityIDs          []string `json:"addTrustcenterEntityIDs,omitempty"`
+	RemoveTrustcenterEntityIDs       []string `json:"removeTrustcenterEntityIDs,omitempty"`
+	ClearTrustcenterEntities         *bool    `json:"clearTrustcenterEntities,omitempty"`
 	// adds a post for the trust center feed
 	AddPost *CreateNoteInput `json:"addPost,omitempty"`
 	// delete a post from the trust center feed

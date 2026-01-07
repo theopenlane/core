@@ -55102,6 +55102,11 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, trustcenter.FieldPreviewStatus)
 				fieldSeen[trustcenter.FieldPreviewStatus] = struct{}{}
 			}
+		case "subprocessorURL":
+			if _, ok := fieldSeen[trustcenter.FieldSubprocessorURL]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldSubprocessorURL)
+				fieldSeen[trustcenter.FieldSubprocessorURL] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

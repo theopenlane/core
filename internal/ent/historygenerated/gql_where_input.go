@@ -52379,6 +52379,23 @@ type TrustCenterHistoryWhereInput struct {
 	PreviewStatusNotIn  []enums.TrustCenterPreviewStatus `json:"previewStatusNotIn,omitempty"`
 	PreviewStatusIsNil  bool                             `json:"previewStatusIsNil,omitempty"`
 	PreviewStatusNotNil bool                             `json:"previewStatusNotNil,omitempty"`
+
+	// "subprocessor_url" field predicates.
+	SubprocessorURL             *string  `json:"subprocessorURL,omitempty"`
+	SubprocessorURLNEQ          *string  `json:"subprocessorURLNEQ,omitempty"`
+	SubprocessorURLIn           []string `json:"subprocessorURLIn,omitempty"`
+	SubprocessorURLNotIn        []string `json:"subprocessorURLNotIn,omitempty"`
+	SubprocessorURLGT           *string  `json:"subprocessorURLGT,omitempty"`
+	SubprocessorURLGTE          *string  `json:"subprocessorURLGTE,omitempty"`
+	SubprocessorURLLT           *string  `json:"subprocessorURLLT,omitempty"`
+	SubprocessorURLLTE          *string  `json:"subprocessorURLLTE,omitempty"`
+	SubprocessorURLContains     *string  `json:"subprocessorURLContains,omitempty"`
+	SubprocessorURLHasPrefix    *string  `json:"subprocessorURLHasPrefix,omitempty"`
+	SubprocessorURLHasSuffix    *string  `json:"subprocessorURLHasSuffix,omitempty"`
+	SubprocessorURLIsNil        bool     `json:"subprocessorURLIsNil,omitempty"`
+	SubprocessorURLNotNil       bool     `json:"subprocessorURLNotNil,omitempty"`
+	SubprocessorURLEqualFold    *string  `json:"subprocessorURLEqualFold,omitempty"`
+	SubprocessorURLContainsFold *string  `json:"subprocessorURLContainsFold,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -53000,6 +53017,51 @@ func (i *TrustCenterHistoryWhereInput) P() (predicate.TrustCenterHistory, error)
 	}
 	if i.PreviewStatusNotNil {
 		predicates = append(predicates, trustcenterhistory.PreviewStatusNotNil())
+	}
+	if i.SubprocessorURL != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLEQ(*i.SubprocessorURL))
+	}
+	if i.SubprocessorURLNEQ != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLNEQ(*i.SubprocessorURLNEQ))
+	}
+	if len(i.SubprocessorURLIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLIn(i.SubprocessorURLIn...))
+	}
+	if len(i.SubprocessorURLNotIn) > 0 {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLNotIn(i.SubprocessorURLNotIn...))
+	}
+	if i.SubprocessorURLGT != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLGT(*i.SubprocessorURLGT))
+	}
+	if i.SubprocessorURLGTE != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLGTE(*i.SubprocessorURLGTE))
+	}
+	if i.SubprocessorURLLT != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLLT(*i.SubprocessorURLLT))
+	}
+	if i.SubprocessorURLLTE != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLLTE(*i.SubprocessorURLLTE))
+	}
+	if i.SubprocessorURLContains != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLContains(*i.SubprocessorURLContains))
+	}
+	if i.SubprocessorURLHasPrefix != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLHasPrefix(*i.SubprocessorURLHasPrefix))
+	}
+	if i.SubprocessorURLHasSuffix != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLHasSuffix(*i.SubprocessorURLHasSuffix))
+	}
+	if i.SubprocessorURLIsNil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLIsNil())
+	}
+	if i.SubprocessorURLNotNil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLNotNil())
+	}
+	if i.SubprocessorURLEqualFold != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLEqualFold(*i.SubprocessorURLEqualFold))
+	}
+	if i.SubprocessorURLContainsFold != nil {
+		predicates = append(predicates, trustcenterhistory.SubprocessorURLContainsFold(*i.SubprocessorURLContainsFold))
 	}
 
 	switch len(predicates) {

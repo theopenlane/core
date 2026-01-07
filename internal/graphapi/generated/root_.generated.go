@@ -4704,6 +4704,7 @@ type ComplexityRoot struct {
 		PreviewStatus            func(childComplexity int) int
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
+		SubprocessorURL          func(childComplexity int) int
 		Tags                     func(childComplexity int) int
 		Templates                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
 		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
@@ -32943,6 +32944,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.Slug(childComplexity), true
 
+	case "TrustCenter.subprocessorURL":
+		if e.complexity.TrustCenter.SubprocessorURL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.SubprocessorURL(childComplexity), true
+
 	case "TrustCenter.tags":
 		if e.complexity.TrustCenter.Tags == nil {
 			break
@@ -49437,6 +49445,10 @@ input CreateTrustCenterInput {
   preview status of the trust center
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
   ownerID: ID
   customDomainID: ID
   previewDomainID: ID
@@ -86443,6 +86455,10 @@ type TrustCenter implements Node {
   preview status of the trust center
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
   owner: Organization
   customDomain: CustomDomain
   previewDomain: CustomDomain
@@ -88574,6 +88590,24 @@ input TrustCenterWhereInput {
   previewStatusNotIn: [TrustCenterTrustCenterPreviewStatus!]
   previewStatusIsNil: Boolean
   previewStatusNotNil: Boolean
+  """
+  subprocessor_url field predicates
+  """
+  subprocessorURL: String
+  subprocessorURLNEQ: String
+  subprocessorURLIn: [String!]
+  subprocessorURLNotIn: [String!]
+  subprocessorURLGT: String
+  subprocessorURLGTE: String
+  subprocessorURLLT: String
+  subprocessorURLLTE: String
+  subprocessorURLContains: String
+  subprocessorURLHasPrefix: String
+  subprocessorURLHasSuffix: String
+  subprocessorURLIsNil: Boolean
+  subprocessorURLNotNil: Boolean
+  subprocessorURLEqualFold: String
+  subprocessorURLContainsFold: String
   """
   owner edge predicates
   """
@@ -93662,6 +93696,11 @@ input UpdateTrustCenterInput {
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
   clearPreviewStatus: Boolean
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
+  clearSubprocessorURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   customDomainID: ID

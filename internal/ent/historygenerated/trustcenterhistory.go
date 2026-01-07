@@ -56,7 +56,9 @@ type TrustCenterHistory struct {
 	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
 	// preview status of the trust center
 	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
-	selectValues  sql.SelectValues
+	// External URL for the trust center subprocessors
+	SubprocessorURL string `json:"subprocessor_url,omitempty"`
+	selectValues    sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -68,7 +70,7 @@ func (*TrustCenterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode, trustcenterhistory.FieldPreviewStatus:
+		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode, trustcenterhistory.FieldPreviewStatus, trustcenterhistory.FieldSubprocessorURL:
 			values[i] = new(sql.NullString)
 		case trustcenterhistory.FieldHistoryTime, trustcenterhistory.FieldCreatedAt, trustcenterhistory.FieldUpdatedAt, trustcenterhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -198,6 +200,12 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.PreviewStatus = enums.TrustCenterPreviewStatus(value.String)
 			}
+		case trustcenterhistory.FieldSubprocessorURL:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field subprocessor_url", values[i])
+			} else if value.Valid {
+				_m.SubprocessorURL = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -286,6 +294,9 @@ func (_m *TrustCenterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("preview_status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.PreviewStatus))
+	builder.WriteString(", ")
+	builder.WriteString("subprocessor_url=")
+	builder.WriteString(_m.SubprocessorURL)
 	builder.WriteByte(')')
 	return builder.String()
 }
