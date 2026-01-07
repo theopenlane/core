@@ -218,6 +218,20 @@ func (_c *TrustCenterCreate) SetNillablePreviewStatus(v *enums.TrustCenterPrevie
 	return _c
 }
 
+// SetSubprocessorURL sets the "subprocessor_url" field.
+func (_c *TrustCenterCreate) SetSubprocessorURL(v string) *TrustCenterCreate {
+	_c.mutation.SetSubprocessorURL(v)
+	return _c
+}
+
+// SetNillableSubprocessorURL sets the "subprocessor_url" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillableSubprocessorURL(v *string) *TrustCenterCreate {
+	if v != nil {
+		_c.SetSubprocessorURL(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterCreate) SetID(v string) *TrustCenterCreate {
 	_c.mutation.SetID(v)
@@ -475,6 +489,11 @@ func (_c *TrustCenterCreate) check() error {
 			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.SubprocessorURL(); ok {
+		if err := trustcenter.SubprocessorURLValidator(v); err != nil {
+			return &ValidationError{Name: "subprocessor_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.subprocessor_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -554,6 +573,10 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PreviewStatus(); ok {
 		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
 		_node.PreviewStatus = value
+	}
+	if value, ok := _c.mutation.SubprocessorURL(); ok {
+		_spec.SetField(trustcenter.FieldSubprocessorURL, field.TypeString, value)
+		_node.SubprocessorURL = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -15451,6 +15451,10 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetPreviewStatus(previewStatus)
 	}
 
+	if subprocessorURL, exists := m.SubprocessorURL(); exists {
+		create = create.SetSubprocessorURL(subprocessorURL)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15566,6 +15570,12 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPreviewStatus(trustcenter.PreviewStatus)
 		}
 
+		if subprocessorURL, exists := m.SubprocessorURL(); exists {
+			create = create.SetSubprocessorURL(subprocessorURL)
+		} else {
+			create = create.SetSubprocessorURL(trustcenter.SubprocessorURL)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15615,6 +15625,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetPirschDomainID(trustcenter.PirschDomainID).
 			SetPirschIdentificationCode(trustcenter.PirschIdentificationCode).
 			SetPreviewStatus(trustcenter.PreviewStatus).
+			SetSubprocessorURL(trustcenter.SubprocessorURL).
 			Save(ctx)
 		if err != nil {
 			return err

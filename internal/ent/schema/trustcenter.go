@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
@@ -79,6 +80,10 @@ func (TrustCenter) Fields() []ent.Field {
 			Default(enums.TrustCenterPreviewStatusNone.String()).
 			Optional().
 			Comment("preview status of the trust center"),
+		field.String("subprocessor_url").
+			Comment("External URL for the trust center subprocessors").
+			Validate(validator.ValidateURL()).
+			Optional(),
 	}
 }
 

@@ -138,6 +138,11 @@ func PirschIdentificationCode(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEQ(FieldPirschIdentificationCode, v))
 }
 
+// SubprocessorURL applies equality check predicate on the "subprocessor_url" field. It's identical to SubprocessorURLEQ.
+func SubprocessorURL(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEQ(FieldSubprocessorURL, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1146,6 +1151,81 @@ func PreviewStatusIsNil() predicate.TrustCenterHistory {
 // PreviewStatusNotNil applies the NotNil predicate on the "preview_status" field.
 func PreviewStatusNotNil() predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldNotNull(FieldPreviewStatus))
+}
+
+// SubprocessorURLEQ applies the EQ predicate on the "subprocessor_url" field.
+func SubprocessorURLEQ(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEQ(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLNEQ applies the NEQ predicate on the "subprocessor_url" field.
+func SubprocessorURLNEQ(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNEQ(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLIn applies the In predicate on the "subprocessor_url" field.
+func SubprocessorURLIn(vs ...string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldIn(FieldSubprocessorURL, vs...))
+}
+
+// SubprocessorURLNotIn applies the NotIn predicate on the "subprocessor_url" field.
+func SubprocessorURLNotIn(vs ...string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNotIn(FieldSubprocessorURL, vs...))
+}
+
+// SubprocessorURLGT applies the GT predicate on the "subprocessor_url" field.
+func SubprocessorURLGT(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldGT(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLGTE applies the GTE predicate on the "subprocessor_url" field.
+func SubprocessorURLGTE(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldGTE(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLLT applies the LT predicate on the "subprocessor_url" field.
+func SubprocessorURLLT(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldLT(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLLTE applies the LTE predicate on the "subprocessor_url" field.
+func SubprocessorURLLTE(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldLTE(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLContains applies the Contains predicate on the "subprocessor_url" field.
+func SubprocessorURLContains(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldContains(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLHasPrefix applies the HasPrefix predicate on the "subprocessor_url" field.
+func SubprocessorURLHasPrefix(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldHasPrefix(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLHasSuffix applies the HasSuffix predicate on the "subprocessor_url" field.
+func SubprocessorURLHasSuffix(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldHasSuffix(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLIsNil applies the IsNil predicate on the "subprocessor_url" field.
+func SubprocessorURLIsNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldIsNull(FieldSubprocessorURL))
+}
+
+// SubprocessorURLNotNil applies the NotNil predicate on the "subprocessor_url" field.
+func SubprocessorURLNotNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNotNull(FieldSubprocessorURL))
+}
+
+// SubprocessorURLEqualFold applies the EqualFold predicate on the "subprocessor_url" field.
+func SubprocessorURLEqualFold(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEqualFold(FieldSubprocessorURL, v))
+}
+
+// SubprocessorURLContainsFold applies the ContainsFold predicate on the "subprocessor_url" field.
+func SubprocessorURLContainsFold(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldContainsFold(FieldSubprocessorURL, v))
 }
 
 // And groups predicates with the AND operator between them.

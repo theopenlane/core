@@ -265,6 +265,26 @@ func (_u *TrustCenterHistoryUpdate) ClearPreviewStatus() *TrustCenterHistoryUpda
 	return _u
 }
 
+// SetSubprocessorURL sets the "subprocessor_url" field.
+func (_u *TrustCenterHistoryUpdate) SetSubprocessorURL(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetSubprocessorURL(v)
+	return _u
+}
+
+// SetNillableSubprocessorURL sets the "subprocessor_url" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillableSubprocessorURL(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetSubprocessorURL(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorURL clears the value of the "subprocessor_url" field.
+func (_u *TrustCenterHistoryUpdate) ClearSubprocessorURL() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearSubprocessorURL()
+	return _u
+}
+
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
 func (_u *TrustCenterHistoryUpdate) Mutation() *TrustCenterHistoryMutation {
 	return _u.mutation
@@ -425,6 +445,12 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.PreviewStatusCleared() {
 		_spec.ClearField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SubprocessorURL(); ok {
+		_spec.SetField(trustcenterhistory.FieldSubprocessorURL, field.TypeString, value)
+	}
+	if _u.mutation.SubprocessorURLCleared() {
+		_spec.ClearField(trustcenterhistory.FieldSubprocessorURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -680,6 +706,26 @@ func (_u *TrustCenterHistoryUpdateOne) ClearPreviewStatus() *TrustCenterHistoryU
 	return _u
 }
 
+// SetSubprocessorURL sets the "subprocessor_url" field.
+func (_u *TrustCenterHistoryUpdateOne) SetSubprocessorURL(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetSubprocessorURL(v)
+	return _u
+}
+
+// SetNillableSubprocessorURL sets the "subprocessor_url" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillableSubprocessorURL(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetSubprocessorURL(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorURL clears the value of the "subprocessor_url" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearSubprocessorURL() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearSubprocessorURL()
+	return _u
+}
+
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
 func (_u *TrustCenterHistoryUpdateOne) Mutation() *TrustCenterHistoryMutation {
 	return _u.mutation
@@ -870,6 +916,12 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.PreviewStatusCleared() {
 		_spec.ClearField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SubprocessorURL(); ok {
+		_spec.SetField(trustcenterhistory.FieldSubprocessorURL, field.TypeString, value)
+	}
+	if _u.mutation.SubprocessorURLCleared() {
+		_spec.ClearField(trustcenterhistory.FieldSubprocessorURL, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

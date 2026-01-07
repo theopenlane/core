@@ -9595,6 +9595,10 @@ input CreateTrustCenterInput {
   preview status of the trust center
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
   ownerID: ID
   customDomainID: ID
   previewDomainID: ID
@@ -46601,6 +46605,10 @@ type TrustCenter implements Node {
   preview status of the trust center
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
   owner: Organization
   customDomain: CustomDomain
   previewDomain: CustomDomain
@@ -48732,6 +48740,24 @@ input TrustCenterWhereInput {
   previewStatusNotIn: [TrustCenterTrustCenterPreviewStatus!]
   previewStatusIsNil: Boolean
   previewStatusNotNil: Boolean
+  """
+  subprocessor_url field predicates
+  """
+  subprocessorURL: String
+  subprocessorURLNEQ: String
+  subprocessorURLIn: [String!]
+  subprocessorURLNotIn: [String!]
+  subprocessorURLGT: String
+  subprocessorURLGTE: String
+  subprocessorURLLT: String
+  subprocessorURLLTE: String
+  subprocessorURLContains: String
+  subprocessorURLHasPrefix: String
+  subprocessorURLHasSuffix: String
+  subprocessorURLIsNil: Boolean
+  subprocessorURLNotNil: Boolean
+  subprocessorURLEqualFold: String
+  subprocessorURLContainsFold: String
   """
   owner edge predicates
   """
@@ -53820,6 +53846,11 @@ input UpdateTrustCenterInput {
   """
   previewStatus: TrustCenterTrustCenterPreviewStatus
   clearPreviewStatus: Boolean
+  """
+  External URL for the trust center subprocessors
+  """
+  subprocessorURL: String
+  clearSubprocessorURL: Boolean
   ownerID: ID
   clearOwner: Boolean
   customDomainID: ID

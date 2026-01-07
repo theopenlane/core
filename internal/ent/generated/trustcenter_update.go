@@ -273,6 +273,26 @@ func (_u *TrustCenterUpdate) ClearPreviewStatus() *TrustCenterUpdate {
 	return _u
 }
 
+// SetSubprocessorURL sets the "subprocessor_url" field.
+func (_u *TrustCenterUpdate) SetSubprocessorURL(v string) *TrustCenterUpdate {
+	_u.mutation.SetSubprocessorURL(v)
+	return _u
+}
+
+// SetNillableSubprocessorURL sets the "subprocessor_url" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillableSubprocessorURL(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetSubprocessorURL(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorURL clears the value of the "subprocessor_url" field.
+func (_u *TrustCenterUpdate) ClearSubprocessorURL() *TrustCenterUpdate {
+	_u.mutation.ClearSubprocessorURL()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdate) SetOwner(v *Organization) *TrustCenterUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -656,6 +676,11 @@ func (_u *TrustCenterUpdate) check() error {
 			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SubprocessorURL(); ok {
+		if err := trustcenter.SubprocessorURLValidator(v); err != nil {
+			return &ValidationError{Name: "subprocessor_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.subprocessor_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -741,6 +766,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.PreviewStatusCleared() {
 		_spec.ClearField(trustcenter.FieldPreviewStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SubprocessorURL(); ok {
+		_spec.SetField(trustcenter.FieldSubprocessorURL, field.TypeString, value)
+	}
+	if _u.mutation.SubprocessorURLCleared() {
+		_spec.ClearField(trustcenter.FieldSubprocessorURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1470,6 +1501,26 @@ func (_u *TrustCenterUpdateOne) ClearPreviewStatus() *TrustCenterUpdateOne {
 	return _u
 }
 
+// SetSubprocessorURL sets the "subprocessor_url" field.
+func (_u *TrustCenterUpdateOne) SetSubprocessorURL(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetSubprocessorURL(v)
+	return _u
+}
+
+// SetNillableSubprocessorURL sets the "subprocessor_url" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillableSubprocessorURL(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetSubprocessorURL(*v)
+	}
+	return _u
+}
+
+// ClearSubprocessorURL clears the value of the "subprocessor_url" field.
+func (_u *TrustCenterUpdateOne) ClearSubprocessorURL() *TrustCenterUpdateOne {
+	_u.mutation.ClearSubprocessorURL()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1866,6 +1917,11 @@ func (_u *TrustCenterUpdateOne) check() error {
 			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.SubprocessorURL(); ok {
+		if err := trustcenter.SubprocessorURLValidator(v); err != nil {
+			return &ValidationError{Name: "subprocessor_url", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.subprocessor_url": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1968,6 +2024,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	}
 	if _u.mutation.PreviewStatusCleared() {
 		_spec.ClearField(trustcenter.FieldPreviewStatus, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.SubprocessorURL(); ok {
+		_spec.SetField(trustcenter.FieldSubprocessorURL, field.TypeString, value)
+	}
+	if _u.mutation.SubprocessorURLCleared() {
+		_spec.ClearField(trustcenter.FieldSubprocessorURL, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

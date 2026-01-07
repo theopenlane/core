@@ -1939,6 +1939,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenterhistory.FieldPirschDomainID},
 			trustcenterhistory.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenterhistory.FieldPirschIdentificationCode},
 			trustcenterhistory.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenterhistory.FieldPreviewStatus},
+			trustcenterhistory.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenterhistory.FieldSubprocessorURL},
 		},
 	}
 	graph.Nodes[52] = &sqlgraph.Node{
@@ -10418,6 +10419,11 @@ func (f *TrustCenterHistoryFilter) WherePirschIdentificationCode(p entql.StringP
 // WherePreviewStatus applies the entql string predicate on the preview_status field.
 func (f *TrustCenterHistoryFilter) WherePreviewStatus(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldPreviewStatus))
+}
+
+// WhereSubprocessorURL applies the entql string predicate on the subprocessor_url field.
+func (f *TrustCenterHistoryFilter) WhereSubprocessorURL(p entql.StringP) {
+	f.Where(p.Field(trustcenterhistory.FieldSubprocessorURL))
 }
 
 // addPredicate implements the predicateAdder interface.
