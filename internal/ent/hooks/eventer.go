@@ -46,6 +46,7 @@ func WithEventerEmitter(emitter *soiree.EventBus) EventerOpts {
 // MutationHandler is the signature listener implementations expose for mutation events
 type MutationHandler func(*soiree.EventContext, *events.MutationPayload) error
 
+// mutationTopic constructs a typed topic for the supplied entity name
 func mutationTopic(entity string) soiree.TypedTopic[*events.MutationPayload] {
 	return soiree.NewTypedTopic(
 		entity,
@@ -87,6 +88,7 @@ func NewEventerPool(client any) *Eventer {
 	bus := soiree.New(
 		soiree.Workers(eventerPoolWorkers),
 		soiree.Client(client))
+	soiree.WithPoolName("ent_event_pool")
 
 	eventer := NewEventer(
 		WithEventerEmitter(bus),
