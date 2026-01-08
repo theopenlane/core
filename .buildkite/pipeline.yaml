@@ -19,6 +19,16 @@ env:
   HELM_CHART_REPO: git@github.com:theopenlane/openlane-infra.git
   HELM_CHART_PATH: charts/openlane
 
+secrets:
+  - GITHUB_TOKEN
+  - SLACK_WEBHOOK_URL
+  - GITHUB_SSH_PRIVATE_KEY
+  - ANALYTICS_KEY
+  - SONAR_TOKEN
+  - ATLAS_CLOUD_TOKEN
+  - APOLLO_KEY
+  - SECRET_GHCR_PUBLISH_TOKEN
+
 steps:
   - group: ":knife: Pre-check"
     key: "precheck"
@@ -75,11 +85,6 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -103,11 +108,6 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -129,11 +129,6 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -157,11 +152,6 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
-                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -185,10 +175,6 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -203,11 +189,6 @@ steps:
         depends_on: "docker-build-and-tag"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                GITHUB_TOKEN: GITHUB_TOKEN
-                GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
-                SLACK_WEBHOOK_URL: SLACK_WEBHOOK_URL
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -368,9 +349,6 @@ steps:
             -F "run_env[url]=$BUILDKITE_BUILD_URL" \
             https://analytics-api.buildkite.com/v1/uploads
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ANALYTICS_KEY: ANALYTICS_KEY
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
@@ -389,9 +367,6 @@ steps:
         if: build.pull_request.id != null
         depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
               download: "coverage-no-graph.out"
               step: "go_test_no_graph"
@@ -427,9 +402,6 @@ steps:
         if: build.branch == "main" && build.tag == null
         depends_on: ["go_test_graph", "go_test_no_graph"]
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                SONAR_TOKEN: SONAR_TOKEN
           - artifacts#v1.9.4:
               download: "coverage-no-graph.out"
               step: "go_test_no_graph"
@@ -563,9 +535,6 @@ steps:
         soft_fail:
           - exit_status: 1
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.2.1:
               project: core
               atlas-env: dev
@@ -608,9 +577,6 @@ steps:
           fi
         artifact_paths: linter-result.txt
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                APOLLO_KEY: APOLLO_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -645,9 +611,6 @@ steps:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
               step: "gobuild-server"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
           - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -681,9 +644,6 @@ steps:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
               step: "gobuild-server-release"
-          - cluster-secrets#v1.0.0:
-              variables:
-                SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
           - docker-login#v3.0.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
@@ -709,9 +669,6 @@ steps:
         cancel_on_build_failing: true
         command: "rover graph publish --schema $$GRAPHQL_SCHEMA_LOCATION $$GRAPHQL_SCHEMA_NAME"
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                APOLLO_KEY: APOLLO_KEY
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
@@ -738,9 +695,6 @@ steps:
         if: build.branch == "main" && build.tag == null
         key: "atlas_migrate"
         plugins:
-          - cluster-secrets#v1.0.0:
-              variables:
-                ATLAS_CLOUD_TOKEN: ATLAS_CLOUD_TOKEN
           - theopenlane/atlas#v1.2.1:
               project: core
               dir: "file://db/migrations"
