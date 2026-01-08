@@ -44,6 +44,9 @@ type importSchemaMutation interface {
 	FileID() (string, bool)
 	SetURL(string)
 	URL() (string, bool)
+	AppendTags([]string)
+	SetTags([]string)
+	SetRevision(string)
 }
 
 // HookSummarizeDetails is an ent hook that summarizes long details fields into a short human readable summary
@@ -181,6 +184,14 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 			status := enums.ToDocumentStatus(parsedContent.Frontmatter.Status)
 
 			m.SetStatus(*status)
+		}
+
+		if len(parsedContent.Frontmatter.Tags) > 0 {
+			m.SetTags(parsedContent.Frontmatter.Tags)
+		}
+
+		if parsedContent.Frontmatter.Revision != "" {
+			m.SetRevision(parsedContent.Frontmatter.Revision)
 		}
 	}
 

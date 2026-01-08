@@ -65,7 +65,7 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 			return common.NewForeignKeyError(a.Action, object)
 		}
 
-		return constraintError
+		return common.NewConstraintError(a.Object, constraintError)
 	case generated.IsNotFound(err):
 		logx.FromContext(ctx).Info().Err(err).Msg("request object was not found")
 

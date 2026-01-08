@@ -16,6 +16,12 @@ type Frontmatter struct {
 	Title string `yaml:"title"`
 	// Status of the document
 	Status string `yaml:"status"`
+	// Tags associated with the document
+	Tags []string `yaml:"tags"`
+	// Revision of the document
+	Revision string `yaml:"revision"`
+	// Satisfies lists the standards or requirements that this document satisfies
+	Satisfies map[string][]string `yaml:"satisfies"`
 }
 
 // ParseFrontmatter extracts YAML frontmatter and returns (metadata, content, error)
