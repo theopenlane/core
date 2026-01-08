@@ -49,6 +49,22 @@ func (r *mutationResolver) CreateBulkTrustCenterCompliance(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("input")
 	}
 
+	// ensure trust center id is set for each input
+	trustCenterID, err := getTrustCenterID(ctx, nil, "trustcentercompliance")
+	if err != nil {
+		return nil, err
+	}
+
+	for i, v := range input {
+		if v.TrustCenterID == nil {
+			input[i].TrustCenterID = trustCenterID
+		}
+
+		// set the input in the graphql context
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
+	}
+
 	return r.bulkCreateTrustCenterCompliance(ctx, input)
 }
 
