@@ -2781,6 +2781,7 @@ type ComplexityRoot struct {
 		UpdateAssessment                      func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
 		UpdateAsset                           func(childComplexity int, id string, input generated.UpdateAssetInput) int
 		UpdateBulkActionPlan                  func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
+		UpdateBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
 		UpdateBulkContact                     func(childComplexity int, ids []string, input generated.UpdateContactInput) int
 		UpdateBulkControl                     func(childComplexity int, ids []string, input generated.UpdateControlInput) int
 		UpdateBulkEvidence                    func(childComplexity int, ids []string, input generated.UpdateEvidenceInput) int
@@ -20902,6 +20903,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkActionPlan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateActionPlanInput)), true
 
+	case "Mutation.updateBulkCSVControl":
+		if e.complexity.Mutation.UpdateBulkCSVControl == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVControl_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkCSVControl(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.updateBulkContact":
 		if e.complexity.Mutation.UpdateBulkContact == nil {
 			break
@@ -38217,8 +38230,6 @@ extend type Query {
     ):  Control!
 }
 
-
-
 extend type Mutation{
     """
     Create a new control
@@ -38259,6 +38270,15 @@ extend type Mutation{
         values to update the controls with
         """
         input: UpdateControlInput!
+    ): ControlBulkUpdatePayload!
+    """
+    Update multiple existing controls with a CSV upload, must include the ID or refCode and referenceFramework
+    """
+    updateBulkCSVControl(
+        """
+        values to update the controls with
+        """
+        input: Upload!
     ): ControlBulkUpdatePayload!
     """
     Update an existing control

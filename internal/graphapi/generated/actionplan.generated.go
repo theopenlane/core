@@ -54,6 +54,7 @@ type MutationResolver interface {
 	CreateBulkControl(ctx context.Context, input []*generated.CreateControlInput) (*model.ControlBulkCreatePayload, error)
 	CreateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkCreatePayload, error)
 	UpdateBulkControl(ctx context.Context, ids []string, input generated.UpdateControlInput) (*model.ControlBulkUpdatePayload, error)
+	UpdateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkUpdatePayload, error)
 	UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error)
 	DeleteControl(ctx context.Context, id string) (*model.ControlDeletePayload, error)
 	DeleteBulkControl(ctx context.Context, ids []string) (*model.ControlBulkDeletePayload, error)
@@ -4316,6 +4317,17 @@ func (ec *executionContext) field_Mutation_updateBulkActionPlan_args(ctx context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateBulkCSVControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -8219,6 +8231,53 @@ func (ec *executionContext) fieldContext_Mutation_updateBulkControl(ctx context.
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateBulkControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBulkCSVControl(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBulkCSVControl,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateBulkCSVControl(ctx, fc.Args["input"].(graphql.Upload))
+		},
+		nil,
+		ec.marshalNControlBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlBulkUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBulkCSVControl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "controls":
+				return ec.fieldContext_ControlBulkUpdatePayload_controls(ctx, field)
+			case "updatedIDs":
+				return ec.fieldContext_ControlBulkUpdatePayload_updatedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type ControlBulkUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBulkCSVControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -26439,6 +26498,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateBulkControl":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateBulkControl(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBulkCSVControl":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBulkCSVControl(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
