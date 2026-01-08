@@ -3,29 +3,35 @@ package graphapi
 import "github.com/theopenlane/core/pkg/events/soiree"
 
 const (
-	// defaultMaxWorkers is the default number of workers in the pond pool when the pool was not created on server startup
+	// defaultMaxWorkers is the default number of workers when the pool was not created on server startup
 	defaultMaxWorkers = 10
 )
 
-// WithPool returns the existing pool or creates a new one if it does not exist to be used in queries
-func (r *queryResolver) withPool() *soiree.PondPool {
+// withPool returns the existing pool or creates a new one if it does not exist to be used in queries
+func (r *queryResolver) withPool() *soiree.Pool {
 	if r.pool != nil {
 		return r.pool
 	}
 
-	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(defaultMaxWorkers))
+	r.pool = soiree.NewPool(
+		soiree.WithWorkers(defaultMaxWorkers),
+		soiree.WithPoolName("graphapi-worker-pool"),
+	)
 
 	return r.pool
 }
 
-// WithPool returns the existing pool or creates a new one if it does not exist to be used in mutations
+// withPool returns the existing pool or creates a new one if it does not exist to be used in mutations
 // note that transactions can not be used when using a pool, so this is only used for non-transactional mutations
-func (r *mutationResolver) withPool() *soiree.PondPool {
+func (r *mutationResolver) withPool() *soiree.Pool {
 	if r.pool != nil {
 		return r.pool
 	}
 
-	r.pool = soiree.NewPondPool(soiree.WithMaxWorkers(defaultMaxWorkers))
+	r.pool = soiree.NewPool(
+		soiree.WithWorkers(defaultMaxWorkers),
+		soiree.WithPoolName("graphapi-worker-pool"),
+	)
 
 	return r.pool
 }

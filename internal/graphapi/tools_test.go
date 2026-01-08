@@ -186,9 +186,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
 	requireNoError(t, err)
 
-	pool := soiree.NewPondPool(
-		soiree.WithMaxWorkers(100), //nolint:mnd
-		soiree.WithName("ent_client_pool"),
+	pool := soiree.NewPool(
+		soiree.WithWorkers(100), //nolint:mnd
+		soiree.WithPoolName("ent_client_pool"),
 	)
 
 	// setup history client
@@ -209,7 +209,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.SessionConfig(&sessionConfig),
 		ent.EntConfig(entCfg),
 		ent.Summarizer(summarizerClient),
-		ent.PondPool(pool),
+		ent.Pool(pool),
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),
 		ent.HistoryClient(hc),

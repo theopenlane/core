@@ -26,7 +26,7 @@ import (
 // Resolver provides a graph response resolver
 type Resolver struct {
 	db                *historygenerated.Client
-	pool              *soiree.PondPool
+	pool              *soiree.Pool
 	extensionsEnabled bool
 	isDevelopment     bool
 	complexityLimit   int
@@ -166,14 +166,11 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 }
 
 // WithPool adds a worker pool to the resolver for parallel processing
-func (r *Resolver) WithPool(maxWorkers int, includeMetrics bool) {
-	r.pool = soiree.NewPondPool(
-		soiree.WithMaxWorkers(maxWorkers),
-		soiree.WithName("graphapi-history-worker-pool"))
-
-	if includeMetrics {
-		r.pool.NewStatsCollector()
-	}
+func (r *Resolver) WithPool(maxWorkers int) {
+	r.pool = soiree.NewPool(
+		soiree.WithWorkers(maxWorkers),
+		soiree.WithPoolName("graphapi-history-worker-pool"),
+	)
 }
 
 // Handler returns the http.HandlerFunc for the GraphAPI

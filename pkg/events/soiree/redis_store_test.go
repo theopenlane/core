@@ -100,7 +100,7 @@ func TestRedisMetrics(t *testing.T) {
 
 	reg := prometheus.NewRegistry()
 	metrics := newRedisMetrics(reg)
-	store := NewRedisStoreWithMetrics(client, metrics)
+	store := NewRedisStore(client, WithRedisMetrics(metrics))
 	soiree := New(EventStore(store))
 	topic := typedEventTopic("topic")
 
@@ -118,5 +118,69 @@ func TestRedisMetrics(t *testing.T) {
 	}
 	if v := testutil.ToFloat64(metrics.redisResultsPersisted); v != 1 {
 		t.Fatalf("expected 1 result persisted, got %v", v)
+	}
+}
+
+func TestRedisStoreWithTTLOptions(t *testing.T) {
+	client := newTestRedis(t)
+
+	store := NewRedisStore(client,
+		WithEventsTTL(time.Hour),
+		WithResultsTTL(time.Hour),
+		WithDedupTTL(time.Hour),
+	)
+
+	if store.eventsTTL != time.Hour {
+		t.Fatalf("expected eventsTTL to be 1 hour, got %v", store.eventsTTL)
+	}
+	if store.resultsTTL != time.Hour {
+		t.Fatalf("expected resultsTTL to be 1 hour, got %v", store.resultsTTL)
+	}
+	if store.dedupTTL != time.Hour {
+		t.Fatalf("expected dedupTTL to be 1 hour, got %v", store.dedupTTL)
+	}
+
+	soiree := New(EventStore(store))
+	topic := typedEventTopic("topic")
+
+	done := make(chan struct{}, 1)
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
+		done <- struct{}{}
+		return nil
+	})
+
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
+
+	select {
+	case <-done:
+	case <-time.After(time.Second):
+		t.Fatal("listener did not run")
+	}
+}
+
+func TestEmitWithContext(t *testing.T) {
+	bus := New()
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	done := make(chan context.Context, 1)
+	_, err := bus.On("topic", func(ec *EventContext) error {
+		done <- ec.Context()
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("On() failed: %v", err)
+	}
+
+	bus.EmitWithContext(ctx, "topic", "payload")
+
+	select {
+	case receivedCtx := <-done:
+		if receivedCtx == nil {
+			t.Fatal("expected context to be set")
+		}
+	case <-time.After(time.Second):
+		t.Fatal("listener did not run")
 	}
 }

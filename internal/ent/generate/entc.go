@@ -364,8 +364,8 @@ func schemaGenerate(extensions ...entc.Extension) {
 			entc.DependencyType(&summarizer.Client{}),
 		),
 		entc.Dependency(
-			entc.DependencyName("PondPool"),
-			entc.DependencyType(&soiree.PondPool{}),
+			entc.DependencyName("Pool"),
+			entc.DependencyType(&soiree.Pool{}),
 		),
 		entc.Dependency(
 			entc.DependencyName("EmailVerifier"),

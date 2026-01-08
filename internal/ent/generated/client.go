@@ -454,7 +454,7 @@ type (
 		EntitlementManager *entitlements.StripeClient
 		ObjectManager      *objects.Service
 		Summarizer         *summarizer.Client
-		PondPool           *soiree.PondPool
+		Pool               *soiree.Pool
 		EmailVerifier      *validator.EmailVerifier
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
@@ -581,10 +581,10 @@ func Summarizer(v *summarizer.Client) Option {
 	}
 }
 
-// PondPool configures the PondPool.
-func PondPool(v *soiree.PondPool) Option {
+// Pool configures the Pool.
+func Pool(v *soiree.Pool) Option {
 	return func(c *config) {
-		c.PondPool = v
+		c.Pool = v
 	}
 }
 

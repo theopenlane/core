@@ -3,6 +3,7 @@ package soiree
 import (
 	"context"
 	"fmt"
+	"maps"
 	"sort"
 	"strings"
 	"sync"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/cenkalti/backoff/v5"
+	"github.com/rs/zerolog/log"
 )
 
 // EventBus manages subscribing and unsubscribing listeners to topics and emitting events to subscribers
@@ -18,8 +20,9 @@ type EventBus struct {
 	errorHandler      func(Event, error) error
 	idGenerator       func() string
 	panicHandler      PanicHandler
-	pool              *PondPool
-	closed            atomic.Value
+	pool              *Pool
+	poolOpts          []PoolOption
+	closed            atomic.Bool
 	errChanBufferSize int
 	client            any
 	store             eventStore
@@ -42,11 +45,11 @@ func New(opts ...Option) *EventBus {
 		},
 	}
 
-	m.closed.Store(false)
-
 	for _, opt := range opts {
 		opt(m)
 	}
+
+	m.pool = NewPool(m.poolOpts...)
 
 	register(m)
 
@@ -62,19 +65,34 @@ func (m *EventBus) Client() any {
 	return m.client
 }
 
-// GetClient returns the client set on the event bus (alias for Client)
-func (m *EventBus) GetClient() any {
-	return m.client
-}
-
 // InterestedIn checks if the event bus has any listeners registered for the given topic
 func (m *EventBus) InterestedIn(topicName string) bool {
-	t, err := m.getTopic(topicName)
-	if err != nil {
+	topicName = normalizeTopicName(topicName)
+	if err := validateTopicName(topicName); err != nil {
 		return false
 	}
 
-	return t.hasListeners()
+	if t, ok := m.topics.Load(topicName); ok {
+		if t.(*topic).hasListeners() {
+			return true
+		}
+	}
+
+	interested := false
+	m.topics.Range(func(key, value any) bool {
+		pattern := key.(string)
+		if pattern == topicName {
+			return true
+		}
+		if matchTopicPattern(pattern, topicName) && value.(*topic).hasListeners() {
+			interested = true
+			return false
+		}
+
+		return true
+	})
+
+	return interested
 }
 
 // RegisterListeners registers multiple listener bindings and returns their IDs
@@ -98,8 +116,9 @@ func (m *EventBus) On(topicName string, listener Listener) (string, error) {
 		return "", ErrNilListener
 	}
 
-	if !isValidTopicName(topicName) {
-		return "", ErrInvalidTopicName
+	topicName = normalizeTopicName(topicName)
+	if err := validateTopicName(topicName); err != nil {
+		return "", err
 	}
 
 	t := m.ensureTopic(topicName)
@@ -111,6 +130,11 @@ func (m *EventBus) On(topicName string, listener Listener) (string, error) {
 
 // Off unsubscribes a listener from a topic using the listener's unique ID
 func (m *EventBus) Off(topicName string, listenerID string) error {
+	topicName = normalizeTopicName(topicName)
+	if err := validateTopicName(topicName); err != nil {
+		return err
+	}
+
 	t, err := m.getTopic(topicName)
 	if err != nil {
 		return err
@@ -121,20 +145,29 @@ func (m *EventBus) Off(topicName string, listenerID string) error {
 
 // Emit asynchronously dispatches an event to all subscribers of the event's topic
 func (m *EventBus) Emit(eventName string, payload any) <-chan error {
+	return m.EmitWithContext(context.Background(), eventName, payload)
+}
+
+// EmitWithContext asynchronously dispatches an event with the given context for timeout/cancellation control
+func (m *EventBus) EmitWithContext(ctx context.Context, eventName string, payload any) <-chan error {
 	errChan := make(chan error, m.errChanBufferSize)
 
-	if m.closed.Load().(bool) {
+	if m.closed.Load() {
 		m.trySendErr(errChan, ErrEmitterClosed)
 		close(errChan)
 		return errChan
 	}
 
-	topicName, event, prepErr := m.prepareEmit(eventName, payload)
+	topicName, event, prepErr := m.prepareEvent(eventName, payload)
 	if prepErr != nil {
 		m.trySendErr(errChan, prepErr)
 		close(errChan)
 
 		return errChan
+	}
+
+	if ctx != context.Background() {
+		event.SetContext(ctx)
 	}
 
 	if m.store != nil {
@@ -149,78 +182,28 @@ func (m *EventBus) Emit(eventName string, payload any) <-chan error {
 		return errChan
 	}
 
-	if m.pool != nil {
-		m.pool.Submit(func() {
-			defer close(errChan)
-			m.handleEvents(topicName, event, func(err error) {
-				m.trySendErr(errChan, err)
-			})
+	m.pool.Submit(func() {
+		defer close(errChan)
+		m.handleEvents(topicName, event, func(err error) {
+			m.trySendErr(errChan, err)
 		})
-	} else {
-		go func() {
-			defer close(errChan)
-			m.handleEvents(topicName, event, func(err error) {
-				m.trySendErr(errChan, err)
-			})
-		}()
-	}
+	})
 
 	return errChan
 }
 
-// EmitSync dispatches an event synchronously to all subscribers of the event's topic
-func (m *EventBus) EmitSync(eventName string, payload any) []error {
-	var errs []error
-
-	if m.closed.Load().(bool) {
-		return []error{ErrEmitterClosed}
-	}
-
-	topicName, event, prepErr := m.prepareEmit(eventName, payload)
-	if prepErr != nil {
-		return []error{prepErr}
-	}
-
-	if m.store != nil {
-		if err := m.store.SaveEvent(event); err != nil {
-			errs = append(errs, err)
-
-			return errs
-		}
-	}
-
-	if _, ok := m.store.(eventQueue); ok {
-		return nil
-	}
-
-	m.handleEvents(topicName, event, func(err error) {
-		errs = append(errs, err)
-	})
-
-	return errs
-}
-
-func (m *EventBus) handleEvents(topicName string, payload any, errorHandler func(error)) {
+// handleEvents dispatches an event to all matching topic listeners and invokes the error handler for any failures
+func (m *EventBus) handleEvents(topicName string, event Event, errorHandler func(error)) {
 	defer func() {
 		if r := recover(); r != nil && m.panicHandler != nil {
 			m.panicHandler(r)
 		}
 	}()
 
-	event, ok := payload.(Event)
-	if !ok {
-		event = NewBaseEvent(topicName, payload)
-	} else if strings.TrimSpace(event.Topic()) != "" && event.Topic() != topicName {
-		errorHandler(fmt.Errorf("%w: emit topic %q != event topic %q", ErrEventTopicMismatch, topicName, event.Topic()))
-
+	if event == nil {
+		errorHandler(ErrNilPayload)
 		return
 	}
-
-	if m.client != nil && event.Client() == nil {
-		event.SetClient(m.client)
-	}
-
-	m.ensureEventID(event)
 
 	matches := make([]matchedTopic, 0)
 	m.topics.Range(func(key, value any) bool {
@@ -246,6 +229,7 @@ func (m *EventBus) handleEvents(topicName string, payload any, errorHandler func
 	}
 }
 
+// handleTopicErrors processes errors from topic listeners through the bus error handler
 func (m *EventBus) handleTopicErrors(event Event, topicErrors []error, errorHandler func(error)) {
 	for _, err := range topicErrors {
 		if m.errorHandler != nil {
@@ -258,6 +242,7 @@ func (m *EventBus) handleTopicErrors(event Event, topicErrors []error, errorHand
 	}
 }
 
+// getTopic retrieves a topic by name or returns an error if not found
 func (m *EventBus) getTopic(topicName string) (*topic, error) {
 	t, ok := m.topics.Load(topicName)
 	if !ok {
@@ -267,24 +252,34 @@ func (m *EventBus) getTopic(topicName string) (*topic, error) {
 	return t.(*topic), nil
 }
 
+// ensureTopic retrieves or creates a topic by name
 func (m *EventBus) ensureTopic(topicName string) *topic {
 	t, _ := m.topics.LoadOrStore(topicName, newTopic())
 	return t.(*topic)
 }
 
+// triggerWithRetry invokes all listeners on a topic, collecting any errors
 func (m *EventBus) triggerWithRetry(t *topic, event Event) []error {
+	type listenerSnapshot struct {
+		id       string
+		listener Listener
+	}
+
 	t.mu.RLock()
-	defer t.mu.RUnlock()
-
-	var errs []error
-
+	snapshots := make([]listenerSnapshot, 0, len(t.listenerIDs))
 	for _, id := range t.listenerIDs {
-		item, ok := t.listeners[id]
+		listener, ok := t.listeners[id]
 		if !ok {
 			continue
 		}
+		snapshots = append(snapshots, listenerSnapshot{id: id, listener: listener})
+	}
+	t.mu.RUnlock()
 
-		if err := m.runListenerWithRetry(event, id, item); err != nil {
+	var errs []error
+
+	for _, snap := range snapshots {
+		if err := m.runListenerWithRetry(event, snap.id, snap.listener); err != nil {
 			errs = append(errs, err)
 		}
 
@@ -296,7 +291,8 @@ func (m *EventBus) triggerWithRetry(t *topic, event Event) []error {
 	return errs
 }
 
-func (m *EventBus) runListenerWithRetry(event Event, id string, item *listenerItem) error {
+// runListenerWithRetry executes a single listener with retry logic and deduplication
+func (m *EventBus) runListenerWithRetry(event Event, id string, listener Listener) error {
 	retries := m.maxRetries
 	if retries <= 0 {
 		retries = 1
@@ -320,14 +316,20 @@ func (m *EventBus) runListenerWithRetry(event Event, id string, item *listenerIt
 
 	for i := 0; i < retries; i++ {
 		ctx := newEventContext(event)
-		lastErr = item.call(ctx)
+		lastErr = listener(ctx)
 
 		if m.store != nil {
-			_ = m.store.SaveHandlerResult(ctx.event, id, lastErr)
+			if saveErr := m.store.SaveHandlerResult(ctx.event, id, lastErr); saveErr != nil {
+				log.Warn().Err(saveErr).Str("handler_id", id).Msg("failed to save handler result")
+			}
 		}
 
 		if lastErr == nil {
 			return nil
+		}
+
+		if i == retries-1 {
+			break
 		}
 
 		wait := backOff.NextBackOff()
@@ -343,7 +345,7 @@ func (m *EventBus) runListenerWithRetry(event Event, id string, item *listenerIt
 
 // Close terminates the event pool and releases resources
 func (m *EventBus) Close() error {
-	if m.closed.Load().(bool) {
+	if m.closed.Load() {
 		return ErrEmitterAlreadyClosed
 	}
 
@@ -359,15 +361,14 @@ func (m *EventBus) Close() error {
 		return true
 	})
 
-	if m.pool != nil {
-		m.pool.Release()
-	}
+	m.pool.Release()
 
 	deregister(m)
 
 	return nil
 }
 
+// startQueueConsumer spawns a background goroutine to consume events from the queue
 func (m *EventBus) startQueueConsumer(q eventQueue) {
 	ctx, cancel := context.WithCancel(context.Background())
 	m.queueCancel = cancel
@@ -376,16 +377,15 @@ func (m *EventBus) startQueueConsumer(q eventQueue) {
 		m.consumeQueue(ctx, q)
 	}
 
-	if m.pool != nil {
-		m.pool.Submit(consume)
-	} else {
-		go consume()
-	}
+	m.pool.Submit(consume)
 }
 
+// consumeQueue continuously dequeues and processes events until the context is cancelled
 func (m *EventBus) consumeQueue(ctx context.Context, q eventQueue) {
+	bo := m.backOffFactory()
+
 	for {
-		if ctx.Err() != nil || m.closed.Load().(bool) {
+		if ctx.Err() != nil || m.closed.Load() {
 			return
 		}
 
@@ -394,19 +394,30 @@ func (m *EventBus) consumeQueue(ctx context.Context, q eventQueue) {
 			if ctx.Err() != nil {
 				return
 			}
-			time.Sleep(100 * time.Millisecond) //nolint:mnd
+
+			wait := bo.NextBackOff()
+			if wait == backoff.Stop {
+				bo.Reset()
+				wait = bo.NextBackOff()
+			}
+
+			time.Sleep(wait)
+
 			continue
 		}
 
-		if m.client != nil && evt.Client() == nil {
-			evt.SetClient(m.client)
+		bo.Reset()
+
+		topicName, event, err := m.prepareEvent(evt.Topic(), evt)
+		if err != nil {
+			continue
 		}
 
-		m.ensureEventID(evt)
-		m.handleEvents(evt.Topic(), evt, func(error) {})
+		m.handleEvents(topicName, event, func(error) {})
 	}
 }
 
+// trySendErr attempts to send an error to the channel without blocking
 func (m *EventBus) trySendErr(ch chan<- error, err error) {
 	if err == nil || ch == nil {
 		return
@@ -418,27 +429,33 @@ func (m *EventBus) trySendErr(ch chan<- error, err error) {
 	}
 }
 
-func (m *EventBus) prepareEmit(eventName string, payload any) (string, Event, error) {
-	topicName := strings.TrimSpace(eventName)
+// prepareEvent validates and normalizes the event name and payload before emission
+func (m *EventBus) prepareEvent(eventName string, payload any) (string, Event, error) {
+	topicName := normalizeTopicName(eventName)
 
 	if event, ok := payload.(Event); ok {
-		eventTopic := strings.TrimSpace(event.Topic())
+		if event == nil {
+			return "", nil, ErrNilPayload
+		}
+
+		rawTopic := event.Topic()
+		eventTopic := normalizeTopicName(rawTopic)
 
 		switch {
 		case topicName == "" && eventTopic == "":
 			return "", nil, ErrInvalidTopicName
 		case topicName != "" && eventTopic != "" && topicName != eventTopic:
-			return "", nil, fmt.Errorf("%w: emit topic %q != event topic %q", ErrEventTopicMismatch, topicName, eventTopic)
-		case eventTopic == "" && topicName != "":
-			event = cloneEventWithTopic(event, topicName)
-		case topicName == "" && eventTopic != "":
-			topicName = eventTopic
-		default:
+			return "", nil, fmt.Errorf("%w: emit topic %q != event topic %q", ErrEventTopicMismatch, topicName, rawTopic)
+		case topicName == "":
 			topicName = eventTopic
 		}
 
-		if topicName == "" || !isValidTopicName(topicName) {
-			return "", nil, ErrInvalidTopicName
+		if err := validateTopicName(topicName); err != nil {
+			return "", nil, err
+		}
+
+		if eventTopic == "" || rawTopic != topicName {
+			event = cloneEventWithTopic(event, topicName)
 		}
 
 		if m.client != nil && event.Client() == nil {
@@ -450,8 +467,8 @@ func (m *EventBus) prepareEmit(eventName string, payload any) (string, Event, er
 		return topicName, event, nil
 	}
 
-	if topicName == "" || !isValidTopicName(topicName) {
-		return "", nil, ErrInvalidTopicName
+	if err := validateTopicName(topicName); err != nil {
+		return "", nil, err
 	}
 
 	event := NewBaseEvent(topicName, payload)
@@ -464,15 +481,29 @@ func (m *EventBus) prepareEmit(eventName string, payload any) (string, Event, er
 	return topicName, event, nil
 }
 
+// cloneEventWithTopic creates a copy of the event with a new topic name
 func cloneEventWithTopic(event Event, topic string) Event {
 	cloned := NewBaseEvent(topic, event.Payload())
-	cloned.SetProperties(event.Properties())
+	cloned.SetProperties(cloneProperties(event.Properties()))
 	cloned.SetAborted(event.IsAborted())
 	cloned.SetContext(event.Context())
 	cloned.SetClient(event.Client())
 	return cloned
 }
 
+// cloneProperties creates a shallow copy of the given Properties map
+func cloneProperties(props Properties) Properties {
+	if props == nil {
+		return NewProperties()
+	}
+
+	cloned := NewProperties()
+	maps.Copy(cloned, props)
+
+	return cloned
+}
+
+// ensureEventID assigns a unique event ID if one is not already present
 func (m *EventBus) ensureEventID(event Event) {
 	if m == nil || event == nil {
 		return
@@ -492,11 +523,13 @@ func (m *EventBus) ensureEventID(event Event) {
 	event.SetProperties(props)
 }
 
+// matchedTopic pairs a topic pattern with its corresponding topic instance
 type matchedTopic struct {
 	pattern string
 	t       *topic
 }
 
+// topicSpecificity captures the wildcard and segment counts used for pattern ordering
 type topicSpecificity struct {
 	multiWildcards  int
 	singleWildcards int
@@ -504,6 +537,7 @@ type topicSpecificity struct {
 	length          int
 }
 
+// topicSpecificityKey computes the specificity metrics for a topic pattern
 func topicSpecificityKey(pattern string) topicSpecificity {
 	parts := strings.Split(pattern, ".")
 	key := topicSpecificity{
@@ -523,6 +557,7 @@ func topicSpecificityKey(pattern string) topicSpecificity {
 	return key
 }
 
+// compareTopicSpecificity returns true if pattern a should be ordered before pattern b
 func compareTopicSpecificity(a, b string) bool {
 	keyA := topicSpecificityKey(a)
 	keyB := topicSpecificityKey(b)

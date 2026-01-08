@@ -11,7 +11,7 @@ type Config struct {
 	EntityTypes []string `json:"entitytypes" koanf:"entitytypes" default:"" description:"entity types to create for the organization"`
 	// Summarizer contains configuration for text summarization
 	Summarizer summarizer.Config `json:"summarizer" koanf:"summarizer"`
-	// MaxPoolSize is the max pond pool workers that can be used by the ent client
+	// MaxPoolSize is the max worker pool size that can be used by the ent client
 	MaxPoolSize int `json:"maxpoolsize" koanf:"maxpoolsize" default:"100"`
 	// Modules contains the configuration for the module system
 	Modules Modules `json:"modules" koanf:"modules"`

@@ -27,11 +27,11 @@ type handlerResultDeduper interface {
 // storedResult holds the outcome of a listener processing an event
 type storedResult struct {
 	// Topic is the topic of the event that was processed
-	Topic string
+	Topic string `json:"topic"`
 	// EventID is the unique idempotency key for the event, when available
-	EventID string
+	EventID string `json:"event_id,omitempty"`
 	// HandlerID is the unique identifier of the listener that processed the event
-	HandlerID string
+	HandlerID string `json:"handler_id"`
 	// Error is the error encountered while processing the event
-	Error string
+	Error string `json:"error,omitempty"`
 }

@@ -111,12 +111,12 @@ func serve(ctx context.Context) error {
 
 	defer redisClient.Close()
 
-	// Setup Pond Pool if max workers is greater than 0
-	var pool *soiree.PondPool
+	// Setup pool if max workers is greater than 0
+	var pool *soiree.Pool
 	if so.Config.Settings.EntConfig.MaxPoolSize > 0 {
-		pool = soiree.NewPondPool(
-			soiree.WithMaxWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
-			soiree.WithName("ent_client_pool"),
+		pool = soiree.NewPool(
+			soiree.WithWorkers(so.Config.Settings.EntConfig.MaxPoolSize),
+			soiree.WithPoolName("ent_client_pool"),
 		)
 	}
 
@@ -162,7 +162,7 @@ func serve(ctx context.Context) error {
 		ent.EntitlementManager(so.Config.Handler.Entitlements),
 		ent.ObjectManager(so.Config.StorageService),
 		ent.Summarizer(so.Config.Handler.Summarizer),
-		ent.PondPool(pool),
+		ent.Pool(pool),
 		ent.EmailVerifier(verifier),
 		ent.HistoryClient(historyClient),
 	)

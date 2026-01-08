@@ -11,8 +11,8 @@ import (
 func defaultTopic() TypedTopic[Event] {
 	return NewTypedTopic(
 		"testTopic",
-		func(e Event) Event { return e },
-		func(e Event) (Event, error) { return e, nil },
+		WithWrap(func(e Event) Event { return e }),
+		WithUnwrap(func(e Event) (Event, error) { return e, nil }),
 	)
 }
 
@@ -20,9 +20,9 @@ func subscribeDefaultTopic(bus *EventBus, listener TypedListener[Event]) (string
 	return BindListener(defaultTopic(), listener).Register(bus)
 }
 
-func emitDefaultTopicSync(bus *EventBus, payload any) []error {
+func emitDefaultTopicAndCollect(bus *EventBus, payload any) []error {
 	topic := defaultTopic()
-	return bus.EmitSync(topic.Name(), NewBaseEvent(topic.Name(), payload))
+	return collectEmitErrors(bus.Emit(topic.Name(), NewBaseEvent(topic.Name(), payload)))
 }
 
 func emitDefaultTopicAsync(bus *EventBus, payload any) <-chan error {
@@ -58,7 +58,7 @@ func TestErrorHandler(t *testing.T) {
 		t.Fatalf(errorMessage, err)
 	}
 
-	emitDefaultTopicSync(soiree, "testPayload")
+	emitDefaultTopicAndCollect(soiree, "testPayload")
 
 	if !handlerCalled {
 		t.Fatalf("Custom error handler was not called on listener error")
@@ -110,7 +110,7 @@ func TestErrorHandlerAsync(t *testing.T) {
 	}
 }
 
-func TestPanicHandlerSync(t *testing.T) {
+func TestPanicHandler(t *testing.T) {
 	var panicHandlerInvoked bool
 
 	customPanicHandler := func(p any) {
@@ -135,7 +135,7 @@ func TestPanicHandlerSync(t *testing.T) {
 		}
 	}()
 
-	emitDefaultTopicSync(soiree, "testPayload")
+	emitDefaultTopicAndCollect(soiree, "testPayload")
 
 	if !panicHandlerInvoked {
 		t.Fatalf("Custom panic handler was not called on listener panic")

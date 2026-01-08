@@ -1,9 +1,6 @@
 package soiree
 
 import (
-	"encoding/json"
-	"fmt"
-
 	"github.com/theopenlane/core/common/enums"
 )
 
@@ -95,116 +92,26 @@ const (
 	TopicMutationDetected            = "mutation.detected"
 )
 
-// UnwrapWorkflowPayload is a helper that unwraps workflow payloads with type checking
-func UnwrapWorkflowPayload[T any](event Event) (T, error) {
-	var zero T
-
-	if event == nil {
-		return zero, ErrNilPayload
-	}
-
-	payload := event.Payload()
-	if payload == nil {
-		return zero, ErrNilPayload
-	}
-
-	typed, ok := payload.(T)
-	if ok {
-		return typed, nil
-	}
-
-	var raw json.RawMessage
-	switch v := payload.(type) {
-	case json.RawMessage:
-		raw = v
-	case []byte:
-		raw = v
-	default:
-		encoded, err := json.Marshal(payload)
-		if err != nil {
-			return zero, fmt.Errorf("%w: expected %T, got %T", ErrPayloadTypeMismatch, zero, payload)
-		}
-		raw = encoded
-	}
-
-	var decoded T
-	if err := json.Unmarshal(raw, &decoded); err != nil {
-		return zero, fmt.Errorf("%w: expected %T, got %T", ErrPayloadTypeMismatch, zero, payload)
-	}
-
-	event.SetPayload(decoded)
-
-	return decoded, nil
-}
-
 // WorkflowTriggeredTopic is emitted when a workflow instance is created
-var WorkflowTriggeredTopic = NewTypedTopic(
-	TopicWorkflowTriggered,
-	func(p WorkflowTriggeredPayload) Event {
-		return NewBaseEvent(TopicWorkflowTriggered, p)
-	},
-	UnwrapWorkflowPayload[WorkflowTriggeredPayload],
-)
+var WorkflowTriggeredTopic = NewTypedTopic[WorkflowTriggeredPayload](TopicWorkflowTriggered)
 
 // WorkflowActionStartedTopic is emitted when a workflow action begins execution
-var WorkflowActionStartedTopic = NewTypedTopic(
-	TopicWorkflowActionStarted,
-	func(p WorkflowActionStartedPayload) Event {
-		return NewBaseEvent(TopicWorkflowActionStarted, p)
-	},
-	UnwrapWorkflowPayload[WorkflowActionStartedPayload],
-)
+var WorkflowActionStartedTopic = NewTypedTopic[WorkflowActionStartedPayload](TopicWorkflowActionStarted)
 
 // WorkflowActionCompletedTopic is emitted when a workflow action finishes
-var WorkflowActionCompletedTopic = NewTypedTopic(
-	TopicWorkflowActionCompleted,
-	func(p WorkflowActionCompletedPayload) Event {
-		return NewBaseEvent(TopicWorkflowActionCompleted, p)
-	},
-	UnwrapWorkflowPayload[WorkflowActionCompletedPayload],
-)
+var WorkflowActionCompletedTopic = NewTypedTopic[WorkflowActionCompletedPayload](TopicWorkflowActionCompleted)
 
 // WorkflowAssignmentCreatedTopic is emitted when an approval is assigned
-var WorkflowAssignmentCreatedTopic = NewTypedTopic(
-	TopicWorkflowAssignmentCreated,
-	func(p WorkflowAssignmentCreatedPayload) Event {
-		return NewBaseEvent(TopicWorkflowAssignmentCreated, p)
-	},
-	UnwrapWorkflowPayload[WorkflowAssignmentCreatedPayload],
-)
+var WorkflowAssignmentCreatedTopic = NewTypedTopic[WorkflowAssignmentCreatedPayload](TopicWorkflowAssignmentCreated)
 
 // WorkflowAssignmentCompletedTopic is emitted when an approval decision is made
-var WorkflowAssignmentCompletedTopic = NewTypedTopic(
-	TopicWorkflowAssignmentCompleted,
-	func(p WorkflowAssignmentCompletedPayload) Event {
-		return NewBaseEvent(TopicWorkflowAssignmentCompleted, p)
-	},
-	UnwrapWorkflowPayload[WorkflowAssignmentCompletedPayload],
-)
+var WorkflowAssignmentCompletedTopic = NewTypedTopic[WorkflowAssignmentCompletedPayload](TopicWorkflowAssignmentCompleted)
 
 // WorkflowInstanceCompletedTopic is emitted when a workflow finishes
-var WorkflowInstanceCompletedTopic = NewTypedTopic(
-	TopicWorkflowInstanceCompleted,
-	func(p WorkflowInstanceCompletedPayload) Event {
-		return NewBaseEvent(TopicWorkflowInstanceCompleted, p)
-	},
-	UnwrapWorkflowPayload[WorkflowInstanceCompletedPayload],
-)
+var WorkflowInstanceCompletedTopic = NewTypedTopic[WorkflowInstanceCompletedPayload](TopicWorkflowInstanceCompleted)
 
 // WorkflowTimeoutExpiredTopic is emitted when a timeout occurs
-var WorkflowTimeoutExpiredTopic = NewTypedTopic(
-	TopicWorkflowTimeoutExpired,
-	func(p WorkflowTimeoutExpiredPayload) Event {
-		return NewBaseEvent(TopicWorkflowTimeoutExpired, p)
-	},
-	UnwrapWorkflowPayload[WorkflowTimeoutExpiredPayload],
-)
+var WorkflowTimeoutExpiredTopic = NewTypedTopic[WorkflowTimeoutExpiredPayload](TopicWorkflowTimeoutExpired)
 
 // MutationDetectedTopic is emitted when a mutation occurs that might trigger workflows
-var MutationDetectedTopic = NewTypedTopic(
-	TopicMutationDetected,
-	func(p MutationDetectedPayload) Event {
-		return NewBaseEvent(TopicMutationDetected, p)
-	},
-	UnwrapWorkflowPayload[MutationDetectedPayload],
-)
+var MutationDetectedTopic = NewTypedTopic[MutationDetectedPayload](TopicMutationDetected)

@@ -130,7 +130,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			client.PondPool.SubmitMultipleAndWait(funcs)
+			client.Pool.SubmitMultipleAndWait(funcs)
 
 			if len(errs) > 0 {
 				logx.FromContext(ctx).Error().

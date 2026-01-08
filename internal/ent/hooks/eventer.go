@@ -49,15 +49,14 @@ type MutationHandler func(*soiree.EventContext, *events.MutationPayload) error
 func mutationTopic(entity string) soiree.TypedTopic[*events.MutationPayload] {
 	return soiree.NewTypedTopic(
 		entity,
-		func(payload *events.MutationPayload) soiree.Event { return soiree.NewBaseEvent(entity, payload) },
-		func(event soiree.Event) (*events.MutationPayload, error) {
+		soiree.WithUnwrap(func(event soiree.Event) (*events.MutationPayload, error) {
 			payload, ok := event.Payload().(*events.MutationPayload)
 			if !ok {
 				return nil, fmt.Errorf("%w: %s", errMutationPayloadUnavailable, entity)
 			}
 
 			return payload, nil
-		},
+		}),
 	)
 }
 

@@ -148,7 +148,7 @@
       "type": "object",
       "description": "KeyWatcher contains settings for the key watcher that manages JWT signing keys"
     },
-    "config.PondPool": {
+    "config.PoolConfig": {
       "properties": {
         "maxworkers": {
           "type": "integer",
@@ -157,7 +157,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "PondPool contains the settings for the goroutine pool"
+      "description": "PoolConfig contains the settings for the goroutine pool"
     },
     "config.Server": {
       "properties": {
@@ -218,7 +218,7 @@
           "description": "Mime contains settings for the mime middleware"
         },
         "graphpool": {
-          "$ref": "#/$defs/config.PondPool",
+          "$ref": "#/$defs/config.PoolConfig",
           "description": "GraphPool contains settings for the goroutine pool used by the graph resolvers"
         },
         "enablegraphextensions": {
@@ -462,7 +462,7 @@
         },
         "maxpoolsize": {
           "type": "integer",
-          "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
+          "description": "MaxPoolSize is the max worker pool size that can be used by the ent client"
         },
         "modules": {
           "$ref": "#/$defs/entconfig.Modules",

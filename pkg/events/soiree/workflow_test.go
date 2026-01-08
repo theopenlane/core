@@ -19,7 +19,7 @@ func TestWorkflowActionCompletedPayloadRoundTrip(t *testing.T) {
 
 	event := NewBaseEvent(TopicWorkflowActionCompleted, payload)
 
-	decoded, err := UnwrapWorkflowPayload[WorkflowActionCompletedPayload](event)
+	decoded, err := UnwrapPayload[WorkflowActionCompletedPayload](event)
 	if err != nil {
 		t.Fatalf("expected payload to unwrap, got error: %v", err)
 	}

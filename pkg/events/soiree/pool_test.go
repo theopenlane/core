@@ -176,3 +176,79 @@ func TestListenerErrorReporting(t *testing.T) {
 		t.Fatalf("Expected error '%v', got '%v'", someErr, gotErr)
 	}
 }
+
+func TestPoolWithPoolName(t *testing.T) {
+	pool := NewPool(WithPoolName("test-pool"))
+	if pool == nil {
+		t.Fatal("expected non-nil pool")
+	}
+	pool.Release()
+}
+
+func TestPoolResize(t *testing.T) {
+	pool := NewPool(WithWorkers(5))
+
+	pool.Resize(10)
+
+	pool.Release()
+}
+
+func TestOffNonexistentTopic(t *testing.T) {
+	bus := New()
+	err := bus.Off("nonexistent", "some-id")
+	if err == nil {
+		t.Error("expected error when removing listener from nonexistent topic")
+	}
+}
+
+func TestOffNonexistentListener(t *testing.T) {
+	bus := New()
+	_, err := bus.On("topic", func(_ *EventContext) error { return nil })
+	if err != nil {
+		t.Fatalf("On() failed: %v", err)
+	}
+
+	err = bus.Off("topic", "nonexistent-id")
+	if err == nil {
+		t.Error("expected error when removing nonexistent listener")
+	}
+}
+
+func TestEmitToClosedBus(t *testing.T) {
+	bus := New()
+	if err := bus.Close(); err != nil {
+		t.Fatalf("Close() failed: %v", err)
+	}
+
+	errChan := bus.Emit("topic", "payload")
+	var gotErr error
+	for err := range errChan {
+		gotErr = err
+	}
+
+	if gotErr != ErrEmitterClosed {
+		t.Errorf("expected ErrEmitterClosed, got %v", gotErr)
+	}
+}
+
+func TestEmitInvalidTopicName(t *testing.T) {
+	bus := New()
+
+	errChan := bus.Emit("", "payload")
+	var gotErr error
+	for err := range errChan {
+		gotErr = err
+	}
+
+	if gotErr == nil {
+		t.Error("expected error for empty topic name")
+	}
+}
+
+func TestInterestedInNoListeners(t *testing.T) {
+	bus := New()
+
+	if bus.InterestedIn("nonexistent") {
+		t.Error("expected InterestedIn to return false for topic with no listeners")
+	}
+}

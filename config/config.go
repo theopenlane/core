@@ -122,7 +122,7 @@ type Server struct {
 	// Mime contains settings for the mime middleware
 	Mime mime.Config `json:"mime" koanf:"mime"`
 	// GraphPool contains settings for the goroutine pool used by the graph resolvers
-	GraphPool PondPool `json:"graphpool" koanf:"graphpool"`
+	GraphPool PoolConfig `json:"graphpool" koanf:"graphpool"`
 	// EnableGraphExtensions enables the graph extensions for the graph resolvers
 	EnableGraphExtensions bool `json:"enablegraphextensions" koanf:"enablegraphextensions" default:"true"`
 	// EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse
@@ -182,8 +182,8 @@ type TLS struct {
 	AutoCert bool `json:"autocert" koanf:"autocert" default:"false"`
 }
 
-// PondPool contains the settings for the goroutine pool
-type PondPool struct {
+// PoolConfig contains the settings for the goroutine pool
+type PoolConfig struct {
 	// MaxWorkers is the maximum number of workers in the pool
 	MaxWorkers int `json:"maxworkers" koanf:"maxworkers" default:"100"`
 }

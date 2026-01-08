@@ -13,8 +13,6 @@ linters:
     - mnd
     - noctx
     - revive
-    - wsl_v5
-    - whitespace
   exclusions:
     generated: lax
     warn-unused: true
@@ -60,5 +58,3 @@ formatters:
       - cli/cmd/*
       - pkg/events/soiree/examples/*
       - internal/ent/hush/examples/*
-issues:
-  fix: true

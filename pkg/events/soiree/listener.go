@@ -7,15 +7,6 @@ import (
 // Listener handles an event via the provided event context wrapper
 type Listener func(*EventContext) error
 
-// listenerItem stores a listener along with its unique identifier
-type listenerItem struct {
-	listener Listener
-}
-
-func (item *listenerItem) call(ctx *EventContext) error {
-	return item.listener(ctx)
-}
-
 // EventContext bundles the event, payload, and client for a listener
 type EventContext struct {
 	event     Event
@@ -23,6 +14,7 @@ type EventContext struct {
 	hasClient bool
 }
 
+// newEventContext creates a new event context from the given event
 func newEventContext(event Event) *EventContext {
 	ctx := &EventContext{
 		event:  event,
@@ -40,6 +32,24 @@ func (c *EventContext) Context() context.Context {
 		return context.Background()
 	}
 	return c.event.Context()
+}
+
+// Event exposes the underlying event
+func (c *EventContext) Event() Event {
+	if c == nil {
+		return nil
+	}
+
+	return c.event
+}
+
+// Payload returns the event payload
+func (c *EventContext) Payload() any {
+	if c == nil || c.event == nil {
+		return nil
+	}
+
+	return c.event.Payload()
 }
 
 // Properties exposes the underlying property map
@@ -63,10 +73,11 @@ func (c *EventContext) Property(key string) (any, bool) {
 		return nil, false
 	}
 
-	val, ok := props[key]
-	if !ok || val == nil {
+	val := props.GetKey(key)
+	if val == nil {
 		return nil, false
 	}
+
 	return val, true
 }
 
@@ -97,4 +108,19 @@ func ClientAs[T any](ctx *EventContext) (T, bool) {
 	}
 
 	return typed, true
+}
+
+// PayloadAs attempts to cast the payload to the requested type
+func PayloadAs[T any](ctx *EventContext) (T, bool) {
+	var zero T
+	if ctx == nil || ctx.event == nil {
+		return zero, false
+	}
+
+	payload, ok := ctx.event.Payload().(T)
+	if !ok {
+		return zero, false
+	}
+
+	return payload, true
 }

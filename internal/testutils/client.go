@@ -192,8 +192,8 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 		WithTrustCenterDefaultDomain(TrustCenterDefaultDomain).
 		WithSubscriptions(true)
 
-	// add the pool to the resolver without a metrics collector
-	r.WithPool(100, false) //nolint:mnd
+	// add the pool to the resolver
+	r.WithPool(100) //nolint:mnd
 
 	conf := gqlgenerated.Config{Resolvers: r}
 

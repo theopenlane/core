@@ -43,15 +43,8 @@ func IDGenerator(idGen func() string) Option {
 func Workers(n int) Option {
 	return func(m *EventBus) {
 		if n > 0 {
-			m.pool = newPondPool(n)
+			m.poolOpts = append(m.poolOpts, WithWorkers(n))
 		}
-	}
-}
-
-// WithPool sets an existing worker pool for the EventBus
-func WithPool(pool *PondPool) Option {
-	return func(m *EventBus) {
-		m.pool = pool
 	}
 }
 
@@ -63,9 +56,9 @@ func EventStore(store eventStore) Option {
 }
 
 // WithRedisStore configures a Redis-backed event store
-func WithRedisStore(client *redis.Client) Option {
+func WithRedisStore(client *redis.Client, opts ...RedisStoreOption) Option {
 	return func(m *EventBus) {
-		m.store = NewRedisStore(client)
+		m.store = NewRedisStore(client, opts...)
 	}
 }
 

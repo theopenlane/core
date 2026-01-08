@@ -6,12 +6,10 @@ import (
 
 // topic represents an event channel to which listeners can subscribe
 type topic struct {
-	// name signifies the topic's unique identifier
-	name string
 	// mu provides concurrent access to the topic
 	mu sync.RWMutex
 	// listeners indexed by their ID
-	listeners map[string]*listenerItem
+	listeners map[string]Listener
 	// listenerIDs maintains registration order
 	listenerIDs []string
 }
@@ -19,7 +17,7 @@ type topic struct {
 // newTopic creates a new topic
 func newTopic() *topic {
 	return &topic{
-		listeners: make(map[string]*listenerItem),
+		listeners: make(map[string]Listener),
 	}
 }
 
@@ -28,7 +26,7 @@ func (t *topic) addListener(id string, listener Listener) {
 	t.mu.Lock()
 	defer t.mu.Unlock()
 
-	t.listeners[id] = &listenerItem{listener: listener}
+	t.listeners[id] = listener
 	t.listenerIDs = append(t.listenerIDs, id)
 }
 

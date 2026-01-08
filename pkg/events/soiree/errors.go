@@ -19,6 +19,8 @@ var (
 	errNilEventBus = errors.New("event bus is nil")
 	// errMissingTypedUnwrap is returned when a typed topic is missing an unwrap helper
 	errMissingTypedUnwrap = errors.New("soiree: missing unwrap helper for typed topic")
+	// errMissingTypedWrap is returned when a typed topic is missing a wrap helper
+	errMissingTypedWrap = errors.New("soiree: missing wrap helper for typed topic")
 	// ErrNilPayload is returned when an event payload is nil
 	ErrNilPayload = errors.New("nil payload")
 	// ErrPayloadTypeMismatch is returned when an event payload type does not match the expected type
