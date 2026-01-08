@@ -143,8 +143,6 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// do this in a go-routine to allow multiple controls to be cloned in parallel, use the worker pool for this
 	// we cannot use a transaction here because we are running multiple go-routines
 	// and transactions cannot be used across go-routines
-	funcs := make([]func(), len(controlsToClone))
-
 	var (
 		errors []error
 		mu     sync.Mutex
@@ -229,6 +227,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	// this will allow us to run the cloning in parallel
 	// we will use a mutex to protect the createdControlIDs and existingControlIDs slices
 	// and the errors slice
+	funcs := make([]func(), len(updatedControlsToClone))
+
 	for i, c := range updatedControlsToClone {
 		c := c // capture loop variable
 		funcs[i] = func() {

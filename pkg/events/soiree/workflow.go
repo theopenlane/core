@@ -6,78 +6,122 @@ import (
 
 // WorkflowTriggeredPayload contains data for a workflow instance creation event
 type WorkflowTriggeredPayload struct {
-	InstanceID           string
-	DefinitionID         string
-	ObjectID             string
-	ObjectType           enums.WorkflowObjectType
-	TriggerEventType     string
+	// InstanceID is the unique identifier for the workflow instance
+	InstanceID string
+	// DefinitionID is the identifier for the workflow definition
+	DefinitionID string
+	// ObjectID is the ID of the object the workflow is acting on
+	ObjectID string
+	// ObjectType is the type of the object the workflow is acting on
+	ObjectType enums.WorkflowObjectType
+	// TriggerEventType is the event type that triggered the workflow
+	TriggerEventType string
+	// TriggerChangedFields are the fields that changed and triggered the workflow
 	TriggerChangedFields []string
 }
 
 // WorkflowActionStartedPayload contains data for when a workflow action begins
 type WorkflowActionStartedPayload struct {
-	InstanceID  string
+	// InstanceID is the unique identifier for the workflow instance
+	InstanceID string
+	// ActionIndex is the index of the action in the workflow
 	ActionIndex int
-	ActionType  enums.WorkflowActionType
-	ObjectID    string
-	ObjectType  enums.WorkflowObjectType
+	// ActionType is the type of action being started
+	ActionType enums.WorkflowActionType
+	// ObjectID is the ID of the object the action is acting on
+	ObjectID string
+	// ObjectType is the type of the object the action is acting on
+	ObjectType enums.WorkflowObjectType
 }
 
 // WorkflowActionCompletedPayload contains data for when a workflow action finishes
 type WorkflowActionCompletedPayload struct {
-	InstanceID   string
-	ActionIndex  int
-	ActionType   enums.WorkflowActionType
-	ObjectID     string
-	ObjectType   enums.WorkflowObjectType
-	Success      bool
-	Skipped      bool
+	// InstanceID is the unique identifier for the workflow instance
+	InstanceID string
+	// ActionIndex is the index of the action in the workflow
+	ActionIndex int
+	// ActionType is the type of action that was completed
+	ActionType enums.WorkflowActionType
+	// ObjectID is the ID of the object the action was acting on
+	ObjectID string
+	// ObjectType is the type of the object the action was acting on
+	ObjectType enums.WorkflowObjectType
+	// Success indicates if the action completed successfully
+	Success bool
+	// Skipped indicates if the action was skipped
+	Skipped bool
+	// ErrorMessage contains any error message if the action failed
 	ErrorMessage string
 }
 
 // WorkflowAssignmentCreatedPayload contains data for when an approval is assigned
 type WorkflowAssignmentCreatedPayload struct {
+	// AssignmentID is the unique identifier for the assignment
 	AssignmentID string
-	InstanceID   string
-	TargetType   enums.WorkflowTargetType
-	TargetIDs    []string
-	ObjectID     string
-	ObjectType   enums.WorkflowObjectType
+	// InstanceID is the unique identifier for the workflow instance
+	InstanceID string
+	// TargetType is the type of the target for the assignment
+	TargetType enums.WorkflowTargetType
+	// TargetIDs are the IDs of the targets for the assignment
+	TargetIDs []string
+	// ObjectID is the ID of the object the assignment is related to
+	ObjectID string
+	// ObjectType is the type of the object the assignment is related to
+	ObjectType enums.WorkflowObjectType
 }
 
 // WorkflowAssignmentCompletedPayload contains data for when an approval decision is made
 type WorkflowAssignmentCompletedPayload struct {
+	// AssignmentID is the unique identifier for the assignment
 	AssignmentID string
-	InstanceID   string
-	Status       enums.WorkflowAssignmentStatus
-	CompletedBy  string
-	ObjectID     string
-	ObjectType   enums.WorkflowObjectType
+	// InstanceID is the unique identifier for the workflow instance
+	InstanceID string
+	// Status is the status of the assignment after completion
+	Status enums.WorkflowAssignmentStatus
+	// CompletedBy is the ID of the user who completed the assignment
+	CompletedBy string
+	// ObjectID is the ID of the object the assignment is related to
+	ObjectID string
+	// ObjectType is the type of the object the assignment is related to
+	ObjectType enums.WorkflowObjectType
 }
 
 // WorkflowInstanceCompletedPayload contains data for when a workflow finishes
 type WorkflowInstanceCompletedPayload struct {
+	// InstanceID is the unique identifier for the workflow instance
 	InstanceID string
-	State      enums.WorkflowInstanceState
-	ObjectID   string
+	// State is the final state of the workflow instance
+	State enums.WorkflowInstanceState
+	// ObjectID is the ID of the object the workflow was acting on
+	ObjectID string
+	// ObjectType is the type of the object the workflow was acting on
 	ObjectType enums.WorkflowObjectType
 }
 
 // WorkflowTimeoutExpiredPayload contains data for when a timeout occurs
 type WorkflowTimeoutExpiredPayload struct {
-	InstanceID   string
+	// InstanceID is the unique identifier for the workflow instance
+	InstanceID string
+	// AssignmentID is the unique identifier for the assignment that timed out
 	AssignmentID string
-	ObjectID     string
-	ObjectType   enums.WorkflowObjectType
+	// ObjectID is the ID of the object related to the timeout
+	ObjectID string
+	// ObjectType is the type of the object related to the timeout
+	ObjectType enums.WorkflowObjectType
 }
 
 // MutationDetectedPayload contains data for mutations that might trigger workflows
 type MutationDetectedPayload struct {
-	SchemaType    string
-	ObjectID      string
-	Operation     string
+	// SchemaType is the type of schema where the mutation occurred
+	SchemaType string
+	// ObjectID is the ID of the object that was mutated
+	ObjectID string
+	// Operation is the type of operation performed (e.g., update, delete)
+	Operation string
+	// ChangedFields are the fields that were changed in the mutation
 	ChangedFields []string
-	UserID        string
+	// UserID is the ID of the user who performed the mutation
+	UserID string
 }
 
 // Topic name constants
