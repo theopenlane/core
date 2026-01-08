@@ -21,8 +21,6 @@ extend type Query {
     ):  Control!
 }
 
-
-
 extend type Mutation{
     """
     Create a new control
@@ -63,6 +61,15 @@ extend type Mutation{
         values to update the controls with
         """
         input: UpdateControlInput!
+    ): ControlBulkUpdatePayload!
+    """
+    Update multiple existing controls with a CSV upload, must include the ID or refCode and referenceFramework
+    """
+    updateBulkCSVControl(
+        """
+        values to update the controls with
+        """
+        input: Upload!
     ): ControlBulkUpdatePayload!
     """
     Update an existing control
