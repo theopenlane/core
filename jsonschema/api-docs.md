@@ -1673,3 +1673,4 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
 
 **Additional Properties:** not allowed  
+
