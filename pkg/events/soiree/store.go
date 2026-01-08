@@ -24,8 +24,8 @@ type handlerResultDeduper interface {
 	HandlerSucceeded(context.Context, string, string) (bool, error)
 }
 
-// storedResult holds the outcome of a listener processing an event
-type storedResult struct {
+// StoredResult holds the outcome of a listener processing an event
+type StoredResult struct {
 	// Topic is the topic of the event that was processed
 	Topic string `json:"topic"`
 	// EventID is the unique idempotency key for the event, when available

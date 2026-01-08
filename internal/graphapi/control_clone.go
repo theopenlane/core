@@ -265,7 +265,9 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	}
 
 	// run the cloning functions in parallel
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	// check if there were any errors during the cloning process
 	if len(errors) > 0 {
@@ -529,7 +531,9 @@ func (r *mutationResolver) bulkCreateSubcontrolNoTransaction(ctx context.Context
 	}
 
 	// run the cloning functions in parallel
-	r.withPool().SubmitMultipleAndWait(funks)
+	if err := r.withPool().SubmitMultipleAndWait(funks); err != nil {
+		return err
+	}
 
 	if len(errors) == 0 {
 		return nil

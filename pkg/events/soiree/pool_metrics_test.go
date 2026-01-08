@@ -12,7 +12,7 @@ func TestPoolMetrics(t *testing.T) {
 	pool := NewPool(WithWorkers(1), WithPoolMetricsRegisterer(reg))
 	defer pool.Release()
 
-	pool.SubmitMultipleAndWait([]func(){func() {}})
+	_ = pool.SubmitMultipleAndWait([]func(){func() {}})
 
 	if pool.metrics == nil {
 		t.Fatal("expected pool metrics to be configured")

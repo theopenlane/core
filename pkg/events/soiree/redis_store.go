@@ -128,7 +128,7 @@ func (s *RedisStore) SaveEvent(e Event) error {
 
 // SaveHandlerResult stores the result of a listener processing an event
 func (s *RedisStore) SaveHandlerResult(e Event, handlerID string, err error) error {
-	res := storedResult{Topic: e.Topic(), HandlerID: handlerID, EventID: EventID(e)}
+	res := StoredResult{Topic: e.Topic(), HandlerID: handlerID, EventID: EventID(e)}
 	if err != nil {
 		res.Error = err.Error()
 	}
@@ -224,15 +224,15 @@ func (s *RedisStore) Events(ctx context.Context) ([]Event, error) {
 }
 
 // Results returns all persisted listener results
-func (s *RedisStore) Results(ctx context.Context) ([]storedResult, error) {
+func (s *RedisStore) Results(ctx context.Context) ([]StoredResult, error) {
 	vals, err := s.client.LRange(ctx, "soiree:results", 0, -1).Result()
 	if err != nil {
 		return nil, err
 	}
 
-	results := make([]storedResult, 0, len(vals))
+	results := make([]StoredResult, 0, len(vals))
 	for _, v := range vals {
-		var r storedResult
+		var r StoredResult
 		if err := json.Unmarshal([]byte(v), &r); err != nil {
 			return nil, err
 		}

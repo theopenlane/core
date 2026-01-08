@@ -5,6 +5,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 )
 
+// defaultPoolWorkers is the default number of workers in a pool
+const defaultPoolWorkers = 10
+
 // Pool is a worker pool implementation using the pond library
 type Pool struct {
 	pool       pond.Pool
@@ -41,7 +44,7 @@ func WithPoolName(name string) PoolOption {
 // NewPool creates a new worker pool with the given options
 func NewPool(opts ...PoolOption) *Pool {
 	p := &Pool{
-		maxWorkers: 10,
+		maxWorkers: defaultPoolWorkers,
 		metricsReg: prometheus.DefaultRegisterer,
 	}
 
@@ -62,13 +65,14 @@ func (p *Pool) Submit(task func()) {
 }
 
 // SubmitMultipleAndWait submits multiple tasks and waits for all to complete
-func (p *Pool) SubmitMultipleAndWait(tasks []func()) {
+func (p *Pool) SubmitMultipleAndWait(tasks []func()) error {
 	group := p.pool.NewGroup()
 	for _, task := range tasks {
 		p.trackSubmission()
 		group.Submit(p.wrapTask(task))
 	}
-	group.Wait()
+
+	return group.Wait()
 }
 
 // Release stops all workers in the pool and waits for them to finish

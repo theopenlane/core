@@ -110,7 +110,9 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some actionplan deletions failed")
@@ -177,7 +179,9 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some apitoken deletions failed")
@@ -225,7 +229,9 @@ func (r *mutationResolver) bulkDeleteAssessment(ctx context.Context, ids []strin
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some assessment deletions failed")
@@ -292,7 +298,9 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some asset deletions failed")
@@ -400,7 +408,9 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some contact deletions failed")
@@ -508,7 +518,9 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some control deletions failed")
@@ -575,7 +587,9 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlimplementation deletions failed")
@@ -642,7 +656,9 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlobjective deletions failed")
@@ -709,7 +725,9 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some customdomain deletions failed")
@@ -890,7 +908,9 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some dnsverification deletions failed")
@@ -957,7 +977,9 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some documentdata deletions failed")
@@ -1024,7 +1046,9 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entity deletions failed")
@@ -1091,7 +1115,9 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entitytype deletions failed")
@@ -1158,7 +1184,9 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some event deletions failed")
@@ -1266,7 +1294,9 @@ func (r *mutationResolver) bulkDeleteEvidence(ctx context.Context, ids []string)
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some evidence deletions failed")
@@ -1314,7 +1344,9 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some export deletions failed")
@@ -1419,7 +1451,9 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some group deletions failed")
@@ -1486,7 +1520,9 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupmembership deletions failed")
@@ -1553,7 +1589,9 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupsetting deletions failed")
@@ -1661,7 +1699,9 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some hush deletions failed")
@@ -1769,7 +1809,9 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some internalpolicy deletions failed")
@@ -1836,7 +1878,9 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some invite deletions failed")
@@ -1903,7 +1947,9 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some jobtemplate deletions failed")
@@ -1970,7 +2016,9 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappabledomain deletions failed")
@@ -2037,7 +2085,9 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappedcontrol deletions failed")
@@ -2104,7 +2154,9 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some narrative deletions failed")
@@ -2171,7 +2223,9 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some organizationsetting deletions failed")
@@ -2238,7 +2292,9 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some orgmembership deletions failed")
@@ -2346,7 +2402,9 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some procedure deletions failed")
@@ -2413,7 +2471,9 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some program deletions failed")
@@ -2480,7 +2540,9 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some programmembership deletions failed")
@@ -2626,7 +2688,9 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some risk deletions failed")
@@ -2734,7 +2798,9 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scan deletions failed")
@@ -2801,7 +2867,9 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scheduledjob deletions failed")
@@ -2868,7 +2936,9 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subcontrol deletions failed")
@@ -2976,7 +3046,9 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subprocessor deletions failed")
@@ -3122,7 +3194,9 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some task deletions failed")
@@ -3189,7 +3263,9 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some template deletions failed")
@@ -3256,7 +3332,9 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentercompliance deletions failed")
@@ -3364,7 +3442,9 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterdoc deletions failed")
@@ -3491,7 +3571,9 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentersubprocessor deletions failed")
@@ -3558,7 +3640,9 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 		})
 	}
 
-	r.withPool().SubmitMultipleAndWait(funcs)
+	if err := r.withPool().SubmitMultipleAndWait(funcs); err != nil {
+		return nil, err
+	}
 
 	if len(errors) > 0 {
 		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some usersetting deletions failed")

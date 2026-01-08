@@ -1702,6 +1702,11 @@ func (_u *ControlUpdate) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ReferenceFrameworkRevision(); ok {
+		if err := control.ReferenceFrameworkRevisionValidator(v); err != nil {
+			return &ValidationError{Name: "reference_framework_revision", err: fmt.Errorf(`generated: validator failed for field "Control.reference_framework_revision": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.RefCode(); ok {
 		if err := control.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Control.ref_code": %w`, err)}
@@ -4945,6 +4950,11 @@ func (_u *ControlUpdateOne) check() error {
 	if v, ok := _u.mutation.Source(); ok {
 		if err := control.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Control.source": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReferenceFrameworkRevision(); ok {
+		if err := control.ReferenceFrameworkRevisionValidator(v); err != nil {
+			return &ValidationError{Name: "reference_framework_revision", err: fmt.Errorf(`generated: validator failed for field "Control.reference_framework_revision": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.RefCode(); ok {
