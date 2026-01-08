@@ -3,7 +3,7 @@ module github.com/theopenlane/core/common
 go 1.25.5
 
 require (
-	entgo.io/ent v0.14.6-0.20251211203232-397ebe9f39af
+	entgo.io/ent v0.14.6-0.20260108211107-2eb36418a02e
 	github.com/go-viper/mapstructure/v2 v2.4.0
 	github.com/go-webauthn/webauthn v0.15.0
 	github.com/google/uuid v1.6.0
