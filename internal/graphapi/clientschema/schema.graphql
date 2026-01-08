@@ -29338,6 +29338,15 @@ type Mutation {
 		input: UpdateControlInput!
 	): ControlBulkUpdatePayload!
 	"""
+	Update multiple existing controls with a CSV upload, must include the ID or refCode and referenceFramework
+	"""
+	updateBulkCSVControl(
+		"""
+		values to update the controls with
+		"""
+		input: Upload!
+	): ControlBulkUpdatePayload!
+	"""
 	Update an existing control
 	"""
 	updateControl(

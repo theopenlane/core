@@ -97,6 +97,26 @@ func (r *mutationResolver) UpdateBulkControl(ctx context.Context, ids []string, 
 	return r.bulkUpdateControl(ctx, ids, input)
 }
 
+// UpdateBulkCSVControl is the resolver for the updateBulkCSVControl field.
+func (r *mutationResolver) UpdateBulkCSVControl(ctx context.Context, input graphql.Upload) (*model.ControlBulkUpdatePayload, error) {
+	data, err := common.UnmarshalBulkData[UpdateBulkCSVControl](input)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
+
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "control"})
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	if len(data) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("input")
+	}
+
+	return r.bulkUpdateControlCSV(ctx, data)
+}
+
 // UpdateControl is the resolver for the updateControl field.
 func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)
