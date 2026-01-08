@@ -134,6 +134,40 @@ func NewAlreadyExistsError(o string) *AlreadyExistsError {
 	}
 }
 
+// ConstraintError is returned when an object input violates a constraint
+type ConstraintError struct {
+	ObjectType      string
+	ConstraintError error
+}
+
+// Code returns the ConstraintError code
+func (e *ConstraintError) Code() string {
+	return gqlerrors.ConflictErrorCode
+}
+
+// Message returns the ConstraintError message
+func (e *ConstraintError) Message() string {
+	return fmt.Sprintf("%s already exists in the system", e.ObjectType)
+}
+
+// Error returns the ConstraintError in string format
+func (e *ConstraintError) Error() string {
+	return fmt.Sprintf("unable to create %s, invalid constraint: %s", e.ObjectType, e.ConstraintError.Error())
+}
+
+// Module implements the CustomErrorType interface
+func (e *ConstraintError) Module() models.OrgModule {
+	return ""
+}
+
+// NewConstraintError returns a ConstraintError
+func NewConstraintError(o string, err error) *ConstraintError {
+	return &ConstraintError{
+		ObjectType:      o,
+		ConstraintError: err,
+	}
+}
+
 var _ gqlerrors.CustomErrorType = (*ForeignKeyError)(nil)
 
 // ForeignKeyError is returned when an object does not exist in the related table

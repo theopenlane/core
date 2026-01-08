@@ -1,14 +1,18 @@
 package schema
 
 import (
+	"fmt"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+	"golang.org/x/mod/semver"
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/entx/accessmap"
 
@@ -264,6 +268,14 @@ var controlFields = []ent.Field{
 	field.String("reference_framework_revision").
 		Comment("the reference framework revision for the control if it came from a standard, empty if not associated with a standard, allows for pulling in updates when the standard is updated").
 		Nillable().
+		Validate(func(s string) error {
+			ok := semver.IsValid(s)
+			if !ok {
+				return fmt.Errorf("%w, invalid semver value", rout.InvalidField("revision"))
+			}
+
+			return nil
+		}).
 		Annotations(
 			directives.ExternalSourceDirectiveAnnotation,
 			entx.FieldWorkflowEligible(),
