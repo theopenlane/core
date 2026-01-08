@@ -52,7 +52,7 @@ func (r *mutationResolver) CreateBulkTrustCenterCompliance(ctx context.Context, 
 	// ensure trust center id is set for each input
 	trustCenterID, err := getTrustCenterID(ctx, nil, "trustcentercompliance")
 	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcentercompliance"})
+		return nil, err
 	}
 
 	for i, v := range input {
