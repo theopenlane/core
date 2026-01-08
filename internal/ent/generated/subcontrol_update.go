@@ -1402,6 +1402,11 @@ func (_u *SubcontrolUpdate) check() error {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.ReferenceFrameworkRevision(); ok {
+		if err := subcontrol.ReferenceFrameworkRevisionValidator(v); err != nil {
+			return &ValidationError{Name: "reference_framework_revision", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.reference_framework_revision": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.RefCode(); ok {
 		if err := subcontrol.RefCodeValidator(v); err != nil {
 			return &ValidationError{Name: "ref_code", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.ref_code": %w`, err)}
@@ -3954,6 +3959,11 @@ func (_u *SubcontrolUpdateOne) check() error {
 	if v, ok := _u.mutation.Source(); ok {
 		if err := subcontrol.SourceValidator(v); err != nil {
 			return &ValidationError{Name: "source", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.source": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ReferenceFrameworkRevision(); ok {
+		if err := subcontrol.ReferenceFrameworkRevisionValidator(v); err != nil {
+			return &ValidationError{Name: "reference_framework_revision", err: fmt.Errorf(`generated: validator failed for field "Subcontrol.reference_framework_revision": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.RefCode(); ok {

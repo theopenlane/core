@@ -10,7 +10,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/alitto/pond/v2"
 	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -27,7 +26,7 @@ import (
 // Resolver provides a graph response resolver
 type Resolver struct {
 	db                *historygenerated.Client
-	pool              *soiree.PondPool
+	pool              *soiree.Pool
 	extensionsEnabled bool
 	isDevelopment     bool
 	complexityLimit   int
@@ -167,17 +166,11 @@ func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 }
 
 // WithPool adds a worker pool to the resolver for parallel processing
-func (r *Resolver) WithPool(maxWorkers int, includeMetrics bool, options ...pond.Option) {
-	// create the pool
-	r.pool = soiree.NewPondPool(
-		soiree.WithMaxWorkers(maxWorkers),
-		soiree.WithName("graphapi-history-worker-pool"),
-		soiree.WithOptions(options...))
-
-	if includeMetrics {
-		// add metrics
-		r.pool.NewStatsCollector()
-	}
+func (r *Resolver) WithPool(maxWorkers int) {
+	r.pool = soiree.NewPool(
+		soiree.WithWorkers(maxWorkers),
+		soiree.WithPoolName("graphapi-history-worker-pool"),
+	)
 }
 
 // Handler returns the http.HandlerFunc for the GraphAPI

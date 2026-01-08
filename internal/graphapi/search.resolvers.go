@@ -62,7 +62,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 	hasSearchContext := graphutils.CheckForRequestedField(ctx, "searchContext")
 
-	r.withPool().SubmitMultipleAndWait([]func(){
+	if err := r.withPool().SubmitMultipleAndWait([]func(){
 		func() {
 			var err error
 			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
@@ -459,7 +459,9 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 				highlightSearchContext(ctx, query, vulnerabilityResults, highlightTracker)
 			}
 		},
-	})
+	}); err != nil {
+		return nil, err
+	}
 
 	// log the errors for debugging
 	if len(errors) > 0 {

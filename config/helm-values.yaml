@@ -166,7 +166,7 @@ coreConfiguration:
           organizationid: ""  # @schema type:string
       # -- MaximumSentences specifies the maximum number of sentences in the summary
       maximumsentences: 10  # @schema type:integer; default:10
-    # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
+    # -- MaxPoolSize is the max worker pool size that can be used by the ent client
     maxpoolsize: 100  # @schema type:integer; default:100
     # -- Modules contains the configuration for the module system
     modules:

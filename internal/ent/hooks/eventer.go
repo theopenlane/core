@@ -17,7 +17,7 @@ const eventerPoolWorkers = 100
 // Eventer coordinates the mutation listeners that will be registered against the ent client and
 // underpins the hook emission predicate
 type Eventer struct {
-	Emitter   *soiree.EventPool
+	Emitter   *soiree.EventBus
 	listeners map[string][]soiree.ListenerBinding
 }
 
@@ -25,11 +25,8 @@ type Eventer struct {
 type EventerOpts func(*Eventer)
 
 // NewEventer constructs an Eventer and applies the provided option set; callers typically use this
-// when they have an existing event pool that needs to be reused
+// when they have an existing event bus that needs to be reused
 func NewEventer(opts ...EventerOpts) *Eventer {
-	// listeners is keyed by ent entity name so emission decisions can be made without maintaining
-	// a separate allowlist. Mutations that have nothing registered against them simply never fire
-	// events.
 	e := &Eventer{listeners: make(map[string][]soiree.ListenerBinding)}
 
 	for _, opt := range opts {
@@ -39,8 +36,8 @@ func NewEventer(opts ...EventerOpts) *Eventer {
 	return e
 }
 
-// WithEventerEmitter injects an existing soiree.EventPool into an Eventer
-func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
+// WithEventerEmitter injects an existing soiree.EventBus into an Eventer
+func WithEventerEmitter(emitter *soiree.EventBus) EventerOpts {
 	return func(e *Eventer) {
 		e.Emitter = emitter
 	}
@@ -49,34 +46,29 @@ func WithEventerEmitter(emitter *soiree.EventPool) EventerOpts {
 // MutationHandler is the signature listener implementations expose for mutation events
 type MutationHandler func(*soiree.EventContext, *events.MutationPayload) error
 
+// mutationTopic constructs a typed topic for the supplied entity name
 func mutationTopic(entity string) soiree.TypedTopic[*events.MutationPayload] {
-	// mutationTopic builds a typed topic for the supplied entity so listeners receive strongly typed payloads
-	// Ensure every entity shares the same wrapping/unwrapping logic so listeners can rely on a
-	// strongly typed payload instead of re-parsing the soiree.Event in every handler
 	return soiree.NewTypedTopic(
 		entity,
-		func(payload *events.MutationPayload) soiree.Event { return soiree.NewBaseEvent(entity, payload) },
-		func(event soiree.Event) (*events.MutationPayload, error) {
+		soiree.WithUnwrap(func(event soiree.Event) (*events.MutationPayload, error) {
 			payload, ok := event.Payload().(*events.MutationPayload)
 			if !ok {
 				return nil, fmt.Errorf("%w: %s", errMutationPayloadUnavailable, entity)
 			}
 
 			return payload, nil
-		},
+		}),
 	)
 }
 
-// AddMutationListener registers a handler for the supplied entity and records any listener
-// options; registration automatically opts the entity into event emission
-func (e *Eventer) AddMutationListener(entity string, handler MutationHandler, opts ...soiree.ListenerOption) {
+// AddMutationListener registers a handler for the supplied entity; registration automatically
+// opts the entity into event emission
+func (e *Eventer) AddMutationListener(entity string, handler MutationHandler) {
 	if e == nil || handler == nil || entity == "" {
 		return
 	}
 
 	if e.listeners == nil {
-		// The zero-value Eventer can be embedded into other structs; lazily recreate the map so
-		// calls remain safe after JSON/YAML unmarshalling or tests that bypass NewEventer.
 		e.listeners = make(map[string][]soiree.ListenerBinding)
 	}
 
@@ -85,24 +77,21 @@ func (e *Eventer) AddMutationListener(entity string, handler MutationHandler, op
 		func(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 			return handler(ctx, payload)
 		},
-		opts...,
 	)
 
 	e.listeners[entity] = append(e.listeners[entity], bound)
 }
 
-// NewEventerPool builds a fresh event pool, associates it with an Eventer, and wires the default
+// NewEventerPool builds a fresh event bus, associates it with an Eventer, and wires the default
 // mutation listeners
 func NewEventerPool(client any) *Eventer {
-	pool := soiree.NewEventPool(
-		soiree.WithPool(
-			soiree.NewPondPool(
-				soiree.WithMaxWorkers(eventerPoolWorkers),
-				soiree.WithName("ent_event_pool"))),
-		soiree.WithClient(client))
+	bus := soiree.New(
+		soiree.Workers(eventerPoolWorkers),
+		soiree.Client(client))
+	soiree.WithPoolName("ent_event_pool")
 
 	eventer := NewEventer(
-		WithEventerEmitter(pool),
+		WithEventerEmitter(bus),
 	)
 
 	registerDefaultMutationListeners(eventer)
@@ -131,9 +120,7 @@ func registerDefaultMutationListeners(e *Eventer) {
 	e.AddMutationListener(entgen.TypeSubprocessor, handleSubprocessorMutation)
 	e.AddMutationListener(entgen.TypeStandard, handleStandardMutation)
 
-	// Register notification listeners from notifications package
 	notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext, *events.MutationPayload) error) {
-		// Wrap the handler to match the MutationHandler signature expected by AddMutationListener
 		e.AddMutationListener(entityType, handler)
 	})
 }

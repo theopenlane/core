@@ -82,6 +82,20 @@ func matchParts(patternParts, subjectParts []string) bool {
 	return false
 }
 
+// normalizeTopicName trims whitespace from the topic name
+func normalizeTopicName(topicName string) string {
+	return strings.TrimSpace(topicName)
+}
+
+// validateTopicName returns an error if the topic name is empty or contains invalid characters
+func validateTopicName(topicName string) error {
+	if topicName == "" || !isValidTopicName(topicName) {
+		return ErrInvalidTopicName
+	}
+
+	return nil
+}
+
 // isValidTopicName checks if the topic name is valid, obviously
 func isValidTopicName(topicName string) bool {
 	return !strings.ContainsAny(topicName, "?[")

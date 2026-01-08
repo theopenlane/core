@@ -114,7 +114,7 @@ type HandlerTestSuite struct {
 	sharedSessionManager sessions.Store[map[string]any]
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
-	sharedPondPool       *soiree.PondPool
+	sharedPool           *soiree.Pool
 	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
@@ -177,10 +177,10 @@ func (suite *HandlerTestSuite) SetupSuite() {
 		Manager: otpMan,
 	}
 
-	// shared pond pool to avoid worker pool creation
-	suite.sharedPondPool = soiree.NewPondPool(
-		soiree.WithMaxWorkers(100), //nolint:mnd
-		soiree.WithName("ent_client_pool"),
+	// shared pool to avoid worker pool creation
+	suite.sharedPool = soiree.NewPool(
+		soiree.WithWorkers(100), //nolint:mnd
+		soiree.WithPoolName("ent_client_pool"),
 	)
 }
 
@@ -221,7 +221,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 			},
 		}),
 		ent.TOTP(suite.sharedOTPManager),
-		ent.PondPool(suite.sharedPondPool),
+		ent.Pool(suite.sharedPool),
 		ent.EntitlementManager(entitlements),
 		ent.HistoryClient(hc),
 	}

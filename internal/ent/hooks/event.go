@@ -87,7 +87,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 
 				var emitterClient any
 				if e.Emitter != nil {
-					emitterClient = e.Emitter.GetClient()
+					emitterClient = e.Emitter.Client()
 					if client, ok := emitterClient.(*entgen.Client); ok {
 						payload.Client = client
 					}
@@ -201,7 +201,7 @@ func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 		}
 
 		// Prefer the live pool state so dynamically registered listeners are honoured even when they bypass
-		// Eventer bookkeeping (e.g. direct EventPool.On calls in tests)
+		// Eventer bookkeeping (e.g. direct EventBus.On calls in tests)
 		if e.Emitter != nil && e.Emitter.InterestedIn(entity) {
 			return true
 		}

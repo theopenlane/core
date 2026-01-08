@@ -269,7 +269,6 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(
 			s.Config.Settings.Server.GraphPool.MaxWorkers,
-			true, // include metrics collectors
 		)
 
 		handler := r.Handler()
@@ -292,7 +291,6 @@ func WithHistoryGraphRoute(srv *server.Server, c *historygenerated.Client) Serve
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(
 			s.Config.Settings.Server.GraphPool.MaxWorkers,
-			true, // include metrics collectors
 		)
 
 		handler := r.Handler()

@@ -116,8 +116,8 @@ func TestEventPropertiesSetNilMap(t *testing.T) {
 }
 func TestBaseEventContext(t *testing.T) {
 	event := NewBaseEvent("test_topic", "payload")
-	if event.Context() != nil {
-		t.Errorf("expected initial context to be nil, got %v", event.Context())
+	if event.Context() != context.Background() {
+		t.Errorf("expected initial context to be context.Background(), got %v", event.Context())
 	}
 
 	ctx := context.WithValue(context.Background(), "key", "value")

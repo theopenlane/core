@@ -1,159 +1,125 @@
 package soiree
 
 import (
-	"math"
-	"sync"
-
 	"github.com/alitto/pond/v2"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
-// Pool is an interface for a worker pool
-type Pool interface {
-	// Submit submits a task to the worker pool
-	Submit(task func())
-	// Running returns the number of running workers in the pool
-	Running() int64
-	// Release stops all workers in the pool and waits for them to finish
-	Release()
-	// Stop causes this pool to stop accepting new tasks and signals all workers to exit
-	Stop()
-	// SubmittedTasks returns the number of tasks submitted to the pool
-	SubmittedTasks() int
-	// WaitingTasks returns the number of tasks waiting in the pool
-	WaitingTasks() int
-	// SuccessfulTasks returns the number of tasks that completed successfully
-	SuccessfulTasks() int
-	// FailedTasks returns the number of tasks that completed with a panic
-	FailedTasks() int
-	// CompletedTasks returns the number of tasks that completed either successfully or with a panic
-	CompletedTasks() int
+// defaultPoolWorkers is the default number of workers in a pool
+const defaultPoolWorkers = 10
+
+// Pool is a worker pool implementation using the pond library
+type Pool struct {
+	pool       pond.Pool
+	maxWorkers int
+	name       string
+	metricsReg prometheus.Registerer
+	metrics    *poolMetrics
 }
 
-// PondPool is a worker pool implementation using the pond library
-type PondPool struct {
-	// pool is the worker pool
-	pool pond.Pool
-	// name is the name of the pool used in metrics
-	name string
-	// MaxWorkers is the maximum number of workers in the pool
-	MaxWorkers int `json:"maxWorkers" koanf:"maxWorkers" default:"100"`
-	// opts are the options for the pool
-	opts []pond.Option
+// PoolOption configures a Pool
+type PoolOption func(*Pool)
+
+// WithWorkers sets the maximum number of workers in the pool
+func WithWorkers(n int) PoolOption {
+	return func(p *Pool) {
+		p.maxWorkers = n
+	}
 }
 
-// NewPondPool creates a new worker pool using the pond library
-func NewPondPool(opts ...PoolOptions) *PondPool {
-	p := &PondPool{}
+// WithPoolMetricsRegisterer configures pool metrics using the provided registerer (nil disables metrics)
+func WithPoolMetricsRegisterer(reg prometheus.Registerer) PoolOption {
+	return func(p *Pool) {
+		p.metricsReg = reg
+	}
+}
+
+// WithPoolName sets the pool name used for metrics labeling
+func WithPoolName(name string) PoolOption {
+	return func(p *Pool) {
+		p.name = name
+	}
+}
+
+// NewPool creates a new worker pool with the given options
+func NewPool(opts ...PoolOption) *Pool {
+	p := &Pool{
+		maxWorkers: defaultPoolWorkers,
+		metricsReg: prometheus.DefaultRegisterer,
+	}
 
 	for _, opt := range opts {
 		opt(p)
 	}
 
-	p.pool = pond.NewPool(p.MaxWorkers, p.opts...)
+	p.metrics = poolMetricsFor(p.metricsReg, p.name)
+	p.pool = pond.NewPool(p.maxWorkers)
 
 	return p
 }
 
-// PoolOptions is a type for setting options on the pool
-type PoolOptions func(*PondPool)
-
-// WithName sets the name of the pool
-func WithName(name string) PoolOptions {
-	return func(p *PondPool) {
-		p.name = name
-	}
-}
-
-// WithMaxWorkers sets the maximum number of workers in the pool
-func WithMaxWorkers(maxWorkers int) PoolOptions {
-	return func(p *PondPool) {
-		p.MaxWorkers = maxWorkers
-	}
-}
-
-// WithOptions sets the options for the pool
-func WithOptions(opts ...pond.Option) PoolOptions {
-	return func(p *PondPool) {
-		p.opts = opts
-	}
-}
-
 // Submit submits a task to the worker pool
-func (p *PondPool) Submit(task func()) {
-	p.pool.Submit(task)
+func (p *Pool) Submit(task func()) {
+	p.trackSubmission()
+	p.pool.Submit(p.wrapTask(task))
 }
 
-// SubmitMultipleAndWait submits multiple tasks to the worker pool and waits for all them to finish
-func (p *PondPool) SubmitMultipleAndWait(task []func()) {
-	wg := new(sync.WaitGroup)
-
-	for _, t := range task {
-		wg.Add(1)
-
-		p.pool.Submit(func() {
-			// Decrement the counter when the goroutine completes.
-			defer wg.Done()
-			// Execute the task
-			t()
-		})
+// SubmitMultipleAndWait submits multiple tasks and waits for all to complete
+func (p *Pool) SubmitMultipleAndWait(tasks []func()) error {
+	group := p.pool.NewGroup()
+	for _, task := range tasks {
+		p.trackSubmission()
+		group.Submit(p.wrapTask(task))
 	}
 
-	wg.Wait()
-}
-
-// Running returns the number of running workers in the pool
-func (p *PondPool) Running() int64 {
-	return p.pool.RunningWorkers()
+	return group.Wait()
 }
 
 // Release stops all workers in the pool and waits for them to finish
-func (p *PondPool) Release() {
+func (p *Pool) Release() {
 	p.pool.StopAndWait()
 }
 
-// Stop causes this pool to stop accepting new tasks and signals all workers to exit
-// Tasks being executed by workers will continue until completion (unless the process is terminated)
-// Tasks in the queue will not be executed (so will drop any buffered tasks - ideally use Release)
-func (p *PondPool) Stop() {
-	p.pool.Stop()
-}
-
-// SubmittedTasks returns the number of tasks submitted to the pool
-func (p *PondPool) SubmittedTasks() int {
-	return uintToInt(p.pool.SubmittedTasks())
-}
-
-// WaitingTasks returns the number of tasks waiting in the pool
-func (p *PondPool) WaitingTasks() int {
-	waitingTasks := p.pool.WaitingTasks()
-	maxInt := uint64(math.MaxInt)
-
-	if waitingTasks > maxInt {
-		return math.MaxInt
+// Resize adjusts the maximum number of workers in the pool
+func (p *Pool) Resize(maxWorkers int) {
+	if maxWorkers <= 0 {
+		return
 	}
 
-	return int(waitingTasks) //nolint:gosec
+	p.maxWorkers = maxWorkers
+	p.pool.Resize(maxWorkers)
 }
 
-// SuccessfulTasks returns the number of tasks that completed successfully
-func (p *PondPool) SuccessfulTasks() int {
-	return uintToInt(p.pool.SuccessfulTasks())
-}
-
-// FailedTasks returns the number of tasks that completed with a panic
-func (p *PondPool) FailedTasks() int {
-	return uintToInt(p.pool.FailedTasks())
-}
-
-// CompletedTasks returns the number of tasks that completed either successfully or with a panic
-func (p *PondPool) CompletedTasks() int {
-	return uintToInt(p.pool.CompletedTasks())
-}
-
-func uintToInt(v uint64) int {
-	if v > uint64(math.MaxInt) {
-		return math.MaxInt
+// trackSubmission updates metrics when a task is submitted
+func (p *Pool) trackSubmission() {
+	if p.metrics == nil {
+		return
 	}
 
-	return int(v) //nolint:gosec
+	p.metrics.tasksSubmitted.Inc()
+	p.metrics.tasksQueued.Inc()
+}
+
+// wrapTask wraps a task function to track metrics around its execution
+func (p *Pool) wrapTask(task func()) func() {
+	if p.metrics == nil {
+		return task
+	}
+
+	return func() {
+		p.metrics.tasksQueued.Dec()
+		p.metrics.tasksRunning.Inc()
+		p.metrics.tasksStarted.Inc()
+
+		defer func() {
+			p.metrics.tasksRunning.Dec()
+			if r := recover(); r != nil {
+				p.metrics.tasksPanicked.Inc()
+				panic(r)
+			}
+			p.metrics.tasksCompleted.Inc()
+		}()
+
+		task()
+	}
 }

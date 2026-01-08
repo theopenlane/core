@@ -7,86 +7,96 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
-// EventPoolOption defines a function type for Soiree configuration options
-type EventPoolOption func(Soiree)
+// Option defines a function type for EventBus configuration options
+type Option func(*EventBus)
 
-// DefaultErrorHandler is the default error handler that simply returns the error
-var DefaultErrorHandler = func(_ Event, err error) error {
+// defaultErrorHandler is the default error handler that simply returns the error
+var defaultErrorHandler = func(_ Event, err error) error {
 	return err
 }
 
-// DefaultIDGenerator generates a unique identifier
-var DefaultIDGenerator = func() string {
+// defaultIDGenerator generates a unique identifier
+var defaultIDGenerator = func() string {
 	return ulids.New().String()
 }
 
-// DefaultPanicHandler handles panics by printing the panic value
-var DefaultPanicHandler = func(p any) {
+// defaultPanicHandler handles panics by printing the panic value
+var defaultPanicHandler = func(p any) {
 	log.Error().Msgf("panic occurred processing event: %v", p)
 }
 
-// WithErrorHandler sets a custom error handler for an Soiree
-func WithErrorHandler(errHandler func(Event, error) error) EventPoolOption {
-	return func(m Soiree) {
-		m.SetErrorHandler(errHandler)
+// ErrorHandler sets a custom error handler for an EventBus
+func ErrorHandler(errHandler func(Event, error) error) Option {
+	return func(m *EventBus) {
+		m.errorHandler = errHandler
 	}
 }
 
-// WithIDGenerator sets a custom ID generator for an Soiree
-func WithIDGenerator(idGen func() string) EventPoolOption {
-	return func(m Soiree) {
-		m.SetIDGenerator(idGen)
+// IDGenerator sets a custom ID generator for an EventBus
+func IDGenerator(idGen func() string) Option {
+	return func(m *EventBus) {
+		m.idGenerator = idGen
 	}
 }
 
-// WithPool sets a custom pool for an Soiree
-func WithPool(pool Pool) EventPoolOption {
-	return func(m Soiree) {
-		m.SetPool(pool)
+// Workers sets the number of worker goroutines for concurrent event handling
+func Workers(n int) Option {
+	return func(m *EventBus) {
+		if n > 0 {
+			m.poolOpts = append(m.poolOpts, WithWorkers(n))
+		}
 	}
 }
 
-// WithEventStore sets the event persistence store for the Soiree
-func WithEventStore(store EventStore) EventPoolOption {
-	return func(m Soiree) {
-		m.SetEventStore(store)
+// EventStore configures a custom event store
+func EventStore(store eventStore) Option {
+	return func(m *EventBus) {
+		m.store = store
 	}
 }
 
 // WithRedisStore configures a Redis-backed event store
-func WithRedisStore(client *redis.Client) EventPoolOption {
-	return func(m Soiree) {
-		m.SetEventStore(NewRedisStore(client))
+func WithRedisStore(client *redis.Client, opts ...RedisStoreOption) Option {
+	return func(m *EventBus) {
+		m.store = NewRedisStore(client, opts...)
 	}
 }
 
-// WithRetry configures retry attempts and backoff behavior for listener failures
-func WithRetry(retries int, factory func() backoff.BackOff) EventPoolOption {
-	return func(m Soiree) {
-		m.SetRetry(retries, factory)
+// Retry configures retry attempts and backoff behavior for listener failures
+func Retry(retries int, factory func() backoff.BackOff) Option {
+	return func(m *EventBus) {
+		if retries > 0 {
+			m.maxRetries = retries
+		}
+		if factory != nil {
+			m.backOffFactory = factory
+		}
 	}
 }
 
 // PanicHandler is a function type that handles panics
 type PanicHandler func(any)
 
-// WithPanicHandler sets a custom panic handler for an Soiree
-func WithPanicHandler(panicHandler PanicHandler) EventPoolOption {
-	return func(m Soiree) {
-		m.SetPanicHandler(panicHandler)
+// Panics sets a custom panic handler for an EventBus
+func Panics(panicHandler PanicHandler) Option {
+	return func(m *EventBus) {
+		m.panicHandler = panicHandler
 	}
 }
 
-// WithErrChanBufferSize sets the size of the buffered channel for errors returned by asynchronous emits
-func WithErrChanBufferSize(size int) EventPoolOption {
-	return func(m Soiree) {
-		m.SetErrChanBufferSize(size)
+// ErrChanBufferSize sets the size of the buffered channel for errors returned by asynchronous emits
+func ErrChanBufferSize(size int) Option {
+	return func(m *EventBus) {
+		if size < 1 {
+			size = 1
+		}
+		m.errChanBufferSize = size
 	}
 }
 
-// WithClient sets a custom client for the Soiree
-func WithClient(client any) EventPoolOption {
-	return func(m Soiree) {
-		m.SetClient(client)
+// Client sets a custom client for the EventBus
+func Client(client any) Option {
+	return func(m *EventBus) {
+		m.client = client
 	}
 }

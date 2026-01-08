@@ -3,6 +3,10 @@ package soiree
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
@@ -16,22 +20,58 @@ type redisEvent struct {
 	Topic string `json:"topic"`
 	// Payload is the serialized payload of the event
 	Payload json.RawMessage `json:"payload"`
+	// Properties captures the serialized event properties for replay/idempotency
+	Properties json.RawMessage `json:"properties,omitempty"`
 }
 
 // RedisStore persists events and results in redis and acts as an event queue
 type RedisStore struct {
-	client  *redis.Client
-	metrics *redisMetrics
+	client     *redis.Client
+	metrics    *redisMetrics
+	eventsTTL  time.Duration
+	resultsTTL time.Duration
+	dedupTTL   time.Duration
+}
+
+// RedisStoreOption configures a RedisStore
+type RedisStoreOption func(*RedisStore)
+
+// WithEventsTTL sets the TTL for persisted events in Redis
+func WithEventsTTL(ttl time.Duration) RedisStoreOption {
+	return func(s *RedisStore) {
+		s.eventsTTL = ttl
+	}
+}
+
+// WithResultsTTL sets the TTL for handler results in Redis
+func WithResultsTTL(ttl time.Duration) RedisStoreOption {
+	return func(s *RedisStore) {
+		s.resultsTTL = ttl
+	}
+}
+
+// WithDedupTTL sets the TTL for deduplication keys in Redis
+func WithDedupTTL(ttl time.Duration) RedisStoreOption {
+	return func(s *RedisStore) {
+		s.dedupTTL = ttl
+	}
+}
+
+// WithRedisMetrics allows injecting custom metrics (for testing)
+func WithRedisMetrics(metrics *redisMetrics) RedisStoreOption {
+	return func(s *RedisStore) {
+		s.metrics = metrics
+	}
 }
 
 // NewRedisStore creates a new RedisStore with default metrics
-func NewRedisStore(client *redis.Client) *RedisStore {
-	return NewRedisStoreWithMetrics(client, defaultRedisMetrics)
-}
+func NewRedisStore(client *redis.Client, opts ...RedisStoreOption) *RedisStore {
+	s := &RedisStore{client: client, metrics: defaultRedisMetrics}
 
-// NewRedisStoreWithMetrics allows injecting custom metrics (for testing)
-func NewRedisStoreWithMetrics(client *redis.Client, metrics *redisMetrics) *RedisStore {
-	s := &RedisStore{client: client, metrics: metrics}
+	for _, opt := range opts {
+		opt(s)
+	}
+
 	s.initQueueLength()
 
 	return s
@@ -45,8 +85,13 @@ func (s *RedisStore) SaveEvent(e Event) error {
 		return err
 	}
 
+	props, propsErr := marshalEventProperties(e)
+	if propsErr != nil {
+		return propsErr
+	}
+
 	// Create a redisEvent instance with the topic and payload
-	data, err := json.Marshal(redisEvent{Topic: e.Topic(), Payload: payload})
+	data, err := json.Marshal(redisEvent{Topic: e.Topic(), Payload: payload, Properties: props})
 	if err != nil {
 		return err
 	}
@@ -62,40 +107,67 @@ func (s *RedisStore) SaveEvent(e Event) error {
 	pipe.RPush(ctx, "soiree:events", data)
 	pipe.RPush(ctx, "soiree:queue", data)
 
-	// we don't need the results of the pipeline commands, so we ignore them
-	// we just want to ensure that both commands are executed atomically
-	// if one fails, the other will not be executed
-	// this ensures that we don't end up with an event in the queue without it being stored
-	// caller is responsible for handling errors
-	_, err = pipe.Exec(ctx)
-	if err == nil {
-		s.metrics.redisEventsPersisted.Inc()
-		s.metrics.redisQueueLength.Inc()
+	if s.eventsTTL > 0 {
+		pipe.Expire(ctx, "soiree:events", s.eventsTTL)
 	}
 
-	return err
-}
-
-// SaveHandlerResult stores the result of a listener processing an event.
-func (s *RedisStore) SaveHandlerResult(e Event, handlerID string, err error) error {
-	res := StoredResult{Topic: e.Topic(), HandlerID: handlerID}
-	if err != nil {
-		res.Error = err.Error()
-	}
-
-	data, err := json.Marshal(res)
+	cmds, err := pipe.Exec(ctx)
 	if err != nil {
 		return err
 	}
 
-	// Store the result in the "soiree:results" list
-	// context is not needed here since this is a fire-and-forget operation
-	pushErr := s.client.RPush(context.Background(), "soiree:results", data).Err()
-	if pushErr == nil {
-		s.metrics.redisResultsPersisted.Inc()
+	if cmdErr := collectPipelineErrors(cmds); cmdErr != nil {
+		return cmdErr
 	}
 
-	return pushErr
+	s.metrics.redisEventsPersisted.Inc()
+	s.metrics.redisQueueLength.Inc()
+
+	return nil
+}
+
+// SaveHandlerResult stores the result of a listener processing an event
+func (s *RedisStore) SaveHandlerResult(e Event, handlerID string, err error) error {
+	res := StoredResult{Topic: e.Topic(), HandlerID: handlerID, EventID: EventID(e)}
+	if err != nil {
+		res.Error = err.Error()
+	}
+
+	data, marshalErr := json.Marshal(res)
+	if marshalErr != nil {
+		return marshalErr
+	}
+
+	ctx := context.Background()
+
+	pipe := s.client.Pipeline()
+	pipe.RPush(ctx, "soiree:results", data)
+
+	if s.resultsTTL > 0 {
+		pipe.Expire(ctx, "soiree:results", s.resultsTTL)
+	}
+
+	if res.EventID != "" && handlerID != "" {
+		dedupKey := redisHandlerDedupKey(res.EventID)
+		pipe.SAdd(ctx, dedupKey, handlerID)
+
+		if s.dedupTTL > 0 {
+			pipe.Expire(ctx, dedupKey, s.dedupTTL)
+		}
+	}
+
+	cmds, pushErr := pipe.Exec(ctx)
+	if pushErr != nil {
+		return pushErr
+	}
+
+	if cmdErr := collectPipelineErrors(cmds); cmdErr != nil {
+		return cmdErr
+	}
+
+	s.metrics.redisResultsPersisted.Inc()
+
+	return nil
 }
 
 // DequeueEvent pops a soiree event from the event queue - party line !
@@ -116,27 +188,18 @@ func (s *RedisStore) DequeueEvent(ctx context.Context) (Event, error) {
 		return nil, redis.Nil
 	}
 
-	var re redisEvent
-	if err := json.Unmarshal([]byte(vals[1]), &re); err != nil {
+	event, err := unmarshalRedisEvent(vals[1])
+	if err != nil {
 		return nil, err
 	}
 
-	var payload any
-	// If the payload is not empty, unmarshal it into a generic interface
-	if len(re.Payload) > 0 {
-		if err = json.Unmarshal(re.Payload, &payload); err != nil {
-			return nil, err
-		}
-	}
-
-	// decrease queue length and increment dequeued events counter
 	s.metrics.redisEventsDequeued.Inc()
 	s.metrics.redisQueueLength.Dec()
 
-	return NewBaseEvent(re.Topic, payload), nil
+	return event, nil
 }
 
-// Events returns all persisted events.
+// Events returns all persisted events
 func (s *RedisStore) Events(ctx context.Context) ([]Event, error) {
 	// Retrieve all events from the Redis list "soiree:events"
 	// using LRange to get all elements from index 0 to -1 (which means all elements)
@@ -147,35 +210,21 @@ func (s *RedisStore) Events(ctx context.Context) ([]Event, error) {
 	}
 
 	events := make([]Event, 0, len(vals))
-	// Iterate over the values and unmarshal them into redisEvent structs
-	// then create BaseEvent instances from them
-	// this allows us to return a slice of Event interface types
-	// which is what the caller expects
+
 	for _, v := range vals {
-		var re redisEvent
-		if err := json.Unmarshal([]byte(v), &re); err != nil {
+		event, err := unmarshalRedisEvent(v)
+		if err != nil {
 			return nil, err
 		}
 
-		var payload any
-		// If the payload is not empty, unmarshal it into a generic interface
-		if len(re.Payload) > 0 {
-			if err := json.Unmarshal(re.Payload, &payload); err != nil {
-				return nil, err
-			}
-		}
-
-		events = append(events, NewBaseEvent(re.Topic, payload))
+		events = append(events, event)
 	}
 
 	return events, nil
 }
 
-// Results returns all persisted listener results.
+// Results returns all persisted listener results
 func (s *RedisStore) Results(ctx context.Context) ([]StoredResult, error) {
-	// Retrieve all results from the Redis list "soiree:results"
-	// using LRange to get all elements from index 0 to -1 (which means all elements)
-	// this will return a slice of JSON strings representing the results
 	vals, err := s.client.LRange(ctx, "soiree:results", 0, -1).Result()
 	if err != nil {
 		return nil, err
@@ -183,9 +232,6 @@ func (s *RedisStore) Results(ctx context.Context) ([]StoredResult, error) {
 
 	results := make([]StoredResult, 0, len(vals))
 	for _, v := range vals {
-		// Unmarshal each value into a StoredResult struct
-		// this allows us to return a slice of StoredResult structs
-		// which is what the caller expects
 		var r StoredResult
 		if err := json.Unmarshal([]byte(v), &r); err != nil {
 			return nil, err
@@ -195,4 +241,87 @@ func (s *RedisStore) Results(ctx context.Context) ([]StoredResult, error) {
 	}
 
 	return results, nil
+}
+
+// HandlerSucceeded reports whether the handler has already succeeded for the given event ID.
+func (s *RedisStore) HandlerSucceeded(ctx context.Context, eventID string, handlerID string) (bool, error) {
+	if strings.TrimSpace(eventID) == "" || strings.TrimSpace(handlerID) == "" {
+		return false, nil
+	}
+
+	return s.client.SIsMember(ctx, redisHandlerDedupKey(eventID), handlerID).Result()
+}
+
+// redisHandlerDedupKey returns the Redis key used for handler deduplication for a given event ID
+func redisHandlerDedupKey(eventID string) string {
+	return fmt.Sprintf("soiree:dedup:%s", eventID)
+}
+
+// collectPipelineErrors aggregates errors from individual pipeline commands
+func collectPipelineErrors(cmds []redis.Cmder) error {
+	var errs []error
+
+	for _, cmd := range cmds {
+		if err := cmd.Err(); err != nil && !errors.Is(err, redis.Nil) {
+			errs = append(errs, err)
+		}
+	}
+
+	return errors.Join(errs...)
+}
+
+// unmarshalRedisEvent converts a JSON string into an Event
+func unmarshalRedisEvent(data string) (Event, error) {
+	var re redisEvent
+	if err := json.Unmarshal([]byte(data), &re); err != nil {
+		return nil, err
+	}
+
+	var payload any
+	if len(re.Payload) > 0 {
+		if err := json.Unmarshal(re.Payload, &payload); err != nil {
+			return nil, err
+		}
+	}
+
+	var props Properties
+	if len(re.Properties) > 0 {
+		if err := json.Unmarshal(re.Properties, &props); err != nil {
+			return nil, err
+		}
+	}
+
+	event := NewBaseEvent(re.Topic, payload)
+	if props != nil {
+		event.SetProperties(props)
+	}
+
+	return event, nil
+}
+
+// marshalEventProperties marshals the event properties to JSON, ensuring at least the EventID is included
+func marshalEventProperties(event Event) (json.RawMessage, error) {
+	props := event.Properties()
+	if props == nil {
+		if id := EventID(event); id != "" {
+			props = Properties{PropertyEventID: id}
+		}
+	}
+
+	data, err := json.Marshal(props)
+	if err == nil {
+		return data, nil
+	}
+
+	id := EventID(event)
+	if id == "" {
+		return nil, err
+	}
+
+	fallback, fallbackErr := json.Marshal(Properties{PropertyEventID: id})
+	if fallbackErr != nil {
+		return nil, err
+	}
+
+	return fallback, nil
 }

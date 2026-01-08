@@ -159,7 +159,7 @@ Server settings for the echo server
 |[**redirects**](#serverredirects)|`object`|Config contains the types used in executing redirects via the redirect middleware<br/>|no|
 |[**cachecontrol**](#servercachecontrol)|`object`|Config is the config values for the cache-control middleware<br/>|no|
 |[**mime**](#servermime)|`object`|Config defines the config for Mime middleware<br/>|no|
-|[**graphpool**](#servergraphpool)|`object`|PondPool contains the settings for the goroutine pool<br/>|no|
+|[**graphpool**](#servergraphpool)|`object`|PoolConfig contains the settings for the goroutine pool<br/>|no|
 |**enablegraphextensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
 |**enablegraphsubscriptions**|`boolean`|EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse<br/>|no|
 |**complexitylimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
@@ -362,7 +362,7 @@ Config defines the config for Mime middleware
 <a name="servergraphpool"></a>
 ### server\.graphpool: object
 
-PondPool contains the settings for the goroutine pool
+PoolConfig contains the settings for the goroutine pool
 
 
 **Properties**
@@ -404,7 +404,7 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entitytypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
-|**maxpoolsize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
+|**maxpoolsize**|`integer`|MaxPoolSize is the max worker pool size that can be used by the ent client<br/>||
 |[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
 |**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
 |[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
