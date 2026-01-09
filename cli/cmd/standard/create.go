@@ -7,9 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/theopenlane/go-client/graphclient"
+
 	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/go-client/graphclient"
 )
 
 var createCmd = &cobra.Command{
@@ -114,7 +115,7 @@ func create(ctx context.Context) error {
 	input, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.CreateStandard(ctx, input)
+	o, err := client.CreateStandard(ctx, input, nil)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)
