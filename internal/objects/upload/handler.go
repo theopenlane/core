@@ -40,7 +40,7 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 		// we just won't populate the provider hints with it. The upload can still proceed
 		// without it - failing at this stage prevents the upload from ever progressing
 		orgID, _ := auth.GetOrganizationIDFromContext(ctx)
-		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" {
+		if orgID != "" && file.Parent.ID == "" && file.CorrelatedObjectID == "" && file.CorrelatedObjectType == "" {
 			file.CorrelatedObjectID = orgID
 			file.CorrelatedObjectType = "organization"
 		}
