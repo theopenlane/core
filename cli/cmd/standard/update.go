@@ -132,7 +132,7 @@ func update(ctx context.Context) error {
 	id, input, err := updateValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.UpdateStandard(ctx, id, input)
+	o, err := client.UpdateStandard(ctx, id, input,nil)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)
