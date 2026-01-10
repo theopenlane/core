@@ -468,7 +468,7 @@ func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, 
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to update control in bulk operation")
-			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
+			continue
 		}
 
 		results = append(results, updatedEntity)
