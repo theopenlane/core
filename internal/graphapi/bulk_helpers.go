@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -40,7 +41,7 @@ func (r *mutationResolver) bulkUpdateControlCSV(ctx context.Context, inputs []*U
 		updatedEntity, err := existing.Update().SetInput(input.UpdateControlInput).Save(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("control_id", input.ID).Msg("failed to update control in bulk operation")
-			continue
+			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "control"})
 		}
 
 		results = append(results, updatedEntity)

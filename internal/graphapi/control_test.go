@@ -1697,6 +1697,147 @@ func TestMutationUpdateControl(t *testing.T) {
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlAnotherOrg.ID}).MustDelete(testUser2.UserCtx, t)
 	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kind.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, IDs: []string{kindCustom.ID}}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestMutationUpdateControlDescription(t *testing.T) {
+	control := (&ControlBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	descriptionRichText := "<div class=\"slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold\" data-slate-editor=\"true\" data-slate-node=\"value\"><div data-slate-node=\"element\" data-block-id=\"kK9tZ5Tllq\" data-slate-type=\"p\" data-slate-id=\"kK9tZ5Tllq\" class=\"slate-p m-0 px-0 py-1\" style=\"position:relative\"><span data-slate-node=\"text\"><span data-slate-leaf=\"true\"><span data-slate-string=\"true\">lets just have text here and see</span></span></span></div></div>"
+	descriptionSlateJSON := []any{`
+        {
+          "children": [
+            {
+              "text": "lets just have text here and see but I added something else here so thats my fault"
+            }
+          ],
+          "id": "kK9tZ5Tllq",
+          "type": "p"
+        }
+      `}
+
+	descriptionRichUpdatedText := "<div class=\"slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold\" data-slate-editor=\"true\" data-slate-node=\"value\"><div data-slate-node=\"element\" data-block-id=\"kK9tZ5Tllq\" data-slate-type=\"p\" data-slate-id=\"kK9tZ5Tllq\" class=\"slate-p m-0 px-0 py-1\" style=\"position:relative\"><span data-slate-node=\"text\"><span data-slate-leaf=\"true\"><span data-slate-string=\"true\">lets just have text here and see with update</span></span></span></div></div>"
+
+	descriptionRichTextForComments := "<div class=\"slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold\" data-slate-editor=\"true\" data-slate-node=\"value\"><div data-slate-node=\"element\" data-block-id=\"b_bwtnb9l8\" data-slate-id=\"b_bwtnb9l8\" data-slate-type=\"p\" class=\"slate-p m-0 px-0 py-1\" style=\"position:relative\"><span data-slate-node=\"text\"><span data-slate-leaf=\"true\"><span data-slate-string=\"true\">asfsadfsd</span></span></span></div><div data-slate-node=\"element\" data-block-id=\"lqbGHj_l70\" data-slate-id=\"lqbGHj_l70\" data-slate-type=\"p\" class=\"slate-p m-0 px-0 py-1\" style=\"position:relative\"><span data-slate-node=\"text\"><span data-slate-leaf=\"true\"><span data-slate-string=\"true\"></span></span></span></div><div data-slate-node=\"element\" data-block-id=\"qfPeKFLe13\" data-slate-id=\"qfPeKFLe13\" data-slate-type=\"p\" class=\"slate-p m-0 px-0 py-1\" style=\"position:relative\"><span data-slate-node=\"text\"><span data-slate-leaf=\"true\"><span data-slate-string=\"true\">for a comment</span></span></span></div></div>"
+
+	jsonWithComments := []any{
+		`{
+              "children": [
+                {
+                  "text": "asfsadfsd"
+                }
+              ],
+              "id": "b_bwtnb9l8",
+              "type": "p"
+            }`,
+		`{
+              "children": [
+                {
+                  "text": ""
+                }
+              ],
+              "id": "lqbGHj_l70",
+              "type": "p"
+            }`,
+		`{
+              "children": [
+                {
+                  "text": "for a "
+                },
+                {
+                  "comment": true,
+                  "comment_MDHGnHfbfTfX-amk1Gugp": true,
+                  "text": "comment"
+                }
+              ],
+              "id": "qfPeKFLe13",
+              "type": "p"
+            }`,
+	}
+
+	testCases := []struct {
+		name         string
+		request      testclient.UpdateControlInput
+		controlID    string
+		client       *testclient.TestClient
+		ctx          context.Context
+		expectedErr  string
+		expectedJSON []any
+	}{
+		{
+			name: "happy path, update both fields, it should return description JSON provided (even if description text matches the JSON)",
+			request: testclient.UpdateControlInput{
+				Description:     &descriptionRichText,
+				DescriptionJSON: descriptionSlateJSON,
+			},
+			controlID:    control.ID,
+			client:       suite.client.api,
+			ctx:          testUser1.UserCtx,
+			expectedJSON: descriptionSlateJSON,
+		},
+		{
+			name: "happy path, update description rich text, don't provide description JSON",
+			request: testclient.UpdateControlInput{
+				Description: &descriptionRichUpdatedText,
+			},
+			controlID: control.ID,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+		},
+		{
+			name: "complex slate JSON with comments and multiple blocks",
+			request: testclient.UpdateControlInput{
+				Description: lo.ToPtr(`<div class="slate-editor group/editor relative w-full cursor-text overflow-x-hidden break-words whitespace-pre-wrap select-text rounded-md ring-offset-background focus-visible:outline-hidden placeholder:text-muted-foreground/80 **:data-slate-placeholder:top-[auto_!important] **:data-slate-placeholder:text-muted-foreground/80 **:data-slate-placeholder:opacity-100! [&_strong]:font-bold" data-slate-editor="true" data-slate-node="value"><div data-slate-node="element" data-block-id="b_bwtnb9l8" data-slate-id="b_bwtnb9l8" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">asfsadfsd</span></span></span></div><div data-slate-node="element" data-block-id="lqbGHj_l70" data-slate-id="lqbGHj_l70" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true"></span></span></span></div><div data-slate-node="element" data-block-id="qfPeKFLe13" data-slate-id="qfPeKFLe13" data-slate-type="p" class="slate-p m-0 px-0 py-1" style="position:relative"><span data-slate-node="text"><span data-slate-leaf="true"><span data-slate-string="true">for a comment with update</span></span></span></div></div>`),
+			},
+			controlID: control.ID,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+		},
+		{
+			name: "complex with comments, provide JSON",
+			request: testclient.UpdateControlInput{
+				Description:     &descriptionRichTextForComments,
+				DescriptionJSON: jsonWithComments,
+			},
+			controlID:    control.ID,
+			client:       suite.client.api,
+			ctx:          testUser1.UserCtx,
+			expectedJSON: jsonWithComments,
+		},
+		{
+			name: "complex with comments, json not provided, should error",
+			request: testclient.UpdateControlInput{
+				Description: &descriptionRichTextForComments,
+			},
+			controlID:   control.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "text contains comments",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Update "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.UpdateControl(tc.ctx, tc.controlID, tc.request)
+			if tc.expectedErr != "" {
+
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateControl.Control.Description))
+
+			if tc.expectedJSON == nil {
+				assert.Check(t, resp.UpdateControl.Control.DescriptionJSON == nil)
+			} else {
+				assert.Check(t, is.DeepEqual(tc.expectedJSON, resp.UpdateControl.Control.DescriptionJSON))
+			}
+		})
+	}
+
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser1.UserCtx, t)
 
 }
 

@@ -67,6 +67,7 @@ func (d DocumentMixin) Hooks() []ent.Hook {
 			hooks.HookStatusApproval(),
 			ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne,
 		),
+		hooks.HookSlateJSON(),
 	}
 }
 

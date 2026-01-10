@@ -179,6 +179,7 @@ func (ControlMixin) Hooks() []ent.Hook {
 			}, "delegate"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+		hooks.HookSlateJSON(),
 	}
 }
 
