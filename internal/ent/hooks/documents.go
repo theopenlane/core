@@ -89,11 +89,7 @@ func HookImportDocument() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			mut2 := generated.InternalPolicyMutation{}
-			mut2.Name()
-
 			_, exists := mut.URL()
-
 			switch exists {
 			case true:
 				if err := importURLToSchema(mut); err != nil {

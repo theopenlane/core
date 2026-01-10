@@ -112,6 +112,7 @@ func (c ControlImplementation) Edges() []ent.Edge {
 func (ControlImplementation) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookControlImplementation(),
+		hooks.HookSlateJSON(),
 	}
 }
 

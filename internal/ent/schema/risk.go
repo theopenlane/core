@@ -196,6 +196,7 @@ func (Risk) Hooks() []ent.Hook {
 			}, "delegate"),
 			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
 		),
+		hooks.HookSlateJSON(),
 	}
 }
 

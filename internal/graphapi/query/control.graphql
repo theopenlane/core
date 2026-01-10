@@ -11,6 +11,7 @@ mutation CreateBulkControl($input: [CreateControlInput!]) {
       createdAt
       createdBy
       description
+      descriptionJSON
       displayID
       exampleEvidence
       id
@@ -46,6 +47,7 @@ mutation CreateBulkCSVControl($input: Upload!) {
       createdAt
       createdBy
       description
+      descriptionJSON
       displayID
       exampleEvidence
       id
@@ -81,6 +83,7 @@ mutation CreateControl($input: CreateControlInput!) {
       createdAt
       createdBy
       description
+      descriptionJSON
       displayID
       exampleEvidence
       id
@@ -178,6 +181,7 @@ query GetAllControls {
         createdAt
         createdBy
         description
+        descriptionJSON
         displayID
         exampleEvidence
         id
@@ -270,6 +274,7 @@ query GetControlByID($controlId: ID!) {
     createdAt
     createdBy
     description
+    descriptionJSON
     displayID
     exampleEvidence
     id
@@ -376,6 +381,7 @@ query GetControls($first: Int, $last: Int, $after: Cursor, $before: Cursor, $whe
         createdAt
         createdBy
         description
+        descriptionJSON
         displayID
         exampleEvidence
         id
@@ -469,6 +475,7 @@ mutation UpdateBulkControl($ids: [ID!]!, $input: UpdateControlInput!) {
       createdAt
       createdBy
       description
+      descriptionJSON
       displayID
       exampleEvidence
       id
@@ -547,6 +554,7 @@ mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
       createdAt
       createdBy
       description
+      descriptionJSON
       displayID
       exampleEvidence
       id
