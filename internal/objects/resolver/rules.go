@@ -3,12 +3,13 @@ package resolver
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"
 	"github.com/theopenlane/utils/contextx"
+
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // providerBuilder is a type alias for readability
