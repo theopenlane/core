@@ -2322,6 +2322,40 @@ func (r *queryResolver) TrustCenterDocs(ctx context.Context, after *entgql.Curso
 	return res, err
 }
 
+// TrustCenterEntities is the resolver for the trustCenterEntities field.
+func (r *queryResolver) TrustCenterEntities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterEntityOrder, where *generated.TrustCenterEntityWhereInput) (*generated.TrustCenterEntityConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterEntityOrder{
+			{
+				Field:     generated.TrustCenterEntityOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterEntity.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterEntityOrder(orderBy),
+		generated.WithTrustCenterEntityFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
+	}
+
+	return res, err
+}
+
 // TrustCenterSettings is the resolver for the trustCenterSettings field.
 func (r *queryResolver) TrustCenterSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) (*generated.TrustCenterSettingConnection, error) {
 	// set page limit if nothing was set
@@ -2419,40 +2453,6 @@ func (r *queryResolver) TrustCenterWatermarkConfigs(ctx context.Context, after *
 		generated.WithTrustCenterWatermarkConfigFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterwatermarkconfig"})
-	}
-
-	return res, err
-}
-
-// TrustcenterEntities is the resolver for the trustcenterEntities field.
-func (r *queryResolver) TrustcenterEntities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustcenterEntityOrder, where *generated.TrustcenterEntityWhereInput) (*generated.TrustcenterEntityConnection, error) {
-	// set page limit if nothing was set
-	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
-
-	if orderBy == nil {
-		orderBy = []*generated.TrustcenterEntityOrder{
-			{
-				Field:     generated.TrustcenterEntityOrderFieldCreatedAt,
-				Direction: entgql.OrderDirectionDesc,
-			},
-		}
-	}
-
-	query, err := withTransactionalMutation(ctx).TrustcenterEntity.Query().CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
-	}
-
-	res, err := query.Paginate(
-		ctx,
-		after,
-		first,
-		before,
-		last,
-		generated.WithTrustcenterEntityOrder(orderBy),
-		generated.WithTrustcenterEntityFilter(where.Filter))
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
 	}
 
 	return res, err

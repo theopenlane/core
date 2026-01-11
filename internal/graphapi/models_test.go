@@ -1787,8 +1787,9 @@ type TrustCenterBuilder struct {
 	client *client
 
 	// Fields
-	Slug           string
-	CustomDomainID string
+	Slug            string
+	CustomDomainID  string
+	IncludeChildren bool
 }
 
 // TrustCenterSettingBuilder is used to create trust center settings
@@ -1833,6 +1834,10 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 
 	trustCenter, err := mutation.Save(ctx)
 	requireNoError(t, err)
+
+	if tc.IncludeChildren {
+		(&TrustCenterEntityBuilder{client: tc.client, TrustCenterID: trustCenter.ID}).MustNew(ctx, t)
+	}
 
 	// Create the organization parent tuple for the trust center
 	// This is normally done by the orgOwnedMixin, but since we're bypassing hooks, we need to do it manually
@@ -1923,8 +1928,8 @@ func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testin
 	return trustCenterCompliance
 }
 
-// TrustcenterEntityBuilder is used to create trustcenter entities
-type TrustcenterEntityBuilder struct {
+// TrustCenterEntityBuilder is used to create trustcenter entities
+type TrustCenterEntityBuilder struct {
 	client *client
 
 	// Fields
@@ -1934,7 +1939,7 @@ type TrustcenterEntityBuilder struct {
 	LogoFileID    *string
 }
 
-func (te *TrustcenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustcenterEntity {
+func (te *TrustCenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustCenterEntity {
 	userCtx := ctx
 	ctx = ent.NewContext(ctx, te.client.db)
 	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
@@ -1948,7 +1953,7 @@ func (te *TrustcenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *
 		te.TrustCenterID = trustCenter.ID
 	}
 
-	mutation := te.client.db.TrustcenterEntity.Create().
+	mutation := te.client.db.TrustCenterEntity.Create().
 		SetName(te.Name).
 		SetTrustCenterID(te.TrustCenterID)
 
@@ -1960,10 +1965,10 @@ func (te *TrustcenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *
 		mutation.SetLogoFileID(*te.LogoFileID)
 	}
 
-	trustcenterEntity, err := mutation.Save(ctx)
+	trustCenterEntity, err := mutation.Save(ctx)
 	requireNoError(t, err)
 
-	return trustcenterEntity
+	return trustCenterEntity
 }
 
 // IntegrationBuilder is used to create integrations

@@ -21,54 +21,54 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// TrustcenterEntityHistoryQuery is the builder for querying TrustcenterEntityHistory entities.
-type TrustcenterEntityHistoryQuery struct {
+// TrustCenterEntityHistoryQuery is the builder for querying TrustCenterEntityHistory entities.
+type TrustCenterEntityHistoryQuery struct {
 	config
 	ctx        *QueryContext
 	order      []trustcenterentityhistory.OrderOption
 	inters     []Interceptor
-	predicates []predicate.TrustcenterEntityHistory
-	loadTotal  []func(context.Context, []*TrustcenterEntityHistory) error
+	predicates []predicate.TrustCenterEntityHistory
+	loadTotal  []func(context.Context, []*TrustCenterEntityHistory) error
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
 }
 
-// Where adds a new predicate for the TrustcenterEntityHistoryQuery builder.
-func (_q *TrustcenterEntityHistoryQuery) Where(ps ...predicate.TrustcenterEntityHistory) *TrustcenterEntityHistoryQuery {
+// Where adds a new predicate for the TrustCenterEntityHistoryQuery builder.
+func (_q *TrustCenterEntityHistoryQuery) Where(ps ...predicate.TrustCenterEntityHistory) *TrustCenterEntityHistoryQuery {
 	_q.predicates = append(_q.predicates, ps...)
 	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (_q *TrustcenterEntityHistoryQuery) Limit(limit int) *TrustcenterEntityHistoryQuery {
+func (_q *TrustCenterEntityHistoryQuery) Limit(limit int) *TrustCenterEntityHistoryQuery {
 	_q.ctx.Limit = &limit
 	return _q
 }
 
 // Offset to start from.
-func (_q *TrustcenterEntityHistoryQuery) Offset(offset int) *TrustcenterEntityHistoryQuery {
+func (_q *TrustCenterEntityHistoryQuery) Offset(offset int) *TrustCenterEntityHistoryQuery {
 	_q.ctx.Offset = &offset
 	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (_q *TrustcenterEntityHistoryQuery) Unique(unique bool) *TrustcenterEntityHistoryQuery {
+func (_q *TrustCenterEntityHistoryQuery) Unique(unique bool) *TrustCenterEntityHistoryQuery {
 	_q.ctx.Unique = &unique
 	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (_q *TrustcenterEntityHistoryQuery) Order(o ...trustcenterentityhistory.OrderOption) *TrustcenterEntityHistoryQuery {
+func (_q *TrustCenterEntityHistoryQuery) Order(o ...trustcenterentityhistory.OrderOption) *TrustCenterEntityHistoryQuery {
 	_q.order = append(_q.order, o...)
 	return _q
 }
 
-// First returns the first TrustcenterEntityHistory entity from the query.
-// Returns a *NotFoundError when no TrustcenterEntityHistory was found.
-func (_q *TrustcenterEntityHistoryQuery) First(ctx context.Context) (*TrustcenterEntityHistory, error) {
+// First returns the first TrustCenterEntityHistory entity from the query.
+// Returns a *NotFoundError when no TrustCenterEntityHistory was found.
+func (_q *TrustCenterEntityHistoryQuery) First(ctx context.Context) (*TrustCenterEntityHistory, error) {
 	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
@@ -80,7 +80,7 @@ func (_q *TrustcenterEntityHistoryQuery) First(ctx context.Context) (*Trustcente
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) FirstX(ctx context.Context) *TrustcenterEntityHistory {
+func (_q *TrustCenterEntityHistoryQuery) FirstX(ctx context.Context) *TrustCenterEntityHistory {
 	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -88,9 +88,9 @@ func (_q *TrustcenterEntityHistoryQuery) FirstX(ctx context.Context) *Trustcente
 	return node
 }
 
-// FirstID returns the first TrustcenterEntityHistory ID from the query.
-// Returns a *NotFoundError when no TrustcenterEntityHistory ID was found.
-func (_q *TrustcenterEntityHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
+// FirstID returns the first TrustCenterEntityHistory ID from the query.
+// Returns a *NotFoundError when no TrustCenterEntityHistory ID was found.
+func (_q *TrustCenterEntityHistoryQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
@@ -103,7 +103,7 @@ func (_q *TrustcenterEntityHistoryQuery) FirstID(ctx context.Context) (id string
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) FirstIDX(ctx context.Context) string {
+func (_q *TrustCenterEntityHistoryQuery) FirstIDX(ctx context.Context) string {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -111,10 +111,10 @@ func (_q *TrustcenterEntityHistoryQuery) FirstIDX(ctx context.Context) string {
 	return id
 }
 
-// Only returns a single TrustcenterEntityHistory entity found by the query, ensuring it only returns one.
-// Returns a *NotSingularError when more than one TrustcenterEntityHistory entity is found.
-// Returns a *NotFoundError when no TrustcenterEntityHistory entities are found.
-func (_q *TrustcenterEntityHistoryQuery) Only(ctx context.Context) (*TrustcenterEntityHistory, error) {
+// Only returns a single TrustCenterEntityHistory entity found by the query, ensuring it only returns one.
+// Returns a *NotSingularError when more than one TrustCenterEntityHistory entity is found.
+// Returns a *NotFoundError when no TrustCenterEntityHistory entities are found.
+func (_q *TrustCenterEntityHistoryQuery) Only(ctx context.Context) (*TrustCenterEntityHistory, error) {
 	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
@@ -130,7 +130,7 @@ func (_q *TrustcenterEntityHistoryQuery) Only(ctx context.Context) (*Trustcenter
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) OnlyX(ctx context.Context) *TrustcenterEntityHistory {
+func (_q *TrustCenterEntityHistoryQuery) OnlyX(ctx context.Context) *TrustCenterEntityHistory {
 	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
@@ -138,10 +138,10 @@ func (_q *TrustcenterEntityHistoryQuery) OnlyX(ctx context.Context) *Trustcenter
 	return node
 }
 
-// OnlyID is like Only, but returns the only TrustcenterEntityHistory ID in the query.
-// Returns a *NotSingularError when more than one TrustcenterEntityHistory ID is found.
+// OnlyID is like Only, but returns the only TrustCenterEntityHistory ID in the query.
+// Returns a *NotSingularError when more than one TrustCenterEntityHistory ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *TrustcenterEntityHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterEntityHistoryQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
@@ -158,7 +158,7 @@ func (_q *TrustcenterEntityHistoryQuery) OnlyID(ctx context.Context) (id string,
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) OnlyIDX(ctx context.Context) string {
+func (_q *TrustCenterEntityHistoryQuery) OnlyIDX(ctx context.Context) string {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -166,18 +166,18 @@ func (_q *TrustcenterEntityHistoryQuery) OnlyIDX(ctx context.Context) string {
 	return id
 }
 
-// All executes the query and returns a list of TrustcenterEntityHistories.
-func (_q *TrustcenterEntityHistoryQuery) All(ctx context.Context) ([]*TrustcenterEntityHistory, error) {
+// All executes the query and returns a list of TrustCenterEntityHistories.
+func (_q *TrustCenterEntityHistoryQuery) All(ctx context.Context) ([]*TrustCenterEntityHistory, error) {
 	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
 	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	qr := querierAll[[]*TrustcenterEntityHistory, *TrustcenterEntityHistoryQuery]()
-	return withInterceptors[[]*TrustcenterEntityHistory](ctx, _q, qr, _q.inters)
+	qr := querierAll[[]*TrustCenterEntityHistory, *TrustCenterEntityHistoryQuery]()
+	return withInterceptors[[]*TrustCenterEntityHistory](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) AllX(ctx context.Context) []*TrustcenterEntityHistory {
+func (_q *TrustCenterEntityHistoryQuery) AllX(ctx context.Context) []*TrustCenterEntityHistory {
 	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
@@ -185,8 +185,8 @@ func (_q *TrustcenterEntityHistoryQuery) AllX(ctx context.Context) []*Trustcente
 	return nodes
 }
 
-// IDs executes the query and returns a list of TrustcenterEntityHistory IDs.
-func (_q *TrustcenterEntityHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
+// IDs executes the query and returns a list of TrustCenterEntityHistory IDs.
+func (_q *TrustCenterEntityHistoryQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -198,7 +198,7 @@ func (_q *TrustcenterEntityHistoryQuery) IDs(ctx context.Context) (ids []string,
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) IDsX(ctx context.Context) []string {
+func (_q *TrustCenterEntityHistoryQuery) IDsX(ctx context.Context) []string {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -207,16 +207,16 @@ func (_q *TrustcenterEntityHistoryQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (_q *TrustcenterEntityHistoryQuery) Count(ctx context.Context) (int, error) {
+func (_q *TrustCenterEntityHistoryQuery) Count(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
 	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, _q, querierCount[*TrustcenterEntityHistoryQuery](), _q.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TrustCenterEntityHistoryQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) CountX(ctx context.Context) int {
+func (_q *TrustCenterEntityHistoryQuery) CountX(ctx context.Context) int {
 	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
@@ -225,7 +225,7 @@ func (_q *TrustcenterEntityHistoryQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (_q *TrustcenterEntityHistoryQuery) Exist(ctx context.Context) (bool, error) {
+func (_q *TrustCenterEntityHistoryQuery) Exist(ctx context.Context) (bool, error) {
 	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
 	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
@@ -238,7 +238,7 @@ func (_q *TrustcenterEntityHistoryQuery) Exist(ctx context.Context) (bool, error
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (_q *TrustcenterEntityHistoryQuery) ExistX(ctx context.Context) bool {
+func (_q *TrustCenterEntityHistoryQuery) ExistX(ctx context.Context) bool {
 	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
@@ -246,18 +246,18 @@ func (_q *TrustcenterEntityHistoryQuery) ExistX(ctx context.Context) bool {
 	return exist
 }
 
-// Clone returns a duplicate of the TrustcenterEntityHistoryQuery builder, including all associated steps. It can be
+// Clone returns a duplicate of the TrustCenterEntityHistoryQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (_q *TrustcenterEntityHistoryQuery) Clone() *TrustcenterEntityHistoryQuery {
+func (_q *TrustCenterEntityHistoryQuery) Clone() *TrustCenterEntityHistoryQuery {
 	if _q == nil {
 		return nil
 	}
-	return &TrustcenterEntityHistoryQuery{
+	return &TrustCenterEntityHistoryQuery{
 		config:     _q.config,
 		ctx:        _q.ctx.Clone(),
 		order:      append([]trustcenterentityhistory.OrderOption{}, _q.order...),
 		inters:     append([]Interceptor{}, _q.inters...),
-		predicates: append([]predicate.TrustcenterEntityHistory{}, _q.predicates...),
+		predicates: append([]predicate.TrustCenterEntityHistory{}, _q.predicates...),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -275,13 +275,13 @@ func (_q *TrustcenterEntityHistoryQuery) Clone() *TrustcenterEntityHistoryQuery 
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.TrustcenterEntityHistory.Query().
+//	client.TrustCenterEntityHistory.Query().
 //		GroupBy(trustcenterentityhistory.FieldHistoryTime).
 //		Aggregate(historygenerated.Count()).
 //		Scan(ctx, &v)
-func (_q *TrustcenterEntityHistoryQuery) GroupBy(field string, fields ...string) *TrustcenterEntityHistoryGroupBy {
+func (_q *TrustCenterEntityHistoryQuery) GroupBy(field string, fields ...string) *TrustCenterEntityHistoryGroupBy {
 	_q.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TrustcenterEntityHistoryGroupBy{build: _q}
+	grbuild := &TrustCenterEntityHistoryGroupBy{build: _q}
 	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = trustcenterentityhistory.Label
 	grbuild.scan = grbuild.Scan
@@ -297,23 +297,23 @@ func (_q *TrustcenterEntityHistoryQuery) GroupBy(field string, fields ...string)
 //		HistoryTime time.Time `json:"history_time,omitempty"`
 //	}
 //
-//	client.TrustcenterEntityHistory.Query().
+//	client.TrustCenterEntityHistory.Query().
 //		Select(trustcenterentityhistory.FieldHistoryTime).
 //		Scan(ctx, &v)
-func (_q *TrustcenterEntityHistoryQuery) Select(fields ...string) *TrustcenterEntityHistorySelect {
+func (_q *TrustCenterEntityHistoryQuery) Select(fields ...string) *TrustCenterEntityHistorySelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
-	sbuild := &TrustcenterEntityHistorySelect{TrustcenterEntityHistoryQuery: _q}
+	sbuild := &TrustCenterEntityHistorySelect{TrustCenterEntityHistoryQuery: _q}
 	sbuild.label = trustcenterentityhistory.Label
 	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
-// Aggregate returns a TrustcenterEntityHistorySelect configured with the given aggregations.
-func (_q *TrustcenterEntityHistoryQuery) Aggregate(fns ...AggregateFunc) *TrustcenterEntityHistorySelect {
+// Aggregate returns a TrustCenterEntityHistorySelect configured with the given aggregations.
+func (_q *TrustCenterEntityHistoryQuery) Aggregate(fns ...AggregateFunc) *TrustCenterEntityHistorySelect {
 	return _q.Select().Aggregate(fns...)
 }
 
-func (_q *TrustcenterEntityHistoryQuery) prepareQuery(ctx context.Context) error {
+func (_q *TrustCenterEntityHistoryQuery) prepareQuery(ctx context.Context) error {
 	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("historygenerated: uninitialized interceptor (forgotten import historygenerated/runtime?)")
@@ -345,20 +345,20 @@ func (_q *TrustcenterEntityHistoryQuery) prepareQuery(ctx context.Context) error
 	return nil
 }
 
-func (_q *TrustcenterEntityHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustcenterEntityHistory, error) {
+func (_q *TrustCenterEntityHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterEntityHistory, error) {
 	var (
-		nodes = []*TrustcenterEntityHistory{}
+		nodes = []*TrustCenterEntityHistory{}
 		_spec = _q.querySpec()
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
-		return (*TrustcenterEntityHistory).scanValues(nil, columns)
+		return (*TrustCenterEntityHistory).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TrustcenterEntityHistory{config: _q.config}
+		node := &TrustCenterEntityHistory{config: _q.config}
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.TrustcenterEntityHistory
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
@@ -380,9 +380,9 @@ func (_q *TrustcenterEntityHistoryQuery) sqlAll(ctx context.Context, hooks ...qu
 	return nodes, nil
 }
 
-func (_q *TrustcenterEntityHistoryQuery) sqlCount(ctx context.Context) (int, error) {
+func (_q *TrustCenterEntityHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.TrustcenterEntityHistory
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
@@ -394,7 +394,7 @@ func (_q *TrustcenterEntityHistoryQuery) sqlCount(ctx context.Context) (int, err
 	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (_q *TrustcenterEntityHistoryQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TrustCenterEntityHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(trustcenterentityhistory.Table, trustcenterentityhistory.Columns, sqlgraph.NewFieldSpec(trustcenterentityhistory.FieldID, field.TypeString))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
@@ -434,7 +434,7 @@ func (_q *TrustcenterEntityHistoryQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (_q *TrustcenterEntityHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
+func (_q *TrustCenterEntityHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(trustcenterentityhistory.Table)
 	columns := _q.ctx.Fields
@@ -449,7 +449,7 @@ func (_q *TrustcenterEntityHistoryQuery) sqlQuery(ctx context.Context) *sql.Sele
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.TrustcenterEntityHistory)
+	t1.Schema(_q.schemaConfig.TrustCenterEntityHistory)
 	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
@@ -473,51 +473,51 @@ func (_q *TrustcenterEntityHistoryQuery) sqlQuery(ctx context.Context) *sql.Sele
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (_q *TrustcenterEntityHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustcenterEntityHistorySelect {
+func (_q *TrustCenterEntityHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterEntityHistorySelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied
-func (tehq *TrustcenterEntityHistoryQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustcenterEntityHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
+func (tcehq *TrustCenterEntityHistoryQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterEntityHistory").Str("operation", "count_ids").Msg("CountIDs: starting")
 
-	ctx = setContextOp(ctx, tehq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, tcehq.ctx, ent.OpQueryIDs)
 
-	ids, err := tehq.IDs(ctx)
+	ids, err := tcehq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustcenterEntityHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterEntityHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustcenterEntityHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterEntityHistory").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }
 
-// TrustcenterEntityHistoryGroupBy is the group-by builder for TrustcenterEntityHistory entities.
-type TrustcenterEntityHistoryGroupBy struct {
+// TrustCenterEntityHistoryGroupBy is the group-by builder for TrustCenterEntityHistory entities.
+type TrustCenterEntityHistoryGroupBy struct {
 	selector
-	build *TrustcenterEntityHistoryQuery
+	build *TrustCenterEntityHistoryQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (_g *TrustcenterEntityHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TrustcenterEntityHistoryGroupBy {
+func (_g *TrustCenterEntityHistoryGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterEntityHistoryGroupBy {
 	_g.fns = append(_g.fns, fns...)
 	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (_g *TrustcenterEntityHistoryGroupBy) Scan(ctx context.Context, v any) error {
+func (_g *TrustCenterEntityHistoryGroupBy) Scan(ctx context.Context, v any) error {
 	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
 	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustcenterEntityHistoryQuery, *TrustcenterEntityHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
+	return scanWithInterceptors[*TrustCenterEntityHistoryQuery, *TrustCenterEntityHistoryGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (_g *TrustcenterEntityHistoryGroupBy) sqlScan(ctx context.Context, root *TrustcenterEntityHistoryQuery, v any) error {
+func (_g *TrustCenterEntityHistoryGroupBy) sqlScan(ctx context.Context, root *TrustCenterEntityHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
 	aggregation := make([]string, 0, len(_g.fns))
 	for _, fn := range _g.fns {
@@ -544,28 +544,28 @@ func (_g *TrustcenterEntityHistoryGroupBy) sqlScan(ctx context.Context, root *Tr
 	return sql.ScanSlice(rows, v)
 }
 
-// TrustcenterEntityHistorySelect is the builder for selecting fields of TrustcenterEntityHistory entities.
-type TrustcenterEntityHistorySelect struct {
-	*TrustcenterEntityHistoryQuery
+// TrustCenterEntityHistorySelect is the builder for selecting fields of TrustCenterEntityHistory entities.
+type TrustCenterEntityHistorySelect struct {
+	*TrustCenterEntityHistoryQuery
 	selector
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (_s *TrustcenterEntityHistorySelect) Aggregate(fns ...AggregateFunc) *TrustcenterEntityHistorySelect {
+func (_s *TrustCenterEntityHistorySelect) Aggregate(fns ...AggregateFunc) *TrustCenterEntityHistorySelect {
 	_s.fns = append(_s.fns, fns...)
 	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (_s *TrustcenterEntityHistorySelect) Scan(ctx context.Context, v any) error {
+func (_s *TrustCenterEntityHistorySelect) Scan(ctx context.Context, v any) error {
 	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
 	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustcenterEntityHistoryQuery, *TrustcenterEntityHistorySelect](ctx, _s.TrustcenterEntityHistoryQuery, _s, _s.inters, v)
+	return scanWithInterceptors[*TrustCenterEntityHistoryQuery, *TrustCenterEntityHistorySelect](ctx, _s.TrustCenterEntityHistoryQuery, _s, _s.inters, v)
 }
 
-func (_s *TrustcenterEntityHistorySelect) sqlScan(ctx context.Context, root *TrustcenterEntityHistoryQuery, v any) error {
+func (_s *TrustCenterEntityHistorySelect) sqlScan(ctx context.Context, root *TrustCenterEntityHistoryQuery, v any) error {
 	selector := root.sqlQuery(ctx)
 	aggregation := make([]string, 0, len(_s.fns))
 	for _, fn := range _s.fns {
@@ -587,7 +587,7 @@ func (_s *TrustcenterEntityHistorySelect) sqlScan(ctx context.Context, root *Tru
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (_s *TrustcenterEntityHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustcenterEntityHistorySelect {
+func (_s *TrustCenterEntityHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterEntityHistorySelect {
 	_s.modifiers = append(_s.modifiers, modifiers...)
 	return _s
 }

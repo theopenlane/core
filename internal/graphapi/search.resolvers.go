@@ -54,7 +54,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		tagdefinitionResults      *generated.TagDefinitionConnection
 		taskResults               *generated.TaskConnection
 		templateResults           *generated.TemplateConnection
-		trustcenterentityResults  *generated.TrustcenterEntityConnection
+		trustcenterentityResults  *generated.TrustCenterEntityConnection
 		vulnerabilityResults      *generated.VulnerabilityConnection
 	)
 
@@ -437,7 +437,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			trustcenterentityResults, err = searchTrustcenterEntities(ctx, query, after, first, before, last)
+			trustcenterentityResults, err = searchTrustCenterEntities(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
 				errors = append(errors, err)
@@ -629,7 +629,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.TotalCount += templateResults.TotalCount
 	}
 	if trustcenterentityResults != nil && len(trustcenterentityResults.Edges) > 0 {
-		res.TrustcenterEntities = trustcenterentityResults
+		res.TrustCenterEntities = trustcenterentityResults
 
 		res.TotalCount += trustcenterentityResults.TotalCount
 	}
@@ -951,8 +951,8 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after 
 	// return the results
 	return templateResults, nil
 }
-func (r *queryResolver) TrustcenterEntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustcenterEntityConnection, error) {
-	trustcenterentityResults, err := searchTrustcenterEntities(ctx, query, after, first, before, last)
+func (r *queryResolver) TrustCenterEntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterEntityConnection, error) {
+	trustcenterentityResults, err := searchTrustCenterEntities(ctx, query, after, first, before, last)
 
 	if err != nil {
 		return nil, common.ErrSearchFailed

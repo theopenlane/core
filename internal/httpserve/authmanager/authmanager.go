@@ -28,7 +28,7 @@ import (
 const (
 	bearerScheme = "Bearer"
 
-	AnonTrustcenterJWTPrefix   = "anon_trustcenter_"
+	AnonTrustCenterJWTPrefix   = "anon_trustcenter_"
 	AnonQuestionnaireJWTPrefix = "anon_questionnaire_"
 )
 
@@ -108,7 +108,7 @@ func (a *Client) generateAnonymousSession(ctx context.Context, w http.ResponseWr
 
 // GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
 func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("%s%s", AnonTrustcenterJWTPrefix, uuid.New().String())
+	anonUserID := fmt.Sprintf("%s%s", AnonTrustCenterJWTPrefix, uuid.New().String())
 
 	claims := &tokens.Claims{
 		RegisteredClaims: jwt.RegisteredClaims{

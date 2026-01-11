@@ -102,8 +102,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_templates(ctx, field)
 			case "posts":
 				return ec.fieldContext_TrustCenter_posts(ctx, field)
-			case "trustcenterEntities":
-				return ec.fieldContext_TrustCenter_trustcenterEntities(ctx, field)
+			case "trustCenterEntities":
+				return ec.fieldContext_TrustCenter_trustCenterEntities(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},
@@ -214,8 +214,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_templates(ctx, field)
 			case "posts":
 				return ec.fieldContext_TrustCenter_posts(ctx, field)
-			case "trustcenterEntities":
-				return ec.fieldContext_TrustCenter_trustcenterEntities(ctx, field)
+			case "trustCenterEntities":
+				return ec.fieldContext_TrustCenter_trustCenterEntities(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},

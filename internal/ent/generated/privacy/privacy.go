@@ -1935,6 +1935,30 @@ func (f TrustCenterDocMutationRuleFunc) EvalMutation(ctx context.Context, m gene
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterDocMutation", m)
 }
 
+// The TrustCenterEntityQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterEntityQueryRuleFunc func(context.Context, *generated.TrustCenterEntityQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterEntityQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterEntityQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterEntityQuery", q)
+}
+
+// The TrustCenterEntityMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterEntityMutationRuleFunc func(context.Context, *generated.TrustCenterEntityMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterEntityMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterEntityMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterEntityMutation", m)
+}
+
 // The TrustCenterSettingQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TrustCenterSettingQueryRuleFunc func(context.Context, *generated.TrustCenterSettingQuery) error
@@ -2005,30 +2029,6 @@ func (f TrustCenterWatermarkConfigMutationRuleFunc) EvalMutation(ctx context.Con
 		return f(ctx, m)
 	}
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterWatermarkConfigMutation", m)
-}
-
-// The TrustcenterEntityQueryRuleFunc type is an adapter to allow the use of ordinary
-// functions as a query rule.
-type TrustcenterEntityQueryRuleFunc func(context.Context, *generated.TrustcenterEntityQuery) error
-
-// EvalQuery return f(ctx, q).
-func (f TrustcenterEntityQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.TrustcenterEntityQuery); ok {
-		return f(ctx, q)
-	}
-	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustcenterEntityQuery", q)
-}
-
-// The TrustcenterEntityMutationRuleFunc type is an adapter to allow the use of ordinary
-// functions as a mutation rule.
-type TrustcenterEntityMutationRuleFunc func(context.Context, *generated.TrustcenterEntityMutation) error
-
-// EvalMutation calls f(ctx, m).
-func (f TrustcenterEntityMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
-	if m, ok := m.(*generated.TrustcenterEntityMutation); ok {
-		return f(ctx, m)
-	}
-	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustcenterEntityMutation", m)
 }
 
 // The UserQueryRuleFunc type is an adapter to allow the use of ordinary
@@ -2482,13 +2482,13 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TrustCenterDocQuery:
 		return q.Filter(), nil
+	case *generated.TrustCenterEntityQuery:
+		return q.Filter(), nil
 	case *generated.TrustCenterSettingQuery:
 		return q.Filter(), nil
 	case *generated.TrustCenterSubprocessorQuery:
 		return q.Filter(), nil
 	case *generated.TrustCenterWatermarkConfigQuery:
-		return q.Filter(), nil
-	case *generated.TrustcenterEntityQuery:
 		return q.Filter(), nil
 	case *generated.UserQuery:
 		return q.Filter(), nil
@@ -2671,13 +2671,13 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 		return m.Filter(), nil
 	case *generated.TrustCenterDocMutation:
 		return m.Filter(), nil
+	case *generated.TrustCenterEntityMutation:
+		return m.Filter(), nil
 	case *generated.TrustCenterSettingMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterSubprocessorMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterWatermarkConfigMutation:
-		return m.Filter(), nil
-	case *generated.TrustcenterEntityMutation:
 		return m.Filter(), nil
 	case *generated.UserMutation:
 		return m.Filter(), nil

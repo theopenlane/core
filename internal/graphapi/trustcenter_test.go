@@ -654,7 +654,7 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 
 // createAnonymousTrustCenterContext creates a context for an anonymous trust center user
 func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,
@@ -669,18 +669,24 @@ func createAnonymousTrustCenterContext(trustCenterID, organizationID string) con
 }
 
 func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
-	t.Parallel()
-
 	// create new test users
 	testUser := suite.userBuilder(context.Background(), t)
 	testUserOther := suite.userBuilder(context.Background(), t)
 
 	// Create a trust center for testing
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client, IncludeChildren: true}).MustNew(testUser.UserCtx, t)
 
 	// Create another trust center that the anonymous user should NOT have access to
-	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUserOther.UserCtx, t)
+	trustCenter2 := (&TrustCenterBuilder{client: suite.client, IncludeChildren: true}).MustNew(testUserOther.UserCtx, t)
 
+	// get entities to clean up later
+	entity1, err := trustCenter.QueryTrustCenterEntities().IDs(testUser.UserCtx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(entity1, 1))
+
+	entity2, err := trustCenter2.QueryTrustCenterEntities().IDs(testUserOther.UserCtx)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(entity2, 1))
 	testCases := []struct {
 		name           string
 		queryID        string
@@ -742,9 +748,16 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 			assert.Check(t, setting.Title != nil)
 			assert.Check(t, setting.Overview != nil)
 			assert.Check(t, setting.PrimaryColor != nil)
+
+			// Verify that children are accessible
+			assert.Check(t, resp.TrustCenter.TrustCenterEntities.Edges != nil)
+			assert.Check(t, len(resp.TrustCenter.TrustCenterEntities.Edges) > 0)
 		})
 	}
 
+	// Cleanup Trust Center Children
+	(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, IDs: entity1}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, IDs: entity2}).MustDelete(testUserOther.UserCtx, t)
 	// Clean up
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserOther.UserCtx, t)

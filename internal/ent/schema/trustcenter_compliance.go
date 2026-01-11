@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
@@ -64,6 +65,7 @@ func (t TrustCenterCompliance) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterCompliance](t,
 				withParents(TrustCenter{}),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 		},
 	}.getMixins(t)
@@ -89,6 +91,13 @@ func (t TrustCenterCompliance) Edges() []ent.Edge {
 	}
 }
 
+// Modules this schema has access to
+func (TrustCenterCompliance) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Hooks of the TrustCenterCompliance
 func (TrustCenterCompliance) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -100,6 +109,7 @@ func (TrustCenterCompliance) Hooks() []ent.Hook {
 func (TrustCenterCompliance) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),

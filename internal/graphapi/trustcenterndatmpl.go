@@ -207,7 +207,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		}
 
 		anonymousUser = &auth.AnonymousTrustCenterUser{
-			SubjectID:          fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, uuid.New().String()),
+			SubjectID:          fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, uuid.New().String()),
 			SubjectName:        "Anonymous User",
 			AuthenticationType: auth.JWTAuthentication,
 			TrustCenterID:      input.TrustCenterID,

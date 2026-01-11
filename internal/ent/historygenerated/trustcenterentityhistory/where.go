@@ -13,1011 +13,1011 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldID, id))
+func ID(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldID, id))
+func IDEQ(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldID, id))
+func IDNEQ(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldID, ids...))
+func IDIn(ids ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldID, ids...))
+func IDNotIn(ids ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldID, id))
+func IDGT(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldID, id))
+func IDGTE(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldID, id))
+func IDLT(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldID, id))
+func IDLTE(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldID, id))
 }
 
 // IDEqualFold applies the EqualFold predicate on the ID field.
-func IDEqualFold(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldID, id))
+func IDEqualFold(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldID, id))
 }
 
 // IDContainsFold applies the ContainsFold predicate on the ID field.
-func IDContainsFold(id string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldID, id))
+func IDContainsFold(id string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldID, id))
 }
 
 // HistoryTime applies equality check predicate on the "history_time" field. It's identical to HistoryTimeEQ.
-func HistoryTime(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldHistoryTime, v))
+func HistoryTime(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldHistoryTime, v))
 }
 
 // Ref applies equality check predicate on the "ref" field. It's identical to RefEQ.
-func Ref(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldRef, v))
+func Ref(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldRef, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldCreatedAt, v))
+func CreatedAt(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
-func UpdatedAt(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldUpdatedAt, v))
+func UpdatedAt(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // CreatedBy applies equality check predicate on the "created_by" field. It's identical to CreatedByEQ.
-func CreatedBy(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldCreatedBy, v))
+func CreatedBy(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldCreatedBy, v))
 }
 
 // UpdatedBy applies equality check predicate on the "updated_by" field. It's identical to UpdatedByEQ.
-func UpdatedBy(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldUpdatedBy, v))
+func UpdatedBy(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
-func DeletedAt(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldDeletedAt, v))
+func DeletedAt(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldDeletedAt, v))
 }
 
 // DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldDeletedBy, v))
+func DeletedBy(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
 // LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
-func LogoFileID(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldLogoFileID, v))
+func LogoFileID(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldLogoFileID, v))
 }
 
 // URL applies equality check predicate on the "url" field. It's identical to URLEQ.
-func URL(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldURL, v))
+func URL(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldURL, v))
 }
 
 // TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
-func TrustCenterID(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldTrustCenterID, v))
+func TrustCenterID(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
-func Name(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldName, v))
+func Name(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldName, v))
 }
 
 // EntityTypeID applies equality check predicate on the "entity_type_id" field. It's identical to EntityTypeIDEQ.
-func EntityTypeID(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldEntityTypeID, v))
+func EntityTypeID(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldEntityTypeID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
-func HistoryTimeEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldHistoryTime, v))
+func HistoryTimeEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldHistoryTime, v))
 }
 
 // HistoryTimeNEQ applies the NEQ predicate on the "history_time" field.
-func HistoryTimeNEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldHistoryTime, v))
+func HistoryTimeNEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldHistoryTime, v))
 }
 
 // HistoryTimeIn applies the In predicate on the "history_time" field.
-func HistoryTimeIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldHistoryTime, vs...))
+func HistoryTimeIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldHistoryTime, vs...))
 }
 
 // HistoryTimeNotIn applies the NotIn predicate on the "history_time" field.
-func HistoryTimeNotIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldHistoryTime, vs...))
+func HistoryTimeNotIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldHistoryTime, vs...))
 }
 
 // HistoryTimeGT applies the GT predicate on the "history_time" field.
-func HistoryTimeGT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldHistoryTime, v))
+func HistoryTimeGT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldHistoryTime, v))
 }
 
 // HistoryTimeGTE applies the GTE predicate on the "history_time" field.
-func HistoryTimeGTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldHistoryTime, v))
+func HistoryTimeGTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldHistoryTime, v))
 }
 
 // HistoryTimeLT applies the LT predicate on the "history_time" field.
-func HistoryTimeLT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldHistoryTime, v))
+func HistoryTimeLT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldHistoryTime, v))
 }
 
 // HistoryTimeLTE applies the LTE predicate on the "history_time" field.
-func HistoryTimeLTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldHistoryTime, v))
+func HistoryTimeLTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldHistoryTime, v))
 }
 
 // RefEQ applies the EQ predicate on the "ref" field.
-func RefEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldRef, v))
+func RefEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldRef, v))
 }
 
 // RefNEQ applies the NEQ predicate on the "ref" field.
-func RefNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldRef, v))
+func RefNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldRef, v))
 }
 
 // RefIn applies the In predicate on the "ref" field.
-func RefIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldRef, vs...))
+func RefIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldRef, vs...))
 }
 
 // RefNotIn applies the NotIn predicate on the "ref" field.
-func RefNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldRef, vs...))
+func RefNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldRef, vs...))
 }
 
 // RefGT applies the GT predicate on the "ref" field.
-func RefGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldRef, v))
+func RefGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldRef, v))
 }
 
 // RefGTE applies the GTE predicate on the "ref" field.
-func RefGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldRef, v))
+func RefGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldRef, v))
 }
 
 // RefLT applies the LT predicate on the "ref" field.
-func RefLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldRef, v))
+func RefLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldRef, v))
 }
 
 // RefLTE applies the LTE predicate on the "ref" field.
-func RefLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldRef, v))
+func RefLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldRef, v))
 }
 
 // RefContains applies the Contains predicate on the "ref" field.
-func RefContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldRef, v))
+func RefContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldRef, v))
 }
 
 // RefHasPrefix applies the HasPrefix predicate on the "ref" field.
-func RefHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldRef, v))
+func RefHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldRef, v))
 }
 
 // RefHasSuffix applies the HasSuffix predicate on the "ref" field.
-func RefHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldRef, v))
+func RefHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldRef, v))
 }
 
 // RefIsNil applies the IsNil predicate on the "ref" field.
-func RefIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldRef))
+func RefIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldRef))
 }
 
 // RefNotNil applies the NotNil predicate on the "ref" field.
-func RefNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldRef))
+func RefNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldRef))
 }
 
 // RefEqualFold applies the EqualFold predicate on the "ref" field.
-func RefEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldRef, v))
+func RefEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldRef, v))
 }
 
 // RefContainsFold applies the ContainsFold predicate on the "ref" field.
-func RefContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldRef, v))
+func RefContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldRef, v))
 }
 
 // OperationEQ applies the EQ predicate on the "operation" field.
-func OperationEQ(v history.OpType) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldOperation, v))
+func OperationEQ(v history.OpType) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldOperation, v))
 }
 
 // OperationNEQ applies the NEQ predicate on the "operation" field.
-func OperationNEQ(v history.OpType) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldOperation, v))
+func OperationNEQ(v history.OpType) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldOperation, v))
 }
 
 // OperationIn applies the In predicate on the "operation" field.
-func OperationIn(vs ...history.OpType) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldOperation, vs...))
+func OperationIn(vs ...history.OpType) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldOperation, vs...))
 }
 
 // OperationNotIn applies the NotIn predicate on the "operation" field.
-func OperationNotIn(vs ...history.OpType) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldOperation, vs...))
+func OperationNotIn(vs ...history.OpType) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldOperation, vs...))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldCreatedAt, v))
+func CreatedAtEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldCreatedAt, v))
+func CreatedAtNEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldCreatedAt, vs...))
+func CreatedAtIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldCreatedAt, vs...))
+func CreatedAtNotIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldCreatedAt, v))
+func CreatedAtGT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldCreatedAt, v))
 }
 
 // CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldCreatedAt, v))
+func CreatedAtGTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldCreatedAt, v))
 }
 
 // CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldCreatedAt, v))
+func CreatedAtLT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldCreatedAt, v))
 }
 
 // CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldCreatedAt, v))
+func CreatedAtLTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldCreatedAt, v))
 }
 
 // CreatedAtIsNil applies the IsNil predicate on the "created_at" field.
-func CreatedAtIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldCreatedAt))
+func CreatedAtIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldCreatedAt))
 }
 
 // CreatedAtNotNil applies the NotNil predicate on the "created_at" field.
-func CreatedAtNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldCreatedAt))
+func CreatedAtNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldCreatedAt))
 }
 
 // UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
-func UpdatedAtEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldUpdatedAt, v))
+func UpdatedAtEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
-func UpdatedAtNEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldUpdatedAt, v))
+func UpdatedAtNEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtIn applies the In predicate on the "updated_at" field.
-func UpdatedAtIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldUpdatedAt, vs...))
+func UpdatedAtIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
-func UpdatedAtNotIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldUpdatedAt, vs...))
+func UpdatedAtNotIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtGT applies the GT predicate on the "updated_at" field.
-func UpdatedAtGT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldUpdatedAt, v))
+func UpdatedAtGT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
-func UpdatedAtGTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldUpdatedAt, v))
+func UpdatedAtGTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLT applies the LT predicate on the "updated_at" field.
-func UpdatedAtLT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldUpdatedAt, v))
+func UpdatedAtLT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
-func UpdatedAtLTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldUpdatedAt, v))
+func UpdatedAtLTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
 // UpdatedAtIsNil applies the IsNil predicate on the "updated_at" field.
-func UpdatedAtIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldUpdatedAt))
+func UpdatedAtIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldUpdatedAt))
 }
 
 // UpdatedAtNotNil applies the NotNil predicate on the "updated_at" field.
-func UpdatedAtNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldUpdatedAt))
+func UpdatedAtNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldUpdatedAt))
 }
 
 // CreatedByEQ applies the EQ predicate on the "created_by" field.
-func CreatedByEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldCreatedBy, v))
+func CreatedByEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldCreatedBy, v))
 }
 
 // CreatedByNEQ applies the NEQ predicate on the "created_by" field.
-func CreatedByNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldCreatedBy, v))
+func CreatedByNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldCreatedBy, v))
 }
 
 // CreatedByIn applies the In predicate on the "created_by" field.
-func CreatedByIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldCreatedBy, vs...))
+func CreatedByIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldCreatedBy, vs...))
 }
 
 // CreatedByNotIn applies the NotIn predicate on the "created_by" field.
-func CreatedByNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldCreatedBy, vs...))
+func CreatedByNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldCreatedBy, vs...))
 }
 
 // CreatedByGT applies the GT predicate on the "created_by" field.
-func CreatedByGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldCreatedBy, v))
+func CreatedByGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldCreatedBy, v))
 }
 
 // CreatedByGTE applies the GTE predicate on the "created_by" field.
-func CreatedByGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldCreatedBy, v))
+func CreatedByGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldCreatedBy, v))
 }
 
 // CreatedByLT applies the LT predicate on the "created_by" field.
-func CreatedByLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldCreatedBy, v))
+func CreatedByLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldCreatedBy, v))
 }
 
 // CreatedByLTE applies the LTE predicate on the "created_by" field.
-func CreatedByLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldCreatedBy, v))
+func CreatedByLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldCreatedBy, v))
 }
 
 // CreatedByContains applies the Contains predicate on the "created_by" field.
-func CreatedByContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldCreatedBy, v))
+func CreatedByContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldCreatedBy, v))
 }
 
 // CreatedByHasPrefix applies the HasPrefix predicate on the "created_by" field.
-func CreatedByHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldCreatedBy, v))
+func CreatedByHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldCreatedBy, v))
 }
 
 // CreatedByHasSuffix applies the HasSuffix predicate on the "created_by" field.
-func CreatedByHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldCreatedBy, v))
+func CreatedByHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldCreatedBy, v))
 }
 
 // CreatedByIsNil applies the IsNil predicate on the "created_by" field.
-func CreatedByIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldCreatedBy))
+func CreatedByIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldCreatedBy))
 }
 
 // CreatedByNotNil applies the NotNil predicate on the "created_by" field.
-func CreatedByNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldCreatedBy))
+func CreatedByNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldCreatedBy))
 }
 
 // CreatedByEqualFold applies the EqualFold predicate on the "created_by" field.
-func CreatedByEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldCreatedBy, v))
+func CreatedByEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldCreatedBy, v))
 }
 
 // CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
-func CreatedByContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldCreatedBy, v))
+func CreatedByContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldCreatedBy, v))
 }
 
 // UpdatedByEQ applies the EQ predicate on the "updated_by" field.
-func UpdatedByEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldUpdatedBy, v))
+func UpdatedByEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
 // UpdatedByNEQ applies the NEQ predicate on the "updated_by" field.
-func UpdatedByNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldUpdatedBy, v))
+func UpdatedByNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldUpdatedBy, v))
 }
 
 // UpdatedByIn applies the In predicate on the "updated_by" field.
-func UpdatedByIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldUpdatedBy, vs...))
+func UpdatedByIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldUpdatedBy, vs...))
 }
 
 // UpdatedByNotIn applies the NotIn predicate on the "updated_by" field.
-func UpdatedByNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldUpdatedBy, vs...))
+func UpdatedByNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldUpdatedBy, vs...))
 }
 
 // UpdatedByGT applies the GT predicate on the "updated_by" field.
-func UpdatedByGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldUpdatedBy, v))
+func UpdatedByGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldUpdatedBy, v))
 }
 
 // UpdatedByGTE applies the GTE predicate on the "updated_by" field.
-func UpdatedByGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldUpdatedBy, v))
+func UpdatedByGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldUpdatedBy, v))
 }
 
 // UpdatedByLT applies the LT predicate on the "updated_by" field.
-func UpdatedByLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldUpdatedBy, v))
+func UpdatedByLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldUpdatedBy, v))
 }
 
 // UpdatedByLTE applies the LTE predicate on the "updated_by" field.
-func UpdatedByLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldUpdatedBy, v))
+func UpdatedByLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldUpdatedBy, v))
 }
 
 // UpdatedByContains applies the Contains predicate on the "updated_by" field.
-func UpdatedByContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldUpdatedBy, v))
+func UpdatedByContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldUpdatedBy, v))
 }
 
 // UpdatedByHasPrefix applies the HasPrefix predicate on the "updated_by" field.
-func UpdatedByHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldUpdatedBy, v))
+func UpdatedByHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldUpdatedBy, v))
 }
 
 // UpdatedByHasSuffix applies the HasSuffix predicate on the "updated_by" field.
-func UpdatedByHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldUpdatedBy, v))
+func UpdatedByHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldUpdatedBy, v))
 }
 
 // UpdatedByIsNil applies the IsNil predicate on the "updated_by" field.
-func UpdatedByIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldUpdatedBy))
+func UpdatedByIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldUpdatedBy))
 }
 
 // UpdatedByNotNil applies the NotNil predicate on the "updated_by" field.
-func UpdatedByNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldUpdatedBy))
+func UpdatedByNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldUpdatedBy))
 }
 
 // UpdatedByEqualFold applies the EqualFold predicate on the "updated_by" field.
-func UpdatedByEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldUpdatedBy, v))
+func UpdatedByEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldUpdatedBy, v))
 }
 
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
-func UpdatedByContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
+func UpdatedByContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldUpdatedBy, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
-func DeletedAtEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldDeletedAt, v))
+func DeletedAtEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldDeletedAt, v))
 }
 
 // DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
-func DeletedAtNEQ(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldDeletedAt, v))
+func DeletedAtNEQ(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldDeletedAt, v))
 }
 
 // DeletedAtIn applies the In predicate on the "deleted_at" field.
-func DeletedAtIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldDeletedAt, vs...))
+func DeletedAtIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldDeletedAt, vs...))
 }
 
 // DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
-func DeletedAtNotIn(vs ...time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldDeletedAt, vs...))
+func DeletedAtNotIn(vs ...time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldDeletedAt, vs...))
 }
 
 // DeletedAtGT applies the GT predicate on the "deleted_at" field.
-func DeletedAtGT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldDeletedAt, v))
+func DeletedAtGT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldDeletedAt, v))
 }
 
 // DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
-func DeletedAtGTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldDeletedAt, v))
+func DeletedAtGTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldDeletedAt, v))
 }
 
 // DeletedAtLT applies the LT predicate on the "deleted_at" field.
-func DeletedAtLT(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldDeletedAt, v))
+func DeletedAtLT(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldDeletedAt, v))
 }
 
 // DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
-func DeletedAtLTE(v time.Time) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldDeletedAt, v))
+func DeletedAtLTE(v time.Time) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldDeletedAt, v))
 }
 
 // DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
-func DeletedAtIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldDeletedAt))
+func DeletedAtIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldDeletedAt))
 }
 
 // DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
-func DeletedAtNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldDeletedAt))
+func DeletedAtNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldDeletedAt))
 }
 
 // DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldDeletedBy, v))
+func DeletedByEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldDeletedBy, v))
 }
 
 // DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldDeletedBy, v))
+func DeletedByNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldDeletedBy, v))
 }
 
 // DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldDeletedBy, vs...))
+func DeletedByIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldDeletedBy, vs...))
 }
 
 // DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldDeletedBy, vs...))
+func DeletedByNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldDeletedBy, vs...))
 }
 
 // DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldDeletedBy, v))
+func DeletedByGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldDeletedBy, v))
 }
 
 // DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldDeletedBy, v))
+func DeletedByGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldDeletedBy, v))
 }
 
 // DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldDeletedBy, v))
+func DeletedByLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldDeletedBy, v))
 }
 
 // DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldDeletedBy, v))
+func DeletedByLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldDeletedBy, v))
 }
 
 // DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldDeletedBy, v))
+func DeletedByContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldDeletedBy, v))
 }
 
 // DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldDeletedBy, v))
+func DeletedByHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldDeletedBy, v))
 }
 
 // DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldDeletedBy, v))
+func DeletedByHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldDeletedBy, v))
 }
 
 // DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldDeletedBy))
+func DeletedByIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldDeletedBy))
 }
 
 // DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldDeletedBy))
+func DeletedByNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldDeletedBy))
 }
 
 // DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldDeletedBy, v))
+func DeletedByEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldDeletedBy, v))
 }
 
 // DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldDeletedBy, v))
+func DeletedByContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
 // LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
-func LogoFileIDEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldLogoFileID, v))
+func LogoFileIDEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldLogoFileID, v))
 }
 
 // LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
-func LogoFileIDNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldLogoFileID, v))
+func LogoFileIDNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldLogoFileID, v))
 }
 
 // LogoFileIDIn applies the In predicate on the "logo_file_id" field.
-func LogoFileIDIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldLogoFileID, vs...))
+func LogoFileIDIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldLogoFileID, vs...))
 }
 
 // LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
-func LogoFileIDNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldLogoFileID, vs...))
+func LogoFileIDNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldLogoFileID, vs...))
 }
 
 // LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
-func LogoFileIDGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldLogoFileID, v))
+func LogoFileIDGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldLogoFileID, v))
 }
 
 // LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
-func LogoFileIDGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldLogoFileID, v))
+func LogoFileIDGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldLogoFileID, v))
 }
 
 // LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
-func LogoFileIDLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldLogoFileID, v))
+func LogoFileIDLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldLogoFileID, v))
 }
 
 // LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
-func LogoFileIDLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldLogoFileID, v))
+func LogoFileIDLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldLogoFileID, v))
 }
 
 // LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
-func LogoFileIDContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldLogoFileID, v))
+func LogoFileIDContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldLogoFileID, v))
 }
 
 // LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
-func LogoFileIDHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldLogoFileID, v))
+func LogoFileIDHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldLogoFileID, v))
 }
 
 // LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
-func LogoFileIDHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldLogoFileID, v))
+func LogoFileIDHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldLogoFileID, v))
 }
 
 // LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
-func LogoFileIDIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldLogoFileID))
+func LogoFileIDIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldLogoFileID))
 }
 
 // LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
-func LogoFileIDNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldLogoFileID))
+func LogoFileIDNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldLogoFileID))
 }
 
 // LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
-func LogoFileIDEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldLogoFileID, v))
+func LogoFileIDEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldLogoFileID, v))
 }
 
 // LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
-func LogoFileIDContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldLogoFileID, v))
+func LogoFileIDContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldLogoFileID, v))
 }
 
 // URLEQ applies the EQ predicate on the "url" field.
-func URLEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldURL, v))
+func URLEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldURL, v))
 }
 
 // URLNEQ applies the NEQ predicate on the "url" field.
-func URLNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldURL, v))
+func URLNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldURL, v))
 }
 
 // URLIn applies the In predicate on the "url" field.
-func URLIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldURL, vs...))
+func URLIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldURL, vs...))
 }
 
 // URLNotIn applies the NotIn predicate on the "url" field.
-func URLNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldURL, vs...))
+func URLNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldURL, vs...))
 }
 
 // URLGT applies the GT predicate on the "url" field.
-func URLGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldURL, v))
+func URLGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldURL, v))
 }
 
 // URLGTE applies the GTE predicate on the "url" field.
-func URLGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldURL, v))
+func URLGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldURL, v))
 }
 
 // URLLT applies the LT predicate on the "url" field.
-func URLLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldURL, v))
+func URLLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldURL, v))
 }
 
 // URLLTE applies the LTE predicate on the "url" field.
-func URLLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldURL, v))
+func URLLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldURL, v))
 }
 
 // URLContains applies the Contains predicate on the "url" field.
-func URLContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldURL, v))
+func URLContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldURL, v))
 }
 
 // URLHasPrefix applies the HasPrefix predicate on the "url" field.
-func URLHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldURL, v))
+func URLHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldURL, v))
 }
 
 // URLHasSuffix applies the HasSuffix predicate on the "url" field.
-func URLHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldURL, v))
+func URLHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldURL, v))
 }
 
 // URLIsNil applies the IsNil predicate on the "url" field.
-func URLIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldURL))
+func URLIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldURL))
 }
 
 // URLNotNil applies the NotNil predicate on the "url" field.
-func URLNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldURL))
+func URLNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldURL))
 }
 
 // URLEqualFold applies the EqualFold predicate on the "url" field.
-func URLEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldURL, v))
+func URLEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldURL, v))
 }
 
 // URLContainsFold applies the ContainsFold predicate on the "url" field.
-func URLContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldURL, v))
+func URLContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldURL, v))
 }
 
 // TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
-func TrustCenterIDEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldTrustCenterID, v))
+func TrustCenterIDEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDNEQ applies the NEQ predicate on the "trust_center_id" field.
-func TrustCenterIDNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldTrustCenterID, v))
+func TrustCenterIDNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDIn applies the In predicate on the "trust_center_id" field.
-func TrustCenterIDIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldTrustCenterID, vs...))
+func TrustCenterIDIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldTrustCenterID, vs...))
 }
 
 // TrustCenterIDNotIn applies the NotIn predicate on the "trust_center_id" field.
-func TrustCenterIDNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldTrustCenterID, vs...))
+func TrustCenterIDNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldTrustCenterID, vs...))
 }
 
 // TrustCenterIDGT applies the GT predicate on the "trust_center_id" field.
-func TrustCenterIDGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldTrustCenterID, v))
+func TrustCenterIDGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDGTE applies the GTE predicate on the "trust_center_id" field.
-func TrustCenterIDGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldTrustCenterID, v))
+func TrustCenterIDGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDLT applies the LT predicate on the "trust_center_id" field.
-func TrustCenterIDLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldTrustCenterID, v))
+func TrustCenterIDLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDLTE applies the LTE predicate on the "trust_center_id" field.
-func TrustCenterIDLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldTrustCenterID, v))
+func TrustCenterIDLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDContains applies the Contains predicate on the "trust_center_id" field.
-func TrustCenterIDContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldTrustCenterID, v))
+func TrustCenterIDContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDHasPrefix applies the HasPrefix predicate on the "trust_center_id" field.
-func TrustCenterIDHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldTrustCenterID, v))
+func TrustCenterIDHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDHasSuffix applies the HasSuffix predicate on the "trust_center_id" field.
-func TrustCenterIDHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldTrustCenterID, v))
+func TrustCenterIDHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDIsNil applies the IsNil predicate on the "trust_center_id" field.
-func TrustCenterIDIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldTrustCenterID))
+func TrustCenterIDIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldTrustCenterID))
 }
 
 // TrustCenterIDNotNil applies the NotNil predicate on the "trust_center_id" field.
-func TrustCenterIDNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldTrustCenterID))
+func TrustCenterIDNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldTrustCenterID))
 }
 
 // TrustCenterIDEqualFold applies the EqualFold predicate on the "trust_center_id" field.
-func TrustCenterIDEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldTrustCenterID, v))
+func TrustCenterIDEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldTrustCenterID, v))
 }
 
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
-func TrustCenterIDContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
+func TrustCenterIDContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
-func NameEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldName, v))
+func NameEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldName, v))
 }
 
 // NameNEQ applies the NEQ predicate on the "name" field.
-func NameNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldName, v))
+func NameNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldName, v))
 }
 
 // NameIn applies the In predicate on the "name" field.
-func NameIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldName, vs...))
+func NameIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldName, vs...))
 }
 
 // NameNotIn applies the NotIn predicate on the "name" field.
-func NameNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldName, vs...))
+func NameNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldName, vs...))
 }
 
 // NameGT applies the GT predicate on the "name" field.
-func NameGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldName, v))
+func NameGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldName, v))
 }
 
 // NameGTE applies the GTE predicate on the "name" field.
-func NameGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldName, v))
+func NameGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldName, v))
 }
 
 // NameLT applies the LT predicate on the "name" field.
-func NameLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldName, v))
+func NameLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldName, v))
 }
 
 // NameLTE applies the LTE predicate on the "name" field.
-func NameLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldName, v))
+func NameLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldName, v))
 }
 
 // NameContains applies the Contains predicate on the "name" field.
-func NameContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldName, v))
+func NameContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldName, v))
 }
 
 // NameHasPrefix applies the HasPrefix predicate on the "name" field.
-func NameHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldName, v))
+func NameHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldName, v))
 }
 
 // NameHasSuffix applies the HasSuffix predicate on the "name" field.
-func NameHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldName, v))
+func NameHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldName, v))
 }
 
 // NameEqualFold applies the EqualFold predicate on the "name" field.
-func NameEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldName, v))
+func NameEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldName, v))
 }
 
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
-func NameContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldName, v))
+func NameContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldName, v))
 }
 
 // EntityTypeIDEQ applies the EQ predicate on the "entity_type_id" field.
-func EntityTypeIDEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldEntityTypeID, v))
+func EntityTypeIDEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEQ(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDNEQ applies the NEQ predicate on the "entity_type_id" field.
-func EntityTypeIDNEQ(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldEntityTypeID, v))
+func EntityTypeIDNEQ(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNEQ(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDIn applies the In predicate on the "entity_type_id" field.
-func EntityTypeIDIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldEntityTypeID, vs...))
+func EntityTypeIDIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIn(FieldEntityTypeID, vs...))
 }
 
 // EntityTypeIDNotIn applies the NotIn predicate on the "entity_type_id" field.
-func EntityTypeIDNotIn(vs ...string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldEntityTypeID, vs...))
+func EntityTypeIDNotIn(vs ...string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotIn(FieldEntityTypeID, vs...))
 }
 
 // EntityTypeIDGT applies the GT predicate on the "entity_type_id" field.
-func EntityTypeIDGT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldEntityTypeID, v))
+func EntityTypeIDGT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGT(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDGTE applies the GTE predicate on the "entity_type_id" field.
-func EntityTypeIDGTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldEntityTypeID, v))
+func EntityTypeIDGTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldGTE(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDLT applies the LT predicate on the "entity_type_id" field.
-func EntityTypeIDLT(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldEntityTypeID, v))
+func EntityTypeIDLT(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLT(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDLTE applies the LTE predicate on the "entity_type_id" field.
-func EntityTypeIDLTE(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldEntityTypeID, v))
+func EntityTypeIDLTE(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldLTE(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDContains applies the Contains predicate on the "entity_type_id" field.
-func EntityTypeIDContains(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldEntityTypeID, v))
+func EntityTypeIDContains(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContains(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDHasPrefix applies the HasPrefix predicate on the "entity_type_id" field.
-func EntityTypeIDHasPrefix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldEntityTypeID, v))
+func EntityTypeIDHasPrefix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasPrefix(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDHasSuffix applies the HasSuffix predicate on the "entity_type_id" field.
-func EntityTypeIDHasSuffix(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldEntityTypeID, v))
+func EntityTypeIDHasSuffix(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldHasSuffix(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDIsNil applies the IsNil predicate on the "entity_type_id" field.
-func EntityTypeIDIsNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldEntityTypeID))
+func EntityTypeIDIsNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldIsNull(FieldEntityTypeID))
 }
 
 // EntityTypeIDNotNil applies the NotNil predicate on the "entity_type_id" field.
-func EntityTypeIDNotNil() predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldEntityTypeID))
+func EntityTypeIDNotNil() predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldNotNull(FieldEntityTypeID))
 }
 
 // EntityTypeIDEqualFold applies the EqualFold predicate on the "entity_type_id" field.
-func EntityTypeIDEqualFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldEntityTypeID, v))
+func EntityTypeIDEqualFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldEqualFold(FieldEntityTypeID, v))
 }
 
 // EntityTypeIDContainsFold applies the ContainsFold predicate on the "entity_type_id" field.
-func EntityTypeIDContainsFold(v string) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldEntityTypeID, v))
+func EntityTypeIDContainsFold(v string) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.FieldContainsFold(FieldEntityTypeID, v))
 }
 
 // And groups predicates with the AND operator between them.
-func And(predicates ...predicate.TrustcenterEntityHistory) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.AndPredicates(predicates...))
+func And(predicates ...predicate.TrustCenterEntityHistory) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.AndPredicates(predicates...))
 }
 
 // Or groups predicates with the OR operator between them.
-func Or(predicates ...predicate.TrustcenterEntityHistory) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.OrPredicates(predicates...))
+func Or(predicates ...predicate.TrustCenterEntityHistory) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.OrPredicates(predicates...))
 }
 
 // Not applies the not operator on the given predicate.
-func Not(p predicate.TrustcenterEntityHistory) predicate.TrustcenterEntityHistory {
-	return predicate.TrustcenterEntityHistory(sql.NotPredicates(p))
+func Not(p predicate.TrustCenterEntityHistory) predicate.TrustCenterEntityHistory {
+	return predicate.TrustCenterEntityHistory(sql.NotPredicates(p))
 }

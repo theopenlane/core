@@ -86,8 +86,8 @@ type TrustCenterEdges struct {
 	Templates []*Template `json:"templates,omitempty"`
 	// posts for the trust center feed
 	Posts []*Note `json:"posts,omitempty"`
-	// TrustcenterEntities holds the value of the trustcenter_entities edge.
-	TrustcenterEntities []*TrustcenterEntity `json:"trustcenter_entities,omitempty"`
+	// TrustCenterEntities holds the value of the trust_center_entities edge.
+	TrustCenterEntities []*TrustCenterEntity `json:"trust_center_entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [12]bool
@@ -99,7 +99,7 @@ type TrustCenterEdges struct {
 	namedTrustCenterCompliances   map[string][]*TrustCenterCompliance
 	namedTemplates                map[string][]*Template
 	namedPosts                    map[string][]*Note
-	namedTrustcenterEntities      map[string][]*TrustcenterEntity
+	namedTrustCenterEntities      map[string][]*TrustCenterEntity
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -213,13 +213,13 @@ func (e TrustCenterEdges) PostsOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "posts"}
 }
 
-// TrustcenterEntitiesOrErr returns the TrustcenterEntities value or an error if the edge
+// TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
-func (e TrustCenterEdges) TrustcenterEntitiesOrErr() ([]*TrustcenterEntity, error) {
+func (e TrustCenterEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 	if e.loadedTypes[11] {
-		return e.TrustcenterEntities, nil
+		return e.TrustCenterEntities, nil
 	}
-	return nil, &NotLoadedError{edge: "trustcenter_entities"}
+	return nil, &NotLoadedError{edge: "trust_center_entities"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -442,9 +442,9 @@ func (_m *TrustCenter) QueryPosts() *NoteQuery {
 	return NewTrustCenterClient(_m.config).QueryPosts(_m)
 }
 
-// QueryTrustcenterEntities queries the "trustcenter_entities" edge of the TrustCenter entity.
-func (_m *TrustCenter) QueryTrustcenterEntities() *TrustcenterEntityQuery {
-	return NewTrustCenterClient(_m.config).QueryTrustcenterEntities(_m)
+// QueryTrustCenterEntities queries the "trust_center_entities" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryTrustCenterEntities() *TrustCenterEntityQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterEntities(_m)
 }
 
 // Update returns a builder for updating this TrustCenter.
@@ -640,27 +640,27 @@ func (_m *TrustCenter) appendNamedPosts(name string, edges ...*Note) {
 	}
 }
 
-// NamedTrustcenterEntities returns the TrustcenterEntities named value or an error if the edge was not
+// NamedTrustCenterEntities returns the TrustCenterEntities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *TrustCenter) NamedTrustcenterEntities(name string) ([]*TrustcenterEntity, error) {
-	if _m.Edges.namedTrustcenterEntities == nil {
+func (_m *TrustCenter) NamedTrustCenterEntities(name string) ([]*TrustCenterEntity, error) {
+	if _m.Edges.namedTrustCenterEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedTrustcenterEntities[name]
+	nodes, ok := _m.Edges.namedTrustCenterEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *TrustCenter) appendNamedTrustcenterEntities(name string, edges ...*TrustcenterEntity) {
-	if _m.Edges.namedTrustcenterEntities == nil {
-		_m.Edges.namedTrustcenterEntities = make(map[string][]*TrustcenterEntity)
+func (_m *TrustCenter) appendNamedTrustCenterEntities(name string, edges ...*TrustCenterEntity) {
+	if _m.Edges.namedTrustCenterEntities == nil {
+		_m.Edges.namedTrustCenterEntities = make(map[string][]*TrustCenterEntity)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedTrustcenterEntities[name] = []*TrustcenterEntity{}
+		_m.Edges.namedTrustCenterEntities[name] = []*TrustCenterEntity{}
 	} else {
-		_m.Edges.namedTrustcenterEntities[name] = append(_m.Edges.namedTrustcenterEntities[name], edges...)
+		_m.Edges.namedTrustCenterEntities[name] = append(_m.Edges.namedTrustCenterEntities[name], edges...)
 	}
 }
 

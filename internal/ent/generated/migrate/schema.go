@@ -5333,6 +5333,61 @@ var (
 			},
 		},
 	}
+	// TrustCenterEntitiesColumns holds the columns for the "trust_center_entities" table.
+	TrustCenterEntitiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "name", Type: field.TypeString},
+		{Name: "file_trust_center_entities", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_trust_center_entities", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustCenterEntitiesTable holds the schema information for the "trust_center_entities" table.
+	TrustCenterEntitiesTable = &schema.Table{
+		Name:       "trust_center_entities",
+		Columns:    TrustCenterEntitiesColumns,
+		PrimaryKey: []*schema.Column{TrustCenterEntitiesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trust_center_entities_files_trust_center_entities",
+				Columns:    []*schema.Column{TrustCenterEntitiesColumns[9]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_entities_trust_centers_trust_center_entities",
+				Columns:    []*schema.Column{TrustCenterEntitiesColumns[10]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_entities_files_logo_file",
+				Columns:    []*schema.Column{TrustCenterEntitiesColumns[11]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_entities_trust_centers_trust_center",
+				Columns:    []*schema.Column{TrustCenterEntitiesColumns[12]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_entities_entity_types_entity_type",
+				Columns:    []*schema.Column{TrustCenterEntitiesColumns[13]},
+				RefColumns: []*schema.Column{EntityTypesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// TrustCenterSettingsColumns holds the columns for the "trust_center_settings" table.
 	TrustCenterSettingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -5488,61 +5543,6 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
-			},
-		},
-	}
-	// TrustcenterEntitiesColumns holds the columns for the "trustcenter_entities" table.
-	TrustcenterEntitiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "name", Type: field.TypeString},
-		{Name: "file_trustcenter_entities", Type: field.TypeString, Nullable: true},
-		{Name: "trust_center_trustcenter_entities", Type: field.TypeString, Nullable: true},
-		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
-		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
-	}
-	// TrustcenterEntitiesTable holds the schema information for the "trustcenter_entities" table.
-	TrustcenterEntitiesTable = &schema.Table{
-		Name:       "trustcenter_entities",
-		Columns:    TrustcenterEntitiesColumns,
-		PrimaryKey: []*schema.Column{TrustcenterEntitiesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "trustcenter_entities_files_trustcenter_entities",
-				Columns:    []*schema.Column{TrustcenterEntitiesColumns[9]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trustcenter_entities_trust_centers_trustcenter_entities",
-				Columns:    []*schema.Column{TrustcenterEntitiesColumns[10]},
-				RefColumns: []*schema.Column{TrustCentersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trustcenter_entities_files_logo_file",
-				Columns:    []*schema.Column{TrustcenterEntitiesColumns[11]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trustcenter_entities_trust_centers_trust_center",
-				Columns:    []*schema.Column{TrustcenterEntitiesColumns[12]},
-				RefColumns: []*schema.Column{TrustCentersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trustcenter_entities_entity_types_entity_type",
-				Columns:    []*schema.Column{TrustcenterEntitiesColumns[13]},
-				RefColumns: []*schema.Column{EntityTypesColumns[0]},
-				OnDelete:   schema.SetNull,
 			},
 		},
 	}
@@ -9548,10 +9548,10 @@ var (
 		TrustCentersTable,
 		TrustCenterCompliancesTable,
 		TrustCenterDocsTable,
+		TrustCenterEntitiesTable,
 		TrustCenterSettingsTable,
 		TrustCenterSubprocessorsTable,
 		TrustCenterWatermarkConfigsTable,
-		TrustcenterEntitiesTable,
 		UsersTable,
 		UserSettingsTable,
 		VulnerabilitiesTable,
@@ -9995,6 +9995,11 @@ func init() {
 	TrustCenterDocsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterDocsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterDocsTable.ForeignKeys[3].RefTable = FilesTable
+	TrustCenterEntitiesTable.ForeignKeys[0].RefTable = FilesTable
+	TrustCenterEntitiesTable.ForeignKeys[1].RefTable = TrustCentersTable
+	TrustCenterEntitiesTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterEntitiesTable.ForeignKeys[3].RefTable = TrustCentersTable
+	TrustCenterEntitiesTable.ForeignKeys[4].RefTable = EntityTypesTable
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSubprocessorsTable.ForeignKeys[0].RefTable = SubprocessorsTable
@@ -10005,11 +10010,6 @@ func init() {
 	TrustCenterWatermarkConfigsTable.Annotation.Checks = map[string]string{
 		"text_or_logo_id_not_null": "(text IS NOT NULL) OR (logo_id IS NOT NULL)",
 	}
-	TrustcenterEntitiesTable.ForeignKeys[0].RefTable = FilesTable
-	TrustcenterEntitiesTable.ForeignKeys[1].RefTable = TrustCentersTable
-	TrustcenterEntitiesTable.ForeignKeys[2].RefTable = FilesTable
-	TrustcenterEntitiesTable.ForeignKeys[3].RefTable = TrustCentersTable
-	TrustcenterEntitiesTable.ForeignKeys[4].RefTable = EntityTypesTable
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	UserSettingsTable.ForeignKeys[1].RefTable = OrganizationsTable

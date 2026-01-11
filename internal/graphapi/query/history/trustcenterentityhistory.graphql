@@ -1,7 +1,7 @@
 
 
-query GetAllTrustcenterEntityHistories {
-  trustcenterEntityHistories {
+query GetAllTrustCenterEntityHistories {
+  trustCenterEntityHistories {
     totalCount
     pageInfo {
       startCursor
@@ -29,8 +29,8 @@ query GetAllTrustcenterEntityHistories {
   }
 }
 
-query GetTrustcenterEntityHistories($first: Int, $last: Int, $where: TrustcenterEntityHistoryWhereInput) {
-  trustcenterEntityHistories(first: $first, last: $last, where: $where) {
+query GetTrustCenterEntityHistories($first: Int, $last: Int, $where: TrustCenterEntityHistoryWhereInput) {
+  trustCenterEntityHistories(first: $first, last: $last, where: $where) {
     totalCount
     pageInfo {
       startCursor

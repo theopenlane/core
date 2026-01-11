@@ -12,7 +12,7 @@ import (
 
 const (
 	// Label holds the string label denoting the trustcenterentity type in the database.
-	Label = "trustcenter_entity"
+	Label = "trust_center_entity"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -44,23 +44,23 @@ const (
 	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
 	EdgeEntityType = "entity_type"
 	// Table holds the table name of the trustcenterentity in the database.
-	Table = "trustcenter_entities"
+	Table = "trust_center_entities"
 	// LogoFileTable is the table that holds the logo_file relation/edge.
-	LogoFileTable = "trustcenter_entities"
+	LogoFileTable = "trust_center_entities"
 	// LogoFileInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	LogoFileInverseTable = "files"
 	// LogoFileColumn is the table column denoting the logo_file relation/edge.
 	LogoFileColumn = "logo_file_id"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
-	TrustCenterTable = "trustcenter_entities"
+	TrustCenterTable = "trust_center_entities"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
 	// EntityTypeTable is the table that holds the entity_type relation/edge.
-	EntityTypeTable = "trustcenter_entities"
+	EntityTypeTable = "trust_center_entities"
 	// EntityTypeInverseTable is the table name for the EntityType entity.
 	// It exists in this package in order to avoid circular dependency with the "entitytype" package.
 	EntityTypeInverseTable = "entity_types"
@@ -84,11 +84,11 @@ var Columns = []string{
 	FieldEntityTypeID,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "trustcenter_entities"
+// ForeignKeys holds the SQL foreign-keys that are owned by the "trust_center_entities"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"file_trustcenter_entities",
-	"trust_center_trustcenter_entities",
+	"file_trust_center_entities",
+	"trust_center_trust_center_entities",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -123,11 +123,13 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// URLValidator is a validator for the "url" field. It is called by the builders before save.
 	URLValidator func(string) error
+	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	TrustCenterIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
 
-// OrderOption defines the ordering options for the TrustcenterEntity queries.
+// OrderOption defines the ordering options for the TrustCenterEntity queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.

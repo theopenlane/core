@@ -106,26 +106,6 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) ClearDeletedBy() *TrustCenter
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetTrustCenterID(v string) *TrustCenterWatermarkConfigHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterWatermarkConfigHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigHistoryUpdate) ClearTrustCenterID() *TrustCenterWatermarkConfigHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // SetIsEnabled sets the "is_enabled" field.
 func (_u *TrustCenterWatermarkConfigHistoryUpdate) SetIsEnabled(v bool) *TrustCenterWatermarkConfigHistoryUpdate {
 	_u.mutation.SetIsEnabled(v)
@@ -418,9 +398,6 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdate) sqlSave(ctx context.Context) 
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString)
 	}
@@ -574,26 +551,6 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetNillableDeletedBy(v *st
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) ClearDeletedBy() *TrustCenterWatermarkConfigHistoryUpdateOne {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterWatermarkConfigHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterWatermarkConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) ClearTrustCenterID() *TrustCenterWatermarkConfigHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -918,9 +875,6 @@ func (_u *TrustCenterWatermarkConfigHistoryUpdateOne) sqlSave(ctx context.Contex
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString)

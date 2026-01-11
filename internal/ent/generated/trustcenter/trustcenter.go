@@ -70,8 +70,8 @@ const (
 	EdgeTemplates = "templates"
 	// EdgePosts holds the string denoting the posts edge name in mutations.
 	EdgePosts = "posts"
-	// EdgeTrustcenterEntities holds the string denoting the trustcenter_entities edge name in mutations.
-	EdgeTrustcenterEntities = "trustcenter_entities"
+	// EdgeTrustCenterEntities holds the string denoting the trust_center_entities edge name in mutations.
+	EdgeTrustCenterEntities = "trust_center_entities"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -151,13 +151,13 @@ const (
 	PostsInverseTable = "notes"
 	// PostsColumn is the table column denoting the posts relation/edge.
 	PostsColumn = "trust_center_id"
-	// TrustcenterEntitiesTable is the table that holds the trustcenter_entities relation/edge.
-	TrustcenterEntitiesTable = "trustcenter_entities"
-	// TrustcenterEntitiesInverseTable is the table name for the TrustcenterEntity entity.
+	// TrustCenterEntitiesTable is the table that holds the trust_center_entities relation/edge.
+	TrustCenterEntitiesTable = "trust_center_entities"
+	// TrustCenterEntitiesInverseTable is the table name for the TrustCenterEntity entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenterentity" package.
-	TrustcenterEntitiesInverseTable = "trustcenter_entities"
-	// TrustcenterEntitiesColumn is the table column denoting the trustcenter_entities relation/edge.
-	TrustcenterEntitiesColumn = "trust_center_trustcenter_entities"
+	TrustCenterEntitiesInverseTable = "trust_center_entities"
+	// TrustCenterEntitiesColumn is the table column denoting the trust_center_entities relation/edge.
+	TrustCenterEntitiesColumn = "trust_center_trust_center_entities"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -430,17 +430,17 @@ func ByPosts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTrustcenterEntitiesCount orders the results by trustcenter_entities count.
-func ByTrustcenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTrustCenterEntitiesCount orders the results by trust_center_entities count.
+func ByTrustCenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTrustcenterEntitiesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterEntitiesStep(), opts...)
 	}
 }
 
-// ByTrustcenterEntities orders the results by trustcenter_entities terms.
-func ByTrustcenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTrustCenterEntities orders the results by trust_center_entities terms.
+func ByTrustCenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustcenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -520,11 +520,11 @@ func newPostsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, PostsTable, PostsColumn),
 	)
 }
-func newTrustcenterEntitiesStep() *sqlgraph.Step {
+func newTrustCenterEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustcenterEntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TrustcenterEntitiesTable, TrustcenterEntitiesColumn),
+		sqlgraph.To(TrustCenterEntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterEntitiesTable, TrustCenterEntitiesColumn),
 	)
 }
 

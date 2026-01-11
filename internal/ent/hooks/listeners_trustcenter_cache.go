@@ -104,43 +104,45 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	return nil
 }
 
-// handleTrustcenterEntityMutation processes TrustcenterEntity mutations and invalidates cache
-func handleTrustcenterEntityMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
-	if payload == nil || payload.Client == nil {
-		return nil
-	}
+// handleTrustCenterEntityMutation processes TrustCenterEntity mutations and invalidates cache
+func handleTrustCenterEntityMutation(ctx *soiree.EventContext, payload *events.MutationPayload) error {
+	// if payload == nil || payload.Client == nil {
+	// 	return nil
+	// }
 
-	mut, ok := payload.Mutation.(*entgen.TrustcenterEntityMutation)
-	if !ok {
-		return nil
-	}
+	// mut, ok := payload.Mutation.(*entgen.TrustCenterEntityMutation)
+	// if !ok {
+	// 	return nil
+	// }
 
-	var trustCenterID string
-	if tcID, exists := mut.TrustCenterID(); exists {
-		trustCenterID = tcID
-	}
+	// var trustCenterID string
+	// if tcID, exists := mut.TrustCenterID(); exists {
+	// 	trustCenterID = tcID
+	// }
 
-	if trustCenterID == "" {
-		entityID := payload.EntityID
-		if entityID == "" {
-			if id, ok := mut.ID(); ok {
-				entityID = id
-			}
-		}
+	// if trustCenterID == "" {
+	// 	entityID := payload.EntityID
+	// 	if entityID == "" {
+	// 		if id, ok := mut.ID(); ok {
+	// 			entityID = id
+	// 		}
+	// 	}
 
-		if entityID != "" {
-			entity, err := payload.Client.TrustcenterEntity.Get(ctx.Context(), entityID)
-			if err == nil && entity != nil {
-				trustCenterID = entity.TrustCenterID
-			}
-		}
-	}
+	// 	if entityID != "" {
+	// 		entity, err := payload.Client.TrustCenterEntity.Get(ctx.Context(), entityID)
+	// 		if err == nil && entity != nil {
+	// 			trustCenterID = entity.TrustCenterID
+	// 		}
+	// 	}
+	// }
 
-	if trustCenterID == "" {
-		return nil
-	}
+	// if trustCenterID == "" {
+	// 	return nil
+	// }
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	// return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+
+	return nil
 }
 
 // handleTrustCenterSubprocessorMutation processes TrustCenterSubprocessor mutations and invalidates cache

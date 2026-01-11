@@ -181,7 +181,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
 			name:          "entities",
-			edgeSchema:    TrustcenterEntity{},
+			edgeSchema:    TrustCenterEntity{},
 			cascadeDelete: "TrustCenter",
 		}),
 	}

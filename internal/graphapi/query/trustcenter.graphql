@@ -131,6 +131,33 @@ query GetAllTrustCenters {
             }
           }
         }
+        trustCenterEntities {
+          edges {
+            node {
+              id
+              name
+              logoFile {
+                id
+                base64
+                presignedURL
+              }
+            }
+          }
+        }
+        trustCenterSubprocessors {
+          edges {
+            node {
+              id
+              subprocessor {
+                name
+                description
+                logoFile {
+                  base64
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -180,6 +207,33 @@ query GetTrustCenterByID($trustCenterId: ID!) {
         node {
           id
           text
+        }
+      }
+    }
+    trustCenterEntities {
+      edges {
+        node {
+          id
+          name
+          logoFile {
+            id
+            base64
+            presignedURL
+          }
+        }
+      }
+    }
+    trustCenterSubprocessors {
+      edges {
+        node {
+          id
+          subprocessor {
+            name
+            description
+            logoFile {
+              base64
+            }
+          }
         }
       }
     }

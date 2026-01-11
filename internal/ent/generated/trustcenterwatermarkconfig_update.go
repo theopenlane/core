@@ -106,26 +106,6 @@ func (_u *TrustCenterWatermarkConfigUpdate) ClearDeletedBy() *TrustCenterWaterma
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdate) SetTrustCenterID(v string) *TrustCenterWatermarkConfigUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigUpdate) SetNillableTrustCenterID(v *string) *TrustCenterWatermarkConfigUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdate) ClearTrustCenterID() *TrustCenterWatermarkConfigUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // SetIsEnabled sets the "is_enabled" field.
 func (_u *TrustCenterWatermarkConfigUpdate) SetIsEnabled(v bool) *TrustCenterWatermarkConfigUpdate {
 	_u.mutation.SetIsEnabled(v)
@@ -417,11 +397,6 @@ func (_u *TrustCenterWatermarkConfigUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterWatermarkConfigUpdate) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcenterwatermarkconfig.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Text(); ok {
 		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
@@ -497,9 +472,6 @@ func (_u *TrustCenterWatermarkConfigUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString)
@@ -727,26 +699,6 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableDeletedBy(v *string) *
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *TrustCenterWatermarkConfigUpdateOne) ClearDeletedBy() *TrustCenterWatermarkConfigUpdateOne {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdateOne) SetTrustCenterID(v string) *TrustCenterWatermarkConfigUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterWatermarkConfigUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdateOne) ClearTrustCenterID() *TrustCenterWatermarkConfigUpdateOne {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -1054,11 +1006,6 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterWatermarkConfigUpdateOne) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcenterwatermarkconfig.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Text(); ok {
 		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
@@ -1151,9 +1098,6 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString)

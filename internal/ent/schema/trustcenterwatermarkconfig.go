@@ -60,6 +60,7 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("ID of the trust center").
 			NotEmpty().
+			Immutable().
 			Optional(),
 		field.Bool("is_enabled").
 			Comment("whether the watermarking is enabled for all trust center documents, default is true").
@@ -147,6 +148,7 @@ func (TrustCenterWatermarkConfig) Hooks() []ent.Hook {
 func (TrustCenterWatermarkConfig) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),

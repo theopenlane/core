@@ -72,6 +72,7 @@ func (t TrustCenterSubprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterSubprocessor](t,
 				withParents(TrustCenter{}),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
 		},
 	}.getMixins(t)
@@ -106,6 +107,7 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),

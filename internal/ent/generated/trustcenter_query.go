@@ -48,7 +48,7 @@ type TrustCenterQuery struct {
 	withTrustCenterCompliances        *TrustCenterComplianceQuery
 	withTemplates                     *TemplateQuery
 	withPosts                         *NoteQuery
-	withTrustcenterEntities           *TrustcenterEntityQuery
+	withTrustCenterEntities           *TrustCenterEntityQuery
 	withFKs                           bool
 	loadTotal                         []func(context.Context, []*TrustCenter) error
 	modifiers                         []func(*sql.Selector)
@@ -57,7 +57,7 @@ type TrustCenterQuery struct {
 	withNamedTrustCenterCompliances   map[string]*TrustCenterComplianceQuery
 	withNamedTemplates                map[string]*TemplateQuery
 	withNamedPosts                    map[string]*NoteQuery
-	withNamedTrustcenterEntities      map[string]*TrustcenterEntityQuery
+	withNamedTrustCenterEntities      map[string]*TrustCenterEntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -369,9 +369,9 @@ func (_q *TrustCenterQuery) QueryPosts() *NoteQuery {
 	return query
 }
 
-// QueryTrustcenterEntities chains the current query on the "trustcenter_entities" edge.
-func (_q *TrustCenterQuery) QueryTrustcenterEntities() *TrustcenterEntityQuery {
-	query := (&TrustcenterEntityClient{config: _q.config}).Query()
+// QueryTrustCenterEntities chains the current query on the "trust_center_entities" edge.
+func (_q *TrustCenterQuery) QueryTrustCenterEntities() *TrustCenterEntityQuery {
+	query := (&TrustCenterEntityClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -383,11 +383,11 @@ func (_q *TrustCenterQuery) QueryTrustcenterEntities() *TrustcenterEntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
 			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustcenterEntitiesTable, trustcenter.TrustcenterEntitiesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterEntitiesTable, trustcenter.TrustCenterEntitiesColumn),
 		)
 		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustcenterEntity
-		step.Edge.Schema = schemaConfig.TrustcenterEntity
+		step.To.Schema = schemaConfig.TrustCenterEntity
+		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -597,7 +597,7 @@ func (_q *TrustCenterQuery) Clone() *TrustCenterQuery {
 		withTrustCenterCompliances:   _q.withTrustCenterCompliances.Clone(),
 		withTemplates:                _q.withTemplates.Clone(),
 		withPosts:                    _q.withPosts.Clone(),
-		withTrustcenterEntities:      _q.withTrustcenterEntities.Clone(),
+		withTrustCenterEntities:      _q.withTrustCenterEntities.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -726,14 +726,14 @@ func (_q *TrustCenterQuery) WithPosts(opts ...func(*NoteQuery)) *TrustCenterQuer
 	return _q
 }
 
-// WithTrustcenterEntities tells the query-builder to eager-load the nodes that are connected to
-// the "trustcenter_entities" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustCenterQuery) WithTrustcenterEntities(opts ...func(*TrustcenterEntityQuery)) *TrustCenterQuery {
-	query := (&TrustcenterEntityClient{config: _q.config}).Query()
+// WithTrustCenterEntities tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithTrustCenterEntities(opts ...func(*TrustCenterEntityQuery)) *TrustCenterQuery {
+	query := (&TrustCenterEntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withTrustcenterEntities = query
+	_q.withTrustCenterEntities = query
 	return _q
 }
 
@@ -834,7 +834,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withTrustCenterCompliances != nil,
 			_q.withTemplates != nil,
 			_q.withPosts != nil,
-			_q.withTrustcenterEntities != nil,
+			_q.withTrustCenterEntities != nil,
 		}
 	)
 	if _q.withSetting != nil || _q.withPreviewSetting != nil || _q.withWatermarkConfig != nil {
@@ -941,11 +941,11 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
-	if query := _q.withTrustcenterEntities; query != nil {
-		if err := _q.loadTrustcenterEntities(ctx, query, nodes,
-			func(n *TrustCenter) { n.Edges.TrustcenterEntities = []*TrustcenterEntity{} },
-			func(n *TrustCenter, e *TrustcenterEntity) {
-				n.Edges.TrustcenterEntities = append(n.Edges.TrustcenterEntities, e)
+	if query := _q.withTrustCenterEntities; query != nil {
+		if err := _q.loadTrustCenterEntities(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.TrustCenterEntities = []*TrustCenterEntity{} },
+			func(n *TrustCenter, e *TrustCenterEntity) {
+				n.Edges.TrustCenterEntities = append(n.Edges.TrustCenterEntities, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -985,10 +985,10 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedTrustcenterEntities {
-		if err := _q.loadTrustcenterEntities(ctx, query, nodes,
-			func(n *TrustCenter) { n.appendNamedTrustcenterEntities(name) },
-			func(n *TrustCenter, e *TrustcenterEntity) { n.appendNamedTrustcenterEntities(name, e) }); err != nil {
+	for name, query := range _q.withNamedTrustCenterEntities {
+		if err := _q.loadTrustCenterEntities(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedTrustCenterEntities(name) },
+			func(n *TrustCenter, e *TrustCenterEntity) { n.appendNamedTrustCenterEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1337,7 +1337,7 @@ func (_q *TrustCenterQuery) loadPosts(ctx context.Context, query *NoteQuery, nod
 	}
 	return nil
 }
-func (_q *TrustCenterQuery) loadTrustcenterEntities(ctx context.Context, query *TrustcenterEntityQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustcenterEntity)) error {
+func (_q *TrustCenterQuery) loadTrustCenterEntities(ctx context.Context, query *TrustCenterEntityQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustCenterEntity)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*TrustCenter)
 	for i := range nodes {
@@ -1348,21 +1348,21 @@ func (_q *TrustCenterQuery) loadTrustcenterEntities(ctx context.Context, query *
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.TrustcenterEntity(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(trustcenter.TrustcenterEntitiesColumn), fks...))
+	query.Where(predicate.TrustCenterEntity(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.TrustCenterEntitiesColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.trust_center_trustcenter_entities
+		fk := n.trust_center_trust_center_entities
 		if fk == nil {
-			return fmt.Errorf(`foreign-key "trust_center_trustcenter_entities" is nil for node %v`, n.ID)
+			return fmt.Errorf(`foreign-key "trust_center_trust_center_entities" is nil for node %v`, n.ID)
 		}
 		node, ok := nodeids[*fk]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_trustcenter_entities" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_trust_center_entities" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1546,17 +1546,17 @@ func (_q *TrustCenterQuery) WithNamedPosts(name string, opts ...func(*NoteQuery)
 	return _q
 }
 
-// WithNamedTrustcenterEntities tells the query-builder to eager-load the nodes that are connected to the "trustcenter_entities"
+// WithNamedTrustCenterEntities tells the query-builder to eager-load the nodes that are connected to the "trust_center_entities"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustCenterQuery) WithNamedTrustcenterEntities(name string, opts ...func(*TrustcenterEntityQuery)) *TrustCenterQuery {
-	query := (&TrustcenterEntityClient{config: _q.config}).Query()
+func (_q *TrustCenterQuery) WithNamedTrustCenterEntities(name string, opts ...func(*TrustCenterEntityQuery)) *TrustCenterQuery {
+	query := (&TrustCenterEntityClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	if _q.withNamedTrustcenterEntities == nil {
-		_q.withNamedTrustcenterEntities = make(map[string]*TrustcenterEntityQuery)
+	if _q.withNamedTrustCenterEntities == nil {
+		_q.withNamedTrustCenterEntities = make(map[string]*TrustCenterEntityQuery)
 	}
-	_q.withNamedTrustcenterEntities[name] = query
+	_q.withNamedTrustCenterEntities[name] = query
 	return _q
 }
 

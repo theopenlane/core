@@ -146,6 +146,7 @@ func (TrustCenterDoc) Hooks() []ent.Hook {
 func (TrustCenterDoc) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),

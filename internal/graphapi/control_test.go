@@ -32,6 +32,7 @@ func TestQueryControl(t *testing.T) {
 		UserID: adminUser.ID, Role: enums.RoleAdmin.String(),
 	}).
 		MustNew(testUser1.UserCtx, t)
+
 	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), testUser1.OrganizationID)
 
 	controlIDs := []string{}
