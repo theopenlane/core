@@ -1576,24 +1576,28 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 	}
 
 	testCases := []struct {
-		name                 string
-		watermarkingEnabled  *bool
-		expectedWatermarking bool
+		name                    string
+		watermarkingEnabled     *bool
+		expectedWatermarking    bool
+		expectedWatermarkStatus enums.WatermarkStatus
 	}{
 		{
-			name:                 "watermarkingEnabled explicitly set to false should override global config (true)",
-			watermarkingEnabled:  lo.ToPtr(false),
-			expectedWatermarking: false,
+			name:                    "watermarkingEnabled explicitly set to false should override global config (true)",
+			watermarkingEnabled:     lo.ToPtr(false),
+			expectedWatermarking:    false,
+			expectedWatermarkStatus: enums.WatermarkStatusDisabled,
 		},
 		{
-			name:                 "watermarkingEnabled not set should use global config (true)",
-			watermarkingEnabled:  nil,
-			expectedWatermarking: true,
+			name:                    "watermarkingEnabled not set should use global config (true)",
+			watermarkingEnabled:     nil,
+			expectedWatermarking:    true,
+			expectedWatermarkStatus: enums.WatermarkStatusPending,
 		},
 		{
-			name:                 "watermarkingEnabled explicitly set to true should remain true",
-			watermarkingEnabled:  lo.ToPtr(true),
-			expectedWatermarking: true,
+			name:                    "watermarkingEnabled explicitly set to true should remain true",
+			watermarkingEnabled:     lo.ToPtr(true),
+			expectedWatermarking:    true,
+			expectedWatermarkStatus: enums.WatermarkStatusPending,
 		},
 	}
 
@@ -1620,6 +1624,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 			dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(tc.expectedWatermarking, dbDoc.WatermarkingEnabled))
+			assert.Check(t, is.Equal(tc.expectedWatermarkStatus, dbDoc.WatermarkStatus))
 
 			(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 		})
@@ -1630,7 +1635,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 		Save(allowCtx)
 	assert.NilError(t, err)
 
-	t.Run("watermarkingEnabled false with config disabled should remain false", func(t *testing.T) {
+	t.Run("watermarkingEnabled false with config disabled should remain false with DISABLED status", func(t *testing.T) {
 		file := createPDFUpload()
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
@@ -1649,6 +1654,7 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 		dbDoc, err := suite.client.db.TrustCenterDoc.Get(dbCtx, resp.CreateTrustCenterDoc.TrustCenterDoc.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(false, dbDoc.WatermarkingEnabled))
+		assert.Check(t, is.Equal(enums.WatermarkStatusDisabled, dbDoc.WatermarkStatus))
 
 		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: resp.CreateTrustCenterDoc.TrustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
 	})
@@ -1873,7 +1879,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		assert.Check(t, is.Equal(true, dbDoc.WatermarkingEnabled))
 	})
 
-	t.Run("document with watermarkingEnabled false can be updated to true", func(t *testing.T) {
+	t.Run("document with watermarkingEnabled false can be updated to true and status changes to PENDING", func(t *testing.T) {
 		allowCtx := privacy.DecisionContext(dbCtx, privacy.Allow)
 		watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
 			Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
@@ -1903,6 +1909,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		dbDoc2, err := suite.client.db.TrustCenterDoc.Get(dbCtx, doc2ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(false, dbDoc2.WatermarkingEnabled))
+		assert.Check(t, is.Equal(enums.WatermarkStatusDisabled, dbDoc2.WatermarkStatus))
 
 		updateInput := testclient.UpdateTrustCenterDocInput{
 			WatermarkingEnabled: lo.ToPtr(true),
@@ -1915,6 +1922,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		dbDoc2, err = suite.client.db.TrustCenterDoc.Get(dbCtx, doc2ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(true, dbDoc2.WatermarkingEnabled))
+		assert.Check(t, is.Equal(enums.WatermarkStatusPending, dbDoc2.WatermarkStatus))
 
 		updateInput2 := testclient.UpdateTrustCenterDocInput{
 			WatermarkingEnabled: lo.ToPtr(false),
@@ -1927,6 +1935,7 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		dbDoc2, err = suite.client.db.TrustCenterDoc.Get(dbCtx, doc2ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(true, dbDoc2.WatermarkingEnabled))
+		assert.Check(t, is.Equal(enums.WatermarkStatusPending, dbDoc2.WatermarkStatus))
 
 		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc2ID}).MustDelete(testUser1.UserCtx, t)
 	})
