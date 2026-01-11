@@ -166,6 +166,7 @@ func TestQueryStandard(t *testing.T) {
 		})
 	}
 
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(testUser1.UserCtx, t)
 }
@@ -267,7 +268,7 @@ func TestQueryStandards(t *testing.T) {
 		})
 	}
 
-	systemOwnedIDs := notPublicStandardIDs
+	systemOwnedIDs := append(notPublicStandardIDs, publicStandardIDs...)
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, t)

@@ -2400,9 +2400,9 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		})
 	}
 
-	// cleanup created controls
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
+	// cleanup created controls first, then standard
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, control3.ID, control4.ID, control5.ID, control6.ID, control7.ID, control8.ID}}).MustDelete(user1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(user1.UserCtx, t)
 }
 
 func TestMutationUpdateBulkControl(t *testing.T) {

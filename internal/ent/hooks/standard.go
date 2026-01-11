@@ -30,6 +30,9 @@ var (
 	// ErrStandardInUseByTrustCenter defines an error that denotes a standard cannot be deleted
 	// because it is in use by an active trust center
 	ErrStandardInUseByTrustCenter = errors.New("standard cannot be deleted because it is in use by a trust center")
+	// ErrSystemOwnedStandardCannotBeDeleted defines an error that denotes a system-owned standard
+	// can only be deleted by a system admin
+	ErrSystemOwnedStandardCannotBeDeleted = errors.New("system-owned standard can only be deleted by a system admin")
 )
 
 // HookStandardDelete blocks deletion of a standard that is in use by trust center compliances.
@@ -39,10 +42,6 @@ func HookStandardDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
 			if !isDeleteOp(ctx, m) {
-				return next.Mutate(ctx, m)
-			}
-
-			if !auth.IsSystemAdminFromContext(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
@@ -62,12 +61,10 @@ func HookStandardDelete() ent.Hook {
 				return nil, ErrStandardInUseByTrustCenter
 			}
 
-			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
-
 			retrievedStandard, err := m.Client().Standard.Query().
 				Where(standard.ID(id)).
 				Select(standard.FieldSystemOwned, standard.FieldIsPublic).
-				Only(ctx)
+				Only(checkCtx)
 			if err != nil {
 				return nil, err
 			}
@@ -88,13 +85,18 @@ func HookStandardDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// system-owned standards can only be deleted by system admins
+			if !auth.IsSystemAdminFromContext(ctx) {
+				return nil, ErrSystemOwnedStandardCannotBeDeleted
+			}
+
 			if retrievedStandard.IsPublic {
 				return nil, ErrPublicStandardCannotBeDeleted
 			}
 
+			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
+
 			// remove standard_id mapping from org owned controls
-			// this uses the same allow context, as above, which will allow the
-			// control to be updated to clear the standard id field by the system admin
 			err = m.Client().Control.Update().ClearStandardID().
 				Where(
 					control.And(
