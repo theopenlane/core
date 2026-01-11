@@ -217,3 +217,9 @@ mutation UpdateBulkSubprocessor($ids: [ID!]!, $input: UpdateSubprocessorInput!) 
     updatedIDs
   }
 }
+
+mutation DeleteBulkSubprocessor($ids: [ID!]!) {
+  deleteBulkSubprocessor(ids: $ids) {
+    deletedIDs
+  }
+}
