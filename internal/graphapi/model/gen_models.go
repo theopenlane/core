@@ -2190,7 +2190,7 @@ type TrustCenterDomainCreatePayload struct {
 // Return response for createBulkTrustCenterEntity mutation
 type TrustCenterEntityBulkCreatePayload struct {
 	// Created trustCenterEntitys
-	TrustCenterEntities []*generated.TrustCenterEntity `json:"TrustCenterEntities,omitempty"`
+	TrustCenterEntities []*generated.TrustCenterEntity `json:"trustCenterEntities,omitempty"`
 }
 
 // Return response for createTrustCenterEntity mutation

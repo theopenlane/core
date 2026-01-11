@@ -23009,8 +23009,8 @@ func (ec *executionContext) fieldContext_Mutation_createBulkTrustCenterEntity(ct
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "TrustCenterEntities":
-				return ec.fieldContext_TrustCenterEntityBulkCreatePayload_TrustCenterEntities(ctx, field)
+			case "trustCenterEntities":
+				return ec.fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityBulkCreatePayload", field.Name)
 		},
@@ -23054,8 +23054,8 @@ func (ec *executionContext) fieldContext_Mutation_createBulkCSVTrustCenterEntity
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "TrustCenterEntities":
-				return ec.fieldContext_TrustCenterEntityBulkCreatePayload_TrustCenterEntities(ctx, field)
+			case "trustCenterEntities":
+				return ec.fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityBulkCreatePayload", field.Name)
 		},

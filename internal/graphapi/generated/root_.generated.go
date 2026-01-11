@@ -33556,7 +33556,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterEntity.UpdatedBy(childComplexity), true
 
-	case "TrustCenterEntityBulkCreatePayload.TrustCenterEntities":
+	case "TrustCenterEntityBulkCreatePayload.trustCenterEntities":
 		if e.complexity.TrustCenterEntityBulkCreatePayload.TrustCenterEntities == nil {
 			break
 		}
@@ -107267,7 +107267,7 @@ type TrustCenterEntityBulkCreatePayload {
     """
     Created trustCenterEntitys
     """
-    TrustCenterEntities: [TrustCenterEntity!]
+    trustCenterEntities: [TrustCenterEntity!]
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterextended.graphql", Input: `extend input UpdateTrustCenterInput {
   updateTrustCenterSetting: UpdateTrustCenterSettingInput

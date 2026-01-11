@@ -28,12 +28,12 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _TrustCenterEntityBulkCreatePayload_TrustCenterEntities(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterEntityBulkCreatePayload) (ret graphql.Marshaler) {
+func (ec *executionContext) _TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterEntityBulkCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustCenterEntityBulkCreatePayload_TrustCenterEntities,
+		ec.fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities,
 		func(ctx context.Context) (any, error) {
 			return obj.TrustCenterEntities, nil
 		},
@@ -44,7 +44,7 @@ func (ec *executionContext) _TrustCenterEntityBulkCreatePayload_TrustCenterEntit
 	)
 }
 
-func (ec *executionContext) fieldContext_TrustCenterEntityBulkCreatePayload_TrustCenterEntities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "TrustCenterEntityBulkCreatePayload",
 		Field:      field,
@@ -251,8 +251,8 @@ func (ec *executionContext) _TrustCenterEntityBulkCreatePayload(ctx context.Cont
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("TrustCenterEntityBulkCreatePayload")
-		case "TrustCenterEntities":
-			out.Values[i] = ec._TrustCenterEntityBulkCreatePayload_TrustCenterEntities(ctx, field, obj)
+		case "trustCenterEntities":
+			out.Values[i] = ec._TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

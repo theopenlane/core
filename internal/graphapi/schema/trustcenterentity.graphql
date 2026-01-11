@@ -107,5 +107,5 @@ type TrustCenterEntityBulkCreatePayload {
     """
     Created trustCenterEntitys
     """
-    TrustCenterEntities: [TrustCenterEntity!]
+    trustCenterEntities: [TrustCenterEntity!]
 }
