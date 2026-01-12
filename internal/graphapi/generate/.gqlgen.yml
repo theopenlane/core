@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/99designs/gqlgen/refs/heads/master/gqlgen.schema.json
+
 schema:
   - internal/graphapi/schema/common/*.graphql
   - internal/graphapi/schema/*.graphql
@@ -115,17 +117,23 @@ models:
     model:
       - github.com/theopenlane/core/common/models.VersionBump
   DateTime:
-    model: github.com/theopenlane/core/common/models.DateTime
+    model:
+      - github.com/theopenlane/core/common/models.DateTime
   AAGUID:
-    model: github.com/theopenlane/core/common/models.AAGUID
+    model:
+      - github.com/theopenlane/core/common/models.AAGUID
   JobConfiguration:
-    model: github.com/theopenlane/core/common/models.JobConfiguration
+    model:
+      - github.com/theopenlane/core/common/models.JobConfiguration
   JobCadence:
-    model: github.com/theopenlane/core/common/models.JobCadence
+    model:
+      - github.com/theopenlane/core/common/models.JobCadence
   Change:
-    model: github.com/theopenlane/core/common/models.Change
+    model:
+      - github.com/theopenlane/core/common/models.Change
   AuditLogOrderField:
-    model: github.com/theopenlane/core/common/models.AuditLogOrderField
+    model:
+      - github.com/theopenlane/core/common/models.AuditLogOrderField
   CredentialSet:
     model:
       - github.com/theopenlane/core/common/models.CredentialSet
