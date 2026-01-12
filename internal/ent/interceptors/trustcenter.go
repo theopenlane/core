@@ -2,11 +2,13 @@ package interceptors
 
 import (
 	"context"
+	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/auth"
 	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -40,20 +42,35 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 				return nil, err
 			}
 
+			if query.Type() == "TrustCenterDoc" {
+				query.WhereP(func(s *sql.Selector) {
+					s.Where(sql.ExprP("wrong_column = 'test'"))
+				})
+			}
 			if err := applyTrustCenterChildFilters(ctx, query); err != nil {
 				return nil, err
 			}
 
 			v, err := next.Query(ctx, q)
 			if err != nil {
-				logx.FromContext(ctx).Err(err).Msg("trust center child query failed")
+				logx.FromContext(ctx).Err(err).Str("type", query.Type()).Msg("trust center child query failed")
 
-				// only do this for anon trustcenters tokens
+				// only do this for anon trust center tokens
 				if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok && graphql.HasOperationContext(ctx) {
+					entity := pluralize.NewClient().Plural(strings.ToLower(query.Type()))
+
+					path := graphql.GetPath(ctx)
+
+					if len(path) == 0 {
+						path = ast.Path{ast.PathName(entity)}
+					} else if lastName, ok := path[len(path)-1].(ast.PathName); !ok || string(lastName) != entity {
+						path = append(path, ast.PathName(entity))
+					}
+
 					graphql.AddError(ctx, &gqlerror.Error{
 						Err:     gqlerrors.NewCustomError(gqlerrors.InternalServerErrorCode, "failed to load trust center data", err),
 						Message: "failed to load trust center data",
-						Path:    graphql.GetPath(ctx),
+						Path:    path,
 					})
 				}
 			}
