@@ -8,12 +8,14 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/iam/entfga"
 )
 
 const (
@@ -132,6 +134,7 @@ func (TrustCenterSubprocessor) Modules() []models.OrgModule {
 func (t TrustCenterSubprocessor) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
+		entx.Exportable{},
 	}
 }
 
