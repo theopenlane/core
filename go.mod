@@ -73,8 +73,8 @@ require (
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.17.2
-	github.com/riverqueue/river v0.29.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.29.0
+	github.com/riverqueue/river v0.30.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.30.0
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
 	github.com/spf13/cobra v1.10.2
@@ -120,7 +120,7 @@ require (
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/google/go-github/v80 v80.0.0 // indirect
-	github.com/riverqueue/river/rivertype v0.29.0 // indirect
+	github.com/riverqueue/river/rivertype v0.30.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
@@ -310,8 +310,8 @@ require (
 	github.com/prometheus/common v0.67.4 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
 	github.com/resend/resend-go/v2 v2.28.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.29.0 // indirect
-	github.com/riverqueue/river/rivershared v0.29.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.30.0 // indirect
+	github.com/riverqueue/river/rivershared v0.30.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.6.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
