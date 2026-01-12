@@ -181,3 +181,9 @@ mutation UpdateBulkTrustCenterSubprocessor($ids: [ID!]!, $input: UpdateTrustCent
     updatedIDs
   }
 }
+
+mutation DeleteBulkTrustCenterSubprocessor($ids: [ID!]!) {
+  deleteBulkTrustCenterSubprocessor(ids: $ids) {
+    deletedIDs
+  }
+}
