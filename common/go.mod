@@ -20,7 +20,7 @@ require (
 	github.com/theopenlane/entx v0.20.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/utils v0.6.2
-	github.com/zitadel/oidc/v3 v3.45.1
+	github.com/zitadel/oidc/v3 v3.45.3
 	golang.org/x/oauth2 v0.34.0
 	gotest.tools/v3 v3.5.2
 )
@@ -72,7 +72,7 @@ require (
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/zclconf/go-cty v1.17.0 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
-	github.com/zitadel/schema v1.3.1 // indirect
+	github.com/zitadel/schema v1.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.39.0 // indirect
 	go.opentelemetry.io/otel/metric v1.39.0 // indirect
