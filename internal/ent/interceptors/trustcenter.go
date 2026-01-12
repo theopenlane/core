@@ -48,7 +48,8 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 			if err != nil {
 				logx.FromContext(ctx).Err(err).Msg("trust center child query failed")
 
-				if graphql.HasOperationContext(ctx) {
+				// only do this for anon trustcenters tokens
+				if _, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok && graphql.HasOperationContext(ctx) {
 					graphql.AddError(ctx, &gqlerror.Error{
 						Err:     gqlerrors.NewCustomError(gqlerrors.InternalServerErrorCode, "failed to load trust center data", err),
 						Message: "failed to load trust center data",
