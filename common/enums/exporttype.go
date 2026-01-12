@@ -34,6 +34,8 @@ var (
 	ExportTypeSubscriber ExportType = "SUBSCRIBER"
 	// ExportTypeTask indicates the task.
 	ExportTypeTask ExportType = "TASK"
+	// ExportTypeTrustCenterSubprocessor indicates the trustcentersubprocessor.
+	ExportTypeTrustCenterSubprocessor ExportType = "TRUST_CENTER_SUBPROCESSOR"
 	// ExportTypeVulnerability indicates the vulnerability.
 	ExportTypeVulnerability ExportType = "VULNERABILITY"
 	// ExportTypeInvalid is used when an unknown or unsupported value is provided.
@@ -55,6 +57,7 @@ func (ExportType) Values() []string {
 		string(ExportTypeSubprocessor),
 		string(ExportTypeSubscriber),
 		string(ExportTypeTask),
+		string(ExportTypeTrustCenterSubprocessor),
 		string(ExportTypeVulnerability),
 	}
 }
@@ -91,6 +94,8 @@ func ToExportType(r string) *ExportType {
 		return &ExportTypeSubscriber
 	case ExportTypeTask.String():
 		return &ExportTypeTask
+	case ExportTypeTrustCenterSubprocessor.String():
+		return &ExportTypeTrustCenterSubprocessor
 	case ExportTypeVulnerability.String():
 		return &ExportTypeVulnerability
 	default:
