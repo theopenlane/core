@@ -2,6 +2,7 @@ package interceptors
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"entgo.io/ent"
@@ -42,11 +43,6 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 				return nil, err
 			}
 
-			if query.Type() == "TrustCenterDoc" {
-				query.WhereP(func(s *sql.Selector) {
-					s.Where(sql.ExprP("wrong_column = 'test'"))
-				})
-			}
 			if err := applyTrustCenterChildFilters(ctx, query); err != nil {
 				return nil, err
 			}
@@ -67,8 +63,10 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 						path = append(path, ast.PathName(entity))
 					}
 
+					msg := fmt.Sprintf("failed to load %s data", query.Type())
+
 					graphql.AddError(ctx, &gqlerror.Error{
-						Err:     gqlerrors.NewCustomError(gqlerrors.InternalServerErrorCode, "failed to load trust center data", err),
+						Err:     gqlerrors.NewCustomError(gqlerrors.InternalServerErrorCode, msg, err),
 						Message: "failed to load trust center data",
 						Path:    path,
 					})
