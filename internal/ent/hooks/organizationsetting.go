@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/theopenlane/emailtemplates"
@@ -232,6 +233,7 @@ func sendBillingEmailChangeNotifications(ctx context.Context, m *generated.Organ
 		OrganizationName: orgName,
 		OldEmail:         previousEmail,
 		NewEmail:         newEmail,
+		ChangedAt:        time.Now(),
 	}
 
 	for _, currentEmail := range []string{previousEmail, newEmail} {

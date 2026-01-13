@@ -655,6 +655,8 @@ github.com/theopenlane/echox v0.2.4 h1:bocz1Dfs7d2fkNa8foQqdmeTtkMTQNwe1v20bIGID
 github.com/theopenlane/echox v0.2.4/go.mod h1:0cPOHe4SSQHmqP0/n2LsIEzRSogkxSX653bE+PIOVZ8=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
 github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8xSEAT8aDs=
+github.com/theopenlane/emailtemplates v0.3.1 h1:P2kWqdNUP6LOmvL17Ujc/3zvIaw621/4w9yFk0J+pO4=
+github.com/theopenlane/emailtemplates v0.3.1/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
 github.com/theopenlane/entx v0.20.3 h1:IrbHmymRkzUgCWyZCrBnyg/qjT+SbVYdNQsTdjay0g4=
 github.com/theopenlane/entx v0.20.3/go.mod h1:AqYlfu6IdIW6v0yZ5TGWKftzfjklhBipXormMnA/PMc=
 github.com/theopenlane/go-client v0.4.3 h1:jyK9er8z1mHBl7BjUOiSvB0SNGEpsirkxZZ6ZvZoZOo=
@@ -792,8 +794,8 @@ golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93/go.mod h1:EPRbTFwzwjXj9NpYyy
 golang.org/x/mod v0.32.0 h1:9F4d3PHLljb6x//jOyokMv3eX+YDeepZSEo3mFJy93c=
 golang.org/x/mod v0.32.0/go.mod h1:SgipZ/3h2Ci89DlEtEXWUk/HteuRin+HHhN+WbNhguU=
 golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
-golang.org/x/net v0.48.0 h1:zyQRTTrjc33Lhh0fBgT/H3oZq9WuvRR5gPC70xpDiQU=
-golang.org/x/net v0.48.0/go.mod h1:+ndRgGjkh8FGtu1w1FGbEC31if4VrNVMuKTgcAAnQRY=
+golang.org/x/net v0.49.0 h1:eeHFmOGUTtaaPSGNmjBKpbng9MulQsJURQUAfUwY++o=
+golang.org/x/net v0.49.0/go.mod h1:/ysNB2EvaqvesRkuLAyjI1ycPZlQHM3q01F02UY/MV8=
 golang.org/x/oauth2 v0.34.0 h1:hqK/t4AKgbqWkdkcAeI8XLmbK+4m4G5YeQRrmiotGlw=
 golang.org/x/oauth2 v0.34.0/go.mod h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA=
 golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=

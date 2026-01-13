@@ -10,8 +10,6 @@ tool (
 	gotest.tools/gotestsum
 )
 
-replace github.com/theopenlane/emailtemplates => ../emailtemplates/
-
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
@@ -87,7 +85,7 @@ require (
 	github.com/theopenlane/core/common v1.0.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
-	github.com/theopenlane/emailtemplates v0.3.0
+	github.com/theopenlane/emailtemplates v0.3.1
 	github.com/theopenlane/entx v0.20.3
 	github.com/theopenlane/go-client v0.4.3
 	github.com/theopenlane/gqlgen-plugins v0.13.2
@@ -358,7 +356,7 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
-	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
