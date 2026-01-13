@@ -56649,6 +56649,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
   SUBPROCESSOR
   SUBSCRIBER
   TASK
+  TRUST_CENTER_SUBPROCESSOR
   VULNERABILITY
 }
 """
