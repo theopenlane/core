@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -23,58 +24,79 @@ var (
 	// ErrPublicStandardCannotBeDeleted defines an error that denotes a public standard cannot be
 	// deleted once made public
 	ErrPublicStandardCannotBeDeleted = errors.New("public standard not allowed to be deleted")
+	// ErrStandardInUseByControls defines an error that denotes a standard cannot be deleted
+	// because it is in use by active controls in the system
+	ErrStandardInUseByControls = errors.New("standard cannot be deleted because it is in use by one or more controls")
+	// ErrStandardInUseByTrustCenter defines an error that denotes a standard cannot be deleted
+	// because it is in use by an active trust center
+	ErrStandardInUseByTrustCenter = errors.New("standard cannot be deleted because it is in use by a trust center")
+	// ErrSystemOwnedStandardCannotBeDeleted defines an error that denotes a system-owned standard
+	// can only be deleted by a system admin
+	ErrSystemOwnedStandardCannotBeDeleted = errors.New("system-owned standard can only be deleted by a system admin")
 )
 
-// HookStandardDelete cascades the deletion of all controls for a system-owned standard connected
-// as long as the standard is not public. This is to prevent the deletion of a standard that is
-// actively used by an organization.
+// HookStandardDelete blocks deletion of a standard that is in use by trust center compliances.
+// For system-owned standards, it cascades the deletion by clearing standard_id from org-owned controls
+// and deleting system-owned controls. For non-system-owned standards, it blocks deletion if controls exist.
 func HookStandardDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
-			// only run on delete operations
 			if !isDeleteOp(ctx, m) {
-				return next.Mutate(ctx, m)
-			}
-
-			// only system admins edit system-owned standards
-			// check early to avoid unnecessary database queries to both
-			// the database and the authz service
-			if !auth.IsSystemAdminFromContext(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
 			id, _ := m.ID()
 
-			var err error
+			checkCtx := privacy.DecisionContext(ctx, privacy.Allowf("check standard usage before deletion"))
 
-			// use the same context we use on edge_cleanup to make sure everything is cleaned up properly
-			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
-
-			// get the standard, we only need the systemOwned and isPublic fields
-			retrievedStandard, err := m.Client().Standard.Query().
-				Where(standard.ID(id)).
-				Select(standard.FieldSystemOwned, standard.FieldIsPublic).
-				Only(ctx)
+			// always block if standard is in use by trust center compliances
+			trustCenterLinkedCount, err := m.Client().TrustCenterCompliance.Query().
+				Where(trustcentercompliance.StandardID(id)).
+				Count(checkCtx)
 			if err != nil {
 				return nil, err
 			}
 
-			// if the standard is not system-owned, we don't need to do anything
-			// we don't want to cascade on org owned standards because they might be used
-			// by an organization and they don't care about the parent standard
+			if trustCenterLinkedCount > 0 {
+				return nil, ErrStandardInUseByTrustCenter
+			}
+
+			retrievedStandard, err := m.Client().Standard.Query().
+				Where(standard.ID(id)).
+				Select(standard.FieldSystemOwned, standard.FieldIsPublic).
+				Only(checkCtx)
+			if err != nil {
+				return nil, err
+			}
+
+			// for non-system-owned standards, block if controls exist
 			if !retrievedStandard.SystemOwned {
+				controlLinkedCount, err := m.Client().Control.Query().
+					Where(control.StandardID(id)).
+					Count(checkCtx)
+				if err != nil {
+					return nil, err
+				}
+
+				if controlLinkedCount > 0 {
+					return nil, ErrStandardInUseByControls
+				}
+
 				return next.Mutate(ctx, m)
 			}
 
-			// prevent accidental deletion of public standards, and require a system admin
-			// to flip it to not public before they can delete it
+			// system-owned standards can only be deleted by system admins
+			if !auth.IsSystemAdminFromContext(ctx) {
+				return nil, ErrSystemOwnedStandardCannotBeDeleted
+			}
+
 			if retrievedStandard.IsPublic {
 				return nil, ErrPublicStandardCannotBeDeleted
 			}
 
+			ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup standard control edges")), entfga.DeleteTuplesFirstKey{})
+
 			// remove standard_id mapping from org owned controls
-			// this uses the same allow context, as above, which will allow the
-			// control to be updated to clear the standard id field by the system admin
 			err = m.Client().Control.Update().ClearStandardID().
 				Where(
 					control.And(
