@@ -69,8 +69,9 @@ func (Notification) Fields() []ent.Field {
 		field.JSON("channels", []enums.Channel{}).
 			Comment("the channels this notification should be sent to (IN_APP, SLACK, EMAIL)").
 			Optional(),
-		field.String("topic").
-			Comment("the topic of the notification").
+		field.Enum("topic").
+			Comment("the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)").
+			GoType(enums.NotificationTopic("")).
 			Optional(),
 	}
 }

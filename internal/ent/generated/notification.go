@@ -50,8 +50,8 @@ type Notification struct {
 	ReadAt *models.DateTime `json:"read_at,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []enums.Channel `json:"channels,omitempty"`
-	// the topic of the notification
-	Topic string `json:"topic,omitempty"`
+	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
+	Topic enums.NotificationTopic `json:"topic,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationQuery when eager-loading is set.
 	Edges        NotificationEdges `json:"edges"`
@@ -222,7 +222,7 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field topic", values[i])
 			} else if value.Valid {
-				_m.Topic = value.String
+				_m.Topic = enums.NotificationTopic(value.String)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -315,7 +315,7 @@ func (_m *Notification) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Channels))
 	builder.WriteString(", ")
 	builder.WriteString("topic=")
-	builder.WriteString(_m.Topic)
+	builder.WriteString(fmt.Sprintf("%v", _m.Topic))
 	builder.WriteByte(')')
 	return builder.String()
 }

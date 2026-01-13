@@ -233,13 +233,13 @@ func (_u *NotificationUpdate) ClearChannels() *NotificationUpdate {
 }
 
 // SetTopic sets the "topic" field.
-func (_u *NotificationUpdate) SetTopic(v string) *NotificationUpdate {
+func (_u *NotificationUpdate) SetTopic(v enums.NotificationTopic) *NotificationUpdate {
 	_u.mutation.SetTopic(v)
 	return _u
 }
 
 // SetNillableTopic sets the "topic" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableTopic(v *string) *NotificationUpdate {
+func (_u *NotificationUpdate) SetNillableTopic(v *enums.NotificationTopic) *NotificationUpdate {
 	if v != nil {
 		_u.SetTopic(*v)
 	}
@@ -348,6 +348,11 @@ func (_u *NotificationUpdate) check() error {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Topic(); ok {
+		if err := notification.TopicValidator(v); err != nil {
+			return &ValidationError{Name: "topic", err: fmt.Errorf(`generated: validator failed for field "Notification.topic": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -434,10 +439,10 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Topic(); ok {
-		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+		_spec.SetField(notification.FieldTopic, field.TypeEnum, value)
 	}
 	if _u.mutation.TopicCleared() {
-		_spec.ClearField(notification.FieldTopic, field.TypeString)
+		_spec.ClearField(notification.FieldTopic, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -722,13 +727,13 @@ func (_u *NotificationUpdateOne) ClearChannels() *NotificationUpdateOne {
 }
 
 // SetTopic sets the "topic" field.
-func (_u *NotificationUpdateOne) SetTopic(v string) *NotificationUpdateOne {
+func (_u *NotificationUpdateOne) SetTopic(v enums.NotificationTopic) *NotificationUpdateOne {
 	_u.mutation.SetTopic(v)
 	return _u
 }
 
 // SetNillableTopic sets the "topic" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableTopic(v *string) *NotificationUpdateOne {
+func (_u *NotificationUpdateOne) SetNillableTopic(v *enums.NotificationTopic) *NotificationUpdateOne {
 	if v != nil {
 		_u.SetTopic(*v)
 	}
@@ -850,6 +855,11 @@ func (_u *NotificationUpdateOne) check() error {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.Topic(); ok {
+		if err := notification.TopicValidator(v); err != nil {
+			return &ValidationError{Name: "topic", err: fmt.Errorf(`generated: validator failed for field "Notification.topic": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -953,10 +963,10 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Topic(); ok {
-		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+		_spec.SetField(notification.FieldTopic, field.TypeEnum, value)
 	}
 	if _u.mutation.TopicCleared() {
-		_spec.ClearField(notification.FieldTopic, field.TypeString)
+		_spec.ClearField(notification.FieldTopic, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
