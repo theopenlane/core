@@ -2167,6 +2167,25 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 	}, nil
 }
 
+// bulkCreateNotification uses the CreateBulk function to create multiple Notification entities
+func (r *mutationResolver) bulkCreateNotification(ctx context.Context, input []*generated.CreateNotificationInput) (*model.NotificationBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.NotificationCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Notification.Create().SetInput(*data)
+	}
+
+	res, err := c.Notification.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notification"})
+	}
+
+	// return response
+	return &model.NotificationBulkCreatePayload{
+		Notifications: res,
+	}, nil
+}
+
 // bulkCreateOrganizationSetting uses the CreateBulk function to create multiple OrganizationSetting entities
 func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, input []*generated.CreateOrganizationSettingInput) (*model.OrganizationSettingBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)

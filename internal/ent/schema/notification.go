@@ -10,7 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -45,33 +44,43 @@ func (Notification) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("user_id").
 			Comment("the user this notification is for").
-			Optional(),
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
+
 		field.Enum("notification_type").
 			Comment("the type of notification - organization or user").
-			GoType(enums.NotificationType("")),
+			GoType(enums.NotificationType("")).
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("object_type").
 			Comment("the event type this notification is related to (e.g., task.created, control.updated)").
-			NotEmpty(),
+			NotEmpty().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("title").
 			Comment("the title of the notification").
-			NotEmpty(),
+			NotEmpty().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Text("body").
 			Comment("the body text of the notification").
-			NotEmpty(),
+			NotEmpty().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.JSON("data", map[string]interface{}{}).
 			Comment("structured payload containing IDs, links, and other notification data").
-			Optional(),
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Time("read_at").
 			Comment("the time the notification was read").
 			GoType(models.DateTime{}).
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput)),
 		field.JSON("channels", []enums.Channel{}).
 			Comment("the channels this notification should be sent to (IN_APP, SLACK, EMAIL)").
-			Optional(),
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("topic").
 			Comment("the topic of the notification").
-			Optional(),
+			Optional().
+			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 	}
 }
 
@@ -138,11 +147,11 @@ func (Notification) Annotations() []schema.Annotation {
 			Exclude: true,
 		},
 		// skip schema gen, this is used for subscriptions only
-		entx.SchemaGenSkip(true),
+		// entx.SchemaGenSkip(true),
 		// skip query gen, this is used for subscriptions only
-		entx.QueryGenSkip(true),
-		entgql.Skip(entgql.SkipMutationUpdateInput | entgql.SkipWhereInput | entgql.SkipOrderField),
-		entgql.Mutations(entgql.MutationCreate()), // only allow creation via mutations, updates are not supported
+		// entx.QueryGenSkip(true),
+		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()), // only allow creation via mutations, updates are not supported
 	}
 }
 

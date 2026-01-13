@@ -58,4 +58,3 @@ func TestAddRemoveListener(t *testing.T) {
 		t.Errorf("removeListener() failed to remove listener 2, remaining listeners: %d", len(topic.listeners))
 	}
 }
-

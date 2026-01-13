@@ -2483,6 +2483,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVMappableDomain           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappedControl            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNotification             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrgMembership            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVOrganizationSetting      func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVProcedure                func(childComplexity int, input graphql.Upload) int
@@ -2540,6 +2541,7 @@ type ComplexityRoot struct {
 		CreateBulkMappableDomain              func(childComplexity int, input []*generated.CreateMappableDomainInput) int
 		CreateBulkMappedControl               func(childComplexity int, input []*generated.CreateMappedControlInput) int
 		CreateBulkNarrative                   func(childComplexity int, input []*generated.CreateNarrativeInput) int
+		CreateBulkNotification                func(childComplexity int, input []*generated.CreateNotificationInput) int
 		CreateBulkOrgMembership               func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
 		CreateBulkOrganizationSetting         func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
 		CreateBulkProcedure                   func(childComplexity int, input []*generated.CreateProcedureInput) int
@@ -2607,6 +2609,7 @@ type ComplexityRoot struct {
 		CreateMappableDomain                  func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                   func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                       func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateNotification                    func(childComplexity int, input generated.CreateNotificationInput) int
 		CreateOnboarding                      func(childComplexity int, input generated.CreateOnboardingInput) int
 		CreateOrgMembership                   func(childComplexity int, input generated.CreateOrgMembershipInput) int
 		CreateOrganization                    func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
@@ -2736,6 +2739,7 @@ type ComplexityRoot struct {
 		DeleteMappedControl                   func(childComplexity int, id string) int
 		DeleteNarrative                       func(childComplexity int, id string) int
 		DeleteNote                            func(childComplexity int, id string) int
+		DeleteNotification                    func(childComplexity int, id string) int
 		DeleteOrgMembership                   func(childComplexity int, id string) int
 		DeleteOrganization                    func(childComplexity int, id string) int
 		DeleteOrganizationSetting             func(childComplexity int, id string) int
@@ -2829,6 +2833,7 @@ type ComplexityRoot struct {
 		UpdateMappableDomain                  func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
 		UpdateMappedControl                   func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                       func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
+		UpdateNotification                    func(childComplexity int, id string, input generated.UpdateNotificationInput) int
 		UpdateOrgMembership                   func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
 		UpdateOrganization                    func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
 		UpdateOrganizationSetting             func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
@@ -2990,6 +2995,22 @@ type ComplexityRoot struct {
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
 		UserID           func(childComplexity int) int
+	}
+
+	NotificationBulkCreatePayload struct {
+		Notifications func(childComplexity int) int
+	}
+
+	NotificationCreatePayload struct {
+		Notification func(childComplexity int) int
+	}
+
+	NotificationDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	NotificationUpdatePayload struct {
+		Notification func(childComplexity int) int
 	}
 
 	Onboarding struct {
@@ -3668,6 +3689,7 @@ type ComplexityRoot struct {
 		Nodes                           func(childComplexity int, ids []string) int
 		Note                            func(childComplexity int, id string) int
 		Notes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		Notification                    func(childComplexity int, id string) int
 		OrgMembership                   func(childComplexity int, id string) int
 		OrgMemberships                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
 		OrgSubscription                 func(childComplexity int, id string) int
@@ -17332,6 +17354,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVNarrative(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVNotification":
+		if e.complexity.Mutation.CreateBulkCSVNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVNotification(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVOrgMembership":
 		if e.complexity.Mutation.CreateBulkCSVOrgMembership == nil {
 			break
@@ -18015,6 +18049,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkNarrative(childComplexity, args["input"].([]*generated.CreateNarrativeInput)), true
+
+	case "Mutation.createBulkNotification":
+		if e.complexity.Mutation.CreateBulkNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkNotification(childComplexity, args["input"].([]*generated.CreateNotificationInput)), true
 
 	case "Mutation.createBulkOrgMembership":
 		if e.complexity.Mutation.CreateBulkOrgMembership == nil {
@@ -18819,6 +18865,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateNarrative(childComplexity, args["input"].(generated.CreateNarrativeInput)), true
+
+	case "Mutation.createNotification":
+		if e.complexity.Mutation.CreateNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateNotification(childComplexity, args["input"].(generated.CreateNotificationInput)), true
 
 	case "Mutation.createOnboarding":
 		if e.complexity.Mutation.CreateOnboarding == nil {
@@ -20368,6 +20426,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteNote(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteNotification":
+		if e.complexity.Mutation.DeleteNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteNotification(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteOrgMembership":
 		if e.complexity.Mutation.DeleteOrgMembership == nil {
 			break
@@ -21479,6 +21549,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateNarrative(childComplexity, args["id"].(string), args["input"].(generated.UpdateNarrativeInput)), true
 
+	case "Mutation.updateNotification":
+		if e.complexity.Mutation.UpdateNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateNotification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateNotification(childComplexity, args["id"].(string), args["input"].(generated.UpdateNotificationInput)), true
+
 	case "Mutation.updateOrgMembership":
 		if e.complexity.Mutation.UpdateOrgMembership == nil {
 			break
@@ -22587,6 +22669,34 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Notification.UserID(childComplexity), true
+
+	case "NotificationBulkCreatePayload.notifications":
+		if e.complexity.NotificationBulkCreatePayload.Notifications == nil {
+			break
+		}
+
+		return e.complexity.NotificationBulkCreatePayload.Notifications(childComplexity), true
+
+	case "NotificationCreatePayload.notification":
+		if e.complexity.NotificationCreatePayload.Notification == nil {
+			break
+		}
+
+		return e.complexity.NotificationCreatePayload.Notification(childComplexity), true
+
+	case "NotificationDeletePayload.deletedID":
+		if e.complexity.NotificationDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.NotificationDeletePayload.DeletedID(childComplexity), true
+
+	case "NotificationUpdatePayload.notification":
+		if e.complexity.NotificationUpdatePayload.Notification == nil {
+			break
+		}
+
+		return e.complexity.NotificationUpdatePayload.Notification(childComplexity), true
 
 	case "Onboarding.companyDetails":
 		if e.complexity.Onboarding.CompanyDetails == nil {
@@ -27145,6 +27255,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Notes(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
+	case "Query.notification":
+		if e.complexity.Query.Notification == nil {
+			break
+		}
+
+		args, err := ec.field_Query_notification_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Notification(childComplexity, args["id"].(string)), true
 
 	case "Query.orgMembership":
 		if e.complexity.Query.OrgMembership == nil {
@@ -37209,6 +37331,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateMappedControlInput,
 		ec.unmarshalInputUpdateNarrativeInput,
 		ec.unmarshalInputUpdateNoteInput,
+		ec.unmarshalInputUpdateNotificationInput,
 		ec.unmarshalInputUpdateOrgMembershipInput,
 		ec.unmarshalInputUpdateOrganizationInput,
 		ec.unmarshalInputUpdateOrganizationSettingInput,
@@ -48100,10 +48223,6 @@ input CreateNotificationInput {
   structured payload containing IDs, links, and other notification data
   """
   data: Map
-  """
-  the time the notification was read
-  """
-  readAt: DateTime
   """
   the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
   """
@@ -91728,6 +91847,25 @@ input UpdateNoteInput {
   clearFiles: Boolean
 }
 """
+UpdateNotificationInput is used for update Notification object.
+Input was generated by ent.
+"""
+input UpdateNotificationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the time the notification was read
+  """
+  readAt: DateTime
+  clearReadAt: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateOrgMembershipInput is used for update OrgMembership object.
 Input was generated by ent.
 """
@@ -103109,6 +103247,109 @@ type NoteDeletePayload {
     deletedID: ID!
 }
 `, BuiltIn: false},
+	{Name: "../schema/notification.graphql", Input: `extend type Query {
+    """
+    Look up notification by ID
+    """
+     notification(
+        """
+        ID of the notification
+        """
+        id: ID!
+    ):  Notification!
+}
+
+extend type Mutation{
+    """
+    Create a new notification
+    """
+    createNotification(
+        """
+        values of the notification
+        """
+        input: CreateNotificationInput!
+    ): NotificationCreatePayload!
+    """
+    Create multiple new notifications
+    """
+    createBulkNotification(
+        """
+        values of the notification
+        """
+        input: [CreateNotificationInput!]
+    ): NotificationBulkCreatePayload!
+    """
+    Create multiple new notifications via file upload
+    """
+    createBulkCSVNotification(
+        """
+        csv file containing values of the notification
+        """
+        input: Upload!
+    ): NotificationBulkCreatePayload!
+    """
+    Update an existing notification
+    """
+    updateNotification(
+        """
+        ID of the notification
+        """
+        id: ID!
+        """
+        New values for the notification
+        """
+        input: UpdateNotificationInput!
+    ): NotificationUpdatePayload!
+    """
+    Delete an existing notification
+    """
+    deleteNotification(
+        """
+        ID of the notification
+        """
+        id: ID!
+    ): NotificationDeletePayload!
+}
+
+"""
+Return response for createNotification mutation
+"""
+type NotificationCreatePayload {
+    """
+    Created notification
+    """
+    notification: Notification!
+}
+
+"""
+Return response for updateNotification mutation
+"""
+type NotificationUpdatePayload {
+    """
+    Updated notification
+    """
+    notification: Notification!
+}
+
+"""
+Return response for deleteNotification mutation
+"""
+type NotificationDeletePayload {
+    """
+    Deleted notification ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkNotification mutation
+"""
+type NotificationBulkCreatePayload {
+    """
+    Created notifications
+    """
+    notifications: [Notification!]
+}`, BuiltIn: false},
 	{Name: "../schema/onboarding.graphql", Input: `extend type Mutation{
     """
     Create a new onboarding
