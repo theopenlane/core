@@ -199,12 +199,10 @@ func HookBillingEmailChange() ent.Hook {
 				return retVal, nil
 			}
 
-			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 			org, err := m.Client().Organization.Query().
 				Where(organization.ID(orgID)).
 				Select(organization.FieldDisplayName).
-				Only(allowCtx)
+				Only(ctx)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization for billing email change notification")
 				return retVal, nil
