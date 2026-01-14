@@ -96,6 +96,7 @@ func (n Notification) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeAnnotations: true,
 		excludeSoftDelete:  true,
+		includeRequestor:   true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(n),
 		},

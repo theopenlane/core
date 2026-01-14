@@ -444,6 +444,9 @@ func (_u *InviteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
 	}
+	if _u.mutation.RequestorIDCleared() {
+		_spec.ClearField(invite.FieldRequestorID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
 	}
@@ -464,9 +467,6 @@ func (_u *InviteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(invite.FieldSendAttempts, field.TypeInt, value)
-	}
-	if _u.mutation.RequestorIDCleared() {
-		_spec.ClearField(invite.FieldRequestorID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)
@@ -1067,6 +1067,9 @@ func (_u *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err erro
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(invite.FieldDeletedBy, field.TypeString)
 	}
+	if _u.mutation.RequestorIDCleared() {
+		_spec.ClearField(invite.FieldRequestorID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
 	}
@@ -1087,9 +1090,6 @@ func (_u *InviteUpdateOne) sqlSave(ctx context.Context) (_node *Invite, err erro
 	}
 	if value, ok := _u.mutation.AddedSendAttempts(); ok {
 		_spec.AddField(invite.FieldSendAttempts, field.TypeInt, value)
-	}
-	if _u.mutation.RequestorIDCleared() {
-		_spec.ClearField(invite.FieldRequestorID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)

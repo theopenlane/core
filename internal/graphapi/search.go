@@ -809,9 +809,9 @@ func adminSearchInvites(ctx context.Context, query string, after *entgql.Cursor[
 		Where(
 			invite.Or(
 				invite.ID(query),                      // search equal to ID
+				invite.RequestorIDContainsFold(query), // search by RequestorID
 				invite.OwnerIDContainsFold(query),     // search by OwnerID
 				invite.RecipientContainsFold(query),   // search by Recipient
-				invite.RequestorIDContainsFold(query), // search by RequestorID
 			),
 		)
 

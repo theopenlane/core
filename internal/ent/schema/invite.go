@@ -96,11 +96,6 @@ func (Invite) Fields() []ent.Field {
 				entgql.OrderField("send_attempts"),
 			).
 			Default(1),
-		field.String("requestor_id").
-			Comment("the user who initiated the invitation").
-			Immutable().
-			Optional().
-			NotEmpty(),
 		field.Bytes("secret").
 			Comment("the comparison secret to verify the token's signature").
 			NotEmpty().
@@ -117,7 +112,8 @@ func (Invite) Fields() []ent.Field {
 // Mixin of the Invite
 func (i Invite) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags: true,
+		excludeTags:      true,
+		includeRequestor: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(i, withSkipTokenTypesObjects(&token.OrgInviteToken{})),
 		},

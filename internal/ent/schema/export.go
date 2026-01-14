@@ -53,14 +53,6 @@ func (Export) Fields() []ent.Field {
 				entgql.OrderField("status"),
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			),
-		field.String("requestor_id").
-			Comment("the user who initiated the export").
-			Immutable().
-			Optional().
-			NotEmpty().
-			Annotations(
-				entgql.Skip(entgql.SkipMutationCreateInput),
-			),
 		field.JSON("fields", []string{}).
 			Comment("the specific fields to include in the export (defaults to only the id if not provided)").
 			Default([]string{"id"}).
@@ -92,7 +84,8 @@ func (e Export) Edges() []ent.Edge {
 // Mixin of the Export
 func (e Export) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags: true,
+		excludeTags:      true,
+		includeRequestor: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e,
 				withSkipForSystemAdmin(true)),

@@ -98,6 +98,11 @@ func DeletedBy(v string) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// RequestorID applies equality check predicate on the "requestor_id" field. It's identical to RequestorIDEQ.
+func RequestorID(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldRequestorID, v))
+}
+
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldOwnerID, v))
@@ -121,11 +126,6 @@ func Recipient(v string) predicate.Invite {
 // SendAttempts applies equality check predicate on the "send_attempts" field. It's identical to SendAttemptsEQ.
 func SendAttempts(v int) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldSendAttempts, v))
-}
-
-// RequestorID applies equality check predicate on the "requestor_id" field. It's identical to RequestorIDEQ.
-func RequestorID(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldEQ(FieldRequestorID, v))
 }
 
 // Secret applies equality check predicate on the "secret" field. It's identical to SecretEQ.
@@ -513,6 +513,81 @@ func DeletedByContainsFold(v string) predicate.Invite {
 	return predicate.Invite(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
+// RequestorIDEQ applies the EQ predicate on the "requestor_id" field.
+func RequestorIDEQ(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldEQ(FieldRequestorID, v))
+}
+
+// RequestorIDNEQ applies the NEQ predicate on the "requestor_id" field.
+func RequestorIDNEQ(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldNEQ(FieldRequestorID, v))
+}
+
+// RequestorIDIn applies the In predicate on the "requestor_id" field.
+func RequestorIDIn(vs ...string) predicate.Invite {
+	return predicate.Invite(sql.FieldIn(FieldRequestorID, vs...))
+}
+
+// RequestorIDNotIn applies the NotIn predicate on the "requestor_id" field.
+func RequestorIDNotIn(vs ...string) predicate.Invite {
+	return predicate.Invite(sql.FieldNotIn(FieldRequestorID, vs...))
+}
+
+// RequestorIDGT applies the GT predicate on the "requestor_id" field.
+func RequestorIDGT(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldGT(FieldRequestorID, v))
+}
+
+// RequestorIDGTE applies the GTE predicate on the "requestor_id" field.
+func RequestorIDGTE(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldGTE(FieldRequestorID, v))
+}
+
+// RequestorIDLT applies the LT predicate on the "requestor_id" field.
+func RequestorIDLT(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldLT(FieldRequestorID, v))
+}
+
+// RequestorIDLTE applies the LTE predicate on the "requestor_id" field.
+func RequestorIDLTE(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldLTE(FieldRequestorID, v))
+}
+
+// RequestorIDContains applies the Contains predicate on the "requestor_id" field.
+func RequestorIDContains(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldContains(FieldRequestorID, v))
+}
+
+// RequestorIDHasPrefix applies the HasPrefix predicate on the "requestor_id" field.
+func RequestorIDHasPrefix(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldHasPrefix(FieldRequestorID, v))
+}
+
+// RequestorIDHasSuffix applies the HasSuffix predicate on the "requestor_id" field.
+func RequestorIDHasSuffix(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldHasSuffix(FieldRequestorID, v))
+}
+
+// RequestorIDIsNil applies the IsNil predicate on the "requestor_id" field.
+func RequestorIDIsNil() predicate.Invite {
+	return predicate.Invite(sql.FieldIsNull(FieldRequestorID))
+}
+
+// RequestorIDNotNil applies the NotNil predicate on the "requestor_id" field.
+func RequestorIDNotNil() predicate.Invite {
+	return predicate.Invite(sql.FieldNotNull(FieldRequestorID))
+}
+
+// RequestorIDEqualFold applies the EqualFold predicate on the "requestor_id" field.
+func RequestorIDEqualFold(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldEqualFold(FieldRequestorID, v))
+}
+
+// RequestorIDContainsFold applies the ContainsFold predicate on the "requestor_id" field.
+func RequestorIDContainsFold(v string) predicate.Invite {
+	return predicate.Invite(sql.FieldContainsFold(FieldRequestorID, v))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.Invite {
 	return predicate.Invite(sql.FieldEQ(FieldOwnerID, v))
@@ -866,81 +941,6 @@ func SendAttemptsLT(v int) predicate.Invite {
 // SendAttemptsLTE applies the LTE predicate on the "send_attempts" field.
 func SendAttemptsLTE(v int) predicate.Invite {
 	return predicate.Invite(sql.FieldLTE(FieldSendAttempts, v))
-}
-
-// RequestorIDEQ applies the EQ predicate on the "requestor_id" field.
-func RequestorIDEQ(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldEQ(FieldRequestorID, v))
-}
-
-// RequestorIDNEQ applies the NEQ predicate on the "requestor_id" field.
-func RequestorIDNEQ(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldNEQ(FieldRequestorID, v))
-}
-
-// RequestorIDIn applies the In predicate on the "requestor_id" field.
-func RequestorIDIn(vs ...string) predicate.Invite {
-	return predicate.Invite(sql.FieldIn(FieldRequestorID, vs...))
-}
-
-// RequestorIDNotIn applies the NotIn predicate on the "requestor_id" field.
-func RequestorIDNotIn(vs ...string) predicate.Invite {
-	return predicate.Invite(sql.FieldNotIn(FieldRequestorID, vs...))
-}
-
-// RequestorIDGT applies the GT predicate on the "requestor_id" field.
-func RequestorIDGT(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldGT(FieldRequestorID, v))
-}
-
-// RequestorIDGTE applies the GTE predicate on the "requestor_id" field.
-func RequestorIDGTE(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldGTE(FieldRequestorID, v))
-}
-
-// RequestorIDLT applies the LT predicate on the "requestor_id" field.
-func RequestorIDLT(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldLT(FieldRequestorID, v))
-}
-
-// RequestorIDLTE applies the LTE predicate on the "requestor_id" field.
-func RequestorIDLTE(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldLTE(FieldRequestorID, v))
-}
-
-// RequestorIDContains applies the Contains predicate on the "requestor_id" field.
-func RequestorIDContains(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldContains(FieldRequestorID, v))
-}
-
-// RequestorIDHasPrefix applies the HasPrefix predicate on the "requestor_id" field.
-func RequestorIDHasPrefix(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldHasPrefix(FieldRequestorID, v))
-}
-
-// RequestorIDHasSuffix applies the HasSuffix predicate on the "requestor_id" field.
-func RequestorIDHasSuffix(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldHasSuffix(FieldRequestorID, v))
-}
-
-// RequestorIDIsNil applies the IsNil predicate on the "requestor_id" field.
-func RequestorIDIsNil() predicate.Invite {
-	return predicate.Invite(sql.FieldIsNull(FieldRequestorID))
-}
-
-// RequestorIDNotNil applies the NotNil predicate on the "requestor_id" field.
-func RequestorIDNotNil() predicate.Invite {
-	return predicate.Invite(sql.FieldNotNull(FieldRequestorID))
-}
-
-// RequestorIDEqualFold applies the EqualFold predicate on the "requestor_id" field.
-func RequestorIDEqualFold(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldEqualFold(FieldRequestorID, v))
-}
-
-// RequestorIDContainsFold applies the ContainsFold predicate on the "requestor_id" field.
-func RequestorIDContainsFold(v string) predicate.Invite {
-	return predicate.Invite(sql.FieldContainsFold(FieldRequestorID, v))
 }
 
 // SecretEQ applies the EQ predicate on the "secret" field.

@@ -62,6 +62,8 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "requestorID":
+				return ec.fieldContext_Invite_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Invite_ownerID(ctx, field)
 			case "expires":
@@ -74,8 +76,6 @@ func (ec *executionContext) fieldContext_InviteBulkCreatePayload_invites(_ conte
 				return ec.fieldContext_Invite_role(ctx, field)
 			case "sendAttempts":
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
 			case "ownershipTransfer":
 				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
@@ -154,6 +154,8 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "requestorID":
+				return ec.fieldContext_Invite_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Invite_ownerID(ctx, field)
 			case "expires":
@@ -166,8 +168,6 @@ func (ec *executionContext) fieldContext_InviteCreatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_role(ctx, field)
 			case "sendAttempts":
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
 			case "ownershipTransfer":
 				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":
@@ -246,6 +246,8 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Invite_updatedBy(ctx, field)
+			case "requestorID":
+				return ec.fieldContext_Invite_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Invite_ownerID(ctx, field)
 			case "expires":
@@ -258,8 +260,6 @@ func (ec *executionContext) fieldContext_InviteUpdatePayload_invite(_ context.Co
 				return ec.fieldContext_Invite_role(ctx, field)
 			case "sendAttempts":
 				return ec.fieldContext_Invite_sendAttempts(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Invite_requestorID(ctx, field)
 			case "ownershipTransfer":
 				return ec.fieldContext_Invite_ownershipTransfer(ctx, field)
 			case "owner":

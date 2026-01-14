@@ -8664,7 +8664,6 @@ type CreateInviteInput struct {
 	Status            *enums.InviteStatus
 	Role              *enums.Role
 	SendAttempts      *int
-	RequestorID       *string
 	OwnershipTransfer *bool
 	OwnerID           *string
 	EventIDs          []string
@@ -8685,9 +8684,6 @@ func (i *CreateInviteInput) Mutate(m *InviteMutation) {
 	}
 	if v := i.SendAttempts; v != nil {
 		m.SetSendAttempts(*v)
-	}
-	if v := i.RequestorID; v != nil {
-		m.SetRequestorID(*v)
 	}
 	if v := i.OwnershipTransfer; v != nil {
 		m.SetOwnershipTransfer(*v)

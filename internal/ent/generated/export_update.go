@@ -349,11 +349,11 @@ func (_u *ExportUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(export.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(export.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.RequestorIDCleared() {
 		_spec.ClearField(export.FieldRequestorID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(export.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.FieldsCleared() {
 		_spec.ClearField(export.FieldFields, field.TypeJSON)
@@ -862,11 +862,11 @@ func (_u *ExportUpdateOne) sqlSave(ctx context.Context) (_node *Export, err erro
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(export.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(export.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.RequestorIDCleared() {
 		_spec.ClearField(export.FieldRequestorID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Status(); ok {
+		_spec.SetField(export.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.FieldsCleared() {
 		_spec.ClearField(export.FieldFields, field.TypeJSON)

@@ -2093,26 +2093,31 @@ func init() {
 	}
 	exportMixinHooks0 := exportMixin[0].Hooks()
 	exportMixinHooks1 := exportMixin[1].Hooks()
-	exportMixinHooks4 := exportMixin[4].Hooks()
+	exportMixinHooks3 := exportMixin[3].Hooks()
+	exportMixinHooks5 := exportMixin[5].Hooks()
 	exportHooks := schema.Export{}.Hooks()
 
 	export.Hooks[1] = exportMixinHooks0[0]
 
 	export.Hooks[2] = exportMixinHooks1[0]
 
-	export.Hooks[3] = exportMixinHooks4[0]
+	export.Hooks[3] = exportMixinHooks3[0]
 
-	export.Hooks[4] = exportHooks[0]
+	export.Hooks[4] = exportMixinHooks5[0]
 
-	export.Hooks[5] = exportHooks[1]
+	export.Hooks[5] = exportHooks[0]
+
+	export.Hooks[6] = exportHooks[1]
 	exportMixinInters1 := exportMixin[1].Interceptors()
-	exportMixinInters4 := exportMixin[4].Interceptors()
+	exportMixinInters5 := exportMixin[5].Interceptors()
 	export.Interceptors[0] = exportMixinInters1[0]
-	export.Interceptors[1] = exportMixinInters4[0]
+	export.Interceptors[1] = exportMixinInters5[0]
 	exportMixinFields0 := exportMixin[0].Fields()
 	_ = exportMixinFields0
 	exportMixinFields2 := exportMixin[2].Fields()
 	_ = exportMixinFields2
+	exportMixinFields3 := exportMixin[3].Fields()
+	_ = exportMixinFields3
 	exportFields := schema.Export{}.Fields()
 	_ = exportFields
 	// exportDescCreatedAt is the schema descriptor for created_at field.
@@ -2126,11 +2131,11 @@ func init() {
 	// export.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	export.UpdateDefaultUpdatedAt = exportDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// exportDescRequestorID is the schema descriptor for requestor_id field.
-	exportDescRequestorID := exportFields[3].Descriptor()
+	exportDescRequestorID := exportMixinFields3[0].Descriptor()
 	// export.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
 	export.RequestorIDValidator = exportDescRequestorID.Validators[0].(func(string) error)
 	// exportDescFields is the schema descriptor for fields field.
-	exportDescFields := exportFields[4].Descriptor()
+	exportDescFields := exportFields[3].Descriptor()
 	// export.DefaultFields holds the default value on creation for the fields field.
 	export.DefaultFields = exportDescFields.Default.([]string)
 	// exportDescID is the schema descriptor for id field.
@@ -2911,32 +2916,37 @@ func init() {
 	}
 	inviteMixinHooks0 := inviteMixin[0].Hooks()
 	inviteMixinHooks1 := inviteMixin[1].Hooks()
-	inviteMixinHooks4 := inviteMixin[4].Hooks()
+	inviteMixinHooks3 := inviteMixin[3].Hooks()
+	inviteMixinHooks5 := inviteMixin[5].Hooks()
 	inviteHooks := schema.Invite{}.Hooks()
 
 	invite.Hooks[1] = inviteMixinHooks0[0]
 
 	invite.Hooks[2] = inviteMixinHooks1[0]
 
-	invite.Hooks[3] = inviteMixinHooks4[0]
+	invite.Hooks[3] = inviteMixinHooks3[0]
 
-	invite.Hooks[4] = inviteHooks[0]
+	invite.Hooks[4] = inviteMixinHooks5[0]
 
-	invite.Hooks[5] = inviteHooks[1]
+	invite.Hooks[5] = inviteHooks[0]
 
-	invite.Hooks[6] = inviteHooks[2]
+	invite.Hooks[6] = inviteHooks[1]
 
-	invite.Hooks[7] = inviteHooks[3]
+	invite.Hooks[7] = inviteHooks[2]
+
+	invite.Hooks[8] = inviteHooks[3]
 	inviteMixinInters1 := inviteMixin[1].Interceptors()
-	inviteMixinInters4 := inviteMixin[4].Interceptors()
+	inviteMixinInters5 := inviteMixin[5].Interceptors()
 	invite.Interceptors[0] = inviteMixinInters1[0]
-	invite.Interceptors[1] = inviteMixinInters4[0]
+	invite.Interceptors[1] = inviteMixinInters5[0]
 	inviteMixinFields0 := inviteMixin[0].Fields()
 	_ = inviteMixinFields0
 	inviteMixinFields2 := inviteMixin[2].Fields()
 	_ = inviteMixinFields2
-	inviteMixinFields4 := inviteMixin[4].Fields()
-	_ = inviteMixinFields4
+	inviteMixinFields3 := inviteMixin[3].Fields()
+	_ = inviteMixinFields3
+	inviteMixinFields5 := inviteMixin[5].Fields()
+	_ = inviteMixinFields5
 	inviteFields := schema.Invite{}.Fields()
 	_ = inviteFields
 	// inviteDescCreatedAt is the schema descriptor for created_at field.
@@ -2949,8 +2959,12 @@ func init() {
 	invite.DefaultUpdatedAt = inviteDescUpdatedAt.Default.(func() time.Time)
 	// invite.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	invite.UpdateDefaultUpdatedAt = inviteDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// inviteDescRequestorID is the schema descriptor for requestor_id field.
+	inviteDescRequestorID := inviteMixinFields3[0].Descriptor()
+	// invite.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	invite.RequestorIDValidator = inviteDescRequestorID.Validators[0].(func(string) error)
 	// inviteDescOwnerID is the schema descriptor for owner_id field.
-	inviteDescOwnerID := inviteMixinFields4[0].Descriptor()
+	inviteDescOwnerID := inviteMixinFields5[0].Descriptor()
 	// invite.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	invite.OwnerIDValidator = inviteDescOwnerID.Validators[0].(func(string) error)
 	// inviteDescToken is the schema descriptor for token field.
@@ -2983,16 +2997,12 @@ func init() {
 	inviteDescSendAttempts := inviteFields[5].Descriptor()
 	// invite.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	invite.DefaultSendAttempts = inviteDescSendAttempts.Default.(int)
-	// inviteDescRequestorID is the schema descriptor for requestor_id field.
-	inviteDescRequestorID := inviteFields[6].Descriptor()
-	// invite.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
-	invite.RequestorIDValidator = inviteDescRequestorID.Validators[0].(func(string) error)
 	// inviteDescSecret is the schema descriptor for secret field.
-	inviteDescSecret := inviteFields[7].Descriptor()
+	inviteDescSecret := inviteFields[6].Descriptor()
 	// invite.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	invite.SecretValidator = inviteDescSecret.Validators[0].(func([]byte) error)
 	// inviteDescOwnershipTransfer is the schema descriptor for ownership_transfer field.
-	inviteDescOwnershipTransfer := inviteFields[8].Descriptor()
+	inviteDescOwnershipTransfer := inviteFields[7].Descriptor()
 	// invite.DefaultOwnershipTransfer holds the default value on creation for the ownership_transfer field.
 	invite.DefaultOwnershipTransfer = inviteDescOwnershipTransfer.Default.(bool)
 	// inviteDescID is the schema descriptor for id field.
@@ -3694,6 +3704,7 @@ func init() {
 	notificationMixinHooks0 := notificationMixin[0].Hooks()
 	notificationMixinHooks2 := notificationMixin[2].Hooks()
 	notificationMixinHooks3 := notificationMixin[3].Hooks()
+	notificationMixinHooks4 := notificationMixin[4].Hooks()
 	notificationHooks := schema.Notification{}.Hooks()
 
 	notification.Hooks[1] = notificationMixinHooks0[0]
@@ -3702,12 +3713,14 @@ func init() {
 
 	notification.Hooks[3] = notificationMixinHooks3[0]
 
-	notification.Hooks[4] = notificationHooks[0]
+	notification.Hooks[4] = notificationMixinHooks4[0]
 
-	notification.Hooks[5] = notificationHooks[1]
-	notificationMixinInters3 := notificationMixin[3].Interceptors()
+	notification.Hooks[5] = notificationHooks[0]
+
+	notification.Hooks[6] = notificationHooks[1]
+	notificationMixinInters4 := notificationMixin[4].Interceptors()
 	notificationInters := schema.Notification{}.Interceptors()
-	notification.Interceptors[0] = notificationMixinInters3[0]
+	notification.Interceptors[0] = notificationMixinInters4[0]
 	notification.Interceptors[1] = notificationInters[0]
 	notificationMixinFields0 := notificationMixin[0].Fields()
 	_ = notificationMixinFields0
@@ -3717,6 +3730,8 @@ func init() {
 	_ = notificationMixinFields2
 	notificationMixinFields3 := notificationMixin[3].Fields()
 	_ = notificationMixinFields3
+	notificationMixinFields4 := notificationMixin[4].Fields()
+	_ = notificationMixinFields4
 	notificationFields := schema.Notification{}.Fields()
 	_ = notificationFields
 	// notificationDescCreatedAt is the schema descriptor for created_at field.
@@ -3733,8 +3748,12 @@ func init() {
 	notificationDescTags := notificationMixinFields2[0].Descriptor()
 	// notification.DefaultTags holds the default value on creation for the tags field.
 	notification.DefaultTags = notificationDescTags.Default.([]string)
+	// notificationDescRequestorID is the schema descriptor for requestor_id field.
+	notificationDescRequestorID := notificationMixinFields3[0].Descriptor()
+	// notification.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	notification.RequestorIDValidator = notificationDescRequestorID.Validators[0].(func(string) error)
 	// notificationDescOwnerID is the schema descriptor for owner_id field.
-	notificationDescOwnerID := notificationMixinFields3[0].Descriptor()
+	notificationDescOwnerID := notificationMixinFields4[0].Descriptor()
 	// notification.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	notification.OwnerIDValidator = notificationDescOwnerID.Validators[0].(func(string) error)
 	// notificationDescObjectType is the schema descriptor for object_type field.

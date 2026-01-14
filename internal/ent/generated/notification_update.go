@@ -403,6 +403,9 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(notification.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.RequestorIDCleared() {
+		_spec.ClearField(notification.FieldRequestorID, field.TypeString)
+	}
 	if value, ok := _u.mutation.NotificationType(); ok {
 		_spec.SetField(notification.FieldNotificationType, field.TypeEnum, value)
 	}
@@ -926,6 +929,9 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(notification.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.RequestorIDCleared() {
+		_spec.ClearField(notification.FieldRequestorID, field.TypeString)
 	}
 	if value, ok := _u.mutation.NotificationType(); ok {
 		_spec.SetField(notification.FieldNotificationType, field.TypeEnum, value)

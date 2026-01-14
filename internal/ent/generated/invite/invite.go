@@ -30,6 +30,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldRequestorID holds the string denoting the requestor_id field in the database.
+	FieldRequestorID = "requestor_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldToken holds the string denoting the token field in the database.
@@ -44,8 +46,6 @@ const (
 	FieldRole = "role"
 	// FieldSendAttempts holds the string denoting the send_attempts field in the database.
 	FieldSendAttempts = "send_attempts"
-	// FieldRequestorID holds the string denoting the requestor_id field in the database.
-	FieldRequestorID = "requestor_id"
 	// FieldSecret holds the string denoting the secret field in the database.
 	FieldSecret = "secret"
 	// FieldOwnershipTransfer holds the string denoting the ownership_transfer field in the database.
@@ -86,6 +86,7 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldRequestorID,
 	FieldOwnerID,
 	FieldToken,
 	FieldExpires,
@@ -93,7 +94,6 @@ var Columns = []string{
 	FieldStatus,
 	FieldRole,
 	FieldSendAttempts,
-	FieldRequestorID,
 	FieldSecret,
 	FieldOwnershipTransfer,
 }
@@ -123,7 +123,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -132,6 +132,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	RequestorIDValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// TokenValidator is a validator for the "token" field. It is called by the builders before save.
@@ -142,8 +144,6 @@ var (
 	RecipientValidator func(string) error
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
-	// RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
-	RequestorIDValidator func(string) error
 	// SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	SecretValidator func([]byte) error
 	// DefaultOwnershipTransfer holds the default value on creation for the "ownership_transfer" field.
@@ -214,6 +214,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByRequestorID orders the results by the requestor_id field.
+func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -247,11 +252,6 @@ func ByRole(opts ...sql.OrderTermOption) OrderOption {
 // BySendAttempts orders the results by the send_attempts field.
 func BySendAttempts(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSendAttempts, opts...).ToFunc()
-}
-
-// ByRequestorID orders the results by the requestor_id field.
-func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
 }
 
 // ByOwnershipTransfer orders the results by the ownership_transfer field.

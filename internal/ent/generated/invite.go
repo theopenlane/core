@@ -31,6 +31,8 @@ type Invite struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the user who initiated the request
+	RequestorID string `json:"requestor_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the invitation token sent to the user via email which should only be provided to the /verify endpoint + handler
@@ -45,8 +47,6 @@ type Invite struct {
 	Role enums.Role `json:"role,omitempty"`
 	// the number of attempts made to perform email send of the invitation, maximum of 5
 	SendAttempts int `json:"send_attempts,omitempty"`
-	// the user who initiated the invitation
-	RequestorID string `json:"requestor_id,omitempty"`
 	// the comparison secret to verify the token's signature
 	Secret *[]byte `json:"-"`
 	// indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
@@ -115,7 +115,7 @@ func (*Invite) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case invite.FieldSendAttempts:
 			values[i] = new(sql.NullInt64)
-		case invite.FieldID, invite.FieldCreatedBy, invite.FieldUpdatedBy, invite.FieldDeletedBy, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole, invite.FieldRequestorID:
+		case invite.FieldID, invite.FieldCreatedBy, invite.FieldUpdatedBy, invite.FieldDeletedBy, invite.FieldRequestorID, invite.FieldOwnerID, invite.FieldToken, invite.FieldRecipient, invite.FieldStatus, invite.FieldRole:
 			values[i] = new(sql.NullString)
 		case invite.FieldCreatedAt, invite.FieldUpdatedAt, invite.FieldDeletedAt, invite.FieldExpires:
 			values[i] = new(sql.NullTime)
@@ -176,6 +176,12 @@ func (_m *Invite) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case invite.FieldRequestorID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field requestor_id", values[i])
+			} else if value.Valid {
+				_m.RequestorID = value.String
+			}
 		case invite.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -217,12 +223,6 @@ func (_m *Invite) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field send_attempts", values[i])
 			} else if value.Valid {
 				_m.SendAttempts = int(value.Int64)
-			}
-		case invite.FieldRequestorID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field requestor_id", values[i])
-			} else if value.Valid {
-				_m.RequestorID = value.String
 			}
 		case invite.FieldSecret:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -305,6 +305,9 @@ func (_m *Invite) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("requestor_id=")
+	builder.WriteString(_m.RequestorID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -324,9 +327,6 @@ func (_m *Invite) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))
-	builder.WriteString(", ")
-	builder.WriteString("requestor_id=")
-	builder.WriteString(_m.RequestorID)
 	builder.WriteString(", ")
 	builder.WriteString("secret=<sensitive>")
 	builder.WriteString(", ")

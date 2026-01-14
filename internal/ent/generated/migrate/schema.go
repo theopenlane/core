@@ -1679,10 +1679,10 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "DIRECTORY_MEMBERSHIP", "EVIDENCE", "FINDING", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBPROCESSOR", "SUBSCRIBER", "TASK", "TRUST_CENTER_SUBPROCESSOR", "VULNERABILITY"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}, Default: "CSV"},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
-		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "fields", Type: field.TypeJSON, Nullable: true},
 		{Name: "filters", Type: field.TypeString, Nullable: true},
 		{Name: "error_message", Type: field.TypeString, Nullable: true},
@@ -2675,13 +2675,13 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "token", Type: field.TypeString, Unique: true},
 		{Name: "expires", Type: field.TypeTime, Nullable: true},
 		{Name: "recipient", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVITATION_SENT", "APPROVAL_REQUIRED", "INVITATION_ACCEPTED", "INVITATION_EXPIRED"}, Default: "INVITATION_SENT"},
 		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
-		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "secret", Type: field.TypeBytes},
 		{Name: "ownership_transfer", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2711,7 +2711,7 @@ var (
 			{
 				Name:    "invite_recipient_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InvitesColumns[9], InvitesColumns[16]},
+				Columns: []*schema.Column{InvitesColumns[10], InvitesColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3261,6 +3261,7 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "notification_type", Type: field.TypeEnum, Enums: []string{"ORGANIZATION", "USER"}},
 		{Name: "object_type", Type: field.TypeString},
 		{Name: "title", Type: field.TypeString},
@@ -3280,13 +3281,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notifications_organizations_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[14]},
+				Columns:    []*schema.Column{NotificationsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notifications_users_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[15]},
+				Columns:    []*schema.Column{NotificationsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3295,7 +3296,7 @@ var (
 			{
 				Name:    "notification_user_id_read_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotificationsColumns[15], NotificationsColumns[11], NotificationsColumns[14]},
+				Columns: []*schema.Column{NotificationsColumns[16], NotificationsColumns[12], NotificationsColumns[15]},
 			},
 		},
 	}

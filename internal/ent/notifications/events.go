@@ -474,4 +474,5 @@ func RegisterListeners(addListener func(entityType string, handler func(*soiree.
 	addListener(generated.TypeRisk, handleRiskMutation)
 	addListener(generated.TypeProcedure, handleProcedureMutation)
 	addListener(generated.TypeNote, handleNoteMutation)
+	addListener(generated.TypeExport, handleExportMutation)
 }

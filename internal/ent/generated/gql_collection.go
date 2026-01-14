@@ -15839,6 +15839,11 @@ func (_q *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, export.FieldUpdatedBy)
 				fieldSeen[export.FieldUpdatedBy] = struct{}{}
 			}
+		case "requestorID":
+			if _, ok := fieldSeen[export.FieldRequestorID]; !ok {
+				selectedFields = append(selectedFields, export.FieldRequestorID)
+				fieldSeen[export.FieldRequestorID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[export.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, export.FieldOwnerID)
@@ -15858,11 +15863,6 @@ func (_q *ExportQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[export.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, export.FieldStatus)
 				fieldSeen[export.FieldStatus] = struct{}{}
-			}
-		case "requestorID":
-			if _, ok := fieldSeen[export.FieldRequestorID]; !ok {
-				selectedFields = append(selectedFields, export.FieldRequestorID)
-				fieldSeen[export.FieldRequestorID] = struct{}{}
 			}
 		case "fields":
 			if _, ok := fieldSeen[export.FieldFields]; !ok {
@@ -26871,6 +26871,11 @@ func (_q *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 				selectedFields = append(selectedFields, invite.FieldUpdatedBy)
 				fieldSeen[invite.FieldUpdatedBy] = struct{}{}
 			}
+		case "requestorID":
+			if _, ok := fieldSeen[invite.FieldRequestorID]; !ok {
+				selectedFields = append(selectedFields, invite.FieldRequestorID)
+				fieldSeen[invite.FieldRequestorID] = struct{}{}
+			}
 		case "ownerID":
 			if _, ok := fieldSeen[invite.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, invite.FieldOwnerID)
@@ -26900,11 +26905,6 @@ func (_q *InviteQuery) collectField(ctx context.Context, oneNode bool, opCtx *gr
 			if _, ok := fieldSeen[invite.FieldSendAttempts]; !ok {
 				selectedFields = append(selectedFields, invite.FieldSendAttempts)
 				fieldSeen[invite.FieldSendAttempts] = struct{}{}
-			}
-		case "requestorID":
-			if _, ok := fieldSeen[invite.FieldRequestorID]; !ok {
-				selectedFields = append(selectedFields, invite.FieldRequestorID)
-				fieldSeen[invite.FieldRequestorID] = struct{}{}
 			}
 		case "ownershipTransfer":
 			if _, ok := fieldSeen[invite.FieldOwnershipTransfer]; !ok {
@@ -30344,6 +30344,11 @@ func (_q *NotificationQuery) collectField(ctx context.Context, oneNode bool, opC
 			if _, ok := fieldSeen[notification.FieldTags]; !ok {
 				selectedFields = append(selectedFields, notification.FieldTags)
 				fieldSeen[notification.FieldTags] = struct{}{}
+			}
+		case "requestorID":
+			if _, ok := fieldSeen[notification.FieldRequestorID]; !ok {
+				selectedFields = append(selectedFields, notification.FieldRequestorID)
+				fieldSeen[notification.FieldRequestorID] = struct{}{}
 			}
 		case "ownerID":
 			if _, ok := fieldSeen[notification.FieldOwnerID]; !ok {

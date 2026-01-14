@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"entgo.io/ent"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -14,7 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
-func TestSetRequestor(t *testing.T) {
+func TestHookRequestor(t *testing.T) {
 	// setup valid user
 	userID := ulids.New().String()
 	userCtx := auth.NewTestContextWithValidUser(userID)
@@ -42,21 +44,31 @@ func TestSetRequestor(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			invMut := &generated.InviteMutation{}
 
-			got, err := setRequestor(tt.ctx, invMut)
+			var mockRequestorID string
+			var mockOk bool
 
-			requestor, ok := got.RequestorID()
+			nextMutator := ent.MutateFunc(func(_ context.Context, m ent.Mutation) (ent.Value, error) {
+				if inv, ok := m.(*generated.InviteMutation); ok {
+					mockRequestorID, mockOk = inv.RequestorID()
+				}
+
+				return nil, nil
+			})
+
+			hook := HookRequestor()
+			_, err := hook(nextMutator).Mutate(tt.ctx, invMut)
 
 			if tt.wantErr {
 				require.Error(t, err)
-				assert.False(t, ok)
+				assert.False(t, mockOk)
 
 				return
 			}
 
 			require.NoError(t, err)
-			require.True(t, ok)
+			require.True(t, mockOk)
 
-			assert.Equal(t, userID, requestor)
+			assert.Equal(t, userID, mockRequestorID)
 		})
 	}
 }

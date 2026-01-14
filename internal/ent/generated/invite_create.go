@@ -108,6 +108,20 @@ func (_c *InviteCreate) SetNillableDeletedBy(v *string) *InviteCreate {
 	return _c
 }
 
+// SetRequestorID sets the "requestor_id" field.
+func (_c *InviteCreate) SetRequestorID(v string) *InviteCreate {
+	_c.mutation.SetRequestorID(v)
+	return _c
+}
+
+// SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
+func (_c *InviteCreate) SetNillableRequestorID(v *string) *InviteCreate {
+	if v != nil {
+		_c.SetRequestorID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *InviteCreate) SetOwnerID(v string) *InviteCreate {
 	_c.mutation.SetOwnerID(v)
@@ -186,20 +200,6 @@ func (_c *InviteCreate) SetSendAttempts(v int) *InviteCreate {
 func (_c *InviteCreate) SetNillableSendAttempts(v *int) *InviteCreate {
 	if v != nil {
 		_c.SetSendAttempts(*v)
-	}
-	return _c
-}
-
-// SetRequestorID sets the "requestor_id" field.
-func (_c *InviteCreate) SetRequestorID(v string) *InviteCreate {
-	_c.mutation.SetRequestorID(v)
-	return _c
-}
-
-// SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
-func (_c *InviteCreate) SetNillableRequestorID(v *string) *InviteCreate {
-	if v != nil {
-		_c.SetRequestorID(*v)
 	}
 	return _c
 }
@@ -359,6 +359,11 @@ func (_c *InviteCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *InviteCreate) check() error {
+	if v, ok := _c.mutation.RequestorID(); ok {
+		if err := invite.RequestorIDValidator(v); err != nil {
+			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Invite.requestor_id": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := invite.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Invite.owner_id": %w`, err)}
@@ -398,11 +403,6 @@ func (_c *InviteCreate) check() error {
 	}
 	if _, ok := _c.mutation.SendAttempts(); !ok {
 		return &ValidationError{Name: "send_attempts", err: errors.New(`generated: missing required field "Invite.send_attempts"`)}
-	}
-	if v, ok := _c.mutation.RequestorID(); ok {
-		if err := invite.RequestorIDValidator(v); err != nil {
-			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Invite.requestor_id": %w`, err)}
-		}
 	}
 	if _, ok := _c.mutation.Secret(); !ok {
 		return &ValidationError{Name: "secret", err: errors.New(`generated: missing required field "Invite.secret"`)}
@@ -472,6 +472,10 @@ func (_c *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 		_spec.SetField(invite.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.RequestorID(); ok {
+		_spec.SetField(invite.FieldRequestorID, field.TypeString, value)
+		_node.RequestorID = value
+	}
 	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(invite.FieldToken, field.TypeString, value)
 		_node.Token = value
@@ -495,10 +499,6 @@ func (_c *InviteCreate) createSpec() (*Invite, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(invite.FieldSendAttempts, field.TypeInt, value)
 		_node.SendAttempts = value
-	}
-	if value, ok := _c.mutation.RequestorID(); ok {
-		_spec.SetField(invite.FieldRequestorID, field.TypeString, value)
-		_node.RequestorID = value
 	}
 	if value, ok := _c.mutation.Secret(); ok {
 		_spec.SetField(invite.FieldSecret, field.TypeBytes, value)

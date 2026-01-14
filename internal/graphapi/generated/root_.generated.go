@@ -2984,6 +2984,7 @@ type ComplexityRoot struct {
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		ReadAt           func(childComplexity int) int
+		RequestorID      func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		Title            func(childComplexity int) int
 		Topic            func(childComplexity int) int
@@ -22545,6 +22546,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Notification.ReadAt(childComplexity), true
+
+	case "Notification.requestorID":
+		if e.complexity.Notification.RequestorID == nil {
+			break
+		}
+
+		return e.complexity.Notification.RequestorID(childComplexity), true
 
 	case "Notification.tags":
 		if e.complexity.Notification.Tags == nil {
@@ -47771,10 +47779,6 @@ input CreateInviteInput {
   """
   sendAttempts: Int
   """
-  the user who initiated the invitation
-  """
-  requestorID: String
-  """
   indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
   """
   ownershipTransfer: Boolean
@@ -56493,6 +56497,10 @@ type Export implements Node {
   createdBy: String
   updatedBy: String
   """
+  the user who initiated the request
+  """
+  requestorID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -56508,10 +56516,6 @@ type Export implements Node {
   the status of the export, e.g., pending, ready, failed
   """
   status: ExportExportStatus!
-  """
-  the user who initiated the export
-  """
-  requestorID: String
   """
   the specific fields to include in the export (defaults to only the id if not provided)
   """
@@ -56759,6 +56763,24 @@ input ExportWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  requestor_id field predicates
+  """
+  requestorID: String
+  requestorIDNEQ: String
+  requestorIDIn: [String!]
+  requestorIDNotIn: [String!]
+  requestorIDGT: String
+  requestorIDGTE: String
+  requestorIDLT: String
+  requestorIDLTE: String
+  requestorIDContains: String
+  requestorIDHasPrefix: String
+  requestorIDHasSuffix: String
+  requestorIDIsNil: Boolean
+  requestorIDNotNil: Boolean
+  requestorIDEqualFold: String
+  requestorIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -56797,24 +56819,6 @@ input ExportWhereInput {
   statusNEQ: ExportExportStatus
   statusIn: [ExportExportStatus!]
   statusNotIn: [ExportExportStatus!]
-  """
-  requestor_id field predicates
-  """
-  requestorID: String
-  requestorIDNEQ: String
-  requestorIDIn: [String!]
-  requestorIDNotIn: [String!]
-  requestorIDGT: String
-  requestorIDGTE: String
-  requestorIDLT: String
-  requestorIDLTE: String
-  requestorIDContains: String
-  requestorIDHasPrefix: String
-  requestorIDHasSuffix: String
-  requestorIDIsNil: Boolean
-  requestorIDNotNil: Boolean
-  requestorIDEqualFold: String
-  requestorIDContainsFold: String
   """
   filters field predicates
   """
@@ -63908,6 +63912,10 @@ type Invite implements Node {
   createdBy: String
   updatedBy: String
   """
+  the user who initiated the request
+  """
+  requestorID: String
+  """
   the organization id that owns the object
   """
   ownerID: ID
@@ -63928,10 +63936,6 @@ type Invite implements Node {
   the number of attempts made to perform email send of the invitation, maximum of 5
   """
   sendAttempts: Int!
-  """
-  the user who initiated the invitation
-  """
-  requestorID: String
   """
   indicates if this invitation is for transferring organization ownership - when accepted, current owner becomes admin and invitee becomes owner
   """
@@ -64154,6 +64158,24 @@ input InviteWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  requestor_id field predicates
+  """
+  requestorID: String
+  requestorIDNEQ: String
+  requestorIDIn: [String!]
+  requestorIDNotIn: [String!]
+  requestorIDGT: String
+  requestorIDGTE: String
+  requestorIDLT: String
+  requestorIDLTE: String
+  requestorIDContains: String
+  requestorIDHasPrefix: String
+  requestorIDHasSuffix: String
+  requestorIDIsNil: Boolean
+  requestorIDNotNil: Boolean
+  requestorIDEqualFold: String
+  requestorIDContainsFold: String
+  """
   owner_id field predicates
   """
   ownerID: ID
@@ -64225,24 +64247,6 @@ input InviteWhereInput {
   sendAttemptsGTE: Int
   sendAttemptsLT: Int
   sendAttemptsLTE: Int
-  """
-  requestor_id field predicates
-  """
-  requestorID: String
-  requestorIDNEQ: String
-  requestorIDIn: [String!]
-  requestorIDNotIn: [String!]
-  requestorIDGT: String
-  requestorIDGTE: String
-  requestorIDLT: String
-  requestorIDLTE: String
-  requestorIDContains: String
-  requestorIDHasPrefix: String
-  requestorIDHasSuffix: String
-  requestorIDIsNil: Boolean
-  requestorIDNotNil: Boolean
-  requestorIDEqualFold: String
-  requestorIDContainsFold: String
   """
   ownership_transfer field predicates
   """
@@ -67595,6 +67599,10 @@ type Notification implements Node {
   tags associated with the object
   """
   tags: [String!]
+  """
+  the user who initiated the request
+  """
+  requestorID: String
   """
   the organization id that owns the object
   """

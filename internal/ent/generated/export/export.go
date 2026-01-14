@@ -30,6 +30,8 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
 	FieldDeletedBy = "deleted_by"
+	// FieldRequestorID holds the string denoting the requestor_id field in the database.
+	FieldRequestorID = "requestor_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldExportType holds the string denoting the export_type field in the database.
@@ -38,8 +40,6 @@ const (
 	FieldFormat = "format"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
-	// FieldRequestorID holds the string denoting the requestor_id field in the database.
-	FieldRequestorID = "requestor_id"
 	// FieldFields holds the string denoting the fields field in the database.
 	FieldFields = "fields"
 	// FieldFilters holds the string denoting the filters field in the database.
@@ -86,11 +86,11 @@ var Columns = []string{
 	FieldUpdatedBy,
 	FieldDeletedAt,
 	FieldDeletedBy,
+	FieldRequestorID,
 	FieldOwnerID,
 	FieldExportType,
 	FieldFormat,
 	FieldStatus,
-	FieldRequestorID,
 	FieldFields,
 	FieldFilters,
 	FieldErrorMessage,
@@ -112,7 +112,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [7]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -201,6 +201,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByRequestorID orders the results by the requestor_id field.
+func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
+}
+
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -219,11 +224,6 @@ func ByFormat(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
-}
-
-// ByRequestorID orders the results by the requestor_id field.
-func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
 }
 
 // ByFilters orders the results by the filters field.
