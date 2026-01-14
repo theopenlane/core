@@ -7,6 +7,14 @@ import (
 
 	"entgo.io/ent"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/gravatar"
+	"github.com/theopenlane/utils/passwd"
+	"github.com/theopenlane/utils/ulids"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -16,13 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/gravatar"
-	"github.com/theopenlane/utils/passwd"
-	"github.com/theopenlane/utils/ulids"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 const (

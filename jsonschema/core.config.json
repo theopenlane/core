@@ -389,6 +389,9 @@
         "supportemail": {
           "type": "string"
         },
+        "questionnaireemail": {
+          "type": "string"
+        },
         "logourl": {
           "type": "string"
         },

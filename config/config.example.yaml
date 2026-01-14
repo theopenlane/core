@@ -97,6 +97,7 @@ email:
     corporation: ""
     fromemail: ""
     logourl: ""
+    questionnaireemail: ""
     supportemail: ""
     templatespath: ""
     urls:
