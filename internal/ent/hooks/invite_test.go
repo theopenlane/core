@@ -43,6 +43,7 @@ func TestHookRequestor(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			invMut := &generated.InviteMutation{}
+			invMut.SetOp(ent.OpCreate)
 
 			var mockRequestorID string
 			var mockOk bool
