@@ -78,6 +78,7 @@ type MutationResolver interface {
 	UpdateCustomDomain(ctx context.Context, id string, input generated.UpdateCustomDomainInput) (*model.CustomDomainUpdatePayload, error)
 	DeleteCustomDomain(ctx context.Context, id string) (*model.CustomDomainDeletePayload, error)
 	DeleteBulkCustomDomain(ctx context.Context, ids []string) (*model.CustomDomainBulkDeletePayload, error)
+	ValidateCustomDomain(ctx context.Context, id string) (*model.CustomDomainValidatePayload, error)
 	CreateCustomTypeEnum(ctx context.Context, input generated.CreateCustomTypeEnumInput) (*model.CustomTypeEnumCreatePayload, error)
 	CreateBulkCustomTypeEnum(ctx context.Context, input []*generated.CreateCustomTypeEnumInput) (*model.CustomTypeEnumBulkCreatePayload, error)
 	CreateBulkCSVCustomTypeEnum(ctx context.Context, input graphql.Upload) (*model.CustomTypeEnumBulkCreatePayload, error)
@@ -5888,6 +5889,17 @@ func (ec *executionContext) field_Mutation_updateWorkflowInstance_args(ctx conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_validateCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 // endregion ***************************** args.gotpl *****************************
 
 // region    ************************** directives.gotpl **************************
@@ -9313,6 +9325,51 @@ func (ec *executionContext) fieldContext_Mutation_deleteBulkCustomDomain(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteBulkCustomDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_validateCustomDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_validateCustomDomain,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().ValidateCustomDomain(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		ec.marshalNCustomDomainValidatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_validateCustomDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "customDomain":
+				return ec.fieldContext_CustomDomainValidatePayload_customDomain(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomDomainValidatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_validateCustomDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -26666,6 +26723,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteBulkCustomDomain":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteBulkCustomDomain(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "validateCustomDomain":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_validateCustomDomain(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
