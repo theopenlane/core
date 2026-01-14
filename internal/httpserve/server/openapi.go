@@ -8,6 +8,7 @@ import (
 	"go/token"
 	"maps"
 	"net/url"
+	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -559,6 +560,12 @@ func extractOpenAPITypeDescriptions() map[string]string {
 	// Navigate from server -> httpserve -> internal -> core -> common/openapi
 	projectRoot := filepath.Dir(filepath.Dir(filepath.Dir(filepath.Dir(filename))))
 	openapiPkgPath := filepath.Join(projectRoot, "common", "openapi")
+
+	// Check if the directory exists before attempting to parse
+	// This handles the case where the binary is running without source code (e.g., in a container)
+	if _, err := os.Stat(openapiPkgPath); os.IsNotExist(err) {
+		return descriptions
+	}
 
 	// Parse the package
 	fset := token.NewFileSet()
