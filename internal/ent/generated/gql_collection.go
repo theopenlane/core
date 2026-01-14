@@ -30345,11 +30345,6 @@ func (_q *NotificationQuery) collectField(ctx context.Context, oneNode bool, opC
 				selectedFields = append(selectedFields, notification.FieldTags)
 				fieldSeen[notification.FieldTags] = struct{}{}
 			}
-		case "requestorID":
-			if _, ok := fieldSeen[notification.FieldRequestorID]; !ok {
-				selectedFields = append(selectedFields, notification.FieldRequestorID)
-				fieldSeen[notification.FieldRequestorID] = struct{}{}
-			}
 		case "ownerID":
 			if _, ok := fieldSeen[notification.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, notification.FieldOwnerID)

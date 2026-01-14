@@ -3704,7 +3704,6 @@ func init() {
 	notificationMixinHooks0 := notificationMixin[0].Hooks()
 	notificationMixinHooks2 := notificationMixin[2].Hooks()
 	notificationMixinHooks3 := notificationMixin[3].Hooks()
-	notificationMixinHooks4 := notificationMixin[4].Hooks()
 	notificationHooks := schema.Notification{}.Hooks()
 
 	notification.Hooks[1] = notificationMixinHooks0[0]
@@ -3713,14 +3712,12 @@ func init() {
 
 	notification.Hooks[3] = notificationMixinHooks3[0]
 
-	notification.Hooks[4] = notificationMixinHooks4[0]
+	notification.Hooks[4] = notificationHooks[0]
 
-	notification.Hooks[5] = notificationHooks[0]
-
-	notification.Hooks[6] = notificationHooks[1]
-	notificationMixinInters4 := notificationMixin[4].Interceptors()
+	notification.Hooks[5] = notificationHooks[1]
+	notificationMixinInters3 := notificationMixin[3].Interceptors()
 	notificationInters := schema.Notification{}.Interceptors()
-	notification.Interceptors[0] = notificationMixinInters4[0]
+	notification.Interceptors[0] = notificationMixinInters3[0]
 	notification.Interceptors[1] = notificationInters[0]
 	notificationMixinFields0 := notificationMixin[0].Fields()
 	_ = notificationMixinFields0
@@ -3730,8 +3727,6 @@ func init() {
 	_ = notificationMixinFields2
 	notificationMixinFields3 := notificationMixin[3].Fields()
 	_ = notificationMixinFields3
-	notificationMixinFields4 := notificationMixin[4].Fields()
-	_ = notificationMixinFields4
 	notificationFields := schema.Notification{}.Fields()
 	_ = notificationFields
 	// notificationDescCreatedAt is the schema descriptor for created_at field.
@@ -3748,12 +3743,8 @@ func init() {
 	notificationDescTags := notificationMixinFields2[0].Descriptor()
 	// notification.DefaultTags holds the default value on creation for the tags field.
 	notification.DefaultTags = notificationDescTags.Default.([]string)
-	// notificationDescRequestorID is the schema descriptor for requestor_id field.
-	notificationDescRequestorID := notificationMixinFields3[0].Descriptor()
-	// notification.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
-	notification.RequestorIDValidator = notificationDescRequestorID.Validators[0].(func(string) error)
 	// notificationDescOwnerID is the schema descriptor for owner_id field.
-	notificationDescOwnerID := notificationMixinFields4[0].Descriptor()
+	notificationDescOwnerID := notificationMixinFields3[0].Descriptor()
 	// notification.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	notification.OwnerIDValidator = notificationDescOwnerID.Validators[0].(func(string) error)
 	// notificationDescObjectType is the schema descriptor for object_type field.

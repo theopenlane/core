@@ -86,20 +86,6 @@ func (_c *NotificationCreate) SetTags(v []string) *NotificationCreate {
 	return _c
 }
 
-// SetRequestorID sets the "requestor_id" field.
-func (_c *NotificationCreate) SetRequestorID(v string) *NotificationCreate {
-	_c.mutation.SetRequestorID(v)
-	return _c
-}
-
-// SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
-func (_c *NotificationCreate) SetNillableRequestorID(v *string) *NotificationCreate {
-	if v != nil {
-		_c.SetRequestorID(*v)
-	}
-	return _c
-}
-
 // SetOwnerID sets the "owner_id" field.
 func (_c *NotificationCreate) SetOwnerID(v string) *NotificationCreate {
 	_c.mutation.SetOwnerID(v)
@@ -283,11 +269,6 @@ func (_c *NotificationCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *NotificationCreate) check() error {
-	if v, ok := _c.mutation.RequestorID(); ok {
-		if err := notification.RequestorIDValidator(v); err != nil {
-			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Notification.requestor_id": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.OwnerID(); ok {
 		if err := notification.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Notification.owner_id": %w`, err)}
@@ -385,10 +366,6 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
-	}
-	if value, ok := _c.mutation.RequestorID(); ok {
-		_spec.SetField(notification.FieldRequestorID, field.TypeString, value)
-		_node.RequestorID = value
 	}
 	if value, ok := _c.mutation.NotificationType(); ok {
 		_spec.SetField(notification.FieldNotificationType, field.TypeEnum, value)

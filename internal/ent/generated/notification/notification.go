@@ -28,8 +28,6 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldRequestorID holds the string denoting the requestor_id field in the database.
-	FieldRequestorID = "requestor_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
@@ -80,7 +78,6 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldTags,
-	FieldRequestorID,
 	FieldOwnerID,
 	FieldUserID,
 	FieldNotificationType,
@@ -109,7 +106,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [6]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -120,8 +117,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
-	RequestorIDValidator func(string) error
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
 	// ObjectTypeValidator is a validator for the "object_type" field. It is called by the builders before save.
@@ -180,11 +175,6 @@ func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedBy orders the results by the updated_by field.
 func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
-}
-
-// ByRequestorID orders the results by the requestor_id field.
-func ByRequestorID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldRequestorID, opts...).ToFunc()
 }
 
 // ByOwnerID orders the results by the owner_id field.

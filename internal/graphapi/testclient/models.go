@@ -16234,8 +16234,6 @@ type Notification struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
-	// the user who initiated the request
-	RequestorID *string `json:"requestorID,omitempty"`
 	// the organization id that owns the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the user this notification is for

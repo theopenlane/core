@@ -27722,10 +27722,6 @@ type Notification implements Node {
   """
   tags: [String!]
   """
-  the user who initiated the request
-  """
-  requestorID: String
-  """
   the organization id that owns the object
   """
   ownerID: ID

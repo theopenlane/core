@@ -66,8 +66,6 @@ func (ec *executionContext) fieldContext_Subscription_notificationCreated(_ cont
 				return ec.fieldContext_Notification_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_Notification_tags(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Notification_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Notification_ownerID(ctx, field)
 			case "userID":

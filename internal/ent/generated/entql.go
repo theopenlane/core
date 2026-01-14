@@ -1515,7 +1515,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notification.FieldCreatedBy:        {Type: field.TypeString, Column: notification.FieldCreatedBy},
 			notification.FieldUpdatedBy:        {Type: field.TypeString, Column: notification.FieldUpdatedBy},
 			notification.FieldTags:             {Type: field.TypeJSON, Column: notification.FieldTags},
-			notification.FieldRequestorID:      {Type: field.TypeString, Column: notification.FieldRequestorID},
 			notification.FieldOwnerID:          {Type: field.TypeString, Column: notification.FieldOwnerID},
 			notification.FieldUserID:           {Type: field.TypeString, Column: notification.FieldUserID},
 			notification.FieldNotificationType: {Type: field.TypeEnum, Column: notification.FieldNotificationType},
@@ -22705,11 +22704,6 @@ func (f *NotificationFilter) WhereUpdatedBy(p entql.StringP) {
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *NotificationFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(notification.FieldTags))
-}
-
-// WhereRequestorID applies the entql string predicate on the requestor_id field.
-func (f *NotificationFilter) WhereRequestorID(p entql.StringP) {
-	f.Where(p.Field(notification.FieldRequestorID))
 }
 
 // WhereOwnerID applies the entql string predicate on the owner_id field.

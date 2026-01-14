@@ -2984,7 +2984,6 @@ type ComplexityRoot struct {
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		ReadAt           func(childComplexity int) int
-		RequestorID      func(childComplexity int) int
 		Tags             func(childComplexity int) int
 		Title            func(childComplexity int) int
 		Topic            func(childComplexity int) int
@@ -22546,13 +22545,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Notification.ReadAt(childComplexity), true
-
-	case "Notification.requestorID":
-		if e.complexity.Notification.RequestorID == nil {
-			break
-		}
-
-		return e.complexity.Notification.RequestorID(childComplexity), true
 
 	case "Notification.tags":
 		if e.complexity.Notification.Tags == nil {
@@ -67599,10 +67591,6 @@ type Notification implements Node {
   tags associated with the object
   """
   tags: [String!]
-  """
-  the user who initiated the request
-  """
-  requestorID: String
   """
   the organization id that owns the object
   """
