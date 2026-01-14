@@ -189,3 +189,24 @@ mutation UpdateCustomDomain($updateCustomDomainId: ID!, $input: UpdateCustomDoma
     }
   }
 }
+
+mutation ValidateCustomDomain($validateCustomDomainId: ID!) {
+  validateCustomDomain(id: $validateCustomDomainId) {
+    customDomain {
+      cnameRecord
+      id
+      dnsVerificationID
+      dnsVerification {
+        id
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+        dnsVerificationStatusReason
+        acmeChallengePath
+        expectedAcmeChallengeValue
+        acmeChallengeStatus
+        acmeChallengeStatusReason
+      }
+    }
+  }
+}

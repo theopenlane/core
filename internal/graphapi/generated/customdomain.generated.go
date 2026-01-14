@@ -275,6 +275,69 @@ func (ec *executionContext) fieldContext_CustomDomainUpdatePayload_customDomain(
 	return fc, nil
 }
 
+func (ec *executionContext) _CustomDomainValidatePayload_customDomain(ctx context.Context, field graphql.CollectedField, obj *model.CustomDomainValidatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_CustomDomainValidatePayload_customDomain,
+		func(ctx context.Context) (any, error) {
+			return obj.CustomDomain, nil
+		},
+		nil,
+		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_CustomDomainValidatePayload_customDomain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CustomDomainValidatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CustomDomain_id(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_CustomDomain_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_CustomDomain_updatedAt(ctx, field)
+			case "createdBy":
+				return ec.fieldContext_CustomDomain_createdBy(ctx, field)
+			case "updatedBy":
+				return ec.fieldContext_CustomDomain_updatedBy(ctx, field)
+			case "tags":
+				return ec.fieldContext_CustomDomain_tags(ctx, field)
+			case "ownerID":
+				return ec.fieldContext_CustomDomain_ownerID(ctx, field)
+			case "systemOwned":
+				return ec.fieldContext_CustomDomain_systemOwned(ctx, field)
+			case "internalNotes":
+				return ec.fieldContext_CustomDomain_internalNotes(ctx, field)
+			case "systemInternalID":
+				return ec.fieldContext_CustomDomain_systemInternalID(ctx, field)
+			case "cnameRecord":
+				return ec.fieldContext_CustomDomain_cnameRecord(ctx, field)
+			case "mappableDomainID":
+				return ec.fieldContext_CustomDomain_mappableDomainID(ctx, field)
+			case "dnsVerificationID":
+				return ec.fieldContext_CustomDomain_dnsVerificationID(ctx, field)
+			case "owner":
+				return ec.fieldContext_CustomDomain_owner(ctx, field)
+			case "mappableDomain":
+				return ec.fieldContext_CustomDomain_mappableDomain(ctx, field)
+			case "dnsVerification":
+				return ec.fieldContext_CustomDomain_dnsVerification(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CustomDomain", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -479,6 +542,45 @@ func (ec *executionContext) _CustomDomainUpdatePayload(ctx context.Context, sel 
 	return out
 }
 
+var customDomainValidatePayloadImplementors = []string{"CustomDomainValidatePayload"}
+
+func (ec *executionContext) _CustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.CustomDomainValidatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, customDomainValidatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CustomDomainValidatePayload")
+		case "customDomain":
+			out.Values[i] = ec._CustomDomainValidatePayload_customDomain(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
@@ -551,6 +653,20 @@ func (ec *executionContext) marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._CustomDomainUpdatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNCustomDomainValidatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainValidatePayload) graphql.Marshaler {
+	return ec._CustomDomainValidatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCustomDomainValidatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainValidatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CustomDomainValidatePayload(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************
