@@ -492,6 +492,12 @@ type CustomDomainUpdatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for validateCustomDomain mutation
+type CustomDomainValidatePayload struct {
+	// CustomDomain that validation was triggered for
+	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
 // Return response for createBulkCustomTypeEnum mutation
 type CustomTypeEnumBulkCreatePayload struct {
 	// Created customTypeEnums

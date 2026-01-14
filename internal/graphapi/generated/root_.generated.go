@@ -751,6 +751,10 @@ type ComplexityRoot struct {
 		CustomDomain func(childComplexity int) int
 	}
 
+	CustomDomainValidatePayload struct {
+		CustomDomain func(childComplexity int) int
+	}
+
 	CustomTypeEnum struct {
 		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		Color            func(childComplexity int) int
@@ -2872,6 +2876,7 @@ type ComplexityRoot struct {
 		UpdateWorkflowDefinition              func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
 		UpdateWorkflowEvent                   func(childComplexity int, id string, input generated.UpdateWorkflowEventInput) int
 		UpdateWorkflowInstance                func(childComplexity int, id string, input generated.UpdateWorkflowInstanceInput) int
+		ValidateCustomDomain                  func(childComplexity int, id string) int
 	}
 
 	Narrative struct {
@@ -8851,6 +8856,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomDomainUpdatePayload.CustomDomain(childComplexity), true
+
+	case "CustomDomainValidatePayload.customDomain":
+		if e.complexity.CustomDomainValidatePayload.CustomDomain == nil {
+			break
+		}
+
+		return e.complexity.CustomDomainValidatePayload.CustomDomain(childComplexity), true
 
 	case "CustomTypeEnum.actionPlans":
 		if e.complexity.CustomTypeEnum.ActionPlans == nil {
@@ -21994,6 +22006,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateWorkflowInstance(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowInstanceInput)), true
+
+	case "Mutation.validateCustomDomain":
+		if e.complexity.Mutation.ValidateCustomDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_validateCustomDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ValidateCustomDomain(childComplexity, args["id"].(string)), true
 
 	case "Narrative.blockedGroups":
 		if e.complexity.Narrative.BlockedGroups == nil {
@@ -38946,6 +38970,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): CustomDomainBulkDeletePayload!
+    """
+    Trigger validation for an existing customDomain
+    """
+    validateCustomDomain(
+        """
+        ID of the customDomain to validate
+        """
+        id: ID!
+    ): CustomDomainValidatePayload!
 }
 
 """
@@ -38996,6 +39029,16 @@ type CustomDomainBulkDeletePayload {
     Deleted customDomain IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for validateCustomDomain mutation
+"""
+type CustomDomainValidatePayload {
+    """
+    CustomDomain that validation was triggered for
+    """
+    customDomain: CustomDomain!
 }`, BuiltIn: false},
 	{Name: "../schema/customtypeenum.graphql", Input: `extend type Query {
     """
