@@ -73,7 +73,7 @@ func getOpName(ctx context.Context) string {
 		}
 	}
 
-	logx.FromContext(ctx).Info().Str("raw_query", opCtx.RawQuery).Msg("GraphQL operation name is empty; metrics may be obscured")
+	logx.FromContext(ctx).Info().Str("raw_query", opCtx.RawQuery).Msg("graphql operation name is empty; metrics may be obscured")
 
 	return "unknown"
 }
