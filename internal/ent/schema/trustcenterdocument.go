@@ -95,7 +95,7 @@ func (t TrustCenterDoc) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterDoc](t,
 				withParents(TrustCenter{}),
 			),
-			newCustomEnumMixin(t, withEnumFieldName("category")),
+			newCustomEnumMixin(t),
 		},
 	}.getMixins(t)
 }

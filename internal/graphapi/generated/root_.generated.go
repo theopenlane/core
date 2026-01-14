@@ -4781,27 +4781,27 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDoc struct {
-		CreatedAt                  func(childComplexity int) int
-		CreatedBy                  func(childComplexity int) int
-		File                       func(childComplexity int) int
-		FileID                     func(childComplexity int) int
-		ID                         func(childComplexity int) int
-		OriginalFile               func(childComplexity int) int
-		OriginalFileID             func(childComplexity int) int
-		Standard                   func(childComplexity int) int
-		StandardID                 func(childComplexity int) int
-		Tags                       func(childComplexity int) int
-		Title                      func(childComplexity int) int
-		TrustCenter                func(childComplexity int) int
-		TrustCenterDocCategory     func(childComplexity int) int
-		TrustCenterDocCategoryID   func(childComplexity int) int
-		TrustCenterDocCategoryName func(childComplexity int) int
-		TrustCenterID              func(childComplexity int) int
-		UpdatedAt                  func(childComplexity int) int
-		UpdatedBy                  func(childComplexity int) int
-		Visibility                 func(childComplexity int) int
-		WatermarkStatus            func(childComplexity int) int
-		WatermarkingEnabled        func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		File                   func(childComplexity int) int
+		FileID                 func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		OriginalFile           func(childComplexity int) int
+		OriginalFileID         func(childComplexity int) int
+		Standard               func(childComplexity int) int
+		StandardID             func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		TrustCenter            func(childComplexity int) int
+		TrustCenterDocKind     func(childComplexity int) int
+		TrustCenterDocKindID   func(childComplexity int) int
+		TrustCenterDocKindName func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Visibility             func(childComplexity int) int
+		WatermarkStatus        func(childComplexity int) int
+		WatermarkingEnabled    func(childComplexity int) int
 	}
 
 	TrustCenterDocBulkCreatePayload struct {
@@ -33337,26 +33337,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.TrustCenter(childComplexity), true
 
-	case "TrustCenterDoc.trustCenterDocCategory":
-		if e.complexity.TrustCenterDoc.TrustCenterDocCategory == nil {
+	case "TrustCenterDoc.trustCenterDocKind":
+		if e.complexity.TrustCenterDoc.TrustCenterDocKind == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDoc.TrustCenterDocCategory(childComplexity), true
+		return e.complexity.TrustCenterDoc.TrustCenterDocKind(childComplexity), true
 
-	case "TrustCenterDoc.trustCenterDocCategoryID":
-		if e.complexity.TrustCenterDoc.TrustCenterDocCategoryID == nil {
+	case "TrustCenterDoc.trustCenterDocKindID":
+		if e.complexity.TrustCenterDoc.TrustCenterDocKindID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDoc.TrustCenterDocCategoryID(childComplexity), true
+		return e.complexity.TrustCenterDoc.TrustCenterDocKindID(childComplexity), true
 
-	case "TrustCenterDoc.trustCenterDocCategoryName":
-		if e.complexity.TrustCenterDoc.TrustCenterDocCategoryName == nil {
+	case "TrustCenterDoc.trustCenterDocKindName":
+		if e.complexity.TrustCenterDoc.TrustCenterDocKindName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDoc.TrustCenterDocCategoryName(childComplexity), true
+		return e.complexity.TrustCenterDoc.TrustCenterDocKindName(childComplexity), true
 
 	case "TrustCenterDoc.trustCenterID":
 		if e.complexity.TrustCenterDoc.TrustCenterID == nil {
@@ -49475,9 +49475,9 @@ input CreateTrustCenterDocInput {
   """
   tags: [String!]
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryName: String
+  trustCenterDocKindName: String
   """
   title of the document
   """
@@ -49494,7 +49494,7 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
-  trustCenterDocCategoryID: ID
+  trustCenterDocKindID: ID
   trustCenterID: ID
   standardID: ID
   fileID: ID
@@ -86965,13 +86965,13 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryName: String
+  trustCenterDocKindName: String
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryID: ID
+  trustCenterDocKindID: ID
   """
   ID of the trust center
   """
@@ -87004,7 +87004,7 @@ type TrustCenterDoc implements Node {
   ID of the standard
   """
   standardID: ID
-  trustCenterDocCategory: CustomTypeEnum
+  trustCenterDocKind: CustomTypeEnum
   trustCenter: TrustCenter
   standard: Standard
   """
@@ -87168,41 +87168,41 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  trust_center_doc_category_name field predicates
+  trust_center_doc_kind_name field predicates
   """
-  trustCenterDocCategoryName: String
-  trustCenterDocCategoryNameNEQ: String
-  trustCenterDocCategoryNameIn: [String!]
-  trustCenterDocCategoryNameNotIn: [String!]
-  trustCenterDocCategoryNameGT: String
-  trustCenterDocCategoryNameGTE: String
-  trustCenterDocCategoryNameLT: String
-  trustCenterDocCategoryNameLTE: String
-  trustCenterDocCategoryNameContains: String
-  trustCenterDocCategoryNameHasPrefix: String
-  trustCenterDocCategoryNameHasSuffix: String
-  trustCenterDocCategoryNameIsNil: Boolean
-  trustCenterDocCategoryNameNotNil: Boolean
-  trustCenterDocCategoryNameEqualFold: String
-  trustCenterDocCategoryNameContainsFold: String
+  trustCenterDocKindName: String
+  trustCenterDocKindNameNEQ: String
+  trustCenterDocKindNameIn: [String!]
+  trustCenterDocKindNameNotIn: [String!]
+  trustCenterDocKindNameGT: String
+  trustCenterDocKindNameGTE: String
+  trustCenterDocKindNameLT: String
+  trustCenterDocKindNameLTE: String
+  trustCenterDocKindNameContains: String
+  trustCenterDocKindNameHasPrefix: String
+  trustCenterDocKindNameHasSuffix: String
+  trustCenterDocKindNameIsNil: Boolean
+  trustCenterDocKindNameNotNil: Boolean
+  trustCenterDocKindNameEqualFold: String
+  trustCenterDocKindNameContainsFold: String
   """
-  trust_center_doc_category_id field predicates
+  trust_center_doc_kind_id field predicates
   """
-  trustCenterDocCategoryID: ID
-  trustCenterDocCategoryIDNEQ: ID
-  trustCenterDocCategoryIDIn: [ID!]
-  trustCenterDocCategoryIDNotIn: [ID!]
-  trustCenterDocCategoryIDGT: ID
-  trustCenterDocCategoryIDGTE: ID
-  trustCenterDocCategoryIDLT: ID
-  trustCenterDocCategoryIDLTE: ID
-  trustCenterDocCategoryIDContains: ID
-  trustCenterDocCategoryIDHasPrefix: ID
-  trustCenterDocCategoryIDHasSuffix: ID
-  trustCenterDocCategoryIDIsNil: Boolean
-  trustCenterDocCategoryIDNotNil: Boolean
-  trustCenterDocCategoryIDEqualFold: ID
-  trustCenterDocCategoryIDContainsFold: ID
+  trustCenterDocKindID: ID
+  trustCenterDocKindIDNEQ: ID
+  trustCenterDocKindIDIn: [ID!]
+  trustCenterDocKindIDNotIn: [ID!]
+  trustCenterDocKindIDGT: ID
+  trustCenterDocKindIDGTE: ID
+  trustCenterDocKindIDLT: ID
+  trustCenterDocKindIDLTE: ID
+  trustCenterDocKindIDContains: ID
+  trustCenterDocKindIDHasPrefix: ID
+  trustCenterDocKindIDHasSuffix: ID
+  trustCenterDocKindIDIsNil: Boolean
+  trustCenterDocKindIDNotNil: Boolean
+  trustCenterDocKindIDEqualFold: ID
+  trustCenterDocKindIDContainsFold: ID
   """
   trust_center_id field predicates
   """
@@ -87317,10 +87317,10 @@ input TrustCenterDocWhereInput {
   standardIDEqualFold: ID
   standardIDContainsFold: ID
   """
-  trust_center_doc_category edge predicates
+  trust_center_doc_kind edge predicates
   """
-  hasTrustCenterDocCategory: Boolean
-  hasTrustCenterDocCategoryWith: [CustomTypeEnumWhereInput!]
+  hasTrustCenterDocKind: Boolean
+  hasTrustCenterDocKindWith: [CustomTypeEnumWhereInput!]
   """
   trust_center edge predicates
   """
@@ -93755,10 +93755,10 @@ input UpdateTrustCenterDocInput {
   appendTags: [String!]
   clearTags: Boolean
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryName: String
-  clearTrustCenterDocCategoryName: Boolean
+  trustCenterDocKindName: String
+  clearTrustCenterDocKindName: Boolean
   """
   title of the document
   """
@@ -93778,8 +93778,8 @@ input UpdateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   clearVisibility: Boolean
-  trustCenterDocCategoryID: ID
-  clearTrustCenterDocCategory: Boolean
+  trustCenterDocKindID: ID
+  clearTrustCenterDocKind: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   standardID: ID

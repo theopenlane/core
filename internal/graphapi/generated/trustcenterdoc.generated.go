@@ -64,10 +64,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocCategoryName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryName(ctx, field)
-			case "trustCenterDocCategoryID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryID(ctx, field)
+			case "trustCenterDocKindName":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
+			case "trustCenterDocKindID":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -84,8 +84,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocCategory":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategory(ctx, field)
+			case "trustCenterDocKind":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -166,10 +166,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocCategoryName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryName(ctx, field)
-			case "trustCenterDocCategoryID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryID(ctx, field)
+			case "trustCenterDocKindName":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
+			case "trustCenterDocKindID":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -186,8 +186,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocCategory":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategory(ctx, field)
+			case "trustCenterDocKind":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -268,10 +268,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocCategoryName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryName(ctx, field)
-			case "trustCenterDocCategoryID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryID(ctx, field)
+			case "trustCenterDocKindName":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
+			case "trustCenterDocKindID":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -288,8 +288,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocCategory":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategory(ctx, field)
+			case "trustCenterDocKind":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -370,10 +370,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocCategoryName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryName(ctx, field)
-			case "trustCenterDocCategoryID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategoryID(ctx, field)
+			case "trustCenterDocKindName":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
+			case "trustCenterDocKindID":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
@@ -390,8 +390,8 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocCategory":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocCategory(ctx, field)
+			case "trustCenterDocKind":
+				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":

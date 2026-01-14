@@ -15869,12 +15869,12 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
-	if trustCenterDocCategoryName, exists := m.TrustCenterDocCategoryName(); exists {
-		create = create.SetTrustCenterDocCategoryName(trustCenterDocCategoryName)
+	if trustCenterDocKindName, exists := m.TrustCenterDocKindName(); exists {
+		create = create.SetTrustCenterDocKindName(trustCenterDocKindName)
 	}
 
-	if trustCenterDocCategoryID, exists := m.TrustCenterDocCategoryID(); exists {
-		create = create.SetTrustCenterDocCategoryID(trustCenterDocCategoryID)
+	if trustCenterDocKindID, exists := m.TrustCenterDocKindID(); exists {
+		create = create.SetTrustCenterDocKindID(trustCenterDocKindID)
 	}
 
 	if trustCenterID, exists := m.TrustCenterID(); exists {
@@ -15982,16 +15982,16 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(trustcenterdoc.Tags)
 		}
 
-		if trustCenterDocCategoryName, exists := m.TrustCenterDocCategoryName(); exists {
-			create = create.SetTrustCenterDocCategoryName(trustCenterDocCategoryName)
+		if trustCenterDocKindName, exists := m.TrustCenterDocKindName(); exists {
+			create = create.SetTrustCenterDocKindName(trustCenterDocKindName)
 		} else {
-			create = create.SetTrustCenterDocCategoryName(trustcenterdoc.TrustCenterDocCategoryName)
+			create = create.SetTrustCenterDocKindName(trustcenterdoc.TrustCenterDocKindName)
 		}
 
-		if trustCenterDocCategoryID, exists := m.TrustCenterDocCategoryID(); exists {
-			create = create.SetTrustCenterDocCategoryID(trustCenterDocCategoryID)
+		if trustCenterDocKindID, exists := m.TrustCenterDocKindID(); exists {
+			create = create.SetTrustCenterDocKindID(trustCenterDocKindID)
 		} else {
-			create = create.SetTrustCenterDocCategoryID(trustcenterdoc.TrustCenterDocCategoryID)
+			create = create.SetTrustCenterDocKindID(trustcenterdoc.TrustCenterDocKindID)
 		}
 
 		if trustCenterID, exists := m.TrustCenterID(); exists {
@@ -16084,8 +16084,8 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
-			SetTrustCenterDocCategoryName(trustcenterdoc.TrustCenterDocCategoryName).
-			SetTrustCenterDocCategoryID(trustcenterdoc.TrustCenterDocCategoryID).
+			SetTrustCenterDocKindName(trustcenterdoc.TrustCenterDocKindName).
+			SetTrustCenterDocKindID(trustcenterdoc.TrustCenterDocKindID).
 			SetTrustCenterID(trustcenterdoc.TrustCenterID).
 			SetTitle(trustcenterdoc.Title).
 			SetNillableFileID(trustcenterdoc.FileID).

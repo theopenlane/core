@@ -2450,23 +2450,23 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterDoc",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterdoc.FieldCreatedAt:                  {Type: field.TypeTime, Column: trustcenterdoc.FieldCreatedAt},
-			trustcenterdoc.FieldUpdatedAt:                  {Type: field.TypeTime, Column: trustcenterdoc.FieldUpdatedAt},
-			trustcenterdoc.FieldCreatedBy:                  {Type: field.TypeString, Column: trustcenterdoc.FieldCreatedBy},
-			trustcenterdoc.FieldUpdatedBy:                  {Type: field.TypeString, Column: trustcenterdoc.FieldUpdatedBy},
-			trustcenterdoc.FieldDeletedAt:                  {Type: field.TypeTime, Column: trustcenterdoc.FieldDeletedAt},
-			trustcenterdoc.FieldDeletedBy:                  {Type: field.TypeString, Column: trustcenterdoc.FieldDeletedBy},
-			trustcenterdoc.FieldTags:                       {Type: field.TypeJSON, Column: trustcenterdoc.FieldTags},
-			trustcenterdoc.FieldTrustCenterDocCategoryName: {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterDocCategoryName},
-			trustcenterdoc.FieldTrustCenterDocCategoryID:   {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterDocCategoryID},
-			trustcenterdoc.FieldTrustCenterID:              {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterID},
-			trustcenterdoc.FieldTitle:                      {Type: field.TypeString, Column: trustcenterdoc.FieldTitle},
-			trustcenterdoc.FieldFileID:                     {Type: field.TypeString, Column: trustcenterdoc.FieldFileID},
-			trustcenterdoc.FieldOriginalFileID:             {Type: field.TypeString, Column: trustcenterdoc.FieldOriginalFileID},
-			trustcenterdoc.FieldWatermarkingEnabled:        {Type: field.TypeBool, Column: trustcenterdoc.FieldWatermarkingEnabled},
-			trustcenterdoc.FieldWatermarkStatus:            {Type: field.TypeEnum, Column: trustcenterdoc.FieldWatermarkStatus},
-			trustcenterdoc.FieldVisibility:                 {Type: field.TypeEnum, Column: trustcenterdoc.FieldVisibility},
-			trustcenterdoc.FieldStandardID:                 {Type: field.TypeString, Column: trustcenterdoc.FieldStandardID},
+			trustcenterdoc.FieldCreatedAt:              {Type: field.TypeTime, Column: trustcenterdoc.FieldCreatedAt},
+			trustcenterdoc.FieldUpdatedAt:              {Type: field.TypeTime, Column: trustcenterdoc.FieldUpdatedAt},
+			trustcenterdoc.FieldCreatedBy:              {Type: field.TypeString, Column: trustcenterdoc.FieldCreatedBy},
+			trustcenterdoc.FieldUpdatedBy:              {Type: field.TypeString, Column: trustcenterdoc.FieldUpdatedBy},
+			trustcenterdoc.FieldDeletedAt:              {Type: field.TypeTime, Column: trustcenterdoc.FieldDeletedAt},
+			trustcenterdoc.FieldDeletedBy:              {Type: field.TypeString, Column: trustcenterdoc.FieldDeletedBy},
+			trustcenterdoc.FieldTags:                   {Type: field.TypeJSON, Column: trustcenterdoc.FieldTags},
+			trustcenterdoc.FieldTrustCenterDocKindName: {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterDocKindName},
+			trustcenterdoc.FieldTrustCenterDocKindID:   {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterDocKindID},
+			trustcenterdoc.FieldTrustCenterID:          {Type: field.TypeString, Column: trustcenterdoc.FieldTrustCenterID},
+			trustcenterdoc.FieldTitle:                  {Type: field.TypeString, Column: trustcenterdoc.FieldTitle},
+			trustcenterdoc.FieldFileID:                 {Type: field.TypeString, Column: trustcenterdoc.FieldFileID},
+			trustcenterdoc.FieldOriginalFileID:         {Type: field.TypeString, Column: trustcenterdoc.FieldOriginalFileID},
+			trustcenterdoc.FieldWatermarkingEnabled:    {Type: field.TypeBool, Column: trustcenterdoc.FieldWatermarkingEnabled},
+			trustcenterdoc.FieldWatermarkStatus:        {Type: field.TypeEnum, Column: trustcenterdoc.FieldWatermarkStatus},
+			trustcenterdoc.FieldVisibility:             {Type: field.TypeEnum, Column: trustcenterdoc.FieldVisibility},
+			trustcenterdoc.FieldStandardID:             {Type: field.TypeString, Column: trustcenterdoc.FieldStandardID},
 		},
 	}
 	graph.Nodes[76] = &sqlgraph.Node{
@@ -10753,12 +10753,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Standard",
 	)
 	graph.MustAddE(
-		"trust_center_doc_category",
+		"trust_center_doc_kind",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   trustcenterdoc.TrustCenterDocCategoryTable,
-			Columns: []string{trustcenterdoc.TrustCenterDocCategoryColumn},
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
 			Bidi:    false,
 		},
 		"TrustCenterDoc",
@@ -30991,14 +30991,14 @@ func (f *TrustCenterDocFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(trustcenterdoc.FieldTags))
 }
 
-// WhereTrustCenterDocCategoryName applies the entql string predicate on the trust_center_doc_category_name field.
-func (f *TrustCenterDocFilter) WhereTrustCenterDocCategoryName(p entql.StringP) {
-	f.Where(p.Field(trustcenterdoc.FieldTrustCenterDocCategoryName))
+// WhereTrustCenterDocKindName applies the entql string predicate on the trust_center_doc_kind_name field.
+func (f *TrustCenterDocFilter) WhereTrustCenterDocKindName(p entql.StringP) {
+	f.Where(p.Field(trustcenterdoc.FieldTrustCenterDocKindName))
 }
 
-// WhereTrustCenterDocCategoryID applies the entql string predicate on the trust_center_doc_category_id field.
-func (f *TrustCenterDocFilter) WhereTrustCenterDocCategoryID(p entql.StringP) {
-	f.Where(p.Field(trustcenterdoc.FieldTrustCenterDocCategoryID))
+// WhereTrustCenterDocKindID applies the entql string predicate on the trust_center_doc_kind_id field.
+func (f *TrustCenterDocFilter) WhereTrustCenterDocKindID(p entql.StringP) {
+	f.Where(p.Field(trustcenterdoc.FieldTrustCenterDocKindID))
 }
 
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
@@ -31041,14 +31041,14 @@ func (f *TrustCenterDocFilter) WhereStandardID(p entql.StringP) {
 	f.Where(p.Field(trustcenterdoc.FieldStandardID))
 }
 
-// WhereHasTrustCenterDocCategory applies a predicate to check if query has an edge trust_center_doc_category.
-func (f *TrustCenterDocFilter) WhereHasTrustCenterDocCategory() {
-	f.Where(entql.HasEdge("trust_center_doc_category"))
+// WhereHasTrustCenterDocKind applies a predicate to check if query has an edge trust_center_doc_kind.
+func (f *TrustCenterDocFilter) WhereHasTrustCenterDocKind() {
+	f.Where(entql.HasEdge("trust_center_doc_kind"))
 }
 
-// WhereHasTrustCenterDocCategoryWith applies a predicate to check if query has an edge trust_center_doc_category with a given conditions (other predicates).
-func (f *TrustCenterDocFilter) WhereHasTrustCenterDocCategoryWith(preds ...predicate.CustomTypeEnum) {
-	f.Where(entql.HasEdgeWith("trust_center_doc_category", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasTrustCenterDocKindWith applies a predicate to check if query has an edge trust_center_doc_kind with a given conditions (other predicates).
+func (f *TrustCenterDocFilter) WhereHasTrustCenterDocKindWith(preds ...predicate.CustomTypeEnum) {
+	f.Where(entql.HasEdgeWith("trust_center_doc_kind", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

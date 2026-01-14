@@ -403,6 +403,7 @@ type CustomTypeEnumBuilder struct {
 	Description string
 	Color       string
 	ObjectType  string
+	Field       string
 }
 
 // Faker structs with random injected data
@@ -2315,6 +2316,12 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 		tcdb.Tags = []string{"test", "document"}
 	}
 
+	(&CustomTypeEnumBuilder{
+		client:     tcdb.client,
+		Name:       tcdb.Category,
+		ObjectType: "trust_center_doc",
+	}).MustNew(userCtx, t)
+
 	// Create a test PDF file for upload
 	pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
 	requireNoError(t, err)
@@ -2328,10 +2335,10 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 	// Prepare the GraphQL input
 	input := testclient.CreateTrustCenterDocInput{
-		Title:         tcdb.Title,
-		Category:      tcdb.Category,
-		TrustCenterID: &tcdb.TrustCenterID,
-		Tags:          tcdb.Tags,
+		Title:                      tcdb.Title,
+		TrustCenterDocKindName: &tcdb.Category,
+		TrustCenterID:              &tcdb.TrustCenterID,
+		Tags:                       tcdb.Tags,
 	}
 
 	if tcdb.Visibility != "" {
@@ -2443,6 +2450,10 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	mutation := td.client.db.CustomTypeEnum.Create().
 		SetName(td.Name).
 		SetObjectType(td.ObjectType)
+
+	if td.Field != "" {
+		mutation.SetField(td.Field)
+	}
 
 	if td.Description != "" {
 		mutation.SetDescription(td.Description)

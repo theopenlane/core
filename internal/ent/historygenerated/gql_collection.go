@@ -9632,15 +9632,15 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldTags)
 				fieldSeen[trustcenterdochistory.FieldTags] = struct{}{}
 			}
-		case "trustCenterDocCategoryName":
-			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterDocCategoryName]; !ok {
-				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterDocCategoryName)
-				fieldSeen[trustcenterdochistory.FieldTrustCenterDocCategoryName] = struct{}{}
+		case "trustCenterDocKindName":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindName]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterDocKindName)
+				fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindName] = struct{}{}
 			}
-		case "trustCenterDocCategoryID":
-			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterDocCategoryID]; !ok {
-				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterDocCategoryID)
-				fieldSeen[trustcenterdochistory.FieldTrustCenterDocCategoryID] = struct{}{}
+		case "trustCenterDocKindID":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterDocKindID)
+				fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindID] = struct{}{}
 			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterID]; !ok {

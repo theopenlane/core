@@ -26,17 +26,17 @@ import (
 // TrustCenterDocQuery is the builder for querying TrustCenterDoc entities.
 type TrustCenterDocQuery struct {
 	config
-	ctx                        *QueryContext
-	order                      []trustcenterdoc.OrderOption
-	inters                     []Interceptor
-	predicates                 []predicate.TrustCenterDoc
-	withTrustCenterDocCategory *CustomTypeEnumQuery
-	withTrustCenter            *TrustCenterQuery
-	withStandard               *StandardQuery
-	withFile                   *FileQuery
-	withOriginalFile           *FileQuery
-	loadTotal                  []func(context.Context, []*TrustCenterDoc) error
-	modifiers                  []func(*sql.Selector)
+	ctx                    *QueryContext
+	order                  []trustcenterdoc.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.TrustCenterDoc
+	withTrustCenterDocKind *CustomTypeEnumQuery
+	withTrustCenter        *TrustCenterQuery
+	withStandard           *StandardQuery
+	withFile               *FileQuery
+	withOriginalFile       *FileQuery
+	loadTotal              []func(context.Context, []*TrustCenterDoc) error
+	modifiers              []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -73,8 +73,8 @@ func (_q *TrustCenterDocQuery) Order(o ...trustcenterdoc.OrderOption) *TrustCent
 	return _q
 }
 
-// QueryTrustCenterDocCategory chains the current query on the "trust_center_doc_category" edge.
-func (_q *TrustCenterDocQuery) QueryTrustCenterDocCategory() *CustomTypeEnumQuery {
+// QueryTrustCenterDocKind chains the current query on the "trust_center_doc_kind" edge.
+func (_q *TrustCenterDocQuery) QueryTrustCenterDocKind() *CustomTypeEnumQuery {
 	query := (&CustomTypeEnumClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -87,7 +87,7 @@ func (_q *TrustCenterDocQuery) QueryTrustCenterDocCategory() *CustomTypeEnumQuer
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.TrustCenterDocCategoryTable, trustcenterdoc.TrustCenterDocCategoryColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.TrustCenterDocKindTable, trustcenterdoc.TrustCenterDocKindColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CustomTypeEnum
@@ -385,16 +385,16 @@ func (_q *TrustCenterDocQuery) Clone() *TrustCenterDocQuery {
 		return nil
 	}
 	return &TrustCenterDocQuery{
-		config:                     _q.config,
-		ctx:                        _q.ctx.Clone(),
-		order:                      append([]trustcenterdoc.OrderOption{}, _q.order...),
-		inters:                     append([]Interceptor{}, _q.inters...),
-		predicates:                 append([]predicate.TrustCenterDoc{}, _q.predicates...),
-		withTrustCenterDocCategory: _q.withTrustCenterDocCategory.Clone(),
-		withTrustCenter:            _q.withTrustCenter.Clone(),
-		withStandard:               _q.withStandard.Clone(),
-		withFile:                   _q.withFile.Clone(),
-		withOriginalFile:           _q.withOriginalFile.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]trustcenterdoc.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.TrustCenterDoc{}, _q.predicates...),
+		withTrustCenterDocKind: _q.withTrustCenterDocKind.Clone(),
+		withTrustCenter:        _q.withTrustCenter.Clone(),
+		withStandard:           _q.withStandard.Clone(),
+		withFile:               _q.withFile.Clone(),
+		withOriginalFile:       _q.withOriginalFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -402,14 +402,14 @@ func (_q *TrustCenterDocQuery) Clone() *TrustCenterDocQuery {
 	}
 }
 
-// WithTrustCenterDocCategory tells the query-builder to eager-load the nodes that are connected to
-// the "trust_center_doc_category" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustCenterDocQuery) WithTrustCenterDocCategory(opts ...func(*CustomTypeEnumQuery)) *TrustCenterDocQuery {
+// WithTrustCenterDocKind tells the query-builder to eager-load the nodes that are connected to
+// the "trust_center_doc_kind" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterDocQuery) WithTrustCenterDocKind(opts ...func(*CustomTypeEnumQuery)) *TrustCenterDocQuery {
 	query := (&CustomTypeEnumClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withTrustCenterDocCategory = query
+	_q.withTrustCenterDocKind = query
 	return _q
 }
 
@@ -542,7 +542,7 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*TrustCenterDoc{}
 		_spec       = _q.querySpec()
 		loadedTypes = [5]bool{
-			_q.withTrustCenterDocCategory != nil,
+			_q.withTrustCenterDocKind != nil,
 			_q.withTrustCenter != nil,
 			_q.withStandard != nil,
 			_q.withFile != nil,
@@ -572,9 +572,9 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
-	if query := _q.withTrustCenterDocCategory; query != nil {
-		if err := _q.loadTrustCenterDocCategory(ctx, query, nodes, nil,
-			func(n *TrustCenterDoc, e *CustomTypeEnum) { n.Edges.TrustCenterDocCategory = e }); err != nil {
+	if query := _q.withTrustCenterDocKind; query != nil {
+		if err := _q.loadTrustCenterDocKind(ctx, query, nodes, nil,
+			func(n *TrustCenterDoc, e *CustomTypeEnum) { n.Edges.TrustCenterDocKind = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -610,11 +610,11 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
-func (_q *TrustCenterDocQuery) loadTrustCenterDocCategory(ctx context.Context, query *CustomTypeEnumQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *CustomTypeEnum)) error {
+func (_q *TrustCenterDocQuery) loadTrustCenterDocKind(ctx context.Context, query *CustomTypeEnumQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *CustomTypeEnum)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TrustCenterDoc)
 	for i := range nodes {
-		fk := nodes[i].TrustCenterDocCategoryID
+		fk := nodes[i].TrustCenterDocKindID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -631,7 +631,7 @@ func (_q *TrustCenterDocQuery) loadTrustCenterDocCategory(ctx context.Context, q
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "trust_center_doc_category_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "trust_center_doc_kind_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -792,8 +792,8 @@ func (_q *TrustCenterDocQuery) querySpec() *sqlgraph.QuerySpec {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
 		}
-		if _q.withTrustCenterDocCategory != nil {
-			_spec.Node.AddColumnOnce(trustcenterdoc.FieldTrustCenterDocCategoryID)
+		if _q.withTrustCenterDocKind != nil {
+			_spec.Node.AddColumnOnce(trustcenterdoc.FieldTrustCenterDocKindID)
 		}
 		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcenterdoc.FieldTrustCenterID)

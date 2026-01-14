@@ -9,7 +9,7 @@ mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!, $trustCenterDo
       tags
       trustCenterID
       title
-      trustCenterDocCategoryName
+      trustCenterDocKindName
       fileID
       visibility
       standardID
@@ -59,7 +59,7 @@ query GetAllTrustCenterDocs {
         tags
         trustCenterID
         title
-        trustCenterDocCategoryName
+        trustCenterDocKindName
         fileID
         visibility
         file {
@@ -88,7 +88,7 @@ query GetTrustCenterDocByID($trustCenterDocId: ID!) {
     tags
     trustCenterID
     title
-    trustCenterDocCategoryName
+    trustCenterDocKindName
     fileID
     visibility
     standardID
@@ -131,7 +131,7 @@ query GetTrustCenterDocs($first: Int, $last: Int, $where: TrustCenterDocWhereInp
         tags
         trustCenterID
         title
-        trustCenterDocCategoryName
+        trustCenterDocKindName
         fileID
         visibility
         file {
@@ -161,7 +161,7 @@ mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustC
       tags
       trustCenterID
       title
-      trustCenterDocCategoryName
+      trustCenterDocKindName
       fileID
       visibility
       standardID

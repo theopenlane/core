@@ -115,30 +115,30 @@ func (_c *TrustCenterDocCreate) SetTags(v []string) *TrustCenterDocCreate {
 	return _c
 }
 
-// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
-func (_c *TrustCenterDocCreate) SetTrustCenterDocCategoryName(v string) *TrustCenterDocCreate {
-	_c.mutation.SetTrustCenterDocCategoryName(v)
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_c *TrustCenterDocCreate) SetTrustCenterDocKindName(v string) *TrustCenterDocCreate {
+	_c.mutation.SetTrustCenterDocKindName(v)
 	return _c
 }
 
-// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
-func (_c *TrustCenterDocCreate) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocCreate {
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_c *TrustCenterDocCreate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocCreate {
 	if v != nil {
-		_c.SetTrustCenterDocCategoryName(*v)
+		_c.SetTrustCenterDocKindName(*v)
 	}
 	return _c
 }
 
-// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
-func (_c *TrustCenterDocCreate) SetTrustCenterDocCategoryID(v string) *TrustCenterDocCreate {
-	_c.mutation.SetTrustCenterDocCategoryID(v)
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_c *TrustCenterDocCreate) SetTrustCenterDocKindID(v string) *TrustCenterDocCreate {
+	_c.mutation.SetTrustCenterDocKindID(v)
 	return _c
 }
 
-// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
-func (_c *TrustCenterDocCreate) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocCreate {
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_c *TrustCenterDocCreate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocCreate {
 	if v != nil {
-		_c.SetTrustCenterDocCategoryID(*v)
+		_c.SetTrustCenterDocKindID(*v)
 	}
 	return _c
 }
@@ -261,9 +261,9 @@ func (_c *TrustCenterDocCreate) SetNillableID(v *string) *TrustCenterDocCreate {
 	return _c
 }
 
-// SetTrustCenterDocCategory sets the "trust_center_doc_category" edge to the CustomTypeEnum entity.
-func (_c *TrustCenterDocCreate) SetTrustCenterDocCategory(v *CustomTypeEnum) *TrustCenterDocCreate {
-	return _c.SetTrustCenterDocCategoryID(v.ID)
+// SetTrustCenterDocKind sets the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_c *TrustCenterDocCreate) SetTrustCenterDocKind(v *CustomTypeEnum) *TrustCenterDocCreate {
+	return _c.SetTrustCenterDocKindID(v.ID)
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
@@ -453,9 +453,9 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 		_spec.SetField(trustcenterdoc.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := _c.mutation.TrustCenterDocCategoryName(); ok {
-		_spec.SetField(trustcenterdoc.FieldTrustCenterDocCategoryName, field.TypeString, value)
-		_node.TrustCenterDocCategoryName = value
+	if value, ok := _c.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString, value)
+		_node.TrustCenterDocKindName = value
 	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
@@ -473,12 +473,12 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 		_spec.SetField(trustcenterdoc.FieldVisibility, field.TypeEnum, value)
 		_node.Visibility = value
 	}
-	if nodes := _c.mutation.TrustCenterDocCategoryIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterDocKindIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   trustcenterdoc.TrustCenterDocCategoryTable,
-			Columns: []string{trustcenterdoc.TrustCenterDocCategoryColumn},
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
@@ -488,7 +488,7 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.TrustCenterDocCategoryID = nodes[0]
+		_node.TrustCenterDocKindID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {

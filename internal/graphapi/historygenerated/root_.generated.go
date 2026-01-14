@@ -1933,25 +1933,25 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDocHistory struct {
-		CreatedAt                  func(childComplexity int) int
-		CreatedBy                  func(childComplexity int) int
-		FileID                     func(childComplexity int) int
-		HistoryTime                func(childComplexity int) int
-		ID                         func(childComplexity int) int
-		Operation                  func(childComplexity int) int
-		OriginalFileID             func(childComplexity int) int
-		Ref                        func(childComplexity int) int
-		StandardID                 func(childComplexity int) int
-		Tags                       func(childComplexity int) int
-		Title                      func(childComplexity int) int
-		TrustCenterDocCategoryID   func(childComplexity int) int
-		TrustCenterDocCategoryName func(childComplexity int) int
-		TrustCenterID              func(childComplexity int) int
-		UpdatedAt                  func(childComplexity int) int
-		UpdatedBy                  func(childComplexity int) int
-		Visibility                 func(childComplexity int) int
-		WatermarkStatus            func(childComplexity int) int
-		WatermarkingEnabled        func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		FileID                 func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OriginalFileID         func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		StandardID             func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		TrustCenterDocKindID   func(childComplexity int) int
+		TrustCenterDocKindName func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Visibility             func(childComplexity int) int
+		WatermarkStatus        func(childComplexity int) int
+		WatermarkingEnabled    func(childComplexity int) int
 	}
 
 	TrustCenterDocHistoryConnection struct {
@@ -12898,19 +12898,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDocHistory.Title(childComplexity), true
 
-	case "TrustCenterDocHistory.trustCenterDocCategoryID":
-		if e.complexity.TrustCenterDocHistory.TrustCenterDocCategoryID == nil {
+	case "TrustCenterDocHistory.trustCenterDocKindID":
+		if e.complexity.TrustCenterDocHistory.TrustCenterDocKindID == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.TrustCenterDocCategoryID(childComplexity), true
+		return e.complexity.TrustCenterDocHistory.TrustCenterDocKindID(childComplexity), true
 
-	case "TrustCenterDocHistory.trustCenterDocCategoryName":
-		if e.complexity.TrustCenterDocHistory.TrustCenterDocCategoryName == nil {
+	case "TrustCenterDocHistory.trustCenterDocKindName":
+		if e.complexity.TrustCenterDocHistory.TrustCenterDocKindName == nil {
 			break
 		}
 
-		return e.complexity.TrustCenterDocHistory.TrustCenterDocCategoryName(childComplexity), true
+		return e.complexity.TrustCenterDocHistory.TrustCenterDocKindName(childComplexity), true
 
 	case "TrustCenterDocHistory.trustCenterID":
 		if e.complexity.TrustCenterDocHistory.TrustCenterID == nil {
@@ -39362,13 +39362,13 @@ type TrustCenterDocHistory implements Node {
   """
   tags: [String!]
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryName: String
+  trustCenterDocKindName: String
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryID: String
+  trustCenterDocKindID: String
   """
   ID of the trust center
   """
@@ -39599,41 +39599,41 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  trust_center_doc_category_name field predicates
+  trust_center_doc_kind_name field predicates
   """
-  trustCenterDocCategoryName: String
-  trustCenterDocCategoryNameNEQ: String
-  trustCenterDocCategoryNameIn: [String!]
-  trustCenterDocCategoryNameNotIn: [String!]
-  trustCenterDocCategoryNameGT: String
-  trustCenterDocCategoryNameGTE: String
-  trustCenterDocCategoryNameLT: String
-  trustCenterDocCategoryNameLTE: String
-  trustCenterDocCategoryNameContains: String
-  trustCenterDocCategoryNameHasPrefix: String
-  trustCenterDocCategoryNameHasSuffix: String
-  trustCenterDocCategoryNameIsNil: Boolean
-  trustCenterDocCategoryNameNotNil: Boolean
-  trustCenterDocCategoryNameEqualFold: String
-  trustCenterDocCategoryNameContainsFold: String
+  trustCenterDocKindName: String
+  trustCenterDocKindNameNEQ: String
+  trustCenterDocKindNameIn: [String!]
+  trustCenterDocKindNameNotIn: [String!]
+  trustCenterDocKindNameGT: String
+  trustCenterDocKindNameGTE: String
+  trustCenterDocKindNameLT: String
+  trustCenterDocKindNameLTE: String
+  trustCenterDocKindNameContains: String
+  trustCenterDocKindNameHasPrefix: String
+  trustCenterDocKindNameHasSuffix: String
+  trustCenterDocKindNameIsNil: Boolean
+  trustCenterDocKindNameNotNil: Boolean
+  trustCenterDocKindNameEqualFold: String
+  trustCenterDocKindNameContainsFold: String
   """
-  trust_center_doc_category_id field predicates
+  trust_center_doc_kind_id field predicates
   """
-  trustCenterDocCategoryID: String
-  trustCenterDocCategoryIDNEQ: String
-  trustCenterDocCategoryIDIn: [String!]
-  trustCenterDocCategoryIDNotIn: [String!]
-  trustCenterDocCategoryIDGT: String
-  trustCenterDocCategoryIDGTE: String
-  trustCenterDocCategoryIDLT: String
-  trustCenterDocCategoryIDLTE: String
-  trustCenterDocCategoryIDContains: String
-  trustCenterDocCategoryIDHasPrefix: String
-  trustCenterDocCategoryIDHasSuffix: String
-  trustCenterDocCategoryIDIsNil: Boolean
-  trustCenterDocCategoryIDNotNil: Boolean
-  trustCenterDocCategoryIDEqualFold: String
-  trustCenterDocCategoryIDContainsFold: String
+  trustCenterDocKindID: String
+  trustCenterDocKindIDNEQ: String
+  trustCenterDocKindIDIn: [String!]
+  trustCenterDocKindIDNotIn: [String!]
+  trustCenterDocKindIDGT: String
+  trustCenterDocKindIDGTE: String
+  trustCenterDocKindIDLT: String
+  trustCenterDocKindIDLTE: String
+  trustCenterDocKindIDContains: String
+  trustCenterDocKindIDHasPrefix: String
+  trustCenterDocKindIDHasSuffix: String
+  trustCenterDocKindIDIsNil: Boolean
+  trustCenterDocKindIDNotNil: Boolean
+  trustCenterDocKindIDEqualFold: String
+  trustCenterDocKindIDContainsFold: String
   """
   trust_center_id field predicates
   """

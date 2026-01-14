@@ -148,30 +148,30 @@ func (_c *TrustCenterDocHistoryCreate) SetTags(v []string) *TrustCenterDocHistor
 	return _c
 }
 
-// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
-func (_c *TrustCenterDocHistoryCreate) SetTrustCenterDocCategoryName(v string) *TrustCenterDocHistoryCreate {
-	_c.mutation.SetTrustCenterDocCategoryName(v)
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_c *TrustCenterDocHistoryCreate) SetTrustCenterDocKindName(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetTrustCenterDocKindName(v)
 	return _c
 }
 
-// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
-func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocHistoryCreate {
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocHistoryCreate {
 	if v != nil {
-		_c.SetTrustCenterDocCategoryName(*v)
+		_c.SetTrustCenterDocKindName(*v)
 	}
 	return _c
 }
 
-// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
-func (_c *TrustCenterDocHistoryCreate) SetTrustCenterDocCategoryID(v string) *TrustCenterDocHistoryCreate {
-	_c.mutation.SetTrustCenterDocCategoryID(v)
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetTrustCenterDocKindID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetTrustCenterDocKindID(v)
 	return _c
 }
 
-// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
-func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocHistoryCreate {
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocHistoryCreate {
 	if v != nil {
-		_c.SetTrustCenterDocCategoryID(*v)
+		_c.SetTrustCenterDocKindID(*v)
 	}
 	return _c
 }
@@ -476,13 +476,13 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 		_spec.SetField(trustcenterdochistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
-	if value, ok := _c.mutation.TrustCenterDocCategoryName(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryName, field.TypeString, value)
-		_node.TrustCenterDocCategoryName = value
+	if value, ok := _c.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString, value)
+		_node.TrustCenterDocKindName = value
 	}
-	if value, ok := _c.mutation.TrustCenterDocCategoryID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryID, field.TypeString, value)
-		_node.TrustCenterDocCategoryID = value
+	if value, ok := _c.mutation.TrustCenterDocKindID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString, value)
+		_node.TrustCenterDocKindID = value
 	}
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)

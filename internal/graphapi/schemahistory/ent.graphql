@@ -23476,13 +23476,13 @@ type TrustCenterDocHistory implements Node {
   """
   tags: [String!]
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryName: String
+  trustCenterDocKindName: String
   """
-  the category of the trust_center_doc
+  the kind of the trust_center_doc
   """
-  trustCenterDocCategoryID: String
+  trustCenterDocKindID: String
   """
   ID of the trust center
   """
@@ -23713,41 +23713,41 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
-  trust_center_doc_category_name field predicates
+  trust_center_doc_kind_name field predicates
   """
-  trustCenterDocCategoryName: String
-  trustCenterDocCategoryNameNEQ: String
-  trustCenterDocCategoryNameIn: [String!]
-  trustCenterDocCategoryNameNotIn: [String!]
-  trustCenterDocCategoryNameGT: String
-  trustCenterDocCategoryNameGTE: String
-  trustCenterDocCategoryNameLT: String
-  trustCenterDocCategoryNameLTE: String
-  trustCenterDocCategoryNameContains: String
-  trustCenterDocCategoryNameHasPrefix: String
-  trustCenterDocCategoryNameHasSuffix: String
-  trustCenterDocCategoryNameIsNil: Boolean
-  trustCenterDocCategoryNameNotNil: Boolean
-  trustCenterDocCategoryNameEqualFold: String
-  trustCenterDocCategoryNameContainsFold: String
+  trustCenterDocKindName: String
+  trustCenterDocKindNameNEQ: String
+  trustCenterDocKindNameIn: [String!]
+  trustCenterDocKindNameNotIn: [String!]
+  trustCenterDocKindNameGT: String
+  trustCenterDocKindNameGTE: String
+  trustCenterDocKindNameLT: String
+  trustCenterDocKindNameLTE: String
+  trustCenterDocKindNameContains: String
+  trustCenterDocKindNameHasPrefix: String
+  trustCenterDocKindNameHasSuffix: String
+  trustCenterDocKindNameIsNil: Boolean
+  trustCenterDocKindNameNotNil: Boolean
+  trustCenterDocKindNameEqualFold: String
+  trustCenterDocKindNameContainsFold: String
   """
-  trust_center_doc_category_id field predicates
+  trust_center_doc_kind_id field predicates
   """
-  trustCenterDocCategoryID: String
-  trustCenterDocCategoryIDNEQ: String
-  trustCenterDocCategoryIDIn: [String!]
-  trustCenterDocCategoryIDNotIn: [String!]
-  trustCenterDocCategoryIDGT: String
-  trustCenterDocCategoryIDGTE: String
-  trustCenterDocCategoryIDLT: String
-  trustCenterDocCategoryIDLTE: String
-  trustCenterDocCategoryIDContains: String
-  trustCenterDocCategoryIDHasPrefix: String
-  trustCenterDocCategoryIDHasSuffix: String
-  trustCenterDocCategoryIDIsNil: Boolean
-  trustCenterDocCategoryIDNotNil: Boolean
-  trustCenterDocCategoryIDEqualFold: String
-  trustCenterDocCategoryIDContainsFold: String
+  trustCenterDocKindID: String
+  trustCenterDocKindIDNEQ: String
+  trustCenterDocKindIDIn: [String!]
+  trustCenterDocKindIDNotIn: [String!]
+  trustCenterDocKindIDGT: String
+  trustCenterDocKindIDGTE: String
+  trustCenterDocKindIDLT: String
+  trustCenterDocKindIDLTE: String
+  trustCenterDocKindIDContains: String
+  trustCenterDocKindIDHasPrefix: String
+  trustCenterDocKindIDHasSuffix: String
+  trustCenterDocKindIDIsNil: Boolean
+  trustCenterDocKindIDNotNil: Boolean
+  trustCenterDocKindIDEqualFold: String
+  trustCenterDocKindIDContainsFold: String
   """
   trust_center_id field predicates
   """

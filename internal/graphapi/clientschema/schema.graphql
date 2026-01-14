@@ -10244,9 +10244,9 @@ input CreateTrustCenterDocInput {
 	"""
 	tags: [String!]
 	"""
-	the category of the trust_center_doc
+	the kind of the trust_center_doc
 	"""
-	trustCenterDocCategoryName: String
+	trustCenterDocKindName: String
 	"""
 	title of the document
 	"""
@@ -10263,7 +10263,7 @@ input CreateTrustCenterDocInput {
 	visibility of the document
 	"""
 	visibility: TrustCenterDocTrustCenterDocumentVisibility
-	trustCenterDocCategoryID: ID
+	trustCenterDocKindID: ID
 	trustCenterID: ID
 	standardID: ID
 	fileID: ID
@@ -56730,13 +56730,13 @@ type TrustCenterDoc implements Node {
 	"""
 	tags: [String!]
 	"""
-	the category of the trust_center_doc
+	the kind of the trust_center_doc
 	"""
-	trustCenterDocCategoryName: String
+	trustCenterDocKindName: String
 	"""
-	the category of the trust_center_doc
+	the kind of the trust_center_doc
 	"""
-	trustCenterDocCategoryID: ID
+	trustCenterDocKindID: ID
 	"""
 	ID of the trust center
 	"""
@@ -56769,7 +56769,7 @@ type TrustCenterDoc implements Node {
 	ID of the standard
 	"""
 	standardID: ID
-	trustCenterDocCategory: CustomTypeEnum
+	trustCenterDocKind: CustomTypeEnum
 	trustCenter: TrustCenter
 	standard: Standard
 	"""
@@ -56991,41 +56991,41 @@ input TrustCenterDocWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
-	trust_center_doc_category_name field predicates
+	trust_center_doc_kind_name field predicates
 	"""
-	trustCenterDocCategoryName: String
-	trustCenterDocCategoryNameNEQ: String
-	trustCenterDocCategoryNameIn: [String!]
-	trustCenterDocCategoryNameNotIn: [String!]
-	trustCenterDocCategoryNameGT: String
-	trustCenterDocCategoryNameGTE: String
-	trustCenterDocCategoryNameLT: String
-	trustCenterDocCategoryNameLTE: String
-	trustCenterDocCategoryNameContains: String
-	trustCenterDocCategoryNameHasPrefix: String
-	trustCenterDocCategoryNameHasSuffix: String
-	trustCenterDocCategoryNameIsNil: Boolean
-	trustCenterDocCategoryNameNotNil: Boolean
-	trustCenterDocCategoryNameEqualFold: String
-	trustCenterDocCategoryNameContainsFold: String
+	trustCenterDocKindName: String
+	trustCenterDocKindNameNEQ: String
+	trustCenterDocKindNameIn: [String!]
+	trustCenterDocKindNameNotIn: [String!]
+	trustCenterDocKindNameGT: String
+	trustCenterDocKindNameGTE: String
+	trustCenterDocKindNameLT: String
+	trustCenterDocKindNameLTE: String
+	trustCenterDocKindNameContains: String
+	trustCenterDocKindNameHasPrefix: String
+	trustCenterDocKindNameHasSuffix: String
+	trustCenterDocKindNameIsNil: Boolean
+	trustCenterDocKindNameNotNil: Boolean
+	trustCenterDocKindNameEqualFold: String
+	trustCenterDocKindNameContainsFold: String
 	"""
-	trust_center_doc_category_id field predicates
+	trust_center_doc_kind_id field predicates
 	"""
-	trustCenterDocCategoryID: ID
-	trustCenterDocCategoryIDNEQ: ID
-	trustCenterDocCategoryIDIn: [ID!]
-	trustCenterDocCategoryIDNotIn: [ID!]
-	trustCenterDocCategoryIDGT: ID
-	trustCenterDocCategoryIDGTE: ID
-	trustCenterDocCategoryIDLT: ID
-	trustCenterDocCategoryIDLTE: ID
-	trustCenterDocCategoryIDContains: ID
-	trustCenterDocCategoryIDHasPrefix: ID
-	trustCenterDocCategoryIDHasSuffix: ID
-	trustCenterDocCategoryIDIsNil: Boolean
-	trustCenterDocCategoryIDNotNil: Boolean
-	trustCenterDocCategoryIDEqualFold: ID
-	trustCenterDocCategoryIDContainsFold: ID
+	trustCenterDocKindID: ID
+	trustCenterDocKindIDNEQ: ID
+	trustCenterDocKindIDIn: [ID!]
+	trustCenterDocKindIDNotIn: [ID!]
+	trustCenterDocKindIDGT: ID
+	trustCenterDocKindIDGTE: ID
+	trustCenterDocKindIDLT: ID
+	trustCenterDocKindIDLTE: ID
+	trustCenterDocKindIDContains: ID
+	trustCenterDocKindIDHasPrefix: ID
+	trustCenterDocKindIDHasSuffix: ID
+	trustCenterDocKindIDIsNil: Boolean
+	trustCenterDocKindIDNotNil: Boolean
+	trustCenterDocKindIDEqualFold: ID
+	trustCenterDocKindIDContainsFold: ID
 	"""
 	trust_center_id field predicates
 	"""
@@ -57140,10 +57140,10 @@ input TrustCenterDocWhereInput {
 	standardIDEqualFold: ID
 	standardIDContainsFold: ID
 	"""
-	trust_center_doc_category edge predicates
+	trust_center_doc_kind edge predicates
 	"""
-	hasTrustCenterDocCategory: Boolean
-	hasTrustCenterDocCategoryWith: [CustomTypeEnumWhereInput!]
+	hasTrustCenterDocKind: Boolean
+	hasTrustCenterDocKindWith: [CustomTypeEnumWhereInput!]
 	"""
 	trust_center edge predicates
 	"""
@@ -63838,10 +63838,10 @@ input UpdateTrustCenterDocInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the category of the trust_center_doc
+	the kind of the trust_center_doc
 	"""
-	trustCenterDocCategoryName: String
-	clearTrustCenterDocCategoryName: Boolean
+	trustCenterDocKindName: String
+	clearTrustCenterDocKindName: Boolean
 	"""
 	title of the document
 	"""
@@ -63861,8 +63861,8 @@ input UpdateTrustCenterDocInput {
 	"""
 	visibility: TrustCenterDocTrustCenterDocumentVisibility
 	clearVisibility: Boolean
-	trustCenterDocCategoryID: ID
-	clearTrustCenterDocCategory: Boolean
+	trustCenterDocKindID: ID
+	clearTrustCenterDocKind: Boolean
 	trustCenterID: ID
 	clearTrustCenter: Boolean
 	standardID: ID

@@ -10848,10 +10848,10 @@ func (_m *TrustCenterCompliance) Standard(ctx context.Context) (*Standard, error
 	return result, err
 }
 
-func (_m *TrustCenterDoc) TrustCenterDocCategory(ctx context.Context) (*CustomTypeEnum, error) {
-	result, err := _m.Edges.TrustCenterDocCategoryOrErr()
+func (_m *TrustCenterDoc) TrustCenterDocKind(ctx context.Context) (*CustomTypeEnum, error) {
+	result, err := _m.Edges.TrustCenterDocKindOrErr()
 	if IsNotLoaded(err) {
-		result, err = _m.QueryTrustCenterDocCategory().Only(ctx)
+		result, err = _m.QueryTrustCenterDocKind().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

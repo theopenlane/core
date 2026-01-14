@@ -32,10 +32,10 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
-	// FieldTrustCenterDocCategoryName holds the string denoting the trust_center_doc_category_name field in the database.
-	FieldTrustCenterDocCategoryName = "trust_center_doc_category_name"
-	// FieldTrustCenterDocCategoryID holds the string denoting the trust_center_doc_category_id field in the database.
-	FieldTrustCenterDocCategoryID = "trust_center_doc_category_id"
+	// FieldTrustCenterDocKindName holds the string denoting the trust_center_doc_kind_name field in the database.
+	FieldTrustCenterDocKindName = "trust_center_doc_kind_name"
+	// FieldTrustCenterDocKindID holds the string denoting the trust_center_doc_kind_id field in the database.
+	FieldTrustCenterDocKindID = "trust_center_doc_kind_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldTitle holds the string denoting the title field in the database.
@@ -52,8 +52,8 @@ const (
 	FieldVisibility = "visibility"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
 	FieldStandardID = "standard_id"
-	// EdgeTrustCenterDocCategory holds the string denoting the trust_center_doc_category edge name in mutations.
-	EdgeTrustCenterDocCategory = "trust_center_doc_category"
+	// EdgeTrustCenterDocKind holds the string denoting the trust_center_doc_kind edge name in mutations.
+	EdgeTrustCenterDocKind = "trust_center_doc_kind"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
@@ -64,13 +64,13 @@ const (
 	EdgeOriginalFile = "original_file"
 	// Table holds the table name of the trustcenterdoc in the database.
 	Table = "trust_center_docs"
-	// TrustCenterDocCategoryTable is the table that holds the trust_center_doc_category relation/edge.
-	TrustCenterDocCategoryTable = "trust_center_docs"
-	// TrustCenterDocCategoryInverseTable is the table name for the CustomTypeEnum entity.
+	// TrustCenterDocKindTable is the table that holds the trust_center_doc_kind relation/edge.
+	TrustCenterDocKindTable = "trust_center_docs"
+	// TrustCenterDocKindInverseTable is the table name for the CustomTypeEnum entity.
 	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
-	TrustCenterDocCategoryInverseTable = "custom_type_enums"
-	// TrustCenterDocCategoryColumn is the table column denoting the trust_center_doc_category relation/edge.
-	TrustCenterDocCategoryColumn = "trust_center_doc_category_id"
+	TrustCenterDocKindInverseTable = "custom_type_enums"
+	// TrustCenterDocKindColumn is the table column denoting the trust_center_doc_kind relation/edge.
+	TrustCenterDocKindColumn = "trust_center_doc_kind_id"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
 	TrustCenterTable = "trust_center_docs"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
@@ -111,8 +111,8 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
-	FieldTrustCenterDocCategoryName,
-	FieldTrustCenterDocCategoryID,
+	FieldTrustCenterDocKindName,
+	FieldTrustCenterDocKindID,
 	FieldTrustCenterID,
 	FieldTitle,
 	FieldFileID,
@@ -222,14 +222,14 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
-// ByTrustCenterDocCategoryName orders the results by the trust_center_doc_category_name field.
-func ByTrustCenterDocCategoryName(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTrustCenterDocCategoryName, opts...).ToFunc()
+// ByTrustCenterDocKindName orders the results by the trust_center_doc_kind_name field.
+func ByTrustCenterDocKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterDocKindName, opts...).ToFunc()
 }
 
-// ByTrustCenterDocCategoryID orders the results by the trust_center_doc_category_id field.
-func ByTrustCenterDocCategoryID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldTrustCenterDocCategoryID, opts...).ToFunc()
+// ByTrustCenterDocKindID orders the results by the trust_center_doc_kind_id field.
+func ByTrustCenterDocKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterDocKindID, opts...).ToFunc()
 }
 
 // ByTrustCenterID orders the results by the trust_center_id field.
@@ -272,10 +272,10 @@ func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
 }
 
-// ByTrustCenterDocCategoryField orders the results by trust_center_doc_category field.
-func ByTrustCenterDocCategoryField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByTrustCenterDocKindField orders the results by trust_center_doc_kind field.
+func ByTrustCenterDocKindField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocCategoryStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocKindStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -306,11 +306,11 @@ func ByOriginalFileField(field string, opts ...sql.OrderTermOption) OrderOption 
 		sqlgraph.OrderByNeighborTerms(s, newOriginalFileStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newTrustCenterDocCategoryStep() *sqlgraph.Step {
+func newTrustCenterDocKindStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustCenterDocCategoryInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterDocCategoryTable, TrustCenterDocCategoryColumn),
+		sqlgraph.To(TrustCenterDocKindInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterDocKindTable, TrustCenterDocKindColumn),
 	)
 }
 func newTrustCenterStep() *sqlgraph.Step {

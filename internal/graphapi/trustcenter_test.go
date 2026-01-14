@@ -1388,6 +1388,12 @@ func TestTrustCenterDocStandards(t *testing.T) {
 	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	(&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "Policy",
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
+
 	createPDFUpload := func() *graphql.Upload {
 		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
 		assert.NilError(t, err)
@@ -1404,11 +1410,11 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 
 		input := testclient.CreateTrustCenterDocInput{
-			Title:         "Test Document with Standard",
-			Category:      "Policy",
-			TrustCenterID: &trustCenter.ID,
-			StandardID:    &standard1.ID,
-			Tags:          []string{"test", "standard"},
+			Title:                      "Test Document with Standard",
+			TrustCenterDocKindName: lo.ToPtr("Policy"),
+			TrustCenterID:              &trustCenter.ID,
+			StandardID:                 &standard1.ID,
+			Tags:                       []string{"test", "standard"},
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *fileUpload)
@@ -1440,10 +1446,10 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 
 		createInput := testclient.CreateTrustCenterDocInput{
-			Title:         "Test Document without Standard",
-			Category:      "Policy",
-			TrustCenterID: &trustCenter.ID,
-			Tags:          []string{"test"},
+			Title:                      "Test Document without Standard",
+			TrustCenterDocKindName: lo.ToPtr("Policy"),
+			TrustCenterID:              &trustCenter.ID,
+			Tags:                       []string{"test"},
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *fileUpload)
