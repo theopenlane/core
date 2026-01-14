@@ -205,14 +205,15 @@ func addExportNotification(ctx *soiree.EventContext, input *exportFields) error 
 	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
 
 	// verify the requestor is a valid user (not a service account)
-	userExists, err := client.User.Query().Where(user.ID(input.requestorID)).Exist(allowCtx)
+	// we only want to add notifications for exports coming from users not the api
+	userOk, err := client.User.Query().Where(user.ID(input.requestorID)).Exist(allowCtx)
 	if err != nil {
-		logx.FromContext(ctx.Context()).Warn().Err(err).Str("requestor_id", input.requestorID).Msg("failed to check if requestor is a user")
+		logx.FromContext(ctx.Context()).Warn().Err(err).Msg("failed to check if requestor is a user")
 		return nil
 	}
 
-	if !userExists {
-		logx.FromContext(ctx.Context()).Debug().Str("requestor_id", input.requestorID).Msg("requestor is not a user, skipping notification")
+	if !userOk {
+		logx.FromContext(ctx.Context()).Debug().Msg("export requestor is not a user, skipping notification")
 		return nil
 	}
 
@@ -225,10 +226,10 @@ func addExportNotification(ctx *soiree.EventContext, input *exportFields) error 
 
 	if input.status == enums.ExportStatusReady {
 		title = "Export Complete"
-		body = fmt.Sprintf("Export of %s is ready for download", input.exportType.String())
+		body = fmt.Sprintf("Export of %s is ready for download", input.exportType)
 	} else {
 		title = "Export Failed"
-		body = fmt.Sprintf("Export of %s completed with errors", input.exportType.String())
+		body = fmt.Sprintf("Export of %s completed with errors", input.exportType)
 
 		if input.errorMessage != "" {
 			dataMap["errors"] = input.errorMessage
