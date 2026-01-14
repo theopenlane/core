@@ -1214,6 +1214,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**year**|`integer`|||
 |**fromemail**|`string`|||
 |**supportemail**|`string`|||
+|**questionnaireemail**|`string`|||
 |**logourl**|`string`|||
 |[**urls**](#emailurls)|`object`|||
 |**templatespath**|`string`|||

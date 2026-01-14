@@ -4,9 +4,13 @@ import (
 	"context"
 	"fmt"
 	"slices"
+	"strings"
+	"time"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -164,6 +168,95 @@ func HookOrganizationUpdatePolicy() ent.Hook {
 			hook.HasOp(ent.OpUpdateOne|ent.OpUpdate),
 		),
 	)
+}
+
+// HookBillingEmailChange is triggered when the billing_email field is updated on an organization setting.
+func HookBillingEmailChange() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.OrganizationSettingFunc(func(ctx context.Context, m *generated.OrganizationSettingMutation) (ent.Value, error) {
+			oldEmail, err := m.OldBillingEmail(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get old billing email")
+				return nil, err
+			}
+
+			newEmail, _ := m.BillingEmail()
+
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// only send the email if the billing email actually changed
+			// or it is not the first time the billing email is being updated
+			if oldEmail == "" || strings.EqualFold(newEmail, oldEmail) {
+				return retVal, nil
+			}
+
+			orgID, err := getOrgIDFromSettingMutation(ctx, m, retVal)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization ID for billing email change notification")
+				return retVal, nil
+			}
+
+			org, err := m.Client().Organization.Query().
+				Where(organization.ID(orgID)).
+				Select(organization.FieldDisplayName).
+				Only(ctx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization for billing email change notification")
+				return retVal, nil
+			}
+
+			if err := sendBillingEmailChangeNotifications(ctx, m, org.DisplayName, oldEmail, newEmail); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to send billing email change notifications")
+			}
+
+			return retVal, nil
+		})
+	},
+		hook.And(
+			hook.HasFields("billing_email"),
+			hook.HasOp(ent.OpUpdateOne),
+		),
+	)
+}
+
+func sendBillingEmailChangeNotifications(ctx context.Context, m *generated.OrganizationSettingMutation, orgName, previousEmail, newEmail string) error {
+	if m.Job == nil {
+		logx.FromContext(ctx).Info().Msg("no job client, skipping billing email change notifications")
+		return nil
+	}
+
+	data := emailtemplates.BillingEmailChangedTemplateData{
+		OrganizationName: orgName,
+		OldEmail:         previousEmail,
+		NewEmail:         newEmail,
+		ChangedAt:        time.Now(),
+	}
+
+	for _, currentEmail := range []string{previousEmail, newEmail} {
+		if currentEmail == "" {
+			continue
+		}
+
+		email, err := m.Emailer.NewBillingEmailChangedEmail(emailtemplates.Recipient{
+			Email: currentEmail,
+		}, data)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to create billing email change notification")
+			continue
+		}
+
+		if _, err = m.Job.Insert(ctx, jobs.EmailArgs{
+			Message: *email,
+		}, nil); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to queue billing email change notification")
+			continue
+		}
+	}
+
+	return nil
 }
 
 // updateOrgConditionalTuples will update (or create) a conditional tuple for the organization

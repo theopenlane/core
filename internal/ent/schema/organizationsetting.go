@@ -185,6 +185,7 @@ func (OrganizationSetting) Hooks() []ent.Hook {
 		hooks.HookValidateIdentityProviderConfig(),
 		hooks.HookOrganizationCreatePolicy(),
 		hooks.HookOrganizationUpdatePolicy(),
+		hooks.HookBillingEmailChange(),
 	}
 }
 
