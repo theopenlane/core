@@ -71,6 +71,10 @@ func getOpName(ctx context.Context) string {
 		if opCtx.Operation.Operation == ast.Query {
 			return "unnamed_query"
 		}
+
+		if opCtx.Operation.Operation == ast.Subscription {
+			return "subscription"
+		}
 	}
 
 	logx.FromContext(ctx).Info().Str("raw_query", opCtx.RawQuery).Msg("graphql operation name is empty; metrics may be obscured")
