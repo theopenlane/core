@@ -108,6 +108,20 @@ func (_c *ExportCreate) SetNillableDeletedBy(v *string) *ExportCreate {
 	return _c
 }
 
+// SetRequestorID sets the "requestor_id" field.
+func (_c *ExportCreate) SetRequestorID(v string) *ExportCreate {
+	_c.mutation.SetRequestorID(v)
+	return _c
+}
+
+// SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
+func (_c *ExportCreate) SetNillableRequestorID(v *string) *ExportCreate {
+	if v != nil {
+		_c.SetRequestorID(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ExportCreate) SetOwnerID(v string) *ExportCreate {
 	_c.mutation.SetOwnerID(v)
@@ -152,20 +166,6 @@ func (_c *ExportCreate) SetStatus(v enums.ExportStatus) *ExportCreate {
 func (_c *ExportCreate) SetNillableStatus(v *enums.ExportStatus) *ExportCreate {
 	if v != nil {
 		_c.SetStatus(*v)
-	}
-	return _c
-}
-
-// SetRequestorID sets the "requestor_id" field.
-func (_c *ExportCreate) SetRequestorID(v string) *ExportCreate {
-	_c.mutation.SetRequestorID(v)
-	return _c
-}
-
-// SetNillableRequestorID sets the "requestor_id" field if the given value is not nil.
-func (_c *ExportCreate) SetNillableRequestorID(v *string) *ExportCreate {
-	if v != nil {
-		_c.SetRequestorID(*v)
 	}
 	return _c
 }
@@ -328,6 +328,11 @@ func (_c *ExportCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *ExportCreate) check() error {
+	if v, ok := _c.mutation.RequestorID(); ok {
+		if err := export.RequestorIDValidator(v); err != nil {
+			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Export.requestor_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.ExportType(); !ok {
 		return &ValidationError{Name: "export_type", err: errors.New(`generated: missing required field "Export.export_type"`)}
 	}
@@ -350,11 +355,6 @@ func (_c *ExportCreate) check() error {
 	if v, ok := _c.mutation.Status(); ok {
 		if err := export.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "Export.status": %w`, err)}
-		}
-	}
-	if v, ok := _c.mutation.RequestorID(); ok {
-		if err := export.RequestorIDValidator(v); err != nil {
-			return &ValidationError{Name: "requestor_id", err: fmt.Errorf(`generated: validator failed for field "Export.requestor_id": %w`, err)}
 		}
 	}
 	return nil
@@ -417,6 +417,10 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 		_spec.SetField(export.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.RequestorID(); ok {
+		_spec.SetField(export.FieldRequestorID, field.TypeString, value)
+		_node.RequestorID = value
+	}
 	if value, ok := _c.mutation.ExportType(); ok {
 		_spec.SetField(export.FieldExportType, field.TypeEnum, value)
 		_node.ExportType = value
@@ -428,10 +432,6 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(export.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
-	}
-	if value, ok := _c.mutation.RequestorID(); ok {
-		_spec.SetField(export.FieldRequestorID, field.TypeString, value)
-		_node.RequestorID = value
 	}
 	if value, ok := _c.mutation.GetFields(); ok {
 		_spec.SetField(export.FieldFields, field.TypeJSON, value)

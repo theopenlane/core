@@ -98,14 +98,14 @@ func DeletedBy(v string) predicate.Export {
 	return predicate.Export(sql.FieldEQ(FieldDeletedBy, v))
 }
 
-// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
-func OwnerID(v string) predicate.Export {
-	return predicate.Export(sql.FieldEQ(FieldOwnerID, v))
-}
-
 // RequestorID applies equality check predicate on the "requestor_id" field. It's identical to RequestorIDEQ.
 func RequestorID(v string) predicate.Export {
 	return predicate.Export(sql.FieldEQ(FieldRequestorID, v))
+}
+
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.Export {
+	return predicate.Export(sql.FieldEQ(FieldOwnerID, v))
 }
 
 // Filters applies equality check predicate on the "filters" field. It's identical to FiltersEQ.
@@ -493,6 +493,81 @@ func DeletedByContainsFold(v string) predicate.Export {
 	return predicate.Export(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
+// RequestorIDEQ applies the EQ predicate on the "requestor_id" field.
+func RequestorIDEQ(v string) predicate.Export {
+	return predicate.Export(sql.FieldEQ(FieldRequestorID, v))
+}
+
+// RequestorIDNEQ applies the NEQ predicate on the "requestor_id" field.
+func RequestorIDNEQ(v string) predicate.Export {
+	return predicate.Export(sql.FieldNEQ(FieldRequestorID, v))
+}
+
+// RequestorIDIn applies the In predicate on the "requestor_id" field.
+func RequestorIDIn(vs ...string) predicate.Export {
+	return predicate.Export(sql.FieldIn(FieldRequestorID, vs...))
+}
+
+// RequestorIDNotIn applies the NotIn predicate on the "requestor_id" field.
+func RequestorIDNotIn(vs ...string) predicate.Export {
+	return predicate.Export(sql.FieldNotIn(FieldRequestorID, vs...))
+}
+
+// RequestorIDGT applies the GT predicate on the "requestor_id" field.
+func RequestorIDGT(v string) predicate.Export {
+	return predicate.Export(sql.FieldGT(FieldRequestorID, v))
+}
+
+// RequestorIDGTE applies the GTE predicate on the "requestor_id" field.
+func RequestorIDGTE(v string) predicate.Export {
+	return predicate.Export(sql.FieldGTE(FieldRequestorID, v))
+}
+
+// RequestorIDLT applies the LT predicate on the "requestor_id" field.
+func RequestorIDLT(v string) predicate.Export {
+	return predicate.Export(sql.FieldLT(FieldRequestorID, v))
+}
+
+// RequestorIDLTE applies the LTE predicate on the "requestor_id" field.
+func RequestorIDLTE(v string) predicate.Export {
+	return predicate.Export(sql.FieldLTE(FieldRequestorID, v))
+}
+
+// RequestorIDContains applies the Contains predicate on the "requestor_id" field.
+func RequestorIDContains(v string) predicate.Export {
+	return predicate.Export(sql.FieldContains(FieldRequestorID, v))
+}
+
+// RequestorIDHasPrefix applies the HasPrefix predicate on the "requestor_id" field.
+func RequestorIDHasPrefix(v string) predicate.Export {
+	return predicate.Export(sql.FieldHasPrefix(FieldRequestorID, v))
+}
+
+// RequestorIDHasSuffix applies the HasSuffix predicate on the "requestor_id" field.
+func RequestorIDHasSuffix(v string) predicate.Export {
+	return predicate.Export(sql.FieldHasSuffix(FieldRequestorID, v))
+}
+
+// RequestorIDIsNil applies the IsNil predicate on the "requestor_id" field.
+func RequestorIDIsNil() predicate.Export {
+	return predicate.Export(sql.FieldIsNull(FieldRequestorID))
+}
+
+// RequestorIDNotNil applies the NotNil predicate on the "requestor_id" field.
+func RequestorIDNotNil() predicate.Export {
+	return predicate.Export(sql.FieldNotNull(FieldRequestorID))
+}
+
+// RequestorIDEqualFold applies the EqualFold predicate on the "requestor_id" field.
+func RequestorIDEqualFold(v string) predicate.Export {
+	return predicate.Export(sql.FieldEqualFold(FieldRequestorID, v))
+}
+
+// RequestorIDContainsFold applies the ContainsFold predicate on the "requestor_id" field.
+func RequestorIDContainsFold(v string) predicate.Export {
+	return predicate.Export(sql.FieldContainsFold(FieldRequestorID, v))
+}
+
 // OwnerIDEQ applies the EQ predicate on the "owner_id" field.
 func OwnerIDEQ(v string) predicate.Export {
 	return predicate.Export(sql.FieldEQ(FieldOwnerID, v))
@@ -656,81 +731,6 @@ func StatusNotIn(vs ...enums.ExportStatus) predicate.Export {
 		v[i] = vs[i]
 	}
 	return predicate.Export(sql.FieldNotIn(FieldStatus, v...))
-}
-
-// RequestorIDEQ applies the EQ predicate on the "requestor_id" field.
-func RequestorIDEQ(v string) predicate.Export {
-	return predicate.Export(sql.FieldEQ(FieldRequestorID, v))
-}
-
-// RequestorIDNEQ applies the NEQ predicate on the "requestor_id" field.
-func RequestorIDNEQ(v string) predicate.Export {
-	return predicate.Export(sql.FieldNEQ(FieldRequestorID, v))
-}
-
-// RequestorIDIn applies the In predicate on the "requestor_id" field.
-func RequestorIDIn(vs ...string) predicate.Export {
-	return predicate.Export(sql.FieldIn(FieldRequestorID, vs...))
-}
-
-// RequestorIDNotIn applies the NotIn predicate on the "requestor_id" field.
-func RequestorIDNotIn(vs ...string) predicate.Export {
-	return predicate.Export(sql.FieldNotIn(FieldRequestorID, vs...))
-}
-
-// RequestorIDGT applies the GT predicate on the "requestor_id" field.
-func RequestorIDGT(v string) predicate.Export {
-	return predicate.Export(sql.FieldGT(FieldRequestorID, v))
-}
-
-// RequestorIDGTE applies the GTE predicate on the "requestor_id" field.
-func RequestorIDGTE(v string) predicate.Export {
-	return predicate.Export(sql.FieldGTE(FieldRequestorID, v))
-}
-
-// RequestorIDLT applies the LT predicate on the "requestor_id" field.
-func RequestorIDLT(v string) predicate.Export {
-	return predicate.Export(sql.FieldLT(FieldRequestorID, v))
-}
-
-// RequestorIDLTE applies the LTE predicate on the "requestor_id" field.
-func RequestorIDLTE(v string) predicate.Export {
-	return predicate.Export(sql.FieldLTE(FieldRequestorID, v))
-}
-
-// RequestorIDContains applies the Contains predicate on the "requestor_id" field.
-func RequestorIDContains(v string) predicate.Export {
-	return predicate.Export(sql.FieldContains(FieldRequestorID, v))
-}
-
-// RequestorIDHasPrefix applies the HasPrefix predicate on the "requestor_id" field.
-func RequestorIDHasPrefix(v string) predicate.Export {
-	return predicate.Export(sql.FieldHasPrefix(FieldRequestorID, v))
-}
-
-// RequestorIDHasSuffix applies the HasSuffix predicate on the "requestor_id" field.
-func RequestorIDHasSuffix(v string) predicate.Export {
-	return predicate.Export(sql.FieldHasSuffix(FieldRequestorID, v))
-}
-
-// RequestorIDIsNil applies the IsNil predicate on the "requestor_id" field.
-func RequestorIDIsNil() predicate.Export {
-	return predicate.Export(sql.FieldIsNull(FieldRequestorID))
-}
-
-// RequestorIDNotNil applies the NotNil predicate on the "requestor_id" field.
-func RequestorIDNotNil() predicate.Export {
-	return predicate.Export(sql.FieldNotNull(FieldRequestorID))
-}
-
-// RequestorIDEqualFold applies the EqualFold predicate on the "requestor_id" field.
-func RequestorIDEqualFold(v string) predicate.Export {
-	return predicate.Export(sql.FieldEqualFold(FieldRequestorID, v))
-}
-
-// RequestorIDContainsFold applies the ContainsFold predicate on the "requestor_id" field.
-func RequestorIDContainsFold(v string) predicate.Export {
-	return predicate.Export(sql.FieldContainsFold(FieldRequestorID, v))
 }
 
 // FieldsIsNil applies the IsNil predicate on the "fields" field.

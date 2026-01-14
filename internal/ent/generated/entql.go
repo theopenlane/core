@@ -844,11 +844,11 @@ var schemaGraph = func() *sqlgraph.Schema {
 			export.FieldUpdatedBy:    {Type: field.TypeString, Column: export.FieldUpdatedBy},
 			export.FieldDeletedAt:    {Type: field.TypeTime, Column: export.FieldDeletedAt},
 			export.FieldDeletedBy:    {Type: field.TypeString, Column: export.FieldDeletedBy},
+			export.FieldRequestorID:  {Type: field.TypeString, Column: export.FieldRequestorID},
 			export.FieldOwnerID:      {Type: field.TypeString, Column: export.FieldOwnerID},
 			export.FieldExportType:   {Type: field.TypeEnum, Column: export.FieldExportType},
 			export.FieldFormat:       {Type: field.TypeEnum, Column: export.FieldFormat},
 			export.FieldStatus:       {Type: field.TypeEnum, Column: export.FieldStatus},
-			export.FieldRequestorID:  {Type: field.TypeString, Column: export.FieldRequestorID},
 			export.FieldFields:       {Type: field.TypeJSON, Column: export.FieldFields},
 			export.FieldFilters:      {Type: field.TypeString, Column: export.FieldFilters},
 			export.FieldErrorMessage: {Type: field.TypeString, Column: export.FieldErrorMessage},
@@ -1239,6 +1239,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			invite.FieldUpdatedBy:         {Type: field.TypeString, Column: invite.FieldUpdatedBy},
 			invite.FieldDeletedAt:         {Type: field.TypeTime, Column: invite.FieldDeletedAt},
 			invite.FieldDeletedBy:         {Type: field.TypeString, Column: invite.FieldDeletedBy},
+			invite.FieldRequestorID:       {Type: field.TypeString, Column: invite.FieldRequestorID},
 			invite.FieldOwnerID:           {Type: field.TypeString, Column: invite.FieldOwnerID},
 			invite.FieldToken:             {Type: field.TypeString, Column: invite.FieldToken},
 			invite.FieldExpires:           {Type: field.TypeTime, Column: invite.FieldExpires},
@@ -1246,7 +1247,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			invite.FieldStatus:            {Type: field.TypeEnum, Column: invite.FieldStatus},
 			invite.FieldRole:              {Type: field.TypeEnum, Column: invite.FieldRole},
 			invite.FieldSendAttempts:      {Type: field.TypeInt, Column: invite.FieldSendAttempts},
-			invite.FieldRequestorID:       {Type: field.TypeString, Column: invite.FieldRequestorID},
 			invite.FieldSecret:            {Type: field.TypeBytes, Column: invite.FieldSecret},
 			invite.FieldOwnershipTransfer: {Type: field.TypeBool, Column: invite.FieldOwnershipTransfer},
 		},
@@ -17535,6 +17535,11 @@ func (f *ExportFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(export.FieldDeletedBy))
 }
 
+// WhereRequestorID applies the entql string predicate on the requestor_id field.
+func (f *ExportFilter) WhereRequestorID(p entql.StringP) {
+	f.Where(p.Field(export.FieldRequestorID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ExportFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(export.FieldOwnerID))
@@ -17553,11 +17558,6 @@ func (f *ExportFilter) WhereFormat(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *ExportFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(export.FieldStatus))
-}
-
-// WhereRequestorID applies the entql string predicate on the requestor_id field.
-func (f *ExportFilter) WhereRequestorID(p entql.StringP) {
-	f.Where(p.Field(export.FieldRequestorID))
 }
 
 // WhereFields applies the entql json.RawMessage predicate on the fields field.
@@ -21002,6 +21002,11 @@ func (f *InviteFilter) WhereDeletedBy(p entql.StringP) {
 	f.Where(p.Field(invite.FieldDeletedBy))
 }
 
+// WhereRequestorID applies the entql string predicate on the requestor_id field.
+func (f *InviteFilter) WhereRequestorID(p entql.StringP) {
+	f.Where(p.Field(invite.FieldRequestorID))
+}
+
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *InviteFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(invite.FieldOwnerID))
@@ -21035,11 +21040,6 @@ func (f *InviteFilter) WhereRole(p entql.StringP) {
 // WhereSendAttempts applies the entql int predicate on the send_attempts field.
 func (f *InviteFilter) WhereSendAttempts(p entql.IntP) {
 	f.Where(p.Field(invite.FieldSendAttempts))
-}
-
-// WhereRequestorID applies the entql string predicate on the requestor_id field.
-func (f *InviteFilter) WhereRequestorID(p entql.StringP) {
-	f.Where(p.Field(invite.FieldRequestorID))
 }
 
 // WhereSecret applies the entql []byte predicate on the secret field.

@@ -50,10 +50,6 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return nil, err
 	}
 
-	requestorID := au.SubjectID
-
-	m.SetRequestorID(requestorID)
-
 	v, err := next.Mutate(ctx, m)
 	if err != nil {
 		return v, err
@@ -66,7 +62,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 
 	_, err = m.Job.Insert(ctx, jobspec.ExportContentArgs{
 		ExportID:       id,
-		UserID:         requestorID,
+		UserID:         au.SubjectID,
 		OrganizationID: au.OrganizationID,
 	}, nil)
 
