@@ -4,11 +4,14 @@ import (
 	"context"
 	"testing"
 
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -156,6 +159,12 @@ func TestQueryTrustCenterSetting(t *testing.T) {
 			ctx:       testUser1.UserCtx,
 		},
 		{
+			name:      "happy path - query trust center preview setting by ID",
+			settingID: trustCenter.Edges.PreviewSetting.ID,
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+		},
+		{
 			name:        "trust center setting not found",
 			settingID:   "non-existent-id",
 			client:      suite.client.api,
@@ -195,6 +204,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
+		expectJob   bool
 	}{
 		{
 			name:      "happy path - update title",
@@ -204,6 +214,16 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:      "happy path - update title of preview setting",
+			settingID: trustCenter.Edges.PreviewSetting.ID,
+			input: testclient.UpdateTrustCenterSettingInput{
+				Title: lo.ToPtr("Updated Title Preview"),
+			},
+			client:    suite.client.api,
+			ctx:       testUser1.UserCtx,
+			expectJob: true, // updating preview setting should enqueue a job to create preview domain
 		},
 		{
 			name:      "happy path - update multiple fields",
@@ -260,6 +280,10 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			assert.NilError(t, err)
+
 			resp, err := tc.client.UpdateTrustCenterSetting(tc.ctx, tc.settingID, tc.input, nil, nil)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -280,6 +304,23 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 
 			if tc.input.ThemeMode != nil {
 				assert.Check(t, is.Equal(*tc.input.ThemeMode, *resp.UpdateTrustCenterSetting.TrustCenterSetting.ThemeMode))
+			}
+
+			if tc.expectJob {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: jobspec.CreatePreviewDomainArgs{
+								TrustCenterID:            *resp.UpdateTrustCenterSetting.TrustCenterSetting.TrustCenterID,
+								TrustCenterPreviewZoneID: "", // not set in configs for tests
+								TrustCenterCnameTarget:   "", // not set in configs for tests
+							},
+						},
+					})
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &jobspec.CreatePreviewDomainArgs{}, nil)
 			}
 		})
 	}

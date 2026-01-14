@@ -58,15 +58,18 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 			}
 
 			// check the environment
-			if env, ok := m.Environment(); !ok || env != enums.TrustCenterEnvironmentPreview {
+			if !isPreviewSetting(ctx, m) {
+				logx.FromContext(ctx).Debug().Msg("trust center setting is not for preview environment, skipping preview domain creation job")
+
 				return v, nil
 			}
 
-			trustCenterID, hasTc := m.TrustCenterID()
+			trustCenterID, hasTc := getTrustCenterSettingID(ctx, m)
 			if !hasTc {
-				logx.FromContext(ctx).Error().Msg("trust center ID missing in trust center setting mutation")
-				// should never happen
-				return nil, ErrMissingTrustCenterID
+				// this should not happen, but just in case
+				logx.FromContext(ctx).Warn().Msg("trust center ID missing in trust center setting mutation, skipping preview domain creation job")
+
+				return v, nil
 			}
 
 			trustCenter, err := m.Client().TrustCenter.Get(ctx, trustCenterID)
@@ -96,6 +99,46 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 			return v, nil
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+// isPreviewSetting checks if the trust center setting mutation is for the preview environment
+func isPreviewSetting(ctx context.Context, m *generated.TrustCenterSettingMutation) bool {
+	env, ok := m.Environment()
+	if ok {
+		return env == enums.TrustCenterEnvironmentPreview
+	}
+
+	if m.Op().Is(ent.OpCreate) {
+		// on create there is no old environment to check
+		return false
+	}
+
+	logx.FromContext(ctx).Debug().Msg("environment missing in trust center setting mutation")
+
+	// check old environment for updates
+	oldEnv, err := m.OldEnvironment(ctx)
+	if err != nil {
+		return false
+	}
+
+	return oldEnv == enums.TrustCenterEnvironmentPreview
+}
+
+func getTrustCenterSettingID(ctx context.Context, m *generated.TrustCenterSettingMutation) (string, bool) {
+	trustCenterID, hasTc := m.TrustCenterID()
+	if hasTc || m.Op().Is(ent.OpCreate) {
+		return trustCenterID, hasTc
+	}
+
+	// on update we need to get the old trust center ID
+	oldTrustCenterID, err := m.OldTrustCenterID(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get old trust center ID from trust center setting mutation")
+
+		return "", false
+	}
+
+	return oldTrustCenterID, oldTrustCenterID != ""
 }
 
 // checkTrustCenterFiles checks for logo and favicon files in the context
