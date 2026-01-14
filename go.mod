@@ -10,6 +10,8 @@ tool (
 	gotest.tools/gotestsum
 )
 
+replace github.com/99designs/gqlgen => github.com/99designs/gqlgen v0.17.85
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
