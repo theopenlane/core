@@ -52,9 +52,6 @@ func (TrustCenterDoc) Fields() []ent.Field {
 		field.String("title").
 			Comment("title of the document").
 			NotEmpty(),
-		field.String("category").
-			Comment("category of the document").
-			NotEmpty(),
 		field.String("file_id").
 			Comment("ID of the file containing the document").
 			Annotations(
@@ -98,6 +95,7 @@ func (t TrustCenterDoc) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterDoc](t,
 				withParents(TrustCenter{}),
 			),
+			newCustomEnumMixin(t, withEnumFieldName("category")),
 		},
 	}.getMixins(t)
 }

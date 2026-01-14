@@ -9546,13 +9546,13 @@ input CreateTrustCenterDocInput {
   """
   tags: [String!]
   """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryName: String
+  """
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
   """
@@ -9565,6 +9565,7 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  trustCenterDocCategoryID: ID
   trustCenterID: ID
   standardID: ID
   fileID: ID
@@ -47035,6 +47036,14 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryName: String
+  """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryID: ID
+  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -47042,10 +47051,6 @@ type TrustCenterDoc implements Node {
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   ID of the file containing the document
   """
@@ -47070,6 +47075,7 @@ type TrustCenterDoc implements Node {
   ID of the standard
   """
   standardID: ID
+  trustCenterDocCategory: CustomTypeEnum
   trustCenter: TrustCenter
   standard: Standard
   """
@@ -47233,6 +47239,42 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_doc_category_name field predicates
+  """
+  trustCenterDocCategoryName: String
+  trustCenterDocCategoryNameNEQ: String
+  trustCenterDocCategoryNameIn: [String!]
+  trustCenterDocCategoryNameNotIn: [String!]
+  trustCenterDocCategoryNameGT: String
+  trustCenterDocCategoryNameGTE: String
+  trustCenterDocCategoryNameLT: String
+  trustCenterDocCategoryNameLTE: String
+  trustCenterDocCategoryNameContains: String
+  trustCenterDocCategoryNameHasPrefix: String
+  trustCenterDocCategoryNameHasSuffix: String
+  trustCenterDocCategoryNameIsNil: Boolean
+  trustCenterDocCategoryNameNotNil: Boolean
+  trustCenterDocCategoryNameEqualFold: String
+  trustCenterDocCategoryNameContainsFold: String
+  """
+  trust_center_doc_category_id field predicates
+  """
+  trustCenterDocCategoryID: ID
+  trustCenterDocCategoryIDNEQ: ID
+  trustCenterDocCategoryIDIn: [ID!]
+  trustCenterDocCategoryIDNotIn: [ID!]
+  trustCenterDocCategoryIDGT: ID
+  trustCenterDocCategoryIDGTE: ID
+  trustCenterDocCategoryIDLT: ID
+  trustCenterDocCategoryIDLTE: ID
+  trustCenterDocCategoryIDContains: ID
+  trustCenterDocCategoryIDHasPrefix: ID
+  trustCenterDocCategoryIDHasSuffix: ID
+  trustCenterDocCategoryIDIsNil: Boolean
+  trustCenterDocCategoryIDNotNil: Boolean
+  trustCenterDocCategoryIDEqualFold: ID
+  trustCenterDocCategoryIDContainsFold: ID
+  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -47266,22 +47308,6 @@ input TrustCenterDocWhereInput {
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   file_id field predicates
   """
@@ -47361,6 +47387,11 @@ input TrustCenterDocWhereInput {
   standardIDNotNil: Boolean
   standardIDEqualFold: ID
   standardIDContainsFold: ID
+  """
+  trust_center_doc_category edge predicates
+  """
+  hasTrustCenterDocCategory: Boolean
+  hasTrustCenterDocCategoryWith: [CustomTypeEnumWhereInput!]
   """
   trust_center edge predicates
   """
@@ -53795,13 +53826,14 @@ input UpdateTrustCenterDocInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryName: String
+  clearTrustCenterDocCategoryName: Boolean
+  """
   title of the document
   """
   title: String
-  """
-  category of the document
-  """
-  category: String
   """
   whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
   """
@@ -53817,6 +53849,8 @@ input UpdateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   clearVisibility: Boolean
+  trustCenterDocCategoryID: ID
+  clearTrustCenterDocCategory: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   standardID: ID

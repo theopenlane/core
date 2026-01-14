@@ -125,6 +125,46 @@ func (_u *TrustCenterDocHistoryUpdate) ClearTags() *TrustCenterDocHistoryUpdate 
 	return _u
 }
 
+// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterDocCategoryName(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetTrustCenterDocCategoryName(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryName clears the value of the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterDocCategoryName() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearTrustCenterDocCategoryName()
+	return _u
+}
+
+// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterDocCategoryID(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetTrustCenterDocCategoryID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryID clears the value of the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterDocCategoryID() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearTrustCenterDocCategoryID()
+	return _u
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdate {
 	_u.mutation.SetTrustCenterID(v)
@@ -155,20 +195,6 @@ func (_u *TrustCenterDocHistoryUpdate) SetTitle(v string) *TrustCenterDocHistory
 func (_u *TrustCenterDocHistoryUpdate) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdate {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocHistoryUpdate) SetCategory(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableCategory(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -417,6 +443,18 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocCategoryName(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocCategoryNameCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterDocCategoryID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocCategoryIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocCategoryID, field.TypeString)
+	}
 	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
 	}
@@ -425,9 +463,6 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
@@ -579,6 +614,46 @@ func (_u *TrustCenterDocHistoryUpdateOne) ClearTags() *TrustCenterDocHistoryUpda
 	return _u
 }
 
+// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterDocCategoryName(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetTrustCenterDocCategoryName(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryName clears the value of the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterDocCategoryName() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterDocCategoryName()
+	return _u
+}
+
+// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterDocCategoryID(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetTrustCenterDocCategoryID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryID clears the value of the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterDocCategoryID() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterDocCategoryID()
+	return _u
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdateOne {
 	_u.mutation.SetTrustCenterID(v)
@@ -609,20 +684,6 @@ func (_u *TrustCenterDocHistoryUpdateOne) SetTitle(v string) *TrustCenterDocHist
 func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdateOne {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetCategory(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableCategory(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -901,6 +962,18 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocCategoryName(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocCategoryNameCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocCategoryName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterDocCategoryID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocCategoryIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocCategoryID, field.TypeString)
+	}
 	if value, ok := _u.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
 	}
@@ -909,9 +982,6 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)

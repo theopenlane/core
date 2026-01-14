@@ -6074,6 +6074,7 @@ func init() {
 	trustcenterdocMixinHooks1 := trustcenterdocMixin[1].Hooks()
 	trustcenterdocMixinHooks3 := trustcenterdocMixin[3].Hooks()
 	trustcenterdocMixinHooks5 := trustcenterdocMixin[5].Hooks()
+	trustcenterdocMixinHooks6 := trustcenterdocMixin[6].Hooks()
 	trustcenterdocHooks := schema.TrustCenterDoc{}.Hooks()
 
 	trustcenterdoc.Hooks[1] = trustcenterdocMixinHooks0[0]
@@ -6084,9 +6085,11 @@ func init() {
 
 	trustcenterdoc.Hooks[4] = trustcenterdocMixinHooks5[0]
 
-	trustcenterdoc.Hooks[5] = trustcenterdocHooks[0]
+	trustcenterdoc.Hooks[5] = trustcenterdocMixinHooks6[0]
 
-	trustcenterdoc.Hooks[6] = trustcenterdocHooks[1]
+	trustcenterdoc.Hooks[6] = trustcenterdocHooks[0]
+
+	trustcenterdoc.Hooks[7] = trustcenterdocHooks[1]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters5 := trustcenterdocMixin[5].Interceptors()
 	trustcenterdocInters := schema.TrustCenterDoc{}.Interceptors()
@@ -6123,12 +6126,8 @@ func init() {
 	trustcenterdocDescTitle := trustcenterdocFields[1].Descriptor()
 	// trustcenterdoc.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	trustcenterdoc.TitleValidator = trustcenterdocDescTitle.Validators[0].(func(string) error)
-	// trustcenterdocDescCategory is the schema descriptor for category field.
-	trustcenterdocDescCategory := trustcenterdocFields[2].Descriptor()
-	// trustcenterdoc.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
-	trustcenterdoc.CategoryValidator = trustcenterdocDescCategory.Validators[0].(func(string) error)
 	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
-	trustcenterdocDescStandardID := trustcenterdocFields[8].Descriptor()
+	trustcenterdocDescStandardID := trustcenterdocFields[7].Descriptor()
 	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
 	trustcenterdoc.StandardIDValidator = trustcenterdocDescStandardID.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.

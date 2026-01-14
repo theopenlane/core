@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -126,6 +127,46 @@ func (_u *TrustCenterDocUpdate) ClearTags() *TrustCenterDocUpdate {
 	return _u
 }
 
+// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocCategoryName(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterDocCategoryName(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryName clears the value of the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocCategoryName() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocCategoryName()
+	return _u
+}
+
+// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocCategoryID(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterDocCategoryID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryID clears the value of the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocCategoryID() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocCategoryID()
+	return _u
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_u *TrustCenterDocUpdate) SetTrustCenterID(v string) *TrustCenterDocUpdate {
 	_u.mutation.SetTrustCenterID(v)
@@ -156,20 +197,6 @@ func (_u *TrustCenterDocUpdate) SetTitle(v string) *TrustCenterDocUpdate {
 func (_u *TrustCenterDocUpdate) SetNillableTitle(v *string) *TrustCenterDocUpdate {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocUpdate) SetCategory(v string) *TrustCenterDocUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocUpdate) SetNillableCategory(v *string) *TrustCenterDocUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -294,6 +321,11 @@ func (_u *TrustCenterDocUpdate) ClearStandardID() *TrustCenterDocUpdate {
 	return _u
 }
 
+// SetTrustCenterDocCategory sets the "trust_center_doc_category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocCategory(v *CustomTypeEnum) *TrustCenterDocUpdate {
+	return _u.SetTrustCenterDocCategoryID(v.ID)
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (_u *TrustCenterDocUpdate) SetTrustCenter(v *TrustCenter) *TrustCenterDocUpdate {
 	return _u.SetTrustCenterID(v.ID)
@@ -317,6 +349,12 @@ func (_u *TrustCenterDocUpdate) SetOriginalFile(v *File) *TrustCenterDocUpdate {
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdate) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenterDocCategory clears the "trust_center_doc_category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocCategory() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocCategory()
+	return _u
 }
 
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
@@ -397,11 +435,6 @@ func (_u *TrustCenterDocUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {
 			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.watermark_status": %w`, err)}
@@ -479,11 +512,14 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocCategoryName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocCategoryNameCleared() {
+		_spec.ClearField(trustcenterdoc.FieldTrustCenterDocCategoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -502,6 +538,37 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
+	}
+	if _u.mutation.TrustCenterDocCategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocCategoryTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocCategoryTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -741,6 +808,46 @@ func (_u *TrustCenterDocUpdateOne) ClearTags() *TrustCenterDocUpdateOne {
 	return _u
 }
 
+// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocCategoryName(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterDocCategoryName(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryName(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryName clears the value of the "trust_center_doc_category_name" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocCategoryName() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocCategoryName()
+	return _u
+}
+
+// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocCategoryID(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterDocCategoryID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocCategoryID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocCategoryID clears the value of the "trust_center_doc_category_id" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocCategoryID() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocCategoryID()
+	return _u
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_u *TrustCenterDocUpdateOne) SetTrustCenterID(v string) *TrustCenterDocUpdateOne {
 	_u.mutation.SetTrustCenterID(v)
@@ -771,20 +878,6 @@ func (_u *TrustCenterDocUpdateOne) SetTitle(v string) *TrustCenterDocUpdateOne {
 func (_u *TrustCenterDocUpdateOne) SetNillableTitle(v *string) *TrustCenterDocUpdateOne {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocUpdateOne) SetCategory(v string) *TrustCenterDocUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocUpdateOne) SetNillableCategory(v *string) *TrustCenterDocUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -909,6 +1002,11 @@ func (_u *TrustCenterDocUpdateOne) ClearStandardID() *TrustCenterDocUpdateOne {
 	return _u
 }
 
+// SetTrustCenterDocCategory sets the "trust_center_doc_category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocCategory(v *CustomTypeEnum) *TrustCenterDocUpdateOne {
+	return _u.SetTrustCenterDocCategoryID(v.ID)
+}
+
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (_u *TrustCenterDocUpdateOne) SetTrustCenter(v *TrustCenter) *TrustCenterDocUpdateOne {
 	return _u.SetTrustCenterID(v.ID)
@@ -932,6 +1030,12 @@ func (_u *TrustCenterDocUpdateOne) SetOriginalFile(v *File) *TrustCenterDocUpdat
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdateOne) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenterDocCategory clears the "trust_center_doc_category" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocCategory() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocCategory()
+	return _u
 }
 
 // ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
@@ -1023,11 +1127,6 @@ func (_u *TrustCenterDocUpdateOne) check() error {
 	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcenterdoc.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.WatermarkStatus(); ok {
@@ -1124,11 +1223,14 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocCategoryName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocCategoryName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocCategoryNameCleared() {
+		_spec.ClearField(trustcenterdoc.FieldTrustCenterDocCategoryName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -1147,6 +1249,37 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
+	}
+	if _u.mutation.TrustCenterDocCategoryCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocCategoryTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocCategoryIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocCategoryTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocCategoryColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{

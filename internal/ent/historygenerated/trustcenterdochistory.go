@@ -42,12 +42,14 @@ type TrustCenterDocHistory struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the category of the trust_center_doc
+	TrustCenterDocCategoryName string `json:"trust_center_doc_category_name,omitempty"`
+	// the category of the trust_center_doc
+	TrustCenterDocCategoryID string `json:"trust_center_doc_category_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// title of the document
 	Title string `json:"title,omitempty"`
-	// category of the document
-	Category string `json:"category,omitempty"`
 	// ID of the file containing the document
 	FileID *string `json:"file_id,omitempty"`
 	// ID of the file containing the document, before any watermarking
@@ -74,7 +76,7 @@ func (*TrustCenterDocHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcenterdochistory.FieldWatermarkingEnabled:
 			values[i] = new(sql.NullBool)
-		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility, trustcenterdochistory.FieldStandardID:
+		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterDocCategoryName, trustcenterdochistory.FieldTrustCenterDocCategoryID, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility, trustcenterdochistory.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case trustcenterdochistory.FieldHistoryTime, trustcenterdochistory.FieldCreatedAt, trustcenterdochistory.FieldUpdatedAt, trustcenterdochistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -161,6 +163,18 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
 			}
+		case trustcenterdochistory.FieldTrustCenterDocCategoryName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_doc_category_name", values[i])
+			} else if value.Valid {
+				_m.TrustCenterDocCategoryName = value.String
+			}
+		case trustcenterdochistory.FieldTrustCenterDocCategoryID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_doc_category_id", values[i])
+			} else if value.Valid {
+				_m.TrustCenterDocCategoryID = value.String
+			}
 		case trustcenterdochistory.FieldTrustCenterID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
@@ -172,12 +186,6 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				_m.Title = value.String
-			}
-		case trustcenterdochistory.FieldCategory:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category", values[i])
-			} else if value.Valid {
-				_m.Category = value.String
 			}
 		case trustcenterdochistory.FieldFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -283,14 +291,17 @@ func (_m *TrustCenterDocHistory) String() string {
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
+	builder.WriteString("trust_center_doc_category_name=")
+	builder.WriteString(_m.TrustCenterDocCategoryName)
+	builder.WriteString(", ")
+	builder.WriteString("trust_center_doc_category_id=")
+	builder.WriteString(_m.TrustCenterDocCategoryID)
+	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
-	builder.WriteString(", ")
-	builder.WriteString("category=")
-	builder.WriteString(_m.Category)
 	builder.WriteString(", ")
 	if v := _m.FileID; v != nil {
 		builder.WriteString("file_id=")

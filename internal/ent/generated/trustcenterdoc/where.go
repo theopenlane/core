@@ -98,6 +98,16 @@ func DeletedBy(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldDeletedBy, v))
 }
 
+// TrustCenterDocCategoryName applies equality check predicate on the "trust_center_doc_category_name" field. It's identical to TrustCenterDocCategoryNameEQ.
+func TrustCenterDocCategoryName(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryID applies equality check predicate on the "trust_center_doc_category_id" field. It's identical to TrustCenterDocCategoryIDEQ.
+func TrustCenterDocCategoryID(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTrustCenterDocCategoryID, v))
+}
+
 // TrustCenterID applies equality check predicate on the "trust_center_id" field. It's identical to TrustCenterIDEQ.
 func TrustCenterID(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTrustCenterID, v))
@@ -106,11 +116,6 @@ func TrustCenterID(v string) predicate.TrustCenterDoc {
 // Title applies equality check predicate on the "title" field. It's identical to TitleEQ.
 func Title(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTitle, v))
-}
-
-// Category applies equality check predicate on the "category" field. It's identical to CategoryEQ.
-func Category(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldEQ(FieldCategory, v))
 }
 
 // FileID applies equality check predicate on the "file_id" field. It's identical to FileIDEQ.
@@ -518,6 +523,156 @@ func TagsNotNil() predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldTags))
 }
 
+// TrustCenterDocCategoryNameEQ applies the EQ predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameNEQ applies the NEQ predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameNEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameIn applies the In predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIn(FieldTrustCenterDocCategoryName, vs...))
+}
+
+// TrustCenterDocCategoryNameNotIn applies the NotIn predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameNotIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotIn(FieldTrustCenterDocCategoryName, vs...))
+}
+
+// TrustCenterDocCategoryNameGT applies the GT predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameGT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGT(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameGTE applies the GTE predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameGTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGTE(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameLT applies the LT predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameLT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLT(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameLTE applies the LTE predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameLTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLTE(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameContains applies the Contains predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameContains(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContains(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameHasPrefix applies the HasPrefix predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameHasPrefix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasPrefix(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameHasSuffix applies the HasSuffix predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameHasSuffix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasSuffix(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameIsNil applies the IsNil predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameIsNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIsNull(FieldTrustCenterDocCategoryName))
+}
+
+// TrustCenterDocCategoryNameNotNil applies the NotNil predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameNotNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldTrustCenterDocCategoryName))
+}
+
+// TrustCenterDocCategoryNameEqualFold applies the EqualFold predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameEqualFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEqualFold(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryNameContainsFold applies the ContainsFold predicate on the "trust_center_doc_category_name" field.
+func TrustCenterDocCategoryNameContainsFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldTrustCenterDocCategoryName, v))
+}
+
+// TrustCenterDocCategoryIDEQ applies the EQ predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDNEQ applies the NEQ predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDNEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDIn applies the In predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIn(FieldTrustCenterDocCategoryID, vs...))
+}
+
+// TrustCenterDocCategoryIDNotIn applies the NotIn predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDNotIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotIn(FieldTrustCenterDocCategoryID, vs...))
+}
+
+// TrustCenterDocCategoryIDGT applies the GT predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDGT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGT(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDGTE applies the GTE predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDGTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGTE(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDLT applies the LT predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDLT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLT(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDLTE applies the LTE predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDLTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLTE(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDContains applies the Contains predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDContains(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContains(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDHasPrefix applies the HasPrefix predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDHasPrefix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasPrefix(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDHasSuffix applies the HasSuffix predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDHasSuffix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasSuffix(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDIsNil applies the IsNil predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDIsNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIsNull(FieldTrustCenterDocCategoryID))
+}
+
+// TrustCenterDocCategoryIDNotNil applies the NotNil predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDNotNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldTrustCenterDocCategoryID))
+}
+
+// TrustCenterDocCategoryIDEqualFold applies the EqualFold predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDEqualFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEqualFold(FieldTrustCenterDocCategoryID, v))
+}
+
+// TrustCenterDocCategoryIDContainsFold applies the ContainsFold predicate on the "trust_center_doc_category_id" field.
+func TrustCenterDocCategoryIDContainsFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldTrustCenterDocCategoryID, v))
+}
+
 // TrustCenterIDEQ applies the EQ predicate on the "trust_center_id" field.
 func TrustCenterIDEQ(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldTrustCenterID, v))
@@ -656,71 +811,6 @@ func TitleEqualFold(v string) predicate.TrustCenterDoc {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldTitle, v))
-}
-
-// CategoryEQ applies the EQ predicate on the "category" field.
-func CategoryEQ(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldEQ(FieldCategory, v))
-}
-
-// CategoryNEQ applies the NEQ predicate on the "category" field.
-func CategoryNEQ(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldCategory, v))
-}
-
-// CategoryIn applies the In predicate on the "category" field.
-func CategoryIn(vs ...string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldIn(FieldCategory, vs...))
-}
-
-// CategoryNotIn applies the NotIn predicate on the "category" field.
-func CategoryNotIn(vs ...string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldNotIn(FieldCategory, vs...))
-}
-
-// CategoryGT applies the GT predicate on the "category" field.
-func CategoryGT(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldGT(FieldCategory, v))
-}
-
-// CategoryGTE applies the GTE predicate on the "category" field.
-func CategoryGTE(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldGTE(FieldCategory, v))
-}
-
-// CategoryLT applies the LT predicate on the "category" field.
-func CategoryLT(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldLT(FieldCategory, v))
-}
-
-// CategoryLTE applies the LTE predicate on the "category" field.
-func CategoryLTE(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldLTE(FieldCategory, v))
-}
-
-// CategoryContains applies the Contains predicate on the "category" field.
-func CategoryContains(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldContains(FieldCategory, v))
-}
-
-// CategoryHasPrefix applies the HasPrefix predicate on the "category" field.
-func CategoryHasPrefix(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldHasPrefix(FieldCategory, v))
-}
-
-// CategoryHasSuffix applies the HasSuffix predicate on the "category" field.
-func CategoryHasSuffix(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldHasSuffix(FieldCategory, v))
-}
-
-// CategoryEqualFold applies the EqualFold predicate on the "category" field.
-func CategoryEqualFold(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldEqualFold(FieldCategory, v))
-}
-
-// CategoryContainsFold applies the ContainsFold predicate on the "category" field.
-func CategoryContainsFold(v string) predicate.TrustCenterDoc {
-	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldCategory, v))
 }
 
 // FileIDEQ applies the EQ predicate on the "file_id" field.
@@ -1046,6 +1136,35 @@ func StandardIDEqualFold(v string) predicate.TrustCenterDoc {
 // StandardIDContainsFold applies the ContainsFold predicate on the "standard_id" field.
 func StandardIDContainsFold(v string) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldStandardID, v))
+}
+
+// HasTrustCenterDocCategory applies the HasEdge predicate on the "trust_center_doc_category" edge.
+func HasTrustCenterDocCategory() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterDocCategoryTable, TrustCenterDocCategoryColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterDocCategoryWith applies the HasEdge predicate on the "trust_center_doc_category" edge with a given conditions (other predicates).
+func HasTrustCenterDocCategoryWith(preds ...predicate.CustomTypeEnum) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(func(s *sql.Selector) {
+		step := newTrustCenterDocCategoryStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.

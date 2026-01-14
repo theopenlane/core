@@ -148,6 +148,34 @@ func (_c *TrustCenterDocHistoryCreate) SetTags(v []string) *TrustCenterDocHistor
 	return _c
 }
 
+// SetTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field.
+func (_c *TrustCenterDocHistoryCreate) SetTrustCenterDocCategoryName(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetTrustCenterDocCategoryName(v)
+	return _c
+}
+
+// SetNillableTrustCenterDocCategoryName sets the "trust_center_doc_category_name" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterDocCategoryName(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterDocCategoryName(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetTrustCenterDocCategoryID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetTrustCenterDocCategoryID(v)
+	return _c
+}
+
+// SetNillableTrustCenterDocCategoryID sets the "trust_center_doc_category_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterDocCategoryID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetTrustCenterDocCategoryID(*v)
+	}
+	return _c
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_c *TrustCenterDocHistoryCreate) SetTrustCenterID(v string) *TrustCenterDocHistoryCreate {
 	_c.mutation.SetTrustCenterID(v)
@@ -165,12 +193,6 @@ func (_c *TrustCenterDocHistoryCreate) SetNillableTrustCenterID(v *string) *Trus
 // SetTitle sets the "title" field.
 func (_c *TrustCenterDocHistoryCreate) SetTitle(v string) *TrustCenterDocHistoryCreate {
 	_c.mutation.SetTitle(v)
-	return _c
-}
-
-// SetCategory sets the "category" field.
-func (_c *TrustCenterDocHistoryCreate) SetCategory(v string) *TrustCenterDocHistoryCreate {
-	_c.mutation.SetCategory(v)
 	return _c
 }
 
@@ -368,9 +390,6 @@ func (_c *TrustCenterDocHistoryCreate) check() error {
 	if _, ok := _c.mutation.Title(); !ok {
 		return &ValidationError{Name: "title", err: errors.New(`historygenerated: missing required field "TrustCenterDocHistory.title"`)}
 	}
-	if _, ok := _c.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`historygenerated: missing required field "TrustCenterDocHistory.category"`)}
-	}
 	if v, ok := _c.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {
 			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterDocHistory.watermark_status": %w`, err)}
@@ -457,6 +476,14 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 		_spec.SetField(trustcenterdochistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.TrustCenterDocCategoryName(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryName, field.TypeString, value)
+		_node.TrustCenterDocCategoryName = value
+	}
+	if value, ok := _c.mutation.TrustCenterDocCategoryID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocCategoryID, field.TypeString, value)
+		_node.TrustCenterDocCategoryID = value
+	}
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
@@ -464,10 +491,6 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
-	}
-	if value, ok := _c.mutation.Category(); ok {
-		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
-		_node.Category = value
 	}
 	if value, ok := _c.mutation.FileID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)

@@ -55353,6 +55353,21 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "trustCenterDocCategory":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenterDocCategory = query
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterDocCategoryID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterDocCategoryID)
+				fieldSeen[trustcenterdoc.FieldTrustCenterDocCategoryID] = struct{}{}
+			}
+
 		case "trustCenter":
 			var (
 				alias = field.Alias
@@ -55437,6 +55452,16 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTags)
 				fieldSeen[trustcenterdoc.FieldTags] = struct{}{}
 			}
+		case "trustCenterDocCategoryName":
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterDocCategoryName]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterDocCategoryName)
+				fieldSeen[trustcenterdoc.FieldTrustCenterDocCategoryName] = struct{}{}
+			}
+		case "trustCenterDocCategoryID":
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterDocCategoryID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterDocCategoryID)
+				fieldSeen[trustcenterdoc.FieldTrustCenterDocCategoryID] = struct{}{}
+			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterID)
@@ -55446,11 +55471,6 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterdoc.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTitle)
 				fieldSeen[trustcenterdoc.FieldTitle] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[trustcenterdoc.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, trustcenterdoc.FieldCategory)
-				fieldSeen[trustcenterdoc.FieldCategory] = struct{}{}
 			}
 		case "fileID":
 			if _, ok := fieldSeen[trustcenterdoc.FieldFileID]; !ok {

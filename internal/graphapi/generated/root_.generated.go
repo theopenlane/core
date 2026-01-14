@@ -4781,25 +4781,27 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDoc struct {
-		Category            func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		File                func(childComplexity int) int
-		FileID              func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		OriginalFile        func(childComplexity int) int
-		OriginalFileID      func(childComplexity int) int
-		Standard            func(childComplexity int) int
-		StandardID          func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		Title               func(childComplexity int) int
-		TrustCenter         func(childComplexity int) int
-		TrustCenterID       func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
-		Visibility          func(childComplexity int) int
-		WatermarkStatus     func(childComplexity int) int
-		WatermarkingEnabled func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		File                       func(childComplexity int) int
+		FileID                     func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		OriginalFile               func(childComplexity int) int
+		OriginalFileID             func(childComplexity int) int
+		Standard                   func(childComplexity int) int
+		StandardID                 func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		Title                      func(childComplexity int) int
+		TrustCenter                func(childComplexity int) int
+		TrustCenterDocCategory     func(childComplexity int) int
+		TrustCenterDocCategoryID   func(childComplexity int) int
+		TrustCenterDocCategoryName func(childComplexity int) int
+		TrustCenterID              func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
+		Visibility                 func(childComplexity int) int
+		WatermarkStatus            func(childComplexity int) int
+		WatermarkingEnabled        func(childComplexity int) int
 	}
 
 	TrustCenterDocBulkCreatePayload struct {
@@ -33251,13 +33253,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDeletePayload.DeletedID(childComplexity), true
 
-	case "TrustCenterDoc.category":
-		if e.complexity.TrustCenterDoc.Category == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterDoc.Category(childComplexity), true
-
 	case "TrustCenterDoc.createdAt":
 		if e.complexity.TrustCenterDoc.CreatedAt == nil {
 			break
@@ -33341,6 +33336,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDoc.TrustCenter(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterDocCategory":
+		if e.complexity.TrustCenterDoc.TrustCenterDocCategory == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterDocCategory(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterDocCategoryID":
+		if e.complexity.TrustCenterDoc.TrustCenterDocCategoryID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterDocCategoryID(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterDocCategoryName":
+		if e.complexity.TrustCenterDoc.TrustCenterDocCategoryName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterDocCategoryName(childComplexity), true
 
 	case "TrustCenterDoc.trustCenterID":
 		if e.complexity.TrustCenterDoc.TrustCenterID == nil {
@@ -49459,13 +49475,13 @@ input CreateTrustCenterDocInput {
   """
   tags: [String!]
   """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryName: String
+  """
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
   """
@@ -49478,6 +49494,7 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  trustCenterDocCategoryID: ID
   trustCenterID: ID
   standardID: ID
   fileID: ID
@@ -86948,6 +86965,14 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryName: String
+  """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryID: ID
+  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -86955,10 +86980,6 @@ type TrustCenterDoc implements Node {
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   ID of the file containing the document
   """
@@ -86983,6 +87004,7 @@ type TrustCenterDoc implements Node {
   ID of the standard
   """
   standardID: ID
+  trustCenterDocCategory: CustomTypeEnum
   trustCenter: TrustCenter
   standard: Standard
   """
@@ -87146,6 +87168,42 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_doc_category_name field predicates
+  """
+  trustCenterDocCategoryName: String
+  trustCenterDocCategoryNameNEQ: String
+  trustCenterDocCategoryNameIn: [String!]
+  trustCenterDocCategoryNameNotIn: [String!]
+  trustCenterDocCategoryNameGT: String
+  trustCenterDocCategoryNameGTE: String
+  trustCenterDocCategoryNameLT: String
+  trustCenterDocCategoryNameLTE: String
+  trustCenterDocCategoryNameContains: String
+  trustCenterDocCategoryNameHasPrefix: String
+  trustCenterDocCategoryNameHasSuffix: String
+  trustCenterDocCategoryNameIsNil: Boolean
+  trustCenterDocCategoryNameNotNil: Boolean
+  trustCenterDocCategoryNameEqualFold: String
+  trustCenterDocCategoryNameContainsFold: String
+  """
+  trust_center_doc_category_id field predicates
+  """
+  trustCenterDocCategoryID: ID
+  trustCenterDocCategoryIDNEQ: ID
+  trustCenterDocCategoryIDIn: [ID!]
+  trustCenterDocCategoryIDNotIn: [ID!]
+  trustCenterDocCategoryIDGT: ID
+  trustCenterDocCategoryIDGTE: ID
+  trustCenterDocCategoryIDLT: ID
+  trustCenterDocCategoryIDLTE: ID
+  trustCenterDocCategoryIDContains: ID
+  trustCenterDocCategoryIDHasPrefix: ID
+  trustCenterDocCategoryIDHasSuffix: ID
+  trustCenterDocCategoryIDIsNil: Boolean
+  trustCenterDocCategoryIDNotNil: Boolean
+  trustCenterDocCategoryIDEqualFold: ID
+  trustCenterDocCategoryIDContainsFold: ID
+  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -87179,22 +87237,6 @@ input TrustCenterDocWhereInput {
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   file_id field predicates
   """
@@ -87274,6 +87316,11 @@ input TrustCenterDocWhereInput {
   standardIDNotNil: Boolean
   standardIDEqualFold: ID
   standardIDContainsFold: ID
+  """
+  trust_center_doc_category edge predicates
+  """
+  hasTrustCenterDocCategory: Boolean
+  hasTrustCenterDocCategoryWith: [CustomTypeEnumWhereInput!]
   """
   trust_center edge predicates
   """
@@ -93708,13 +93755,14 @@ input UpdateTrustCenterDocInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  the category of the trust_center_doc
+  """
+  trustCenterDocCategoryName: String
+  clearTrustCenterDocCategoryName: Boolean
+  """
   title of the document
   """
   title: String
-  """
-  category of the document
-  """
-  category: String
   """
   whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
   """
@@ -93730,6 +93778,8 @@ input UpdateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   clearVisibility: Boolean
+  trustCenterDocCategoryID: ID
+  clearTrustCenterDocCategory: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   standardID: ID
