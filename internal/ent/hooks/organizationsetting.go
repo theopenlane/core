@@ -188,7 +188,8 @@ func HookBillingEmailChange() ent.Hook {
 			}
 
 			// only send the email if the billing email actually changed
-			if strings.EqualFold(newEmail, oldEmail) {
+			// or it is not the first time the billing email is being updated
+			if oldEmail == "" || strings.EqualFold(newEmail, oldEmail) {
 				return retVal, nil
 			}
 
