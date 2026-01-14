@@ -119,12 +119,15 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
+	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b // indirect
+	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/google/go-github/v80 v80.0.0 // indirect
 	github.com/riverqueue/river/rivertype v0.30.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/term v0.39.0 // indirect
 )
 
