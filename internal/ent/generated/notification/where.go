@@ -119,11 +119,6 @@ func ReadAt(v models.DateTime) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldReadAt, v))
 }
 
-// Topic applies equality check predicate on the "topic" field. It's identical to TopicEQ.
-func Topic(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldEQ(FieldTopic, v))
-}
-
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldCreatedAt, v))
@@ -830,58 +825,33 @@ func ChannelsNotNil() predicate.Notification {
 }
 
 // TopicEQ applies the EQ predicate on the "topic" field.
-func TopicEQ(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldEQ(FieldTopic, v))
+func TopicEQ(v enums.NotificationTopic) predicate.Notification {
+	vc := v
+	return predicate.Notification(sql.FieldEQ(FieldTopic, vc))
 }
 
 // TopicNEQ applies the NEQ predicate on the "topic" field.
-func TopicNEQ(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldNEQ(FieldTopic, v))
+func TopicNEQ(v enums.NotificationTopic) predicate.Notification {
+	vc := v
+	return predicate.Notification(sql.FieldNEQ(FieldTopic, vc))
 }
 
 // TopicIn applies the In predicate on the "topic" field.
-func TopicIn(vs ...string) predicate.Notification {
-	return predicate.Notification(sql.FieldIn(FieldTopic, vs...))
+func TopicIn(vs ...enums.NotificationTopic) predicate.Notification {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notification(sql.FieldIn(FieldTopic, v...))
 }
 
 // TopicNotIn applies the NotIn predicate on the "topic" field.
-func TopicNotIn(vs ...string) predicate.Notification {
-	return predicate.Notification(sql.FieldNotIn(FieldTopic, vs...))
-}
-
-// TopicGT applies the GT predicate on the "topic" field.
-func TopicGT(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldGT(FieldTopic, v))
-}
-
-// TopicGTE applies the GTE predicate on the "topic" field.
-func TopicGTE(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldGTE(FieldTopic, v))
-}
-
-// TopicLT applies the LT predicate on the "topic" field.
-func TopicLT(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldLT(FieldTopic, v))
-}
-
-// TopicLTE applies the LTE predicate on the "topic" field.
-func TopicLTE(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldLTE(FieldTopic, v))
-}
-
-// TopicContains applies the Contains predicate on the "topic" field.
-func TopicContains(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldContains(FieldTopic, v))
-}
-
-// TopicHasPrefix applies the HasPrefix predicate on the "topic" field.
-func TopicHasPrefix(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldHasPrefix(FieldTopic, v))
-}
-
-// TopicHasSuffix applies the HasSuffix predicate on the "topic" field.
-func TopicHasSuffix(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldHasSuffix(FieldTopic, v))
+func TopicNotIn(vs ...enums.NotificationTopic) predicate.Notification {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Notification(sql.FieldNotIn(FieldTopic, v...))
 }
 
 // TopicIsNil applies the IsNil predicate on the "topic" field.
@@ -892,16 +862,6 @@ func TopicIsNil() predicate.Notification {
 // TopicNotNil applies the NotNil predicate on the "topic" field.
 func TopicNotNil() predicate.Notification {
 	return predicate.Notification(sql.FieldNotNull(FieldTopic))
-}
-
-// TopicEqualFold applies the EqualFold predicate on the "topic" field.
-func TopicEqualFold(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldEqualFold(FieldTopic, v))
-}
-
-// TopicContainsFold applies the ContainsFold predicate on the "topic" field.
-func TopicContainsFold(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldContainsFold(FieldTopic, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

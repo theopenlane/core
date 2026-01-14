@@ -1524,7 +1524,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notification.FieldData:             {Type: field.TypeJSON, Column: notification.FieldData},
 			notification.FieldReadAt:           {Type: field.TypeTime, Column: notification.FieldReadAt},
 			notification.FieldChannels:         {Type: field.TypeJSON, Column: notification.FieldChannels},
-			notification.FieldTopic:            {Type: field.TypeString, Column: notification.FieldTopic},
+			notification.FieldTopic:            {Type: field.TypeEnum, Column: notification.FieldTopic},
 		},
 	}
 	graph.Nodes[46] = &sqlgraph.Node{

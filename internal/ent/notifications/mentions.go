@@ -417,7 +417,7 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 		dataMap["url"] = url
 	}
 
-	topic := "mention_alert"
+	topic := enums.NotificationTopicMention
 	notifInput := &generated.CreateNotificationInput{
 		NotificationType: enums.NotificationTypeUser,
 		Title:            "You were mentioned",

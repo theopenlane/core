@@ -4785,9 +4785,9 @@ type CreateNotificationInput struct {
 	ReadAt *models.DateTime `json:"readAt,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []string `json:"channels,omitempty"`
-	// the topic of the notification
-	Topic   *string `json:"topic,omitempty"`
-	OwnerID *string `json:"ownerID,omitempty"`
+	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
+	Topic   *enums.NotificationTopic `json:"topic,omitempty"`
+	OwnerID *string                  `json:"ownerID,omitempty"`
 }
 
 // CreateOnboardingInput is used for create Onboarding object.
@@ -16254,9 +16254,9 @@ type Notification struct {
 	ReadAt *models.DateTime `json:"readAt,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []string `json:"channels,omitempty"`
-	// the topic of the notification
-	Topic *string       `json:"topic,omitempty"`
-	Owner *Organization `json:"owner,omitempty"`
+	// the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
+	Topic *enums.NotificationTopic `json:"topic,omitempty"`
+	Owner *Organization            `json:"owner,omitempty"`
 }
 
 func (Notification) IsNode() {}

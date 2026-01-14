@@ -10141,7 +10141,7 @@ type CreateNotificationInput struct {
 	Data             map[string]interface{}
 	ReadAt           *models.DateTime
 	Channels         []enums.Channel
-	Topic            *string
+	Topic            *enums.NotificationTopic
 	OwnerID          *string
 }
 

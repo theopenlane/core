@@ -28,7 +28,7 @@ require (
 require (
 	ariga.io/atlas v1.0.0 // indirect
 	entgo.io/contrib v0.7.0 // indirect
-	github.com/99designs/gqlgen v0.17.85 // indirect
+	github.com/99designs/gqlgen v0.17.86 // indirect
 	github.com/XSAM/otelsql v0.41.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect

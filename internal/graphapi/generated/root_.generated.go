@@ -48109,9 +48109,9 @@ input CreateNotificationInput {
   """
   channels: [Channel!]
   """
-  the topic of the notification
+  the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
   """
-  topic: String
+  topic: NotificationNotificationTopic
   ownerID: ID
 }
 """
@@ -56649,6 +56649,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
   SUBPROCESSOR
   SUBSCRIBER
   TASK
+  TRUST_CENTER_SUBPROCESSOR
   VULNERABILITY
 }
 """
@@ -67631,10 +67632,19 @@ type Notification implements Node {
   """
   channels: [Channel!]
   """
-  the topic of the notification
+  the topic of the notification (TASK_ASSIGNMENT, APPROVAL, MENTION, EXPORT)
   """
-  topic: String
+  topic: NotificationNotificationTopic
   owner: Organization
+}
+"""
+NotificationNotificationTopic is enum for the field topic
+"""
+enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/common/enums.NotificationTopic") {
+  TASK_ASSIGNMENT
+  APPROVAL
+  MENTION
+  EXPORT
 }
 """
 NotificationNotificationType is enum for the field notification_type
