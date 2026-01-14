@@ -6,7 +6,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/vektah/gqlparser/v2/ast"
 
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 )
 
@@ -19,10 +21,7 @@ func WithMetrics(h *handler.Server) {
 		// get the operation context
 		opCtx := graphql.GetOperationContext(ctx)
 
-		opName := opCtx.OperationName
-		if opName == "" && opCtx.Operation != nil {
-			opName = opCtx.Operation.Name
-		}
+		opName := getOpName(ctx)
 
 		start := opCtx.Stats.OperationStart
 		duration := time.Since(start).Seconds()
@@ -45,4 +44,36 @@ func WithMetrics(h *handler.Server) {
 
 		return resp
 	})
+}
+
+// getOpName retrieves the operation name from the context or returns "unknown" if not found
+func getOpName(ctx context.Context) string {
+	if !graphql.HasOperationContext(ctx) {
+		logx.FromContext(ctx).Info().Msg("graphql operation context not found; unable to determine operation name")
+
+		return "unknown"
+	}
+
+	opCtx := graphql.GetOperationContext(ctx)
+	if opCtx.OperationName != "" {
+		return opCtx.OperationName
+	}
+
+	if opCtx.Operation != nil {
+		if opCtx.Operation.Name != "" {
+			return opCtx.Operation.Name
+		}
+
+		if opCtx.Operation.Operation == ast.Mutation {
+			return "unnamed_mutation"
+		}
+
+		if opCtx.Operation.Operation == ast.Query {
+			return "unnamed_query"
+		}
+	}
+
+	logx.FromContext(ctx).Info().Str("raw_query", opCtx.RawQuery).Msg("GraphQL operation name is empty; metrics may be obscured")
+
+	return "unknown"
 }
