@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 )
 
-var workflowEligibleEdges = map[string][]string{
+var WorkflowEligibleEdges = map[string][]string{
 	generated.TypeActionPlan: edgeList(
 		"approver",
 		"delegate",
@@ -78,14 +78,14 @@ var workflowEligibleEdges = map[string][]string{
 	),
 }
 
-// extractChangedEdges inspects the mutation to determine which edge relationships were modified.
+// ExtractChangedEdges inspects the mutation to determine which edge relationships were modified.
 // It returns: edge names, added IDs per edge, removed IDs per edge.
-func extractChangedEdges(m ent.Mutation) ([]string, map[string][]string, map[string][]string) {
+func ExtractChangedEdges(m ent.Mutation) ([]string, map[string][]string, map[string][]string) {
 	var edgeNames []string
 	addedIDs := make(map[string][]string)
 	removedIDs := make(map[string][]string)
 
-	eligibleEdges := workflowEligibleEdges[m.Type()]
+	eligibleEdges := WorkflowEligibleEdges[m.Type()]
 	if len(eligibleEdges) == 0 {
 		return edgeNames, addedIDs, removedIDs
 	}

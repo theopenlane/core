@@ -47,12 +47,11 @@ func HookTrustCenterSetting() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
-// HookTrustCenterSettingCreatePreview is a hook that runs on trust center setting create
+// HookTrustCenterSettingCreatePreview is a hook that runs on trust center setting create or update
 // to enqueue a job to create the preview domain
 func HookTrustCenterSettingCreatePreview() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
-			logx.FromContext(ctx).Debug().Msg("trust center setting create preview hook")
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -65,17 +64,21 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 
 			trustCenterID, hasTc := m.TrustCenterID()
 			if !hasTc {
+				logx.FromContext(ctx).Error().Msg("trust center ID missing in trust center setting mutation")
 				// should never happen
 				return nil, ErrMissingTrustCenterID
 			}
 
 			trustCenter, err := m.Client().TrustCenter.Get(ctx, trustCenterID)
 			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to get trust center for trust center setting mutation")
+
 				return nil, err
 			}
 
 			if trustCenter.PreviewDomainID != "" {
 				logx.FromContext(ctx).Debug().Str("trust_center_id", trustCenterID).Msg("preview domain already exists, skipping creation job")
+
 				return v, nil
 			}
 
@@ -85,13 +88,14 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 				TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
 				TrustCenterCnameTarget:   trustCenterConfig.CnameTarget,
 			}, nil); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to enqueue create preview domain job")
+
 				return nil, err
 			}
 
 			return v, nil
-
 		})
-	}, ent.OpCreate)
+	}, ent.OpCreate|ent.OpUpdateOne)
 }
 
 // checkTrustCenterFiles checks for logo and favicon files in the context
