@@ -33,6 +33,7 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.18.0
 	github.com/fsnotify/fsnotify v1.9.0
+	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b
 	github.com/gabriel-vasile/mimetype v1.4.12
 	github.com/gertd/go-pluralize v0.2.1
 	github.com/getkin/kin-openapi v0.133.0
@@ -119,12 +120,14 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
+	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/google/go-github/v80 v80.0.0 // indirect
 	github.com/riverqueue/river/rivertype v0.30.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
+	golang.org/x/image v0.35.0 // indirect
 	golang.org/x/term v0.39.0 // indirect
 )
 
@@ -294,7 +297,6 @@ require (
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/wrap v0.2.0 // indirect
-	github.com/nguyenthenguyen/docx v0.0.0-20230621112118-9c8e795a11db
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
 	github.com/olekukonko/tablewriter v1.1.2 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
