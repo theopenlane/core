@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -156,26 +155,7 @@ func (r *mutationResolver) DeleteBulkCustomDomain(ctx context.Context, ids []str
 
 // ValidateCustomDomain is the resolver for the validateCustomDomain field.
 func (r *mutationResolver) ValidateCustomDomain(ctx context.Context, id string) (*model.CustomDomainValidatePayload, error) {
-	res, err := withTransactionalMutation(ctx).CustomDomain.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "customdomain"})
-	}
-
-	if err := common.SetOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	if _, err := r.db.Job.Insert(ctx, jobspec.ValidateCustomDomainArgs{
-		CustomDomainID: id,
-	}, nil); err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "customdomain"})
-	}
-
-	return &model.CustomDomainValidatePayload{
-		CustomDomain: res,
-	}, nil
+	return validateCustomDomain(ctx, id, r)
 }
 
 // CustomDomain is the resolver for the customDomain field.
