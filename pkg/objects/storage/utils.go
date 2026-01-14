@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fumiama/go-docx"
 	"github.com/gabriel-vasile/mimetype"
-	"github.com/nguyenthenguyen/docx"
 	"gopkg.in/yaml.v3"
 )
 
@@ -94,18 +94,48 @@ func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 	}
 }
 
-// parseDocx extracts and returns the text content from a DOCX file
+// parseDocx extracts and returns the text content from a DOCX file preserving paragraph structure
 func parseDocx(content []byte) (string, error) {
 	reader := bytes.NewReader(content)
 
-	doc, err := docx.ReadDocxFromMemory(reader, int64(len(content)))
+	doc, err := docx.Parse(reader, int64(len(content)))
 	if err != nil {
 		return "", fmt.Errorf("failed to read docx file: %w", err) //nolint:err113
 	}
 
-	defer doc.Close()
+	var paragraphs []string
 
-	return strings.TrimSpace(doc.Editable().GetContent()), nil
+	for _, item := range doc.Document.Body.Items {
+		switch p := item.(type) {
+		case *docx.Paragraph:
+			if text := p.String(); text != "" {
+				paragraphs = append(paragraphs, text)
+			}
+
+		case *docx.Table:
+			for _, row := range p.TableRows {
+				var cells []string
+
+				for _, cell := range row.TableCells {
+					var cellContent []string
+
+					for _, para := range cell.Paragraphs {
+						if t := para.String(); t != "" {
+							cellContent = append(cellContent, t)
+						}
+					}
+
+					cells = append(cells, strings.Join(cellContent, " "))
+				}
+
+				if len(cells) > 0 {
+					paragraphs = append(paragraphs, strings.Join(cells, " | "))
+				}
+			}
+		}
+	}
+
+	return strings.Join(paragraphs, "\n"), nil
 }
 
 // NewUploadFile creates a new File from a file path
