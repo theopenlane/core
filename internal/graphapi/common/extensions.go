@@ -125,6 +125,10 @@ func traceExtension(h *handler.Server) {
 
 // initExtensionResponse initializes the extensions map in the response to avoid nil pointer panics
 func initExtensionResponse(resp *graphql.Response) *graphql.Response {
+	if resp == nil {
+		resp = &graphql.Response{}
+	}
+
 	if resp.Extensions == nil {
 		resp.Extensions = make(map[string]interface{})
 	}
