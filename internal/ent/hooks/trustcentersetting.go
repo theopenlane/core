@@ -124,6 +124,8 @@ func isPreviewSetting(ctx context.Context, m *generated.TrustCenterSettingMutati
 	return oldEnv == enums.TrustCenterEnvironmentPreview
 }
 
+// getTrustCenterSettingID retrieves the trust center ID from the mutation, handling both create and update cases
+// by checking the old value if necessary on updates if its not included in the mutation
 func getTrustCenterSettingID(ctx context.Context, m *generated.TrustCenterSettingMutation) (string, bool) {
 	trustCenterID, hasTc := m.TrustCenterID()
 	if hasTc || m.Op().Is(ent.OpCreate) {
