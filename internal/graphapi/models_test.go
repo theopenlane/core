@@ -2304,7 +2304,7 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 	}
 
 	if tcdb.Category == "" {
-		tcdb.Category = gofakeit.Word()
+		tcdb.Category = gofakeit.Word() + "-" + ulids.New().String()
 	}
 
 	if tcdb.TrustCenterID == "" {
