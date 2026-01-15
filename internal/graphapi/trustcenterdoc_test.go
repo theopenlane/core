@@ -319,6 +319,11 @@ func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
 func TestMutationCreateTrustCenterDoc(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
+
 	// Helper function to create fresh file uploads for each test case
 	createPDFUpload := func() *graphql.Upload {
 		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
@@ -353,10 +358,11 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, create trust center doc with PDF file",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				Tags:                       []string{"test", "document"},
-				Visibility:                 &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
+				Tags:                   []string{"test", "document"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -365,12 +371,12 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, create trust center doc with watermarking",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
-				Tags:                       []string{"test", "document"},
-				Visibility:                 &enums.TrustCenterDocumentVisibilityPubliclyVisible,
-				WatermarkingEnabled:        lo.ToPtr(true),
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
+				Tags:                   []string{"test", "document"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+				WatermarkingEnabled:    lo.ToPtr(true),
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -379,11 +385,11 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, protected, create trust center doc with PDF file",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
-				Tags:                       []string{"test", "document"},
-				Visibility:                 &enums.TrustCenterDocumentVisibilityProtected,
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
+				Tags:                   []string{"test", "document"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityProtected,
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -392,12 +398,12 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, protected, create trust center doc with watermarking",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
-				Tags:                       []string{"test", "document"},
-				Visibility:                 &enums.TrustCenterDocumentVisibilityProtected,
-				WatermarkingEnabled:        lo.ToPtr(true),
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
+				Tags:                   []string{"test", "document"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityProtected,
+				WatermarkingEnabled:    lo.ToPtr(true),
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -406,11 +412,11 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, not visible, create trust center doc with PDF file",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
-				Tags:                       []string{"test", "document"},
-				Visibility:                 &enums.TrustCenterDocumentVisibilityNotVisible,
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
+				Tags:                   []string{"test", "document"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityNotVisible,
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -419,11 +425,11 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, not visible, create trust center doc with watermarking",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				Tags:                       []string{"test", "document"},
-				Visibility:                 &enums.TrustCenterDocumentVisibilityNotVisible,
-				WatermarkingEnabled:        lo.ToPtr(true),
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				Tags:                   []string{"test", "document"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityNotVisible,
+				WatermarkingEnabled:    lo.ToPtr(true),
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -432,9 +438,9 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, minimal required fields",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Minimal Document",
-				TrustCenterDocKindName: lo.ToPtr("General"),
-				TrustCenterID:              &trustCenter.ID,
+				Title:                  "Minimal Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -443,9 +449,9 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, using personal access token",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "PAT Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
+				Title:                  "PAT Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
 			},
 			file:   createPDFUpload(),
 			client: suite.client.apiWithPAT,
@@ -454,8 +460,8 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "invalid file type",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Invalid File Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
+				Title:                  "Invalid File Document",
+				TrustCenterDocKindName: &docKind.Name,
 			},
 			file:        createTXTUpload(),
 			client:      suite.client.api,
@@ -465,8 +471,8 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "missing title",
 			input: testclient.CreateTrustCenterDocInput{
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
 			},
 			file:        createPDFUpload(),
 			client:      suite.client.api,
@@ -474,22 +480,21 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			expectedErr: "title",
 		},
 		{
-			name: "missing category",
+			name: "no category is valid (field is optional)",
 			input: testclient.CreateTrustCenterDocInput{
 				Title:         "Test Document",
 				TrustCenterID: &trustCenter.ID,
 			},
-			file:        createPDFUpload(),
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "category",
+			file:   createPDFUpload(),
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "not authorized, view only user",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Unauthorized Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
+				Title:                  "Unauthorized Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
 			},
 			file:        createPDFUpload(),
 			client:      suite.client.api,
@@ -499,9 +504,9 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "not authorized, different user",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:                      "Different User Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
+				Title:                  "Different User Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
 			},
 			file:        createPDFUpload(),
 			client:      suite.client.api,
@@ -534,7 +539,9 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			trustCenterDoc := resp.CreateTrustCenterDoc.TrustCenterDoc
 			assert.Check(t, trustCenterDoc.ID != "")
 			assert.Check(t, is.Equal(tc.input.Title, trustCenterDoc.Title))
-			assert.Check(t, is.Equal(*tc.input.TrustCenterDocKindName, *trustCenterDoc.TrustCenterDocKindName))
+			if tc.input.TrustCenterDocKindName != nil {
+				assert.Check(t, is.Equal(*tc.input.TrustCenterDocKindName, *trustCenterDoc.TrustCenterDocKindName))
+			}
 
 			// Check trust center ID
 			if tc.input.TrustCenterID != nil {
@@ -735,6 +742,18 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenterDoc := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID}).MustNew(testUser1.UserCtx, t)
 
+	(&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "UpdatedCategory",
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
+
+	(&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "MultiCategory",
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
+
 	testCases := []struct {
 		name             string
 		trustCenterDocID string
@@ -923,6 +942,11 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
+
 	// Helper function to create fresh file uploads
 	createPDFUpload := func() *graphql.Upload {
 		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
@@ -961,11 +985,11 @@ func TestTrustCenterDocWatermarkingFGATuples(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
 		input := testclient.CreateTrustCenterDocInput{
-			Title:                      "Public Watermarked Document",
-			TrustCenterDocKindName: lo.ToPtr("Policy"),
-			TrustCenterID:              &trustCenter.ID,
-			WatermarkingEnabled:        lo.ToPtr(true),
-			Visibility:                 &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+			Title:                  "Public Watermarked Document",
+			TrustCenterDocKindName: &docKind.Name,
+			TrustCenterID:          &trustCenter.ID,
+			WatermarkingEnabled:    lo.ToPtr(true),
+			Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 		}
 
 		resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
@@ -1416,6 +1440,10 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 }
 
 func TestTrustCenterDoc_NotVisible(t *testing.T) {
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
 
 	t.Run("doc without file should set to NOT_VISIBLE", func(t *testing.T) {
 
@@ -1465,7 +1493,7 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 
 				create := suite.client.db.TrustCenterDoc.Create().
 					SetTitle("My Test Document").
-					SetTrustCenterDocKindName("trustcenter").
+					SetTrustCenterDocKindName(docKind.Name).
 					SetTrustCenterID(trustCenter.ID).
 					SetWatermarkingEnabled(tc.watermarkingEnabled)
 
@@ -1512,10 +1540,10 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*upload})
 
 		createInput := testclient.CreateTrustCenterDocInput{
-			Title:                      "Test Document with File",
-			TrustCenterDocKindName: lo.ToPtr("Policy"),
-			TrustCenterID:              &trustCenter.ID,
-			Visibility:                 &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+			Title:                  "Test Document with File",
+			TrustCenterDocKindName: &docKind.Name,
+			TrustCenterID:          &trustCenter.ID,
+			Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *upload)
@@ -1547,6 +1575,11 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 
 func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 	cleanupTrustCenterData(t)
+
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -1607,9 +1640,9 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 			expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
 			input := testclient.CreateTrustCenterDocInput{
-				Title:                      "Test Document",
-				TrustCenterDocKindName: lo.ToPtr("Policy"),
-				TrustCenterID:              &trustCenter.ID,
+				Title:                  "Test Document",
+				TrustCenterDocKindName: &docKind.Name,
+				TrustCenterID:          &trustCenter.ID,
 			}
 
 			if tc.watermarkingEnabled != nil {
@@ -1640,10 +1673,10 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
 		input := testclient.CreateTrustCenterDocInput{
-			Title:                      "Test Document",
-			TrustCenterDocKindName: lo.ToPtr("Policy"),
-			TrustCenterID:              &trustCenter.ID,
-			WatermarkingEnabled:        lo.ToPtr(false),
+			Title:                  "Test Document",
+			TrustCenterDocKindName: &docKind.Name,
+			TrustCenterID:          &trustCenter.ID,
+			WatermarkingEnabled:    lo.ToPtr(false),
 		}
 
 		resp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *file)
@@ -1665,6 +1698,11 @@ func TestTrustCenterDocWatermarkingEnabledCreation(t *testing.T) {
 
 func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 	cleanupTrustCenterData(t)
+
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -1726,9 +1764,9 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
 				input := testclient.CreateTrustCenterDocInput{
-					Title:                      "Test Document - " + tc.name,
-					TrustCenterDocKindName: lo.ToPtr("Policy"),
-					TrustCenterID:              &trustCenter.ID,
+					Title:                  "Test Document - " + tc.name,
+					TrustCenterDocKindName: &docKind.Name,
+					TrustCenterID:          &trustCenter.ID,
 				}
 
 				if tc.watermarkingEnabled != nil {
@@ -1788,9 +1826,9 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
 				input := testclient.CreateTrustCenterDocInput{
-					Title:                      "Test Document - " + tc.name,
-					TrustCenterDocKindName: lo.ToPtr("Policy"),
-					TrustCenterID:              &trustCenter.ID,
+					Title:                  "Test Document - " + tc.name,
+					TrustCenterDocKindName: &docKind.Name,
+					TrustCenterID:          &trustCenter.ID,
 				}
 
 				if tc.watermarkingEnabled != nil {
@@ -1817,6 +1855,11 @@ func TestTrustCenterDocWatermarkingOverrideGlobalConfig(t *testing.T) {
 func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 	cleanupTrustCenterData(t)
 
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser1.UserCtx, t)
+
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	createPDFUpload := func() *graphql.Upload {
@@ -1834,10 +1877,10 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file})
 
 	createInput := testclient.CreateTrustCenterDocInput{
-		Title:                      "Test Document with Watermarking",
-		TrustCenterDocKindName: lo.ToPtr("Policy"),
-		TrustCenterID:              &trustCenter.ID,
-		WatermarkingEnabled:        lo.ToPtr(true),
+		Title:                  "Test Document with Watermarking",
+		TrustCenterDocKindName: &docKind.Name,
+		TrustCenterID:          &trustCenter.ID,
+		WatermarkingEnabled:    lo.ToPtr(true),
 	}
 
 	createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *file)
@@ -1895,10 +1938,10 @@ func TestTrustCenterDocWatermarkingEnabledPreventReset(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*file2})
 
 		createInput2 := testclient.CreateTrustCenterDocInput{
-			Title:                      "Test Document without Watermarking",
-			TrustCenterDocKindName: lo.ToPtr("Policy"),
-			TrustCenterID:              &trustCenter.ID,
-			WatermarkingEnabled:        lo.ToPtr(false),
+			Title:                  "Test Document without Watermarking",
+			TrustCenterDocKindName: &docKind.Name,
+			TrustCenterID:          &trustCenter.ID,
+			WatermarkingEnabled:    lo.ToPtr(false),
 		}
 
 		createResp2, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput2, *file2)
