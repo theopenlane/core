@@ -647,8 +647,8 @@ github.com/testcontainers/testcontainers-go/modules/openfga v0.40.0 h1:7zHXSbw8T
 github.com/testcontainers/testcontainers-go/modules/openfga v0.40.0/go.mod h1:zwLB9Af9gw2ViufG7oZT/DpmubgKhnpleOWItgcnLVY=
 github.com/theopenlane/beacon v0.3.0 h1:lGY2SWRMRVqvbtwDzVsAGtWcgf0ca9n+I49Kyp6Y45Q=
 github.com/theopenlane/beacon v0.3.0/go.mod h1:2A6SqD6PuOlLp3X3jS9yMpfhVmDXqx9whbR6D2tN+Dg=
-github.com/theopenlane/core/common v1.0.0 h1:kgTVv5T6ztzx72qaxK5MjoMRX//N9/RgDa+aPhHIZ2I=
-github.com/theopenlane/core/common v1.0.0/go.mod h1:h+YCWj803NiCSVE7kWgIl2FrgY0qZ/b9I/RHGmfylTc=
+github.com/theopenlane/core/common v1.0.1 h1:jcuau4CEPx6oSB4ZKr3rpYW75c2PLGTbmQnfHOJ5/6U=
+github.com/theopenlane/core/common v1.0.1/go.mod h1:YtuzGWC2beESJViCwrl8PV9fg4U/l1UHSh2TZiuhaxg=
 github.com/theopenlane/dbx v0.1.3 h1:6zncXgqnvRyz5OuCDPM07xmOiBXS7q7U9GSMOWu3vNc=
 github.com/theopenlane/dbx v0.1.3/go.mod h1:/bcz8oKFK3qrakLw0yHCAFY6fGnTOC3CntM0jMj3GDk=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
@@ -706,8 +706,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vektah/gqlparser/v2 v2.5.31 h1:YhWGA1mfTjID7qJhd1+Vxhpk5HTgydrGU9IgkWBTJ7k=
 github.com/vektah/gqlparser/v2 v2.5.31/go.mod h1:c1I28gSOVNzlfc4WuDlqU7voQnsqI6OG2amkBAFmgts=
-github.com/vektra/mockery/v3 v3.6.1 h1:YyqAXihdNML8y6SJnvPKYr+2HAHvBjdvqFu/fMYlX8g=
-github.com/vektra/mockery/v3 v3.6.1/go.mod h1:Oti3Df0WP8wwT31yuVri3QNsDeMUQU5Q4QEg8EabaBw=
+github.com/vektra/mockery/v3 v3.6.2 h1:b3SyDRt+RTNGHZSjbfPAEyGi5yYkAWh1ime4enwxUWE=
+github.com/vektra/mockery/v3 v3.6.2/go.mod h1:kh58mpWIghfUCfFkNCP72TJmuJUR/dKnrqBZ3HspVq8=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
