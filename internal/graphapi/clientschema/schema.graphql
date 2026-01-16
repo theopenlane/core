@@ -1672,6 +1672,9 @@ This scalar can be used to store and validate address information in the GraphQL
 It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
 """
 scalar Address
+"""
+Any is a generic fallback type
+"""
 scalar Any
 type Assessment implements Node {
 	id: ID!

@@ -212,6 +212,7 @@ func WithAuth() ServerOption {
 	})
 }
 
+// getAuthOptions builds the auth options for the server based on the config so it can be used for both the auth middleware as well as websocket init payloads
 func getAuthOptions(s *ServerOptions) []authmw.Option {
 	skipperFunc := func(c echo.Context) bool {
 		return authmw.AuthenticateSkipperFuncForImpersonation(c)

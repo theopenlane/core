@@ -30,12 +30,11 @@ func (r *Resolver) createSSEClient() transport.SSE {
 	}
 }
 
+// webSocketInit handles the websocket init payload for authentication and returns the context with the authenticated user
 func (r *Resolver) webSocketInit(
 	ctx context.Context,
 	initPayload transport.InitPayload,
 ) (context.Context, *transport.InitPayload, error) {
-	logx.FromContext(ctx).Warn().Msg("websocket init payload received")
-
 	au, err := authmw.AuthenticateTransport(
 		ctx,
 		initPayload,

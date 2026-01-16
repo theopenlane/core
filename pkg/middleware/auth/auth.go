@@ -59,6 +59,7 @@ var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
 	return ok
 }
 
+// AuthenticateSkipperFuncForWebsockets determines whether Authenticate middleware should be skipped for websocket upgrades
 var AuthenticateSkipperFuncForWebsockets = func(c echo.Context) bool {
 	return websocket.IsWebSocketUpgrade(c.Request())
 }
