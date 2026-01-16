@@ -226,10 +226,10 @@ func addExportNotification(ctx *soiree.EventContext, input *exportFields) error 
 
 	if input.status == enums.ExportStatusReady {
 		title = "Export Complete"
-		body = fmt.Sprintf("Export of %s is ready for download", input.exportType)
+		body = fmt.Sprintf("Export of %s is ready for download", input.exportType.String())
 	} else {
 		title = "Export Failed"
-		body = fmt.Sprintf("Export of %s completed with errors", input.exportType)
+		body = fmt.Sprintf("Export of %s completed with errors", input.exportType.String())
 
 		if input.errorMessage != "" {
 			dataMap["errors"] = input.errorMessage
