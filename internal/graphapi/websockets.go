@@ -3,6 +3,8 @@ package graphapi
 import (
 	"context"
 	"net/http"
+	"regexp"
+	"strings"
 
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
@@ -63,10 +65,50 @@ func (r *Resolver) upgraderFunc() websocket.Upgrader {
 				return false
 			}
 
-			// check if the origin is in the allowed list
-			_, ok := r.origins[o]
-
-			return ok
+			return checkOrigin(o, r.origins)
 		},
 	}
+}
+
+// checkOrigin checks if the given origin is allowed based on the allowed origins map
+func checkOrigin(o string, allowedOrigins map[string]struct{}) bool {
+	// check if the origin is in the allowed list
+	_, ok := allowedOrigins[o]
+	if ok {
+		return ok
+	}
+
+	// check the same list, but for blob patterns, used sometimes in preview environments
+	// such as  https://*openlane*.vercel.app
+	allowOriginPatterns := allowedOriginsPatterns(allowedOrigins)
+	for _, re := range allowOriginPatterns {
+		if match := re.MatchString(o); match {
+			return true
+		}
+	}
+
+	return ok
+
+}
+
+// allowedOriginsPatterns converts allowed origins with wildcards into regex patterns
+// this matches the cors middleware behavior to allow the same origins for websockets
+func allowedOriginsPatterns(allowedOrigins map[string]struct{}) []*regexp.Regexp {
+	allowOriginPatterns := make([]*regexp.Regexp, 0, len(allowedOrigins))
+
+	for origin := range allowedOrigins {
+		pattern := regexp.QuoteMeta(origin)
+		pattern = strings.ReplaceAll(pattern, "\\*", ".*")
+		pattern = strings.ReplaceAll(pattern, "\\?", ".")
+		pattern = "^" + pattern + "$"
+
+		re, err := regexp.Compile(pattern)
+		if err != nil {
+			continue
+		}
+
+		allowOriginPatterns = append(allowOriginPatterns, re)
+	}
+
+	return allowOriginPatterns
 }
