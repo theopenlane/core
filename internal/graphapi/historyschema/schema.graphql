@@ -27402,6 +27402,10 @@ input VulnerabilityHistoryWhereInput {
 	externalURIEqualFold: String
 	externalURIContainsFold: String
 }
+"""
+WorkflowAssignmentApproval captures structured metadata for workflow assignment approvals.
+"""
+scalar WorkflowAssignmentApproval
 type WorkflowAssignmentHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -27451,6 +27455,18 @@ type WorkflowAssignmentHistory implements Node {
 	Optional metadata for the assignment
 	"""
 	metadata: Map
+	"""
+	structured approval metadata
+	"""
+	approvalMetadata: WorkflowAssignmentApproval
+	"""
+	structured rejection metadata
+	"""
+	rejectionMetadata: WorkflowAssignmentRejection
+	"""
+	structured invalidation metadata
+	"""
+	invalidationMetadata: WorkflowAssignmentInvalidation
 	"""
 	Timestamp when the assignment was decided
 	"""
@@ -27834,6 +27850,14 @@ enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.c
 	APPROVED
 	REJECTED
 }
+"""
+WorkflowAssignmentInvalidation captures details when an approval is invalidated.
+"""
+scalar WorkflowAssignmentInvalidation
+"""
+WorkflowAssignmentRejection captures details when an approval is rejected or denied.
+"""
+scalar WorkflowAssignmentRejection
 type WorkflowAssignmentTargetHistory implements Node {
 	id: ID!
 	historyTime: Time!
