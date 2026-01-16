@@ -70,3 +70,45 @@ func TestCheckOrigin(t *testing.T) {
 		})
 	}
 }
+
+func TestCheckOriginAllowAll(t *testing.T) {
+	allowedOrigins := map[string]struct{}{
+		"*": {},
+	}
+
+	tests := []struct {
+		name           string
+		origin         string
+		allowedOrigins map[string]struct{}
+		want           bool
+	}{
+		{
+			name:   "any origin allowed",
+			origin: "https://allowed.com",
+			allowedOrigins: map[string]struct{}{
+				"*": {},
+			},
+			want: true,
+		},
+		{
+			name:   "any origin allowed",
+			origin: "https://meow.com",
+			allowedOrigins: map[string]struct{}{
+				"*": {},
+			},
+			want: true,
+		},
+		{
+			name:   "empty should also allow all",
+			origin: "https://meow.com",
+			want:   true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			got := checkOrigin(tc.origin, allowedOrigins)
+			assert.Check(t, is.Equal(got, tc.want))
+		})
+	}
+}
