@@ -200,16 +200,10 @@ var (
 
 // AuthenticateTransport authenticates a websocket transport init payload and returns the authenticated user
 func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayload, authOptions *Options) (*auth.AuthenticatedUser, error) {
-	a := initPayload.Authorization()
+	bearerToken, err := auth.GetBearerTokenFromWebsocketRequest(initPayload)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get bearer token from websocket init payload")
 
-	bearerToken := bearer.FindStringSubmatch(a)
-	if len(bearerToken) != 2 {
-		logx.FromContext(ctx).Error().Msg("no bearer token found in websocket init payload")
-
-		return nil, ErrNoAuthorization
-	}
-
-	if authOptions == nil {
 		return nil, ErrUnableToAuthenticateTransport
 	}
 
@@ -218,7 +212,7 @@ func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayloa
 		return nil, err
 	}
 
-	claims, err := validator.VerifyWithContext(ctx, bearerToken[1])
+	claims, err := validator.VerifyWithContext(ctx, bearerToken)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to verify token in websocket init payload")
 

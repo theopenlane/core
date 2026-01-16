@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v0.1.0
 	github.com/theopenlane/go-client v0.4.4
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.23.2
+	github.com/theopenlane/iam v0.23.3-0.20260116032344-0efbbe080f4b
 	github.com/theopenlane/utils v0.6.2
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/term v0.39.0
@@ -53,6 +53,7 @@ require (
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
+	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/invopop/jsonschema v0.13.0 // indirect
@@ -95,6 +96,7 @@ require (
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.47.0 // indirect
+	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/text v0.33.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
