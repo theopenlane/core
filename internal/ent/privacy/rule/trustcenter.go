@@ -12,10 +12,13 @@ import (
 	"github.com/theopenlane/iam/fgax"
 )
 
+// trustCenterMutation defines an interface for mutations that involve a trust center ID.
 type trustCenterMutation interface {
 	TrustCenterID() (id string, exists bool)
 }
 
+// AllowIfTrustCenterEditor checks if the user has edit access to the trust center associated with the mutation
+// so it can be used to allow mutations on trust center related entities.
 func AllowIfTrustCenterEditor() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
 		logx.FromContext(ctx).Debug().Msg("checking write access for trust center")
@@ -48,6 +51,7 @@ func AllowIfTrustCenterEditor() privacy.MutationRule {
 	})
 }
 
+// checkTrustCenterAccess checks if the authenticated user has the specified relation access to the trust center.
 func checkTrustCenterAccess(ctx context.Context, relation string, trustCenterID string) error {
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
