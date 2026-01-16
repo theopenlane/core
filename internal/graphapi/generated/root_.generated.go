@@ -37522,6 +37522,9 @@ scalar WorkflowEventPayload
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
+"""
+Any is a generic fallback type
+"""
 scalar Any`, BuiltIn: false},
 	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
     """

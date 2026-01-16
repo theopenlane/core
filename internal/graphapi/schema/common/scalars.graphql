@@ -95,4 +95,7 @@ scalar WorkflowEventPayload
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
+"""
+Any is a generic fallback type
+"""
 scalar Any
