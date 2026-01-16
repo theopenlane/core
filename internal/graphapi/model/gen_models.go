@@ -2408,51 +2408,15 @@ type WebauthnDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for createBulkWorkflowAssignment mutation
-type WorkflowAssignmentBulkCreatePayload struct {
-	// Created workflowAssignments
-	WorkflowAssignments []*generated.WorkflowAssignment `json:"workflowAssignments,omitempty"`
-}
-
-// Return response for createWorkflowAssignment mutation
-type WorkflowAssignmentCreatePayload struct {
-	// Created workflowAssignment
+// Return response for approveWorkflowAssignment mutation
+type WorkflowAssignmentApprovePayload struct {
+	// Approved workflow assignment
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
 }
 
-// Return response for deleteWorkflowAssignment mutation
-type WorkflowAssignmentDeletePayload struct {
-	// Deleted workflowAssignment ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetBulkCreatePayload struct {
-	// Created workflowAssignmentTargets
-	WorkflowAssignmentTargets []*generated.WorkflowAssignmentTarget `json:"workflowAssignmentTargets,omitempty"`
-}
-
-// Return response for createWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetCreatePayload struct {
-	// Created workflowAssignmentTarget
-	WorkflowAssignmentTarget *generated.WorkflowAssignmentTarget `json:"workflowAssignmentTarget"`
-}
-
-// Return response for deleteWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetDeletePayload struct {
-	// Deleted workflowAssignmentTarget ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetUpdatePayload struct {
-	// Updated workflowAssignmentTarget
-	WorkflowAssignmentTarget *generated.WorkflowAssignmentTarget `json:"workflowAssignmentTarget"`
-}
-
-// Return response for updateWorkflowAssignment mutation
-type WorkflowAssignmentUpdatePayload struct {
-	// Updated workflowAssignment
+// Return response for rejectWorkflowAssignment mutation
+type WorkflowAssignmentRejectPayload struct {
+	// Rejected workflow assignment
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
 }
 
@@ -2504,28 +2468,20 @@ type WorkflowEventUpdatePayload struct {
 	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
 }
 
-// Return response for createBulkWorkflowInstance mutation
-type WorkflowInstanceBulkCreatePayload struct {
-	// Created workflowInstances
-	WorkflowInstances []*generated.WorkflowInstance `json:"workflowInstances,omitempty"`
+// Metadata for a workflow-eligible field
+type WorkflowFieldMetadata struct {
+	// The field name (snake_case)
+	Name string `json:"name"`
+	// Human-readable label for the field
+	Label string `json:"label"`
+	// Field data type
+	Type string `json:"type"`
 }
 
-// Return response for createWorkflowInstance mutation
-type WorkflowInstanceCreatePayload struct {
-	// Created workflowInstance
-	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
-}
-
-// Return response for deleteWorkflowInstance mutation
-type WorkflowInstanceDeletePayload struct {
-	// Deleted workflowInstance ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowInstance mutation
-type WorkflowInstanceUpdatePayload struct {
-	// Updated workflowInstance
-	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
+// Workflow metadata including supported object types and their fields
+type WorkflowMetadata struct {
+	// Available workflow object types
+	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
 }
 
 // Return response for createBulkWorkflowObjectRef mutation
@@ -2544,6 +2500,20 @@ type WorkflowObjectRefCreatePayload struct {
 type WorkflowObjectRefDeletePayload struct {
 	// Deleted workflowObjectRef ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Metadata for a workflow object type
+type WorkflowObjectTypeMetadata struct {
+	// The object type name (e.g., CONTROL, EVIDENCE, POLICY)
+	Type string `json:"type"`
+	// Human-readable label for the type
+	Label string `json:"label"`
+	// Description of the object type
+	Description string `json:"description"`
+	// List of fields that can be tracked in workflows for this type
+	EligibleFields []*WorkflowFieldMetadata `json:"eligibleFields"`
+	// Available resolver keys for this object type
+	ResolverKeys []string `json:"resolverKeys"`
 }
 
 // Properties by which ControlCategory connections can be ordered.

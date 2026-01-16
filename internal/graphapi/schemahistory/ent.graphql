@@ -27336,6 +27336,18 @@ type WorkflowAssignmentHistory implements Node {
   """
   metadata: Map
   """
+  structured approval metadata
+  """
+  approvalMetadata: WorkflowAssignmentApproval
+  """
+  structured rejection metadata
+  """
+  rejectionMetadata: WorkflowAssignmentRejection
+  """
+  structured invalidation metadata
+  """
+  invalidationMetadata: WorkflowAssignmentInvalidation
+  """
   Timestamp when the assignment was decided
   """
   decidedAt: Time

@@ -3672,44 +3672,6 @@ func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []
 	}, nil
 }
 
-// bulkCreateWorkflowAssignment uses the CreateBulk function to create multiple WorkflowAssignment entities
-func (r *mutationResolver) bulkCreateWorkflowAssignment(ctx context.Context, input []*generated.CreateWorkflowAssignmentInput) (*model.WorkflowAssignmentBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WorkflowAssignmentCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.WorkflowAssignment.Create().SetInput(*data)
-	}
-
-	res, err := c.WorkflowAssignment.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignment"})
-	}
-
-	// return response
-	return &model.WorkflowAssignmentBulkCreatePayload{
-		WorkflowAssignments: res,
-	}, nil
-}
-
-// bulkCreateWorkflowAssignmentTarget uses the CreateBulk function to create multiple WorkflowAssignmentTarget entities
-func (r *mutationResolver) bulkCreateWorkflowAssignmentTarget(ctx context.Context, input []*generated.CreateWorkflowAssignmentTargetInput) (*model.WorkflowAssignmentTargetBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WorkflowAssignmentTargetCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.WorkflowAssignmentTarget.Create().SetInput(*data)
-	}
-
-	res, err := c.WorkflowAssignmentTarget.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowassignmenttarget"})
-	}
-
-	// return response
-	return &model.WorkflowAssignmentTargetBulkCreatePayload{
-		WorkflowAssignmentTargets: res,
-	}, nil
-}
-
 // bulkCreateWorkflowDefinition uses the CreateBulk function to create multiple WorkflowDefinition entities
 func (r *mutationResolver) bulkCreateWorkflowDefinition(ctx context.Context, input []*generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -3745,25 +3707,6 @@ func (r *mutationResolver) bulkCreateWorkflowEvent(ctx context.Context, input []
 	// return response
 	return &model.WorkflowEventBulkCreatePayload{
 		WorkflowEvents: res,
-	}, nil
-}
-
-// bulkCreateWorkflowInstance uses the CreateBulk function to create multiple WorkflowInstance entities
-func (r *mutationResolver) bulkCreateWorkflowInstance(ctx context.Context, input []*generated.CreateWorkflowInstanceInput) (*model.WorkflowInstanceBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.WorkflowInstanceCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.WorkflowInstance.Create().SetInput(*data)
-	}
-
-	res, err := c.WorkflowInstance.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "workflowinstance"})
-	}
-
-	// return response
-	return &model.WorkflowInstanceBulkCreatePayload{
-		WorkflowInstances: res,
 	}, nil
 }
 

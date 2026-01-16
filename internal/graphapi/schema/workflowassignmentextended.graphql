@@ -1,0 +1,81 @@
+extend type Mutation{
+    """
+    Approve a workflow assignment and apply the proposed changes
+    """
+    approveWorkflowAssignment(
+        """
+        ID of the workflow assignment to approve
+        """
+        id: ID!
+    ): WorkflowAssignmentApprovePayload!
+    """
+    Reject a workflow assignment and discard the proposed changes
+    """
+    rejectWorkflowAssignment(
+        """
+        ID of the workflow assignment to reject
+        """
+        id: ID!
+        """
+        Optional reason for rejection
+        """
+        reason: String
+    ): WorkflowAssignmentRejectPayload!
+}
+
+extend type Query {
+    """
+    Get workflow assignments for the current user
+    """
+    myWorkflowAssignments(
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+
+        """
+        Ordering options.
+        """
+        orderBy: [WorkflowAssignmentOrder!]
+
+        """
+        Filtering options.
+        """
+        where: WorkflowAssignmentWhereInput
+    ): WorkflowAssignmentConnection!
+}
+
+"""
+Return response for approveWorkflowAssignment mutation
+"""
+type WorkflowAssignmentApprovePayload {
+    """
+    Approved workflow assignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for rejectWorkflowAssignment mutation
+"""
+type WorkflowAssignmentRejectPayload {
+    """
+    Rejected workflow assignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}

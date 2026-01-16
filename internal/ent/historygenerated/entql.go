@@ -2207,29 +2207,32 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "WorkflowAssignmentHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			workflowassignmenthistory.FieldHistoryTime:        {Type: field.TypeTime, Column: workflowassignmenthistory.FieldHistoryTime},
-			workflowassignmenthistory.FieldRef:                {Type: field.TypeString, Column: workflowassignmenthistory.FieldRef},
-			workflowassignmenthistory.FieldOperation:          {Type: field.TypeEnum, Column: workflowassignmenthistory.FieldOperation},
-			workflowassignmenthistory.FieldCreatedAt:          {Type: field.TypeTime, Column: workflowassignmenthistory.FieldCreatedAt},
-			workflowassignmenthistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: workflowassignmenthistory.FieldUpdatedAt},
-			workflowassignmenthistory.FieldCreatedBy:          {Type: field.TypeString, Column: workflowassignmenthistory.FieldCreatedBy},
-			workflowassignmenthistory.FieldUpdatedBy:          {Type: field.TypeString, Column: workflowassignmenthistory.FieldUpdatedBy},
-			workflowassignmenthistory.FieldDeletedAt:          {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDeletedAt},
-			workflowassignmenthistory.FieldDeletedBy:          {Type: field.TypeString, Column: workflowassignmenthistory.FieldDeletedBy},
-			workflowassignmenthistory.FieldDisplayID:          {Type: field.TypeString, Column: workflowassignmenthistory.FieldDisplayID},
-			workflowassignmenthistory.FieldTags:               {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldTags},
-			workflowassignmenthistory.FieldOwnerID:            {Type: field.TypeString, Column: workflowassignmenthistory.FieldOwnerID},
-			workflowassignmenthistory.FieldWorkflowInstanceID: {Type: field.TypeString, Column: workflowassignmenthistory.FieldWorkflowInstanceID},
-			workflowassignmenthistory.FieldAssignmentKey:      {Type: field.TypeString, Column: workflowassignmenthistory.FieldAssignmentKey},
-			workflowassignmenthistory.FieldRole:               {Type: field.TypeString, Column: workflowassignmenthistory.FieldRole},
-			workflowassignmenthistory.FieldLabel:              {Type: field.TypeString, Column: workflowassignmenthistory.FieldLabel},
-			workflowassignmenthistory.FieldRequired:           {Type: field.TypeBool, Column: workflowassignmenthistory.FieldRequired},
-			workflowassignmenthistory.FieldStatus:             {Type: field.TypeEnum, Column: workflowassignmenthistory.FieldStatus},
-			workflowassignmenthistory.FieldMetadata:           {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldMetadata},
-			workflowassignmenthistory.FieldDecidedAt:          {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDecidedAt},
-			workflowassignmenthistory.FieldActorUserID:        {Type: field.TypeString, Column: workflowassignmenthistory.FieldActorUserID},
-			workflowassignmenthistory.FieldActorGroupID:       {Type: field.TypeString, Column: workflowassignmenthistory.FieldActorGroupID},
-			workflowassignmenthistory.FieldNotes:              {Type: field.TypeString, Column: workflowassignmenthistory.FieldNotes},
+			workflowassignmenthistory.FieldHistoryTime:          {Type: field.TypeTime, Column: workflowassignmenthistory.FieldHistoryTime},
+			workflowassignmenthistory.FieldRef:                  {Type: field.TypeString, Column: workflowassignmenthistory.FieldRef},
+			workflowassignmenthistory.FieldOperation:            {Type: field.TypeEnum, Column: workflowassignmenthistory.FieldOperation},
+			workflowassignmenthistory.FieldCreatedAt:            {Type: field.TypeTime, Column: workflowassignmenthistory.FieldCreatedAt},
+			workflowassignmenthistory.FieldUpdatedAt:            {Type: field.TypeTime, Column: workflowassignmenthistory.FieldUpdatedAt},
+			workflowassignmenthistory.FieldCreatedBy:            {Type: field.TypeString, Column: workflowassignmenthistory.FieldCreatedBy},
+			workflowassignmenthistory.FieldUpdatedBy:            {Type: field.TypeString, Column: workflowassignmenthistory.FieldUpdatedBy},
+			workflowassignmenthistory.FieldDeletedAt:            {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDeletedAt},
+			workflowassignmenthistory.FieldDeletedBy:            {Type: field.TypeString, Column: workflowassignmenthistory.FieldDeletedBy},
+			workflowassignmenthistory.FieldDisplayID:            {Type: field.TypeString, Column: workflowassignmenthistory.FieldDisplayID},
+			workflowassignmenthistory.FieldTags:                 {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldTags},
+			workflowassignmenthistory.FieldOwnerID:              {Type: field.TypeString, Column: workflowassignmenthistory.FieldOwnerID},
+			workflowassignmenthistory.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: workflowassignmenthistory.FieldWorkflowInstanceID},
+			workflowassignmenthistory.FieldAssignmentKey:        {Type: field.TypeString, Column: workflowassignmenthistory.FieldAssignmentKey},
+			workflowassignmenthistory.FieldRole:                 {Type: field.TypeString, Column: workflowassignmenthistory.FieldRole},
+			workflowassignmenthistory.FieldLabel:                {Type: field.TypeString, Column: workflowassignmenthistory.FieldLabel},
+			workflowassignmenthistory.FieldRequired:             {Type: field.TypeBool, Column: workflowassignmenthistory.FieldRequired},
+			workflowassignmenthistory.FieldStatus:               {Type: field.TypeEnum, Column: workflowassignmenthistory.FieldStatus},
+			workflowassignmenthistory.FieldMetadata:             {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldMetadata},
+			workflowassignmenthistory.FieldApprovalMetadata:     {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldApprovalMetadata},
+			workflowassignmenthistory.FieldRejectionMetadata:    {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldRejectionMetadata},
+			workflowassignmenthistory.FieldInvalidationMetadata: {Type: field.TypeJSON, Column: workflowassignmenthistory.FieldInvalidationMetadata},
+			workflowassignmenthistory.FieldDecidedAt:            {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDecidedAt},
+			workflowassignmenthistory.FieldActorUserID:          {Type: field.TypeString, Column: workflowassignmenthistory.FieldActorUserID},
+			workflowassignmenthistory.FieldActorGroupID:         {Type: field.TypeString, Column: workflowassignmenthistory.FieldActorGroupID},
+			workflowassignmenthistory.FieldNotes:                {Type: field.TypeString, Column: workflowassignmenthistory.FieldNotes},
 		},
 	}
 	graph.Nodes[60] = &sqlgraph.Node{
@@ -11654,6 +11657,21 @@ func (f *WorkflowAssignmentHistoryFilter) WhereStatus(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *WorkflowAssignmentHistoryFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(workflowassignmenthistory.FieldMetadata))
+}
+
+// WhereApprovalMetadata applies the entql json.RawMessage predicate on the approval_metadata field.
+func (f *WorkflowAssignmentHistoryFilter) WhereApprovalMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignmenthistory.FieldApprovalMetadata))
+}
+
+// WhereRejectionMetadata applies the entql json.RawMessage predicate on the rejection_metadata field.
+func (f *WorkflowAssignmentHistoryFilter) WhereRejectionMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignmenthistory.FieldRejectionMetadata))
+}
+
+// WhereInvalidationMetadata applies the entql json.RawMessage predicate on the invalidation_metadata field.
+func (f *WorkflowAssignmentHistoryFilter) WhereInvalidationMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignmenthistory.FieldInvalidationMetadata))
 }
 
 // WhereDecidedAt applies the entql time.Time predicate on the decided_at field.
