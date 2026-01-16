@@ -3,7 +3,6 @@ package graphapi
 import (
 	"context"
 	"net/http"
-	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
@@ -17,7 +16,7 @@ import (
 func (r *Resolver) createWebsocketClient() transport.Websocket {
 	return transport.Websocket{
 		KeepAlivePingInterval: r.websocketPingInterval,
-		InitTimeout:           10 * time.Second,
+		InitTimeout:           defaultInitTimeout,
 		InitFunc:              r.webSocketInit,
 		Upgrader:              r.upgraderFunc(),
 	}

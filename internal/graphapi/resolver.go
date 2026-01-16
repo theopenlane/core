@@ -60,8 +60,8 @@ type trustCenterSettings struct {
 
 // subscriptionSettings holds the settings for subscriptions
 type subscriptionSettings struct {
-	// enabled indicates if subscriptions are turned on
-	enabled bool
+	// subscriptionsEnabled indicates if subscriptions are turned on
+	subscriptionsEnabled bool
 	// subscription manager for real-time updates
 	subscriptionManager *graphsubscriptions.Manager
 	// allowed origins for websocket connections
@@ -90,7 +90,7 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
 	if enabled {
 		r.subscriptionManager = graphsubscriptions.NewManager()
-		r.subscriptionSettings.enabled = true
+		r.subscriptionsEnabled = true
 	}
 
 	return &r
