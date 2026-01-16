@@ -201,21 +201,7 @@ func WithAuth() ServerOption {
 		}
 
 		// add auth middleware
-		opts := []authmw.Option{
-			authmw.WithAudience(s.Config.Settings.Auth.Token.Audience),
-			authmw.WithIssuer(s.Config.Settings.Auth.Token.Issuer),
-			authmw.WithJWKSEndpoint(s.Config.Settings.Auth.Token.JWKSEndpoint),
-			authmw.WithDBClient(s.Config.Handler.DBClient),
-			authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
-			authmw.WithAllowAnonymous(true),
-			authmw.WithSkipperFunc(func(c echo.Context) bool {
-				return authmw.AuthenticateSkipperFuncForImpersonation(c)
-			}),
-		}
-
-		if s.Config.Handler.RedisClient != nil {
-			opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
-		}
+		opts := getAuthOptions(s)
 
 		conf := authmw.NewAuthOptions(opts...)
 
@@ -224,6 +210,35 @@ func WithAuth() ServerOption {
 		s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, authmw.Authenticate(&conf), impersonation.SystemAdminUserContextMiddleware())
 		s.Config.Handler.AuthMiddleware = append(s.Config.Handler.AuthMiddleware, authmw.Authenticate(&conf))
 	})
+}
+
+func getAuthOptions(s *ServerOptions) []authmw.Option {
+	skipperFunc := func(c echo.Context) bool {
+		return authmw.AuthenticateSkipperFuncForImpersonation(c)
+	}
+
+	if s.Config.Settings.Server.EnableGraphSubscriptions {
+		skipperFunc = func(c echo.Context) bool {
+			return authmw.AuthenticateSkipperFuncForImpersonation(c) ||
+				authmw.AuthenticateSkipperFuncForWebsockets(c)
+		}
+	}
+
+	opts := []authmw.Option{
+		authmw.WithAudience(s.Config.Settings.Auth.Token.Audience),
+		authmw.WithIssuer(s.Config.Settings.Auth.Token.Issuer),
+		authmw.WithJWKSEndpoint(s.Config.Settings.Auth.Token.JWKSEndpoint),
+		authmw.WithDBClient(s.Config.Handler.DBClient),
+		authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
+		authmw.WithAllowAnonymous(true),
+		authmw.WithSkipperFunc(skipperFunc),
+	}
+
+	if s.Config.Handler.RedisClient != nil {
+		opts = append(opts, authmw.WithRedisClient(s.Config.Handler.RedisClient))
+	}
+
+	return opts
 }
 
 // WithReadyChecks adds readiness checks to the server
@@ -264,7 +279,9 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
 			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
-			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions)
+			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions).
+			WithAllowedOrigins(s.Config.Settings.Server.CORS.AllowOrigins).
+			WithAuthOptions(getAuthOptions(s)...)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

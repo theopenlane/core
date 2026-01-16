@@ -1,16 +1,13 @@
 package graphapi
 
 import (
-	"context"
 	"net/http"
 	"time"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/gorilla/websocket"
 	"github.com/ravilushqa/otelgqlgen"
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -23,11 +20,18 @@ import (
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
 )
 
 // This file will not be regenerated automatically.
 //
 // It serves as dependency injection for your app, add any dependencies you require here.
+
+const (
+	defaultWebsocketPingInterval = 30 * time.Second
+	defaultSSEKeepAliveInterval  = 15 * time.Second
+	defaultInitTimeout           = 10 * time.Second
+)
 
 // Resolver provides a graph response resolver
 type Resolver struct {
@@ -38,11 +42,36 @@ type Resolver struct {
 	isDevelopment     bool
 	complexityLimit   int
 	maxResultLimit    *int
-	// mappable domain that trust center records will resolve to
-	trustCenterCnameTarget   string
+
+	// subscription settings
+	subscriptionSettings
+
+	// trust center settings
+	trustCenterSettings
+}
+
+// trustCenterSettings holds the settings for trust center domains
+type trustCenterSettings struct {
+	// trustCenterCnameTarget is the cname target for trust center domains
+	trustCenterCnameTarget string
+	// defaultTrustCenterDomain is the default domain for trust center
 	defaultTrustCenterDomain string
+}
+
+// subscriptionSettings holds the settings for subscriptions
+type subscriptionSettings struct {
+	// enabled indicates if subscriptions are turned on
+	enabled bool
 	// subscription manager for real-time updates
 	subscriptionManager *graphsubscriptions.Manager
+	// allowed origins for websocket connections
+	origins map[string]struct{}
+	// websocketPingInterval is the interval for sending pings to keep the websocket alive
+	websocketPingInterval time.Duration
+	// sseKeepAliveInterval is the interval for sending keep-alive messages for sse connections
+	sseKeepAliveInterval time.Duration
+	// authOptions for authenticating websocket connections
+	authOptions *mwauth.Options
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -50,6 +79,10 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
 		db:       db,
 		uploader: u,
+		subscriptionSettings: subscriptionSettings{
+			websocketPingInterval: defaultWebsocketPingInterval,
+			sseKeepAliveInterval:  defaultSSEKeepAliveInterval,
+		},
 	}
 }
 
@@ -57,47 +90,8 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
 	if enabled {
 		r.subscriptionManager = graphsubscriptions.NewManager()
+		r.subscriptionSettings.enabled = true
 	}
-
-	return &r
-}
-
-func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
-	r.trustCenterCnameTarget = cname
-
-	return &r
-}
-
-func (r Resolver) WithTrustCenterDefaultDomain(domain string) *Resolver {
-	r.defaultTrustCenterDomain = domain
-
-	return &r
-}
-
-func (r Resolver) WithExtensions(enabled bool) *Resolver {
-	r.extensionsEnabled = enabled
-
-	return &r
-}
-
-// WithDevelopment sets the resolver to development mode
-// when isDevelopment is false, introspection will be disabled
-func (r Resolver) WithDevelopment(dev bool) *Resolver {
-	r.isDevelopment = dev
-
-	return &r
-}
-
-// WithComplexityLimitConfig sets the complexity limit for the resolver
-func (r Resolver) WithComplexityLimitConfig(limit int) *Resolver {
-	r.complexityLimit = limit
-
-	return &r
-}
-
-// WithMaxResultLimit sets the max result limit in the config for the resolvers
-func (r Resolver) WithMaxResultLimit(limit int) *Resolver {
-	r.maxResultLimit = &limit
 
 	return &r
 }
@@ -119,19 +113,6 @@ func (r *Resolver) Handler() *Handler {
 		*c,
 	))
 
-	srv.AddTransport(transport.Websocket{
-		KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
-		Upgrader: websocket.Upgrader{
-			CheckOrigin: func(_ *http.Request) bool {
-				return true
-			},
-		},
-	})
-	if r.subscriptionManager != nil {
-		srv.AddTransport(transport.SSE{
-			KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
-		})
-	}
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
@@ -139,6 +120,9 @@ func (r *Resolver) Handler() *Handler {
 		MaxUploadSize: r.uploader.MaxSize(),
 		MaxMemory:     common.DefaultMaxMemoryMB << 20, //nolint:mnd,
 	})
+
+	srv.AddTransport(r.createSSEClient())
+	srv.AddTransport(r.createWebsocketClient())
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
 
@@ -186,35 +170,6 @@ func (r *Resolver) Handler() *Handler {
 	}
 
 	return h
-}
-
-func (r *Resolver) WithComplexityLimit(h *handler.Server) {
-	// prevent complex queries except the introspection query
-	h.Use(common.NewComplexityLimitWithMetrics(func(_ context.Context, rc *graphql.OperationContext) int {
-		if rc != nil && rc.OperationName == "IntrospectionQuery" {
-			return common.IntrospectionComplexity
-		}
-
-		if rc.OperationName == "GlobalSearch" {
-			// allow more complexity for the global search
-			// e.g. if the complexity limit is 100, we allow 500 for the global search
-			return r.complexityLimit * 5 //nolint:mnd
-		}
-
-		if r.complexityLimit > 0 {
-			return r.complexityLimit
-		}
-
-		return common.DefaultComplexityLimit
-	}))
-}
-
-// WithPool adds a worker pool to the resolver for parallel processing
-func (r *Resolver) WithPool(maxWorkers int) {
-	r.pool = soiree.NewPool(
-		soiree.WithWorkers(maxWorkers),
-		soiree.WithPoolName("graphapi-worker-pool"),
-	)
 }
 
 // Handler returns the http.HandlerFunc for the GraphAPI

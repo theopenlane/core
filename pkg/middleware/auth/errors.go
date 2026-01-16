@@ -27,7 +27,8 @@ var (
 	ErrPasswordTooWeak = errors.New("password is too weak: use a combination of upper and lower case letters, numbers, and special characters")
 	// ErrTokenSSORequired is returned when a token must be authorized via SSO for the organization
 	ErrTokenSSORequired = errors.New("token requires SSO authorization")
-
 	// ErrAnonymousAccessNotAllowed is returned when anonymous access is not allowed
 	ErrAnonymousAccessNotAllowed = errors.New("anonymous access not allowed")
+	// ErrUnableToAuthenticateTransport is returned when unable to authenticate transport
+	ErrUnableToAuthenticateTransport = errors.New("unable to authenticate transport")
 )

@@ -15875,6 +15875,9 @@ scalar WorkflowEventPayload
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
+"""
+Any is a generic fallback type
+"""
 scalar Any`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
