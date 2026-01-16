@@ -88,7 +88,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/emailtemplates v0.3.1
 	github.com/theopenlane/entx v0.20.5
-	github.com/theopenlane/go-client v0.4.4
+	github.com/theopenlane/go-client v0.5.0
 	github.com/theopenlane/gqlgen-plugins v0.13.2
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.2
@@ -357,7 +357,7 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
+	golang.org/x/exp v0.0.0-20260112195511-716be5621a96 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
