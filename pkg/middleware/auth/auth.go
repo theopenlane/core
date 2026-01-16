@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"regexp"
 	"slices"
 	"strings"
 	"time"
@@ -193,10 +192,6 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 		}
 	}
 }
-
-var (
-	bearer = regexp.MustCompile(`^\s*[Bb]earer\s+([a-zA-Z0-9_\-\.]+)\s*$`)
-)
 
 // AuthenticateTransport authenticates a websocket transport init payload and returns the authenticated user
 func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayload, authOptions *Options) (*auth.AuthenticatedUser, error) {
