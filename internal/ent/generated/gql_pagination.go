@@ -323,7 +323,9 @@ func (p *apitokenPager) applyCursors(query *APITokenQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -774,7 +776,9 @@ func (p *actionplanPager) applyCursors(query *ActionPlanQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -1289,7 +1293,9 @@ func (p *assessmentPager) applyCursors(query *AssessmentQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -1696,7 +1702,9 @@ func (p *assessmentresponsePager) applyCursors(query *AssessmentResponseQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -2175,7 +2183,9 @@ func (p *assetPager) applyCursors(query *AssetQuery, after, before *Cursor) (*As
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -2564,7 +2574,9 @@ func (p *contactPager) applyCursors(query *ContactQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -3007,7 +3019,9 @@ func (p *controlPager) applyCursors(query *ControlQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -3584,7 +3598,9 @@ func (p *controlimplementationPager) applyCursors(query *ControlImplementationQu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -4009,7 +4025,9 @@ func (p *controlobjectivePager) applyCursors(query *ControlObjectiveQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -4488,7 +4506,9 @@ func (p *customdomainPager) applyCursors(query *CustomDomainQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -4859,7 +4879,9 @@ func (p *customtypeenumPager) applyCursors(query *CustomTypeEnumQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -5266,7 +5288,9 @@ func (p *dnsverificationPager) applyCursors(query *DNSVerificationQuery, after, 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -5619,7 +5643,9 @@ func (p *directoryaccountPager) applyCursors(query *DirectoryAccountQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -6039,7 +6065,9 @@ func (p *directorygroupPager) applyCursors(query *DirectoryGroupQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -6459,7 +6487,9 @@ func (p *directorymembershipPager) applyCursors(query *DirectoryMembershipQuery,
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -6812,7 +6842,9 @@ func (p *directorysyncrunPager) applyCursors(query *DirectorySyncRunQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -7183,7 +7215,9 @@ func (p *discussionPager) applyCursors(query *DiscussionQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -7536,7 +7570,9 @@ func (p *documentdataPager) applyCursors(query *DocumentDataQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -7889,7 +7925,9 @@ func (p *entityPager) applyCursors(query *EntityQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -8296,7 +8334,9 @@ func (p *entitytypePager) applyCursors(query *EntityTypeQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -8667,7 +8707,9 @@ func (p *eventPager) applyCursors(query *EventQuery, after, before *Cursor) (*Ev
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -9020,7 +9062,9 @@ func (p *evidencePager) applyCursors(query *EvidenceQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -9445,7 +9489,9 @@ func (p *exportPager) applyCursors(query *ExportQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -9852,7 +9898,9 @@ func (p *filePager) applyCursors(query *FileQuery, after, before *Cursor) (*File
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -10236,7 +10284,9 @@ func (p *findingPager) applyCursors(query *FindingQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -10661,7 +10711,9 @@ func (p *findingcontrolPager) applyCursors(query *FindingControlQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -11014,7 +11066,9 @@ func (p *groupPager) applyCursors(query *GroupQuery, after, before *Cursor) (*Gr
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -11403,7 +11457,9 @@ func (p *groupmembershipPager) applyCursors(query *GroupMembershipQuery, after, 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -11774,7 +11830,9 @@ func (p *groupsettingPager) applyCursors(query *GroupSettingQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -12127,7 +12185,9 @@ func (p *hushPager) applyCursors(query *HushQuery, after, before *Cursor) (*Hush
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -12578,7 +12638,9 @@ func (p *integrationPager) applyCursors(query *IntegrationQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -12985,7 +13047,9 @@ func (p *internalpolicyPager) applyCursors(query *InternalPolicyQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -13428,7 +13492,9 @@ func (p *invitePager) applyCursors(query *InviteQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -13835,7 +13901,9 @@ func (p *jobresultPager) applyCursors(query *JobResultQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -14273,7 +14341,9 @@ func (p *jobrunnerPager) applyCursors(query *JobRunnerQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -14644,7 +14714,9 @@ func (p *jobrunnerregistrationtokenPager) applyCursors(query *JobRunnerRegistrat
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -15028,7 +15100,9 @@ func (p *jobrunnertokenPager) applyCursors(query *JobRunnerTokenQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -15443,7 +15517,9 @@ func (p *jobtemplatePager) applyCursors(query *JobTemplateQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -15832,7 +15908,9 @@ func (p *mappabledomainPager) applyCursors(query *MappableDomainQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -16203,7 +16281,9 @@ func (p *mappedcontrolPager) applyCursors(query *MappedControlQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -16592,7 +16672,9 @@ func (p *narrativePager) applyCursors(query *NarrativeQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -16963,7 +17045,9 @@ func (p *notePager) applyCursors(query *NoteQuery, after, before *Cursor) (*Note
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -17879,7 +17963,9 @@ func (p *orgmembershipPager) applyCursors(query *OrgMembershipQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -18693,7 +18779,9 @@ func (p *organizationPager) applyCursors(query *OrganizationQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -19082,7 +19170,9 @@ func (p *organizationsettingPager) applyCursors(query *OrganizationSettingQuery,
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -19435,7 +19525,9 @@ func (p *personalaccesstokenPager) applyCursors(query *PersonalAccessTokenQuery,
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -19886,7 +19978,9 @@ func (p *procedurePager) applyCursors(query *ProcedureQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -20329,7 +20423,9 @@ func (p *programPager) applyCursors(query *ProgramQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -20772,7 +20868,9 @@ func (p *programmembershipPager) applyCursors(query *ProgramMembershipQuery, aft
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -21143,7 +21241,9 @@ func (p *remediationPager) applyCursors(query *RemediationQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -21568,7 +21668,9 @@ func (p *reviewPager) applyCursors(query *ReviewQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -21993,7 +22095,9 @@ func (p *riskPager) applyCursors(query *RiskQuery, after, before *Cursor) (*Risk
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -22454,7 +22558,9 @@ func (p *scanPager) applyCursors(query *ScanQuery, after, before *Cursor) (*Scan
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -22843,7 +22949,9 @@ func (p *scheduledjobPager) applyCursors(query *ScheduledJobQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -23196,7 +23304,9 @@ func (p *scheduledjobrunPager) applyCursors(query *ScheduledJobRunQuery, after, 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -23549,7 +23659,9 @@ func (p *standardPager) applyCursors(query *StandardQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -24028,7 +24140,9 @@ func (p *subcontrolPager) applyCursors(query *SubcontrolQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -24605,7 +24719,9 @@ func (p *subprocessorPager) applyCursors(query *SubprocessorQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -24976,7 +25092,9 @@ func (p *subscriberPager) applyCursors(query *SubscriberQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -25401,7 +25519,9 @@ func (p *tfasettingPager) applyCursors(query *TFASettingQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -25754,7 +25874,9 @@ func (p *tagdefinitionPager) applyCursors(query *TagDefinitionQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -26143,7 +26265,9 @@ func (p *taskPager) applyCursors(query *TaskQuery, after, before *Cursor) (*Task
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -26594,7 +26718,9 @@ func (p *templatePager) applyCursors(query *TemplateQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27001,7 +27127,9 @@ func (p *trustcenterPager) applyCursors(query *TrustCenterQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27354,7 +27482,9 @@ func (p *trustcentercompliancePager) applyCursors(query *TrustCenterComplianceQu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27707,7 +27837,9 @@ func (p *trustcenterdocPager) applyCursors(query *TrustCenterDocQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -28060,7 +28192,9 @@ func (p *trustcenterentityPager) applyCursors(query *TrustCenterEntityQuery, aft
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -28431,7 +28565,9 @@ func (p *trustcentersettingPager) applyCursors(query *TrustCenterSettingQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -28784,7 +28920,9 @@ func (p *trustcentersubprocessorPager) applyCursors(query *TrustCenterSubprocess
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -29137,7 +29275,9 @@ func (p *trustcenterwatermarkconfigPager) applyCursors(query *TrustCenterWaterma
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -29490,7 +29630,9 @@ func (p *userPager) applyCursors(query *UserQuery, after, before *Cursor) (*User
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -29897,7 +30039,9 @@ func (p *usersettingPager) applyCursors(query *UserSettingQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -30250,7 +30394,9 @@ func (p *vulnerabilityPager) applyCursors(query *VulnerabilityQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -31007,7 +31153,9 @@ func (p *workflowassignmentPager) applyCursors(query *WorkflowAssignmentQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -31360,7 +31508,9 @@ func (p *workflowassignmenttargetPager) applyCursors(query *WorkflowAssignmentTa
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -31713,7 +31863,9 @@ func (p *workflowdefinitionPager) applyCursors(query *WorkflowDefinitionQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -32066,7 +32218,9 @@ func (p *workfloweventPager) applyCursors(query *WorkflowEventQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -32419,7 +32573,9 @@ func (p *workflowinstancePager) applyCursors(query *WorkflowInstanceQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -32772,7 +32928,9 @@ func (p *workflowobjectrefPager) applyCursors(query *WorkflowObjectRefQuery, aft
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil

@@ -9,8 +9,11 @@ import (
 
 // Object captures the workflow target along with its concrete ent entity when available.
 type Object struct {
-	ID   string
+	// ID is the workflow object identifier.
+	ID string
+	// Type is the workflow object type.
 	Type enums.WorkflowObjectType
+	// Node is the concrete ent entity when available.
 	Node any
 }
 
@@ -44,9 +47,12 @@ func ObjectFromRef(ref *generated.WorkflowObjectRef) (*Object, error) {
 
 // TargetConfig defines who should receive workflow actions.
 type TargetConfig struct {
-	Type        enums.WorkflowTargetType `json:"type"`
-	ID          string                   `json:"id,omitempty"`
-	ResolverKey string                   `json:"resolver_key,omitempty"`
+	// Type selects how targets are resolved.
+	Type enums.WorkflowTargetType `json:"type"`
+	// ID identifies the target resource for static targets.
+	ID string `json:"id,omitempty"`
+	// ResolverKey names the resolver used for dynamic targets.
+	ResolverKey string `json:"resolver_key,omitempty"`
 }
 
 // CELContextBuilder can override how CEL activation variables are built per object type.
