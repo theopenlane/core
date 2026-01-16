@@ -50,6 +50,10 @@ const (
 	FieldVisibility = "visibility"
 	// FieldStandardID holds the string denoting the standard_id field in the database.
 	FieldStandardID = "standard_id"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeStandard holds the string denoting the standard edge name in mutations.
@@ -60,6 +64,20 @@ const (
 	EdgeOriginalFile = "original_file"
 	// Table holds the table name of the trustcenterdoc in the database.
 	Table = "trust_center_docs"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "trust_center_doc_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "trust_center_doc_editors"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
 	TrustCenterTable = "trust_center_docs"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
@@ -127,7 +145,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -257,6 +275,34 @@ func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
 }
 
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -283,6 +329,20 @@ func ByOriginalFileField(field string, opts ...sql.OrderTermOption) OrderOption 
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOriginalFileStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+	)
 }
 func newTrustCenterStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

@@ -62,17 +62,23 @@ type TrustCenterWatermarkConfig struct {
 type TrustCenterWatermarkConfigEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter []*TrustCenter `json:"trust_center,omitempty"`
 	// the file containing the image for watermarking, if applicable
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
-	namedTrustCenter map[string][]*TrustCenter
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+	namedTrustCenter   map[string][]*TrustCenter
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -86,10 +92,28 @@ func (e TrustCenterWatermarkConfigEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterWatermarkConfigEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterWatermarkConfigEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterWatermarkConfigEdges) TrustCenterOrErr() ([]*TrustCenter, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.TrustCenter, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -100,7 +124,7 @@ func (e TrustCenterWatermarkConfigEdges) TrustCenterOrErr() ([]*TrustCenter, err
 func (e TrustCenterWatermarkConfigEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -255,6 +279,16 @@ func (_m *TrustCenterWatermarkConfig) QueryOwner() *OrganizationQuery {
 	return NewTrustCenterWatermarkConfigClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterWatermarkConfig entity.
+func (_m *TrustCenterWatermarkConfig) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterWatermarkConfigClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenterWatermarkConfig entity.
+func (_m *TrustCenterWatermarkConfig) QueryEditors() *GroupQuery {
+	return NewTrustCenterWatermarkConfigClient(_m.config).QueryEditors(_m)
+}
+
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterWatermarkConfig entity.
 func (_m *TrustCenterWatermarkConfig) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterWatermarkConfigClient(_m.config).QueryTrustCenter(_m)
@@ -339,6 +373,54 @@ func (_m *TrustCenterWatermarkConfig) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Font))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterWatermarkConfig) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterWatermarkConfig) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterWatermarkConfig) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterWatermarkConfig) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
 }
 
 // NamedTrustCenter returns the TrustCenter named value or an error if the edge was not

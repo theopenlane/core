@@ -89,7 +89,7 @@ func (t TagDefinition) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(t),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(t)
 }

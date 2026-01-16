@@ -138,7 +138,7 @@ func (a ActionPlan) Mixin() []ent.Mixin {
 				withWorkflowOwnedEdges(),
 			),
 			newGroupPermissionsMixin(),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(a, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},
 		}}.getMixins(a)

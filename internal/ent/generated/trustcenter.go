@@ -66,6 +66,10 @@ type TrustCenter struct {
 type TrustCenterEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// CustomDomain holds the value of the custom_domain edge.
 	CustomDomain *CustomDomain `json:"custom_domain,omitempty"`
 	// PreviewDomain holds the value of the preview_domain edge.
@@ -86,20 +90,22 @@ type TrustCenterEdges struct {
 	Templates []*Template `json:"templates,omitempty"`
 	// posts for the trust center feed
 	Posts []*Note `json:"posts,omitempty"`
-	// TrustcenterEntities holds the value of the trustcenter_entities edge.
-	TrustcenterEntities []*TrustcenterEntity `json:"trustcenter_entities,omitempty"`
+	// TrustCenterEntities holds the value of the trust_center_entities edge.
+	TrustCenterEntities []*TrustCenterEntity `json:"trust_center_entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [12]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [12]map[string]int
+	totalCount [14]map[string]int
 
+	namedBlockedGroups            map[string][]*Group
+	namedEditors                  map[string][]*Group
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 	namedTrustCenterDocs          map[string][]*TrustCenterDoc
 	namedTrustCenterCompliances   map[string][]*TrustCenterCompliance
 	namedTemplates                map[string][]*Template
 	namedPosts                    map[string][]*Note
-	namedTrustcenterEntities      map[string][]*TrustcenterEntity
+	namedTrustCenterEntities      map[string][]*TrustCenterEntity
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -113,12 +119,30 @@ func (e TrustCenterEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
 // CustomDomainOrErr returns the CustomDomain value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TrustCenterEdges) CustomDomainOrErr() (*CustomDomain, error) {
 	if e.CustomDomain != nil {
 		return e.CustomDomain, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: customdomain.Label}
 	}
 	return nil, &NotLoadedError{edge: "custom_domain"}
@@ -129,7 +153,7 @@ func (e TrustCenterEdges) CustomDomainOrErr() (*CustomDomain, error) {
 func (e TrustCenterEdges) PreviewDomainOrErr() (*CustomDomain, error) {
 	if e.PreviewDomain != nil {
 		return e.PreviewDomain, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: customdomain.Label}
 	}
 	return nil, &NotLoadedError{edge: "preview_domain"}
@@ -140,7 +164,7 @@ func (e TrustCenterEdges) PreviewDomainOrErr() (*CustomDomain, error) {
 func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
 	if e.Setting != nil {
 		return e.Setting, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: trustcentersetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "setting"}
@@ -151,7 +175,7 @@ func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
 func (e TrustCenterEdges) PreviewSettingOrErr() (*TrustCenterSetting, error) {
 	if e.PreviewSetting != nil {
 		return e.PreviewSetting, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: trustcentersetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "preview_setting"}
@@ -162,7 +186,7 @@ func (e TrustCenterEdges) PreviewSettingOrErr() (*TrustCenterSetting, error) {
 func (e TrustCenterEdges) WatermarkConfigOrErr() (*TrustCenterWatermarkConfig, error) {
 	if e.WatermarkConfig != nil {
 		return e.WatermarkConfig, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: trustcenterwatermarkconfig.Label}
 	}
 	return nil, &NotLoadedError{edge: "watermark_config"}
@@ -171,7 +195,7 @@ func (e TrustCenterEdges) WatermarkConfigOrErr() (*TrustCenterWatermarkConfig, e
 // TrustCenterSubprocessorsOrErr returns the TrustCenterSubprocessors value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubprocessor, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.TrustCenterSubprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
@@ -180,7 +204,7 @@ func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubproc
 // TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.TrustCenterDocs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
@@ -189,7 +213,7 @@ func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
 // TrustCenterCompliancesOrErr returns the TrustCenterCompliances value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterCompliance, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.TrustCenterCompliances, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_compliances"}
@@ -198,7 +222,7 @@ func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterComplianc
 // TemplatesOrErr returns the Templates value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TemplatesOrErr() ([]*Template, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
@@ -207,19 +231,19 @@ func (e TrustCenterEdges) TemplatesOrErr() ([]*Template, error) {
 // PostsOrErr returns the Posts value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) PostsOrErr() ([]*Note, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Posts, nil
 	}
 	return nil, &NotLoadedError{edge: "posts"}
 }
 
-// TrustcenterEntitiesOrErr returns the TrustcenterEntities value or an error if the edge
+// TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
-func (e TrustCenterEdges) TrustcenterEntitiesOrErr() ([]*TrustcenterEntity, error) {
-	if e.loadedTypes[11] {
-		return e.TrustcenterEntities, nil
+func (e TrustCenterEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
+	if e.loadedTypes[13] {
+		return e.TrustCenterEntities, nil
 	}
-	return nil, &NotLoadedError{edge: "trustcenter_entities"}
+	return nil, &NotLoadedError{edge: "trust_center_entities"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -392,6 +416,16 @@ func (_m *TrustCenter) QueryOwner() *OrganizationQuery {
 	return NewTrustCenterClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryEditors() *GroupQuery {
+	return NewTrustCenterClient(_m.config).QueryEditors(_m)
+}
+
 // QueryCustomDomain queries the "custom_domain" edge of the TrustCenter entity.
 func (_m *TrustCenter) QueryCustomDomain() *CustomDomainQuery {
 	return NewTrustCenterClient(_m.config).QueryCustomDomain(_m)
@@ -442,9 +476,9 @@ func (_m *TrustCenter) QueryPosts() *NoteQuery {
 	return NewTrustCenterClient(_m.config).QueryPosts(_m)
 }
 
-// QueryTrustcenterEntities queries the "trustcenter_entities" edge of the TrustCenter entity.
-func (_m *TrustCenter) QueryTrustcenterEntities() *TrustcenterEntityQuery {
-	return NewTrustCenterClient(_m.config).QueryTrustcenterEntities(_m)
+// QueryTrustCenterEntities queries the "trust_center_entities" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryTrustCenterEntities() *TrustCenterEntityQuery {
+	return NewTrustCenterClient(_m.config).QueryTrustCenterEntities(_m)
 }
 
 // Update returns a builder for updating this TrustCenter.
@@ -518,6 +552,54 @@ func (_m *TrustCenter) String() string {
 	builder.WriteString(_m.SubprocessorURL)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenter) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenter) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
 }
 
 // NamedTrustCenterSubprocessors returns the TrustCenterSubprocessors named value or an error if the edge was not
@@ -640,27 +722,27 @@ func (_m *TrustCenter) appendNamedPosts(name string, edges ...*Note) {
 	}
 }
 
-// NamedTrustcenterEntities returns the TrustcenterEntities named value or an error if the edge was not
+// NamedTrustCenterEntities returns the TrustCenterEntities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *TrustCenter) NamedTrustcenterEntities(name string) ([]*TrustcenterEntity, error) {
-	if _m.Edges.namedTrustcenterEntities == nil {
+func (_m *TrustCenter) NamedTrustCenterEntities(name string) ([]*TrustCenterEntity, error) {
+	if _m.Edges.namedTrustCenterEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedTrustcenterEntities[name]
+	nodes, ok := _m.Edges.namedTrustCenterEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *TrustCenter) appendNamedTrustcenterEntities(name string, edges ...*TrustcenterEntity) {
-	if _m.Edges.namedTrustcenterEntities == nil {
-		_m.Edges.namedTrustcenterEntities = make(map[string][]*TrustcenterEntity)
+func (_m *TrustCenter) appendNamedTrustCenterEntities(name string, edges ...*TrustCenterEntity) {
+	if _m.Edges.namedTrustCenterEntities == nil {
+		_m.Edges.namedTrustCenterEntities = make(map[string][]*TrustCenterEntity)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedTrustcenterEntities[name] = []*TrustcenterEntity{}
+		_m.Edges.namedTrustCenterEntities[name] = []*TrustCenterEntity{}
 	} else {
-		_m.Edges.namedTrustcenterEntities[name] = append(_m.Edges.namedTrustcenterEntities[name], edges...)
+		_m.Edges.namedTrustCenterEntities[name] = append(_m.Edges.namedTrustCenterEntities[name], edges...)
 	}
 }
 

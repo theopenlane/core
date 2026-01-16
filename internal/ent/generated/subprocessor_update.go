@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
@@ -122,26 +121,6 @@ func (_u *SubprocessorUpdate) AppendTags(v []string) *SubprocessorUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *SubprocessorUpdate) ClearTags() *SubprocessorUpdate {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *SubprocessorUpdate) SetOwnerID(v string) *SubprocessorUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *SubprocessorUpdate) SetNillableOwnerID(v *string) *SubprocessorUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *SubprocessorUpdate) ClearOwnerID() *SubprocessorUpdate {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -259,11 +238,6 @@ func (_u *SubprocessorUpdate) ClearLogoFileID() *SubprocessorUpdate {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *SubprocessorUpdate) SetOwner(v *Organization) *SubprocessorUpdate {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_u *SubprocessorUpdate) SetLogoFile(v *File) *SubprocessorUpdate {
 	return _u.SetLogoFileID(v.ID)
@@ -287,12 +261,6 @@ func (_u *SubprocessorUpdate) AddTrustCenterSubprocessors(v ...*TrustCenterSubpr
 // Mutation returns the SubprocessorMutation object of the builder.
 func (_u *SubprocessorUpdate) Mutation() *SubprocessorMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *SubprocessorUpdate) ClearOwner() *SubprocessorUpdate {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -467,37 +435,6 @@ func (_u *SubprocessorUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessor.FieldLogoRemoteURL, field.TypeString)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   subprocessor.OwnerTable,
-			Columns: []string{subprocessor.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Subprocessor
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   subprocessor.OwnerTable,
-			Columns: []string{subprocessor.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Subprocessor
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -692,26 +629,6 @@ func (_u *SubprocessorUpdateOne) ClearTags() *SubprocessorUpdateOne {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *SubprocessorUpdateOne) SetOwnerID(v string) *SubprocessorUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *SubprocessorUpdateOne) SetNillableOwnerID(v *string) *SubprocessorUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *SubprocessorUpdateOne) ClearOwnerID() *SubprocessorUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *SubprocessorUpdateOne) SetInternalNotes(v string) *SubprocessorUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -826,11 +743,6 @@ func (_u *SubprocessorUpdateOne) ClearLogoFileID() *SubprocessorUpdateOne {
 	return _u
 }
 
-// SetOwner sets the "owner" edge to the Organization entity.
-func (_u *SubprocessorUpdateOne) SetOwner(v *Organization) *SubprocessorUpdateOne {
-	return _u.SetOwnerID(v.ID)
-}
-
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_u *SubprocessorUpdateOne) SetLogoFile(v *File) *SubprocessorUpdateOne {
 	return _u.SetLogoFileID(v.ID)
@@ -854,12 +766,6 @@ func (_u *SubprocessorUpdateOne) AddTrustCenterSubprocessors(v ...*TrustCenterSu
 // Mutation returns the SubprocessorMutation object of the builder.
 func (_u *SubprocessorUpdateOne) Mutation() *SubprocessorMutation {
 	return _u.mutation
-}
-
-// ClearOwner clears the "owner" edge to the Organization entity.
-func (_u *SubprocessorUpdateOne) ClearOwner() *SubprocessorUpdateOne {
-	_u.mutation.ClearOwner()
-	return _u
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -1064,37 +970,6 @@ func (_u *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subprocess
 	}
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessor.FieldLogoRemoteURL, field.TypeString)
-	}
-	if _u.mutation.OwnerCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   subprocessor.OwnerTable,
-			Columns: []string{subprocessor.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Subprocessor
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   subprocessor.OwnerTable,
-			Columns: []string{subprocessor.OwnerColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Subprocessor
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{

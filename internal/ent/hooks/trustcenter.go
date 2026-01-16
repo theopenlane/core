@@ -195,16 +195,7 @@ func HookTrustCenter() ent.Hook {
 
 			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
 
-			// Create system tuple for system admin access
-			systemTuple := fgax.GetTupleKey(fgax.TupleRequest{
-				SubjectID:   "openlane_core",
-				SubjectType: "system",
-				ObjectID:    trustCenter.ID,
-				ObjectType:  "trust_center",
-				Relation:    "system",
-			})
-
-			if _, err := m.Authz.WriteTupleKeys(ctx, append(wildcardTuples, systemTuple), nil); err != nil {
+			if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuples, nil); err != nil {
 				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 

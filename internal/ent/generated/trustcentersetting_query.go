@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
@@ -24,16 +25,20 @@ import (
 // TrustCenterSettingQuery is the builder for querying TrustCenterSetting entities.
 type TrustCenterSettingQuery struct {
 	config
-	ctx             *QueryContext
-	order           []trustcentersetting.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.TrustCenterSetting
-	withFiles       *FileQuery
-	withLogoFile    *FileQuery
-	withFaviconFile *FileQuery
-	loadTotal       []func(context.Context, []*TrustCenterSetting) error
-	modifiers       []func(*sql.Selector)
-	withNamedFiles  map[string]*FileQuery
+	ctx                    *QueryContext
+	order                  []trustcentersetting.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.TrustCenterSetting
+	withBlockedGroups      *GroupQuery
+	withEditors            *GroupQuery
+	withFiles              *FileQuery
+	withLogoFile           *FileQuery
+	withFaviconFile        *FileQuery
+	loadTotal              []func(context.Context, []*TrustCenterSetting) error
+	modifiers              []func(*sql.Selector)
+	withNamedBlockedGroups map[string]*GroupQuery
+	withNamedEditors       map[string]*GroupQuery
+	withNamedFiles         map[string]*FileQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -68,6 +73,56 @@ func (_q *TrustCenterSettingQuery) Unique(unique bool) *TrustCenterSettingQuery 
 func (_q *TrustCenterSettingQuery) Order(o ...trustcentersetting.OrderOption) *TrustCenterSettingQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (_q *TrustCenterSettingQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcentersetting.BlockedGroupsTable, trustcentersetting.BlockedGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (_q *TrustCenterSettingQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcentersetting.EditorsTable, trustcentersetting.EditorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
@@ -332,19 +387,43 @@ func (_q *TrustCenterSettingQuery) Clone() *TrustCenterSettingQuery {
 		return nil
 	}
 	return &TrustCenterSettingQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]trustcentersetting.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.TrustCenterSetting{}, _q.predicates...),
-		withFiles:       _q.withFiles.Clone(),
-		withLogoFile:    _q.withLogoFile.Clone(),
-		withFaviconFile: _q.withFaviconFile.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]trustcentersetting.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.TrustCenterSetting{}, _q.predicates...),
+		withBlockedGroups: _q.withBlockedGroups.Clone(),
+		withEditors:       _q.withEditors.Clone(),
+		withFiles:         _q.withFiles.Clone(),
+		withLogoFile:      _q.withLogoFile.Clone(),
+		withFaviconFile:   _q.withFaviconFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterSettingQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *TrustCenterSettingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBlockedGroups = query
+	return _q
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterSettingQuery) WithEditors(opts ...func(*GroupQuery)) *TrustCenterSettingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEditors = query
+	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
@@ -464,7 +543,9 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*TrustCenterSetting{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
 			_q.withFiles != nil,
 			_q.withLogoFile != nil,
 			_q.withFaviconFile != nil,
@@ -493,6 +574,20 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterSetting) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *TrustCenterSetting, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterSetting) { n.Edges.Editors = []*Group{} },
+			func(n *TrustCenterSetting, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFiles; query != nil {
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *TrustCenterSetting) { n.Edges.Files = []*File{} },
@@ -512,6 +607,20 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterSetting) { n.appendNamedBlockedGroups(name) },
+			func(n *TrustCenterSetting, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterSetting) { n.appendNamedEditors(name) },
+			func(n *TrustCenterSetting, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedFiles {
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *TrustCenterSetting) { n.appendNamedFiles(name) },
@@ -527,6 +636,68 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
+func (_q *TrustCenterSettingQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterSetting)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcentersetting.BlockedGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_setting_blocked_groups
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_setting_blocked_groups" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_setting_blocked_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterSettingQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterSetting)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcentersetting.EditorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_setting_editors
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_setting_editors" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_setting_editors" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *TrustCenterSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*TrustCenterSetting)
@@ -756,6 +927,34 @@ func (_q *TrustCenterSettingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *TrustCenterSettingQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterSettingSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterSettingQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *TrustCenterSettingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	_q.withNamedBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterSettingQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *TrustCenterSettingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"

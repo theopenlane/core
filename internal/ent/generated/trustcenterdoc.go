@@ -46,7 +46,7 @@ type TrustCenterDoc struct {
 	FileID *string `json:"file_id,omitempty"`
 	// ID of the file containing the document, before any watermarking
 	OriginalFileID *string `json:"original_file_id,omitempty"`
-	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	// whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
 	WatermarkingEnabled bool `json:"watermarking_enabled,omitempty"`
 	// status of the watermarking
 	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`
@@ -62,6 +62,10 @@ type TrustCenterDoc struct {
 
 // TrustCenterDocEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterDocEdges struct {
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Standard holds the value of the standard edge.
@@ -72,9 +76,30 @@ type TrustCenterDocEdges struct {
 	OriginalFile *File `json:"original_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [6]map[string]int
+
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterDocEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[0] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterDocEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -82,7 +107,7 @@ type TrustCenterDocEdges struct {
 func (e TrustCenterDocEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -93,7 +118,7 @@ func (e TrustCenterDocEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e TrustCenterDocEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -104,7 +129,7 @@ func (e TrustCenterDocEdges) StandardOrErr() (*Standard, error) {
 func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -115,7 +140,7 @@ func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
 func (e TrustCenterDocEdges) OriginalFileOrErr() (*File, error) {
 	if e.OriginalFile != nil {
 		return e.OriginalFile, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "original_file"}
@@ -268,6 +293,16 @@ func (_m *TrustCenterDoc) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterDocClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryEditors() *GroupQuery {
+	return NewTrustCenterDocClient(_m.config).QueryEditors(_m)
+}
+
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterDoc entity.
 func (_m *TrustCenterDoc) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterDocClient(_m.config).QueryTrustCenter(_m)
@@ -364,6 +399,54 @@ func (_m *TrustCenterDoc) String() string {
 	builder.WriteString(_m.StandardID)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterDoc) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterDoc) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterDoc) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterDoc) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
 }
 
 // TrustCenterDocs is a parsable slice of TrustCenterDoc.

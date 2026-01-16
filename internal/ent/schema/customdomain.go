@@ -79,7 +79,7 @@ func (e CustomDomain) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(e, withAllowAnonymousTrustCenterAccess(true)),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(e)
 }
@@ -124,8 +124,7 @@ func (e CustomDomain) Policy() ent.Policy {
 		policy.WithQueryRules(
 			rule.AllowQueryIfSystemAdmin(),
 		),
-		policy.WithOnMutationRules(
-			ent.OpCreate|ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate,
+		policy.WithMutationRules(
 			policy.CheckOrgWriteAccess(),
 		),
 	)

@@ -1707,9 +1707,9 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 	return request.Paginate(ctx, after, first, before, last)
 }
 
-// searchTrustcenterEntity searches for TrustcenterEntity based on the query string looking for matches
-func searchTrustcenterEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustcenterEntityConnection, error) {
-	request := withTransactionalMutation(ctx).TrustcenterEntity.Query().
+// searchTrustCenterEntity searches for TrustCenterEntity based on the query string looking for matches
+func searchTrustCenterEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterEntityConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterEntity.Query().
 		Where(
 			trustcenterentity.Or(
 				trustcenterentity.ID(query),               // search equal to ID
@@ -1721,15 +1721,16 @@ func searchTrustcenterEntities(ctx context.Context, query string, after *entgql.
 	return request.Paginate(ctx, after, first, before, last)
 }
 
-// searchTrustcenterEntity searches for TrustcenterEntity based on the query string looking for matches
-func adminSearchTrustcenterEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustcenterEntityConnection, error) {
-	request := withTransactionalMutation(ctx).TrustcenterEntity.Query().
+// searchTrustCenterEntity searches for TrustCenterEntity based on the query string looking for matches
+func adminSearchTrustCenterEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterEntityConnection, error) {
+	request := withTransactionalMutation(ctx).TrustCenterEntity.Query().
 		Where(
 			trustcenterentity.Or(
-				trustcenterentity.ID(query),                     // search equal to ID
-				trustcenterentity.LogoFileIDContainsFold(query), // search by LogoFileID
-				trustcenterentity.URLContainsFold(query),        // search by URL
-				trustcenterentity.NameContainsFold(query),       // search by Name
+				trustcenterentity.ID(query),                        // search equal to ID
+				trustcenterentity.LogoFileIDContainsFold(query),    // search by LogoFileID
+				trustcenterentity.URLContainsFold(query),           // search by URL
+				trustcenterentity.TrustCenterIDContainsFold(query), // search by TrustCenterID
+				trustcenterentity.NameContainsFold(query),          // search by Name
 			),
 		)
 

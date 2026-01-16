@@ -1853,7 +1853,7 @@ type SearchResults struct {
 	TagDefinitions      *generated.TagDefinitionConnection      `json:"tagDefinitions,omitempty"`
 	Tasks               *generated.TaskConnection               `json:"tasks,omitempty"`
 	Templates           *generated.TemplateConnection           `json:"templates,omitempty"`
-	TrustcenterEntities *generated.TrustcenterEntityConnection  `json:"trustcenterEntities,omitempty"`
+	TrustCenterEntities *generated.TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
 	Vulnerabilities     *generated.VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
 	SearchContext       []*models.SearchContext                 `json:"searchContext,omitempty"`
 }
@@ -2193,6 +2193,30 @@ type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for createBulkTrustCenterEntity mutation
+type TrustCenterEntityBulkCreatePayload struct {
+	// Created trustCenterEntitys
+	TrustCenterEntities []*generated.TrustCenterEntity `json:"trustCenterEntities,omitempty"`
+}
+
+// Return response for createTrustCenterEntity mutation
+type TrustCenterEntityCreatePayload struct {
+	// Created trustCenterEntity
+	TrustCenterEntity *generated.TrustCenterEntity `json:"trustCenterEntity"`
+}
+
+// Return response for deleteTrustCenterEntity mutation
+type TrustCenterEntityDeletePayload struct {
+	// Deleted trustCenterEntity ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterEntity mutation
+type TrustCenterEntityUpdatePayload struct {
+	// Updated trustCenterEntity
+	TrustCenterEntity *generated.TrustCenterEntity `json:"trustCenterEntity"`
+}
+
 type TrustCenterNDACreatePayload struct {
 	Template *generated.Template `json:"template"`
 }
@@ -2297,30 +2321,6 @@ type TrustCenterWatermarkConfigDeletePayload struct {
 type TrustCenterWatermarkConfigUpdatePayload struct {
 	// Updated trustCenterWatermarkConfig
 	TrustCenterWatermarkConfig *generated.TrustCenterWatermarkConfig `json:"trustCenterWatermarkConfig"`
-}
-
-// Return response for createBulkTrustcenterEntity mutation
-type TrustcenterEntityBulkCreatePayload struct {
-	// Created trustcenterEntitys
-	TrustcenterEntities []*generated.TrustcenterEntity `json:"trustcenterEntities,omitempty"`
-}
-
-// Return response for createTrustcenterEntity mutation
-type TrustcenterEntityCreatePayload struct {
-	// Created trustcenterEntity
-	TrustcenterEntity *generated.TrustcenterEntity `json:"trustcenterEntity"`
-}
-
-// Return response for deleteTrustcenterEntity mutation
-type TrustcenterEntityDeletePayload struct {
-	// Deleted trustcenterEntity ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateTrustcenterEntity mutation
-type TrustcenterEntityUpdatePayload struct {
-	// Updated trustcenterEntity
-	TrustcenterEntity *generated.TrustcenterEntity `json:"trustcenterEntity"`
 }
 
 // Update discussions related to an object

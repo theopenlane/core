@@ -84,6 +84,10 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePay
 				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
 			case "owner":
 				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterWatermarkConfig_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterWatermarkConfig_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
 			case "file":
@@ -151,6 +155,10 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
 			case "owner":
 				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterWatermarkConfig_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterWatermarkConfig_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
 			case "file":
@@ -247,6 +255,10 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_font(ctx, field)
 			case "owner":
 				return ec.fieldContext_TrustCenterWatermarkConfig_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterWatermarkConfig_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterWatermarkConfig_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenter(ctx, field)
 			case "file":

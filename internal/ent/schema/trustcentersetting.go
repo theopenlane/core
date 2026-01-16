@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -133,6 +134,7 @@ func (t TrustCenterSetting) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterSetting](t,
 				withParents(TrustCenter{}),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -175,6 +177,7 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
@@ -199,6 +202,5 @@ func (TrustCenterSetting) Modules() []models.OrgModule {
 func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
-		entfga.SelfAccessChecks(),
 	}
 }

@@ -129,7 +129,7 @@ func (c ControlObjective) Mixin() []ent.Mixin {
 			),
 			// add groups permissions with viewer, editor, and blocked groups
 			newGroupPermissionsMixin(),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(c)
 }

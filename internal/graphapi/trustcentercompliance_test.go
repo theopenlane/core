@@ -534,7 +534,7 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 			idToDelete:  complianceOther.ID, // use different org compliance to test permissions
 			client:      suite.client.api,
 			ctx:         orgMemberCtx,
-			expectedErr: notAuthorizedErrorMsg, // view only user gets authorization error
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "trust center compliance not found, invalid ID",
@@ -571,10 +571,10 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 		})
 	}
 
-	// Cleanup remaining test data
-	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceOther.ID}).MustDelete(newUser2.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID, standard3.ID}}).MustDelete(newUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOther.ID}).MustDelete(newUser2.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(newUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterOther.ID}).MustDelete(newUser2.UserCtx, t)
+	// // Cleanup remaining test data
+	// (&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: complianceOther.ID}).MustDelete(newUser2.UserCtx, t)
+	// (&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID, standard3.ID}}).MustDelete(newUser.UserCtx, t)
+	// (&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOther.ID}).MustDelete(newUser2.UserCtx, t)
+	// (&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(newUser.UserCtx, t)
+	// (&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterOther.ID}).MustDelete(newUser2.UserCtx, t)
 }

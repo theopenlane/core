@@ -16,19 +16,20 @@ import (
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
-// TrustcenterEntityHistory holds the schema definition for the TrustcenterEntityHistory entity.
-type TrustcenterEntityHistory struct {
+// TrustCenterEntityHistory holds the schema definition for the TrustCenterEntityHistory entity.
+type TrustCenterEntityHistory struct {
 	ent.Schema
 }
 
-// Annotations of the TrustcenterEntityHistory.
-func (TrustcenterEntityHistory) Annotations() []entschema.Annotation {
+// Annotations of the TrustCenterEntityHistory.
+func (TrustCenterEntityHistory) Annotations() []entschema.Annotation {
 	return []entschema.Annotation{
 		entx.SchemaGenSkip(true),
 		entsql.Annotation{
-			Table: "trustcenter_entity_history",
+			Table: "trust_center_entity_history",
 		},
 		history.Annotations{
 			IsHistory: true,
@@ -36,11 +37,16 @@ func (TrustcenterEntityHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "trust_center",
+			IDField:      "TrustCenterID",
+			IncludeHooks: false,
+		},
 	}
 }
 
-// Fields of the TrustcenterEntityHistory.
-func (TrustcenterEntityHistory) Fields() []ent.Field {
+// Fields of the TrustCenterEntityHistory.
+func (TrustCenterEntityHistory) Fields() []ent.Field {
 	historyFields := []ent.Field{
 		field.Time("history_time").
 			Annotations(
@@ -59,7 +65,7 @@ func (TrustcenterEntityHistory) Fields() []ent.Field {
 	// get the fields from the mixins
 	// we only want to include mixin fields, not edges
 	// so this prevents FKs back to the main tables
-	mixins := schema.TrustcenterEntity{}.Mixin()
+	mixins := schema.TrustCenterEntity{}.Mixin()
 	for _, mixin := range mixins {
 		for _, field := range mixin.Fields() {
 			// make sure the mixed in fields do not have unique constraints
@@ -73,7 +79,7 @@ func (TrustcenterEntityHistory) Fields() []ent.Field {
 		}
 	}
 
-	original := schema.TrustcenterEntity{}
+	original := schema.TrustCenterEntity{}
 	for _, field := range original.Fields() {
 		// make sure the fields do not have unique constraints
 		field.Descriptor().Unique = false
@@ -88,16 +94,16 @@ func (TrustcenterEntityHistory) Fields() []ent.Field {
 	return historyFields
 }
 
-// Indexes of the TrustcenterEntityHistory
-func (TrustcenterEntityHistory) Indexes() []ent.Index {
+// Indexes of the TrustCenterEntityHistory
+func (TrustCenterEntityHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
 	}
 }
 
-// Policy of the TrustcenterEntityHistory.
+// Policy of the TrustCenterEntityHistory.
 // ensure history.AllowIfHistoryRequest() is already added to the base policy
-func (TrustcenterEntityHistory) Policy() ent.Policy {
+func (TrustCenterEntityHistory) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			history.AllowIfHistoryRequest(),
@@ -105,9 +111,9 @@ func (TrustcenterEntityHistory) Policy() ent.Policy {
 	)
 }
 
-// Interceptors of the TrustcenterEntityHistory
-func (TrustcenterEntityHistory) Interceptors() []ent.Interceptor {
+// Interceptors of the TrustCenterEntityHistory
+func (TrustCenterEntityHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, "trust_center"),
 	}
 }

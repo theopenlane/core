@@ -9741,6 +9741,150 @@ func newTrustCenterDocHistoryPaginateArgs(rv map[string]any) *trustcenterdochist
 }
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *TrustCenterEntityHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterEntityHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *TrustCenterEntityHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(trustcenterentityhistory.Columns))
+		selectedFields = []string{trustcenterentityhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldHistoryTime)
+				fieldSeen[trustcenterentityhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldRef)
+				fieldSeen[trustcenterentityhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldOperation)
+				fieldSeen[trustcenterentityhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldCreatedAt)
+				fieldSeen[trustcenterentityhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldUpdatedAt)
+				fieldSeen[trustcenterentityhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldCreatedBy)
+				fieldSeen[trustcenterentityhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldUpdatedBy)
+				fieldSeen[trustcenterentityhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "logoFileID":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldLogoFileID)
+				fieldSeen[trustcenterentityhistory.FieldLogoFileID] = struct{}{}
+			}
+		case "url":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldURL]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldURL)
+				fieldSeen[trustcenterentityhistory.FieldURL] = struct{}{}
+			}
+		case "trustCenterID":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldTrustCenterID]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldTrustCenterID)
+				fieldSeen[trustcenterentityhistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldName)
+				fieldSeen[trustcenterentityhistory.FieldName] = struct{}{}
+			}
+		case "entityTypeID":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldEntityTypeID]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldEntityTypeID)
+				fieldSeen[trustcenterentityhistory.FieldEntityTypeID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type trustcenterentityhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []TrustCenterEntityHistoryPaginateOption
+}
+
+func newTrustCenterEntityHistoryPaginateArgs(rv map[string]any) *trustcenterentityhistoryPaginateArgs {
+	args := &trustcenterentityhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &TrustCenterEntityHistoryOrder{Field: &TrustCenterEntityHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithTrustCenterEntityHistoryOrder(order))
+			}
+		case *TrustCenterEntityHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithTrustCenterEntityHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*TrustCenterEntityHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithTrustCenterEntityHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
 func (_q *TrustCenterHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustCenterHistoryQuery, error) {
 	fc := graphql.GetFieldContext(ctx)
 	if fc == nil {
@@ -10407,150 +10551,6 @@ func newTrustCenterWatermarkConfigHistoryPaginateArgs(rv map[string]any) *trustc
 	}
 	if v, ok := rv[whereField].(*TrustCenterWatermarkConfigHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithTrustCenterWatermarkConfigHistoryFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (_q *TrustcenterEntityHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*TrustcenterEntityHistoryQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return _q, nil
-	}
-	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return _q, nil
-}
-
-func (_q *TrustcenterEntityHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(trustcenterentityhistory.Columns))
-		selectedFields = []string{trustcenterentityhistory.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "historyTime":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldHistoryTime]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldHistoryTime)
-				fieldSeen[trustcenterentityhistory.FieldHistoryTime] = struct{}{}
-			}
-		case "ref":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldRef]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldRef)
-				fieldSeen[trustcenterentityhistory.FieldRef] = struct{}{}
-			}
-		case "operation":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldOperation]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldOperation)
-				fieldSeen[trustcenterentityhistory.FieldOperation] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldCreatedAt)
-				fieldSeen[trustcenterentityhistory.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldUpdatedAt)
-				fieldSeen[trustcenterentityhistory.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldCreatedBy)
-				fieldSeen[trustcenterentityhistory.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldUpdatedBy)
-				fieldSeen[trustcenterentityhistory.FieldUpdatedBy] = struct{}{}
-			}
-		case "logoFileID":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldLogoFileID]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldLogoFileID)
-				fieldSeen[trustcenterentityhistory.FieldLogoFileID] = struct{}{}
-			}
-		case "url":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldURL]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldURL)
-				fieldSeen[trustcenterentityhistory.FieldURL] = struct{}{}
-			}
-		case "trustCenterID":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldTrustCenterID]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldTrustCenterID)
-				fieldSeen[trustcenterentityhistory.FieldTrustCenterID] = struct{}{}
-			}
-		case "name":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldName]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldName)
-				fieldSeen[trustcenterentityhistory.FieldName] = struct{}{}
-			}
-		case "entityTypeID":
-			if _, ok := fieldSeen[trustcenterentityhistory.FieldEntityTypeID]; !ok {
-				selectedFields = append(selectedFields, trustcenterentityhistory.FieldEntityTypeID)
-				fieldSeen[trustcenterentityhistory.FieldEntityTypeID] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		_q.Select(selectedFields...)
-	}
-	return nil
-}
-
-type trustcenterentityhistoryPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []TrustcenterEntityHistoryPaginateOption
-}
-
-func newTrustcenterEntityHistoryPaginateArgs(rv map[string]any) *trustcenterentityhistoryPaginateArgs {
-	args := &trustcenterentityhistoryPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &TrustcenterEntityHistoryOrder{Field: &TrustcenterEntityHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
-			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithTrustcenterEntityHistoryOrder(order))
-			}
-		case *TrustcenterEntityHistoryOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithTrustcenterEntityHistoryOrder(v))
-			}
-		}
-	}
-	if v, ok := rv[whereField].(*TrustcenterEntityHistoryWhereInput); ok {
-		args.opts = append(args.opts, WithTrustcenterEntityHistoryFilter(v.Filter))
 	}
 	return args
 }

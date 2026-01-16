@@ -168,7 +168,7 @@ func (s Standard) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(s,
 				withAllowAnonymousTrustCenterAccess(true),
 			),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(s)
 }

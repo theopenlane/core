@@ -91,7 +91,13 @@ func (TrustCenter) Fields() []ent.Field {
 func (t TrustCenter) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t, withAllowAnonymousTrustCenterAccess(true), withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(t,
+				withAllowAnonymousTrustCenterAccess(true),
+				withSkipForSystemAdmin(true),
+			),
+			// allow for group group permissions to be assigned to trust centers, to give users full edit access
+			// to trust center objects and their children
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -125,6 +131,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -133,6 +140,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -141,6 +149,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("TrustCenter"),
 			},
+			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
@@ -177,11 +186,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
+			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
 			name:          "entities",
-			edgeSchema:    TrustcenterEntity{},
+			edgeSchema:    TrustCenterEntity{},
 			cascadeDelete: "TrustCenter",
 		}),
 	}

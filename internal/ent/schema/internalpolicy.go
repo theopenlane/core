@@ -112,7 +112,7 @@ func (i InternalPolicy) Mixin() []ent.Mixin {
 			// all policies must be associated to an organization
 			// unless they are system owned to be used as templates
 			newOrgOwnedMixin(i),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			// add group edit permissions to the procedure
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			// policies are documents

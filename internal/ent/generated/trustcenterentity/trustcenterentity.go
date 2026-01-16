@@ -12,7 +12,7 @@ import (
 
 const (
 	// Label holds the string label denoting the trustcenterentity type in the database.
-	Label = "trustcenter_entity"
+	Label = "trust_center_entity"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -37,6 +37,10 @@ const (
 	FieldName = "name"
 	// FieldEntityTypeID holds the string denoting the entity_type_id field in the database.
 	FieldEntityTypeID = "entity_type_id"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
@@ -44,23 +48,37 @@ const (
 	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
 	EdgeEntityType = "entity_type"
 	// Table holds the table name of the trustcenterentity in the database.
-	Table = "trustcenter_entities"
+	Table = "trust_center_entities"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "trust_center_entity_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "trust_center_entity_editors"
 	// LogoFileTable is the table that holds the logo_file relation/edge.
-	LogoFileTable = "trustcenter_entities"
+	LogoFileTable = "trust_center_entities"
 	// LogoFileInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	LogoFileInverseTable = "files"
 	// LogoFileColumn is the table column denoting the logo_file relation/edge.
 	LogoFileColumn = "logo_file_id"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
-	TrustCenterTable = "trustcenter_entities"
+	TrustCenterTable = "trust_center_entities"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
 	// EntityTypeTable is the table that holds the entity_type relation/edge.
-	EntityTypeTable = "trustcenter_entities"
+	EntityTypeTable = "trust_center_entities"
 	// EntityTypeInverseTable is the table name for the EntityType entity.
 	// It exists in this package in order to avoid circular dependency with the "entitytype" package.
 	EntityTypeInverseTable = "entity_types"
@@ -84,11 +102,10 @@ var Columns = []string{
 	FieldEntityTypeID,
 }
 
-// ForeignKeys holds the SQL foreign-keys that are owned by the "trustcenter_entities"
+// ForeignKeys holds the SQL foreign-keys that are owned by the "trust_center_entities"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"file_trustcenter_entities",
-	"trust_center_trustcenter_entities",
+	"file_trust_center_entities",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -112,7 +129,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [8]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -123,11 +140,13 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// URLValidator is a validator for the "url" field. It is called by the builders before save.
 	URLValidator func(string) error
+	// TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	TrustCenterIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
 
-// OrderOption defines the ordering options for the TrustcenterEntity queries.
+// OrderOption defines the ordering options for the TrustCenterEntity queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.
@@ -190,6 +209,34 @@ func ByEntityTypeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEntityTypeID, opts...).ToFunc()
 }
 
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByLogoFileField orders the results by logo_file field.
 func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -210,6 +257,20 @@ func ByEntityTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newEntityTypeStep(), sql.OrderByField(field, opts...))
 	}
 }
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+	)
+}
 func newLogoFileStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -221,7 +282,7 @@ func newTrustCenterStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterTable, TrustCenterColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 	)
 }
 func newEntityTypeStep() *sqlgraph.Step {

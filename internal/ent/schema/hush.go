@@ -118,7 +118,7 @@ func (h Hush) Mixin() []ent.Mixin {
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(h),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(h)
 }

@@ -82,8 +82,12 @@ func (Subprocessor) Fields() []ent.Field {
 func (t Subprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t,
+			newObjectOwnedMixin[generated.Subprocessor](
+				t,
+				withParents(Organization{}, TrustCenterSubprocessor{}),
+				withOrganizationOwner(true),
 				withAllowAnonymousTrustCenterAccess(true),
+				withSkipForSystemAdmin(true),
 			),
 			mixin.NewSystemOwnedMixin(),
 		},
@@ -100,8 +104,9 @@ func (t Subprocessor) Edges() []ent.Edge {
 			field:      "logo_file_id",
 		}),
 		edgeToWithPagination(&edgeDefinition{
-			fromSchema: t,
-			edgeSchema: TrustCenterSubprocessor{},
+			fromSchema:    t,
+			edgeSchema:    TrustCenterSubprocessor{},
+			cascadeDelete: "Subprocessor",
 		}),
 	}
 }

@@ -12,46 +12,47 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
-// TrustcenterEntityUpdate is the builder for updating TrustcenterEntity entities.
-type TrustcenterEntityUpdate struct {
+// TrustCenterEntityUpdate is the builder for updating TrustCenterEntity entities.
+type TrustCenterEntityUpdate struct {
 	config
 	hooks     []Hook
-	mutation  *TrustcenterEntityMutation
+	mutation  *TrustCenterEntityMutation
 	modifiers []func(*sql.UpdateBuilder)
 }
 
-// Where appends a list predicates to the TrustcenterEntityUpdate builder.
-func (_u *TrustcenterEntityUpdate) Where(ps ...predicate.TrustcenterEntity) *TrustcenterEntityUpdate {
+// Where appends a list predicates to the TrustCenterEntityUpdate builder.
+func (_u *TrustCenterEntityUpdate) Where(ps ...predicate.TrustCenterEntity) *TrustCenterEntityUpdate {
 	_u.mutation.Where(ps...)
 	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustcenterEntityUpdate) SetUpdatedAt(v time.Time) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetUpdatedAt(v time.Time) *TrustCenterEntityUpdate {
 	_u.mutation.SetUpdatedAt(v)
 	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustcenterEntityUpdate) ClearUpdatedAt() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearUpdatedAt() *TrustCenterEntityUpdate {
 	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustcenterEntityUpdate) SetUpdatedBy(v string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetUpdatedBy(v string) *TrustCenterEntityUpdate {
 	_u.mutation.SetUpdatedBy(v)
 	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdate) SetNillableUpdatedBy(v *string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetNillableUpdatedBy(v *string) *TrustCenterEntityUpdate {
 	if v != nil {
 		_u.SetUpdatedBy(*v)
 	}
@@ -59,19 +60,19 @@ func (_u *TrustcenterEntityUpdate) SetNillableUpdatedBy(v *string) *TrustcenterE
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustcenterEntityUpdate) ClearUpdatedBy() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearUpdatedBy() *TrustCenterEntityUpdate {
 	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustcenterEntityUpdate) SetDeletedAt(v time.Time) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetDeletedAt(v time.Time) *TrustCenterEntityUpdate {
 	_u.mutation.SetDeletedAt(v)
 	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdate) SetNillableDeletedAt(v *time.Time) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterEntityUpdate {
 	if v != nil {
 		_u.SetDeletedAt(*v)
 	}
@@ -79,19 +80,19 @@ func (_u *TrustcenterEntityUpdate) SetNillableDeletedAt(v *time.Time) *Trustcent
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustcenterEntityUpdate) ClearDeletedAt() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearDeletedAt() *TrustCenterEntityUpdate {
 	_u.mutation.ClearDeletedAt()
 	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustcenterEntityUpdate) SetDeletedBy(v string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetDeletedBy(v string) *TrustCenterEntityUpdate {
 	_u.mutation.SetDeletedBy(v)
 	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdate) SetNillableDeletedBy(v *string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetNillableDeletedBy(v *string) *TrustCenterEntityUpdate {
 	if v != nil {
 		_u.SetDeletedBy(*v)
 	}
@@ -99,19 +100,19 @@ func (_u *TrustcenterEntityUpdate) SetNillableDeletedBy(v *string) *TrustcenterE
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustcenterEntityUpdate) ClearDeletedBy() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearDeletedBy() *TrustCenterEntityUpdate {
 	_u.mutation.ClearDeletedBy()
 	return _u
 }
 
 // SetLogoFileID sets the "logo_file_id" field.
-func (_u *TrustcenterEntityUpdate) SetLogoFileID(v string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetLogoFileID(v string) *TrustCenterEntityUpdate {
 	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdate) SetNillableLogoFileID(v *string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetNillableLogoFileID(v *string) *TrustCenterEntityUpdate {
 	if v != nil {
 		_u.SetLogoFileID(*v)
 	}
@@ -119,19 +120,19 @@ func (_u *TrustcenterEntityUpdate) SetNillableLogoFileID(v *string) *Trustcenter
 }
 
 // ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *TrustcenterEntityUpdate) ClearLogoFileID() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearLogoFileID() *TrustCenterEntityUpdate {
 	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
 // SetURL sets the "url" field.
-func (_u *TrustcenterEntityUpdate) SetURL(v string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetURL(v string) *TrustCenterEntityUpdate {
 	_u.mutation.SetURL(v)
 	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdate) SetNillableURL(v *string) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetNillableURL(v *string) *TrustCenterEntityUpdate {
 	if v != nil {
 		_u.SetURL(*v)
 	}
@@ -139,29 +140,101 @@ func (_u *TrustcenterEntityUpdate) SetNillableURL(v *string) *TrustcenterEntityU
 }
 
 // ClearURL clears the value of the "url" field.
-func (_u *TrustcenterEntityUpdate) ClearURL() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearURL() *TrustCenterEntityUpdate {
 	_u.mutation.ClearURL()
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterEntityUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterEntityUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterEntityUpdate) AddBlockedGroups(v ...*Group) *TrustCenterEntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterEntityUpdate) AddEditorIDs(ids ...string) *TrustCenterEntityUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterEntityUpdate) AddEditors(v ...*Group) *TrustCenterEntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (_u *TrustcenterEntityUpdate) SetLogoFile(v *File) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) SetLogoFile(v *File) *TrustCenterEntityUpdate {
 	return _u.SetLogoFileID(v.ID)
 }
 
-// Mutation returns the TrustcenterEntityMutation object of the builder.
-func (_u *TrustcenterEntityUpdate) Mutation() *TrustcenterEntityMutation {
+// Mutation returns the TrustCenterEntityMutation object of the builder.
+func (_u *TrustCenterEntityUpdate) Mutation() *TrustCenterEntityMutation {
 	return _u.mutation
 }
 
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterEntityUpdate) ClearBlockedGroups() *TrustCenterEntityUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterEntityUpdate) RemoveBlockedGroupIDs(ids ...string) *TrustCenterEntityUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterEntityUpdate) RemoveBlockedGroups(v ...*Group) *TrustCenterEntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterEntityUpdate) ClearEditors() *TrustCenterEntityUpdate {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterEntityUpdate) RemoveEditorIDs(ids ...string) *TrustCenterEntityUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterEntityUpdate) RemoveEditors(v ...*Group) *TrustCenterEntityUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
+}
+
 // ClearLogoFile clears the "logo_file" edge to the File entity.
-func (_u *TrustcenterEntityUpdate) ClearLogoFile() *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) ClearLogoFile() *TrustCenterEntityUpdate {
 	_u.mutation.ClearLogoFile()
 	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (_u *TrustcenterEntityUpdate) Save(ctx context.Context) (int, error) {
+func (_u *TrustCenterEntityUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
@@ -169,7 +242,7 @@ func (_u *TrustcenterEntityUpdate) Save(ctx context.Context) (int, error) {
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (_u *TrustcenterEntityUpdate) SaveX(ctx context.Context) int {
+func (_u *TrustCenterEntityUpdate) SaveX(ctx context.Context) int {
 	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -178,20 +251,20 @@ func (_u *TrustcenterEntityUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (_u *TrustcenterEntityUpdate) Exec(ctx context.Context) error {
+func (_u *TrustCenterEntityUpdate) Exec(ctx context.Context) error {
 	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_u *TrustcenterEntityUpdate) ExecX(ctx context.Context) {
+func (_u *TrustCenterEntityUpdate) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *TrustcenterEntityUpdate) defaults() error {
+func (_u *TrustCenterEntityUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenterentity.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterentity.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
@@ -203,22 +276,22 @@ func (_u *TrustcenterEntityUpdate) defaults() error {
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (_u *TrustcenterEntityUpdate) check() error {
+func (_u *TrustCenterEntityUpdate) check() error {
 	if v, ok := _u.mutation.URL(); ok {
 		if err := trustcenterentity.URLValidator(v); err != nil {
-			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "TrustcenterEntity.url": %w`, err)}
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterEntity.url": %w`, err)}
 		}
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustcenterEntityUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustcenterEntityUpdate {
+func (_u *TrustCenterEntityUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterEntityUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
 	return _u
 }
 
-func (_u *TrustcenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+func (_u *TrustCenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
@@ -266,6 +339,102 @@ func (_u *TrustcenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(trustcenterentity.FieldURL, field.TypeString)
 	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -277,7 +446,7 @@ func (_u *TrustcenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
+		edge.Schema = _u.schemaConfig.TrustCenterEntity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
@@ -291,13 +460,13 @@ func (_u *TrustcenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
+		edge.Schema = _u.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustcenterEntity
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterEntity
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
@@ -312,35 +481,35 @@ func (_u *TrustcenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err 
 	return _node, nil
 }
 
-// TrustcenterEntityUpdateOne is the builder for updating a single TrustcenterEntity entity.
-type TrustcenterEntityUpdateOne struct {
+// TrustCenterEntityUpdateOne is the builder for updating a single TrustCenterEntity entity.
+type TrustCenterEntityUpdateOne struct {
 	config
 	fields    []string
 	hooks     []Hook
-	mutation  *TrustcenterEntityMutation
+	mutation  *TrustCenterEntityMutation
 	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustcenterEntityUpdateOne) SetUpdatedAt(v time.Time) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterEntityUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
 	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustcenterEntityUpdateOne) ClearUpdatedAt() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearUpdatedAt() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustcenterEntityUpdateOne) SetUpdatedBy(v string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetUpdatedBy(v string) *TrustCenterEntityUpdateOne {
 	_u.mutation.SetUpdatedBy(v)
 	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdateOne) SetNillableUpdatedBy(v *string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterEntityUpdateOne {
 	if v != nil {
 		_u.SetUpdatedBy(*v)
 	}
@@ -348,19 +517,19 @@ func (_u *TrustcenterEntityUpdateOne) SetNillableUpdatedBy(v *string) *Trustcent
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustcenterEntityUpdateOne) ClearUpdatedBy() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearUpdatedBy() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustcenterEntityUpdateOne) SetDeletedAt(v time.Time) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetDeletedAt(v time.Time) *TrustCenterEntityUpdateOne {
 	_u.mutation.SetDeletedAt(v)
 	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterEntityUpdateOne {
 	if v != nil {
 		_u.SetDeletedAt(*v)
 	}
@@ -368,19 +537,19 @@ func (_u *TrustcenterEntityUpdateOne) SetNillableDeletedAt(v *time.Time) *Trustc
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustcenterEntityUpdateOne) ClearDeletedAt() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearDeletedAt() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearDeletedAt()
 	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustcenterEntityUpdateOne) SetDeletedBy(v string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetDeletedBy(v string) *TrustCenterEntityUpdateOne {
 	_u.mutation.SetDeletedBy(v)
 	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdateOne) SetNillableDeletedBy(v *string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterEntityUpdateOne {
 	if v != nil {
 		_u.SetDeletedBy(*v)
 	}
@@ -388,19 +557,19 @@ func (_u *TrustcenterEntityUpdateOne) SetNillableDeletedBy(v *string) *Trustcent
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustcenterEntityUpdateOne) ClearDeletedBy() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearDeletedBy() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearDeletedBy()
 	return _u
 }
 
 // SetLogoFileID sets the "logo_file_id" field.
-func (_u *TrustcenterEntityUpdateOne) SetLogoFileID(v string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetLogoFileID(v string) *TrustCenterEntityUpdateOne {
 	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdateOne) SetNillableLogoFileID(v *string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetNillableLogoFileID(v *string) *TrustCenterEntityUpdateOne {
 	if v != nil {
 		_u.SetLogoFileID(*v)
 	}
@@ -408,19 +577,19 @@ func (_u *TrustcenterEntityUpdateOne) SetNillableLogoFileID(v *string) *Trustcen
 }
 
 // ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *TrustcenterEntityUpdateOne) ClearLogoFileID() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearLogoFileID() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
 // SetURL sets the "url" field.
-func (_u *TrustcenterEntityUpdateOne) SetURL(v string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetURL(v string) *TrustCenterEntityUpdateOne {
 	_u.mutation.SetURL(v)
 	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdateOne) SetNillableURL(v *string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetNillableURL(v *string) *TrustCenterEntityUpdateOne {
 	if v != nil {
 		_u.SetURL(*v)
 	}
@@ -428,42 +597,114 @@ func (_u *TrustcenterEntityUpdateOne) SetNillableURL(v *string) *TrustcenterEnti
 }
 
 // ClearURL clears the value of the "url" field.
-func (_u *TrustcenterEntityUpdateOne) ClearURL() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearURL() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearURL()
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterEntityUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterEntityUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterEntityUpdateOne) AddBlockedGroups(v ...*Group) *TrustCenterEntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterEntityUpdateOne) AddEditorIDs(ids ...string) *TrustCenterEntityUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterEntityUpdateOne) AddEditors(v ...*Group) *TrustCenterEntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (_u *TrustcenterEntityUpdateOne) SetLogoFile(v *File) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) SetLogoFile(v *File) *TrustCenterEntityUpdateOne {
 	return _u.SetLogoFileID(v.ID)
 }
 
-// Mutation returns the TrustcenterEntityMutation object of the builder.
-func (_u *TrustcenterEntityUpdateOne) Mutation() *TrustcenterEntityMutation {
+// Mutation returns the TrustCenterEntityMutation object of the builder.
+func (_u *TrustCenterEntityUpdateOne) Mutation() *TrustCenterEntityMutation {
 	return _u.mutation
 }
 
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterEntityUpdateOne) ClearBlockedGroups() *TrustCenterEntityUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterEntityUpdateOne) RemoveBlockedGroupIDs(ids ...string) *TrustCenterEntityUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterEntityUpdateOne) RemoveBlockedGroups(v ...*Group) *TrustCenterEntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterEntityUpdateOne) ClearEditors() *TrustCenterEntityUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterEntityUpdateOne) RemoveEditorIDs(ids ...string) *TrustCenterEntityUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterEntityUpdateOne) RemoveEditors(v ...*Group) *TrustCenterEntityUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
+}
+
 // ClearLogoFile clears the "logo_file" edge to the File entity.
-func (_u *TrustcenterEntityUpdateOne) ClearLogoFile() *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) ClearLogoFile() *TrustCenterEntityUpdateOne {
 	_u.mutation.ClearLogoFile()
 	return _u
 }
 
-// Where appends a list predicates to the TrustcenterEntityUpdate builder.
-func (_u *TrustcenterEntityUpdateOne) Where(ps ...predicate.TrustcenterEntity) *TrustcenterEntityUpdateOne {
+// Where appends a list predicates to the TrustCenterEntityUpdate builder.
+func (_u *TrustCenterEntityUpdateOne) Where(ps ...predicate.TrustCenterEntity) *TrustCenterEntityUpdateOne {
 	_u.mutation.Where(ps...)
 	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (_u *TrustcenterEntityUpdateOne) Select(field string, fields ...string) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) Select(field string, fields ...string) *TrustCenterEntityUpdateOne {
 	_u.fields = append([]string{field}, fields...)
 	return _u
 }
 
-// Save executes the query and returns the updated TrustcenterEntity entity.
-func (_u *TrustcenterEntityUpdateOne) Save(ctx context.Context) (*TrustcenterEntity, error) {
+// Save executes the query and returns the updated TrustCenterEntity entity.
+func (_u *TrustCenterEntityUpdateOne) Save(ctx context.Context) (*TrustCenterEntity, error) {
 	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
@@ -471,7 +712,7 @@ func (_u *TrustcenterEntityUpdateOne) Save(ctx context.Context) (*TrustcenterEnt
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (_u *TrustcenterEntityUpdateOne) SaveX(ctx context.Context) *TrustcenterEntity {
+func (_u *TrustCenterEntityUpdateOne) SaveX(ctx context.Context) *TrustCenterEntity {
 	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -480,20 +721,20 @@ func (_u *TrustcenterEntityUpdateOne) SaveX(ctx context.Context) *TrustcenterEnt
 }
 
 // Exec executes the query on the entity.
-func (_u *TrustcenterEntityUpdateOne) Exec(ctx context.Context) error {
+func (_u *TrustCenterEntityUpdateOne) Exec(ctx context.Context) error {
 	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_u *TrustcenterEntityUpdateOne) ExecX(ctx context.Context) {
+func (_u *TrustCenterEntityUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *TrustcenterEntityUpdateOne) defaults() error {
+func (_u *TrustCenterEntityUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenterentity.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterentity.UpdateDefaultUpdatedAt (forgotten import generated/runtime?)")
@@ -505,29 +746,29 @@ func (_u *TrustcenterEntityUpdateOne) defaults() error {
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (_u *TrustcenterEntityUpdateOne) check() error {
+func (_u *TrustCenterEntityUpdateOne) check() error {
 	if v, ok := _u.mutation.URL(); ok {
 		if err := trustcenterentity.URLValidator(v); err != nil {
-			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "TrustcenterEntity.url": %w`, err)}
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterEntity.url": %w`, err)}
 		}
 	}
 	return nil
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustcenterEntityUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustcenterEntityUpdateOne {
+func (_u *TrustCenterEntityUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterEntityUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
 	return _u
 }
 
-func (_u *TrustcenterEntityUpdateOne) sqlSave(ctx context.Context) (_node *TrustcenterEntity, err error) {
+func (_u *TrustCenterEntityUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterEntity, err error) {
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterentity.Table, trustcenterentity.Columns, sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TrustcenterEntity.id" for update`)}
+		return nil, &ValidationError{Name: "id", err: errors.New(`generated: missing "TrustCenterEntity.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
 	if fields := _u.fields; len(fields) > 0 {
@@ -585,6 +826,102 @@ func (_u *TrustcenterEntityUpdateOne) sqlSave(ctx context.Context) (_node *Trust
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(trustcenterentity.FieldURL, field.TypeString)
 	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.LogoFileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -596,7 +933,7 @@ func (_u *TrustcenterEntityUpdateOne) sqlSave(ctx context.Context) (_node *Trust
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
+		edge.Schema = _u.schemaConfig.TrustCenterEntity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
@@ -610,16 +947,16 @@ func (_u *TrustcenterEntityUpdateOne) sqlSave(ctx context.Context) (_node *Trust
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
+		edge.Schema = _u.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustcenterEntity
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterEntity
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
-	_node = &TrustcenterEntity{config: _u.config}
+	_node = &TrustCenterEntity{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
 	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {

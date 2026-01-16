@@ -82,6 +82,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -180,6 +184,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -278,6 +286,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -376,6 +388,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
