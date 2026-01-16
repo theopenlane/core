@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
@@ -587,19 +588,49 @@ func (_c *FileCreate) AddSecrets(v ...*Hush) *FileCreate {
 	return _c.AddSecretIDs(ids...)
 }
 
-// AddTrustcenterEntityIDs adds the "trustcenter_entities" edge to the TrustcenterEntity entity by IDs.
-func (_c *FileCreate) AddTrustcenterEntityIDs(ids ...string) *FileCreate {
-	_c.mutation.AddTrustcenterEntityIDs(ids...)
+// AddTrustCenterEntityIDs adds the "trust_center_entities" edge to the TrustCenterEntity entity by IDs.
+func (_c *FileCreate) AddTrustCenterEntityIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterEntityIDs(ids...)
 	return _c
 }
 
-// AddTrustcenterEntities adds the "trustcenter_entities" edges to the TrustcenterEntity entity.
-func (_c *FileCreate) AddTrustcenterEntities(v ...*TrustcenterEntity) *FileCreate {
+// AddTrustCenterEntities adds the "trust_center_entities" edges to the TrustCenterEntity entity.
+func (_c *FileCreate) AddTrustCenterEntities(v ...*TrustCenterEntity) *FileCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddTrustcenterEntityIDs(ids...)
+	return _c.AddTrustCenterEntityIDs(ids...)
+}
+
+// AddTrustCenterDocIDs adds the "trust_center_doc" edge to the TrustCenterDoc entity by IDs.
+func (_c *FileCreate) AddTrustCenterDocIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustCenterDocIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterDoc adds the "trust_center_doc" edges to the TrustCenterDoc entity.
+func (_c *FileCreate) AddTrustCenterDoc(v ...*TrustCenterDoc) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterDocIDs(ids...)
+}
+
+// AddOriginalTrustCenterDocIDs adds the "original_trust_center_doc" edge to the TrustCenterDoc entity by IDs.
+func (_c *FileCreate) AddOriginalTrustCenterDocIDs(ids ...string) *FileCreate {
+	_c.mutation.AddOriginalTrustCenterDocIDs(ids...)
+	return _c
+}
+
+// AddOriginalTrustCenterDoc adds the "original_trust_center_doc" edges to the TrustCenterDoc entity.
+func (_c *FileCreate) AddOriginalTrustCenterDoc(v ...*TrustCenterDoc) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddOriginalTrustCenterDocIDs(ids...)
 }
 
 // Mutation returns the FileMutation object of the builder.
@@ -1061,18 +1092,52 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.TrustcenterEntitiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterEntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   file.TrustcenterEntitiesTable,
-			Columns: []string{file.TrustcenterEntitiesColumn},
+			Table:   file.TrustCenterEntitiesTable,
+			Columns: []string{file.TrustCenterEntitiesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntity
+		edge.Schema = _c.schemaConfig.TrustCenterEntity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterDocIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterDocTable,
+			Columns: []string{file.TrustCenterDocColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.OriginalTrustCenterDocIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.OriginalTrustCenterDocTable,
+			Columns: []string{file.OriginalTrustCenterDocColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -60,6 +61,7 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("ID of the trust center").
 			NotEmpty().
+			Immutable().
 			Optional(),
 		field.Bool("is_enabled").
 			Comment("whether the watermarking is enabled for all trust center documents, default is true").
@@ -115,6 +117,7 @@ func (t TrustCenterWatermarkConfig) Mixin() []ent.Mixin {
 				withParents(TrustCenter{}),
 				withOrganizationOwner(true),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -147,6 +150,7 @@ func (TrustCenterWatermarkConfig) Hooks() []ent.Hook {
 func (TrustCenterWatermarkConfig) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
@@ -173,7 +177,6 @@ func (TrustCenterWatermarkConfig) Indexes() []ent.Index {
 func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
-		entfga.SelfAccessChecks(),
 		entsql.Annotation{
 			Checks: map[string]string{
 				"text_or_logo_id_not_null": "(text IS NOT NULL) OR (logo_id IS NOT NULL)",

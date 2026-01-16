@@ -120,28 +120,34 @@ type FileEdges struct {
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Secrets holds the value of the secrets edge.
 	Secrets []*Hush `json:"secrets,omitempty"`
-	// TrustcenterEntities holds the value of the trustcenter_entities edge.
-	TrustcenterEntities []*TrustcenterEntity `json:"trustcenter_entities,omitempty"`
+	// TrustCenterEntities holds the value of the trust_center_entities edge.
+	TrustCenterEntities []*TrustCenterEntity `json:"trust_center_entities,omitempty"`
+	// TrustCenterDoc holds the value of the trust_center_doc edge.
+	TrustCenterDoc []*TrustCenterDoc `json:"trust_center_doc,omitempty"`
+	// OriginalTrustCenterDoc holds the value of the original_trust_center_doc edge.
+	OriginalTrustCenterDoc []*TrustCenterDoc `json:"original_trust_center_doc,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [16]map[string]int
 
-	namedOrganization        map[string][]*Organization
-	namedGroups              map[string][]*Group
-	namedContact             map[string][]*Contact
-	namedEntity              map[string][]*Entity
-	namedOrganizationSetting map[string][]*OrganizationSetting
-	namedTemplate            map[string][]*Template
-	namedDocument            map[string][]*DocumentData
-	namedProgram             map[string][]*Program
-	namedEvidence            map[string][]*Evidence
-	namedEvents              map[string][]*Event
-	namedTrustCenterSetting  map[string][]*TrustCenterSetting
-	namedIntegrations        map[string][]*Integration
-	namedSecrets             map[string][]*Hush
-	namedTrustcenterEntities map[string][]*TrustcenterEntity
+	namedOrganization           map[string][]*Organization
+	namedGroups                 map[string][]*Group
+	namedContact                map[string][]*Contact
+	namedEntity                 map[string][]*Entity
+	namedOrganizationSetting    map[string][]*OrganizationSetting
+	namedTemplate               map[string][]*Template
+	namedDocument               map[string][]*DocumentData
+	namedProgram                map[string][]*Program
+	namedEvidence               map[string][]*Evidence
+	namedEvents                 map[string][]*Event
+	namedTrustCenterSetting     map[string][]*TrustCenterSetting
+	namedIntegrations           map[string][]*Integration
+	namedSecrets                map[string][]*Hush
+	namedTrustCenterEntities    map[string][]*TrustCenterEntity
+	namedTrustCenterDoc         map[string][]*TrustCenterDoc
+	namedOriginalTrustCenterDoc map[string][]*TrustCenterDoc
 }
 
 // OrganizationOrErr returns the Organization value or an error if the edge
@@ -261,13 +267,31 @@ func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
 	return nil, &NotLoadedError{edge: "secrets"}
 }
 
-// TrustcenterEntitiesOrErr returns the TrustcenterEntities value or an error if the edge
+// TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) TrustcenterEntitiesOrErr() ([]*TrustcenterEntity, error) {
+func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 	if e.loadedTypes[13] {
-		return e.TrustcenterEntities, nil
+		return e.TrustCenterEntities, nil
 	}
-	return nil, &NotLoadedError{edge: "trustcenter_entities"}
+	return nil, &NotLoadedError{edge: "trust_center_entities"}
+}
+
+// TrustCenterDocOrErr returns the TrustCenterDoc value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
+	if e.loadedTypes[14] {
+		return e.TrustCenterDoc, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_doc"}
+}
+
+// OriginalTrustCenterDocOrErr returns the OriginalTrustCenterDoc value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
+	if e.loadedTypes[15] {
+		return e.OriginalTrustCenterDoc, nil
+	}
+	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -622,9 +646,19 @@ func (_m *File) QuerySecrets() *HushQuery {
 	return NewFileClient(_m.config).QuerySecrets(_m)
 }
 
-// QueryTrustcenterEntities queries the "trustcenter_entities" edge of the File entity.
-func (_m *File) QueryTrustcenterEntities() *TrustcenterEntityQuery {
-	return NewFileClient(_m.config).QueryTrustcenterEntities(_m)
+// QueryTrustCenterEntities queries the "trust_center_entities" edge of the File entity.
+func (_m *File) QueryTrustCenterEntities() *TrustCenterEntityQuery {
+	return NewFileClient(_m.config).QueryTrustCenterEntities(_m)
+}
+
+// QueryTrustCenterDoc queries the "trust_center_doc" edge of the File entity.
+func (_m *File) QueryTrustCenterDoc() *TrustCenterDocQuery {
+	return NewFileClient(_m.config).QueryTrustCenterDoc(_m)
+}
+
+// QueryOriginalTrustCenterDoc queries the "original_trust_center_doc" edge of the File entity.
+func (_m *File) QueryOriginalTrustCenterDoc() *TrustCenterDocQuery {
+	return NewFileClient(_m.config).QueryOriginalTrustCenterDoc(_m)
 }
 
 // Update returns a builder for updating this File.
@@ -1055,27 +1089,75 @@ func (_m *File) appendNamedSecrets(name string, edges ...*Hush) {
 	}
 }
 
-// NamedTrustcenterEntities returns the TrustcenterEntities named value or an error if the edge was not
+// NamedTrustCenterEntities returns the TrustCenterEntities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *File) NamedTrustcenterEntities(name string) ([]*TrustcenterEntity, error) {
-	if _m.Edges.namedTrustcenterEntities == nil {
+func (_m *File) NamedTrustCenterEntities(name string) ([]*TrustCenterEntity, error) {
+	if _m.Edges.namedTrustCenterEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedTrustcenterEntities[name]
+	nodes, ok := _m.Edges.namedTrustCenterEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *File) appendNamedTrustcenterEntities(name string, edges ...*TrustcenterEntity) {
-	if _m.Edges.namedTrustcenterEntities == nil {
-		_m.Edges.namedTrustcenterEntities = make(map[string][]*TrustcenterEntity)
+func (_m *File) appendNamedTrustCenterEntities(name string, edges ...*TrustCenterEntity) {
+	if _m.Edges.namedTrustCenterEntities == nil {
+		_m.Edges.namedTrustCenterEntities = make(map[string][]*TrustCenterEntity)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedTrustcenterEntities[name] = []*TrustcenterEntity{}
+		_m.Edges.namedTrustCenterEntities[name] = []*TrustCenterEntity{}
 	} else {
-		_m.Edges.namedTrustcenterEntities[name] = append(_m.Edges.namedTrustcenterEntities[name], edges...)
+		_m.Edges.namedTrustCenterEntities[name] = append(_m.Edges.namedTrustCenterEntities[name], edges...)
+	}
+}
+
+// NamedTrustCenterDoc returns the TrustCenterDoc named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedTrustCenterDoc(name string) ([]*TrustCenterDoc, error) {
+	if _m.Edges.namedTrustCenterDoc == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterDoc[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedTrustCenterDoc(name string, edges ...*TrustCenterDoc) {
+	if _m.Edges.namedTrustCenterDoc == nil {
+		_m.Edges.namedTrustCenterDoc = make(map[string][]*TrustCenterDoc)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterDoc[name] = []*TrustCenterDoc{}
+	} else {
+		_m.Edges.namedTrustCenterDoc[name] = append(_m.Edges.namedTrustCenterDoc[name], edges...)
+	}
+}
+
+// NamedOriginalTrustCenterDoc returns the OriginalTrustCenterDoc named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedOriginalTrustCenterDoc(name string) ([]*TrustCenterDoc, error) {
+	if _m.Edges.namedOriginalTrustCenterDoc == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedOriginalTrustCenterDoc[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedOriginalTrustCenterDoc(name string, edges ...*TrustCenterDoc) {
+	if _m.Edges.namedOriginalTrustCenterDoc == nil {
+		_m.Edges.namedOriginalTrustCenterDoc = make(map[string][]*TrustCenterDoc)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedOriginalTrustCenterDoc[name] = []*TrustCenterDoc{}
+	} else {
+		_m.Edges.namedOriginalTrustCenterDoc[name] = append(_m.Edges.namedOriginalTrustCenterDoc[name], edges...)
 	}
 }
 

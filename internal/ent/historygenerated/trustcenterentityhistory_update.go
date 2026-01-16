@@ -19,40 +19,40 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
-// TrustcenterEntityHistoryUpdate is the builder for updating TrustcenterEntityHistory entities.
-type TrustcenterEntityHistoryUpdate struct {
+// TrustCenterEntityHistoryUpdate is the builder for updating TrustCenterEntityHistory entities.
+type TrustCenterEntityHistoryUpdate struct {
 	config
 	hooks     []Hook
-	mutation  *TrustcenterEntityHistoryMutation
+	mutation  *TrustCenterEntityHistoryMutation
 	modifiers []func(*sql.UpdateBuilder)
 }
 
-// Where appends a list predicates to the TrustcenterEntityHistoryUpdate builder.
-func (_u *TrustcenterEntityHistoryUpdate) Where(ps ...predicate.TrustcenterEntityHistory) *TrustcenterEntityHistoryUpdate {
+// Where appends a list predicates to the TrustCenterEntityHistoryUpdate builder.
+func (_u *TrustCenterEntityHistoryUpdate) Where(ps ...predicate.TrustCenterEntityHistory) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.Where(ps...)
 	return _u
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetUpdatedAt(v time.Time) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.SetUpdatedAt(v)
 	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearUpdatedAt() *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) ClearUpdatedAt() *TrustCenterEntityHistoryUpdate {
 	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetUpdatedBy(v string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetUpdatedBy(v string) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.SetUpdatedBy(v)
 	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterEntityHistoryUpdate {
 	if v != nil {
 		_u.SetUpdatedBy(*v)
 	}
@@ -60,19 +60,19 @@ func (_u *TrustcenterEntityHistoryUpdate) SetNillableUpdatedBy(v *string) *Trust
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearUpdatedBy() *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) ClearUpdatedBy() *TrustCenterEntityHistoryUpdate {
 	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetDeletedAt(v time.Time) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.SetDeletedAt(v)
 	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterEntityHistoryUpdate {
 	if v != nil {
 		_u.SetDeletedAt(*v)
 	}
@@ -80,19 +80,19 @@ func (_u *TrustcenterEntityHistoryUpdate) SetNillableDeletedAt(v *time.Time) *Tr
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearDeletedAt() *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) ClearDeletedAt() *TrustCenterEntityHistoryUpdate {
 	_u.mutation.ClearDeletedAt()
 	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetDeletedBy(v string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetDeletedBy(v string) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.SetDeletedBy(v)
 	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdate) SetNillableDeletedBy(v *string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterEntityHistoryUpdate {
 	if v != nil {
 		_u.SetDeletedBy(*v)
 	}
@@ -100,19 +100,19 @@ func (_u *TrustcenterEntityHistoryUpdate) SetNillableDeletedBy(v *string) *Trust
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearDeletedBy() *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) ClearDeletedBy() *TrustCenterEntityHistoryUpdate {
 	_u.mutation.ClearDeletedBy()
 	return _u
 }
 
 // SetLogoFileID sets the "logo_file_id" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetLogoFileID(v string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetLogoFileID(v string) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdate) SetNillableLogoFileID(v *string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetNillableLogoFileID(v *string) *TrustCenterEntityHistoryUpdate {
 	if v != nil {
 		_u.SetLogoFileID(*v)
 	}
@@ -120,19 +120,19 @@ func (_u *TrustcenterEntityHistoryUpdate) SetNillableLogoFileID(v *string) *Trus
 }
 
 // ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearLogoFileID() *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) ClearLogoFileID() *TrustCenterEntityHistoryUpdate {
 	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
 // SetURL sets the "url" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetURL(v string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetURL(v string) *TrustCenterEntityHistoryUpdate {
 	_u.mutation.SetURL(v)
 	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdate) SetNillableURL(v *string) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) SetNillableURL(v *string) *TrustCenterEntityHistoryUpdate {
 	if v != nil {
 		_u.SetURL(*v)
 	}
@@ -140,18 +140,18 @@ func (_u *TrustcenterEntityHistoryUpdate) SetNillableURL(v *string) *Trustcenter
 }
 
 // ClearURL clears the value of the "url" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearURL() *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) ClearURL() *TrustCenterEntityHistoryUpdate {
 	_u.mutation.ClearURL()
 	return _u
 }
 
-// Mutation returns the TrustcenterEntityHistoryMutation object of the builder.
-func (_u *TrustcenterEntityHistoryUpdate) Mutation() *TrustcenterEntityHistoryMutation {
+// Mutation returns the TrustCenterEntityHistoryMutation object of the builder.
+func (_u *TrustCenterEntityHistoryUpdate) Mutation() *TrustCenterEntityHistoryMutation {
 	return _u.mutation
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
-func (_u *TrustcenterEntityHistoryUpdate) Save(ctx context.Context) (int, error) {
+func (_u *TrustCenterEntityHistoryUpdate) Save(ctx context.Context) (int, error) {
 	if err := _u.defaults(); err != nil {
 		return 0, err
 	}
@@ -159,7 +159,7 @@ func (_u *TrustcenterEntityHistoryUpdate) Save(ctx context.Context) (int, error)
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (_u *TrustcenterEntityHistoryUpdate) SaveX(ctx context.Context) int {
+func (_u *TrustCenterEntityHistoryUpdate) SaveX(ctx context.Context) int {
 	affected, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -168,20 +168,20 @@ func (_u *TrustcenterEntityHistoryUpdate) SaveX(ctx context.Context) int {
 }
 
 // Exec executes the query.
-func (_u *TrustcenterEntityHistoryUpdate) Exec(ctx context.Context) error {
+func (_u *TrustCenterEntityHistoryUpdate) Exec(ctx context.Context) error {
 	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_u *TrustcenterEntityHistoryUpdate) ExecX(ctx context.Context) {
+func (_u *TrustCenterEntityHistoryUpdate) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *TrustcenterEntityHistoryUpdate) defaults() error {
+func (_u *TrustCenterEntityHistoryUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenterentityhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("historygenerated: uninitialized trustcenterentityhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
@@ -193,12 +193,12 @@ func (_u *TrustcenterEntityHistoryUpdate) defaults() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustcenterEntityHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustcenterEntityHistoryUpdate {
+func (_u *TrustCenterEntityHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterEntityHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
 	return _u
 }
 
-func (_u *TrustcenterEntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+func (_u *TrustCenterEntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcenterentityhistory.Table, trustcenterentityhistory.Columns, sqlgraph.NewFieldSpec(trustcenterentityhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -258,7 +258,7 @@ func (_u *TrustcenterEntityHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	if _u.mutation.EntityTypeIDCleared() {
 		_spec.ClearField(trustcenterentityhistory.FieldEntityTypeID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustcenterEntityHistory
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
@@ -273,35 +273,35 @@ func (_u *TrustcenterEntityHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	return _node, nil
 }
 
-// TrustcenterEntityHistoryUpdateOne is the builder for updating a single TrustcenterEntityHistory entity.
-type TrustcenterEntityHistoryUpdateOne struct {
+// TrustCenterEntityHistoryUpdateOne is the builder for updating a single TrustCenterEntityHistory entity.
+type TrustCenterEntityHistoryUpdateOne struct {
 	config
 	fields    []string
 	hooks     []Hook
-	mutation  *TrustcenterEntityHistoryMutation
+	mutation  *TrustCenterEntityHistoryMutation
 	modifiers []func(*sql.UpdateBuilder)
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.SetUpdatedAt(v)
 	return _u
 }
 
 // ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearUpdatedAt() *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) ClearUpdatedAt() *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.ClearUpdatedAt()
 	return _u
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetUpdatedBy(v string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.SetUpdatedBy(v)
 	return _u
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterEntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetUpdatedBy(*v)
 	}
@@ -309,19 +309,19 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableUpdatedBy(v *string) *Tr
 }
 
 // ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearUpdatedBy() *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) ClearUpdatedBy() *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.ClearUpdatedBy()
 	return _u
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.SetDeletedAt(v)
 	return _u
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterEntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetDeletedAt(*v)
 	}
@@ -329,19 +329,19 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) 
 }
 
 // ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearDeletedAt() *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) ClearDeletedAt() *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.ClearDeletedAt()
 	return _u
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetDeletedBy(v string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.SetDeletedBy(v)
 	return _u
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterEntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetDeletedBy(*v)
 	}
@@ -349,19 +349,19 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableDeletedBy(v *string) *Tr
 }
 
 // ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearDeletedBy() *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) ClearDeletedBy() *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.ClearDeletedBy()
 	return _u
 }
 
 // SetLogoFileID sets the "logo_file_id" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetLogoFileID(v string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetLogoFileID(v string) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
 // SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableLogoFileID(v *string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetNillableLogoFileID(v *string) *TrustCenterEntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetLogoFileID(*v)
 	}
@@ -369,19 +369,19 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableLogoFileID(v *string) *T
 }
 
 // ClearLogoFileID clears the value of the "logo_file_id" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearLogoFileID() *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) ClearLogoFileID() *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
 // SetURL sets the "url" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetURL(v string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetURL(v string) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.SetURL(v)
 	return _u
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableURL(v *string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) SetNillableURL(v *string) *TrustCenterEntityHistoryUpdateOne {
 	if v != nil {
 		_u.SetURL(*v)
 	}
@@ -389,31 +389,31 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableURL(v *string) *Trustcen
 }
 
 // ClearURL clears the value of the "url" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearURL() *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) ClearURL() *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.ClearURL()
 	return _u
 }
 
-// Mutation returns the TrustcenterEntityHistoryMutation object of the builder.
-func (_u *TrustcenterEntityHistoryUpdateOne) Mutation() *TrustcenterEntityHistoryMutation {
+// Mutation returns the TrustCenterEntityHistoryMutation object of the builder.
+func (_u *TrustCenterEntityHistoryUpdateOne) Mutation() *TrustCenterEntityHistoryMutation {
 	return _u.mutation
 }
 
-// Where appends a list predicates to the TrustcenterEntityHistoryUpdate builder.
-func (_u *TrustcenterEntityHistoryUpdateOne) Where(ps ...predicate.TrustcenterEntityHistory) *TrustcenterEntityHistoryUpdateOne {
+// Where appends a list predicates to the TrustCenterEntityHistoryUpdate builder.
+func (_u *TrustCenterEntityHistoryUpdateOne) Where(ps ...predicate.TrustCenterEntityHistory) *TrustCenterEntityHistoryUpdateOne {
 	_u.mutation.Where(ps...)
 	return _u
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
 // The default is selecting all fields defined in the entity schema.
-func (_u *TrustcenterEntityHistoryUpdateOne) Select(field string, fields ...string) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) Select(field string, fields ...string) *TrustCenterEntityHistoryUpdateOne {
 	_u.fields = append([]string{field}, fields...)
 	return _u
 }
 
-// Save executes the query and returns the updated TrustcenterEntityHistory entity.
-func (_u *TrustcenterEntityHistoryUpdateOne) Save(ctx context.Context) (*TrustcenterEntityHistory, error) {
+// Save executes the query and returns the updated TrustCenterEntityHistory entity.
+func (_u *TrustCenterEntityHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterEntityHistory, error) {
 	if err := _u.defaults(); err != nil {
 		return nil, err
 	}
@@ -421,7 +421,7 @@ func (_u *TrustcenterEntityHistoryUpdateOne) Save(ctx context.Context) (*Trustce
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (_u *TrustcenterEntityHistoryUpdateOne) SaveX(ctx context.Context) *TrustcenterEntityHistory {
+func (_u *TrustCenterEntityHistoryUpdateOne) SaveX(ctx context.Context) *TrustCenterEntityHistory {
 	node, err := _u.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -430,20 +430,20 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SaveX(ctx context.Context) *Trustce
 }
 
 // Exec executes the query on the entity.
-func (_u *TrustcenterEntityHistoryUpdateOne) Exec(ctx context.Context) error {
+func (_u *TrustCenterEntityHistoryUpdateOne) Exec(ctx context.Context) error {
 	_, err := _u.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_u *TrustcenterEntityHistoryUpdateOne) ExecX(ctx context.Context) {
+func (_u *TrustCenterEntityHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *TrustcenterEntityHistoryUpdateOne) defaults() error {
+func (_u *TrustCenterEntityHistoryUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
 		if trustcenterentityhistory.UpdateDefaultUpdatedAt == nil {
 			return fmt.Errorf("historygenerated: uninitialized trustcenterentityhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
@@ -455,16 +455,16 @@ func (_u *TrustcenterEntityHistoryUpdateOne) defaults() error {
 }
 
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustcenterEntityHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustcenterEntityHistoryUpdateOne {
+func (_u *TrustCenterEntityHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterEntityHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
 	return _u
 }
 
-func (_u *TrustcenterEntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustcenterEntityHistory, err error) {
+func (_u *TrustCenterEntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterEntityHistory, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcenterentityhistory.Table, trustcenterentityhistory.Columns, sqlgraph.NewFieldSpec(trustcenterentityhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "id", err: errors.New(`historygenerated: missing "TrustcenterEntityHistory.id" for update`)}
+		return nil, &ValidationError{Name: "id", err: errors.New(`historygenerated: missing "TrustCenterEntityHistory.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
 	if fields := _u.fields; len(fields) > 0 {
@@ -537,10 +537,10 @@ func (_u *TrustcenterEntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if _u.mutation.EntityTypeIDCleared() {
 		_spec.ClearField(trustcenterentityhistory.FieldEntityTypeID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustcenterEntityHistory
+	_spec.Node.Schema = _u.schemaConfig.TrustCenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
-	_node = &TrustcenterEntityHistory{config: _u.config}
+	_node = &TrustCenterEntityHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues
 	if err = sqlgraph.UpdateNode(ctx, _u.driver, _spec); err != nil {

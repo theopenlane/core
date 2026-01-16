@@ -125,26 +125,6 @@ func (_u *TrustCenterDocHistoryUpdate) ClearTags() *TrustCenterDocHistoryUpdate 
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterID() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // SetTitle sets the "title" field.
 func (_u *TrustCenterDocHistoryUpdate) SetTitle(v string) *TrustCenterDocHistoryUpdate {
 	_u.mutation.SetTitle(v)
@@ -417,9 +397,6 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
 	}
@@ -576,26 +553,6 @@ func (_u *TrustCenterDocHistoryUpdateOne) AppendTags(v []string) *TrustCenterDoc
 // ClearTags clears the value of the "tags" field.
 func (_u *TrustCenterDocHistoryUpdateOne) ClearTags() *TrustCenterDocHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterID() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -900,9 +857,6 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)

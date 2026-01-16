@@ -39,8 +39,8 @@ func TestSkipOrgValidation(t *testing.T) {
 
 func TestAnonymousPrefixes(t *testing.T) {
 	// Verify that the prefix constants are correct
-	if !strings.HasPrefix(AnonTrustcenterJWTPrefix, "anon_") {
-		t.Errorf("AnonTrustcenterJWTPrefix should start with 'anon_', got: %s", AnonTrustcenterJWTPrefix)
+	if !strings.HasPrefix(AnonTrustCenterJWTPrefix, "anon_") {
+		t.Errorf("AnonTrustCenterJWTPrefix should start with 'anon_', got: %s", AnonTrustCenterJWTPrefix)
 	}
 
 	if !strings.HasPrefix(AnonQuestionnaireJWTPrefix, "anon_") {
@@ -48,13 +48,13 @@ func TestAnonymousPrefixes(t *testing.T) {
 	}
 
 	// Verify they are different
-	if AnonTrustcenterJWTPrefix == AnonQuestionnaireJWTPrefix {
-		t.Error("AnonTrustcenterJWTPrefix and AnonQuestionnaireJWTPrefix should be different")
+	if AnonTrustCenterJWTPrefix == AnonQuestionnaireJWTPrefix {
+		t.Error("AnonTrustCenterJWTPrefix and AnonQuestionnaireJWTPrefix should be different")
 	}
 
 	// Verify expected values
-	if AnonTrustcenterJWTPrefix != "anon_trustcenter_" {
-		t.Errorf("Expected AnonTrustcenterJWTPrefix to be 'anon_trustcenter_', got: %s", AnonTrustcenterJWTPrefix)
+	if AnonTrustCenterJWTPrefix != "anon_trustcenter_" {
+		t.Errorf("Expected AnonTrustCenterJWTPrefix to be 'anon_trustcenter_', got: %s", AnonTrustCenterJWTPrefix)
 	}
 
 	if AnonQuestionnaireJWTPrefix != "anon_questionnaire_" {

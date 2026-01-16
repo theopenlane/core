@@ -1772,7 +1772,9 @@ func init() {
 
 	entity.Hooks[9] = entityMixinHooks7[0]
 
-	entity.Hooks[10] = entityHooks[0]
+	entity.Hooks[10] = entityMixinHooks7[1]
+
+	entity.Hooks[11] = entityHooks[0]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
@@ -3319,7 +3321,9 @@ func init() {
 
 	jobtemplate.Hooks[6] = jobtemplateMixinHooks6[0]
 
-	jobtemplate.Hooks[7] = jobtemplateHooks[0]
+	jobtemplate.Hooks[7] = jobtemplateMixinHooks6[1]
+
+	jobtemplate.Hooks[8] = jobtemplateHooks[0]
 	jobtemplateMixinInters1 := jobtemplateMixin[1].Interceptors()
 	jobtemplateMixinInters5 := jobtemplateMixin[5].Interceptors()
 	jobtemplate.Interceptors[0] = jobtemplateMixinInters1[0]
@@ -5462,23 +5466,30 @@ func init() {
 
 	subprocessor.Hooks[4] = subprocessorMixinHooks5[0]
 
-	subprocessor.Hooks[5] = subprocessorMixinHooks6[0]
+	subprocessor.Hooks[5] = subprocessorMixinHooks5[1]
 
-	subprocessor.Hooks[6] = subprocessorHooks[0]
+	subprocessor.Hooks[6] = subprocessorMixinHooks6[0]
 
-	subprocessor.Hooks[7] = subprocessorHooks[1]
+	subprocessor.Hooks[7] = subprocessorMixinHooks6[1]
+
+	subprocessor.Hooks[8] = subprocessorHooks[0]
+
+	subprocessor.Hooks[9] = subprocessorHooks[1]
 	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
 	subprocessorMixinInters5 := subprocessorMixin[5].Interceptors()
 	subprocessorInters := schema.Subprocessor{}.Interceptors()
 	subprocessor.Interceptors[0] = subprocessorMixinInters1[0]
 	subprocessor.Interceptors[1] = subprocessorMixinInters5[0]
-	subprocessor.Interceptors[2] = subprocessorInters[0]
+	subprocessor.Interceptors[2] = subprocessorMixinInters5[1]
+	subprocessor.Interceptors[3] = subprocessorInters[0]
 	subprocessorMixinFields0 := subprocessorMixin[0].Fields()
 	_ = subprocessorMixinFields0
 	subprocessorMixinFields2 := subprocessorMixin[2].Fields()
 	_ = subprocessorMixinFields2
 	subprocessorMixinFields3 := subprocessorMixin[3].Fields()
 	_ = subprocessorMixinFields3
+	subprocessorMixinFields5 := subprocessorMixin[5].Fields()
+	_ = subprocessorMixinFields5
 	subprocessorMixinFields6 := subprocessorMixin[6].Fields()
 	_ = subprocessorMixinFields6
 	subprocessorFields := schema.Subprocessor{}.Fields()
@@ -5497,6 +5508,10 @@ func init() {
 	subprocessorDescTags := subprocessorMixinFields3[0].Descriptor()
 	// subprocessor.DefaultTags holds the default value on creation for the tags field.
 	subprocessor.DefaultTags = subprocessorDescTags.Default.([]string)
+	// subprocessorDescOwnerID is the schema descriptor for owner_id field.
+	subprocessorDescOwnerID := subprocessorMixinFields5[0].Descriptor()
+	// subprocessor.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	subprocessor.OwnerIDValidator = subprocessorDescOwnerID.Validators[0].(func(string) error)
 	// subprocessorDescSystemOwned is the schema descriptor for system_owned field.
 	subprocessorDescSystemOwned := subprocessorMixinFields6[0].Descriptor()
 	// subprocessor.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -5872,11 +5887,13 @@ func init() {
 
 	template.Hooks[6] = templateMixinHooks6[0]
 
-	template.Hooks[7] = templateHooks[0]
+	template.Hooks[7] = templateMixinHooks6[1]
 
-	template.Hooks[8] = templateHooks[1]
+	template.Hooks[8] = templateHooks[0]
 
-	template.Hooks[9] = templateHooks[2]
+	template.Hooks[9] = templateHooks[1]
+
+	template.Hooks[10] = templateHooks[2]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters5 := templateMixin[5].Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
@@ -5938,6 +5955,7 @@ func init() {
 	trustcenterMixinHooks1 := trustcenterMixin[1].Hooks()
 	trustcenterMixinHooks3 := trustcenterMixin[3].Hooks()
 	trustcenterMixinHooks5 := trustcenterMixin[5].Hooks()
+	trustcenterMixinHooks6 := trustcenterMixin[6].Hooks()
 	trustcenterHooks := schema.TrustCenter{}.Hooks()
 
 	trustcenter.Hooks[1] = trustcenterMixinHooks0[0]
@@ -5948,13 +5966,17 @@ func init() {
 
 	trustcenter.Hooks[4] = trustcenterMixinHooks5[0]
 
-	trustcenter.Hooks[5] = trustcenterHooks[0]
+	trustcenter.Hooks[5] = trustcenterMixinHooks6[0]
 
-	trustcenter.Hooks[6] = trustcenterHooks[1]
+	trustcenter.Hooks[6] = trustcenterMixinHooks6[1]
 
-	trustcenter.Hooks[7] = trustcenterHooks[2]
+	trustcenter.Hooks[7] = trustcenterHooks[0]
 
-	trustcenter.Hooks[8] = trustcenterHooks[3]
+	trustcenter.Hooks[8] = trustcenterHooks[1]
+
+	trustcenter.Hooks[9] = trustcenterHooks[2]
+
+	trustcenter.Hooks[10] = trustcenterHooks[3]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
 	trustcenterInters := schema.TrustCenter{}.Interceptors()
@@ -6009,6 +6031,7 @@ func init() {
 	trustcentercomplianceMixinHooks1 := trustcentercomplianceMixin[1].Hooks()
 	trustcentercomplianceMixinHooks3 := trustcentercomplianceMixin[3].Hooks()
 	trustcentercomplianceMixinHooks5 := trustcentercomplianceMixin[5].Hooks()
+	trustcentercomplianceMixinHooks6 := trustcentercomplianceMixin[6].Hooks()
 	trustcentercomplianceHooks := schema.TrustCenterCompliance{}.Hooks()
 
 	trustcentercompliance.Hooks[1] = trustcentercomplianceMixinHooks0[0]
@@ -6019,7 +6042,11 @@ func init() {
 
 	trustcentercompliance.Hooks[4] = trustcentercomplianceMixinHooks5[0]
 
-	trustcentercompliance.Hooks[5] = trustcentercomplianceHooks[0]
+	trustcentercompliance.Hooks[5] = trustcentercomplianceMixinHooks6[0]
+
+	trustcentercompliance.Hooks[6] = trustcentercomplianceMixinHooks6[1]
+
+	trustcentercompliance.Hooks[7] = trustcentercomplianceHooks[0]
 	trustcentercomplianceMixinInters1 := trustcentercomplianceMixin[1].Interceptors()
 	trustcentercomplianceMixinInters5 := trustcentercomplianceMixin[5].Interceptors()
 	trustcentercomplianceInters := schema.TrustCenterCompliance{}.Interceptors()
@@ -6074,6 +6101,7 @@ func init() {
 	trustcenterdocMixinHooks1 := trustcenterdocMixin[1].Hooks()
 	trustcenterdocMixinHooks3 := trustcenterdocMixin[3].Hooks()
 	trustcenterdocMixinHooks5 := trustcenterdocMixin[5].Hooks()
+	trustcenterdocMixinHooks6 := trustcenterdocMixin[6].Hooks()
 	trustcenterdocHooks := schema.TrustCenterDoc{}.Hooks()
 
 	trustcenterdoc.Hooks[1] = trustcenterdocMixinHooks0[0]
@@ -6084,9 +6112,13 @@ func init() {
 
 	trustcenterdoc.Hooks[4] = trustcenterdocMixinHooks5[0]
 
-	trustcenterdoc.Hooks[5] = trustcenterdocHooks[0]
+	trustcenterdoc.Hooks[5] = trustcenterdocMixinHooks6[0]
 
-	trustcenterdoc.Hooks[6] = trustcenterdocHooks[1]
+	trustcenterdoc.Hooks[6] = trustcenterdocMixinHooks6[1]
+
+	trustcenterdoc.Hooks[7] = trustcenterdocHooks[0]
+
+	trustcenterdoc.Hooks[8] = trustcenterdocHooks[1]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters5 := trustcenterdocMixin[5].Interceptors()
 	trustcenterdocInters := schema.TrustCenterDoc{}.Interceptors()
@@ -6135,6 +6167,83 @@ func init() {
 	trustcenterdocDescID := trustcenterdocMixinFields2[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.
 	trustcenterdoc.DefaultID = trustcenterdocDescID.Default.(func() string)
+	trustcenterentityMixin := schema.TrustCenterEntity{}.Mixin()
+	trustcenterentity.Policy = privacy.NewPolicies(schema.TrustCenterEntity{})
+	trustcenterentity.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterentity.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterentityMixinHooks0 := trustcenterentityMixin[0].Hooks()
+	trustcenterentityMixinHooks1 := trustcenterentityMixin[1].Hooks()
+	trustcenterentityMixinHooks4 := trustcenterentityMixin[4].Hooks()
+	trustcenterentityMixinHooks5 := trustcenterentityMixin[5].Hooks()
+	trustcenterentityHooks := schema.TrustCenterEntity{}.Hooks()
+
+	trustcenterentity.Hooks[1] = trustcenterentityMixinHooks0[0]
+
+	trustcenterentity.Hooks[2] = trustcenterentityMixinHooks1[0]
+
+	trustcenterentity.Hooks[3] = trustcenterentityMixinHooks4[0]
+
+	trustcenterentity.Hooks[4] = trustcenterentityMixinHooks5[0]
+
+	trustcenterentity.Hooks[5] = trustcenterentityMixinHooks5[1]
+
+	trustcenterentity.Hooks[6] = trustcenterentityHooks[0]
+
+	trustcenterentity.Hooks[7] = trustcenterentityHooks[1]
+	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
+	trustcenterentityMixinInters4 := trustcenterentityMixin[4].Interceptors()
+	trustcenterentityInters := schema.TrustCenterEntity{}.Interceptors()
+	trustcenterentity.Interceptors[0] = trustcenterentityMixinInters1[0]
+	trustcenterentity.Interceptors[1] = trustcenterentityMixinInters4[0]
+	trustcenterentity.Interceptors[2] = trustcenterentityInters[0]
+	trustcenterentityMixinFields0 := trustcenterentityMixin[0].Fields()
+	_ = trustcenterentityMixinFields0
+	trustcenterentityMixinFields2 := trustcenterentityMixin[2].Fields()
+	_ = trustcenterentityMixinFields2
+	trustcenterentityFields := schema.TrustCenterEntity{}.Fields()
+	_ = trustcenterentityFields
+	// trustcenterentityDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterentityDescCreatedAt := trustcenterentityMixinFields0[0].Descriptor()
+	// trustcenterentity.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterentity.DefaultCreatedAt = trustcenterentityDescCreatedAt.Default.(func() time.Time)
+	// trustcenterentityDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterentityDescUpdatedAt := trustcenterentityMixinFields0[1].Descriptor()
+	// trustcenterentity.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterentity.DefaultUpdatedAt = trustcenterentityDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterentity.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterentity.UpdateDefaultUpdatedAt = trustcenterentityDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterentityDescURL is the schema descriptor for url field.
+	trustcenterentityDescURL := trustcenterentityFields[1].Descriptor()
+	// trustcenterentity.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	trustcenterentity.URLValidator = func() func(string) error {
+		validators := trustcenterentityDescURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(url string) error {
+			for _, fn := range fns {
+				if err := fn(url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcenterentityDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcenterentityDescTrustCenterID := trustcenterentityFields[2].Descriptor()
+	// trustcenterentity.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcenterentity.TrustCenterIDValidator = trustcenterentityDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcenterentityDescID is the schema descriptor for id field.
+	trustcenterentityDescID := trustcenterentityMixinFields2[0].Descriptor()
+	// trustcenterentity.DefaultID holds the default value on creation for the id field.
+	trustcenterentity.DefaultID = trustcenterentityDescID.Default.(func() string)
 	trustcentersettingMixin := schema.TrustCenterSetting{}.Mixin()
 	trustcentersetting.Policy = privacy.NewPolicies(schema.TrustCenterSetting{})
 	trustcentersetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -6148,6 +6257,7 @@ func init() {
 	trustcentersettingMixinHooks0 := trustcentersettingMixin[0].Hooks()
 	trustcentersettingMixinHooks1 := trustcentersettingMixin[1].Hooks()
 	trustcentersettingMixinHooks4 := trustcentersettingMixin[4].Hooks()
+	trustcentersettingMixinHooks5 := trustcentersettingMixin[5].Hooks()
 	trustcentersettingHooks := schema.TrustCenterSetting{}.Hooks()
 
 	trustcentersetting.Hooks[1] = trustcentersettingMixinHooks0[0]
@@ -6156,9 +6266,13 @@ func init() {
 
 	trustcentersetting.Hooks[3] = trustcentersettingMixinHooks4[0]
 
-	trustcentersetting.Hooks[4] = trustcentersettingHooks[0]
+	trustcentersetting.Hooks[4] = trustcentersettingMixinHooks5[0]
 
-	trustcentersetting.Hooks[5] = trustcentersettingHooks[1]
+	trustcentersetting.Hooks[5] = trustcentersettingMixinHooks5[1]
+
+	trustcentersetting.Hooks[6] = trustcentersettingHooks[0]
+
+	trustcentersetting.Hooks[7] = trustcentersettingHooks[1]
 	trustcentersettingMixinInters1 := trustcentersettingMixin[1].Interceptors()
 	trustcentersettingMixinInters4 := trustcentersettingMixin[4].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
@@ -6270,12 +6384,17 @@ func init() {
 	trustcentersubprocessorMixinHooks0 := trustcentersubprocessorMixin[0].Hooks()
 	trustcentersubprocessorMixinHooks1 := trustcentersubprocessorMixin[1].Hooks()
 	trustcentersubprocessorMixinHooks4 := trustcentersubprocessorMixin[4].Hooks()
+	trustcentersubprocessorMixinHooks5 := trustcentersubprocessorMixin[5].Hooks()
 
 	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
 
 	trustcentersubprocessor.Hooks[2] = trustcentersubprocessorMixinHooks1[0]
 
 	trustcentersubprocessor.Hooks[3] = trustcentersubprocessorMixinHooks4[0]
+
+	trustcentersubprocessor.Hooks[4] = trustcentersubprocessorMixinHooks5[0]
+
+	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks5[1]
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
 	trustcentersubprocessorMixinInters4 := trustcentersubprocessorMixin[4].Interceptors()
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()
@@ -6341,6 +6460,7 @@ func init() {
 	trustcenterwatermarkconfigMixinHooks0 := trustcenterwatermarkconfigMixin[0].Hooks()
 	trustcenterwatermarkconfigMixinHooks1 := trustcenterwatermarkconfigMixin[1].Hooks()
 	trustcenterwatermarkconfigMixinHooks4 := trustcenterwatermarkconfigMixin[4].Hooks()
+	trustcenterwatermarkconfigMixinHooks5 := trustcenterwatermarkconfigMixin[5].Hooks()
 	trustcenterwatermarkconfigHooks := schema.TrustCenterWatermarkConfig{}.Hooks()
 
 	trustcenterwatermarkconfig.Hooks[1] = trustcenterwatermarkconfigMixinHooks0[0]
@@ -6351,7 +6471,11 @@ func init() {
 
 	trustcenterwatermarkconfig.Hooks[4] = trustcenterwatermarkconfigMixinHooks4[1]
 
-	trustcenterwatermarkconfig.Hooks[5] = trustcenterwatermarkconfigHooks[0]
+	trustcenterwatermarkconfig.Hooks[5] = trustcenterwatermarkconfigMixinHooks5[0]
+
+	trustcenterwatermarkconfig.Hooks[6] = trustcenterwatermarkconfigMixinHooks5[1]
+
+	trustcenterwatermarkconfig.Hooks[7] = trustcenterwatermarkconfigHooks[0]
 	trustcenterwatermarkconfigMixinInters1 := trustcenterwatermarkconfigMixin[1].Interceptors()
 	trustcenterwatermarkconfigMixinInters4 := trustcenterwatermarkconfigMixin[4].Interceptors()
 	trustcenterwatermarkconfigInters := schema.TrustCenterWatermarkConfig{}.Interceptors()
@@ -6447,74 +6571,6 @@ func init() {
 	trustcenterwatermarkconfigDescID := trustcenterwatermarkconfigMixinFields2[0].Descriptor()
 	// trustcenterwatermarkconfig.DefaultID holds the default value on creation for the id field.
 	trustcenterwatermarkconfig.DefaultID = trustcenterwatermarkconfigDescID.Default.(func() string)
-	trustcenterentityMixin := schema.TrustcenterEntity{}.Mixin()
-	trustcenterentity.Policy = privacy.NewPolicies(schema.TrustcenterEntity{})
-	trustcenterentity.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := trustcenterentity.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	trustcenterentityMixinHooks0 := trustcenterentityMixin[0].Hooks()
-	trustcenterentityMixinHooks1 := trustcenterentityMixin[1].Hooks()
-	trustcenterentityMixinHooks4 := trustcenterentityMixin[4].Hooks()
-	trustcenterentityHooks := schema.TrustcenterEntity{}.Hooks()
-
-	trustcenterentity.Hooks[1] = trustcenterentityMixinHooks0[0]
-
-	trustcenterentity.Hooks[2] = trustcenterentityMixinHooks1[0]
-
-	trustcenterentity.Hooks[3] = trustcenterentityMixinHooks4[0]
-
-	trustcenterentity.Hooks[4] = trustcenterentityHooks[0]
-
-	trustcenterentity.Hooks[5] = trustcenterentityHooks[1]
-	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
-	trustcenterentityMixinInters4 := trustcenterentityMixin[4].Interceptors()
-	trustcenterentityInters := schema.TrustcenterEntity{}.Interceptors()
-	trustcenterentity.Interceptors[0] = trustcenterentityMixinInters1[0]
-	trustcenterentity.Interceptors[1] = trustcenterentityMixinInters4[0]
-	trustcenterentity.Interceptors[2] = trustcenterentityInters[0]
-	trustcenterentityMixinFields0 := trustcenterentityMixin[0].Fields()
-	_ = trustcenterentityMixinFields0
-	trustcenterentityMixinFields2 := trustcenterentityMixin[2].Fields()
-	_ = trustcenterentityMixinFields2
-	trustcenterentityFields := schema.TrustcenterEntity{}.Fields()
-	_ = trustcenterentityFields
-	// trustcenterentityDescCreatedAt is the schema descriptor for created_at field.
-	trustcenterentityDescCreatedAt := trustcenterentityMixinFields0[0].Descriptor()
-	// trustcenterentity.DefaultCreatedAt holds the default value on creation for the created_at field.
-	trustcenterentity.DefaultCreatedAt = trustcenterentityDescCreatedAt.Default.(func() time.Time)
-	// trustcenterentityDescUpdatedAt is the schema descriptor for updated_at field.
-	trustcenterentityDescUpdatedAt := trustcenterentityMixinFields0[1].Descriptor()
-	// trustcenterentity.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	trustcenterentity.DefaultUpdatedAt = trustcenterentityDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterentity.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterentity.UpdateDefaultUpdatedAt = trustcenterentityDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcenterentityDescURL is the schema descriptor for url field.
-	trustcenterentityDescURL := trustcenterentityFields[1].Descriptor()
-	// trustcenterentity.URLValidator is a validator for the "url" field. It is called by the builders before save.
-	trustcenterentity.URLValidator = func() func(string) error {
-		validators := trustcenterentityDescURL.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(url string) error {
-			for _, fn := range fns {
-				if err := fn(url); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// trustcenterentityDescID is the schema descriptor for id field.
-	trustcenterentityDescID := trustcenterentityMixinFields2[0].Descriptor()
-	// trustcenterentity.DefaultID holds the default value on creation for the id field.
-	trustcenterentity.DefaultID = trustcenterentityDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

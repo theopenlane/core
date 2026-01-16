@@ -154,7 +154,7 @@ func (Template) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTemplate(),
 		hooks.HookTemplateFiles(),
-		hooks.HookTemplateAuthz(),
+		hooks.HookPublicAccess(),
 	}
 }
 

@@ -50,6 +50,10 @@ const (
 	FieldSubprocessorURL = "subprocessor_url"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
 	// EdgeCustomDomain holds the string denoting the custom_domain edge name in mutations.
 	EdgeCustomDomain = "custom_domain"
 	// EdgePreviewDomain holds the string denoting the preview_domain edge name in mutations.
@@ -70,8 +74,8 @@ const (
 	EdgeTemplates = "templates"
 	// EdgePosts holds the string denoting the posts edge name in mutations.
 	EdgePosts = "posts"
-	// EdgeTrustcenterEntities holds the string denoting the trustcenter_entities edge name in mutations.
-	EdgeTrustcenterEntities = "trustcenter_entities"
+	// EdgeTrustCenterEntities holds the string denoting the trust_center_entities edge name in mutations.
+	EdgeTrustCenterEntities = "trust_center_entities"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -81,6 +85,20 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "trust_center_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "trust_center_editors"
 	// CustomDomainTable is the table that holds the custom_domain relation/edge.
 	CustomDomainTable = "trust_centers"
 	// CustomDomainInverseTable is the table name for the CustomDomain entity.
@@ -151,13 +169,13 @@ const (
 	PostsInverseTable = "notes"
 	// PostsColumn is the table column denoting the posts relation/edge.
 	PostsColumn = "trust_center_id"
-	// TrustcenterEntitiesTable is the table that holds the trustcenter_entities relation/edge.
-	TrustcenterEntitiesTable = "trustcenter_entities"
-	// TrustcenterEntitiesInverseTable is the table name for the TrustcenterEntity entity.
+	// TrustCenterEntitiesTable is the table that holds the trust_center_entities relation/edge.
+	TrustCenterEntitiesTable = "trust_center_entities"
+	// TrustCenterEntitiesInverseTable is the table name for the TrustCenterEntity entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenterentity" package.
-	TrustcenterEntitiesInverseTable = "trustcenter_entities"
-	// TrustcenterEntitiesColumn is the table column denoting the trustcenter_entities relation/edge.
-	TrustcenterEntitiesColumn = "trust_center_trustcenter_entities"
+	TrustCenterEntitiesInverseTable = "trust_center_entities"
+	// TrustCenterEntitiesColumn is the table column denoting the trust_center_entities relation/edge.
+	TrustCenterEntitiesColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -209,7 +227,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [9]ent.Hook
+	Hooks        [11]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -325,6 +343,34 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByCustomDomainField orders the results by custom_domain field.
 func ByCustomDomainField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -430,17 +476,17 @@ func ByPosts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTrustcenterEntitiesCount orders the results by trustcenter_entities count.
-func ByTrustcenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTrustCenterEntitiesCount orders the results by trust_center_entities count.
+func ByTrustCenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTrustcenterEntitiesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterEntitiesStep(), opts...)
 	}
 }
 
-// ByTrustcenterEntities orders the results by trustcenter_entities terms.
-func ByTrustcenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTrustCenterEntities orders the results by trust_center_entities terms.
+func ByTrustCenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustcenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -448,6 +494,20 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
+}
+func newBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 	)
 }
 func newCustomDomainStep() *sqlgraph.Step {
@@ -520,11 +580,11 @@ func newPostsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, PostsTable, PostsColumn),
 	)
 }
-func newTrustcenterEntitiesStep() *sqlgraph.Step {
+func newTrustCenterEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustcenterEntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TrustcenterEntitiesTable, TrustcenterEntitiesColumn),
+		sqlgraph.To(TrustCenterEntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterEntitiesTable, TrustCenterEntitiesColumn),
 	)
 }
 

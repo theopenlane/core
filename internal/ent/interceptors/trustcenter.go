@@ -23,8 +23,6 @@ import (
 // InterceptorTrustCenter is middleware to change the TrustCenter query
 func InterceptorTrustCenter() ent.Interceptor {
 	return intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
-		logx.FromContext(ctx).Debug().Msg("InterceptorTrustCenter")
-
 		if anon, ok := auth.AnonymousTrustCenterUserFromContext(ctx); ok {
 			q.WhereP(trustcenter.IDEQ(anon.TrustCenterID))
 		}

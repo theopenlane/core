@@ -12,10 +12,12 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -54,6 +56,7 @@ func (TrustCenterCompliance) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Comment("ID of the trust center").
 			NotEmpty().
+			Immutable().
 			Optional(),
 	}
 }
@@ -64,7 +67,9 @@ func (t TrustCenterCompliance) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterCompliance](t,
 				withParents(TrustCenter{}),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -76,6 +81,7 @@ func (t TrustCenterCompliance) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
+			immutable:  true,
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
@@ -89,6 +95,13 @@ func (t TrustCenterCompliance) Edges() []ent.Edge {
 	}
 }
 
+// Modules this schema has access to
+func (TrustCenterCompliance) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
+}
+
 // Hooks of the TrustCenterCompliance
 func (TrustCenterCompliance) Hooks() []ent.Hook {
 	return []ent.Hook{
@@ -99,7 +112,11 @@ func (TrustCenterCompliance) Hooks() []ent.Hook {
 // Policy of the TrustCenterCompliance
 func (TrustCenterCompliance) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(ent.OpCreate,
+			policy.CheckCreateAccess(),
+		),
 		policy.WithMutationRules(
+			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),

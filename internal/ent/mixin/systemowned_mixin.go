@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/graphapi/directives"
@@ -31,12 +32,19 @@ const (
 // SystemOwnedMixin implements the revision pattern for schemas.
 type SystemOwnedMixin struct {
 	mixin.Schema
+
+	// autoCreateWildcardTuples will include a hook to create wildcard tuples for system owned objects
+	// this should be skipped if there are conditionals, such as `public` field on the object (see standards as an example)
+	autoCreateWildcardTuples bool
 }
 
 // NewSystemOwnedMixin creates a new SystemOwnedMixin with the given options.
 // The options can be used to customize the behavior of the mixin, however, there are currently no options.
 func NewSystemOwnedMixin(opts ...SystemOwnedMixinOption) SystemOwnedMixin {
-	m := SystemOwnedMixin{}
+	m := SystemOwnedMixin{
+		// by default always include the hook to create wildcard tuples
+		autoCreateWildcardTuples: true,
+	}
 
 	for _, opt := range opts {
 		opt(&m)
@@ -47,6 +55,13 @@ func NewSystemOwnedMixin(opts ...SystemOwnedMixinOption) SystemOwnedMixin {
 
 // SystemOwnedMixinOption is a function that configures the SystemOwnedMixin
 type SystemOwnedMixinOption func(*SystemOwnedMixin)
+
+// SkipTupleCreation is an option to skip the creation of authz tuples for system owned objects
+func SkipTupleCreation() SystemOwnedMixinOption {
+	return func(m *SystemOwnedMixin) {
+		m.autoCreateWildcardTuples = false
+	}
+}
 
 // Name of the SystemOwnedMixin
 func (SystemOwnedMixin) Name() string {
@@ -85,9 +100,15 @@ func (SystemOwnedMixin) Fields() []ent.Field {
 
 // Hooks of the SystemOwnedMixin.
 func (d SystemOwnedMixin) Hooks() []ent.Hook {
-	return []ent.Hook{
+	hk := []ent.Hook{
 		HookSystemOwnedCreate(),
 	}
+
+	if d.autoCreateWildcardTuples {
+		hk = append(hk, hooks.HookPublicAccess())
+	}
+
+	return hk
 }
 
 // Policy of the SystemOwnedMixin

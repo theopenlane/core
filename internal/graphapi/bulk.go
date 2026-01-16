@@ -3455,22 +3455,22 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 	}, nil
 }
 
-// bulkCreateTrustcenterEntity uses the CreateBulk function to create multiple TrustcenterEntity entities
-func (r *mutationResolver) bulkCreateTrustcenterEntity(ctx context.Context, input []*generated.CreateTrustcenterEntityInput) (*model.TrustcenterEntityBulkCreatePayload, error) {
+// bulkCreateTrustCenterEntity uses the CreateBulk function to create multiple TrustCenterEntity entities
+func (r *mutationResolver) bulkCreateTrustCenterEntity(ctx context.Context, input []*generated.CreateTrustCenterEntityInput) (*model.TrustCenterEntityBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.TrustcenterEntityCreate, len(input))
+	builders := make([]*generated.TrustCenterEntityCreate, len(input))
 	for i, data := range input {
-		builders[i] = c.TrustcenterEntity.Create().SetInput(*data)
+		builders[i] = c.TrustCenterEntity.Create().SetInput(*data)
 	}
 
-	res, err := c.TrustcenterEntity.CreateBulk(builders...).Save(ctx)
+	res, err := c.TrustCenterEntity.CreateBulk(builders...).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
 	}
 
 	// return response
-	return &model.TrustcenterEntityBulkCreatePayload{
-		TrustcenterEntities: res,
+	return &model.TrustCenterEntityBulkCreatePayload{
+		TrustCenterEntities: res,
 	}, nil
 }
 

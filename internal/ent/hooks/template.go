@@ -10,10 +10,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 )
 
 // HookTemplate runs on template create and update mutations
@@ -37,29 +35,6 @@ func HookTemplate() ent.Hook {
 			hook.HasOp(ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate),
 		),
 	)
-}
-
-func HookTemplateAuthz() ent.Hook {
-	return func(next ent.Mutator) ent.Mutator {
-		return hook.TemplateFunc(func(ctx context.Context, m *generated.TemplateMutation) (ent.Value, error) {
-			if !m.Op().Is(ent.OpCreate) {
-				return next.Mutate(ctx, m)
-			}
-
-			// do the mutation, and then create the relationship
-			retValue, err := next.Mutate(ctx, m)
-			if err != nil {
-				return retValue, err
-			}
-
-			createdTemplate := retValue.(*generated.Template)
-			if createdTemplate.SystemOwned {
-				err = templateCreateHook(ctx, m)
-			}
-
-			return retValue, err
-		})
-	}
 }
 
 func HookTemplateFiles() ent.Hook {
@@ -97,21 +72,4 @@ func checkTemplateFiles(ctx context.Context, m *generated.TemplateMutation) (con
 	)
 
 	return objects.ProcessFilesForMutation(ctx, adapter, key)
-}
-
-func templateCreateHook(ctx context.Context, m *generated.TemplateMutation) error {
-	objID, exists := m.ID()
-	if !exists {
-		return nil
-	}
-
-	wildcardTuple := fgax.CreateWildcardViewerTuple(objID, generated.TypeTemplate)
-	logx.FromContext(ctx).Debug().Interface("request", wildcardTuple).
-		Msg("creating public viewer relationship tuples")
-
-	if _, err := m.Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
-		return err
-	}
-
-	return nil
 }

@@ -15,12 +15,12 @@ const (
 	customerEntityTypeName = "customer"
 )
 
-// HookTrustcenterEntityCreate scopes the entity to the customer type by default.
+// HookTrustCenterEntityCreate scopes the entity to the customer type by default.
 // If the customer entity does not exist ( maybe old orgs ), it creates it before proceeding to the
 // trustcenter entity creation
-func HookTrustcenterEntityCreate() ent.Hook {
+func HookTrustCenterEntityCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.TrustcenterEntityFunc(func(ctx context.Context, m *generated.TrustcenterEntityMutation) (generated.Value, error) {
+		return hook.TrustCenterEntityFunc(func(ctx context.Context, m *generated.TrustCenterEntityMutation) (generated.Value, error) {
 			trustcenterID, err := m.Client().TrustCenter.Query().OnlyID(ctx)
 			if generated.IsNotFound(err) {
 				return nil, err
@@ -67,14 +67,14 @@ func HookTrustcenterEntityCreate() ent.Hook {
 	}, ent.OpCreate)
 }
 
-// HookTrustcenterEntityFiles runs on trustcenter entity mutations
+// HookTrustCenterEntityFiles runs on trustcenter entity mutations
 // and checks for an uploaded logo file
-func HookTrustcenterEntityFiles() ent.Hook {
+func HookTrustCenterEntityFiles() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
-		return hook.TrustcenterEntityFunc(func(ctx context.Context, m *generated.TrustcenterEntityMutation) (generated.Value, error) {
+		return hook.TrustCenterEntityFunc(func(ctx context.Context, m *generated.TrustCenterEntityMutation) (generated.Value, error) {
 			var err error
 
-			ctx, err = checkTrustcenterEntityFiles(ctx, m)
+			ctx, err = checkTrustCenterEntityFiles(ctx, m)
 			if err != nil {
 				return nil, err
 			}
@@ -84,13 +84,13 @@ func HookTrustcenterEntityFiles() ent.Hook {
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-// checkTrustcenterEntityFiles checks for logo files in the context
-func checkTrustcenterEntityFiles(ctx context.Context, m *generated.TrustcenterEntityMutation) (context.Context, error) {
+// checkTrustCenterEntityFiles checks for logo files in the context
+func checkTrustCenterEntityFiles(ctx context.Context, m *generated.TrustCenterEntityMutation) (context.Context, error) {
 	key := "logoFile"
-	ctx, err := processSingleMutationFile(ctx, m, key, "trustcenter_entity", ErrTooManyAvatarFiles,
-		func(mut *generated.TrustcenterEntityMutation, id string) { mut.SetLogoFileID(id) },
-		func(mut *generated.TrustcenterEntityMutation) (string, bool) { return mut.ID() },
-		func(mut *generated.TrustcenterEntityMutation) string { return mut.Type() },
+	ctx, err := processSingleMutationFile(ctx, m, key, "trust_center_entity", ErrTooManyAvatarFiles,
+		func(mut *generated.TrustCenterEntityMutation, id string) { mut.SetLogoFileID(id) },
+		func(mut *generated.TrustCenterEntityMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.TrustCenterEntityMutation) string { return mut.Type() },
 	)
 	if err != nil {
 		return ctx, err

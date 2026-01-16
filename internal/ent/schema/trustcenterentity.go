@@ -8,42 +8,44 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
-// TrustcenterEntity holds the schema definition for the TrustcenterEntity entity
-type TrustcenterEntity struct {
+// TrustCenterEntity holds the schema definition for the TrustCenterEntity entity
+type TrustCenterEntity struct {
 	SchemaFuncs
 
 	ent.Schema
 }
 
-// SchemaTrustcenterEntityis the name of the schema in snake case
-const SchemaTrustcenterEntity = "trustcenter_entity"
+// SchemaTrustCenterEntity is the name of the schema in snake case
+const SchemaTrustCenterEntity = "trust_center_entity"
 
 // Name is the name of the schema in snake case
-func (TrustcenterEntity) Name() string {
-	return SchemaTrustcenterEntity
+func (TrustCenterEntity) Name() string {
+	return SchemaTrustCenterEntity
 }
 
 // GetType returns the type of the schema
-func (TrustcenterEntity) GetType() any {
-	return TrustcenterEntity.Type
+func (TrustCenterEntity) GetType() any {
+	return TrustCenterEntity.Type
 }
 
 // PluralName returns the plural name of the schema
-func (TrustcenterEntity) PluralName() string {
-	return pluralize.NewClient().Plural(SchemaTrustcenterEntity)
+func (TrustCenterEntity) PluralName() string {
+	return pluralize.NewClient().Plural(SchemaTrustCenterEntity)
 }
 
-// Fields of the TrustcenterEntity
-func (TrustcenterEntity) Fields() []ent.Field {
+// Fields of the TrustCenterEntity
+func (TrustCenterEntity) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("logo_file_id").
 			Comment("The local logo file id").
@@ -60,7 +62,7 @@ func (TrustcenterEntity) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Immutable().
 			Comment("The trust center this entity belongs to").
-			Annotations(entgql.Skip(^entgql.SkipType)).
+			NotEmpty().
 			Optional(),
 		field.String("name").
 			Comment("The name of the tag definition").
@@ -77,20 +79,22 @@ func (TrustcenterEntity) Fields() []ent.Field {
 	}
 }
 
-// Mixin of the TrustcenterEntity
-func (t TrustcenterEntity) Mixin() []ent.Mixin {
+// Mixin of the TrustCenterEntity
+func (t TrustCenterEntity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeTags: true,
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[generated.TrustcenterEntity](t,
+			newObjectOwnedMixin[generated.TrustCenterEntity](t,
 				withParents(TrustCenter{}),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
 
-// Edges of the TrustcenterEntity
-func (t TrustcenterEntity) Edges() []ent.Edge {
+// Edges of the TrustCenterEntity
+func (t TrustCenterEntity) Edges() []ent.Edge {
 	return []ent.Edge{
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -98,7 +102,7 @@ func (t TrustcenterEntity) Edges() []ent.Edge {
 			t:          File.Type,
 			field:      "logo_file_id",
 		}),
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
@@ -113,41 +117,52 @@ func (t TrustcenterEntity) Edges() []ent.Edge {
 	}
 }
 
-// Indexes of the TrustcenterEntity
-func (TrustcenterEntity) Indexes() []ent.Index {
+// Indexes of the TrustCenterEntity
+func (TrustCenterEntity) Indexes() []ent.Index {
 	return []ent.Index{}
 }
 
-// Annotations of the TrustcenterEntity
-func (TrustcenterEntity) Annotations() []schema.Annotation {
-	return []schema.Annotation{}
-}
-
-// Hooks of the TrustcenterEntity
-func (TrustcenterEntity) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookTrustcenterEntityCreate(),
-		hooks.HookTrustcenterEntityFiles(),
+// Annotations of the TrustCenterEntity
+func (TrustCenterEntity) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SettingsChecks("trust_center"),
 	}
 }
 
-// Interceptors of the TrustcenterEntity
-func (TrustcenterEntity) Interceptors() []ent.Interceptor {
+// Hooks of the TrustCenterEntity
+func (TrustCenterEntity) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookTrustCenterEntityCreate(),
+		hooks.HookTrustCenterEntityFiles(),
+	}
+}
+
+// Interceptors of the TrustCenterEntity
+func (TrustCenterEntity) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.InterceptorTrustCenterChild(),
 	}
 }
 
 // Modules this schema has access to
-func (TrustcenterEntity) Modules() []models.OrgModule {
-	return []models.OrgModule{}
+func (TrustCenterEntity) Modules() []models.OrgModule {
+	return []models.OrgModule{
+		models.CatalogTrustCenterModule,
+	}
 }
 
-// Policy of the TrustcenterEntity
-func (TrustcenterEntity) Policy() ent.Policy {
+// Policy of the TrustCenterEntity
+func (TrustCenterEntity) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(ent.OpCreate,
+			policy.CheckCreateAccess(),
+		),
 		policy.WithMutationRules(
-			policy.CheckOrgWriteAccess(),
+			rule.AllowIfTrustCenterEditor(),
+			policy.CanCreateObjectsUnderParents([]string{
+				TrustCenter{}.Name(),
+			}),
+			entfga.CheckEditAccess[*generated.TrustCenterEntityMutation](),
 		),
 	)
 }

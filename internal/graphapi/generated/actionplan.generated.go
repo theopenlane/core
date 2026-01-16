@@ -381,11 +381,11 @@ type MutationResolver interface {
 	DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error)
 	DeleteBulkTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error)
 	CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error)
-	CreateTrustcenterEntity(ctx context.Context, input generated.CreateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityCreatePayload, error)
-	CreateBulkTrustcenterEntity(ctx context.Context, input []*generated.CreateTrustcenterEntityInput) (*model.TrustcenterEntityBulkCreatePayload, error)
-	CreateBulkCSVTrustcenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustcenterEntityBulkCreatePayload, error)
-	UpdateTrustcenterEntity(ctx context.Context, id string, input generated.UpdateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityUpdatePayload, error)
-	DeleteTrustcenterEntity(ctx context.Context, id string) (*model.TrustcenterEntityDeletePayload, error)
+	CreateTrustCenterEntity(ctx context.Context, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityCreatePayload, error)
+	CreateBulkTrustCenterEntity(ctx context.Context, input []*generated.CreateTrustCenterEntityInput) (*model.TrustCenterEntityBulkCreatePayload, error)
+	CreateBulkCSVTrustCenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustCenterEntityBulkCreatePayload, error)
+	UpdateTrustCenterEntity(ctx context.Context, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityUpdatePayload, error)
+	DeleteTrustCenterEntity(ctx context.Context, id string) (*model.TrustCenterEntityDeletePayload, error)
 	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error)
 	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error)
 	SendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDAInput) (*model.SendTrustCenterNDAEmailPayload, error)
@@ -1104,7 +1104,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterDoc_args(ctx 
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
@@ -1115,7 +1115,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterSubprocessor_
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkCSVTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Mutation_createBulkCSVTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
@@ -1731,10 +1731,10 @@ func (ec *executionContext) field_Mutation_createBulkTrustCenterDoc_args(ctx con
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Mutation_createBulkTrustCenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterEntityInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1742,10 +1742,10 @@ func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_arg
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_createBulkTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustcenterEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustcenterEntityInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -2632,6 +2632,22 @@ func (ec *executionContext) field_Mutation_createTrustCenterDomain_args(ctx cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_createTrustCenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterEntityInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createTrustCenterNDA_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2725,22 +2741,6 @@ func (ec *executionContext) field_Mutation_createTrustCenter_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_createTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustcenterEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustcenterEntityInput)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
-	if err != nil {
-		return nil, err
-	}
-	args["logoFile"] = arg1
 	return args, nil
 }
 
@@ -4051,6 +4051,17 @@ func (ec *executionContext) field_Mutation_deleteTrustCenterDoc_args(ctx context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_deleteTrustCenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteTrustCenterSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -4085,17 +4096,6 @@ func (ec *executionContext) field_Mutation_deleteTrustCenterWatermarkConfig_args
 }
 
 func (ec *executionContext) field_Mutation_deleteTrustCenter_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_deleteTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
@@ -5598,6 +5598,27 @@ func (ec *executionContext) field_Mutation_updateTrustCenterDoc_args(ctx context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateTrustCenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterEntityInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg2
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateTrustCenterNDA_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -5732,27 +5753,6 @@ func (ec *executionContext) field_Mutation_updateTrustCenter_args(ctx context.Co
 		return nil, err
 	}
 	args["input"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_updateTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustcenterEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustcenterEntityInput)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
-	if err != nil {
-		return nil, err
-	}
-	args["logoFile"] = arg2
 	return args, nil
 }
 
@@ -22996,24 +22996,24 @@ func (ec *executionContext) fieldContext_Mutation_createTrustCenterDomain(ctx co
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_createTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_createTrustcenterEntity,
+		ec.fieldContext_Mutation_createTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustcenterEntity(ctx, fc.Args["input"].(generated.CreateTrustcenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.resolvers.Mutation().CreateTrustCenterEntity(ctx, fc.Args["input"].(generated.CreateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
-		ec.marshalNTrustcenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityCreatePayload,
+		ec.marshalNTrustCenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityCreatePayload,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_createTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -23021,10 +23021,10 @@ func (ec *executionContext) fieldContext_Mutation_createTrustcenterEntity(ctx co
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "trustcenterEntity":
-				return ec.fieldContext_TrustcenterEntityCreatePayload_trustcenterEntity(ctx, field)
+			case "trustCenterEntity":
+				return ec.fieldContext_TrustCenterEntityCreatePayload_trustCenterEntity(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntityCreatePayload", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityCreatePayload", field.Name)
 		},
 	}
 	defer func() {
@@ -23034,31 +23034,31 @@ func (ec *executionContext) fieldContext_Mutation_createTrustcenterEntity(ctx co
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createTrustcenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_createTrustCenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createBulkTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_createBulkTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_createBulkTrustcenterEntity,
+		ec.fieldContext_Mutation_createBulkTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkTrustcenterEntity(ctx, fc.Args["input"].([]*generated.CreateTrustcenterEntityInput))
+			return ec.resolvers.Mutation().CreateBulkTrustCenterEntity(ctx, fc.Args["input"].([]*generated.CreateTrustCenterEntityInput))
 		},
 		nil,
-		ec.marshalNTrustcenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityBulkCreatePayload,
+		ec.marshalNTrustCenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityBulkCreatePayload,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createBulkTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_createBulkTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -23066,10 +23066,10 @@ func (ec *executionContext) fieldContext_Mutation_createBulkTrustcenterEntity(ct
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "trustcenterEntities":
-				return ec.fieldContext_TrustcenterEntityBulkCreatePayload_trustcenterEntities(ctx, field)
+			case "trustCenterEntities":
+				return ec.fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntityBulkCreatePayload", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityBulkCreatePayload", field.Name)
 		},
 	}
 	defer func() {
@@ -23079,31 +23079,31 @@ func (ec *executionContext) fieldContext_Mutation_createBulkTrustcenterEntity(ct
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkTrustcenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_createBulkTrustCenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_createBulkCSVTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_createBulkCSVTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_createBulkCSVTrustcenterEntity,
+		ec.fieldContext_Mutation_createBulkCSVTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateBulkCSVTrustcenterEntity(ctx, fc.Args["input"].(graphql.Upload))
+			return ec.resolvers.Mutation().CreateBulkCSVTrustCenterEntity(ctx, fc.Args["input"].(graphql.Upload))
 		},
 		nil,
-		ec.marshalNTrustcenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityBulkCreatePayload,
+		ec.marshalNTrustCenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityBulkCreatePayload,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_createBulkCSVTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_createBulkCSVTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -23111,10 +23111,10 @@ func (ec *executionContext) fieldContext_Mutation_createBulkCSVTrustcenterEntity
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "trustcenterEntities":
-				return ec.fieldContext_TrustcenterEntityBulkCreatePayload_trustcenterEntities(ctx, field)
+			case "trustCenterEntities":
+				return ec.fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntityBulkCreatePayload", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityBulkCreatePayload", field.Name)
 		},
 	}
 	defer func() {
@@ -23124,31 +23124,31 @@ func (ec *executionContext) fieldContext_Mutation_createBulkCSVTrustcenterEntity
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_createBulkCSVTrustcenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_createBulkCSVTrustCenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_updateTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_updateTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_updateTrustcenterEntity,
+		ec.fieldContext_Mutation_updateTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustcenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustcenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
+			return ec.resolvers.Mutation().UpdateTrustCenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustCenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
-		ec.marshalNTrustcenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityUpdatePayload,
+		ec.marshalNTrustCenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityUpdatePayload,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_updateTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_updateTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -23156,10 +23156,10 @@ func (ec *executionContext) fieldContext_Mutation_updateTrustcenterEntity(ctx co
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "trustcenterEntity":
-				return ec.fieldContext_TrustcenterEntityUpdatePayload_trustcenterEntity(ctx, field)
+			case "trustCenterEntity":
+				return ec.fieldContext_TrustCenterEntityUpdatePayload_trustCenterEntity(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntityUpdatePayload", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityUpdatePayload", field.Name)
 		},
 	}
 	defer func() {
@@ -23169,31 +23169,31 @@ func (ec *executionContext) fieldContext_Mutation_updateTrustcenterEntity(ctx co
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateTrustcenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_updateTrustCenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_deleteTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_deleteTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_Mutation_deleteTrustcenterEntity,
+		ec.fieldContext_Mutation_deleteTrustCenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().DeleteTrustcenterEntity(ctx, fc.Args["id"].(string))
+			return ec.resolvers.Mutation().DeleteTrustCenterEntity(ctx, fc.Args["id"].(string))
 		},
 		nil,
-		ec.marshalNTrustcenterEntityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityDeletePayload,
+		ec.marshalNTrustCenterEntityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityDeletePayload,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_Mutation_deleteTrustcenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_deleteTrustCenterEntity(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -23202,9 +23202,9 @@ func (ec *executionContext) fieldContext_Mutation_deleteTrustcenterEntity(ctx co
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "deletedID":
-				return ec.fieldContext_TrustcenterEntityDeletePayload_deletedID(ctx, field)
+				return ec.fieldContext_TrustCenterEntityDeletePayload_deletedID(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntityDeletePayload", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntityDeletePayload", field.Name)
 		},
 	}
 	defer func() {
@@ -23214,7 +23214,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteTrustcenterEntity(ctx co
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteTrustcenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_deleteTrustCenterEntity_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -28848,37 +28848,37 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "createTrustcenterEntity":
+		case "createTrustCenterEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createTrustcenterEntity(ctx, field)
+				return ec._Mutation_createTrustCenterEntity(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "createBulkTrustcenterEntity":
+		case "createBulkTrustCenterEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkTrustcenterEntity(ctx, field)
+				return ec._Mutation_createBulkTrustCenterEntity(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "createBulkCSVTrustcenterEntity":
+		case "createBulkCSVTrustCenterEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_createBulkCSVTrustcenterEntity(ctx, field)
+				return ec._Mutation_createBulkCSVTrustCenterEntity(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "updateTrustcenterEntity":
+		case "updateTrustCenterEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateTrustcenterEntity(ctx, field)
+				return ec._Mutation_updateTrustCenterEntity(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
-		case "deleteTrustcenterEntity":
+		case "deleteTrustCenterEntity":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteTrustcenterEntity(ctx, field)
+				return ec._Mutation_deleteTrustCenterEntity(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

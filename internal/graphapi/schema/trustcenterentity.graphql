@@ -1,111 +1,111 @@
 extend type Query {
     """
-    Look up trustcenterEntity by ID
+    Look up trustCenterEntity by ID
     """
-     trustcenterEntity(
+     trustCenterEntity(
         """
-        ID of the trustcenterEntity
+        ID of the trustCenterEntity
         """
         id: ID!
-    ):  TrustcenterEntity!
+    ):  TrustCenterEntity!
 }
 
 extend type Mutation{
     """
-    Create a new trustcenterEntity
+    Create a new trustCenterEntity
     """
-    createTrustcenterEntity(
+    createTrustCenterEntity(
         """
-        values of the trustcenterEntity
+        values of the trustCenterEntity
         """
-        input: CreateTrustcenterEntityInput!
+        input: CreateTrustCenterEntityInput!
         """
-        logo file for the trustcenterEntity
+        logo file for the trustCenterEntity
         """
         logoFile: Upload
-    ): TrustcenterEntityCreatePayload!
+    ): TrustCenterEntityCreatePayload!
     """
-    Create multiple new trustcenterEntitys
+    Create multiple new trustCenterEntitys
     """
-    createBulkTrustcenterEntity(
+    createBulkTrustCenterEntity(
         """
-        values of the trustcenterEntity
+        values of the trustCenterEntity
         """
-        input: [CreateTrustcenterEntityInput!]
-    ): TrustcenterEntityBulkCreatePayload!
+        input: [CreateTrustCenterEntityInput!]
+    ): TrustCenterEntityBulkCreatePayload!
     """
-    Create multiple new trustcenterEntitys via file upload
+    Create multiple new trustCenterEntitys via file upload
     """
-    createBulkCSVTrustcenterEntity(
+    createBulkCSVTrustCenterEntity(
         """
-        csv file containing values of the trustcenterEntity
+        csv file containing values of the trustCenterEntity
         """
         input: Upload!
-    ): TrustcenterEntityBulkCreatePayload!
+    ): TrustCenterEntityBulkCreatePayload!
     """
-    Update an existing trustcenterEntity
+    Update an existing trustCenterEntity
     """
-    updateTrustcenterEntity(
+    updateTrustCenterEntity(
         """
-        ID of the trustcenterEntity
+        ID of the trustCenterEntity
         """
         id: ID!
         """
-        New values for the trustcenterEntity
+        New values for the trustCenterEntity
         """
-        input: UpdateTrustcenterEntityInput!
+        input: UpdateTrustCenterEntityInput!
         """
-        logo file for the trustcenterEntity
+        logo file for the trustCenterEntity
         """
         logoFile: Upload
-    ): TrustcenterEntityUpdatePayload!
+    ): TrustCenterEntityUpdatePayload!
     """
-    Delete an existing trustcenterEntity
+    Delete an existing trustCenterEntity
     """
-    deleteTrustcenterEntity(
+    deleteTrustCenterEntity(
         """
-        ID of the trustcenterEntity
+        ID of the trustCenterEntity
         """
         id: ID!
-    ): TrustcenterEntityDeletePayload!
+    ): TrustCenterEntityDeletePayload!
 }
 
 """
-Return response for createTrustcenterEntity mutation
+Return response for createTrustCenterEntity mutation
 """
-type TrustcenterEntityCreatePayload {
+type TrustCenterEntityCreatePayload {
     """
-    Created trustcenterEntity
+    Created trustCenterEntity
     """
-    trustcenterEntity: TrustcenterEntity!
+    trustCenterEntity: TrustCenterEntity!
 }
 
 """
-Return response for updateTrustcenterEntity mutation
+Return response for updateTrustCenterEntity mutation
 """
-type TrustcenterEntityUpdatePayload {
+type TrustCenterEntityUpdatePayload {
     """
-    Updated trustcenterEntity
+    Updated trustCenterEntity
     """
-    trustcenterEntity: TrustcenterEntity!
+    trustCenterEntity: TrustCenterEntity!
 }
 
 """
-Return response for deleteTrustcenterEntity mutation
+Return response for deleteTrustCenterEntity mutation
 """
-type TrustcenterEntityDeletePayload {
+type TrustCenterEntityDeletePayload {
     """
-    Deleted trustcenterEntity ID
+    Deleted trustCenterEntity ID
     """
     deletedID: ID!
 }
 
 """
-Return response for createBulkTrustcenterEntity mutation
+Return response for createBulkTrustCenterEntity mutation
 """
-type TrustcenterEntityBulkCreatePayload {
+type TrustCenterEntityBulkCreatePayload {
     """
-    Created trustcenterEntitys
+    Created trustCenterEntitys
     """
-    trustcenterEntities: [TrustcenterEntity!]
+    trustCenterEntities: [TrustCenterEntity!]
 }

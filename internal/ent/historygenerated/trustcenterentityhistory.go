@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/entx/history"
 )
 
-// TrustcenterEntityHistory is the model entity for the TrustcenterEntityHistory schema.
-type TrustcenterEntityHistory struct {
+// TrustCenterEntityHistory is the model entity for the TrustCenterEntityHistory schema.
+type TrustCenterEntityHistory struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
@@ -52,7 +52,7 @@ type TrustcenterEntityHistory struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*TrustcenterEntityHistory) scanValues(columns []string) ([]any, error) {
+func (*TrustCenterEntityHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
@@ -70,8 +70,8 @@ func (*TrustcenterEntityHistory) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the TrustcenterEntityHistory fields.
-func (_m *TrustcenterEntityHistory) assignValues(columns []string, values []any) error {
+// to the TrustCenterEntityHistory fields.
+func (_m *TrustCenterEntityHistory) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -175,34 +175,34 @@ func (_m *TrustcenterEntityHistory) assignValues(columns []string, values []any)
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the TrustcenterEntityHistory.
+// Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterEntityHistory.
 // This includes values selected through modifiers, order, etc.
-func (_m *TrustcenterEntityHistory) Value(name string) (ent.Value, error) {
+func (_m *TrustCenterEntityHistory) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this TrustcenterEntityHistory.
-// Note that you need to call TrustcenterEntityHistory.Unwrap() before calling this method if this TrustcenterEntityHistory
+// Update returns a builder for updating this TrustCenterEntityHistory.
+// Note that you need to call TrustCenterEntityHistory.Unwrap() before calling this method if this TrustCenterEntityHistory
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (_m *TrustcenterEntityHistory) Update() *TrustcenterEntityHistoryUpdateOne {
-	return NewTrustcenterEntityHistoryClient(_m.config).UpdateOne(_m)
+func (_m *TrustCenterEntityHistory) Update() *TrustCenterEntityHistoryUpdateOne {
+	return NewTrustCenterEntityHistoryClient(_m.config).UpdateOne(_m)
 }
 
-// Unwrap unwraps the TrustcenterEntityHistory entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the TrustCenterEntityHistory entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (_m *TrustcenterEntityHistory) Unwrap() *TrustcenterEntityHistory {
+func (_m *TrustCenterEntityHistory) Unwrap() *TrustCenterEntityHistory {
 	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
-		panic("historygenerated: TrustcenterEntityHistory is not a transactional entity")
+		panic("historygenerated: TrustCenterEntityHistory is not a transactional entity")
 	}
 	_m.config.driver = _tx.drv
 	return _m
 }
 
 // String implements the fmt.Stringer.
-func (_m *TrustcenterEntityHistory) String() string {
+func (_m *TrustCenterEntityHistory) String() string {
 	var builder strings.Builder
-	builder.WriteString("TrustcenterEntityHistory(")
+	builder.WriteString("TrustCenterEntityHistory(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("history_time=")
 	builder.WriteString(_m.HistoryTime.Format(time.ANSIC))
@@ -251,5 +251,5 @@ func (_m *TrustcenterEntityHistory) String() string {
 	return builder.String()
 }
 
-// TrustcenterEntityHistories is a parsable slice of TrustcenterEntityHistory.
-type TrustcenterEntityHistories []*TrustcenterEntityHistory
+// TrustCenterEntityHistories is a parsable slice of TrustCenterEntityHistory.
+type TrustCenterEntityHistories []*TrustCenterEntityHistory

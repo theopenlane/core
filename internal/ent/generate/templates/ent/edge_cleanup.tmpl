@@ -26,6 +26,13 @@
 								return err
 							}
 						}
+						{{- else if hasSuffix $annotation.Field "ID" }}
+						if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where(({{ $edge.Type.Name | lower }}.{{ $annotation.Field }}(id))).Exist(ctx); err == nil && exists {
+							if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.{{ $annotation.Field }}(id)).Exec(ctx); err != nil {
+								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting {{ $edge.Type.Name | lower }}")
+								return err
+							}
+						}
 						{{- else }}
 						if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where(({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
 							if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {

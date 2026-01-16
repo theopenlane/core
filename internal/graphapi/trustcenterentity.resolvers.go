@@ -13,50 +13,47 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
-// CreateTrustcenterEntity is the resolver for the createTrustcenterEntity field.
-func (r *mutationResolver) CreateTrustcenterEntity(ctx context.Context, input generated.CreateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityCreatePayload, error) {
-	res, err := withTransactionalMutation(ctx).TrustcenterEntity.Create().SetInput(input).Save(ctx)
+// CreateTrustCenterEntity is the resolver for the createTrustCenterEntity field.
+func (r *mutationResolver) CreateTrustCenterEntity(ctx context.Context, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityCreatePayload, error) {
+	if input.TrustCenterID == nil {
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterentity")
+		if err != nil {
+			return nil, err
+		}
+
+		// set the input in the graphql context
+		// this isn't a required field, but its required by the access checks
+		// so we need to set it early
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
+	}
+
+	res, err := withTransactionalMutation(ctx).TrustCenterEntity.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
 	}
 
-	return &model.TrustcenterEntityCreatePayload{
-		TrustcenterEntity: res,
+	return &model.TrustCenterEntityCreatePayload{
+		TrustCenterEntity: res,
 	}, nil
 }
 
-// CreateBulkTrustcenterEntity is the resolver for the createBulkTrustcenterEntity field.
-func (r *mutationResolver) CreateBulkTrustcenterEntity(ctx context.Context, input []*generated.CreateTrustcenterEntityInput) (*model.TrustcenterEntityBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	return r.bulkCreateTrustcenterEntity(ctx, input)
+// CreateBulkTrustCenterEntity is the resolver for the createBulkTrustCenterEntity field.
+func (r *mutationResolver) CreateBulkTrustCenterEntity(ctx context.Context, input []*generated.CreateTrustCenterEntityInput) (*model.TrustCenterEntityBulkCreatePayload, error) {
+	return nil, nil
 }
 
-// CreateBulkCSVTrustcenterEntity is the resolver for the createBulkCSVTrustcenterEntity field.
-func (r *mutationResolver) CreateBulkCSVTrustcenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustcenterEntityBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateTrustcenterEntityInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "trustcenterentity"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	return r.bulkCreateTrustcenterEntity(ctx, data)
+// CreateBulkCSVTrustCenterEntity is the resolver for the createBulkCSVTrustCenterEntity field.
+func (r *mutationResolver) CreateBulkCSVTrustCenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustCenterEntityBulkCreatePayload, error) {
+	return nil, nil
 }
 
-// UpdateTrustcenterEntity is the resolver for the updateTrustcenterEntity field.
-func (r *mutationResolver) UpdateTrustcenterEntity(ctx context.Context, id string, input generated.UpdateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).TrustcenterEntity.Get(ctx, id)
+// UpdateTrustCenterEntity is the resolver for the updateTrustCenterEntity field.
+func (r *mutationResolver) UpdateTrustCenterEntity(ctx context.Context, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload) (*model.TrustCenterEntityUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).TrustCenterEntity.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterentity"})
 	}
@@ -69,29 +66,29 @@ func (r *mutationResolver) UpdateTrustcenterEntity(ctx context.Context, id strin
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterentity"})
 	}
 
-	return &model.TrustcenterEntityUpdatePayload{
-		TrustcenterEntity: res,
+	return &model.TrustCenterEntityUpdatePayload{
+		TrustCenterEntity: res,
 	}, nil
 }
 
-// DeleteTrustcenterEntity is the resolver for the deleteTrustcenterEntity field.
-func (r *mutationResolver) DeleteTrustcenterEntity(ctx context.Context, id string) (*model.TrustcenterEntityDeletePayload, error) {
-	if err := withTransactionalMutation(ctx).TrustcenterEntity.DeleteOneID(id).Exec(ctx); err != nil {
+// DeleteTrustCenterEntity is the resolver for the deleteTrustCenterEntity field.
+func (r *mutationResolver) DeleteTrustCenterEntity(ctx context.Context, id string) (*model.TrustCenterEntityDeletePayload, error) {
+	if err := withTransactionalMutation(ctx).TrustCenterEntity.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterentity"})
 	}
 
-	if err := generated.TrustcenterEntityEdgeCleanup(ctx, id); err != nil {
+	if err := generated.TrustCenterEntityEdgeCleanup(ctx, id); err != nil {
 		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
-	return &model.TrustcenterEntityDeletePayload{
+	return &model.TrustCenterEntityDeletePayload{
 		DeletedID: id,
 	}, nil
 }
 
-// TrustcenterEntity is the resolver for the trustcenterEntity field.
-func (r *queryResolver) TrustcenterEntity(ctx context.Context, id string) (*generated.TrustcenterEntity, error) {
-	query, err := withTransactionalMutation(ctx).TrustcenterEntity.Query().Where(trustcenterentity.ID(id)).CollectFields(ctx)
+// TrustCenterEntity is the resolver for the trustCenterEntity field.
+func (r *queryResolver) TrustCenterEntity(ctx context.Context, id string) (*generated.TrustCenterEntity, error) {
+	query, err := withTransactionalMutation(ctx).TrustCenterEntity.Query().Where(trustcenterentity.ID(id)).CollectFields(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterentity"})
 	}

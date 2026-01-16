@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
@@ -405,6 +406,36 @@ func (_u *TrustCenterSettingUpdate) ClearSecondaryForegroundColor() *TrustCenter
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) AddBlockedGroups(v ...*Group) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdate) AddEditorIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) AddEditors(v ...*Group) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -461,6 +492,48 @@ func (_u *TrustCenterSettingUpdate) SetFaviconFile(v *File) *TrustCenterSettingU
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) ClearBlockedGroups() *TrustCenterSettingUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdate) RemoveBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterSettingUpdate) RemoveBlockedGroups(v ...*Group) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) ClearEditors() *TrustCenterSettingUpdate {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdate) RemoveEditorIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterSettingUpdate) RemoveEditors(v ...*Group) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -731,6 +804,102 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersetting.FieldEnvironment, field.TypeEnum)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1238,6 +1407,36 @@ func (_u *TrustCenterSettingUpdateOne) ClearSecondaryForegroundColor() *TrustCen
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) AddBlockedGroups(v ...*Group) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdateOne) AddEditorIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) AddEditors(v ...*Group) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -1294,6 +1493,48 @@ func (_u *TrustCenterSettingUpdateOne) SetFaviconFile(v *File) *TrustCenterSetti
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) ClearBlockedGroups() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdateOne) RemoveBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterSettingUpdateOne) RemoveBlockedGroups(v ...*Group) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) ClearEditors() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdateOne) RemoveEditorIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterSettingUpdateOne) RemoveEditors(v ...*Group) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1594,6 +1835,102 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersetting.FieldEnvironment, field.TypeEnum)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{

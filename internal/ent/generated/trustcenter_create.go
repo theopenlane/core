@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -251,6 +252,36 @@ func (_c *TrustCenterCreate) SetOwner(v *Organization) *TrustCenterCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_c *TrustCenterCreate) AddBlockedGroupIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_c *TrustCenterCreate) AddBlockedGroups(v ...*Group) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_c *TrustCenterCreate) AddEditorIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_c *TrustCenterCreate) AddEditors(v ...*Group) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEditorIDs(ids...)
+}
+
 // SetCustomDomain sets the "custom_domain" edge to the CustomDomain entity.
 func (_c *TrustCenterCreate) SetCustomDomain(v *CustomDomain) *TrustCenterCreate {
 	return _c.SetCustomDomainID(v.ID)
@@ -393,19 +424,19 @@ func (_c *TrustCenterCreate) AddPosts(v ...*Note) *TrustCenterCreate {
 	return _c.AddPostIDs(ids...)
 }
 
-// AddTrustcenterEntityIDs adds the "trustcenter_entities" edge to the TrustcenterEntity entity by IDs.
-func (_c *TrustCenterCreate) AddTrustcenterEntityIDs(ids ...string) *TrustCenterCreate {
-	_c.mutation.AddTrustcenterEntityIDs(ids...)
+// AddTrustCenterEntityIDs adds the "trust_center_entities" edge to the TrustCenterEntity entity by IDs.
+func (_c *TrustCenterCreate) AddTrustCenterEntityIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddTrustCenterEntityIDs(ids...)
 	return _c
 }
 
-// AddTrustcenterEntities adds the "trustcenter_entities" edges to the TrustcenterEntity entity.
-func (_c *TrustCenterCreate) AddTrustcenterEntities(v ...*TrustcenterEntity) *TrustCenterCreate {
+// AddTrustCenterEntities adds the "trust_center_entities" edges to the TrustCenterEntity entity.
+func (_c *TrustCenterCreate) AddTrustCenterEntities(v ...*TrustCenterEntity) *TrustCenterCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _c.AddTrustcenterEntityIDs(ids...)
+	return _c.AddTrustCenterEntityIDs(ids...)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
@@ -596,6 +627,40 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.BlockedGroupsTable,
+			Columns: []string{trustcenter.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EditorsTable,
+			Columns: []string{trustcenter.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.CustomDomainIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -771,18 +836,18 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.TrustcenterEntitiesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustCenterEntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcenter.TrustcenterEntitiesTable,
-			Columns: []string{trustcenter.TrustcenterEntitiesColumn},
+			Table:   trustcenter.TrustCenterEntitiesTable,
+			Columns: []string{trustcenter.TrustCenterEntitiesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntity
+		edge.Schema = _c.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

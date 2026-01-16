@@ -140,7 +140,7 @@ func (w WorkflowDefinition) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.WorkflowDefinition](w,
 				withOrganizationOwner(true),
 			),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(w)
 }

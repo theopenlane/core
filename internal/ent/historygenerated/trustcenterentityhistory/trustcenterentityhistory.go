@@ -16,7 +16,7 @@ import (
 
 const (
 	// Label holds the string label denoting the trustcenterentityhistory type in the database.
-	Label = "trustcenter_entity_history"
+	Label = "trust_center_entity_history"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
 	// FieldHistoryTime holds the string denoting the history_time field in the database.
@@ -48,7 +48,7 @@ const (
 	// FieldEntityTypeID holds the string denoting the entity_type_id field in the database.
 	FieldEntityTypeID = "entity_type_id"
 	// Table holds the table name of the trustcenterentityhistory in the database.
-	Table = "trustcenter_entity_history"
+	Table = "trust_center_entity_history"
 )
 
 // Columns holds all SQL columns for trustcenterentityhistory fields.
@@ -111,7 +111,7 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-// OrderOption defines the ordering options for the TrustcenterEntityHistory queries.
+// OrderOption defines the ordering options for the TrustCenterEntityHistory queries.
 type OrderOption func(*sql.Selector)
 
 // ByID orders the results by the id field.

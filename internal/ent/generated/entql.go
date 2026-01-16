@@ -2470,6 +2470,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[76] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   trustcenterentity.Table,
+			Columns: trustcenterentity.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: trustcenterentity.FieldID,
+			},
+		},
+		Type: "TrustCenterEntity",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			trustcenterentity.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterentity.FieldCreatedAt},
+			trustcenterentity.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterentity.FieldUpdatedAt},
+			trustcenterentity.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterentity.FieldCreatedBy},
+			trustcenterentity.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterentity.FieldUpdatedBy},
+			trustcenterentity.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterentity.FieldDeletedAt},
+			trustcenterentity.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterentity.FieldDeletedBy},
+			trustcenterentity.FieldLogoFileID:    {Type: field.TypeString, Column: trustcenterentity.FieldLogoFileID},
+			trustcenterentity.FieldURL:           {Type: field.TypeString, Column: trustcenterentity.FieldURL},
+			trustcenterentity.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterentity.FieldTrustCenterID},
+			trustcenterentity.FieldName:          {Type: field.TypeString, Column: trustcenterentity.FieldName},
+			trustcenterentity.FieldEntityTypeID:  {Type: field.TypeString, Column: trustcenterentity.FieldEntityTypeID},
+		},
+	}
+	graph.Nodes[77] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -2503,7 +2527,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldEnvironment:              {Type: field.TypeEnum, Column: trustcentersetting.FieldEnvironment},
 		},
 	}
-	graph.Nodes[77] = &sqlgraph.Node{
+	graph.Nodes[78] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessor.Table,
 			Columns: trustcentersubprocessor.Columns,
@@ -2526,7 +2550,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessor.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessor.FieldCategory},
 		},
 	}
-	graph.Nodes[78] = &sqlgraph.Node{
+	graph.Nodes[79] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfig.Table,
 			Columns: trustcenterwatermarkconfig.Columns,
@@ -2553,30 +2577,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldRotation:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldRotation},
 			trustcenterwatermarkconfig.FieldColor:         {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldColor},
 			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
-		},
-	}
-	graph.Nodes[79] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   trustcenterentity.Table,
-			Columns: trustcenterentity.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: trustcenterentity.FieldID,
-			},
-		},
-		Type: "TrustcenterEntity",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterentity.FieldCreatedAt:     {Type: field.TypeTime, Column: trustcenterentity.FieldCreatedAt},
-			trustcenterentity.FieldUpdatedAt:     {Type: field.TypeTime, Column: trustcenterentity.FieldUpdatedAt},
-			trustcenterentity.FieldCreatedBy:     {Type: field.TypeString, Column: trustcenterentity.FieldCreatedBy},
-			trustcenterentity.FieldUpdatedBy:     {Type: field.TypeString, Column: trustcenterentity.FieldUpdatedBy},
-			trustcenterentity.FieldDeletedAt:     {Type: field.TypeTime, Column: trustcenterentity.FieldDeletedAt},
-			trustcenterentity.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterentity.FieldDeletedBy},
-			trustcenterentity.FieldLogoFileID:    {Type: field.TypeString, Column: trustcenterentity.FieldLogoFileID},
-			trustcenterentity.FieldURL:           {Type: field.TypeString, Column: trustcenterentity.FieldURL},
-			trustcenterentity.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterentity.FieldTrustCenterID},
-			trustcenterentity.FieldName:          {Type: field.TypeString, Column: trustcenterentity.FieldName},
-			trustcenterentity.FieldEntityTypeID:  {Type: field.TypeString, Column: trustcenterentity.FieldEntityTypeID},
 		},
 	}
 	graph.Nodes[80] = &sqlgraph.Node{
@@ -5220,16 +5220,40 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Hush",
 	)
 	graph.MustAddE(
-		"trustcenter_entities",
+		"trust_center_entities",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   file.TrustcenterEntitiesTable,
-			Columns: []string{file.TrustcenterEntitiesColumn},
+			Table:   file.TrustCenterEntitiesTable,
+			Columns: []string{file.TrustCenterEntitiesColumn},
 			Bidi:    false,
 		},
 		"File",
-		"TrustcenterEntity",
+		"TrustCenterEntity",
+	)
+	graph.MustAddE(
+		"trust_center_doc",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.TrustCenterDocTable,
+			Columns: []string{file.TrustCenterDocColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterDoc",
+	)
+	graph.MustAddE(
+		"original_trust_center_doc",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   file.OriginalTrustCenterDocTable,
+			Columns: []string{file.OriginalTrustCenterDocColumn},
+			Bidi:    false,
+		},
+		"File",
+		"TrustCenterDoc",
 	)
 	graph.MustAddE(
 		"owner",
@@ -10596,6 +10620,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.BlockedGroupsTable,
+			Columns: []string{trustcenter.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.EditorsTable,
+			Columns: []string{trustcenter.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"Group",
+	)
+	graph.MustAddE(
 		"custom_domain",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -10716,16 +10764,40 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Note",
 	)
 	graph.MustAddE(
-		"trustcenter_entities",
+		"trust_center_entities",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcenter.TrustcenterEntitiesTable,
-			Columns: []string{trustcenter.TrustcenterEntitiesColumn},
+			Table:   trustcenter.TrustCenterEntitiesTable,
+			Columns: []string{trustcenter.TrustCenterEntitiesColumn},
 			Bidi:    false,
 		},
 		"TrustCenter",
-		"TrustcenterEntity",
+		"TrustCenterEntity",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentercompliance.BlockedGroupsTable,
+			Columns: []string{trustcentercompliance.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterCompliance",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentercompliance.EditorsTable,
+			Columns: []string{trustcentercompliance.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterCompliance",
+		"Group",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -10750,6 +10822,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterCompliance",
 		"Standard",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterDoc",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterDoc",
+		"Group",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -10800,6 +10896,90 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterEntity",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterEntity",
+		"Group",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterentity.LogoFileTable,
+			Columns: []string{trustcenterentity.LogoFileColumn},
+			Bidi:    false,
+		},
+		"TrustCenterEntity",
+		"File",
+	)
+	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterentity.TrustCenterTable,
+			Columns: []string{trustcenterentity.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"TrustCenterEntity",
+		"TrustCenter",
+	)
+	graph.MustAddE(
+		"entity_type",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterentity.EntityTypeTable,
+			Columns: []string{trustcenterentity.EntityTypeColumn},
+			Bidi:    false,
+		},
+		"TrustCenterEntity",
+		"EntityType",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSetting",
+		"Group",
+	)
+	graph.MustAddE(
 		"files",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -10834,6 +11014,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterSetting",
 		"File",
+	)
+	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersubprocessor.BlockedGroupsTable,
+			Columns: []string{trustcentersubprocessor.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSubprocessor",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersubprocessor.EditorsTable,
+			Columns: []string{trustcentersubprocessor.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterSubprocessor",
+		"Group",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -10872,6 +11076,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterWatermarkConfig",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterWatermarkConfig",
+		"Group",
+	)
+	graph.MustAddE(
 		"trust_center",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -10894,42 +11122,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterWatermarkConfig",
 		"File",
-	)
-	graph.MustAddE(
-		"logo_file",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.LogoFileTable,
-			Columns: []string{trustcenterentity.LogoFileColumn},
-			Bidi:    false,
-		},
-		"TrustcenterEntity",
-		"File",
-	)
-	graph.MustAddE(
-		"trust_center",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.TrustCenterTable,
-			Columns: []string{trustcenterentity.TrustCenterColumn},
-			Bidi:    false,
-		},
-		"TrustcenterEntity",
-		"TrustCenter",
-	)
-	graph.MustAddE(
-		"entity_type",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.EntityTypeTable,
-			Columns: []string{trustcenterentity.EntityTypeColumn},
-			Bidi:    false,
-		},
-		"TrustcenterEntity",
-		"EntityType",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -17979,14 +18171,42 @@ func (f *FileFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
 	})))
 }
 
-// WhereHasTrustcenterEntities applies a predicate to check if query has an edge trustcenter_entities.
-func (f *FileFilter) WhereHasTrustcenterEntities() {
-	f.Where(entql.HasEdge("trustcenter_entities"))
+// WhereHasTrustCenterEntities applies a predicate to check if query has an edge trust_center_entities.
+func (f *FileFilter) WhereHasTrustCenterEntities() {
+	f.Where(entql.HasEdge("trust_center_entities"))
 }
 
-// WhereHasTrustcenterEntitiesWith applies a predicate to check if query has an edge trustcenter_entities with a given conditions (other predicates).
-func (f *FileFilter) WhereHasTrustcenterEntitiesWith(preds ...predicate.TrustcenterEntity) {
-	f.Where(entql.HasEdgeWith("trustcenter_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasTrustCenterEntitiesWith applies a predicate to check if query has an edge trust_center_entities with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterEntitiesWith(preds ...predicate.TrustCenterEntity) {
+	f.Where(entql.HasEdgeWith("trust_center_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterDoc applies a predicate to check if query has an edge trust_center_doc.
+func (f *FileFilter) WhereHasTrustCenterDoc() {
+	f.Where(entql.HasEdge("trust_center_doc"))
+}
+
+// WhereHasTrustCenterDocWith applies a predicate to check if query has an edge trust_center_doc with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustCenterDocWith(preds ...predicate.TrustCenterDoc) {
+	f.Where(entql.HasEdgeWith("trust_center_doc", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasOriginalTrustCenterDoc applies a predicate to check if query has an edge original_trust_center_doc.
+func (f *FileFilter) WhereHasOriginalTrustCenterDoc() {
+	f.Where(entql.HasEdge("original_trust_center_doc"))
+}
+
+// WhereHasOriginalTrustCenterDocWith applies a predicate to check if query has an edge original_trust_center_doc with a given conditions (other predicates).
+func (f *FileFilter) WhereHasOriginalTrustCenterDocWith(preds ...predicate.TrustCenterDoc) {
+	f.Where(entql.HasEdgeWith("original_trust_center_doc", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -30636,6 +30856,34 @@ func (f *TrustCenterFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	})))
 }
 
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasCustomDomain applies a predicate to check if query has an edge custom_domain.
 func (f *TrustCenterFilter) WhereHasCustomDomain() {
 	f.Where(entql.HasEdge("custom_domain"))
@@ -30776,14 +31024,14 @@ func (f *TrustCenterFilter) WhereHasPostsWith(preds ...predicate.Note) {
 	})))
 }
 
-// WhereHasTrustcenterEntities applies a predicate to check if query has an edge trustcenter_entities.
-func (f *TrustCenterFilter) WhereHasTrustcenterEntities() {
-	f.Where(entql.HasEdge("trustcenter_entities"))
+// WhereHasTrustCenterEntities applies a predicate to check if query has an edge trust_center_entities.
+func (f *TrustCenterFilter) WhereHasTrustCenterEntities() {
+	f.Where(entql.HasEdge("trust_center_entities"))
 }
 
-// WhereHasTrustcenterEntitiesWith applies a predicate to check if query has an edge trustcenter_entities with a given conditions (other predicates).
-func (f *TrustCenterFilter) WhereHasTrustcenterEntitiesWith(preds ...predicate.TrustcenterEntity) {
-	f.Where(entql.HasEdgeWith("trustcenter_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasTrustCenterEntitiesWith applies a predicate to check if query has an edge trust_center_entities with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasTrustCenterEntitiesWith(preds ...predicate.TrustCenterEntity) {
+	f.Where(entql.HasEdgeWith("trust_center_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -30873,6 +31121,34 @@ func (f *TrustCenterComplianceFilter) WhereStandardID(p entql.StringP) {
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TrustCenterComplianceFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcentercompliance.FieldTrustCenterID))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterComplianceFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterComplianceFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterComplianceFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterComplianceFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
@@ -31023,6 +31299,34 @@ func (f *TrustCenterDocFilter) WhereStandardID(p entql.StringP) {
 	f.Where(p.Field(trustcenterdoc.FieldStandardID))
 }
 
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterDocFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterDocFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterDocFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterDocFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterDocFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -31080,6 +31384,171 @@ func (f *TrustCenterDocFilter) WhereHasOriginalFileWith(preds ...predicate.File)
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *TrustCenterEntityQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the TrustCenterEntityQuery builder.
+func (_q *TrustCenterEntityQuery) Filter() *TrustCenterEntityFilter {
+	return &TrustCenterEntityFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *TrustCenterEntityMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the TrustCenterEntityMutation builder.
+func (m *TrustCenterEntityMutation) Filter() *TrustCenterEntityFilter {
+	return &TrustCenterEntityFilter{config: m.config, predicateAdder: m}
+}
+
+// TrustCenterEntityFilter provides a generic filtering capability at runtime for TrustCenterEntityQuery.
+type TrustCenterEntityFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *TrustCenterEntityFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *TrustCenterEntityFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *TrustCenterEntityFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterentity.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *TrustCenterEntityFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterentity.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *TrustCenterEntityFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *TrustCenterEntityFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *TrustCenterEntityFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(trustcenterentity.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *TrustCenterEntityFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldDeletedBy))
+}
+
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *TrustCenterEntityFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldLogoFileID))
+}
+
+// WhereURL applies the entql string predicate on the url field.
+func (f *TrustCenterEntityFilter) WhereURL(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldURL))
+}
+
+// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
+func (f *TrustCenterEntityFilter) WhereTrustCenterID(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldTrustCenterID))
+}
+
+// WhereName applies the entql string predicate on the name field.
+func (f *TrustCenterEntityFilter) WhereName(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldName))
+}
+
+// WhereEntityTypeID applies the entql string predicate on the entity_type_id field.
+func (f *TrustCenterEntityFilter) WhereEntityTypeID(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldEntityTypeID))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterEntityFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterEntityFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterEntityFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterEntityFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *TrustCenterEntityFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *TrustCenterEntityFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *TrustCenterEntityFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *TrustCenterEntityFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntityType applies a predicate to check if query has an edge entity_type.
+func (f *TrustCenterEntityFilter) WhereHasEntityType() {
+	f.Where(entql.HasEdge("entity_type"))
+}
+
+// WhereHasEntityTypeWith applies a predicate to check if query has an edge entity_type with a given conditions (other predicates).
+func (f *TrustCenterEntityFilter) WhereHasEntityTypeWith(preds ...predicate.EntityType) {
+	f.Where(entql.HasEdgeWith("entity_type", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *TrustCenterSettingQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -31108,7 +31577,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31229,6 +31698,34 @@ func (f *TrustCenterSettingFilter) WhereEnvironment(p entql.StringP) {
 	f.Where(p.Field(trustcentersetting.FieldEnvironment))
 }
 
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterSettingFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterSettingFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterSettingFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasFiles applies a predicate to check if query has an edge files.
 func (f *TrustCenterSettingFilter) WhereHasFiles() {
 	f.Where(entql.HasEdge("files"))
@@ -31300,7 +31797,7 @@ type TrustCenterSubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31361,6 +31858,34 @@ func (f *TrustCenterSubprocessorFilter) WhereCategory(p entql.StringP) {
 	f.Where(p.Field(trustcentersubprocessor.FieldCategory))
 }
 
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterSubprocessorFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterSubprocessorFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterSubprocessorFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterSubprocessorFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterSubprocessorFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -31418,7 +31943,7 @@ type TrustCenterWatermarkConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31523,6 +32048,34 @@ func (f *TrustCenterWatermarkConfigFilter) WhereHasOwnerWith(preds ...predicate.
 	})))
 }
 
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterWatermarkConfigFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterWatermarkConfigFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterWatermarkConfigFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterWatermarkConfigFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterWatermarkConfigFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -31545,143 +32098,6 @@ func (f *TrustCenterWatermarkConfigFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *TrustCenterWatermarkConfigFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *TrustcenterEntityQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the TrustcenterEntityQuery builder.
-func (_q *TrustcenterEntityQuery) Filter() *TrustcenterEntityFilter {
-	return &TrustcenterEntityFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *TrustcenterEntityMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the TrustcenterEntityMutation builder.
-func (m *TrustcenterEntityMutation) Filter() *TrustcenterEntityFilter {
-	return &TrustcenterEntityFilter{config: m.config, predicateAdder: m}
-}
-
-// TrustcenterEntityFilter provides a generic filtering capability at runtime for TrustcenterEntityQuery.
-type TrustcenterEntityFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *TrustcenterEntityFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *TrustcenterEntityFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldID))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *TrustcenterEntityFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(trustcenterentity.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *TrustcenterEntityFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(trustcenterentity.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *TrustcenterEntityFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *TrustcenterEntityFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldUpdatedBy))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *TrustcenterEntityFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(trustcenterentity.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *TrustcenterEntityFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldDeletedBy))
-}
-
-// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
-func (f *TrustcenterEntityFilter) WhereLogoFileID(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldLogoFileID))
-}
-
-// WhereURL applies the entql string predicate on the url field.
-func (f *TrustcenterEntityFilter) WhereURL(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldURL))
-}
-
-// WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
-func (f *TrustcenterEntityFilter) WhereTrustCenterID(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldTrustCenterID))
-}
-
-// WhereName applies the entql string predicate on the name field.
-func (f *TrustcenterEntityFilter) WhereName(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldName))
-}
-
-// WhereEntityTypeID applies the entql string predicate on the entity_type_id field.
-func (f *TrustcenterEntityFilter) WhereEntityTypeID(p entql.StringP) {
-	f.Where(p.Field(trustcenterentity.FieldEntityTypeID))
-}
-
-// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
-func (f *TrustcenterEntityFilter) WhereHasLogoFile() {
-	f.Where(entql.HasEdge("logo_file"))
-}
-
-// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
-func (f *TrustcenterEntityFilter) WhereHasLogoFileWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
-func (f *TrustcenterEntityFilter) WhereHasTrustCenter() {
-	f.Where(entql.HasEdge("trust_center"))
-}
-
-// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
-func (f *TrustcenterEntityFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
-	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasEntityType applies a predicate to check if query has an edge entity_type.
-func (f *TrustcenterEntityFilter) WhereHasEntityType() {
-	f.Where(entql.HasEdge("entity_type"))
-}
-
-// WhereHasEntityTypeWith applies a predicate to check if query has an edge entity_type with a given conditions (other predicates).
-func (f *TrustcenterEntityFilter) WhereHasEntityTypeWith(preds ...predicate.EntityType) {
-	f.Where(entql.HasEdgeWith("entity_type", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

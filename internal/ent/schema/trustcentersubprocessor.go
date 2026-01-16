@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
 
 const (
@@ -74,7 +75,9 @@ func (t TrustCenterSubprocessor) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.TrustCenterSubprocessor](t,
 				withParents(TrustCenter{}),
+				withAllowAnonymousTrustCenterAccess(true),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -107,7 +110,11 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 // Policy of the TrustCenterSubprocessor
 func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(ent.OpCreate,
+			policy.CheckCreateAccess(),
+		),
 		policy.WithMutationRules(
+			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),

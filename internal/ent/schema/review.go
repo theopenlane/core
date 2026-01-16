@@ -192,7 +192,7 @@ func (r Review) Mixin() []ent.Mixin {
 				withOrganizationOwner(true),
 			),
 			newGroupPermissionsMixin(),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(r)
 }

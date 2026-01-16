@@ -78,6 +78,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -1061,6 +1062,13 @@ func SubcontrolEdgeCleanup(ctx context.Context, id string) error {
 func SubprocessorEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup subprocessor edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasSubprocessorWith(subprocessor.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasSubprocessorWith(subprocessor.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersubprocessorCount).Msg("error deleting trustcentersubprocessor")
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -1104,6 +1112,20 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenter edge")), entfga.DeleteTuplesFirstKey{})
 
+	if exists, err := FromContext(ctx).TrustCenterSetting.Query().Where((trustcentersetting.TrustCenterID(id))).Exist(ctx); err == nil && exists {
+		if trustcentersettingCount, err := FromContext(ctx).TrustCenterSetting.Delete().Where(trustcentersetting.TrustCenterID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersettingCount).Msg("error deleting trustcentersetting")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TrustCenterSetting.Query().Where((trustcentersetting.TrustCenterID(id))).Exist(ctx); err == nil && exists {
+		if trustcentersettingCount, err := FromContext(ctx).TrustCenterSetting.Delete().Where(trustcentersetting.TrustCenterID(id)).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersettingCount).Msg("error deleting trustcentersetting")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("error deleting trustcenterwatermarkconfig")
@@ -1139,8 +1161,15 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	if exists, err := FromContext(ctx).TrustcenterEntity.Query().Where((trustcenterentity.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
-		if trustcenterentityCount, err := FromContext(ctx).TrustcenterEntity.Delete().Where(trustcenterentity.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+	if exists, err := FromContext(ctx).Note.Query().Where((note.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("error deleting note")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).TrustCenterEntity.Query().Where((trustcenterentity.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
+		if trustcenterentityCount, err := FromContext(ctx).TrustCenterEntity.Delete().Where(trustcenterentity.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterentityCount).Msg("error deleting trustcenterentity")
 			return err
 		}
@@ -1157,6 +1186,26 @@ func TrustCenterComplianceEdgeCleanup(ctx context.Context, id string) error {
 
 func TrustCenterDocEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterdoc edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).File.Query().Where((file.HasTrustCenterDocWith(trustcenterdoc.ID(id)))).Exist(ctx); err == nil && exists {
+		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("error deleting file")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).File.Query().Where((file.HasTrustCenterDocWith(trustcenterdoc.ID(id)))).Exist(ctx); err == nil && exists {
+		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasTrustCenterDocWith(trustcenterdoc.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("error deleting file")
+			return err
+		}
+	}
+
+	return nil
+}
+
+func TrustCenterEntityEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentity edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -1175,12 +1224,6 @@ func TrustCenterSubprocessorEdgeCleanup(ctx context.Context, id string) error {
 
 func TrustCenterWatermarkConfigEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterwatermarkconfig edge")), entfga.DeleteTuplesFirstKey{})
-
-	return nil
-}
-
-func TrustcenterEntityEdgeCleanup(ctx context.Context, id string) error {
-	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup trustcenterentity edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

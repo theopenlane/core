@@ -534,7 +534,7 @@ func TestMutationDeleteTrustCenterCompliance(t *testing.T) {
 			idToDelete:  complianceOther.ID, // use different org compliance to test permissions
 			client:      suite.client.api,
 			ctx:         orgMemberCtx,
-			expectedErr: notAuthorizedErrorMsg, // view only user gets authorization error
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "trust center compliance not found, invalid ID",
