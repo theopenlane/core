@@ -2248,28 +2248,31 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowAssignmentHistory struct {
-		ActorGroupID       func(childComplexity int) int
-		ActorUserID        func(childComplexity int) int
-		AssignmentKey      func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		DecidedAt          func(childComplexity int) int
-		DisplayID          func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		Label              func(childComplexity int) int
-		Metadata           func(childComplexity int) int
-		Notes              func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		Required           func(childComplexity int) int
-		Role               func(childComplexity int) int
-		Status             func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
-		WorkflowInstanceID func(childComplexity int) int
+		ActorGroupID         func(childComplexity int) int
+		ActorUserID          func(childComplexity int) int
+		ApprovalMetadata     func(childComplexity int) int
+		AssignmentKey        func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DecidedAt            func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
+		HistoryTime          func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		InvalidationMetadata func(childComplexity int) int
+		Label                func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		Notes                func(childComplexity int) int
+		Operation            func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Ref                  func(childComplexity int) int
+		RejectionMetadata    func(childComplexity int) int
+		Required             func(childComplexity int) int
+		Role                 func(childComplexity int) int
+		Status               func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		WorkflowInstanceID   func(childComplexity int) int
 	}
 
 	WorkflowAssignmentHistoryConnection struct {
@@ -14472,6 +14475,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowAssignmentHistory.ActorUserID(childComplexity), true
 
+	case "WorkflowAssignmentHistory.approvalMetadata":
+		if e.complexity.WorkflowAssignmentHistory.ApprovalMetadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.ApprovalMetadata(childComplexity), true
+
 	case "WorkflowAssignmentHistory.assignmentKey":
 		if e.complexity.WorkflowAssignmentHistory.AssignmentKey == nil {
 			break
@@ -14521,6 +14531,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowAssignmentHistory.ID(childComplexity), true
 
+	case "WorkflowAssignmentHistory.invalidationMetadata":
+		if e.complexity.WorkflowAssignmentHistory.InvalidationMetadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.InvalidationMetadata(childComplexity), true
+
 	case "WorkflowAssignmentHistory.label":
 		if e.complexity.WorkflowAssignmentHistory.Label == nil {
 			break
@@ -14562,6 +14579,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowAssignmentHistory.Ref(childComplexity), true
+
+	case "WorkflowAssignmentHistory.rejectionMetadata":
+		if e.complexity.WorkflowAssignmentHistory.RejectionMetadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.RejectionMetadata(childComplexity), true
 
 	case "WorkflowAssignmentHistory.required":
 		if e.complexity.WorkflowAssignmentHistory.Required == nil {
@@ -15871,6 +15895,18 @@ scalar WorkflowInstanceContext
 WorkflowEventPayload stores payloads emitted by workflow events and actions.
 """
 scalar WorkflowEventPayload
+"""
+WorkflowAssignmentApproval captures structured metadata for workflow assignment approvals.
+"""
+scalar WorkflowAssignmentApproval
+"""
+WorkflowAssignmentInvalidation captures details when an approval is invalidated.
+"""
+scalar WorkflowAssignmentInvalidation
+"""
+WorkflowAssignmentRejection captures details when an approval is rejected or denied.
+"""
+scalar WorkflowAssignmentRejection
 """
 Channel notifications will be sent to including in-app, slack, etc
 """
@@ -43216,6 +43252,18 @@ type WorkflowAssignmentHistory implements Node {
   Optional metadata for the assignment
   """
   metadata: Map
+  """
+  structured approval metadata
+  """
+  approvalMetadata: WorkflowAssignmentApproval
+  """
+  structured rejection metadata
+  """
+  rejectionMetadata: WorkflowAssignmentRejection
+  """
+  structured invalidation metadata
+  """
+  invalidationMetadata: WorkflowAssignmentInvalidation
   """
   Timestamp when the assignment was decided
   """

@@ -61731,6 +61731,21 @@ func (_q *WorkflowAssignmentQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, workflowassignment.FieldMetadata)
 				fieldSeen[workflowassignment.FieldMetadata] = struct{}{}
 			}
+		case "approvalMetadata":
+			if _, ok := fieldSeen[workflowassignment.FieldApprovalMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldApprovalMetadata)
+				fieldSeen[workflowassignment.FieldApprovalMetadata] = struct{}{}
+			}
+		case "rejectionMetadata":
+			if _, ok := fieldSeen[workflowassignment.FieldRejectionMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldRejectionMetadata)
+				fieldSeen[workflowassignment.FieldRejectionMetadata] = struct{}{}
+			}
+		case "invalidationMetadata":
+			if _, ok := fieldSeen[workflowassignment.FieldInvalidationMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldInvalidationMetadata)
+				fieldSeen[workflowassignment.FieldInvalidationMetadata] = struct{}{}
+			}
 		case "decidedAt":
 			if _, ok := fieldSeen[workflowassignment.FieldDecidedAt]; !ok {
 				selectedFields = append(selectedFields, workflowassignment.FieldDecidedAt)

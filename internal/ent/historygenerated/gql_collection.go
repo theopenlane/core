@@ -11333,6 +11333,21 @@ func (_q *WorkflowAssignmentHistoryQuery) collectField(ctx context.Context, oneN
 				selectedFields = append(selectedFields, workflowassignmenthistory.FieldMetadata)
 				fieldSeen[workflowassignmenthistory.FieldMetadata] = struct{}{}
 			}
+		case "approvalMetadata":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldApprovalMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldApprovalMetadata)
+				fieldSeen[workflowassignmenthistory.FieldApprovalMetadata] = struct{}{}
+			}
+		case "rejectionMetadata":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldRejectionMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldRejectionMetadata)
+				fieldSeen[workflowassignmenthistory.FieldRejectionMetadata] = struct{}{}
+			}
+		case "invalidationMetadata":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldInvalidationMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldInvalidationMetadata)
+				fieldSeen[workflowassignmenthistory.FieldInvalidationMetadata] = struct{}{}
+			}
 		case "decidedAt":
 			if _, ok := fieldSeen[workflowassignmenthistory.FieldDecidedAt]; !ok {
 				selectedFields = append(selectedFields, workflowassignmenthistory.FieldDecidedAt)

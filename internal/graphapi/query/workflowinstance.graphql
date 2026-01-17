@@ -1,69 +1,3 @@
-mutation CreateBulkCSVWorkflowInstance($input: Upload!) {
-  createBulkCSVWorkflowInstance(input: $input) {
-    workflowInstances {
-      context
-      createdAt
-      createdBy
-      definitionSnapshot
-      displayID
-      id
-      lastEvaluatedAt
-      ownerID
-      state
-      tags
-      updatedAt
-      updatedBy
-      workflowDefinitionID
-    }
-  }
-}
-
-mutation CreateBulkWorkflowInstance($input: [CreateWorkflowInstanceInput!]) {
-  createBulkWorkflowInstance(input: $input) {
-    workflowInstances {
-      context
-      createdAt
-      createdBy
-      definitionSnapshot
-      displayID
-      id
-      lastEvaluatedAt
-      ownerID
-      state
-      tags
-      updatedAt
-      updatedBy
-      workflowDefinitionID
-    }
-  }
-}
-
-mutation CreateWorkflowInstance($input: CreateWorkflowInstanceInput!) {
-  createWorkflowInstance(input: $input) {
-    workflowInstance {
-      context
-      createdAt
-      createdBy
-      definitionSnapshot
-      displayID
-      id
-      lastEvaluatedAt
-      ownerID
-      state
-      tags
-      updatedAt
-      updatedBy
-      workflowDefinitionID
-    }
-  }
-}
-
-mutation DeleteWorkflowInstance($deleteWorkflowInstanceId: ID!) {
-  deleteWorkflowInstance(id: $deleteWorkflowInstanceId) {
-    deletedID
-  }
-}
-
 query GetAllWorkflowInstances {
   workflowInstances {
     totalCount
@@ -136,26 +70,6 @@ query GetWorkflowInstances($first: Int, $last: Int, $where: WorkflowInstanceWher
         updatedBy
         workflowDefinitionID
       }
-    }
-  }
-}
-
-mutation UpdateWorkflowInstance($updateWorkflowInstanceId: ID!, $input: UpdateWorkflowInstanceInput!) {
-  updateWorkflowInstance(id: $updateWorkflowInstanceId, input: $input) {
-    workflowInstance {
-      context
-      createdAt
-      createdBy
-      definitionSnapshot
-      displayID
-      id
-      lastEvaluatedAt
-      ownerID
-      state
-      tags
-      updatedAt
-      updatedBy
-      workflowDefinitionID
     }
   }
 }

@@ -1,4 +1,4 @@
-h1:uprfSPuGLd+sYcLXva6LH8eqL1Sl/OkY2d3+dBLPR+M=
+h1:XdaIOH+zbPrpgyxhWAv/rv9FXs2hDTllPG2Kmsgb8PU=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -12,3 +12,6 @@ h1:uprfSPuGLd+sYcLXva6LH8eqL1Sl/OkY2d3+dBLPR+M=
 20260107162831_subprocessor_url_history.sql h1:omgMnP/Yc7X30upjt81HdEywonOZXpyZe8NO9KLuwko=
 20260116171113_trust_center_updates.sql h1:rEulbrZI0+vqWnBj8JSqr+AatxHnxQ3MzNa9v1HT8Qo=
 20260116171116_trust_center_updates_history.sql h1:AZYFXhF3RA7Go4q3q+zuCrI6dPxkj1zSYSeBKx+fRKI=
+20260116180000_trust_center_entity_history_fix.sql h1:a7/K5Ccc0SthrIVnL/4Sc6iZDio11oDVFjUN5ZrYm+E=
+20260117222534_workflowassignmenttypes.sql h1:hJXP/HVRAPDWczRGFllG+j9lC5KRs64DkFKsFMgDfow=
+20260117222537_workflowassignmenttypes_history.sql h1:JKPU+zVBLVWH7mkCxjCwdQDCrJdWn6QenMIhYCNdAps=

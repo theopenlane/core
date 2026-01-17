@@ -58,6 +58,12 @@ const (
 	FieldStatus = "status"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldApprovalMetadata holds the string denoting the approval_metadata field in the database.
+	FieldApprovalMetadata = "approval_metadata"
+	// FieldRejectionMetadata holds the string denoting the rejection_metadata field in the database.
+	FieldRejectionMetadata = "rejection_metadata"
+	// FieldInvalidationMetadata holds the string denoting the invalidation_metadata field in the database.
+	FieldInvalidationMetadata = "invalidation_metadata"
 	// FieldDecidedAt holds the string denoting the decided_at field in the database.
 	FieldDecidedAt = "decided_at"
 	// FieldActorUserID holds the string denoting the actor_user_id field in the database.
@@ -92,6 +98,9 @@ var Columns = []string{
 	FieldRequired,
 	FieldStatus,
 	FieldMetadata,
+	FieldApprovalMetadata,
+	FieldRejectionMetadata,
+	FieldInvalidationMetadata,
 	FieldDecidedAt,
 	FieldActorUserID,
 	FieldActorGroupID,

@@ -5894,6 +5894,9 @@ var (
 		{Name: "required", Type: field.TypeBool, Default: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "APPROVED", "REJECTED"}, Default: "PENDING"},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "approval_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "rejection_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "invalidation_metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "decided_at", Type: field.TypeTime, Nullable: true},
 		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -5910,31 +5913,31 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "workflow_assignments_organizations_workflow_assignments",
-				Columns:    []*schema.Column{WorkflowAssignmentsColumns[17]},
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "workflow_assignments_workflow_instances_workflow_instance",
-				Columns:    []*schema.Column{WorkflowAssignmentsColumns[18]},
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[21]},
 				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "workflow_assignments_users_user",
-				Columns:    []*schema.Column{WorkflowAssignmentsColumns[19]},
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[22]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "workflow_assignments_groups_group",
-				Columns:    []*schema.Column{WorkflowAssignmentsColumns[20]},
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[23]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "workflow_assignments_workflow_instances_workflow_assignments",
-				Columns:    []*schema.Column{WorkflowAssignmentsColumns[21]},
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[24]},
 				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5943,12 +5946,12 @@ var (
 			{
 				Name:    "workflowassignment_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{WorkflowAssignmentsColumns[7], WorkflowAssignmentsColumns[17]},
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[7], WorkflowAssignmentsColumns[20]},
 			},
 			{
 				Name:    "workflowassignment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{WorkflowAssignmentsColumns[17]},
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5956,7 +5959,7 @@ var (
 			{
 				Name:    "workflowassignment_workflow_instance_id_assignment_key",
 				Unique:  true,
-				Columns: []*schema.Column{WorkflowAssignmentsColumns[18], WorkflowAssignmentsColumns[9]},
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[21], WorkflowAssignmentsColumns[9]},
 			},
 		},
 	}

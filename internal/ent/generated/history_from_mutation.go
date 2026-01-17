@@ -18371,6 +18371,18 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetMetadata(metadata)
 	}
 
+	if approvalMetadata, exists := m.ApprovalMetadata(); exists {
+		create = create.SetApprovalMetadata(approvalMetadata)
+	}
+
+	if rejectionMetadata, exists := m.RejectionMetadata(); exists {
+		create = create.SetRejectionMetadata(rejectionMetadata)
+	}
+
+	if invalidationMetadata, exists := m.InvalidationMetadata(); exists {
+		create = create.SetInvalidationMetadata(invalidationMetadata)
+	}
+
 	if decidedAt, exists := m.DecidedAt(); exists {
 		create = create.SetNillableDecidedAt(&decidedAt)
 	}
@@ -18514,6 +18526,24 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetMetadata(workflowassignment.Metadata)
 		}
 
+		if approvalMetadata, exists := m.ApprovalMetadata(); exists {
+			create = create.SetApprovalMetadata(approvalMetadata)
+		} else {
+			create = create.SetApprovalMetadata(workflowassignment.ApprovalMetadata)
+		}
+
+		if rejectionMetadata, exists := m.RejectionMetadata(); exists {
+			create = create.SetRejectionMetadata(rejectionMetadata)
+		} else {
+			create = create.SetRejectionMetadata(workflowassignment.RejectionMetadata)
+		}
+
+		if invalidationMetadata, exists := m.InvalidationMetadata(); exists {
+			create = create.SetInvalidationMetadata(invalidationMetadata)
+		} else {
+			create = create.SetInvalidationMetadata(workflowassignment.InvalidationMetadata)
+		}
+
 		if decidedAt, exists := m.DecidedAt(); exists {
 			create = create.SetNillableDecidedAt(&decidedAt)
 		} else {
@@ -18589,6 +18619,9 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 			SetRequired(workflowassignment.Required).
 			SetStatus(workflowassignment.Status).
 			SetMetadata(workflowassignment.Metadata).
+			SetApprovalMetadata(workflowassignment.ApprovalMetadata).
+			SetRejectionMetadata(workflowassignment.RejectionMetadata).
+			SetInvalidationMetadata(workflowassignment.InvalidationMetadata).
 			SetNillableDecidedAt(workflowassignment.DecidedAt).
 			SetActorUserID(workflowassignment.ActorUserID).
 			SetActorGroupID(workflowassignment.ActorGroupID).

@@ -1138,6 +1138,36 @@ func MetadataNotNil() predicate.WorkflowAssignmentHistory {
 	return predicate.WorkflowAssignmentHistory(sql.FieldNotNull(FieldMetadata))
 }
 
+// ApprovalMetadataIsNil applies the IsNil predicate on the "approval_metadata" field.
+func ApprovalMetadataIsNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldIsNull(FieldApprovalMetadata))
+}
+
+// ApprovalMetadataNotNil applies the NotNil predicate on the "approval_metadata" field.
+func ApprovalMetadataNotNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldNotNull(FieldApprovalMetadata))
+}
+
+// RejectionMetadataIsNil applies the IsNil predicate on the "rejection_metadata" field.
+func RejectionMetadataIsNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldIsNull(FieldRejectionMetadata))
+}
+
+// RejectionMetadataNotNil applies the NotNil predicate on the "rejection_metadata" field.
+func RejectionMetadataNotNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldNotNull(FieldRejectionMetadata))
+}
+
+// InvalidationMetadataIsNil applies the IsNil predicate on the "invalidation_metadata" field.
+func InvalidationMetadataIsNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldIsNull(FieldInvalidationMetadata))
+}
+
+// InvalidationMetadataNotNil applies the NotNil predicate on the "invalidation_metadata" field.
+func InvalidationMetadataNotNil() predicate.WorkflowAssignmentHistory {
+	return predicate.WorkflowAssignmentHistory(sql.FieldNotNull(FieldInvalidationMetadata))
+}
+
 // DecidedAtEQ applies the EQ predicate on the "decided_at" field.
 func DecidedAtEQ(v time.Time) predicate.WorkflowAssignmentHistory {
 	return predicate.WorkflowAssignmentHistory(sql.FieldEQ(FieldDecidedAt, v))

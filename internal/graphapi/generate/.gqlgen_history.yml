@@ -155,3 +155,12 @@ models:
   WorkflowEventPayload:
     model:
       - github.com/theopenlane/core/common/models.WorkflowEventPayload
+  WorkflowAssignmentApproval:
+    model:
+      - github.com/theopenlane/core/common/models.WorkflowAssignmentApproval
+  WorkflowAssignmentInvalidation:
+    model:
+      - github.com/theopenlane/core/common/models.WorkflowAssignmentInvalidation
+  WorkflowAssignmentRejection:
+    model:
+      - github.com/theopenlane/core/common/models.WorkflowAssignmentRejection

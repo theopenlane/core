@@ -160,7 +160,9 @@ func (WorkflowDefinition) Annotations() []schema.Annotation {
 // Policy of the WorkflowDefinition.
 func (WorkflowDefinition) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
+		policy.WithQueryRules(
+			policy.CheckOrgEditAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),

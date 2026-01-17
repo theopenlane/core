@@ -2741,26 +2741,29 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "WorkflowAssignment",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			workflowassignment.FieldCreatedAt:          {Type: field.TypeTime, Column: workflowassignment.FieldCreatedAt},
-			workflowassignment.FieldUpdatedAt:          {Type: field.TypeTime, Column: workflowassignment.FieldUpdatedAt},
-			workflowassignment.FieldCreatedBy:          {Type: field.TypeString, Column: workflowassignment.FieldCreatedBy},
-			workflowassignment.FieldUpdatedBy:          {Type: field.TypeString, Column: workflowassignment.FieldUpdatedBy},
-			workflowassignment.FieldDeletedAt:          {Type: field.TypeTime, Column: workflowassignment.FieldDeletedAt},
-			workflowassignment.FieldDeletedBy:          {Type: field.TypeString, Column: workflowassignment.FieldDeletedBy},
-			workflowassignment.FieldDisplayID:          {Type: field.TypeString, Column: workflowassignment.FieldDisplayID},
-			workflowassignment.FieldTags:               {Type: field.TypeJSON, Column: workflowassignment.FieldTags},
-			workflowassignment.FieldOwnerID:            {Type: field.TypeString, Column: workflowassignment.FieldOwnerID},
-			workflowassignment.FieldWorkflowInstanceID: {Type: field.TypeString, Column: workflowassignment.FieldWorkflowInstanceID},
-			workflowassignment.FieldAssignmentKey:      {Type: field.TypeString, Column: workflowassignment.FieldAssignmentKey},
-			workflowassignment.FieldRole:               {Type: field.TypeString, Column: workflowassignment.FieldRole},
-			workflowassignment.FieldLabel:              {Type: field.TypeString, Column: workflowassignment.FieldLabel},
-			workflowassignment.FieldRequired:           {Type: field.TypeBool, Column: workflowassignment.FieldRequired},
-			workflowassignment.FieldStatus:             {Type: field.TypeEnum, Column: workflowassignment.FieldStatus},
-			workflowassignment.FieldMetadata:           {Type: field.TypeJSON, Column: workflowassignment.FieldMetadata},
-			workflowassignment.FieldDecidedAt:          {Type: field.TypeTime, Column: workflowassignment.FieldDecidedAt},
-			workflowassignment.FieldActorUserID:        {Type: field.TypeString, Column: workflowassignment.FieldActorUserID},
-			workflowassignment.FieldActorGroupID:       {Type: field.TypeString, Column: workflowassignment.FieldActorGroupID},
-			workflowassignment.FieldNotes:              {Type: field.TypeString, Column: workflowassignment.FieldNotes},
+			workflowassignment.FieldCreatedAt:            {Type: field.TypeTime, Column: workflowassignment.FieldCreatedAt},
+			workflowassignment.FieldUpdatedAt:            {Type: field.TypeTime, Column: workflowassignment.FieldUpdatedAt},
+			workflowassignment.FieldCreatedBy:            {Type: field.TypeString, Column: workflowassignment.FieldCreatedBy},
+			workflowassignment.FieldUpdatedBy:            {Type: field.TypeString, Column: workflowassignment.FieldUpdatedBy},
+			workflowassignment.FieldDeletedAt:            {Type: field.TypeTime, Column: workflowassignment.FieldDeletedAt},
+			workflowassignment.FieldDeletedBy:            {Type: field.TypeString, Column: workflowassignment.FieldDeletedBy},
+			workflowassignment.FieldDisplayID:            {Type: field.TypeString, Column: workflowassignment.FieldDisplayID},
+			workflowassignment.FieldTags:                 {Type: field.TypeJSON, Column: workflowassignment.FieldTags},
+			workflowassignment.FieldOwnerID:              {Type: field.TypeString, Column: workflowassignment.FieldOwnerID},
+			workflowassignment.FieldWorkflowInstanceID:   {Type: field.TypeString, Column: workflowassignment.FieldWorkflowInstanceID},
+			workflowassignment.FieldAssignmentKey:        {Type: field.TypeString, Column: workflowassignment.FieldAssignmentKey},
+			workflowassignment.FieldRole:                 {Type: field.TypeString, Column: workflowassignment.FieldRole},
+			workflowassignment.FieldLabel:                {Type: field.TypeString, Column: workflowassignment.FieldLabel},
+			workflowassignment.FieldRequired:             {Type: field.TypeBool, Column: workflowassignment.FieldRequired},
+			workflowassignment.FieldStatus:               {Type: field.TypeEnum, Column: workflowassignment.FieldStatus},
+			workflowassignment.FieldMetadata:             {Type: field.TypeJSON, Column: workflowassignment.FieldMetadata},
+			workflowassignment.FieldApprovalMetadata:     {Type: field.TypeJSON, Column: workflowassignment.FieldApprovalMetadata},
+			workflowassignment.FieldRejectionMetadata:    {Type: field.TypeJSON, Column: workflowassignment.FieldRejectionMetadata},
+			workflowassignment.FieldInvalidationMetadata: {Type: field.TypeJSON, Column: workflowassignment.FieldInvalidationMetadata},
+			workflowassignment.FieldDecidedAt:            {Type: field.TypeTime, Column: workflowassignment.FieldDecidedAt},
+			workflowassignment.FieldActorUserID:          {Type: field.TypeString, Column: workflowassignment.FieldActorUserID},
+			workflowassignment.FieldActorGroupID:         {Type: field.TypeString, Column: workflowassignment.FieldActorGroupID},
+			workflowassignment.FieldNotes:                {Type: field.TypeString, Column: workflowassignment.FieldNotes},
 		},
 	}
 	graph.Nodes[85] = &sqlgraph.Node{
@@ -33507,6 +33510,21 @@ func (f *WorkflowAssignmentFilter) WhereStatus(p entql.StringP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *WorkflowAssignmentFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(workflowassignment.FieldMetadata))
+}
+
+// WhereApprovalMetadata applies the entql json.RawMessage predicate on the approval_metadata field.
+func (f *WorkflowAssignmentFilter) WhereApprovalMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignment.FieldApprovalMetadata))
+}
+
+// WhereRejectionMetadata applies the entql json.RawMessage predicate on the rejection_metadata field.
+func (f *WorkflowAssignmentFilter) WhereRejectionMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignment.FieldRejectionMetadata))
+}
+
+// WhereInvalidationMetadata applies the entql json.RawMessage predicate on the invalidation_metadata field.
+func (f *WorkflowAssignmentFilter) WhereInvalidationMetadata(p entql.BytesP) {
+	f.Where(p.Field(workflowassignment.FieldInvalidationMetadata))
 }
 
 // WhereDecidedAt applies the entql time.Time predicate on the decided_at field.

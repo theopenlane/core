@@ -92,6 +92,18 @@ WorkflowEventPayload stores payloads emitted by workflow events and actions.
 """
 scalar WorkflowEventPayload
 """
+WorkflowAssignmentApproval captures structured metadata for workflow assignment approvals.
+"""
+scalar WorkflowAssignmentApproval
+"""
+WorkflowAssignmentInvalidation captures details when an approval is invalidated.
+"""
+scalar WorkflowAssignmentInvalidation
+"""
+WorkflowAssignmentRejection captures details when an approval is rejected or denied.
+"""
+scalar WorkflowAssignmentRejection
+"""
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel

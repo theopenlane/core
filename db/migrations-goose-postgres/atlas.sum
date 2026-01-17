@@ -1,4 +1,4 @@
-h1:E0vPeecNLvoQhojgz2opqKIJTaFvWSUpV8/8Roq9YoY=
+h1:QWqWEwGDtQFz/mCGwQeyA3CSMNoi42Iuc+uqZ+6oEro=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -12,3 +12,6 @@ h1:E0vPeecNLvoQhojgz2opqKIJTaFvWSUpV8/8Roq9YoY=
 20260107162847_subprocessor_url_history.sql h1:t26YDOYDbdlVja63q2bGHf+uYpmGa0t+bEoJk+iJtFE=
 20260116171120_trust_center_updates.sql h1:NurbP4qGYMyeTnsiONpg8mFBwCDboCOBYNwigyqSTwk=
 20260116171122_trust_center_updates_history.sql h1:lpVS7ubzDNhTtCjD7VTVIkD19rbPLRSgLBKuogA1YGA=
+20260116180005_trust_center_entity_history_fix.sql h1:cEgn+AKsCUjBMrJC7+S79ylqJd0AD20AnLoyxe4qhMk=
+20260117222541_workflowassignmenttypes.sql h1:K7YPcMW30yUPU2WzpStHbGfw/wMcSXjvSbvgGrF/s5s=
+20260117222543_workflowassignmenttypes_history.sql h1:grQtyEXV/n/icIsSN5JnM7Swqab4E5yCmJOTD1rIZ10=
