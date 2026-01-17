@@ -671,8 +671,8 @@ github.com/theopenlane/iam v0.23.3 h1:eKURC25+ASVF0JXmbrqD809kM/3xUcb2RTagfNSa7Z
 github.com/theopenlane/iam v0.23.3/go.mod h1:LUukz+sahnj3VN2yXJH0ssgunaXG3EOPJXkXvLlmz5A=
 github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
-github.com/theopenlane/riverboat v0.8.0 h1:jyYhkvXhUG3Q3+FJLo7UcSZcqlmGW14cMcddUyQiWwY=
-github.com/theopenlane/riverboat v0.8.0/go.mod h1:su3XYE9Bgxx2MQAbhYM4f0EtBzDCPj0qmcw9R1qUXag=
+github.com/theopenlane/riverboat v0.8.1 h1:1T1CFFYDSMhzzN0HMrxm2vQa4q8VwnDtItSOkaZTU1I=
+github.com/theopenlane/riverboat v0.8.1/go.mod h1:VPoW/OvzTlCfjoKKLwHCdtwmmvi6B8DiI6bV8r6ShT4=
 github.com/theopenlane/utils v0.6.2 h1:7TgABVt0rb+Dhph3N7DEBAO3jcB/J+wgVv47F2Nry7c=
 github.com/theopenlane/utils v0.6.2/go.mod h1:7STP+gs2LAYYKLS7blxq8FTY5jvL7R0riLiUQJfTeM0=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
@@ -706,8 +706,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vektah/gqlparser/v2 v2.5.31 h1:YhWGA1mfTjID7qJhd1+Vxhpk5HTgydrGU9IgkWBTJ7k=
 github.com/vektah/gqlparser/v2 v2.5.31/go.mod h1:c1I28gSOVNzlfc4WuDlqU7voQnsqI6OG2amkBAFmgts=
-github.com/vektra/mockery/v3 v3.6.2 h1:b3SyDRt+RTNGHZSjbfPAEyGi5yYkAWh1ime4enwxUWE=
-github.com/vektra/mockery/v3 v3.6.2/go.mod h1:kh58mpWIghfUCfFkNCP72TJmuJUR/dKnrqBZ3HspVq8=
+github.com/vektra/mockery/v3 v3.6.3 h1:YaBokm33LG0E8w1TccCkcJr/6tRf+zSYiHS8ct4ttCc=
+github.com/vektra/mockery/v3 v3.6.3/go.mod h1:kh58mpWIghfUCfFkNCP72TJmuJUR/dKnrqBZ3HspVq8=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
