@@ -37,7 +37,7 @@ func resolveControlAuditor(ctx context.Context, client *generated.Client, obj *w
 		return nil, err
 	}
 
-	auditorID := workflows.StringField(node, "AuditorReferenceID")
+	auditorID := workflows.StringField(node, "auditor_reference_id")
 	if auditorID == "" {
 		return []string{}, nil
 	}
@@ -52,7 +52,7 @@ func resolveResponsibleParty(ctx context.Context, client *generated.Client, obj 
 		return nil, err
 	}
 
-	responsiblePartyID := workflows.StringField(node, "ResponsiblePartyID")
+	responsiblePartyID := workflows.StringField(node, "responsible_party_id")
 	if responsiblePartyID == "" {
 		return []string{}, nil
 	}
@@ -67,7 +67,7 @@ func resolvePolicyApprover(ctx context.Context, client *generated.Client, obj *w
 		return nil, err
 	}
 
-	approverID := workflows.StringField(node, "ApproverID")
+	approverID := workflows.StringField(node, "approver_id")
 	if approverID == "" {
 		return []string{}, nil
 	}
@@ -82,7 +82,7 @@ func resolvePolicyDelegate(ctx context.Context, client *generated.Client, obj *w
 		return nil, err
 	}
 
-	delegateID := workflows.StringField(node, "DelegateID")
+	delegateID := workflows.StringField(node, "delegate_id")
 	if delegateID == "" {
 		return []string{}, nil
 	}
@@ -97,7 +97,7 @@ func resolveObjectCreator(ctx context.Context, client *generated.Client, obj *wo
 		return nil, err
 	}
 
-	createdBy := workflows.StringField(node, "CreatedBy")
+	createdBy := workflows.StringField(node, "created_by")
 	if createdBy != "" {
 		return []string{createdBy}, nil
 	}
@@ -125,7 +125,7 @@ func resolveObjectOwner(ctx context.Context, client *generated.Client, obj *work
 		return nil, err
 	}
 
-	ownerID := workflows.StringField(node, "OwnerID")
+	ownerID := workflows.StringField(node, "owner_id")
 	if ownerID != "" {
 		return workflows.OrganizationOwnerIDs(ctx, client, ownerID)
 	}
