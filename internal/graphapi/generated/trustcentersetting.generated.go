@@ -98,8 +98,6 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":
@@ -181,8 +179,6 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":
@@ -293,8 +289,6 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":

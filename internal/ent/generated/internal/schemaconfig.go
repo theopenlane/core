@@ -206,7 +206,6 @@ type SchemaConfig struct {
 	TrustCenterDoc                     string // TrustCenterDoc table.
 	TrustCenterEntity                  string // TrustCenterEntity table.
 	TrustCenterSetting                 string // TrustCenterSetting table.
-	TrustCenterSettingFiles            string // TrustCenterSetting-files->File table.
 	TrustCenterSubprocessor            string // TrustCenterSubprocessor table.
 	TrustCenterWatermarkConfig         string // TrustCenterWatermarkConfig table.
 	User                               string // User table.

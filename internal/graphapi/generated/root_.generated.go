@@ -1509,7 +1509,6 @@ type ComplexityRoot struct {
 		Template               func(childComplexity int) int
 		TrustCenterDoc         func(childComplexity int) int
 		TrustCenterEntities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterEntityOrder, where *generated.TrustCenterEntityWhereInput) int
-		TrustCenterSetting     func(childComplexity int) int
 		URI                    func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
@@ -4912,7 +4911,6 @@ type ComplexityRoot struct {
 		FaviconFile              func(childComplexity int) int
 		FaviconLocalFileID       func(childComplexity int) int
 		FaviconRemoteURL         func(childComplexity int) int
-		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Font                     func(childComplexity int) int
 		ForegroundColor          func(childComplexity int) int
 		ID                       func(childComplexity int) int
@@ -12351,13 +12349,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.TrustCenterEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterEntityOrder), args["where"].(*generated.TrustCenterEntityWhereInput)), true
-
-	case "File.trustCenterSetting":
-		if e.complexity.File.TrustCenterSetting == nil {
-			break
-		}
-
-		return e.complexity.File.TrustCenterSetting(childComplexity), true
 
 	case "File.uri":
 		if e.complexity.File.URI == nil {
@@ -33703,18 +33694,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.FaviconRemoteURL(childComplexity), true
 
-	case "TrustCenterSetting.files":
-		if e.complexity.TrustCenterSetting.Files == nil {
-			break
-		}
-
-		args, err := ec.field_TrustCenterSetting_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.TrustCenterSetting.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
-
 	case "TrustCenterSetting.font":
 		if e.complexity.TrustCenterSetting.Font == nil {
 			break
@@ -47352,7 +47331,6 @@ input CreateFileInput {
   programIDs: [ID!]
   evidenceIDs: [ID!]
   eventIDs: [ID!]
-  trustCenterSettingIDs: [ID!]
   integrationIDs: [ID!]
   secretIDs: [ID!]
   trustCenterEntityIDs: [ID!]
@@ -49665,7 +49643,6 @@ input CreateTrustCenterSettingInput {
   environment: TrustCenterSettingTrustCenterEnvironment
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
-  fileIDs: [ID!]
   logoFileID: ID
   faviconFileID: ID
 }
@@ -57020,7 +56997,6 @@ type File implements Node {
     """
     where: EventWhereInput
   ): EventConnection!
-  trustCenterSetting: [TrustCenterSetting!]
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -57611,11 +57587,6 @@ input FileWhereInput {
   """
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
-  """
-  trust_center_setting edge predicates
-  """
-  hasTrustCenterSetting: Boolean
-  hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
   """
   integrations edge predicates
   """
@@ -87960,37 +87931,6 @@ type TrustCenterSetting implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
   logoFile: File
   faviconFile: File
 }
@@ -88421,11 +88361,6 @@ input TrustCenterSettingWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
-  """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
   """
   logo_file edge predicates
   """
@@ -91142,9 +91077,6 @@ input UpdateFileInput {
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
-  addTrustCenterSettingIDs: [ID!]
-  removeTrustCenterSettingIDs: [ID!]
-  clearTrustCenterSetting: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -94408,9 +94340,6 @@ input UpdateTrustCenterSettingInput {
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
   faviconFileID: ID

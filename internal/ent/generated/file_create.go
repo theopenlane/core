@@ -25,7 +25,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -543,21 +542,6 @@ func (_c *FileCreate) AddEvents(v ...*Event) *FileCreate {
 	return _c.AddEventIDs(ids...)
 }
 
-// AddTrustCenterSettingIDs adds the "trust_center_setting" edge to the TrustCenterSetting entity by IDs.
-func (_c *FileCreate) AddTrustCenterSettingIDs(ids ...string) *FileCreate {
-	_c.mutation.AddTrustCenterSettingIDs(ids...)
-	return _c
-}
-
-// AddTrustCenterSetting adds the "trust_center_setting" edges to the TrustCenterSetting entity.
-func (_c *FileCreate) AddTrustCenterSetting(v ...*TrustCenterSetting) *FileCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddTrustCenterSettingIDs(ids...)
-}
-
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_c *FileCreate) AddIntegrationIDs(ids ...string) *FileCreate {
 	_c.mutation.AddIntegrationIDs(ids...)
@@ -1036,23 +1020,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.FileEvents
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.TrustCenterSettingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.TrustCenterSettingTable,
-			Columns: file.TrustCenterSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

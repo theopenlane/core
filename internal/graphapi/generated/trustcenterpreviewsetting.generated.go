@@ -97,8 +97,6 @@ func (ec *executionContext) fieldContext_TrustCenterPreviewSettingCreatePayload_
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
 				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":

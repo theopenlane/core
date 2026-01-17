@@ -9489,31 +9489,6 @@ var (
 			},
 		},
 	}
-	// TrustCenterSettingFilesColumns holds the columns for the "trust_center_setting_files" table.
-	TrustCenterSettingFilesColumns = []*schema.Column{
-		{Name: "trust_center_setting_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-	}
-	// TrustCenterSettingFilesTable holds the schema information for the "trust_center_setting_files" table.
-	TrustCenterSettingFilesTable = &schema.Table{
-		Name:       "trust_center_setting_files",
-		Columns:    TrustCenterSettingFilesColumns,
-		PrimaryKey: []*schema.Column{TrustCenterSettingFilesColumns[0], TrustCenterSettingFilesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "trust_center_setting_files_trust_center_setting_id",
-				Columns:    []*schema.Column{TrustCenterSettingFilesColumns[0]},
-				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "trust_center_setting_files_file_id",
-				Columns:    []*schema.Column{TrustCenterSettingFilesColumns[1]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// UserEventsColumns holds the columns for the "user_events" table.
 	UserEventsColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeString},
@@ -9776,7 +9751,6 @@ var (
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
-		TrustCenterSettingFilesTable,
 		UserEventsTable,
 		VulnerabilityActionPlansTable,
 	}
@@ -10403,8 +10377,6 @@ func init() {
 	TaskEvidenceTable.ForeignKeys[1].RefTable = EvidencesTable
 	TemplateFilesTable.ForeignKeys[0].RefTable = TemplatesTable
 	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
-	TrustCenterSettingFilesTable.ForeignKeys[0].RefTable = TrustCenterSettingsTable
-	TrustCenterSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
 	VulnerabilityActionPlansTable.ForeignKeys[0].RefTable = VulnerabilitiesTable

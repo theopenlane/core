@@ -24116,10 +24116,6 @@ type FileWhereInput struct {
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 
-	// "trust_center_setting" edge predicates.
-	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
-	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
-
 	// "integrations" edge predicates.
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -25340,25 +25336,6 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, file.HasEventsWith(with...))
-	}
-	if i.HasTrustCenterSetting != nil {
-		p := file.HasTrustCenterSetting()
-		if !*i.HasTrustCenterSetting {
-			p = file.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterSettingWith) > 0 {
-		with := make([]predicate.TrustCenterSetting, 0, len(i.HasTrustCenterSettingWith))
-		with = append(with, trustcentersetting.DeletedAtIsNil())
-		for _, w := range i.HasTrustCenterSettingWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterSettingWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, file.HasTrustCenterSettingWith(with...))
 	}
 	if i.HasIntegrations != nil {
 		p := file.HasIntegrations()
@@ -72858,10 +72835,6 @@ type TrustCenterSettingWhereInput struct {
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
-	// "files" edge predicates.
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
-
 	// "logo_file" edge predicates.
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
@@ -73826,25 +73799,6 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcentersetting.HasEditorsWith(with...))
-	}
-	if i.HasFiles != nil {
-		p := trustcentersetting.HasFiles()
-		if !*i.HasFiles {
-			p = trustcentersetting.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasFilesWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasFilesWith))
-		with = append(with, file.DeletedAtIsNil())
-		for _, w := range i.HasFilesWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcentersetting.HasFilesWith(with...))
 	}
 	if i.HasLogoFile != nil {
 		p := trustcentersetting.HasLogoFile()

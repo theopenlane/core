@@ -5577,7 +5577,6 @@ type CreateFileInput struct {
 	ProgramIDs                []string
 	EvidenceIDs               []string
 	EventIDs                  []string
-	TrustCenterSettingIDs     []string
 	IntegrationIDs            []string
 	SecretIDs                 []string
 	TrustCenterEntityIDs      []string
@@ -5670,9 +5669,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
-	}
-	if v := i.TrustCenterSettingIDs; len(v) > 0 {
-		m.AddTrustCenterSettingIDs(v...)
 	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
@@ -5767,9 +5763,6 @@ type UpdateFileInput struct {
 	ClearEvents                     bool
 	AddEventIDs                     []string
 	RemoveEventIDs                  []string
-	ClearTrustCenterSetting         bool
-	AddTrustCenterSettingIDs        []string
-	RemoveTrustCenterSettingIDs     []string
 	ClearIntegrations               bool
 	AddIntegrationIDs               []string
 	RemoveIntegrationIDs            []string
@@ -5992,15 +5985,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
-	}
-	if i.ClearTrustCenterSetting {
-		m.ClearTrustCenterSetting()
-	}
-	if v := i.AddTrustCenterSettingIDs; len(v) > 0 {
-		m.AddTrustCenterSettingIDs(v...)
-	}
-	if v := i.RemoveTrustCenterSettingIDs; len(v) > 0 {
-		m.RemoveTrustCenterSettingIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -18045,7 +18029,6 @@ type CreateTrustCenterSettingInput struct {
 	Environment              *enums.TrustCenterEnvironment
 	BlockedGroupIDs          []string
 	EditorIDs                []string
-	FileIDs                  []string
 	LogoFileID               *string
 	FaviconFileID            *string
 }
@@ -18100,9 +18083,6 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.EditorIDs; len(v) > 0 {
 		m.AddEditorIDs(v...)
 	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
 	}
@@ -18151,9 +18131,6 @@ type UpdateTrustCenterSettingInput struct {
 	ClearEditors                  bool
 	AddEditorIDs                  []string
 	RemoveEditorIDs               []string
-	ClearFiles                    bool
-	AddFileIDs                    []string
-	RemoveFileIDs                 []string
 	ClearLogoFile                 bool
 	LogoFileID                    *string
 	ClearFaviconFile              bool
@@ -18257,15 +18234,6 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.RemoveEditorIDs; len(v) > 0 {
 		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearFiles {
-		m.ClearFiles()
-	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
 	}
 	if i.ClearLogoFile {
 		m.ClearLogoFile()
