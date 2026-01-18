@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/vektah/gqlparser/v2/ast"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -58,6 +59,12 @@ func modulesExtension(h *handler.Server) {
 	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		resp := next(ctx)
 
+		// do not wrap subscriptions responses, they must return nil to close the connection
+		optctx := graphql.GetOperationContext(ctx)
+		if optctx.Operation.Operation == ast.Subscription {
+			return resp
+		}
+
 		resp = initExtensionResponse(resp)
 
 		if missingModule := getMissingModuleFromErrors(resp.Errors); missingModule != "" {
@@ -85,6 +92,12 @@ func authExtension(h *handler.Server) {
 	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		resp := next(ctx)
 
+		// do not wrap subscriptions responses, they must return nil to close the connection
+		optctx := graphql.GetOperationContext(ctx)
+		if optctx.Operation.Operation == ast.Subscription {
+			return resp
+		}
+
 		resp = initExtensionResponse(resp)
 
 		resp.Extensions[AuthExtensionKey] = getAuthData(ctx)
@@ -96,6 +109,12 @@ func authExtension(h *handler.Server) {
 // latencyExtension adds the server latency to the extensions map in the response
 func latencyExtension(h *handler.Server) {
 	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+		// do not wrap subscriptions responses, they must return nil to close the connection
+		optctx := graphql.GetOperationContext(ctx)
+		if optctx.Operation.Operation == ast.Subscription {
+			return next(ctx)
+		}
+
 		start := time.Now()
 		resp := next(ctx)
 		latency := time.Since(start).String()
@@ -112,6 +131,12 @@ func latencyExtension(h *handler.Server) {
 func traceExtension(h *handler.Server) {
 	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		resp := next(ctx)
+
+		// do not wrap subscriptions responses, they must return nil to close the connection
+		optctx := graphql.GetOperationContext(ctx)
+		if optctx.Operation.Operation == ast.Subscription {
+			return resp
+		}
 
 		traceID := getRequestID(ctx)
 
