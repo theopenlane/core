@@ -8058,25 +8058,6 @@ func (c *FileClient) QueryEvents(_m *File) *EventQuery {
 	return query
 }
 
-// QueryTrustCenterSetting queries the trust_center_setting edge of a File.
-func (c *FileClient) QueryTrustCenterSetting(_m *File) *TrustCenterSettingQuery {
-	query := (&TrustCenterSettingClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(file.Table, file.FieldID, id),
-			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.TrustCenterSettingTable, file.TrustCenterSettingPrimaryKey...),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryIntegrations queries the integrations edge of a File.
 func (c *FileClient) QueryIntegrations(_m *File) *IntegrationQuery {
 	query := (&IntegrationClient{config: c.config}).Query()
@@ -24383,25 +24364,6 @@ func (c *TrustCenterSettingClient) QueryEditors(_m *TrustCenterSetting) *GroupQu
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryFiles queries the files edge of a TrustCenterSetting.
-func (c *TrustCenterSettingClient) QueryFiles(_m *TrustCenterSetting) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, trustcentersetting.FilesTable, trustcentersetting.FilesPrimaryKey...),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

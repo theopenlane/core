@@ -91,8 +91,6 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
-	// EdgeTrustCenterSetting holds the string denoting the trust_center_setting edge name in mutations.
-	EdgeTrustCenterSetting = "trust_center_setting"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
@@ -155,11 +153,6 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
-	// TrustCenterSettingTable is the table that holds the trust_center_setting relation/edge. The primary key declared below.
-	TrustCenterSettingTable = "trust_center_setting_files"
-	// TrustCenterSettingInverseTable is the table name for the TrustCenterSetting entity.
-	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
-	TrustCenterSettingInverseTable = "trust_center_settings"
 	// IntegrationsTable is the table that holds the integrations relation/edge.
 	IntegrationsTable = "integrations"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -271,9 +264,6 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"file_id", "event_id"}
-	// TrustCenterSettingPrimaryKey and TrustCenterSettingColumn2 are the table columns denoting the
-	// primary key for the trust_center_setting relation (M2M).
-	TrustCenterSettingPrimaryKey = []string{"trust_center_setting_id", "file_id"}
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"file_id", "hush_id"}
@@ -594,20 +584,6 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTrustCenterSettingCount orders the results by trust_center_setting count.
-func ByTrustCenterSettingCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingStep(), opts...)
-	}
-}
-
-// ByTrustCenterSetting orders the results by trust_center_setting terms.
-func ByTrustCenterSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByIntegrationsCount orders the results by integrations count.
 func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -745,13 +721,6 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EventsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
-	)
-}
-func newTrustCenterSettingStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustCenterSettingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
 	)
 }
 func newIntegrationsStep() *sqlgraph.Step {

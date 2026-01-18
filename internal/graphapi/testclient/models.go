@@ -4230,7 +4230,6 @@ type CreateFileInput struct {
 	ProgramIDs                []string   `json:"programIDs,omitempty"`
 	EvidenceIDs               []string   `json:"evidenceIDs,omitempty"`
 	EventIDs                  []string   `json:"eventIDs,omitempty"`
-	TrustCenterSettingIDs     []string   `json:"trustCenterSettingIDs,omitempty"`
 	IntegrationIDs            []string   `json:"integrationIDs,omitempty"`
 	SecretIDs                 []string   `json:"secretIDs,omitempty"`
 	TrustCenterEntityIDs      []string   `json:"trustCenterEntityIDs,omitempty"`
@@ -5778,7 +5777,6 @@ type CreateTrustCenterSettingInput struct {
 	Environment     *enums.TrustCenterEnvironment `json:"environment,omitempty"`
 	BlockedGroupIDs []string                      `json:"blockedGroupIDs,omitempty"`
 	EditorIDs       []string                      `json:"editorIDs,omitempty"`
-	FileIDs         []string                      `json:"fileIDs,omitempty"`
 	LogoFileID      *string                       `json:"logoFileID,omitempty"`
 	FaviconFileID   *string                       `json:"faviconFileID,omitempty"`
 }
@@ -10227,7 +10225,6 @@ type File struct {
 	Program                []*Program                   `json:"program,omitempty"`
 	Evidence               []*Evidence                  `json:"evidence,omitempty"`
 	Events                 *EventConnection             `json:"events"`
-	TrustCenterSetting     []*TrustCenterSetting        `json:"trustCenterSetting,omitempty"`
 	Integrations           *IntegrationConnection       `json:"integrations"`
 	Secrets                *HushConnection              `json:"secrets"`
 	TrustCenterEntities    *TrustCenterEntityConnection `json:"trustCenterEntities"`
@@ -10644,9 +10641,6 @@ type FileWhereInput struct {
 	// events edge predicates
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
-	// trust_center_setting edge predicates
-	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
-	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -25122,7 +25116,6 @@ type TrustCenterSetting struct {
 	Environment   *enums.TrustCenterEnvironment `json:"environment,omitempty"`
 	BlockedGroups *GroupConnection              `json:"blockedGroups"`
 	Editors       *GroupConnection              `json:"editors"`
-	Files         *FileConnection               `json:"files"`
 	LogoFile      *File                         `json:"logoFile,omitempty"`
 	FaviconFile   *File                         `json:"faviconFile,omitempty"`
 }
@@ -25494,9 +25487,6 @@ type TrustCenterSettingWhereInput struct {
 	// editors edge predicates
 	HasEditors     *bool              `json:"hasEditors,omitempty"`
 	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
-	// files edge predicates
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// logo_file edge predicates
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
@@ -27498,9 +27488,6 @@ type UpdateFileInput struct {
 	AddEventIDs                     []string   `json:"addEventIDs,omitempty"`
 	RemoveEventIDs                  []string   `json:"removeEventIDs,omitempty"`
 	ClearEvents                     *bool      `json:"clearEvents,omitempty"`
-	AddTrustCenterSettingIDs        []string   `json:"addTrustCenterSettingIDs,omitempty"`
-	RemoveTrustCenterSettingIDs     []string   `json:"removeTrustCenterSettingIDs,omitempty"`
-	ClearTrustCenterSetting         *bool      `json:"clearTrustCenterSetting,omitempty"`
 	AddIntegrationIDs               []string   `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs            []string   `json:"removeIntegrationIDs,omitempty"`
 	ClearIntegrations               *bool      `json:"clearIntegrations,omitempty"`
@@ -30020,9 +30007,6 @@ type UpdateTrustCenterSettingInput struct {
 	AddEditorIDs                  []string `json:"addEditorIDs,omitempty"`
 	RemoveEditorIDs               []string `json:"removeEditorIDs,omitempty"`
 	ClearEditors                  *bool    `json:"clearEditors,omitempty"`
-	AddFileIDs                    []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                 []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                    *bool    `json:"clearFiles,omitempty"`
 	LogoFileID                    *string  `json:"logoFileID,omitempty"`
 	ClearLogoFile                 *bool    `json:"clearLogoFile,omitempty"`
 	FaviconFileID                 *string  `json:"faviconFileID,omitempty"`

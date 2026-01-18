@@ -374,21 +374,6 @@ func (_c *TrustCenterSettingCreate) AddEditors(v ...*Group) *TrustCenterSettingC
 	return _c.AddEditorIDs(ids...)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *TrustCenterSettingCreate) AddFileIDs(ids ...string) *TrustCenterSettingCreate {
-	_c.mutation.AddFileIDs(ids...)
-	return _c
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_c *TrustCenterSettingCreate) AddFiles(v ...*File) *TrustCenterSettingCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddFileIDs(ids...)
-}
-
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
 func (_c *TrustCenterSettingCreate) SetLogoFileID(id string) *TrustCenterSettingCreate {
 	_c.mutation.SetLogoFileID(id)
@@ -708,23 +693,6 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 			},
 		}
 		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.TrustCenterSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

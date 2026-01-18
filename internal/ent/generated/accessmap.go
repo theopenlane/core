@@ -2641,16 +2641,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 },
 }, "trust_center_setting": {"files": {
 	ObjectType:      "file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "logo_file": {
 	ObjectType:      "logo_file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "favicon_file": {
 	ObjectType:      "favicon_file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "trust_center_subprocessor": {"trust_center": {
 	ObjectType:      "trust_center",
