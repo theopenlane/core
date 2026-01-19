@@ -737,9 +737,9 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 	doc, err := suite.client.api.CreateTrustCenterDoc(testUser.UserCtx, testclient.CreateTrustCenterDocInput{
-		Title:      "Test Doc",
-		Category:   "test",
-		Visibility: &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+		Title:                  "Test Doc",
+		TrustCenterDocKindName: lo.ToPtr("test"),
+		Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 	}, *fileUpload)
 	assert.NilError(t, err)
 	assert.Check(t, doc.CreateTrustCenterDoc.TrustCenterDoc.ID != "")
