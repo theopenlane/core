@@ -70974,6 +70974,40 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "trust_center_doc_kind_name" field predicates.
+	TrustCenterDocKindName             *string  `json:"trustCenterDocKindName,omitempty"`
+	TrustCenterDocKindNameNEQ          *string  `json:"trustCenterDocKindNameNEQ,omitempty"`
+	TrustCenterDocKindNameIn           []string `json:"trustCenterDocKindNameIn,omitempty"`
+	TrustCenterDocKindNameNotIn        []string `json:"trustCenterDocKindNameNotIn,omitempty"`
+	TrustCenterDocKindNameGT           *string  `json:"trustCenterDocKindNameGT,omitempty"`
+	TrustCenterDocKindNameGTE          *string  `json:"trustCenterDocKindNameGTE,omitempty"`
+	TrustCenterDocKindNameLT           *string  `json:"trustCenterDocKindNameLT,omitempty"`
+	TrustCenterDocKindNameLTE          *string  `json:"trustCenterDocKindNameLTE,omitempty"`
+	TrustCenterDocKindNameContains     *string  `json:"trustCenterDocKindNameContains,omitempty"`
+	TrustCenterDocKindNameHasPrefix    *string  `json:"trustCenterDocKindNameHasPrefix,omitempty"`
+	TrustCenterDocKindNameHasSuffix    *string  `json:"trustCenterDocKindNameHasSuffix,omitempty"`
+	TrustCenterDocKindNameIsNil        bool     `json:"trustCenterDocKindNameIsNil,omitempty"`
+	TrustCenterDocKindNameNotNil       bool     `json:"trustCenterDocKindNameNotNil,omitempty"`
+	TrustCenterDocKindNameEqualFold    *string  `json:"trustCenterDocKindNameEqualFold,omitempty"`
+	TrustCenterDocKindNameContainsFold *string  `json:"trustCenterDocKindNameContainsFold,omitempty"`
+
+	// "trust_center_doc_kind_id" field predicates.
+	TrustCenterDocKindID             *string  `json:"trustCenterDocKindID,omitempty"`
+	TrustCenterDocKindIDNEQ          *string  `json:"trustCenterDocKindIDNEQ,omitempty"`
+	TrustCenterDocKindIDIn           []string `json:"trustCenterDocKindIDIn,omitempty"`
+	TrustCenterDocKindIDNotIn        []string `json:"trustCenterDocKindIDNotIn,omitempty"`
+	TrustCenterDocKindIDGT           *string  `json:"trustCenterDocKindIDGT,omitempty"`
+	TrustCenterDocKindIDGTE          *string  `json:"trustCenterDocKindIDGTE,omitempty"`
+	TrustCenterDocKindIDLT           *string  `json:"trustCenterDocKindIDLT,omitempty"`
+	TrustCenterDocKindIDLTE          *string  `json:"trustCenterDocKindIDLTE,omitempty"`
+	TrustCenterDocKindIDContains     *string  `json:"trustCenterDocKindIDContains,omitempty"`
+	TrustCenterDocKindIDHasPrefix    *string  `json:"trustCenterDocKindIDHasPrefix,omitempty"`
+	TrustCenterDocKindIDHasSuffix    *string  `json:"trustCenterDocKindIDHasSuffix,omitempty"`
+	TrustCenterDocKindIDIsNil        bool     `json:"trustCenterDocKindIDIsNil,omitempty"`
+	TrustCenterDocKindIDNotNil       bool     `json:"trustCenterDocKindIDNotNil,omitempty"`
+	TrustCenterDocKindIDEqualFold    *string  `json:"trustCenterDocKindIDEqualFold,omitempty"`
+	TrustCenterDocKindIDContainsFold *string  `json:"trustCenterDocKindIDContainsFold,omitempty"`
+
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -71005,21 +71039,6 @@ type TrustCenterDocWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-
-	// "category" field predicates.
-	Category             *string  `json:"category,omitempty"`
-	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGT           *string  `json:"categoryGT,omitempty"`
-	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
-	CategoryLT           *string  `json:"categoryLT,omitempty"`
-	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "file_id" field predicates.
 	FileID             *string  `json:"fileID,omitempty"`
@@ -71093,6 +71112,10 @@ type TrustCenterDocWhereInput struct {
 	StandardIDNotNil       bool     `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "trust_center_doc_kind" edge predicates.
+	HasTrustCenterDocKind     *bool                       `json:"hasTrustCenterDocKind,omitempty"`
+	HasTrustCenterDocKindWith []*CustomTypeEnumWhereInput `json:"hasTrustCenterDocKindWith,omitempty"`
 
 	// "blocked_groups" edge predicates.
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
@@ -71370,6 +71393,96 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.TrustCenterDocKindName != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameEQ(*i.TrustCenterDocKindName))
+	}
+	if i.TrustCenterDocKindNameNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNEQ(*i.TrustCenterDocKindNameNEQ))
+	}
+	if len(i.TrustCenterDocKindNameIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameIn(i.TrustCenterDocKindNameIn...))
+	}
+	if len(i.TrustCenterDocKindNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNotIn(i.TrustCenterDocKindNameNotIn...))
+	}
+	if i.TrustCenterDocKindNameGT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameGT(*i.TrustCenterDocKindNameGT))
+	}
+	if i.TrustCenterDocKindNameGTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameGTE(*i.TrustCenterDocKindNameGTE))
+	}
+	if i.TrustCenterDocKindNameLT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameLT(*i.TrustCenterDocKindNameLT))
+	}
+	if i.TrustCenterDocKindNameLTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameLTE(*i.TrustCenterDocKindNameLTE))
+	}
+	if i.TrustCenterDocKindNameContains != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameContains(*i.TrustCenterDocKindNameContains))
+	}
+	if i.TrustCenterDocKindNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameHasPrefix(*i.TrustCenterDocKindNameHasPrefix))
+	}
+	if i.TrustCenterDocKindNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameHasSuffix(*i.TrustCenterDocKindNameHasSuffix))
+	}
+	if i.TrustCenterDocKindNameIsNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameIsNil())
+	}
+	if i.TrustCenterDocKindNameNotNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNotNil())
+	}
+	if i.TrustCenterDocKindNameEqualFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameEqualFold(*i.TrustCenterDocKindNameEqualFold))
+	}
+	if i.TrustCenterDocKindNameContainsFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameContainsFold(*i.TrustCenterDocKindNameContainsFold))
+	}
+	if i.TrustCenterDocKindID != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDEQ(*i.TrustCenterDocKindID))
+	}
+	if i.TrustCenterDocKindIDNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNEQ(*i.TrustCenterDocKindIDNEQ))
+	}
+	if len(i.TrustCenterDocKindIDIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDIn(i.TrustCenterDocKindIDIn...))
+	}
+	if len(i.TrustCenterDocKindIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNotIn(i.TrustCenterDocKindIDNotIn...))
+	}
+	if i.TrustCenterDocKindIDGT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDGT(*i.TrustCenterDocKindIDGT))
+	}
+	if i.TrustCenterDocKindIDGTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDGTE(*i.TrustCenterDocKindIDGTE))
+	}
+	if i.TrustCenterDocKindIDLT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDLT(*i.TrustCenterDocKindIDLT))
+	}
+	if i.TrustCenterDocKindIDLTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDLTE(*i.TrustCenterDocKindIDLTE))
+	}
+	if i.TrustCenterDocKindIDContains != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDContains(*i.TrustCenterDocKindIDContains))
+	}
+	if i.TrustCenterDocKindIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDHasPrefix(*i.TrustCenterDocKindIDHasPrefix))
+	}
+	if i.TrustCenterDocKindIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDHasSuffix(*i.TrustCenterDocKindIDHasSuffix))
+	}
+	if i.TrustCenterDocKindIDIsNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDIsNil())
+	}
+	if i.TrustCenterDocKindIDNotNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNotNil())
+	}
+	if i.TrustCenterDocKindIDEqualFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDEqualFold(*i.TrustCenterDocKindIDEqualFold))
+	}
+	if i.TrustCenterDocKindIDContainsFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDContainsFold(*i.TrustCenterDocKindIDContainsFold))
+	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterdoc.TrustCenterIDEQ(*i.TrustCenterID))
 	}
@@ -71453,45 +71566,6 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.TitleContainsFold(*i.TitleContainsFold))
-	}
-	if i.Category != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryEQ(*i.Category))
-	}
-	if i.CategoryNEQ != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryNEQ(*i.CategoryNEQ))
-	}
-	if len(i.CategoryIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.CategoryIn(i.CategoryIn...))
-	}
-	if len(i.CategoryNotIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.CategoryNotIn(i.CategoryNotIn...))
-	}
-	if i.CategoryGT != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryGT(*i.CategoryGT))
-	}
-	if i.CategoryGTE != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryGTE(*i.CategoryGTE))
-	}
-	if i.CategoryLT != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryLT(*i.CategoryLT))
-	}
-	if i.CategoryLTE != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryLTE(*i.CategoryLTE))
-	}
-	if i.CategoryContains != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryContains(*i.CategoryContains))
-	}
-	if i.CategoryHasPrefix != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryHasPrefix(*i.CategoryHasPrefix))
-	}
-	if i.CategoryHasSuffix != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryHasSuffix(*i.CategoryHasSuffix))
-	}
-	if i.CategoryEqualFold != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryEqualFold(*i.CategoryEqualFold))
-	}
-	if i.CategoryContainsFold != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.FileID != nil {
 		predicates = append(predicates, trustcenterdoc.FileIDEQ(*i.FileID))
@@ -71677,6 +71751,25 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 		predicates = append(predicates, trustcenterdoc.StandardIDContainsFold(*i.StandardIDContainsFold))
 	}
 
+	if i.HasTrustCenterDocKind != nil {
+		p := trustcenterdoc.HasTrustCenterDocKind()
+		if !*i.HasTrustCenterDocKind {
+			p = trustcenterdoc.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterDocKindWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasTrustCenterDocKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterDocKindWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocKindWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterdoc.HasTrustCenterDocKindWith(with...))
+	}
 	if i.HasBlockedGroups != nil {
 		p := trustcenterdoc.HasBlockedGroups()
 		if !*i.HasBlockedGroups {

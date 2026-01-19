@@ -9557,21 +9557,7 @@ input CreateTrustCenterDocInput {
   """
   title: String!
   """
-<<<<<<< HEAD
-  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
-||||||| 33d2778bf
-  category of the document
-  """
-  category: String!
-  """
-  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
-=======
-  category of the document
-  """
-  category: String!
-  """
   whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
->>>>>>> origin/main
   """
   watermarkingEnabled: Boolean
   """
@@ -9582,13 +9568,9 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
-<<<<<<< HEAD
   trustCenterDocKindID: ID
-||||||| 33d2778bf
-=======
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
->>>>>>> origin/main
   trustCenterID: ID
   standardID: ID
   fileID: ID
@@ -47137,10 +47119,7 @@ type TrustCenterDoc implements Node {
   ID of the standard
   """
   standardID: ID
-<<<<<<< HEAD
   trustCenterDocKind: CustomTypeEnum
-||||||| 33d2778bf
-=======
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -47203,7 +47182,6 @@ type TrustCenterDoc implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
->>>>>>> origin/main
   trustCenter: TrustCenter
   standard: Standard
   """
@@ -47516,13 +47494,11 @@ input TrustCenterDocWhereInput {
   standardIDEqualFold: ID
   standardIDContainsFold: ID
   """
-<<<<<<< HEAD
   trust_center_doc_kind edge predicates
   """
   hasTrustCenterDocKind: Boolean
   hasTrustCenterDocKindWith: [CustomTypeEnumWhereInput!]
-||||||| 33d2778bf
-=======
+  """
   blocked_groups edge predicates
   """
   hasBlockedGroups: Boolean
@@ -47532,7 +47508,6 @@ input TrustCenterDocWhereInput {
   """
   hasEditors: Boolean
   hasEditorsWith: [GroupWhereInput!]
->>>>>>> origin/main
   """
   trust_center edge predicates
   """
@@ -54261,21 +54236,7 @@ input UpdateTrustCenterDocInput {
   """
   title: String
   """
-<<<<<<< HEAD
-  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
-||||||| 33d2778bf
-  category of the document
-  """
-  category: String
-  """
-  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
-=======
-  category of the document
-  """
-  category: String
-  """
   whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
->>>>>>> origin/main
   """
   watermarkingEnabled: Boolean
   clearWatermarkingEnabled: Boolean
@@ -54289,22 +54250,14 @@ input UpdateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   clearVisibility: Boolean
-<<<<<<< HEAD
   trustCenterDocKindID: ID
   clearTrustCenterDocKind: Boolean
-  trustCenterID: ID
-  clearTrustCenter: Boolean
-||||||| 33d2778bf
-  trustCenterID: ID
-  clearTrustCenter: Boolean
-=======
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
   addEditorIDs: [ID!]
   removeEditorIDs: [ID!]
   clearEditors: Boolean
->>>>>>> origin/main
   standardID: ID
   clearStandard: Boolean
   fileID: ID

@@ -23853,6 +23853,25 @@ func (c *TrustCenterDocClient) GetX(ctx context.Context, id string) *TrustCenter
 	return obj
 }
 
+// QueryTrustCenterDocKind queries the trust_center_doc_kind edge of a TrustCenterDoc.
+func (c *TrustCenterDocClient) QueryTrustCenterDocKind(_m *TrustCenterDoc) *CustomTypeEnumQuery {
+	query := (&CustomTypeEnumClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
+			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.TrustCenterDocKindTable, trustcenterdoc.TrustCenterDocKindColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomTypeEnum
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryBlockedGroups queries the blocked_groups edge of a TrustCenterDoc.
 func (c *TrustCenterDocClient) QueryBlockedGroups(_m *TrustCenterDoc) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
