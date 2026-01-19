@@ -3,6 +3,8 @@ package jobspec
 import (
 	"time"
 
+	"github.com/riverqueue/river"
+
 	"github.com/theopenlane/core/common/models"
 )
 
@@ -44,3 +46,8 @@ type CreateTaskArgs struct {
 
 // Kind satisfies the river.Job interface
 func (CreateTaskArgs) Kind() string { return "create_task" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (CreateTaskArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueDefault}
+}
