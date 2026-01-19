@@ -18,63 +18,21 @@ import (
 )
 
 // CreateNotification is the resolver for the createNotification field.
+// Notifications can only be created internally by the system, not via GraphQL API
 func (r *mutationResolver) CreateNotification(ctx context.Context, input generated.CreateNotificationInput) (*model.NotificationCreatePayload, error) {
-	// set the organization in the auth context if its not done for us
-	if err := common.SetOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	res, err := withTransactionalMutation(ctx).Notification.Create().SetInput(input).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notification"})
-	}
-
-	return &model.NotificationCreatePayload{
-		Notification: res,
-	}, nil
+	return nil, rout.ErrPermissionDenied
 }
 
 // CreateBulkNotification is the resolver for the createBulkNotification field.
+// Notifications can only be created internally by the system, not via GraphQL API
 func (r *mutationResolver) CreateBulkNotification(ctx context.Context, input []*generated.CreateNotificationInput) (*model.NotificationBulkCreatePayload, error) {
-	if len(input) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		logx.FromContext(ctx).Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateNotification(ctx, input)
+	return nil, rout.ErrPermissionDenied
 }
 
 // CreateBulkCSVNotification is the resolver for the createBulkCSVNotification field.
+// Notifications can only be created internally by the system, not via GraphQL API
 func (r *mutationResolver) CreateBulkCSVNotification(ctx context.Context, input graphql.Upload) (*model.NotificationBulkCreatePayload, error) {
-	data, err := common.UnmarshalBulkData[generated.CreateNotificationInput](input)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
-
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "notification"})
-	}
-
-	if len(data) == 0 {
-		return nil, rout.NewMissingRequiredFieldError("input")
-	}
-
-	// set the organization in the auth context if its not done for us
-	// this will choose the first input OwnerID when using a personal access token
-	if err := common.SetOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.NewMissingRequiredFieldError("owner_id")
-	}
-
-	return r.bulkCreateNotification(ctx, data)
+	return nil, rout.ErrPermissionDenied
 }
 
 // UpdateNotification is the resolver for the updateNotification field.
@@ -105,18 +63,9 @@ func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, in
 }
 
 // DeleteNotification is the resolver for the deleteNotification field.
+// Notifications can only be deleted internally by the system, not via GraphQL API
 func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*model.NotificationDeletePayload, error) {
-	if err := withTransactionalMutation(ctx).Notification.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "notification"})
-	}
-
-	if err := generated.NotificationEdgeCleanup(ctx, id); err != nil {
-		return nil, common.NewCascadeDeleteError(ctx, err)
-	}
-
-	return &model.NotificationDeletePayload{
-		DeletedID: id,
-	}, nil
+	return nil, rout.ErrPermissionDenied
 }
 
 // Notification is the resolver for the notification field.

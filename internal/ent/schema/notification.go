@@ -45,27 +45,33 @@ func (Notification) Fields() []ent.Field {
 		field.String("user_id").
 			Comment("the user this notification is for").
 			Optional().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 
 		field.Enum("notification_type").
 			Comment("the type of notification - organization or user").
 			GoType(enums.NotificationType("")).
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("object_type").
 			Comment("the event type this notification is related to (e.g., task.created, control.updated)").
 			NotEmpty().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("title").
 			Comment("the title of the notification").
 			NotEmpty().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Text("body").
 			Comment("the body text of the notification").
 			NotEmpty().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.JSON("data", map[string]interface{}{}).
 			Comment("structured payload containing IDs, links, and other notification data").
 			Optional().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.Time("read_at").
 			Comment("the time the notification was read").
@@ -76,10 +82,12 @@ func (Notification) Fields() []ent.Field {
 		field.JSON("channels", []enums.Channel{}).
 			Comment("the channels this notification should be sent to (IN_APP, SLACK, EMAIL)").
 			Optional().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 		field.String("topic").
 			Comment("the topic of the notification").
 			Optional().
+			Immutable().
 			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
 	}
 }
@@ -117,6 +125,7 @@ func (n Notification) Edges() []ent.Edge {
 			fromSchema: n,
 			edgeSchema: User{},
 			field:      "user_id",
+			immutable:  true,
 			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
 			},
@@ -151,7 +160,7 @@ func (Notification) Annotations() []schema.Annotation {
 		// skip query gen, this is used for subscriptions only
 		// entx.QueryGenSkip(true),
 		entgql.Skip(entgql.SkipWhereInput | entgql.SkipOrderField),
-		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()), // only allow creation via mutations, updates are not supported
+		entgql.Mutations(entgql.MutationCreate(), entgql.MutationUpdate()), // generate input types, but we'll skip the create resolver
 	}
 }
 
