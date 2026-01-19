@@ -9,13 +9,12 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
