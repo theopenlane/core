@@ -208,7 +208,7 @@ var (
 	SubscriptionLifetime = prometheus.NewHistogram(prometheus.HistogramOpts{
 		Name:    "openlane_subscription_lifetime_seconds",
 		Help:    "Lifetime of subscriptions in seconds",
-		Buckets: prometheus.ExponentialBuckets(10, 2, 10), // 10s to ~3 hours
+		Buckets: prometheus.ExponentialBuckets(10, 2, 10), //nolint:mnd
 	})
 
 	// APIMetrics is the list of all API metrics collectors for the main server
