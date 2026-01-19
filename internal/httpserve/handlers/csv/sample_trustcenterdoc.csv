@@ -1,2 +1,10 @@
+<<<<<<< HEAD
 Tags,TrustCenterDocKindName,Title,WatermarkingEnabled,WatermarkStatus,Visibility,TrustCenterDocKindId,TrustCenterId,StandardId,FileId,OriginalFileId
 example_tags,example_trustcenterdockindname,example_title,example_watermarkingenabled,example_watermarkstatus,example_visibility,example_trustcenterdockindid,example_trustcenterid,example_standardid,example_fileid,example_originalfileid
+||||||| 33d2778bf
+Tags,Title,Category,WatermarkingEnabled,WatermarkStatus,Visibility,TrustCenterId,StandardId,FileId,OriginalFileId
+example_tags,example_title,example_category,example_watermarkingenabled,example_watermarkstatus,example_visibility,example_trustcenterid,example_standardid,example_fileid,example_originalfileid
+=======
+Tags,Title,Category,WatermarkingEnabled,WatermarkStatus,Visibility,BlockedGroupIDs,EditorIDs,TrustCenterId,StandardId,FileId,OriginalFileId
+example_tags,example_title,example_category,example_watermarkingenabled,example_watermarkstatus,example_visibility,example_blockedgroupids,example_editorids,example_trustcenterid,example_standardid,example_fileid,example_originalfileid
+>>>>>>> origin/main

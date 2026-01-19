@@ -71,28 +71,40 @@ type TrustCenterSetting struct {
 
 // TrustCenterSettingEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterSettingEdges struct {
-	// Files holds the value of the files edge.
-	Files []*File `json:"files,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
 	// FaviconFile holds the value of the favicon_file edge.
 	FaviconFile *File `json:"favicon_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
-	namedFiles map[string][]*File
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
 }
 
-// FilesOrErr returns the Files value or an error if the edge
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
-func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
+func (e TrustCenterSettingEdges) BlockedGroupsOrErr() ([]*Group, error) {
 	if e.loadedTypes[0] {
-		return e.Files, nil
+		return e.BlockedGroups, nil
 	}
-	return nil, &NotLoadedError{edge: "files"}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterSettingEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
 }
 
 // LogoFileOrErr returns the LogoFile value or an error if the edge
@@ -100,7 +112,7 @@ func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
 func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -111,7 +123,7 @@ func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 func (e TrustCenterSettingEdges) FaviconFileOrErr() (*File, error) {
 	if e.FaviconFile != nil {
 		return e.FaviconFile, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "favicon_file"}
@@ -296,9 +308,14 @@ func (_m *TrustCenterSetting) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// QueryFiles queries the "files" edge of the TrustCenterSetting entity.
-func (_m *TrustCenterSetting) QueryFiles() *FileQuery {
-	return NewTrustCenterSettingClient(_m.config).QueryFiles(_m)
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterSetting entity.
+func (_m *TrustCenterSetting) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenterSetting entity.
+func (_m *TrustCenterSetting) QueryEditors() *GroupQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryEditors(_m)
 }
 
 // QueryLogoFile queries the "logo_file" edge of the TrustCenterSetting entity.
@@ -411,27 +428,51 @@ func (_m *TrustCenterSetting) String() string {
 	return builder.String()
 }
 
-// NamedFiles returns the Files named value or an error if the edge was not
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *TrustCenterSetting) NamedFiles(name string) ([]*File, error) {
-	if _m.Edges.namedFiles == nil {
+func (_m *TrustCenterSetting) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *TrustCenterSetting) appendNamedFiles(name string, edges ...*File) {
-	if _m.Edges.namedFiles == nil {
-		_m.Edges.namedFiles = make(map[string][]*File)
+func (_m *TrustCenterSetting) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterSetting) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterSetting) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 

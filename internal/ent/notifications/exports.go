@@ -2,6 +2,7 @@ package notifications
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/events"
@@ -224,12 +225,13 @@ func addExportNotification(ctx *soiree.EventContext, input *exportFields) error 
 
 	var title, body string
 
+	et := strings.ReplaceAll(strings.ToLower(input.exportType.String()), "_", " ")
 	if input.status == enums.ExportStatusReady {
 		title = "Export Complete"
-		body = fmt.Sprintf("Export of %s is ready for download", input.exportType)
+		body = fmt.Sprintf("Export of %s is ready for download", et)
 	} else {
 		title = "Export Failed"
-		body = fmt.Sprintf("Export of %s completed with errors", input.exportType)
+		body = fmt.Sprintf("Export of %s completed with errors", et)
 
 		if input.errorMessage != "" {
 			dataMap["errors"] = input.errorMessage

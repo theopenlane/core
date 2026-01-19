@@ -2210,6 +2210,33 @@ func (f TraverseTrustCenterDoc) Traverse(ctx context.Context, q generated.Query)
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterDocQuery", q)
 }
 
+// The TrustCenterEntityFunc type is an adapter to allow the use of ordinary function as a Querier.
+type TrustCenterEntityFunc func(context.Context, *generated.TrustCenterEntityQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f TrustCenterEntityFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.TrustCenterEntityQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterEntityQuery", q)
+}
+
+// The TraverseTrustCenterEntity type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseTrustCenterEntity func(context.Context, *generated.TrustCenterEntityQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseTrustCenterEntity) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseTrustCenterEntity) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterEntityQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterEntityQuery", q)
+}
+
 // The TrustCenterSettingFunc type is an adapter to allow the use of ordinary function as a Querier.
 type TrustCenterSettingFunc func(context.Context, *generated.TrustCenterSettingQuery) (generated.Value, error)
 
@@ -2289,33 +2316,6 @@ func (f TraverseTrustCenterWatermarkConfig) Traverse(ctx context.Context, q gene
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.TrustCenterWatermarkConfigQuery", q)
-}
-
-// The TrustcenterEntityFunc type is an adapter to allow the use of ordinary function as a Querier.
-type TrustcenterEntityFunc func(context.Context, *generated.TrustcenterEntityQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f TrustcenterEntityFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.TrustcenterEntityQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.TrustcenterEntityQuery", q)
-}
-
-// The TraverseTrustcenterEntity type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseTrustcenterEntity func(context.Context, *generated.TrustcenterEntityQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseTrustcenterEntity) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseTrustcenterEntity) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.TrustcenterEntityQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.TrustcenterEntityQuery", q)
 }
 
 // The UserFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2770,14 +2770,14 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.TrustCenterComplianceQuery, predicate.TrustCenterCompliance, trustcentercompliance.OrderOption]{typ: generated.TypeTrustCenterCompliance, tq: q}, nil
 	case *generated.TrustCenterDocQuery:
 		return &query[*generated.TrustCenterDocQuery, predicate.TrustCenterDoc, trustcenterdoc.OrderOption]{typ: generated.TypeTrustCenterDoc, tq: q}, nil
+	case *generated.TrustCenterEntityQuery:
+		return &query[*generated.TrustCenterEntityQuery, predicate.TrustCenterEntity, trustcenterentity.OrderOption]{typ: generated.TypeTrustCenterEntity, tq: q}, nil
 	case *generated.TrustCenterSettingQuery:
 		return &query[*generated.TrustCenterSettingQuery, predicate.TrustCenterSetting, trustcentersetting.OrderOption]{typ: generated.TypeTrustCenterSetting, tq: q}, nil
 	case *generated.TrustCenterSubprocessorQuery:
 		return &query[*generated.TrustCenterSubprocessorQuery, predicate.TrustCenterSubprocessor, trustcentersubprocessor.OrderOption]{typ: generated.TypeTrustCenterSubprocessor, tq: q}, nil
 	case *generated.TrustCenterWatermarkConfigQuery:
 		return &query[*generated.TrustCenterWatermarkConfigQuery, predicate.TrustCenterWatermarkConfig, trustcenterwatermarkconfig.OrderOption]{typ: generated.TypeTrustCenterWatermarkConfig, tq: q}, nil
-	case *generated.TrustcenterEntityQuery:
-		return &query[*generated.TrustcenterEntityQuery, predicate.TrustcenterEntity, trustcenterentity.OrderOption]{typ: generated.TypeTrustcenterEntity, tq: q}, nil
 	case *generated.UserQuery:
 		return &query[*generated.UserQuery, predicate.User, user.OrderOption]{typ: generated.TypeUser, tq: q}, nil
 	case *generated.UserSettingQuery:

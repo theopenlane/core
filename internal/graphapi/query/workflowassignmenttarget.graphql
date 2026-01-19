@@ -1,70 +1,3 @@
-
-mutation CreateBulkCSVWorkflowAssignmentTarget($input: Upload!) {
-  createBulkCSVWorkflowAssignmentTarget(input: $input) {
-    workflowAssignmentTargets {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      resolverKey
-      tags
-      targetGroupID
-      targetType
-      targetUserID
-      updatedAt
-      updatedBy
-      workflowAssignmentID
-    }
-  }
-}
-
-mutation CreateBulkWorkflowAssignmentTarget($input: [CreateWorkflowAssignmentTargetInput!]) {
-  createBulkWorkflowAssignmentTarget(input: $input) {
-    workflowAssignmentTargets {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      resolverKey
-      tags
-      targetGroupID
-      targetType
-      targetUserID
-      updatedAt
-      updatedBy
-      workflowAssignmentID
-    }
-  }
-}
-
-mutation CreateWorkflowAssignmentTarget($input: CreateWorkflowAssignmentTargetInput!) {
-  createWorkflowAssignmentTarget(input: $input) {
-    workflowAssignmentTarget {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      resolverKey
-      tags
-      targetGroupID
-      targetType
-      targetUserID
-      updatedAt
-      updatedBy
-      workflowAssignmentID
-    }
-  }
-}
-
-mutation DeleteWorkflowAssignmentTarget($deleteWorkflowAssignmentTargetId: ID!) {
-  deleteWorkflowAssignmentTarget(id: $deleteWorkflowAssignmentTargetId) {
-    deletedID
-  }
-}
-
 query GetAllWorkflowAssignmentTargets {
   workflowAssignmentTargets {
     totalCount
@@ -136,25 +69,6 @@ query GetWorkflowAssignmentTargets($first: Int, $last: Int, $where: WorkflowAssi
         updatedBy
         workflowAssignmentID
       }
-    }
-  }
-}
-mutation UpdateWorkflowAssignmentTarget($updateWorkflowAssignmentTargetId: ID!, $input: UpdateWorkflowAssignmentTargetInput!) {
-  updateWorkflowAssignmentTarget(id: $updateWorkflowAssignmentTargetId, input: $input) {
-    workflowAssignmentTarget {
-      createdAt
-      createdBy
-      displayID
-      id
-      ownerID
-      resolverKey
-      tags
-      targetGroupID
-      targetType
-      targetUserID
-      updatedAt
-      updatedBy
-      workflowAssignmentID
     }
   }
 }

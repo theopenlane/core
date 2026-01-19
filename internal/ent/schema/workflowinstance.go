@@ -198,6 +198,7 @@ func (WorkflowInstance) Modules() []models.OrgModule {
 func (WorkflowInstance) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 	}
 }
 

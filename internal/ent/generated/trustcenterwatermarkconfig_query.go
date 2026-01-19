@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -26,16 +27,20 @@ import (
 // TrustCenterWatermarkConfigQuery is the builder for querying TrustCenterWatermarkConfig entities.
 type TrustCenterWatermarkConfigQuery struct {
 	config
-	ctx                  *QueryContext
-	order                []trustcenterwatermarkconfig.OrderOption
-	inters               []Interceptor
-	predicates           []predicate.TrustCenterWatermarkConfig
-	withOwner            *OrganizationQuery
-	withTrustCenter      *TrustCenterQuery
-	withFile             *FileQuery
-	loadTotal            []func(context.Context, []*TrustCenterWatermarkConfig) error
-	modifiers            []func(*sql.Selector)
-	withNamedTrustCenter map[string]*TrustCenterQuery
+	ctx                    *QueryContext
+	order                  []trustcenterwatermarkconfig.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.TrustCenterWatermarkConfig
+	withOwner              *OrganizationQuery
+	withBlockedGroups      *GroupQuery
+	withEditors            *GroupQuery
+	withTrustCenter        *TrustCenterQuery
+	withFile               *FileQuery
+	loadTotal              []func(context.Context, []*TrustCenterWatermarkConfig) error
+	modifiers              []func(*sql.Selector)
+	withNamedBlockedGroups map[string]*GroupQuery
+	withNamedEditors       map[string]*GroupQuery
+	withNamedTrustCenter   map[string]*TrustCenterQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -91,6 +96,56 @@ func (_q *TrustCenterWatermarkConfigQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (_q *TrustCenterWatermarkConfigQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterwatermarkconfig.BlockedGroupsTable, trustcenterwatermarkconfig.BlockedGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (_q *TrustCenterWatermarkConfigQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterwatermarkconfig.EditorsTable, trustcenterwatermarkconfig.EditorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -334,14 +389,16 @@ func (_q *TrustCenterWatermarkConfigQuery) Clone() *TrustCenterWatermarkConfigQu
 		return nil
 	}
 	return &TrustCenterWatermarkConfigQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]trustcenterwatermarkconfig.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.TrustCenterWatermarkConfig{}, _q.predicates...),
-		withOwner:       _q.withOwner.Clone(),
-		withTrustCenter: _q.withTrustCenter.Clone(),
-		withFile:        _q.withFile.Clone(),
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]trustcenterwatermarkconfig.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.TrustCenterWatermarkConfig{}, _q.predicates...),
+		withOwner:         _q.withOwner.Clone(),
+		withBlockedGroups: _q.withBlockedGroups.Clone(),
+		withEditors:       _q.withEditors.Clone(),
+		withTrustCenter:   _q.withTrustCenter.Clone(),
+		withFile:          _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -357,6 +414,28 @@ func (_q *TrustCenterWatermarkConfigQuery) WithOwner(opts ...func(*OrganizationQ
 		opt(query)
 	}
 	_q.withOwner = query
+	return _q
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterWatermarkConfigQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *TrustCenterWatermarkConfigQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBlockedGroups = query
+	return _q
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterWatermarkConfigQuery) WithEditors(opts ...func(*GroupQuery)) *TrustCenterWatermarkConfigQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEditors = query
 	return _q
 }
 
@@ -466,8 +545,10 @@ func (_q *TrustCenterWatermarkConfigQuery) sqlAll(ctx context.Context, hooks ...
 	var (
 		nodes       = []*TrustCenterWatermarkConfig{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
 			_q.withOwner != nil,
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
 			_q.withTrustCenter != nil,
 			_q.withFile != nil,
 		}
@@ -501,6 +582,22 @@ func (_q *TrustCenterWatermarkConfigQuery) sqlAll(ctx context.Context, hooks ...
 			return nil, err
 		}
 	}
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterWatermarkConfig) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *TrustCenterWatermarkConfig, e *Group) {
+				n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterWatermarkConfig) { n.Edges.Editors = []*Group{} },
+			func(n *TrustCenterWatermarkConfig, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withTrustCenter; query != nil {
 		if err := _q.loadTrustCenter(ctx, query, nodes,
 			func(n *TrustCenterWatermarkConfig) { n.Edges.TrustCenter = []*TrustCenter{} },
@@ -513,6 +610,20 @@ func (_q *TrustCenterWatermarkConfigQuery) sqlAll(ctx context.Context, hooks ...
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *TrustCenterWatermarkConfig, e *File) { n.Edges.File = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterWatermarkConfig) { n.appendNamedBlockedGroups(name) },
+			func(n *TrustCenterWatermarkConfig, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterWatermarkConfig) { n.appendNamedEditors(name) },
+			func(n *TrustCenterWatermarkConfig, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -557,6 +668,68 @@ func (_q *TrustCenterWatermarkConfigQuery) loadOwner(ctx context.Context, query 
 		for i := range nodes {
 			assign(nodes[i], n)
 		}
+	}
+	return nil
+}
+func (_q *TrustCenterWatermarkConfigQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*TrustCenterWatermarkConfig, init func(*TrustCenterWatermarkConfig), assign func(*TrustCenterWatermarkConfig, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterWatermarkConfig)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenterwatermarkconfig.BlockedGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_watermark_config_blocked_groups
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_watermark_config_blocked_groups" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_watermark_config_blocked_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterWatermarkConfigQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*TrustCenterWatermarkConfig, init func(*TrustCenterWatermarkConfig), assign func(*TrustCenterWatermarkConfig, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterWatermarkConfig)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenterwatermarkconfig.EditorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_watermark_config_editors
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_watermark_config_editors" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_watermark_config_editors" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
 	}
 	return nil
 }
@@ -726,6 +899,34 @@ func (_q *TrustCenterWatermarkConfigQuery) sqlQuery(ctx context.Context) *sql.Se
 func (_q *TrustCenterWatermarkConfigQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterWatermarkConfigSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterWatermarkConfigQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *TrustCenterWatermarkConfigQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	_q.withNamedBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterWatermarkConfigQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *TrustCenterWatermarkConfigQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedTrustCenter tells the query-builder to eager-load the nodes that are connected to the "trust_center"

@@ -14,7 +14,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -133,6 +135,7 @@ func (t TrustCenterSetting) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterSetting](t,
 				withParents(TrustCenter{}),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -140,18 +143,23 @@ func (t TrustCenterSetting) Mixin() []ent.Mixin {
 // Edges of the TrustCenterSetting
 func (t TrustCenterSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(t, File{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
 			name:       "logo_file",
 			t:          File.Type,
 			field:      "logo_local_file_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(File{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
 			name:       "favicon_file",
 			t:          File.Type,
 			field:      "favicon_local_file_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(File{}.Name()),
+			},
 		}),
 	}
 }
@@ -175,6 +183,7 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
@@ -199,6 +208,5 @@ func (TrustCenterSetting) Modules() []models.OrgModule {
 func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
-		entfga.SelfAccessChecks(),
 	}
 }

@@ -115,7 +115,7 @@ func (m MappedControl) Edges() []ent.Edge {
 func (m MappedControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newOrgOwnedMixin(m),
 			// add group edit permissions to the mapped control
 			newGroupPermissionsMixin(withSkipViewPermissions()),

@@ -1673,27 +1673,56 @@ func EnvironmentNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldEnvironment))
 }
 
-// HasFiles applies the HasEdge predicate on the "files" edge.
-func HasFiles() predicate.TrustCenterSetting {
+// HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.
+func HasBlockedGroups() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
-func HasFilesWith(preds ...predicate.File) predicate.TrustCenterSetting {
+// HasBlockedGroupsWith applies the HasEdge predicate on the "blocked_groups" edge with a given conditions (other predicates).
+func HasBlockedGroupsWith(preds ...predicate.Group) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(func(s *sql.Selector) {
-		step := newFilesStep()
+		step := newBlockedGroupsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEditors applies the HasEdge predicate on the "editors" edge.
+func HasEditors() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEditorsWith applies the HasEdge predicate on the "editors" edge with a given conditions (other predicates).
+func HasEditorsWith(preds ...predicate.Group) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(func(s *sql.Selector) {
+		step := newEditorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

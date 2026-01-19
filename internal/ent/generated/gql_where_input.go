@@ -24116,10 +24116,6 @@ type FileWhereInput struct {
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 
-	// "trust_center_setting" edge predicates.
-	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
-	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
-
 	// "integrations" edge predicates.
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -24128,9 +24124,17 @@ type FileWhereInput struct {
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 
-	// "trustcenter_entities" edge predicates.
-	HasTrustcenterEntities     *bool                          `json:"hasTrustcenterEntities,omitempty"`
-	HasTrustcenterEntitiesWith []*TrustcenterEntityWhereInput `json:"hasTrustcenterEntitiesWith,omitempty"`
+	// "trust_center_entities" edge predicates.
+	HasTrustCenterEntities     *bool                          `json:"hasTrustCenterEntities,omitempty"`
+	HasTrustCenterEntitiesWith []*TrustCenterEntityWhereInput `json:"hasTrustCenterEntitiesWith,omitempty"`
+
+	// "trust_center_doc" edge predicates.
+	HasTrustCenterDoc     *bool                       `json:"hasTrustCenterDoc,omitempty"`
+	HasTrustCenterDocWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocWith,omitempty"`
+
+	// "original_trust_center_doc" edge predicates.
+	HasOriginalTrustCenterDoc     *bool                       `json:"hasOriginalTrustCenterDoc,omitempty"`
+	HasOriginalTrustCenterDocWith []*TrustCenterDocWhereInput `json:"hasOriginalTrustCenterDocWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -25333,25 +25337,6 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasEventsWith(with...))
 	}
-	if i.HasTrustCenterSetting != nil {
-		p := file.HasTrustCenterSetting()
-		if !*i.HasTrustCenterSetting {
-			p = file.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterSettingWith) > 0 {
-		with := make([]predicate.TrustCenterSetting, 0, len(i.HasTrustCenterSettingWith))
-		with = append(with, trustcentersetting.DeletedAtIsNil())
-		for _, w := range i.HasTrustCenterSettingWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterSettingWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, file.HasTrustCenterSettingWith(with...))
-	}
 	if i.HasIntegrations != nil {
 		p := file.HasIntegrations()
 		if !*i.HasIntegrations {
@@ -25390,24 +25375,62 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasSecretsWith(with...))
 	}
-	if i.HasTrustcenterEntities != nil {
-		p := file.HasTrustcenterEntities()
-		if !*i.HasTrustcenterEntities {
+	if i.HasTrustCenterEntities != nil {
+		p := file.HasTrustCenterEntities()
+		if !*i.HasTrustCenterEntities {
 			p = file.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasTrustcenterEntitiesWith) > 0 {
-		with := make([]predicate.TrustcenterEntity, 0, len(i.HasTrustcenterEntitiesWith))
+	if len(i.HasTrustCenterEntitiesWith) > 0 {
+		with := make([]predicate.TrustCenterEntity, 0, len(i.HasTrustCenterEntitiesWith))
 		with = append(with, trustcenterentity.DeletedAtIsNil())
-		for _, w := range i.HasTrustcenterEntitiesWith {
+		for _, w := range i.HasTrustCenterEntitiesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustcenterEntitiesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterEntitiesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, file.HasTrustcenterEntitiesWith(with...))
+		predicates = append(predicates, file.HasTrustCenterEntitiesWith(with...))
+	}
+	if i.HasTrustCenterDoc != nil {
+		p := file.HasTrustCenterDoc()
+		if !*i.HasTrustCenterDoc {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterDocWith) > 0 {
+		with := make([]predicate.TrustCenterDoc, 0, len(i.HasTrustCenterDocWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterDocWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasTrustCenterDocWith(with...))
+	}
+	if i.HasOriginalTrustCenterDoc != nil {
+		p := file.HasOriginalTrustCenterDoc()
+		if !*i.HasOriginalTrustCenterDoc {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOriginalTrustCenterDocWith) > 0 {
+		with := make([]predicate.TrustCenterDoc, 0, len(i.HasOriginalTrustCenterDocWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
+		for _, w := range i.HasOriginalTrustCenterDocWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOriginalTrustCenterDocWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasOriginalTrustCenterDocWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -69412,6 +69435,14 @@ type TrustCenterWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
 	// "custom_domain" edge predicates.
 	HasCustomDomain     *bool                     `json:"hasCustomDomain,omitempty"`
 	HasCustomDomainWith []*CustomDomainWhereInput `json:"hasCustomDomainWith,omitempty"`
@@ -69452,9 +69483,9 @@ type TrustCenterWhereInput struct {
 	HasPosts     *bool             `json:"hasPosts,omitempty"`
 	HasPostsWith []*NoteWhereInput `json:"hasPostsWith,omitempty"`
 
-	// "trustcenter_entities" edge predicates.
-	HasTrustcenterEntities     *bool                          `json:"hasTrustcenterEntities,omitempty"`
-	HasTrustcenterEntitiesWith []*TrustcenterEntityWhereInput `json:"hasTrustcenterEntitiesWith,omitempty"`
+	// "trust_center_entities" edge predicates.
+	HasTrustCenterEntities     *bool                          `json:"hasTrustCenterEntities,omitempty"`
+	HasTrustCenterEntitiesWith []*TrustCenterEntityWhereInput `json:"hasTrustCenterEntitiesWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -70061,6 +70092,44 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 		}
 		predicates = append(predicates, trustcenter.HasOwnerWith(with...))
 	}
+	if i.HasBlockedGroups != nil {
+		p := trustcenter.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenter.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasEditorsWith(with...))
+	}
 	if i.HasCustomDomain != nil {
 		p := trustcenter.HasCustomDomain()
 		if !*i.HasCustomDomain {
@@ -70251,24 +70320,24 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 		}
 		predicates = append(predicates, trustcenter.HasPostsWith(with...))
 	}
-	if i.HasTrustcenterEntities != nil {
-		p := trustcenter.HasTrustcenterEntities()
-		if !*i.HasTrustcenterEntities {
+	if i.HasTrustCenterEntities != nil {
+		p := trustcenter.HasTrustCenterEntities()
+		if !*i.HasTrustCenterEntities {
 			p = trustcenter.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasTrustcenterEntitiesWith) > 0 {
-		with := make([]predicate.TrustcenterEntity, 0, len(i.HasTrustcenterEntitiesWith))
+	if len(i.HasTrustCenterEntitiesWith) > 0 {
+		with := make([]predicate.TrustCenterEntity, 0, len(i.HasTrustCenterEntitiesWith))
 		with = append(with, trustcenterentity.DeletedAtIsNil())
-		for _, w := range i.HasTrustcenterEntitiesWith {
+		for _, w := range i.HasTrustCenterEntitiesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustcenterEntitiesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterEntitiesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, trustcenter.HasTrustcenterEntitiesWith(with...))
+		predicates = append(predicates, trustcenter.HasTrustCenterEntitiesWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -70388,6 +70457,14 @@ type TrustCenterComplianceWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -70734,6 +70811,44 @@ func (i *TrustCenterComplianceWhereInput) P() (predicate.TrustCenterCompliance, 
 		predicates = append(predicates, trustcentercompliance.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.HasBlockedGroups != nil {
+		p := trustcentercompliance.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcentercompliance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentercompliance.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcentercompliance.HasEditors()
+		if !*i.HasEditors {
+			p = trustcentercompliance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentercompliance.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcentercompliance.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -70859,40 +70974,6 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
-	// "trust_center_doc_kind_name" field predicates.
-	TrustCenterDocKindName             *string  `json:"trustCenterDocKindName,omitempty"`
-	TrustCenterDocKindNameNEQ          *string  `json:"trustCenterDocKindNameNEQ,omitempty"`
-	TrustCenterDocKindNameIn           []string `json:"trustCenterDocKindNameIn,omitempty"`
-	TrustCenterDocKindNameNotIn        []string `json:"trustCenterDocKindNameNotIn,omitempty"`
-	TrustCenterDocKindNameGT           *string  `json:"trustCenterDocKindNameGT,omitempty"`
-	TrustCenterDocKindNameGTE          *string  `json:"trustCenterDocKindNameGTE,omitempty"`
-	TrustCenterDocKindNameLT           *string  `json:"trustCenterDocKindNameLT,omitempty"`
-	TrustCenterDocKindNameLTE          *string  `json:"trustCenterDocKindNameLTE,omitempty"`
-	TrustCenterDocKindNameContains     *string  `json:"trustCenterDocKindNameContains,omitempty"`
-	TrustCenterDocKindNameHasPrefix    *string  `json:"trustCenterDocKindNameHasPrefix,omitempty"`
-	TrustCenterDocKindNameHasSuffix    *string  `json:"trustCenterDocKindNameHasSuffix,omitempty"`
-	TrustCenterDocKindNameIsNil        bool     `json:"trustCenterDocKindNameIsNil,omitempty"`
-	TrustCenterDocKindNameNotNil       bool     `json:"trustCenterDocKindNameNotNil,omitempty"`
-	TrustCenterDocKindNameEqualFold    *string  `json:"trustCenterDocKindNameEqualFold,omitempty"`
-	TrustCenterDocKindNameContainsFold *string  `json:"trustCenterDocKindNameContainsFold,omitempty"`
-
-	// "trust_center_doc_kind_id" field predicates.
-	TrustCenterDocKindID             *string  `json:"trustCenterDocKindID,omitempty"`
-	TrustCenterDocKindIDNEQ          *string  `json:"trustCenterDocKindIDNEQ,omitempty"`
-	TrustCenterDocKindIDIn           []string `json:"trustCenterDocKindIDIn,omitempty"`
-	TrustCenterDocKindIDNotIn        []string `json:"trustCenterDocKindIDNotIn,omitempty"`
-	TrustCenterDocKindIDGT           *string  `json:"trustCenterDocKindIDGT,omitempty"`
-	TrustCenterDocKindIDGTE          *string  `json:"trustCenterDocKindIDGTE,omitempty"`
-	TrustCenterDocKindIDLT           *string  `json:"trustCenterDocKindIDLT,omitempty"`
-	TrustCenterDocKindIDLTE          *string  `json:"trustCenterDocKindIDLTE,omitempty"`
-	TrustCenterDocKindIDContains     *string  `json:"trustCenterDocKindIDContains,omitempty"`
-	TrustCenterDocKindIDHasPrefix    *string  `json:"trustCenterDocKindIDHasPrefix,omitempty"`
-	TrustCenterDocKindIDHasSuffix    *string  `json:"trustCenterDocKindIDHasSuffix,omitempty"`
-	TrustCenterDocKindIDIsNil        bool     `json:"trustCenterDocKindIDIsNil,omitempty"`
-	TrustCenterDocKindIDNotNil       bool     `json:"trustCenterDocKindIDNotNil,omitempty"`
-	TrustCenterDocKindIDEqualFold    *string  `json:"trustCenterDocKindIDEqualFold,omitempty"`
-	TrustCenterDocKindIDContainsFold *string  `json:"trustCenterDocKindIDContainsFold,omitempty"`
-
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -70924,6 +71005,21 @@ type TrustCenterDocWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+
+	// "category" field predicates.
+	Category             *string  `json:"category,omitempty"`
+	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
+	CategoryIn           []string `json:"categoryIn,omitempty"`
+	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
+	CategoryGT           *string  `json:"categoryGT,omitempty"`
+	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
+	CategoryLT           *string  `json:"categoryLT,omitempty"`
+	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
+	CategoryContains     *string  `json:"categoryContains,omitempty"`
+	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
+	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
+	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
+	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "file_id" field predicates.
 	FileID             *string  `json:"fileID,omitempty"`
@@ -70998,9 +71094,13 @@ type TrustCenterDocWhereInput struct {
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
 
-	// "trust_center_doc_kind" edge predicates.
-	HasTrustCenterDocKind     *bool                       `json:"hasTrustCenterDocKind,omitempty"`
-	HasTrustCenterDocKindWith []*CustomTypeEnumWhereInput `json:"hasTrustCenterDocKindWith,omitempty"`
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -71270,96 +71370,6 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
-	if i.TrustCenterDocKindName != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameEQ(*i.TrustCenterDocKindName))
-	}
-	if i.TrustCenterDocKindNameNEQ != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNEQ(*i.TrustCenterDocKindNameNEQ))
-	}
-	if len(i.TrustCenterDocKindNameIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameIn(i.TrustCenterDocKindNameIn...))
-	}
-	if len(i.TrustCenterDocKindNameNotIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNotIn(i.TrustCenterDocKindNameNotIn...))
-	}
-	if i.TrustCenterDocKindNameGT != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameGT(*i.TrustCenterDocKindNameGT))
-	}
-	if i.TrustCenterDocKindNameGTE != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameGTE(*i.TrustCenterDocKindNameGTE))
-	}
-	if i.TrustCenterDocKindNameLT != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameLT(*i.TrustCenterDocKindNameLT))
-	}
-	if i.TrustCenterDocKindNameLTE != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameLTE(*i.TrustCenterDocKindNameLTE))
-	}
-	if i.TrustCenterDocKindNameContains != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameContains(*i.TrustCenterDocKindNameContains))
-	}
-	if i.TrustCenterDocKindNameHasPrefix != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameHasPrefix(*i.TrustCenterDocKindNameHasPrefix))
-	}
-	if i.TrustCenterDocKindNameHasSuffix != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameHasSuffix(*i.TrustCenterDocKindNameHasSuffix))
-	}
-	if i.TrustCenterDocKindNameIsNil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameIsNil())
-	}
-	if i.TrustCenterDocKindNameNotNil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNotNil())
-	}
-	if i.TrustCenterDocKindNameEqualFold != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameEqualFold(*i.TrustCenterDocKindNameEqualFold))
-	}
-	if i.TrustCenterDocKindNameContainsFold != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameContainsFold(*i.TrustCenterDocKindNameContainsFold))
-	}
-	if i.TrustCenterDocKindID != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDEQ(*i.TrustCenterDocKindID))
-	}
-	if i.TrustCenterDocKindIDNEQ != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNEQ(*i.TrustCenterDocKindIDNEQ))
-	}
-	if len(i.TrustCenterDocKindIDIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDIn(i.TrustCenterDocKindIDIn...))
-	}
-	if len(i.TrustCenterDocKindIDNotIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNotIn(i.TrustCenterDocKindIDNotIn...))
-	}
-	if i.TrustCenterDocKindIDGT != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDGT(*i.TrustCenterDocKindIDGT))
-	}
-	if i.TrustCenterDocKindIDGTE != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDGTE(*i.TrustCenterDocKindIDGTE))
-	}
-	if i.TrustCenterDocKindIDLT != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDLT(*i.TrustCenterDocKindIDLT))
-	}
-	if i.TrustCenterDocKindIDLTE != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDLTE(*i.TrustCenterDocKindIDLTE))
-	}
-	if i.TrustCenterDocKindIDContains != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDContains(*i.TrustCenterDocKindIDContains))
-	}
-	if i.TrustCenterDocKindIDHasPrefix != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDHasPrefix(*i.TrustCenterDocKindIDHasPrefix))
-	}
-	if i.TrustCenterDocKindIDHasSuffix != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDHasSuffix(*i.TrustCenterDocKindIDHasSuffix))
-	}
-	if i.TrustCenterDocKindIDIsNil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDIsNil())
-	}
-	if i.TrustCenterDocKindIDNotNil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNotNil())
-	}
-	if i.TrustCenterDocKindIDEqualFold != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDEqualFold(*i.TrustCenterDocKindIDEqualFold))
-	}
-	if i.TrustCenterDocKindIDContainsFold != nil {
-		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDContainsFold(*i.TrustCenterDocKindIDContainsFold))
-	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterdoc.TrustCenterIDEQ(*i.TrustCenterID))
 	}
@@ -71443,6 +71453,45 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.TitleContainsFold(*i.TitleContainsFold))
+	}
+	if i.Category != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryEQ(*i.Category))
+	}
+	if i.CategoryNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryNEQ(*i.CategoryNEQ))
+	}
+	if len(i.CategoryIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.CategoryIn(i.CategoryIn...))
+	}
+	if len(i.CategoryNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.CategoryNotIn(i.CategoryNotIn...))
+	}
+	if i.CategoryGT != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryGT(*i.CategoryGT))
+	}
+	if i.CategoryGTE != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryGTE(*i.CategoryGTE))
+	}
+	if i.CategoryLT != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryLT(*i.CategoryLT))
+	}
+	if i.CategoryLTE != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryLTE(*i.CategoryLTE))
+	}
+	if i.CategoryContains != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryContains(*i.CategoryContains))
+	}
+	if i.CategoryHasPrefix != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryHasPrefix(*i.CategoryHasPrefix))
+	}
+	if i.CategoryHasSuffix != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryHasSuffix(*i.CategoryHasSuffix))
+	}
+	if i.CategoryEqualFold != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryEqualFold(*i.CategoryEqualFold))
+	}
+	if i.CategoryContainsFold != nil {
+		predicates = append(predicates, trustcenterdoc.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.FileID != nil {
 		predicates = append(predicates, trustcenterdoc.FileIDEQ(*i.FileID))
@@ -71628,24 +71677,43 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 		predicates = append(predicates, trustcenterdoc.StandardIDContainsFold(*i.StandardIDContainsFold))
 	}
 
-	if i.HasTrustCenterDocKind != nil {
-		p := trustcenterdoc.HasTrustCenterDocKind()
-		if !*i.HasTrustCenterDocKind {
+	if i.HasBlockedGroups != nil {
+		p := trustcenterdoc.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
 			p = trustcenterdoc.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasTrustCenterDocKindWith) > 0 {
-		with := make([]predicate.CustomTypeEnum, 0, len(i.HasTrustCenterDocKindWith))
-		with = append(with, customtypeenum.DeletedAtIsNil())
-		for _, w := range i.HasTrustCenterDocKindWith {
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocKindWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, trustcenterdoc.HasTrustCenterDocKindWith(with...))
+		predicates = append(predicates, trustcenterdoc.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterdoc.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterdoc.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterdoc.HasEditorsWith(with...))
 	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterdoc.HasTrustCenter()
@@ -71730,6 +71798,701 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 		return predicates[0], nil
 	default:
 		return trustcenterdoc.And(predicates...), nil
+	}
+}
+
+// TrustCenterEntityWhereInput represents a where input for filtering TrustCenterEntity queries.
+type TrustCenterEntityWhereInput struct {
+	Predicates []predicate.TrustCenterEntity  `json:"-"`
+	Not        *TrustCenterEntityWhereInput   `json:"not,omitempty"`
+	Or         []*TrustCenterEntityWhereInput `json:"or,omitempty"`
+	And        []*TrustCenterEntityWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "logo_file_id" field predicates.
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIDNEQ          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIDGT           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIDGTE          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIDLT           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIDLTE          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        bool     `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        bool     `json:"urlIsNil,omitempty"`
+	URLNotNil       bool     `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "logo_file" edge predicates.
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+
+	// "trust_center" edge predicates.
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "entity_type" edge predicates.
+	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
+	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TrustCenterEntityWhereInput) AddPredicates(predicates ...predicate.TrustCenterEntity) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TrustCenterEntityWhereInput filter on the TrustCenterEntityQuery builder.
+func (i *TrustCenterEntityWhereInput) Filter(q *TrustCenterEntityQuery) (*TrustCenterEntityQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTrustCenterEntityWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTrustCenterEntityWhereInput is returned in case the TrustCenterEntityWhereInput is empty.
+var ErrEmptyTrustCenterEntityWhereInput = errors.New("generated: empty predicate TrustCenterEntityWhereInput")
+
+// P returns a predicate for filtering trustcenterentities.
+// An error is returned if the input is empty or invalid.
+func (i *TrustCenterEntityWhereInput) P() (predicate.TrustCenterEntity, error) {
+	var predicates []predicate.TrustCenterEntity
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, trustcenterentity.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TrustCenterEntity, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, trustcenterentity.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TrustCenterEntity, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, trustcenterentity.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, trustcenterentity.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, trustcenterentity.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, trustcenterentity.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, trustcenterentity.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, trustcenterentity.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, trustcenterentity.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, trustcenterentity.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, trustcenterentity.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, trustcenterentity.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, trustcenterentity.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, trustcenterentity.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, trustcenterentity.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, trustcenterentity.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.LogoFileID != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDEQ(*i.LogoFileID))
+	}
+	if i.LogoFileIDNEQ != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDNEQ(*i.LogoFileIDNEQ))
+	}
+	if len(i.LogoFileIDIn) > 0 {
+		predicates = append(predicates, trustcenterentity.LogoFileIDIn(i.LogoFileIDIn...))
+	}
+	if len(i.LogoFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.LogoFileIDNotIn(i.LogoFileIDNotIn...))
+	}
+	if i.LogoFileIDGT != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDGT(*i.LogoFileIDGT))
+	}
+	if i.LogoFileIDGTE != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDGTE(*i.LogoFileIDGTE))
+	}
+	if i.LogoFileIDLT != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDLT(*i.LogoFileIDLT))
+	}
+	if i.LogoFileIDLTE != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDLTE(*i.LogoFileIDLTE))
+	}
+	if i.LogoFileIDContains != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDContains(*i.LogoFileIDContains))
+	}
+	if i.LogoFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDHasPrefix(*i.LogoFileIDHasPrefix))
+	}
+	if i.LogoFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDHasSuffix(*i.LogoFileIDHasSuffix))
+	}
+	if i.LogoFileIDIsNil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDIsNil())
+	}
+	if i.LogoFileIDNotNil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDNotNil())
+	}
+	if i.LogoFileIDEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDEqualFold(*i.LogoFileIDEqualFold))
+	}
+	if i.LogoFileIDContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, trustcenterentity.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, trustcenterentity.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, trustcenterentity.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, trustcenterentity.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, trustcenterentity.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, trustcenterentity.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, trustcenterentity.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, trustcenterentity.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLIsNil {
+		predicates = append(predicates, trustcenterentity.URLIsNil())
+	}
+	if i.URLNotNil {
+		predicates = append(predicates, trustcenterentity.URLNotNil())
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.URLContainsFold(*i.URLContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, trustcenterentity.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, trustcenterentity.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, trustcenterentity.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, trustcenterentity.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, trustcenterentity.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, trustcenterentity.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, trustcenterentity.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, trustcenterentity.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.NameContainsFold(*i.NameContainsFold))
+	}
+
+	if i.HasBlockedGroups != nil {
+		p := trustcenterentity.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterentity.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasEditorsWith(with...))
+	}
+	if i.HasLogoFile != nil {
+		p := trustcenterentity.HasLogoFile()
+		if !*i.HasLogoFile {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLogoFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		with = append(with, file.DeletedAtIsNil())
+		for _, w := range i.HasLogoFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasLogoFileWith(with...))
+	}
+	if i.HasTrustCenter != nil {
+		p := trustcenterentity.HasTrustCenter()
+		if !*i.HasTrustCenter {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasTrustCenterWith(with...))
+	}
+	if i.HasEntityType != nil {
+		p := trustcenterentity.HasEntityType()
+		if !*i.HasEntityType {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityTypeWith) > 0 {
+		with := make([]predicate.EntityType, 0, len(i.HasEntityTypeWith))
+		with = append(with, entitytype.DeletedAtIsNil())
+		for _, w := range i.HasEntityTypeWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityTypeWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasEntityTypeWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTrustCenterEntityWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return trustcenterentity.And(predicates...), nil
 	}
 }
 
@@ -72064,9 +72827,13 @@ type TrustCenterSettingWhereInput struct {
 	EnvironmentIsNil  bool                           `json:"environmentIsNil,omitempty"`
 	EnvironmentNotNil bool                           `json:"environmentNotNil,omitempty"`
 
-	// "files" edge predicates.
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "logo_file" edge predicates.
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
@@ -72995,24 +73762,43 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 		predicates = append(predicates, trustcentersetting.EnvironmentNotNil())
 	}
 
-	if i.HasFiles != nil {
-		p := trustcentersetting.HasFiles()
-		if !*i.HasFiles {
+	if i.HasBlockedGroups != nil {
+		p := trustcentersetting.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
 			p = trustcentersetting.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasFilesWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasFilesWith))
-		with = append(with, file.DeletedAtIsNil())
-		for _, w := range i.HasFilesWith {
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, trustcentersetting.HasFilesWith(with...))
+		predicates = append(predicates, trustcentersetting.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcentersetting.HasEditors()
+		if !*i.HasEditors {
+			p = trustcentersetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersetting.HasEditorsWith(with...))
 	}
 	if i.HasLogoFile != nil {
 		p := trustcentersetting.HasLogoFile()
@@ -73185,6 +73971,14 @@ type TrustCenterSubprocessorWhereInput struct {
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
 	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -73570,6 +74364,44 @@ func (i *TrustCenterSubprocessorWhereInput) P() (predicate.TrustCenterSubprocess
 		predicates = append(predicates, trustcentersubprocessor.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 
+	if i.HasBlockedGroups != nil {
+		p := trustcentersubprocessor.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcentersubprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersubprocessor.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcentersubprocessor.HasEditors()
+		if !*i.HasEditors {
+			p = trustcentersubprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersubprocessor.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcentersubprocessor.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -73833,6 +74665,14 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -74459,6 +75299,44 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 		}
 		predicates = append(predicates, trustcenterwatermarkconfig.HasOwnerWith(with...))
 	}
+	if i.HasBlockedGroups != nil {
+		p := trustcenterwatermarkconfig.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterwatermarkconfig.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterwatermarkconfig.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -74504,593 +75382,6 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 		return predicates[0], nil
 	default:
 		return trustcenterwatermarkconfig.And(predicates...), nil
-	}
-}
-
-// TrustcenterEntityWhereInput represents a where input for filtering TrustcenterEntity queries.
-type TrustcenterEntityWhereInput struct {
-	Predicates []predicate.TrustcenterEntity  `json:"-"`
-	Not        *TrustcenterEntityWhereInput   `json:"not,omitempty"`
-	Or         []*TrustcenterEntityWhereInput `json:"or,omitempty"`
-	And        []*TrustcenterEntityWhereInput `json:"and,omitempty"`
-
-	// "id" field predicates.
-	ID             *string  `json:"id,omitempty"`
-	IDNEQ          *string  `json:"idNEQ,omitempty"`
-	IDIn           []string `json:"idIn,omitempty"`
-	IDNotIn        []string `json:"idNotIn,omitempty"`
-	IDGT           *string  `json:"idGT,omitempty"`
-	IDGTE          *string  `json:"idGTE,omitempty"`
-	IDLT           *string  `json:"idLT,omitempty"`
-	IDLTE          *string  `json:"idLTE,omitempty"`
-	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
-	IDContainsFold *string  `json:"idContainsFold,omitempty"`
-
-	// "created_at" field predicates.
-	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
-	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
-	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
-	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
-	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
-	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
-	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
-	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
-
-	// "updated_at" field predicates.
-	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
-	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
-	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
-	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
-	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
-	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
-	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
-	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
-	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
-	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGT           *string  `json:"createdByGT,omitempty"`
-	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLT           *string  `json:"createdByLT,omitempty"`
-	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-
-	// "logo_file_id" field predicates.
-	LogoFileID             *string  `json:"logoFileID,omitempty"`
-	LogoFileIDNEQ          *string  `json:"logoFileIDNEQ,omitempty"`
-	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
-	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
-	LogoFileIDGT           *string  `json:"logoFileIDGT,omitempty"`
-	LogoFileIDGTE          *string  `json:"logoFileIDGTE,omitempty"`
-	LogoFileIDLT           *string  `json:"logoFileIDLT,omitempty"`
-	LogoFileIDLTE          *string  `json:"logoFileIDLTE,omitempty"`
-	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
-	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
-	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
-	LogoFileIDIsNil        bool     `json:"logoFileIDIsNil,omitempty"`
-	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
-	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
-	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
-
-	// "url" field predicates.
-	URL             *string  `json:"url,omitempty"`
-	URLNEQ          *string  `json:"urlNEQ,omitempty"`
-	URLIn           []string `json:"urlIn,omitempty"`
-	URLNotIn        []string `json:"urlNotIn,omitempty"`
-	URLGT           *string  `json:"urlGT,omitempty"`
-	URLGTE          *string  `json:"urlGTE,omitempty"`
-	URLLT           *string  `json:"urlLT,omitempty"`
-	URLLTE          *string  `json:"urlLTE,omitempty"`
-	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
-	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
-	URLIsNil        bool     `json:"urlIsNil,omitempty"`
-	URLNotNil       bool     `json:"urlNotNil,omitempty"`
-	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
-	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
-
-	// "name" field predicates.
-	Name             *string  `json:"name,omitempty"`
-	NameNEQ          *string  `json:"nameNEQ,omitempty"`
-	NameIn           []string `json:"nameIn,omitempty"`
-	NameNotIn        []string `json:"nameNotIn,omitempty"`
-	NameGT           *string  `json:"nameGT,omitempty"`
-	NameGTE          *string  `json:"nameGTE,omitempty"`
-	NameLT           *string  `json:"nameLT,omitempty"`
-	NameLTE          *string  `json:"nameLTE,omitempty"`
-	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
-	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
-	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
-	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-
-	// "logo_file" edge predicates.
-	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
-	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
-
-	// "trust_center" edge predicates.
-	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
-	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
-
-	// "entity_type" edge predicates.
-	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
-	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
-}
-
-// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
-func (i *TrustcenterEntityWhereInput) AddPredicates(predicates ...predicate.TrustcenterEntity) {
-	i.Predicates = append(i.Predicates, predicates...)
-}
-
-// Filter applies the TrustcenterEntityWhereInput filter on the TrustcenterEntityQuery builder.
-func (i *TrustcenterEntityWhereInput) Filter(q *TrustcenterEntityQuery) (*TrustcenterEntityQuery, error) {
-	if i == nil {
-		return q, nil
-	}
-	p, err := i.P()
-	if err != nil {
-		if err == ErrEmptyTrustcenterEntityWhereInput {
-			return q, nil
-		}
-		return nil, err
-	}
-	return q.Where(p), nil
-}
-
-// ErrEmptyTrustcenterEntityWhereInput is returned in case the TrustcenterEntityWhereInput is empty.
-var ErrEmptyTrustcenterEntityWhereInput = errors.New("generated: empty predicate TrustcenterEntityWhereInput")
-
-// P returns a predicate for filtering trustcenterentities.
-// An error is returned if the input is empty or invalid.
-func (i *TrustcenterEntityWhereInput) P() (predicate.TrustcenterEntity, error) {
-	var predicates []predicate.TrustcenterEntity
-	if i.Not != nil {
-		p, err := i.Not.P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'not'", err)
-		}
-		predicates = append(predicates, trustcenterentity.Not(p))
-	}
-	switch n := len(i.Or); {
-	case n == 1:
-		p, err := i.Or[0].P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'or'", err)
-		}
-		predicates = append(predicates, p)
-	case n > 1:
-		or := make([]predicate.TrustcenterEntity, 0, n)
-		for _, w := range i.Or {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'or'", err)
-			}
-			or = append(or, p)
-		}
-		predicates = append(predicates, trustcenterentity.Or(or...))
-	}
-	switch n := len(i.And); {
-	case n == 1:
-		p, err := i.And[0].P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'and'", err)
-		}
-		predicates = append(predicates, p)
-	case n > 1:
-		and := make([]predicate.TrustcenterEntity, 0, n)
-		for _, w := range i.And {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'and'", err)
-			}
-			and = append(and, p)
-		}
-		predicates = append(predicates, trustcenterentity.And(and...))
-	}
-	predicates = append(predicates, i.Predicates...)
-	if i.ID != nil {
-		predicates = append(predicates, trustcenterentity.IDEQ(*i.ID))
-	}
-	if i.IDNEQ != nil {
-		predicates = append(predicates, trustcenterentity.IDNEQ(*i.IDNEQ))
-	}
-	if len(i.IDIn) > 0 {
-		predicates = append(predicates, trustcenterentity.IDIn(i.IDIn...))
-	}
-	if len(i.IDNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.IDNotIn(i.IDNotIn...))
-	}
-	if i.IDGT != nil {
-		predicates = append(predicates, trustcenterentity.IDGT(*i.IDGT))
-	}
-	if i.IDGTE != nil {
-		predicates = append(predicates, trustcenterentity.IDGTE(*i.IDGTE))
-	}
-	if i.IDLT != nil {
-		predicates = append(predicates, trustcenterentity.IDLT(*i.IDLT))
-	}
-	if i.IDLTE != nil {
-		predicates = append(predicates, trustcenterentity.IDLTE(*i.IDLTE))
-	}
-	if i.IDEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.IDEqualFold(*i.IDEqualFold))
-	}
-	if i.IDContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.IDContainsFold(*i.IDContainsFold))
-	}
-	if i.CreatedAt != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtEQ(*i.CreatedAt))
-	}
-	if i.CreatedAtNEQ != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtNEQ(*i.CreatedAtNEQ))
-	}
-	if len(i.CreatedAtIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedAtIn(i.CreatedAtIn...))
-	}
-	if len(i.CreatedAtNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedAtNotIn(i.CreatedAtNotIn...))
-	}
-	if i.CreatedAtGT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtGT(*i.CreatedAtGT))
-	}
-	if i.CreatedAtGTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtGTE(*i.CreatedAtGTE))
-	}
-	if i.CreatedAtLT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtLT(*i.CreatedAtLT))
-	}
-	if i.CreatedAtLTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtLTE(*i.CreatedAtLTE))
-	}
-	if i.CreatedAtIsNil {
-		predicates = append(predicates, trustcenterentity.CreatedAtIsNil())
-	}
-	if i.CreatedAtNotNil {
-		predicates = append(predicates, trustcenterentity.CreatedAtNotNil())
-	}
-	if i.UpdatedAt != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtEQ(*i.UpdatedAt))
-	}
-	if i.UpdatedAtNEQ != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtNEQ(*i.UpdatedAtNEQ))
-	}
-	if len(i.UpdatedAtIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedAtIn(i.UpdatedAtIn...))
-	}
-	if len(i.UpdatedAtNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedAtNotIn(i.UpdatedAtNotIn...))
-	}
-	if i.UpdatedAtGT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtGT(*i.UpdatedAtGT))
-	}
-	if i.UpdatedAtGTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtGTE(*i.UpdatedAtGTE))
-	}
-	if i.UpdatedAtLT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtLT(*i.UpdatedAtLT))
-	}
-	if i.UpdatedAtLTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtLTE(*i.UpdatedAtLTE))
-	}
-	if i.UpdatedAtIsNil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtIsNil())
-	}
-	if i.UpdatedAtNotNil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtNotNil())
-	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.CreatedByContains != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByContains(*i.CreatedByContains))
-	}
-	if i.CreatedByHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByHasPrefix(*i.CreatedByHasPrefix))
-	}
-	if i.CreatedByHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByHasSuffix(*i.CreatedByHasSuffix))
-	}
-	if i.CreatedByIsNil {
-		predicates = append(predicates, trustcenterentity.CreatedByIsNil())
-	}
-	if i.CreatedByNotNil {
-		predicates = append(predicates, trustcenterentity.CreatedByNotNil())
-	}
-	if i.CreatedByEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByEqualFold(*i.CreatedByEqualFold))
-	}
-	if i.CreatedByContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByContainsFold(*i.CreatedByContainsFold))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByContains != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByContains(*i.UpdatedByContains))
-	}
-	if i.UpdatedByHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
-	}
-	if i.UpdatedByHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, trustcenterentity.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, trustcenterentity.UpdatedByNotNil())
-	}
-	if i.UpdatedByEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByEqualFold(*i.UpdatedByEqualFold))
-	}
-	if i.UpdatedByContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByContainsFold(*i.UpdatedByContainsFold))
-	}
-	if i.LogoFileID != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDEQ(*i.LogoFileID))
-	}
-	if i.LogoFileIDNEQ != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDNEQ(*i.LogoFileIDNEQ))
-	}
-	if len(i.LogoFileIDIn) > 0 {
-		predicates = append(predicates, trustcenterentity.LogoFileIDIn(i.LogoFileIDIn...))
-	}
-	if len(i.LogoFileIDNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.LogoFileIDNotIn(i.LogoFileIDNotIn...))
-	}
-	if i.LogoFileIDGT != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDGT(*i.LogoFileIDGT))
-	}
-	if i.LogoFileIDGTE != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDGTE(*i.LogoFileIDGTE))
-	}
-	if i.LogoFileIDLT != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDLT(*i.LogoFileIDLT))
-	}
-	if i.LogoFileIDLTE != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDLTE(*i.LogoFileIDLTE))
-	}
-	if i.LogoFileIDContains != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDContains(*i.LogoFileIDContains))
-	}
-	if i.LogoFileIDHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDHasPrefix(*i.LogoFileIDHasPrefix))
-	}
-	if i.LogoFileIDHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDHasSuffix(*i.LogoFileIDHasSuffix))
-	}
-	if i.LogoFileIDIsNil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDIsNil())
-	}
-	if i.LogoFileIDNotNil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDNotNil())
-	}
-	if i.LogoFileIDEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDEqualFold(*i.LogoFileIDEqualFold))
-	}
-	if i.LogoFileIDContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
-	}
-	if i.URL != nil {
-		predicates = append(predicates, trustcenterentity.URLEQ(*i.URL))
-	}
-	if i.URLNEQ != nil {
-		predicates = append(predicates, trustcenterentity.URLNEQ(*i.URLNEQ))
-	}
-	if len(i.URLIn) > 0 {
-		predicates = append(predicates, trustcenterentity.URLIn(i.URLIn...))
-	}
-	if len(i.URLNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.URLNotIn(i.URLNotIn...))
-	}
-	if i.URLGT != nil {
-		predicates = append(predicates, trustcenterentity.URLGT(*i.URLGT))
-	}
-	if i.URLGTE != nil {
-		predicates = append(predicates, trustcenterentity.URLGTE(*i.URLGTE))
-	}
-	if i.URLLT != nil {
-		predicates = append(predicates, trustcenterentity.URLLT(*i.URLLT))
-	}
-	if i.URLLTE != nil {
-		predicates = append(predicates, trustcenterentity.URLLTE(*i.URLLTE))
-	}
-	if i.URLContains != nil {
-		predicates = append(predicates, trustcenterentity.URLContains(*i.URLContains))
-	}
-	if i.URLHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.URLHasPrefix(*i.URLHasPrefix))
-	}
-	if i.URLHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.URLHasSuffix(*i.URLHasSuffix))
-	}
-	if i.URLIsNil {
-		predicates = append(predicates, trustcenterentity.URLIsNil())
-	}
-	if i.URLNotNil {
-		predicates = append(predicates, trustcenterentity.URLNotNil())
-	}
-	if i.URLEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.URLEqualFold(*i.URLEqualFold))
-	}
-	if i.URLContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.URLContainsFold(*i.URLContainsFold))
-	}
-	if i.Name != nil {
-		predicates = append(predicates, trustcenterentity.NameEQ(*i.Name))
-	}
-	if i.NameNEQ != nil {
-		predicates = append(predicates, trustcenterentity.NameNEQ(*i.NameNEQ))
-	}
-	if len(i.NameIn) > 0 {
-		predicates = append(predicates, trustcenterentity.NameIn(i.NameIn...))
-	}
-	if len(i.NameNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.NameNotIn(i.NameNotIn...))
-	}
-	if i.NameGT != nil {
-		predicates = append(predicates, trustcenterentity.NameGT(*i.NameGT))
-	}
-	if i.NameGTE != nil {
-		predicates = append(predicates, trustcenterentity.NameGTE(*i.NameGTE))
-	}
-	if i.NameLT != nil {
-		predicates = append(predicates, trustcenterentity.NameLT(*i.NameLT))
-	}
-	if i.NameLTE != nil {
-		predicates = append(predicates, trustcenterentity.NameLTE(*i.NameLTE))
-	}
-	if i.NameContains != nil {
-		predicates = append(predicates, trustcenterentity.NameContains(*i.NameContains))
-	}
-	if i.NameHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.NameHasPrefix(*i.NameHasPrefix))
-	}
-	if i.NameHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.NameHasSuffix(*i.NameHasSuffix))
-	}
-	if i.NameEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.NameEqualFold(*i.NameEqualFold))
-	}
-	if i.NameContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.NameContainsFold(*i.NameContainsFold))
-	}
-
-	if i.HasLogoFile != nil {
-		p := trustcenterentity.HasLogoFile()
-		if !*i.HasLogoFile {
-			p = trustcenterentity.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasLogoFileWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
-		with = append(with, file.DeletedAtIsNil())
-		for _, w := range i.HasLogoFileWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterentity.HasLogoFileWith(with...))
-	}
-	if i.HasTrustCenter != nil {
-		p := trustcenterentity.HasTrustCenter()
-		if !*i.HasTrustCenter {
-			p = trustcenterentity.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterWith) > 0 {
-		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
-		with = append(with, trustcenter.DeletedAtIsNil())
-		for _, w := range i.HasTrustCenterWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterentity.HasTrustCenterWith(with...))
-	}
-	if i.HasEntityType != nil {
-		p := trustcenterentity.HasEntityType()
-		if !*i.HasEntityType {
-			p = trustcenterentity.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEntityTypeWith) > 0 {
-		with := make([]predicate.EntityType, 0, len(i.HasEntityTypeWith))
-		with = append(with, entitytype.DeletedAtIsNil())
-		for _, w := range i.HasEntityTypeWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEntityTypeWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterentity.HasEntityTypeWith(with...))
-	}
-	switch len(predicates) {
-	case 0:
-		return nil, ErrEmptyTrustcenterEntityWhereInput
-	case 1:
-		return predicates[0], nil
-	default:
-		return trustcenterentity.And(predicates...), nil
 	}
 }
 

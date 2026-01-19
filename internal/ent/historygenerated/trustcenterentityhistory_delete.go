@@ -16,26 +16,26 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
 )
 
-// TrustcenterEntityHistoryDelete is the builder for deleting a TrustcenterEntityHistory entity.
-type TrustcenterEntityHistoryDelete struct {
+// TrustCenterEntityHistoryDelete is the builder for deleting a TrustCenterEntityHistory entity.
+type TrustCenterEntityHistoryDelete struct {
 	config
 	hooks    []Hook
-	mutation *TrustcenterEntityHistoryMutation
+	mutation *TrustCenterEntityHistoryMutation
 }
 
-// Where appends a list predicates to the TrustcenterEntityHistoryDelete builder.
-func (_d *TrustcenterEntityHistoryDelete) Where(ps ...predicate.TrustcenterEntityHistory) *TrustcenterEntityHistoryDelete {
+// Where appends a list predicates to the TrustCenterEntityHistoryDelete builder.
+func (_d *TrustCenterEntityHistoryDelete) Where(ps ...predicate.TrustCenterEntityHistory) *TrustCenterEntityHistoryDelete {
 	_d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (_d *TrustcenterEntityHistoryDelete) Exec(ctx context.Context) (int, error) {
+func (_d *TrustCenterEntityHistoryDelete) Exec(ctx context.Context) (int, error) {
 	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *TrustcenterEntityHistoryDelete) ExecX(ctx context.Context) int {
+func (_d *TrustCenterEntityHistoryDelete) ExecX(ctx context.Context) int {
 	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
@@ -43,9 +43,9 @@ func (_d *TrustcenterEntityHistoryDelete) ExecX(ctx context.Context) int {
 	return n
 }
 
-func (_d *TrustcenterEntityHistoryDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TrustCenterEntityHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcenterentityhistory.Table, sqlgraph.NewFieldSpec(trustcenterentityhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.TrustcenterEntityHistory
+	_spec.Node.Schema = _d.schemaConfig.TrustCenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -62,19 +62,19 @@ func (_d *TrustcenterEntityHistoryDelete) sqlExec(ctx context.Context) (int, err
 	return affected, err
 }
 
-// TrustcenterEntityHistoryDeleteOne is the builder for deleting a single TrustcenterEntityHistory entity.
-type TrustcenterEntityHistoryDeleteOne struct {
-	_d *TrustcenterEntityHistoryDelete
+// TrustCenterEntityHistoryDeleteOne is the builder for deleting a single TrustCenterEntityHistory entity.
+type TrustCenterEntityHistoryDeleteOne struct {
+	_d *TrustCenterEntityHistoryDelete
 }
 
-// Where appends a list predicates to the TrustcenterEntityHistoryDelete builder.
-func (_d *TrustcenterEntityHistoryDeleteOne) Where(ps ...predicate.TrustcenterEntityHistory) *TrustcenterEntityHistoryDeleteOne {
+// Where appends a list predicates to the TrustCenterEntityHistoryDelete builder.
+func (_d *TrustCenterEntityHistoryDeleteOne) Where(ps ...predicate.TrustCenterEntityHistory) *TrustCenterEntityHistoryDeleteOne {
 	_d._d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query.
-func (_d *TrustcenterEntityHistoryDeleteOne) Exec(ctx context.Context) error {
+func (_d *TrustCenterEntityHistoryDeleteOne) Exec(ctx context.Context) error {
 	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
@@ -87,7 +87,7 @@ func (_d *TrustcenterEntityHistoryDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *TrustcenterEntityHistoryDeleteOne) ExecX(ctx context.Context) {
+func (_d *TrustCenterEntityHistoryDeleteOne) ExecX(ctx context.Context) {
 	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}

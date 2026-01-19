@@ -8,11 +8,10 @@ import (
 	"net/url"
 	"testing"
 
+	echo_log "github.com/labstack/gommon/log"
+	"github.com/mcuadros/go-defaults"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-
-	"github.com/mcuadros/go-defaults"
-
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
 
@@ -218,4 +217,40 @@ func TestServerDisabledCSRF(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	resp.Body.Close()
+}
+
+func TestRecoverMiddleware(t *testing.T) {
+	t.Parallel()
+
+	// create echo server with the configured middleware
+	e := server.ConfigureEcho(server.LogConfig{
+		PrettyLog: false,
+		LogLevel:  echo_log.INFO,
+	})
+
+	// add a handler that panics
+	e.GET("/panic", func(c echo.Context) error {
+		panic("test panic")
+	})
+
+	// add a normal handler to verify server still works
+	e.GET("/ok", func(c echo.Context) error {
+		return c.String(http.StatusOK, "ok")
+	})
+
+	client, err := newHTTPSlingTestClient(e)
+	require.NoError(t, err)
+	ctx := context.Background()
+
+	// verify panic is recovered and returns 500
+	resp, err := client.get(ctx, "/panic")
+	require.NoError(t, err)
+	defer resp.Body.Close()
+	assert.Equal(t, http.StatusInternalServerError, resp.StatusCode)
+
+	// verify server still works after panic
+	resp2, err := client.get(ctx, "/ok")
+	require.NoError(t, err)
+	defer resp2.Body.Close()
+	assert.Equal(t, http.StatusOK, resp2.StatusCode)
 }

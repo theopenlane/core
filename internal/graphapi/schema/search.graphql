@@ -775,9 +775,9 @@ extend type Query{
         last: Int
     ): TemplateConnection
     """
-    Search across TrustcenterEntity objects
+    Search across TrustCenterEntity objects
     """
-    trustcenterEntitySearch(
+    trustCenterEntitySearch(
         """
         Query string to search across objects
         """
@@ -798,7 +798,7 @@ extend type Query{
         Returns the last _n_ elements from the list.
         """
         last: Int
-    ): TrustcenterEntityConnection
+    ): TrustCenterEntityConnection
     """
     Search across Vulnerability objects
     """
@@ -865,7 +865,7 @@ type SearchResults{
   tagDefinitions: TagDefinitionConnection
   tasks: TaskConnection
   templates: TemplateConnection
-  trustcenterEntities: TrustcenterEntityConnection
+  trustCenterEntities: TrustCenterEntityConnection
   vulnerabilities: VulnerabilityConnection
 }
 

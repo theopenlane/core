@@ -5547,40 +5547,41 @@ func (c *ExportUpdateOne) SetInput(i UpdateExportInput) *ExportUpdateOne {
 
 // CreateFileInput represents a mutation input for creating files.
 type CreateFileInput struct {
-	Tags                   []string
-	InternalNotes          *string
-	SystemInternalID       *string
-	ProvidedFileName       string
-	ProvidedFileExtension  string
-	ProvidedFileSize       *int64
-	PersistedFileSize      *int64
-	DetectedMimeType       *string
-	Md5Hash                *string
-	DetectedContentType    string
-	StoreKey               *string
-	CategoryType           *string
-	URI                    *string
-	StorageScheme          *string
-	StorageVolume          *string
-	StoragePath            *string
-	Metadata               map[string]interface{}
-	StorageRegion          *string
-	StorageProvider        *string
-	LastAccessedAt         *time.Time
-	OrganizationIDs        []string
-	GroupIDs               []string
-	ContactIDs             []string
-	EntityIDs              []string
-	OrganizationSettingIDs []string
-	TemplateIDs            []string
-	DocumentIDs            []string
-	ProgramIDs             []string
-	EvidenceIDs            []string
-	EventIDs               []string
-	TrustCenterSettingIDs  []string
-	IntegrationIDs         []string
-	SecretIDs              []string
-	TrustcenterEntityIDs   []string
+	Tags                      []string
+	InternalNotes             *string
+	SystemInternalID          *string
+	ProvidedFileName          string
+	ProvidedFileExtension     string
+	ProvidedFileSize          *int64
+	PersistedFileSize         *int64
+	DetectedMimeType          *string
+	Md5Hash                   *string
+	DetectedContentType       string
+	StoreKey                  *string
+	CategoryType              *string
+	URI                       *string
+	StorageScheme             *string
+	StorageVolume             *string
+	StoragePath               *string
+	Metadata                  map[string]interface{}
+	StorageRegion             *string
+	StorageProvider           *string
+	LastAccessedAt            *time.Time
+	OrganizationIDs           []string
+	GroupIDs                  []string
+	ContactIDs                []string
+	EntityIDs                 []string
+	OrganizationSettingIDs    []string
+	TemplateIDs               []string
+	DocumentIDs               []string
+	ProgramIDs                []string
+	EvidenceIDs               []string
+	EventIDs                  []string
+	IntegrationIDs            []string
+	SecretIDs                 []string
+	TrustCenterEntityIDs      []string
+	TrustCenterDocIDs         []string
+	OriginalTrustCenterDocIDs []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -5669,17 +5670,20 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.EventIDs; len(v) > 0 {
 		m.AddEventIDs(v...)
 	}
-	if v := i.TrustCenterSettingIDs; len(v) > 0 {
-		m.AddTrustCenterSettingIDs(v...)
-	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
 	}
 	if v := i.SecretIDs; len(v) > 0 {
 		m.AddSecretIDs(v...)
 	}
-	if v := i.TrustcenterEntityIDs; len(v) > 0 {
-		m.AddTrustcenterEntityIDs(v...)
+	if v := i.TrustCenterEntityIDs; len(v) > 0 {
+		m.AddTrustCenterEntityIDs(v...)
+	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.OriginalTrustCenterDocIDs; len(v) > 0 {
+		m.AddOriginalTrustCenterDocIDs(v...)
 	}
 }
 
@@ -5691,86 +5695,89 @@ func (c *FileCreate) SetInput(i CreateFileInput) *FileCreate {
 
 // UpdateFileInput represents a mutation input for updating files.
 type UpdateFileInput struct {
-	ClearTags                    bool
-	Tags                         []string
-	AppendTags                   []string
-	ClearInternalNotes           bool
-	InternalNotes                *string
-	ClearSystemInternalID        bool
-	SystemInternalID             *string
-	ProvidedFileName             *string
-	ProvidedFileExtension        *string
-	ClearProvidedFileSize        bool
-	ProvidedFileSize             *int64
-	ClearPersistedFileSize       bool
-	PersistedFileSize            *int64
-	ClearDetectedMimeType        bool
-	DetectedMimeType             *string
-	ClearMd5Hash                 bool
-	Md5Hash                      *string
-	DetectedContentType          *string
-	ClearStoreKey                bool
-	StoreKey                     *string
-	ClearCategoryType            bool
-	CategoryType                 *string
-	ClearURI                     bool
-	URI                          *string
-	ClearStorageScheme           bool
-	StorageScheme                *string
-	ClearStorageVolume           bool
-	StorageVolume                *string
-	ClearStoragePath             bool
-	StoragePath                  *string
-	ClearMetadata                bool
-	Metadata                     map[string]interface{}
-	ClearStorageRegion           bool
-	StorageRegion                *string
-	ClearStorageProvider         bool
-	StorageProvider              *string
-	ClearLastAccessedAt          bool
-	LastAccessedAt               *time.Time
-	ClearOrganization            bool
-	AddOrganizationIDs           []string
-	RemoveOrganizationIDs        []string
-	ClearGroups                  bool
-	AddGroupIDs                  []string
-	RemoveGroupIDs               []string
-	ClearContact                 bool
-	AddContactIDs                []string
-	RemoveContactIDs             []string
-	ClearEntity                  bool
-	AddEntityIDs                 []string
-	RemoveEntityIDs              []string
-	ClearOrganizationSetting     bool
-	AddOrganizationSettingIDs    []string
-	RemoveOrganizationSettingIDs []string
-	ClearTemplate                bool
-	AddTemplateIDs               []string
-	RemoveTemplateIDs            []string
-	ClearDocument                bool
-	AddDocumentIDs               []string
-	RemoveDocumentIDs            []string
-	ClearProgram                 bool
-	AddProgramIDs                []string
-	RemoveProgramIDs             []string
-	ClearEvidence                bool
-	AddEvidenceIDs               []string
-	RemoveEvidenceIDs            []string
-	ClearEvents                  bool
-	AddEventIDs                  []string
-	RemoveEventIDs               []string
-	ClearTrustCenterSetting      bool
-	AddTrustCenterSettingIDs     []string
-	RemoveTrustCenterSettingIDs  []string
-	ClearIntegrations            bool
-	AddIntegrationIDs            []string
-	RemoveIntegrationIDs         []string
-	ClearSecrets                 bool
-	AddSecretIDs                 []string
-	RemoveSecretIDs              []string
-	ClearTrustcenterEntities     bool
-	AddTrustcenterEntityIDs      []string
-	RemoveTrustcenterEntityIDs   []string
+	ClearTags                       bool
+	Tags                            []string
+	AppendTags                      []string
+	ClearInternalNotes              bool
+	InternalNotes                   *string
+	ClearSystemInternalID           bool
+	SystemInternalID                *string
+	ProvidedFileName                *string
+	ProvidedFileExtension           *string
+	ClearProvidedFileSize           bool
+	ProvidedFileSize                *int64
+	ClearPersistedFileSize          bool
+	PersistedFileSize               *int64
+	ClearDetectedMimeType           bool
+	DetectedMimeType                *string
+	ClearMd5Hash                    bool
+	Md5Hash                         *string
+	DetectedContentType             *string
+	ClearStoreKey                   bool
+	StoreKey                        *string
+	ClearCategoryType               bool
+	CategoryType                    *string
+	ClearURI                        bool
+	URI                             *string
+	ClearStorageScheme              bool
+	StorageScheme                   *string
+	ClearStorageVolume              bool
+	StorageVolume                   *string
+	ClearStoragePath                bool
+	StoragePath                     *string
+	ClearMetadata                   bool
+	Metadata                        map[string]interface{}
+	ClearStorageRegion              bool
+	StorageRegion                   *string
+	ClearStorageProvider            bool
+	StorageProvider                 *string
+	ClearLastAccessedAt             bool
+	LastAccessedAt                  *time.Time
+	ClearOrganization               bool
+	AddOrganizationIDs              []string
+	RemoveOrganizationIDs           []string
+	ClearGroups                     bool
+	AddGroupIDs                     []string
+	RemoveGroupIDs                  []string
+	ClearContact                    bool
+	AddContactIDs                   []string
+	RemoveContactIDs                []string
+	ClearEntity                     bool
+	AddEntityIDs                    []string
+	RemoveEntityIDs                 []string
+	ClearOrganizationSetting        bool
+	AddOrganizationSettingIDs       []string
+	RemoveOrganizationSettingIDs    []string
+	ClearTemplate                   bool
+	AddTemplateIDs                  []string
+	RemoveTemplateIDs               []string
+	ClearDocument                   bool
+	AddDocumentIDs                  []string
+	RemoveDocumentIDs               []string
+	ClearProgram                    bool
+	AddProgramIDs                   []string
+	RemoveProgramIDs                []string
+	ClearEvidence                   bool
+	AddEvidenceIDs                  []string
+	RemoveEvidenceIDs               []string
+	ClearEvents                     bool
+	AddEventIDs                     []string
+	RemoveEventIDs                  []string
+	ClearIntegrations               bool
+	AddIntegrationIDs               []string
+	RemoveIntegrationIDs            []string
+	ClearSecrets                    bool
+	AddSecretIDs                    []string
+	RemoveSecretIDs                 []string
+	ClearTrustCenterEntities        bool
+	AddTrustCenterEntityIDs         []string
+	RemoveTrustCenterEntityIDs      []string
+	ClearTrustCenterDoc             bool
+	AddTrustCenterDocIDs            []string
+	RemoveTrustCenterDocIDs         []string
+	ClearOriginalTrustCenterDoc     bool
+	AddOriginalTrustCenterDocIDs    []string
+	RemoveOriginalTrustCenterDocIDs []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -5979,15 +5986,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveEventIDs; len(v) > 0 {
 		m.RemoveEventIDs(v...)
 	}
-	if i.ClearTrustCenterSetting {
-		m.ClearTrustCenterSetting()
-	}
-	if v := i.AddTrustCenterSettingIDs; len(v) > 0 {
-		m.AddTrustCenterSettingIDs(v...)
-	}
-	if v := i.RemoveTrustCenterSettingIDs; len(v) > 0 {
-		m.RemoveTrustCenterSettingIDs(v...)
-	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
 	}
@@ -6006,14 +6004,32 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveSecretIDs; len(v) > 0 {
 		m.RemoveSecretIDs(v...)
 	}
-	if i.ClearTrustcenterEntities {
-		m.ClearTrustcenterEntities()
+	if i.ClearTrustCenterEntities {
+		m.ClearTrustCenterEntities()
 	}
-	if v := i.AddTrustcenterEntityIDs; len(v) > 0 {
-		m.AddTrustcenterEntityIDs(v...)
+	if v := i.AddTrustCenterEntityIDs; len(v) > 0 {
+		m.AddTrustCenterEntityIDs(v...)
 	}
-	if v := i.RemoveTrustcenterEntityIDs; len(v) > 0 {
-		m.RemoveTrustcenterEntityIDs(v...)
+	if v := i.RemoveTrustCenterEntityIDs; len(v) > 0 {
+		m.RemoveTrustCenterEntityIDs(v...)
+	}
+	if i.ClearTrustCenterDoc {
+		m.ClearTrustCenterDoc()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
+	}
+	if i.ClearOriginalTrustCenterDoc {
+		m.ClearOriginalTrustCenterDoc()
+	}
+	if v := i.AddOriginalTrustCenterDocIDs; len(v) > 0 {
+		m.AddOriginalTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveOriginalTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveOriginalTrustCenterDocIDs(v...)
 	}
 }
 
@@ -16375,8 +16391,6 @@ type UpdateSubprocessorInput struct {
 	Description                      *string
 	ClearLogoRemoteURL               bool
 	LogoRemoteURL                    *string
-	ClearOwner                       bool
-	OwnerID                          *string
 	ClearLogoFile                    bool
 	LogoFileID                       *string
 	ClearTrustCenterSubprocessors    bool
@@ -16421,12 +16435,6 @@ func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	}
 	if v := i.LogoRemoteURL; v != nil {
 		m.SetLogoRemoteURL(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
 	}
 	if i.ClearLogoFile {
 		m.ClearLogoFile()
@@ -17351,6 +17359,8 @@ type CreateTrustCenterInput struct {
 	PreviewStatus              *enums.TrustCenterPreviewStatus
 	SubprocessorURL            *string
 	OwnerID                    *string
+	BlockedGroupIDs            []string
+	EditorIDs                  []string
 	CustomDomainID             *string
 	PreviewDomainID            *string
 	SettingID                  *string
@@ -17361,7 +17371,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterComplianceIDs   []string
 	TemplateIDs                []string
 	PostIDs                    []string
-	TrustcenterEntityIDs       []string
+	TrustCenterEntityIDs       []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -17383,6 +17393,12 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
 	}
 	if v := i.CustomDomainID; v != nil {
 		m.SetCustomDomainID(*v)
@@ -17414,8 +17430,8 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.PostIDs; len(v) > 0 {
 		m.AddPostIDs(v...)
 	}
-	if v := i.TrustcenterEntityIDs; len(v) > 0 {
-		m.AddTrustcenterEntityIDs(v...)
+	if v := i.TrustCenterEntityIDs; len(v) > 0 {
+		m.AddTrustCenterEntityIDs(v...)
 	}
 }
 
@@ -17440,6 +17456,12 @@ type UpdateTrustCenterInput struct {
 	SubprocessorURL                  *string
 	ClearOwner                       bool
 	OwnerID                          *string
+	ClearBlockedGroups               bool
+	AddBlockedGroupIDs               []string
+	RemoveBlockedGroupIDs            []string
+	ClearEditors                     bool
+	AddEditorIDs                     []string
+	RemoveEditorIDs                  []string
 	ClearCustomDomain                bool
 	CustomDomainID                   *string
 	ClearPreviewDomain               bool
@@ -17465,9 +17487,9 @@ type UpdateTrustCenterInput struct {
 	ClearPosts                       bool
 	AddPostIDs                       []string
 	RemovePostIDs                    []string
-	ClearTrustcenterEntities         bool
-	AddTrustcenterEntityIDs          []string
-	RemoveTrustcenterEntityIDs       []string
+	ClearTrustCenterEntities         bool
+	AddTrustCenterEntityIDs          []string
+	RemoveTrustCenterEntityIDs       []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -17510,6 +17532,24 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if i.ClearCustomDomain {
 		m.ClearCustomDomain()
@@ -17586,14 +17626,14 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.RemovePostIDs; len(v) > 0 {
 		m.RemovePostIDs(v...)
 	}
-	if i.ClearTrustcenterEntities {
-		m.ClearTrustcenterEntities()
+	if i.ClearTrustCenterEntities {
+		m.ClearTrustCenterEntities()
 	}
-	if v := i.AddTrustcenterEntityIDs; len(v) > 0 {
-		m.AddTrustcenterEntityIDs(v...)
+	if v := i.AddTrustCenterEntityIDs; len(v) > 0 {
+		m.AddTrustCenterEntityIDs(v...)
 	}
-	if v := i.RemoveTrustcenterEntityIDs; len(v) > 0 {
-		m.RemoveTrustcenterEntityIDs(v...)
+	if v := i.RemoveTrustCenterEntityIDs; len(v) > 0 {
+		m.RemoveTrustCenterEntityIDs(v...)
 	}
 }
 
@@ -17611,15 +17651,23 @@ func (c *TrustCenterUpdateOne) SetInput(i UpdateTrustCenterInput) *TrustCenterUp
 
 // CreateTrustCenterComplianceInput represents a mutation input for creating trustcentercompliances.
 type CreateTrustCenterComplianceInput struct {
-	Tags          []string
-	TrustCenterID *string
-	StandardID    string
+	Tags            []string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	TrustCenterID   *string
+	StandardID      string
 }
 
 // Mutate applies the CreateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
 func (i *CreateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -17635,12 +17683,16 @@ func (c *TrustCenterComplianceCreate) SetInput(i CreateTrustCenterComplianceInpu
 
 // UpdateTrustCenterComplianceInput represents a mutation input for updating trustcentercompliances.
 type UpdateTrustCenterComplianceInput struct {
-	ClearTags        bool
-	Tags             []string
-	AppendTags       []string
-	ClearTrustCenter bool
-	TrustCenterID    *string
-	StandardID       *string
+	ClearTags             bool
+	Tags                  []string
+	AppendTags            []string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	StandardID            *string
 }
 
 // Mutate applies the UpdateTrustCenterComplianceInput on the TrustCenterComplianceMutation builder.
@@ -17654,11 +17706,23 @@ func (i *UpdateTrustCenterComplianceInput) Mutate(m *TrustCenterComplianceMutati
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearTrustCenter {
-		m.ClearTrustCenter()
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
 	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if v := i.StandardID; v != nil {
 		m.SetStandardID(*v)
@@ -17679,17 +17743,18 @@ func (c *TrustCenterComplianceUpdateOne) SetInput(i UpdateTrustCenterComplianceI
 
 // CreateTrustCenterDocInput represents a mutation input for creating trustcenterdocs.
 type CreateTrustCenterDocInput struct {
-	Tags                   []string
-	TrustCenterDocKindName *string
-	Title                  string
-	WatermarkingEnabled    *bool
-	WatermarkStatus        *enums.WatermarkStatus
-	Visibility             *enums.TrustCenterDocumentVisibility
-	TrustCenterDocKindID   *string
-	TrustCenterID          *string
-	StandardID             *string
-	FileID                 *string
-	OriginalFileID         *string
+	Tags                []string
+	Title               string
+	Category            string
+	WatermarkingEnabled *bool
+	WatermarkStatus     *enums.WatermarkStatus
+	Visibility          *enums.TrustCenterDocumentVisibility
+	BlockedGroupIDs     []string
+	EditorIDs           []string
+	TrustCenterID       *string
+	StandardID          *string
+	FileID              *string
+	OriginalFileID      *string
 }
 
 // Mutate applies the CreateTrustCenterDocInput on the TrustCenterDocMutation builder.
@@ -17697,10 +17762,8 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
 	}
-	if v := i.TrustCenterDocKindName; v != nil {
-		m.SetTrustCenterDocKindName(*v)
-	}
 	m.SetTitle(i.Title)
+	m.SetCategory(i.Category)
 	if v := i.WatermarkingEnabled; v != nil {
 		m.SetWatermarkingEnabled(*v)
 	}
@@ -17710,8 +17773,11 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
 	}
-	if v := i.TrustCenterDocKindID; v != nil {
-		m.SetTrustCenterDocKindID(*v)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -17735,28 +17801,29 @@ func (c *TrustCenterDocCreate) SetInput(i CreateTrustCenterDocInput) *TrustCente
 
 // UpdateTrustCenterDocInput represents a mutation input for updating trustcenterdocs.
 type UpdateTrustCenterDocInput struct {
-	ClearTags                   bool
-	Tags                        []string
-	AppendTags                  []string
-	ClearTrustCenterDocKindName bool
-	TrustCenterDocKindName      *string
-	Title                       *string
-	ClearWatermarkingEnabled    bool
-	WatermarkingEnabled         *bool
-	ClearWatermarkStatus        bool
-	WatermarkStatus             *enums.WatermarkStatus
-	ClearVisibility             bool
-	Visibility                  *enums.TrustCenterDocumentVisibility
-	ClearTrustCenterDocKind     bool
-	TrustCenterDocKindID        *string
-	ClearTrustCenter            bool
-	TrustCenterID               *string
-	ClearStandard               bool
-	StandardID                  *string
-	ClearFile                   bool
-	FileID                      *string
-	ClearOriginalFile           bool
-	OriginalFileID              *string
+	ClearTags                bool
+	Tags                     []string
+	AppendTags               []string
+	Title                    *string
+	Category                 *string
+	ClearWatermarkingEnabled bool
+	WatermarkingEnabled      *bool
+	ClearWatermarkStatus     bool
+	WatermarkStatus          *enums.WatermarkStatus
+	ClearVisibility          bool
+	Visibility               *enums.TrustCenterDocumentVisibility
+	ClearBlockedGroups       bool
+	AddBlockedGroupIDs       []string
+	RemoveBlockedGroupIDs    []string
+	ClearEditors             bool
+	AddEditorIDs             []string
+	RemoveEditorIDs          []string
+	ClearStandard            bool
+	StandardID               *string
+	ClearFile                bool
+	FileID                   *string
+	ClearOriginalFile        bool
+	OriginalFileID           *string
 }
 
 // Mutate applies the UpdateTrustCenterDocInput on the TrustCenterDocMutation builder.
@@ -17770,14 +17837,11 @@ func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
 	}
-	if i.ClearTrustCenterDocKindName {
-		m.ClearTrustCenterDocKindName()
-	}
-	if v := i.TrustCenterDocKindName; v != nil {
-		m.SetTrustCenterDocKindName(*v)
-	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
+	}
+	if v := i.Category; v != nil {
+		m.SetCategory(*v)
 	}
 	if i.ClearWatermarkingEnabled {
 		m.ClearWatermarkingEnabled()
@@ -17797,17 +17861,23 @@ func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	if v := i.Visibility; v != nil {
 		m.SetVisibility(*v)
 	}
-	if i.ClearTrustCenterDocKind {
-		m.ClearTrustCenterDocKind()
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
 	}
-	if v := i.TrustCenterDocKindID; v != nil {
-		m.SetTrustCenterDocKindID(*v)
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
 	}
-	if i.ClearTrustCenter {
-		m.ClearTrustCenter()
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
 	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if i.ClearStandard {
 		m.ClearStandard()
@@ -17841,6 +17911,106 @@ func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCe
 	return c
 }
 
+// CreateTrustCenterEntityInput represents a mutation input for creating trustcenterentities.
+type CreateTrustCenterEntityInput struct {
+	URL             *string
+	Name            string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	LogoFileID      *string
+	TrustCenterID   *string
+	EntityTypeID    *string
+}
+
+// Mutate applies the CreateTrustCenterEntityInput on the TrustCenterEntityMutation builder.
+func (i *CreateTrustCenterEntityInput) Mutate(m *TrustCenterEntityMutation) {
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	m.SetName(i.Name)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.EntityTypeID; v != nil {
+		m.SetEntityTypeID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterEntityInput on the TrustCenterEntityCreate builder.
+func (c *TrustCenterEntityCreate) SetInput(i CreateTrustCenterEntityInput) *TrustCenterEntityCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterEntityInput represents a mutation input for updating trustcenterentities.
+type UpdateTrustCenterEntityInput struct {
+	ClearURL              bool
+	URL                   *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearLogoFile         bool
+	LogoFileID            *string
+}
+
+// Mutate applies the UpdateTrustCenterEntityInput on the TrustCenterEntityMutation builder.
+func (i *UpdateTrustCenterEntityInput) Mutate(m *TrustCenterEntityMutation) {
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterEntityInput on the TrustCenterEntityUpdate builder.
+func (c *TrustCenterEntityUpdate) SetInput(i UpdateTrustCenterEntityInput) *TrustCenterEntityUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterEntityInput on the TrustCenterEntityUpdateOne builder.
+func (c *TrustCenterEntityUpdateOne) SetInput(i UpdateTrustCenterEntityInput) *TrustCenterEntityUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
 	TrustCenterID            *string
@@ -17857,7 +18027,8 @@ type CreateTrustCenterSettingInput struct {
 	SecondaryBackgroundColor *string
 	SecondaryForegroundColor *string
 	Environment              *enums.TrustCenterEnvironment
-	FileIDs                  []string
+	BlockedGroupIDs          []string
+	EditorIDs                []string
 	LogoFileID               *string
 	FaviconFileID            *string
 }
@@ -17906,8 +18077,11 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.Environment; v != nil {
 		m.SetEnvironment(*v)
 	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
@@ -17951,9 +18125,12 @@ type UpdateTrustCenterSettingInput struct {
 	SecondaryBackgroundColor      *string
 	ClearSecondaryForegroundColor bool
 	SecondaryForegroundColor      *string
-	ClearFiles                    bool
-	AddFileIDs                    []string
-	RemoveFileIDs                 []string
+	ClearBlockedGroups            bool
+	AddBlockedGroupIDs            []string
+	RemoveBlockedGroupIDs         []string
+	ClearEditors                  bool
+	AddEditorIDs                  []string
+	RemoveEditorIDs               []string
 	ClearLogoFile                 bool
 	LogoFileID                    *string
 	ClearFaviconFile              bool
@@ -18040,14 +18217,23 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.SecondaryForegroundColor; v != nil {
 		m.SetSecondaryForegroundColor(*v)
 	}
-	if i.ClearFiles {
-		m.ClearFiles()
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
 	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
 	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if i.ClearLogoFile {
 		m.ClearLogoFile()
@@ -18077,10 +18263,12 @@ func (c *TrustCenterSettingUpdateOne) SetInput(i UpdateTrustCenterSettingInput) 
 
 // CreateTrustCenterSubprocessorInput represents a mutation input for creating trustcentersubprocessors.
 type CreateTrustCenterSubprocessorInput struct {
-	Countries      []string
-	Category       string
-	TrustCenterID  *string
-	SubprocessorID string
+	Countries       []string
+	Category        string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	TrustCenterID   *string
+	SubprocessorID  string
 }
 
 // Mutate applies the CreateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
@@ -18089,6 +18277,12 @@ func (i *CreateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMu
 		m.SetCountries(v)
 	}
 	m.SetCategory(i.Category)
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
@@ -18103,13 +18297,19 @@ func (c *TrustCenterSubprocessorCreate) SetInput(i CreateTrustCenterSubprocessor
 
 // UpdateTrustCenterSubprocessorInput represents a mutation input for updating trustcentersubprocessors.
 type UpdateTrustCenterSubprocessorInput struct {
-	ClearCountries   bool
-	Countries        []string
-	AppendCountries  []string
-	Category         *string
-	ClearTrustCenter bool
-	TrustCenterID    *string
-	SubprocessorID   *string
+	ClearCountries        bool
+	Countries             []string
+	AppendCountries       []string
+	Category              *string
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearTrustCenter      bool
+	TrustCenterID         *string
+	SubprocessorID        *string
 }
 
 // Mutate applies the UpdateTrustCenterSubprocessorInput on the TrustCenterSubprocessorMutation builder.
@@ -18125,6 +18325,24 @@ func (i *UpdateTrustCenterSubprocessorInput) Mutate(m *TrustCenterSubprocessorMu
 	}
 	if v := i.Category; v != nil {
 		m.SetCategory(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()
@@ -18151,17 +18369,19 @@ func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubproces
 
 // CreateTrustCenterWatermarkConfigInput represents a mutation input for creating trustcenterwatermarkconfigs.
 type CreateTrustCenterWatermarkConfigInput struct {
-	TrustCenterID  *string
-	IsEnabled      *bool
-	Text           *string
-	FontSize       *float64
-	Opacity        *float64
-	Rotation       *float64
-	Color          *string
-	Font           *enums.Font
-	OwnerID        *string
-	TrustCenterIDs []string
-	FileID         *string
+	TrustCenterID   *string
+	IsEnabled       *bool
+	Text            *string
+	FontSize        *float64
+	Opacity         *float64
+	Rotation        *float64
+	Color           *string
+	Font            *enums.Font
+	OwnerID         *string
+	BlockedGroupIDs []string
+	EditorIDs       []string
+	TrustCenterIDs  []string
+	FileID          *string
 }
 
 // Mutate applies the CreateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigMutation builder.
@@ -18193,6 +18413,12 @@ func (i *CreateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkCo
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
 	if v := i.TrustCenterIDs; len(v) > 0 {
 		m.AddTrustCenterIDs(v...)
 	}
@@ -18209,37 +18435,35 @@ func (c *TrustCenterWatermarkConfigCreate) SetInput(i CreateTrustCenterWatermark
 
 // UpdateTrustCenterWatermarkConfigInput represents a mutation input for updating trustcenterwatermarkconfigs.
 type UpdateTrustCenterWatermarkConfigInput struct {
-	ClearTrustCenterID   bool
-	TrustCenterID        *string
-	ClearIsEnabled       bool
-	IsEnabled            *bool
-	ClearText            bool
-	Text                 *string
-	ClearFontSize        bool
-	FontSize             *float64
-	ClearOpacity         bool
-	Opacity              *float64
-	ClearRotation        bool
-	Rotation             *float64
-	ClearColor           bool
-	Color                *string
-	ClearFont            bool
-	Font                 *enums.Font
-	ClearTrustCenter     bool
-	AddTrustCenterIDs    []string
-	RemoveTrustCenterIDs []string
-	ClearFile            bool
-	FileID               *string
+	ClearIsEnabled        bool
+	IsEnabled             *bool
+	ClearText             bool
+	Text                  *string
+	ClearFontSize         bool
+	FontSize              *float64
+	ClearOpacity          bool
+	Opacity               *float64
+	ClearRotation         bool
+	Rotation              *float64
+	ClearColor            bool
+	Color                 *string
+	ClearFont             bool
+	Font                  *enums.Font
+	ClearBlockedGroups    bool
+	AddBlockedGroupIDs    []string
+	RemoveBlockedGroupIDs []string
+	ClearEditors          bool
+	AddEditorIDs          []string
+	RemoveEditorIDs       []string
+	ClearTrustCenter      bool
+	AddTrustCenterIDs     []string
+	RemoveTrustCenterIDs  []string
+	ClearFile             bool
+	FileID                *string
 }
 
 // Mutate applies the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigMutation builder.
 func (i *UpdateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkConfigMutation) {
-	if i.ClearTrustCenterID {
-		m.ClearTrustCenterID()
-	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
-	}
 	if i.ClearIsEnabled {
 		m.ClearIsEnabled()
 	}
@@ -18282,6 +18506,24 @@ func (i *UpdateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkCo
 	if v := i.Font; v != nil {
 		m.SetFont(*v)
 	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()
 	}
@@ -18307,74 +18549,6 @@ func (c *TrustCenterWatermarkConfigUpdate) SetInput(i UpdateTrustCenterWatermark
 
 // SetInput applies the change-set in the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigUpdateOne builder.
 func (c *TrustCenterWatermarkConfigUpdateOne) SetInput(i UpdateTrustCenterWatermarkConfigInput) *TrustCenterWatermarkConfigUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateTrustcenterEntityInput represents a mutation input for creating trustcenterentities.
-type CreateTrustcenterEntityInput struct {
-	URL           *string
-	Name          string
-	LogoFileID    *string
-	TrustCenterID *string
-	EntityTypeID  *string
-}
-
-// Mutate applies the CreateTrustcenterEntityInput on the TrustcenterEntityMutation builder.
-func (i *CreateTrustcenterEntityInput) Mutate(m *TrustcenterEntityMutation) {
-	if v := i.URL; v != nil {
-		m.SetURL(*v)
-	}
-	m.SetName(i.Name)
-	if v := i.LogoFileID; v != nil {
-		m.SetLogoFileID(*v)
-	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
-	}
-	if v := i.EntityTypeID; v != nil {
-		m.SetEntityTypeID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateTrustcenterEntityInput on the TrustcenterEntityCreate builder.
-func (c *TrustcenterEntityCreate) SetInput(i CreateTrustcenterEntityInput) *TrustcenterEntityCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateTrustcenterEntityInput represents a mutation input for updating trustcenterentities.
-type UpdateTrustcenterEntityInput struct {
-	ClearURL      bool
-	URL           *string
-	ClearLogoFile bool
-	LogoFileID    *string
-}
-
-// Mutate applies the UpdateTrustcenterEntityInput on the TrustcenterEntityMutation builder.
-func (i *UpdateTrustcenterEntityInput) Mutate(m *TrustcenterEntityMutation) {
-	if i.ClearURL {
-		m.ClearURL()
-	}
-	if v := i.URL; v != nil {
-		m.SetURL(*v)
-	}
-	if i.ClearLogoFile {
-		m.ClearLogoFile()
-	}
-	if v := i.LogoFileID; v != nil {
-		m.SetLogoFileID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateTrustcenterEntityInput on the TrustcenterEntityUpdate builder.
-func (c *TrustcenterEntityUpdate) SetInput(i UpdateTrustcenterEntityInput) *TrustcenterEntityUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateTrustcenterEntityInput on the TrustcenterEntityUpdateOne builder.
-func (c *TrustcenterEntityUpdateOne) SetInput(i UpdateTrustcenterEntityInput) *TrustcenterEntityUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -19709,286 +19883,6 @@ func (c *VulnerabilityUpdateOne) SetInput(i UpdateVulnerabilityInput) *Vulnerabi
 	return c
 }
 
-// CreateWorkflowAssignmentInput represents a mutation input for creating workflowassignments.
-type CreateWorkflowAssignmentInput struct {
-	Tags                        []string
-	AssignmentKey               string
-	Role                        *string
-	Label                       *string
-	Required                    *bool
-	Status                      *enums.WorkflowAssignmentStatus
-	Metadata                    map[string]interface{}
-	DecidedAt                   *time.Time
-	Notes                       *string
-	OwnerID                     *string
-	WorkflowInstanceID          string
-	WorkflowAssignmentTargetIDs []string
-	UserID                      *string
-	GroupID                     *string
-}
-
-// Mutate applies the CreateWorkflowAssignmentInput on the WorkflowAssignmentMutation builder.
-func (i *CreateWorkflowAssignmentInput) Mutate(m *WorkflowAssignmentMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	m.SetAssignmentKey(i.AssignmentKey)
-	if v := i.Role; v != nil {
-		m.SetRole(*v)
-	}
-	if v := i.Label; v != nil {
-		m.SetLabel(*v)
-	}
-	if v := i.Required; v != nil {
-		m.SetRequired(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if v := i.Metadata; v != nil {
-		m.SetMetadata(v)
-	}
-	if v := i.DecidedAt; v != nil {
-		m.SetDecidedAt(*v)
-	}
-	if v := i.Notes; v != nil {
-		m.SetNotes(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetWorkflowInstanceID(i.WorkflowInstanceID)
-	if v := i.WorkflowAssignmentTargetIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentTargetIDs(v...)
-	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
-	}
-	if v := i.GroupID; v != nil {
-		m.SetGroupID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateWorkflowAssignmentInput on the WorkflowAssignmentCreate builder.
-func (c *WorkflowAssignmentCreate) SetInput(i CreateWorkflowAssignmentInput) *WorkflowAssignmentCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateWorkflowAssignmentInput represents a mutation input for updating workflowassignments.
-type UpdateWorkflowAssignmentInput struct {
-	ClearTags                         bool
-	Tags                              []string
-	AppendTags                        []string
-	AssignmentKey                     *string
-	Role                              *string
-	ClearLabel                        bool
-	Label                             *string
-	Required                          *bool
-	Status                            *enums.WorkflowAssignmentStatus
-	ClearMetadata                     bool
-	Metadata                          map[string]interface{}
-	ClearDecidedAt                    bool
-	DecidedAt                         *time.Time
-	ClearNotes                        bool
-	Notes                             *string
-	WorkflowInstanceID                *string
-	ClearWorkflowAssignmentTargets    bool
-	AddWorkflowAssignmentTargetIDs    []string
-	RemoveWorkflowAssignmentTargetIDs []string
-	ClearUser                         bool
-	UserID                            *string
-	ClearGroup                        bool
-	GroupID                           *string
-}
-
-// Mutate applies the UpdateWorkflowAssignmentInput on the WorkflowAssignmentMutation builder.
-func (i *UpdateWorkflowAssignmentInput) Mutate(m *WorkflowAssignmentMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if v := i.AssignmentKey; v != nil {
-		m.SetAssignmentKey(*v)
-	}
-	if v := i.Role; v != nil {
-		m.SetRole(*v)
-	}
-	if i.ClearLabel {
-		m.ClearLabel()
-	}
-	if v := i.Label; v != nil {
-		m.SetLabel(*v)
-	}
-	if v := i.Required; v != nil {
-		m.SetRequired(*v)
-	}
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if i.ClearMetadata {
-		m.ClearMetadata()
-	}
-	if v := i.Metadata; v != nil {
-		m.SetMetadata(v)
-	}
-	if i.ClearDecidedAt {
-		m.ClearDecidedAt()
-	}
-	if v := i.DecidedAt; v != nil {
-		m.SetDecidedAt(*v)
-	}
-	if i.ClearNotes {
-		m.ClearNotes()
-	}
-	if v := i.Notes; v != nil {
-		m.SetNotes(*v)
-	}
-	if v := i.WorkflowInstanceID; v != nil {
-		m.SetWorkflowInstanceID(*v)
-	}
-	if i.ClearWorkflowAssignmentTargets {
-		m.ClearWorkflowAssignmentTargets()
-	}
-	if v := i.AddWorkflowAssignmentTargetIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentTargetIDs(v...)
-	}
-	if v := i.RemoveWorkflowAssignmentTargetIDs; len(v) > 0 {
-		m.RemoveWorkflowAssignmentTargetIDs(v...)
-	}
-	if i.ClearUser {
-		m.ClearUser()
-	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
-	}
-	if i.ClearGroup {
-		m.ClearGroup()
-	}
-	if v := i.GroupID; v != nil {
-		m.SetGroupID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateWorkflowAssignmentInput on the WorkflowAssignmentUpdate builder.
-func (c *WorkflowAssignmentUpdate) SetInput(i UpdateWorkflowAssignmentInput) *WorkflowAssignmentUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateWorkflowAssignmentInput on the WorkflowAssignmentUpdateOne builder.
-func (c *WorkflowAssignmentUpdateOne) SetInput(i UpdateWorkflowAssignmentInput) *WorkflowAssignmentUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateWorkflowAssignmentTargetInput represents a mutation input for creating workflowassignmenttargets.
-type CreateWorkflowAssignmentTargetInput struct {
-	Tags                 []string
-	TargetType           enums.WorkflowTargetType
-	ResolverKey          *string
-	OwnerID              *string
-	WorkflowAssignmentID string
-	UserID               *string
-	GroupID              *string
-}
-
-// Mutate applies the CreateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetMutation builder.
-func (i *CreateWorkflowAssignmentTargetInput) Mutate(m *WorkflowAssignmentTargetMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	m.SetTargetType(i.TargetType)
-	if v := i.ResolverKey; v != nil {
-		m.SetResolverKey(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetWorkflowAssignmentID(i.WorkflowAssignmentID)
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
-	}
-	if v := i.GroupID; v != nil {
-		m.SetGroupID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetCreate builder.
-func (c *WorkflowAssignmentTargetCreate) SetInput(i CreateWorkflowAssignmentTargetInput) *WorkflowAssignmentTargetCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateWorkflowAssignmentTargetInput represents a mutation input for updating workflowassignmenttargets.
-type UpdateWorkflowAssignmentTargetInput struct {
-	ClearTags            bool
-	Tags                 []string
-	AppendTags           []string
-	TargetType           *enums.WorkflowTargetType
-	ClearResolverKey     bool
-	ResolverKey          *string
-	WorkflowAssignmentID *string
-	ClearUser            bool
-	UserID               *string
-	ClearGroup           bool
-	GroupID              *string
-}
-
-// Mutate applies the UpdateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetMutation builder.
-func (i *UpdateWorkflowAssignmentTargetInput) Mutate(m *WorkflowAssignmentTargetMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if v := i.TargetType; v != nil {
-		m.SetTargetType(*v)
-	}
-	if i.ClearResolverKey {
-		m.ClearResolverKey()
-	}
-	if v := i.ResolverKey; v != nil {
-		m.SetResolverKey(*v)
-	}
-	if v := i.WorkflowAssignmentID; v != nil {
-		m.SetWorkflowAssignmentID(*v)
-	}
-	if i.ClearUser {
-		m.ClearUser()
-	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
-	}
-	if i.ClearGroup {
-		m.ClearGroup()
-	}
-	if v := i.GroupID; v != nil {
-		m.SetGroupID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetUpdate builder.
-func (c *WorkflowAssignmentTargetUpdate) SetInput(i UpdateWorkflowAssignmentTargetInput) *WorkflowAssignmentTargetUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetUpdateOne builder.
-func (c *WorkflowAssignmentTargetUpdateOne) SetInput(i UpdateWorkflowAssignmentTargetInput) *WorkflowAssignmentTargetUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // CreateWorkflowDefinitionInput represents a mutation input for creating workflowdefinitions.
 type CreateWorkflowDefinitionInput struct {
 	Tags             []string
@@ -20283,238 +20177,6 @@ func (c *WorkflowEventUpdate) SetInput(i UpdateWorkflowEventInput) *WorkflowEven
 
 // SetInput applies the change-set in the UpdateWorkflowEventInput on the WorkflowEventUpdateOne builder.
 func (c *WorkflowEventUpdateOne) SetInput(i UpdateWorkflowEventInput) *WorkflowEventUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateWorkflowInstanceInput represents a mutation input for creating workflowinstances.
-type CreateWorkflowInstanceInput struct {
-	Tags                  []string
-	State                 *enums.WorkflowInstanceState
-	Context               *models.WorkflowInstanceContext
-	LastEvaluatedAt       *time.Time
-	DefinitionSnapshot    *models.WorkflowDefinitionDocument
-	CurrentActionIndex    *int
-	OwnerID               *string
-	WorkflowDefinitionID  string
-	ControlID             *string
-	InternalPolicyID      *string
-	EvidenceID            *string
-	SubcontrolID          *string
-	ActionPlanID          *string
-	ProcedureID           *string
-	WorkflowAssignmentIDs []string
-	WorkflowEventIDs      []string
-	WorkflowObjectRefIDs  []string
-}
-
-// Mutate applies the CreateWorkflowInstanceInput on the WorkflowInstanceMutation builder.
-func (i *CreateWorkflowInstanceInput) Mutate(m *WorkflowInstanceMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if v := i.State; v != nil {
-		m.SetState(*v)
-	}
-	if v := i.Context; v != nil {
-		m.SetContext(*v)
-	}
-	if v := i.LastEvaluatedAt; v != nil {
-		m.SetLastEvaluatedAt(*v)
-	}
-	if v := i.DefinitionSnapshot; v != nil {
-		m.SetDefinitionSnapshot(*v)
-	}
-	if v := i.CurrentActionIndex; v != nil {
-		m.SetCurrentActionIndex(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetWorkflowDefinitionID(i.WorkflowDefinitionID)
-	if v := i.ControlID; v != nil {
-		m.SetControlID(*v)
-	}
-	if v := i.InternalPolicyID; v != nil {
-		m.SetInternalPolicyID(*v)
-	}
-	if v := i.EvidenceID; v != nil {
-		m.SetEvidenceID(*v)
-	}
-	if v := i.SubcontrolID; v != nil {
-		m.SetSubcontrolID(*v)
-	}
-	if v := i.ActionPlanID; v != nil {
-		m.SetActionPlanID(*v)
-	}
-	if v := i.ProcedureID; v != nil {
-		m.SetProcedureID(*v)
-	}
-	if v := i.WorkflowAssignmentIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentIDs(v...)
-	}
-	if v := i.WorkflowEventIDs; len(v) > 0 {
-		m.AddWorkflowEventIDs(v...)
-	}
-	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
-		m.AddWorkflowObjectRefIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateWorkflowInstanceInput on the WorkflowInstanceCreate builder.
-func (c *WorkflowInstanceCreate) SetInput(i CreateWorkflowInstanceInput) *WorkflowInstanceCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateWorkflowInstanceInput represents a mutation input for updating workflowinstances.
-type UpdateWorkflowInstanceInput struct {
-	ClearTags                   bool
-	Tags                        []string
-	AppendTags                  []string
-	State                       *enums.WorkflowInstanceState
-	ClearContext                bool
-	Context                     *models.WorkflowInstanceContext
-	ClearLastEvaluatedAt        bool
-	LastEvaluatedAt             *time.Time
-	ClearDefinitionSnapshot     bool
-	DefinitionSnapshot          *models.WorkflowDefinitionDocument
-	CurrentActionIndex          *int
-	WorkflowDefinitionID        *string
-	ClearControl                bool
-	ControlID                   *string
-	ClearInternalPolicy         bool
-	InternalPolicyID            *string
-	ClearEvidence               bool
-	EvidenceID                  *string
-	ClearSubcontrol             bool
-	SubcontrolID                *string
-	ClearActionPlan             bool
-	ActionPlanID                *string
-	ClearProcedure              bool
-	ProcedureID                 *string
-	ClearWorkflowAssignments    bool
-	AddWorkflowAssignmentIDs    []string
-	RemoveWorkflowAssignmentIDs []string
-	ClearWorkflowEvents         bool
-	AddWorkflowEventIDs         []string
-	RemoveWorkflowEventIDs      []string
-	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string
-	RemoveWorkflowObjectRefIDs  []string
-}
-
-// Mutate applies the UpdateWorkflowInstanceInput on the WorkflowInstanceMutation builder.
-func (i *UpdateWorkflowInstanceInput) Mutate(m *WorkflowInstanceMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if v := i.State; v != nil {
-		m.SetState(*v)
-	}
-	if i.ClearContext {
-		m.ClearContext()
-	}
-	if v := i.Context; v != nil {
-		m.SetContext(*v)
-	}
-	if i.ClearLastEvaluatedAt {
-		m.ClearLastEvaluatedAt()
-	}
-	if v := i.LastEvaluatedAt; v != nil {
-		m.SetLastEvaluatedAt(*v)
-	}
-	if i.ClearDefinitionSnapshot {
-		m.ClearDefinitionSnapshot()
-	}
-	if v := i.DefinitionSnapshot; v != nil {
-		m.SetDefinitionSnapshot(*v)
-	}
-	if v := i.CurrentActionIndex; v != nil {
-		m.SetCurrentActionIndex(*v)
-	}
-	if v := i.WorkflowDefinitionID; v != nil {
-		m.SetWorkflowDefinitionID(*v)
-	}
-	if i.ClearControl {
-		m.ClearControl()
-	}
-	if v := i.ControlID; v != nil {
-		m.SetControlID(*v)
-	}
-	if i.ClearInternalPolicy {
-		m.ClearInternalPolicy()
-	}
-	if v := i.InternalPolicyID; v != nil {
-		m.SetInternalPolicyID(*v)
-	}
-	if i.ClearEvidence {
-		m.ClearEvidence()
-	}
-	if v := i.EvidenceID; v != nil {
-		m.SetEvidenceID(*v)
-	}
-	if i.ClearSubcontrol {
-		m.ClearSubcontrol()
-	}
-	if v := i.SubcontrolID; v != nil {
-		m.SetSubcontrolID(*v)
-	}
-	if i.ClearActionPlan {
-		m.ClearActionPlan()
-	}
-	if v := i.ActionPlanID; v != nil {
-		m.SetActionPlanID(*v)
-	}
-	if i.ClearProcedure {
-		m.ClearProcedure()
-	}
-	if v := i.ProcedureID; v != nil {
-		m.SetProcedureID(*v)
-	}
-	if i.ClearWorkflowAssignments {
-		m.ClearWorkflowAssignments()
-	}
-	if v := i.AddWorkflowAssignmentIDs; len(v) > 0 {
-		m.AddWorkflowAssignmentIDs(v...)
-	}
-	if v := i.RemoveWorkflowAssignmentIDs; len(v) > 0 {
-		m.RemoveWorkflowAssignmentIDs(v...)
-	}
-	if i.ClearWorkflowEvents {
-		m.ClearWorkflowEvents()
-	}
-	if v := i.AddWorkflowEventIDs; len(v) > 0 {
-		m.AddWorkflowEventIDs(v...)
-	}
-	if v := i.RemoveWorkflowEventIDs; len(v) > 0 {
-		m.RemoveWorkflowEventIDs(v...)
-	}
-	if i.ClearWorkflowObjectRefs {
-		m.ClearWorkflowObjectRefs()
-	}
-	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
-		m.AddWorkflowObjectRefIDs(v...)
-	}
-	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
-		m.RemoveWorkflowObjectRefIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateWorkflowInstanceInput on the WorkflowInstanceUpdate builder.
-func (c *WorkflowInstanceUpdate) SetInput(i UpdateWorkflowInstanceInput) *WorkflowInstanceUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateWorkflowInstanceInput on the WorkflowInstanceUpdateOne builder.
-func (c *WorkflowInstanceUpdateOne) SetInput(i UpdateWorkflowInstanceInput) *WorkflowInstanceUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

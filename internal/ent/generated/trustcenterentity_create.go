@@ -12,25 +12,26 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 )
 
-// TrustcenterEntityCreate is the builder for creating a TrustcenterEntity entity.
-type TrustcenterEntityCreate struct {
+// TrustCenterEntityCreate is the builder for creating a TrustCenterEntity entity.
+type TrustCenterEntityCreate struct {
 	config
-	mutation *TrustcenterEntityMutation
+	mutation *TrustCenterEntityMutation
 	hooks    []Hook
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (_c *TrustcenterEntityCreate) SetCreatedAt(v time.Time) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetCreatedAt(v time.Time) *TrustCenterEntityCreate {
 	_c.mutation.SetCreatedAt(v)
 	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableCreatedAt(v *time.Time) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableCreatedAt(v *time.Time) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetCreatedAt(*v)
 	}
@@ -38,13 +39,13 @@ func (_c *TrustcenterEntityCreate) SetNillableCreatedAt(v *time.Time) *Trustcent
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (_c *TrustcenterEntityCreate) SetUpdatedAt(v time.Time) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetUpdatedAt(v time.Time) *TrustCenterEntityCreate {
 	_c.mutation.SetUpdatedAt(v)
 	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableUpdatedAt(v *time.Time) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableUpdatedAt(v *time.Time) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetUpdatedAt(*v)
 	}
@@ -52,13 +53,13 @@ func (_c *TrustcenterEntityCreate) SetNillableUpdatedAt(v *time.Time) *Trustcent
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (_c *TrustcenterEntityCreate) SetCreatedBy(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetCreatedBy(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetCreatedBy(v)
 	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableCreatedBy(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableCreatedBy(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetCreatedBy(*v)
 	}
@@ -66,13 +67,13 @@ func (_c *TrustcenterEntityCreate) SetNillableCreatedBy(v *string) *TrustcenterE
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (_c *TrustcenterEntityCreate) SetUpdatedBy(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetUpdatedBy(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetUpdatedBy(v)
 	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableUpdatedBy(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableUpdatedBy(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetUpdatedBy(*v)
 	}
@@ -80,13 +81,13 @@ func (_c *TrustcenterEntityCreate) SetNillableUpdatedBy(v *string) *TrustcenterE
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (_c *TrustcenterEntityCreate) SetDeletedAt(v time.Time) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetDeletedAt(v time.Time) *TrustCenterEntityCreate {
 	_c.mutation.SetDeletedAt(v)
 	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableDeletedAt(v *time.Time) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableDeletedAt(v *time.Time) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetDeletedAt(*v)
 	}
@@ -94,13 +95,13 @@ func (_c *TrustcenterEntityCreate) SetNillableDeletedAt(v *time.Time) *Trustcent
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (_c *TrustcenterEntityCreate) SetDeletedBy(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetDeletedBy(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetDeletedBy(v)
 	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableDeletedBy(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableDeletedBy(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetDeletedBy(*v)
 	}
@@ -108,13 +109,13 @@ func (_c *TrustcenterEntityCreate) SetNillableDeletedBy(v *string) *TrustcenterE
 }
 
 // SetLogoFileID sets the "logo_file_id" field.
-func (_c *TrustcenterEntityCreate) SetLogoFileID(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetLogoFileID(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetLogoFileID(v)
 	return _c
 }
 
 // SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableLogoFileID(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableLogoFileID(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetLogoFileID(*v)
 	}
@@ -122,13 +123,13 @@ func (_c *TrustcenterEntityCreate) SetNillableLogoFileID(v *string) *Trustcenter
 }
 
 // SetURL sets the "url" field.
-func (_c *TrustcenterEntityCreate) SetURL(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetURL(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetURL(v)
 	return _c
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableURL(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableURL(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetURL(*v)
 	}
@@ -136,13 +137,13 @@ func (_c *TrustcenterEntityCreate) SetNillableURL(v *string) *TrustcenterEntityC
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (_c *TrustcenterEntityCreate) SetTrustCenterID(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetTrustCenterID(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetTrustCenterID(v)
 	return _c
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableTrustCenterID(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableTrustCenterID(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetTrustCenterID(*v)
 	}
@@ -150,19 +151,19 @@ func (_c *TrustcenterEntityCreate) SetNillableTrustCenterID(v *string) *Trustcen
 }
 
 // SetName sets the "name" field.
-func (_c *TrustcenterEntityCreate) SetName(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetName(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetName(v)
 	return _c
 }
 
 // SetEntityTypeID sets the "entity_type_id" field.
-func (_c *TrustcenterEntityCreate) SetEntityTypeID(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetEntityTypeID(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetEntityTypeID(v)
 	return _c
 }
 
 // SetNillableEntityTypeID sets the "entity_type_id" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableEntityTypeID(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableEntityTypeID(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetEntityTypeID(*v)
 	}
@@ -170,41 +171,71 @@ func (_c *TrustcenterEntityCreate) SetNillableEntityTypeID(v *string) *Trustcent
 }
 
 // SetID sets the "id" field.
-func (_c *TrustcenterEntityCreate) SetID(v string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetID(v string) *TrustCenterEntityCreate {
 	_c.mutation.SetID(v)
 	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (_c *TrustcenterEntityCreate) SetNillableID(v *string) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetNillableID(v *string) *TrustCenterEntityCreate {
 	if v != nil {
 		_c.SetID(*v)
 	}
 	return _c
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_c *TrustCenterEntityCreate) AddBlockedGroupIDs(ids ...string) *TrustCenterEntityCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_c *TrustCenterEntityCreate) AddBlockedGroups(v ...*Group) *TrustCenterEntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_c *TrustCenterEntityCreate) AddEditorIDs(ids ...string) *TrustCenterEntityCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_c *TrustCenterEntityCreate) AddEditors(v ...*Group) *TrustCenterEntityCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEditorIDs(ids...)
+}
+
 // SetLogoFile sets the "logo_file" edge to the File entity.
-func (_c *TrustcenterEntityCreate) SetLogoFile(v *File) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetLogoFile(v *File) *TrustCenterEntityCreate {
 	return _c.SetLogoFileID(v.ID)
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_c *TrustcenterEntityCreate) SetTrustCenter(v *TrustCenter) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetTrustCenter(v *TrustCenter) *TrustCenterEntityCreate {
 	return _c.SetTrustCenterID(v.ID)
 }
 
 // SetEntityType sets the "entity_type" edge to the EntityType entity.
-func (_c *TrustcenterEntityCreate) SetEntityType(v *EntityType) *TrustcenterEntityCreate {
+func (_c *TrustCenterEntityCreate) SetEntityType(v *EntityType) *TrustCenterEntityCreate {
 	return _c.SetEntityTypeID(v.ID)
 }
 
-// Mutation returns the TrustcenterEntityMutation object of the builder.
-func (_c *TrustcenterEntityCreate) Mutation() *TrustcenterEntityMutation {
+// Mutation returns the TrustCenterEntityMutation object of the builder.
+func (_c *TrustCenterEntityCreate) Mutation() *TrustCenterEntityMutation {
 	return _c.mutation
 }
 
-// Save creates the TrustcenterEntity in the database.
-func (_c *TrustcenterEntityCreate) Save(ctx context.Context) (*TrustcenterEntity, error) {
+// Save creates the TrustCenterEntity in the database.
+func (_c *TrustCenterEntityCreate) Save(ctx context.Context) (*TrustCenterEntity, error) {
 	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
@@ -212,7 +243,7 @@ func (_c *TrustcenterEntityCreate) Save(ctx context.Context) (*TrustcenterEntity
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (_c *TrustcenterEntityCreate) SaveX(ctx context.Context) *TrustcenterEntity {
+func (_c *TrustCenterEntityCreate) SaveX(ctx context.Context) *TrustCenterEntity {
 	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -221,20 +252,20 @@ func (_c *TrustcenterEntityCreate) SaveX(ctx context.Context) *TrustcenterEntity
 }
 
 // Exec executes the query.
-func (_c *TrustcenterEntityCreate) Exec(ctx context.Context) error {
+func (_c *TrustCenterEntityCreate) Exec(ctx context.Context) error {
 	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_c *TrustcenterEntityCreate) ExecX(ctx context.Context) {
+func (_c *TrustCenterEntityCreate) ExecX(ctx context.Context) {
 	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *TrustcenterEntityCreate) defaults() error {
+func (_c *TrustCenterEntityCreate) defaults() error {
 	if _, ok := _c.mutation.CreatedAt(); !ok {
 		if trustcenterentity.DefaultCreatedAt == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterentity.DefaultCreatedAt (forgotten import generated/runtime?)")
@@ -260,19 +291,24 @@ func (_c *TrustcenterEntityCreate) defaults() error {
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (_c *TrustcenterEntityCreate) check() error {
+func (_c *TrustCenterEntityCreate) check() error {
 	if v, ok := _c.mutation.URL(); ok {
 		if err := trustcenterentity.URLValidator(v); err != nil {
-			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "TrustcenterEntity.url": %w`, err)}
+			return &ValidationError{Name: "url", err: fmt.Errorf(`generated: validator failed for field "TrustCenterEntity.url": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.TrustCenterID(); ok {
+		if err := trustcenterentity.TrustCenterIDValidator(v); err != nil {
+			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterEntity.trust_center_id": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "TrustcenterEntity.name"`)}
+		return &ValidationError{Name: "name", err: errors.New(`generated: missing required field "TrustCenterEntity.name"`)}
 	}
 	return nil
 }
 
-func (_c *TrustcenterEntityCreate) sqlSave(ctx context.Context) (*TrustcenterEntity, error) {
+func (_c *TrustCenterEntityCreate) sqlSave(ctx context.Context) (*TrustCenterEntity, error) {
 	if err := _c.check(); err != nil {
 		return nil, err
 	}
@@ -287,7 +323,7 @@ func (_c *TrustcenterEntityCreate) sqlSave(ctx context.Context) (*TrustcenterEnt
 		if id, ok := _spec.ID.Value.(string); ok {
 			_node.ID = id
 		} else {
-			return nil, fmt.Errorf("unexpected TrustcenterEntity.ID type: %T", _spec.ID.Value)
+			return nil, fmt.Errorf("unexpected TrustCenterEntity.ID type: %T", _spec.ID.Value)
 		}
 	}
 	_c.mutation.id = &_node.ID
@@ -295,12 +331,12 @@ func (_c *TrustcenterEntityCreate) sqlSave(ctx context.Context) (*TrustcenterEnt
 	return _node, nil
 }
 
-func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.CreateSpec) {
+func (_c *TrustCenterEntityCreate) createSpec() (*TrustCenterEntity, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TrustcenterEntity{config: _c.config}
+		_node = &TrustCenterEntity{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterentity.Table, sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustcenterEntity
+	_spec.Schema = _c.schemaConfig.TrustCenterEntity
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -337,6 +373,40 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 		_spec.SetField(trustcenterentity.FieldName, field.TypeString, value)
 		_node.Name = value
 	}
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.BlockedGroupsTable,
+			Columns: []string{trustcenterentity.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterentity.EditorsTable,
+			Columns: []string{trustcenterentity.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -348,7 +418,7 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntity
+		edge.Schema = _c.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -358,7 +428,7 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   trustcenterentity.TrustCenterTable,
 			Columns: []string{trustcenterentity.TrustCenterColumn},
 			Bidi:    false,
@@ -366,7 +436,7 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntity
+		edge.Schema = _c.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -384,7 +454,7 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntity
+		edge.Schema = _c.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -394,27 +464,27 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 	return _node, _spec
 }
 
-// TrustcenterEntityCreateBulk is the builder for creating many TrustcenterEntity entities in bulk.
-type TrustcenterEntityCreateBulk struct {
+// TrustCenterEntityCreateBulk is the builder for creating many TrustCenterEntity entities in bulk.
+type TrustCenterEntityCreateBulk struct {
 	config
 	err      error
-	builders []*TrustcenterEntityCreate
+	builders []*TrustCenterEntityCreate
 }
 
-// Save creates the TrustcenterEntity entities in the database.
-func (_c *TrustcenterEntityCreateBulk) Save(ctx context.Context) ([]*TrustcenterEntity, error) {
+// Save creates the TrustCenterEntity entities in the database.
+func (_c *TrustCenterEntityCreateBulk) Save(ctx context.Context) ([]*TrustCenterEntity, error) {
 	if _c.err != nil {
 		return nil, _c.err
 	}
 	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
-	nodes := make([]*TrustcenterEntity, len(_c.builders))
+	nodes := make([]*TrustCenterEntity, len(_c.builders))
 	mutators := make([]Mutator, len(_c.builders))
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-				mutation, ok := m.(*TrustcenterEntityMutation)
+				mutation, ok := m.(*TrustCenterEntityMutation)
 				if !ok {
 					return nil, fmt.Errorf("unexpected mutation type %T", m)
 				}
@@ -457,7 +527,7 @@ func (_c *TrustcenterEntityCreateBulk) Save(ctx context.Context) ([]*Trustcenter
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (_c *TrustcenterEntityCreateBulk) SaveX(ctx context.Context) []*TrustcenterEntity {
+func (_c *TrustCenterEntityCreateBulk) SaveX(ctx context.Context) []*TrustCenterEntity {
 	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -466,13 +536,13 @@ func (_c *TrustcenterEntityCreateBulk) SaveX(ctx context.Context) []*Trustcenter
 }
 
 // Exec executes the query.
-func (_c *TrustcenterEntityCreateBulk) Exec(ctx context.Context) error {
+func (_c *TrustCenterEntityCreateBulk) Exec(ctx context.Context) error {
 	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_c *TrustcenterEntityCreateBulk) ExecX(ctx context.Context) {
+func (_c *TrustCenterEntityCreateBulk) ExecX(ctx context.Context) {
 	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}

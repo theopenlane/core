@@ -62,19 +62,30 @@ const (
 	FieldSecondaryForegroundColor = "secondary_foreground_color"
 	// FieldEnvironment holds the string denoting the environment field in the database.
 	FieldEnvironment = "environment"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
+	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
+	EdgeBlockedGroups = "blocked_groups"
+	// EdgeEditors holds the string denoting the editors edge name in mutations.
+	EdgeEditors = "editors"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
 	// EdgeFaviconFile holds the string denoting the favicon_file edge name in mutations.
 	EdgeFaviconFile = "favicon_file"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "trust_center_setting_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
+	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
+	BlockedGroupsTable = "groups"
+	// BlockedGroupsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	BlockedGroupsInverseTable = "groups"
+	// BlockedGroupsColumn is the table column denoting the blocked_groups relation/edge.
+	BlockedGroupsColumn = "trust_center_setting_blocked_groups"
+	// EditorsTable is the table that holds the editors relation/edge.
+	EditorsTable = "groups"
+	// EditorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	EditorsInverseTable = "groups"
+	// EditorsColumn is the table column denoting the editors relation/edge.
+	EditorsColumn = "trust_center_setting_editors"
 	// LogoFileTable is the table that holds the logo_file relation/edge.
 	LogoFileTable = "trust_center_settings"
 	// LogoFileInverseTable is the table name for the File entity.
@@ -118,12 +129,6 @@ var Columns = []string{
 	FieldEnvironment,
 }
 
-var (
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"trust_center_setting_id", "file_id"}
-)
-
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
@@ -140,7 +145,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
+	Hooks        [8]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -317,17 +322,31 @@ func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnvironment, opts...).ToFunc()
 }
 
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByBlockedGroupsCount orders the results by blocked_groups count.
+func ByBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newBlockedGroupsStep(), opts...)
 	}
 }
 
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByBlockedGroups orders the results by blocked_groups terms.
+func ByBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEditorsCount orders the results by editors count.
+func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEditorsStep(), opts...)
+	}
+}
+
+// ByEditors orders the results by editors terms.
+func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -344,11 +363,18 @@ func ByFaviconFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFaviconFileStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newFilesStep() *sqlgraph.Step {
+func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+		sqlgraph.To(BlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
+	)
+}
+func newEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 	)
 }
 func newLogoFileStep() *sqlgraph.Step {

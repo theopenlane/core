@@ -1496,11 +1496,11 @@ type ComplexityRoot struct {
 		TemplateHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TemplateHistoryOrder, where *historygenerated.TemplateHistoryWhereInput) int
 		TrustCenterComplianceHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterComplianceHistoryOrder, where *historygenerated.TrustCenterComplianceHistoryWhereInput) int
 		TrustCenterDocHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterDocHistoryOrder, where *historygenerated.TrustCenterDocHistoryWhereInput) int
+		TrustCenterEntityHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterEntityHistoryOrder, where *historygenerated.TrustCenterEntityHistoryWhereInput) int
 		TrustCenterHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterHistoryOrder, where *historygenerated.TrustCenterHistoryWhereInput) int
 		TrustCenterSettingHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) int
 		TrustCenterSubprocessorHistories    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSubprocessorHistoryOrder, where *historygenerated.TrustCenterSubprocessorHistoryWhereInput) int
 		TrustCenterWatermarkConfigHistories func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterWatermarkConfigHistoryOrder, where *historygenerated.TrustCenterWatermarkConfigHistoryWhereInput) int
-		TrustcenterEntityHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustcenterEntityHistoryOrder, where *historygenerated.TrustcenterEntityHistoryWhereInput) int
 		UserHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserHistoryOrder, where *historygenerated.UserHistoryWhereInput) int
 		UserSettingHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.UserSettingHistoryOrder, where *historygenerated.UserSettingHistoryWhereInput) int
 		VulnerabilityHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.VulnerabilityHistoryOrder, where *historygenerated.VulnerabilityHistoryWhereInput) int
@@ -1965,6 +1965,33 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	TrustCenterEntityHistory struct {
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		EntityTypeID  func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		LogoFileID    func(childComplexity int) int
+		Name          func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		URL           func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	TrustCenterEntityHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterEntityHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	TrustCenterHistory struct {
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
@@ -2088,33 +2115,6 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterWatermarkConfigHistoryEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	TrustcenterEntityHistory struct {
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		EntityTypeID  func(childComplexity int) int
-		HistoryTime   func(childComplexity int) int
-		ID            func(childComplexity int) int
-		LogoFileID    func(childComplexity int) int
-		Name          func(childComplexity int) int
-		Operation     func(childComplexity int) int
-		Ref           func(childComplexity int) int
-		TrustCenterID func(childComplexity int) int
-		URL           func(childComplexity int) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
-	}
-
-	TrustcenterEntityHistoryConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	TrustcenterEntityHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
 	}
@@ -2249,28 +2249,31 @@ type ComplexityRoot struct {
 	}
 
 	WorkflowAssignmentHistory struct {
-		ActorGroupID       func(childComplexity int) int
-		ActorUserID        func(childComplexity int) int
-		AssignmentKey      func(childComplexity int) int
-		CreatedAt          func(childComplexity int) int
-		CreatedBy          func(childComplexity int) int
-		DecidedAt          func(childComplexity int) int
-		DisplayID          func(childComplexity int) int
-		HistoryTime        func(childComplexity int) int
-		ID                 func(childComplexity int) int
-		Label              func(childComplexity int) int
-		Metadata           func(childComplexity int) int
-		Notes              func(childComplexity int) int
-		Operation          func(childComplexity int) int
-		OwnerID            func(childComplexity int) int
-		Ref                func(childComplexity int) int
-		Required           func(childComplexity int) int
-		Role               func(childComplexity int) int
-		Status             func(childComplexity int) int
-		Tags               func(childComplexity int) int
-		UpdatedAt          func(childComplexity int) int
-		UpdatedBy          func(childComplexity int) int
-		WorkflowInstanceID func(childComplexity int) int
+		ActorGroupID         func(childComplexity int) int
+		ActorUserID          func(childComplexity int) int
+		ApprovalMetadata     func(childComplexity int) int
+		AssignmentKey        func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DecidedAt            func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
+		HistoryTime          func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		InvalidationMetadata func(childComplexity int) int
+		Label                func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		Notes                func(childComplexity int) int
+		Operation            func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Ref                  func(childComplexity int) int
+		RejectionMetadata    func(childComplexity int) int
+		Required             func(childComplexity int) int
+		Role                 func(childComplexity int) int
+		Status               func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		WorkflowInstanceID   func(childComplexity int) int
 	}
 
 	WorkflowAssignmentHistoryConnection struct {
@@ -10406,6 +10409,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterDocHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterDocHistoryOrder), args["where"].(*historygenerated.TrustCenterDocHistoryWhereInput)), true
 
+	case "Query.trustCenterEntityHistories":
+		if e.complexity.Query.TrustCenterEntityHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterEntityHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterEntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterEntityHistoryOrder), args["where"].(*historygenerated.TrustCenterEntityHistoryWhereInput)), true
+
 	case "Query.trustCenterHistories":
 		if e.complexity.Query.TrustCenterHistories == nil {
 			break
@@ -10453,18 +10468,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.TrustCenterWatermarkConfigHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterWatermarkConfigHistoryOrder), args["where"].(*historygenerated.TrustCenterWatermarkConfigHistoryWhereInput)), true
-
-	case "Query.trustcenterEntityHistories":
-		if e.complexity.Query.TrustcenterEntityHistories == nil {
-			break
-		}
-
-		args, err := ec.field_Query_trustcenterEntityHistories_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.TrustcenterEntityHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustcenterEntityHistoryOrder), args["where"].(*historygenerated.TrustcenterEntityHistoryWhereInput)), true
 
 	case "Query.userHistories":
 		if e.complexity.Query.UserHistories == nil {
@@ -12989,6 +12992,132 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDocHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterEntityHistory.createdAt":
+		if e.complexity.TrustCenterEntityHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.CreatedAt(childComplexity), true
+
+	case "TrustCenterEntityHistory.createdBy":
+		if e.complexity.TrustCenterEntityHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterEntityHistory.entityTypeID":
+		if e.complexity.TrustCenterEntityHistory.EntityTypeID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.EntityTypeID(childComplexity), true
+
+	case "TrustCenterEntityHistory.historyTime":
+		if e.complexity.TrustCenterEntityHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.HistoryTime(childComplexity), true
+
+	case "TrustCenterEntityHistory.id":
+		if e.complexity.TrustCenterEntityHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.ID(childComplexity), true
+
+	case "TrustCenterEntityHistory.logoFileID":
+		if e.complexity.TrustCenterEntityHistory.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.LogoFileID(childComplexity), true
+
+	case "TrustCenterEntityHistory.name":
+		if e.complexity.TrustCenterEntityHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.Name(childComplexity), true
+
+	case "TrustCenterEntityHistory.operation":
+		if e.complexity.TrustCenterEntityHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.Operation(childComplexity), true
+
+	case "TrustCenterEntityHistory.ref":
+		if e.complexity.TrustCenterEntityHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.Ref(childComplexity), true
+
+	case "TrustCenterEntityHistory.trustCenterID":
+		if e.complexity.TrustCenterEntityHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.TrustCenterID(childComplexity), true
+
+	case "TrustCenterEntityHistory.url":
+		if e.complexity.TrustCenterEntityHistory.URL == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.URL(childComplexity), true
+
+	case "TrustCenterEntityHistory.updatedAt":
+		if e.complexity.TrustCenterEntityHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.UpdatedAt(childComplexity), true
+
+	case "TrustCenterEntityHistory.updatedBy":
+		if e.complexity.TrustCenterEntityHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterEntityHistoryConnection.edges":
+		if e.complexity.TrustCenterEntityHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistoryConnection.Edges(childComplexity), true
+
+	case "TrustCenterEntityHistoryConnection.pageInfo":
+		if e.complexity.TrustCenterEntityHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistoryConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterEntityHistoryConnection.totalCount":
+		if e.complexity.TrustCenterEntityHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterEntityHistoryEdge.cursor":
+		if e.complexity.TrustCenterEntityHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistoryEdge.Cursor(childComplexity), true
+
+	case "TrustCenterEntityHistoryEdge.node":
+		if e.complexity.TrustCenterEntityHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterEntityHistoryEdge.Node(childComplexity), true
+
 	case "TrustCenterHistory.createdAt":
 		if e.complexity.TrustCenterHistory.CreatedAt == nil {
 			break
@@ -13625,132 +13754,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterWatermarkConfigHistoryEdge.Node(childComplexity), true
-
-	case "TrustcenterEntityHistory.createdAt":
-		if e.complexity.TrustcenterEntityHistory.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.CreatedAt(childComplexity), true
-
-	case "TrustcenterEntityHistory.createdBy":
-		if e.complexity.TrustcenterEntityHistory.CreatedBy == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.CreatedBy(childComplexity), true
-
-	case "TrustcenterEntityHistory.entityTypeID":
-		if e.complexity.TrustcenterEntityHistory.EntityTypeID == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.EntityTypeID(childComplexity), true
-
-	case "TrustcenterEntityHistory.historyTime":
-		if e.complexity.TrustcenterEntityHistory.HistoryTime == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.HistoryTime(childComplexity), true
-
-	case "TrustcenterEntityHistory.id":
-		if e.complexity.TrustcenterEntityHistory.ID == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.ID(childComplexity), true
-
-	case "TrustcenterEntityHistory.logoFileID":
-		if e.complexity.TrustcenterEntityHistory.LogoFileID == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.LogoFileID(childComplexity), true
-
-	case "TrustcenterEntityHistory.name":
-		if e.complexity.TrustcenterEntityHistory.Name == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.Name(childComplexity), true
-
-	case "TrustcenterEntityHistory.operation":
-		if e.complexity.TrustcenterEntityHistory.Operation == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.Operation(childComplexity), true
-
-	case "TrustcenterEntityHistory.ref":
-		if e.complexity.TrustcenterEntityHistory.Ref == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.Ref(childComplexity), true
-
-	case "TrustcenterEntityHistory.trustCenterID":
-		if e.complexity.TrustcenterEntityHistory.TrustCenterID == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.TrustCenterID(childComplexity), true
-
-	case "TrustcenterEntityHistory.url":
-		if e.complexity.TrustcenterEntityHistory.URL == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.URL(childComplexity), true
-
-	case "TrustcenterEntityHistory.updatedAt":
-		if e.complexity.TrustcenterEntityHistory.UpdatedAt == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.UpdatedAt(childComplexity), true
-
-	case "TrustcenterEntityHistory.updatedBy":
-		if e.complexity.TrustcenterEntityHistory.UpdatedBy == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistory.UpdatedBy(childComplexity), true
-
-	case "TrustcenterEntityHistoryConnection.edges":
-		if e.complexity.TrustcenterEntityHistoryConnection.Edges == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistoryConnection.Edges(childComplexity), true
-
-	case "TrustcenterEntityHistoryConnection.pageInfo":
-		if e.complexity.TrustcenterEntityHistoryConnection.PageInfo == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistoryConnection.PageInfo(childComplexity), true
-
-	case "TrustcenterEntityHistoryConnection.totalCount":
-		if e.complexity.TrustcenterEntityHistoryConnection.TotalCount == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistoryConnection.TotalCount(childComplexity), true
-
-	case "TrustcenterEntityHistoryEdge.cursor":
-		if e.complexity.TrustcenterEntityHistoryEdge.Cursor == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistoryEdge.Cursor(childComplexity), true
-
-	case "TrustcenterEntityHistoryEdge.node":
-		if e.complexity.TrustcenterEntityHistoryEdge.Node == nil {
-			break
-		}
-
-		return e.complexity.TrustcenterEntityHistoryEdge.Node(childComplexity), true
 
 	case "UserHistory.authProvider":
 		if e.complexity.UserHistory.AuthProvider == nil {
@@ -14480,6 +14483,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowAssignmentHistory.ActorUserID(childComplexity), true
 
+	case "WorkflowAssignmentHistory.approvalMetadata":
+		if e.complexity.WorkflowAssignmentHistory.ApprovalMetadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.ApprovalMetadata(childComplexity), true
+
 	case "WorkflowAssignmentHistory.assignmentKey":
 		if e.complexity.WorkflowAssignmentHistory.AssignmentKey == nil {
 			break
@@ -14529,6 +14539,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowAssignmentHistory.ID(childComplexity), true
 
+	case "WorkflowAssignmentHistory.invalidationMetadata":
+		if e.complexity.WorkflowAssignmentHistory.InvalidationMetadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.InvalidationMetadata(childComplexity), true
+
 	case "WorkflowAssignmentHistory.label":
 		if e.complexity.WorkflowAssignmentHistory.Label == nil {
 			break
@@ -14570,6 +14587,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowAssignmentHistory.Ref(childComplexity), true
+
+	case "WorkflowAssignmentHistory.rejectionMetadata":
+		if e.complexity.WorkflowAssignmentHistory.RejectionMetadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.RejectionMetadata(childComplexity), true
 
 	case "WorkflowAssignmentHistory.required":
 		if e.complexity.WorkflowAssignmentHistory.Required == nil {
@@ -15654,6 +15678,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterComplianceHistoryWhereInput,
 		ec.unmarshalInputTrustCenterDocHistoryOrder,
 		ec.unmarshalInputTrustCenterDocHistoryWhereInput,
+		ec.unmarshalInputTrustCenterEntityHistoryOrder,
+		ec.unmarshalInputTrustCenterEntityHistoryWhereInput,
 		ec.unmarshalInputTrustCenterHistoryOrder,
 		ec.unmarshalInputTrustCenterHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSettingHistoryOrder,
@@ -15662,8 +15688,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterSubprocessorHistoryWhereInput,
 		ec.unmarshalInputTrustCenterWatermarkConfigHistoryOrder,
 		ec.unmarshalInputTrustCenterWatermarkConfigHistoryWhereInput,
-		ec.unmarshalInputTrustcenterEntityHistoryOrder,
-		ec.unmarshalInputTrustcenterEntityHistoryWhereInput,
 		ec.unmarshalInputUserHistoryOrder,
 		ec.unmarshalInputUserHistoryWhereInput,
 		ec.unmarshalInputUserSettingHistoryOrder,
@@ -15880,9 +15904,24 @@ WorkflowEventPayload stores payloads emitted by workflow events and actions.
 """
 scalar WorkflowEventPayload
 """
+WorkflowAssignmentApproval captures structured metadata for workflow assignment approvals.
+"""
+scalar WorkflowAssignmentApproval
+"""
+WorkflowAssignmentInvalidation captures details when an approval is invalidated.
+"""
+scalar WorkflowAssignmentInvalidation
+"""
+WorkflowAssignmentRejection captures details when an approval is rejected or denied.
+"""
+scalar WorkflowAssignmentRejection
+"""
 Channel notifications will be sent to including in-app, slack, etc
 """
 scalar Channel
+"""
+Any is a generic fallback type
+"""
 scalar Any`, BuiltIn: false},
 	{Name: "../schemahistory/ent.graphql", Input: `directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 directive @goModel(model: String, models: [String!], forceGenerate: Boolean) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
@@ -33724,6 +33763,37 @@ type Query {
     """
     where: TrustCenterDocHistoryWhereInput
   ): TrustCenterDocHistoryConnection!
+  trustCenterEntityHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterEntityHistories returned from the connection.
+    """
+    orderBy: TrustCenterEntityHistoryOrder
+
+    """
+    Filtering options for TrustCenterEntityHistories returned from the connection.
+    """
+    where: TrustCenterEntityHistoryWhereInput
+  ): TrustCenterEntityHistoryConnection!
   trustCenterHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -33848,37 +33918,6 @@ type Query {
     """
     where: TrustCenterWatermarkConfigHistoryWhereInput
   ): TrustCenterWatermarkConfigHistoryConnection!
-  trustcenterEntityHistories(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for TrustcenterEntityHistories returned from the connection.
-    """
-    orderBy: TrustcenterEntityHistoryOrder
-
-    """
-    Filtering options for TrustcenterEntityHistories returned from the connection.
-    """
-    where: TrustcenterEntityHistoryWhereInput
-  ): TrustcenterEntityHistoryConnection!
   userHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -37898,7 +37937,7 @@ type SubprocessorHistory implements Node {
   """
   tags: [String!]
   """
-  the organization id that owns the object
+  the ID of the organization owner of the object
   """
   ownerID: String
   """
@@ -39386,7 +39425,7 @@ type TrustCenterDocHistory implements Node {
   """
   originalFileID: String
   """
-  whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+  whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
   """
   watermarkingEnabled: Boolean
   """
@@ -39747,6 +39786,286 @@ input TrustCenterDocHistoryWhereInput {
   standardIDNotNil: Boolean
   standardIDEqualFold: String
   standardIDContainsFold: String
+}
+type TrustCenterEntityHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterEntityHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  The local logo file id
+  """
+  logoFileID: String
+  """
+  URL of customer's website
+  """
+  url: String
+  """
+  The trust center this entity belongs to
+  """
+  trustCenterID: String
+  """
+  The name of the tag definition
+  """
+  name: String!
+  """
+  The entity type for the customer entity
+  """
+  entityTypeID: String
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterEntityHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterEntityHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterEntityHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterEntityHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterEntityHistoryOpType is enum for the field operation
+"""
+enum TrustCenterEntityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterEntityHistory connections
+"""
+input TrustCenterEntityHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterEntityHistories.
+  """
+  field: TrustCenterEntityHistoryOrderField!
+}
+"""
+Properties by which TrustCenterEntityHistory connections can be ordered.
+"""
+enum TrustCenterEntityHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  NAME
+}
+"""
+TrustCenterEntityHistoryWhereInput is used for filtering TrustCenterEntityHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterEntityHistoryWhereInput {
+  not: TrustCenterEntityHistoryWhereInput
+  and: [TrustCenterEntityHistoryWhereInput!]
+  or: [TrustCenterEntityHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterEntityHistoryOpType
+  operationNEQ: TrustCenterEntityHistoryOpType
+  operationIn: [TrustCenterEntityHistoryOpType!]
+  operationNotIn: [TrustCenterEntityHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
+  """
+  url field predicates
+  """
+  url: String
+  urlNEQ: String
+  urlIn: [String!]
+  urlNotIn: [String!]
+  urlGT: String
+  urlGTE: String
+  urlLT: String
+  urlLTE: String
+  urlContains: String
+  urlHasPrefix: String
+  urlHasSuffix: String
+  urlIsNil: Boolean
+  urlNotNil: Boolean
+  urlEqualFold: String
+  urlContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
 }
 type TrustCenterHistory implements Node {
   id: ID!
@@ -41301,268 +41620,6 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   fontNotIn: [TrustCenterWatermarkConfigHistoryFont!]
   fontIsNil: Boolean
   fontNotNil: Boolean
-}
-type TrustcenterEntityHistory implements Node {
-  id: ID!
-  historyTime: Time!
-  ref: String
-  operation: TrustcenterEntityHistoryOpType!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  The local logo file id
-  """
-  logoFileID: String
-  """
-  URL of customer's website
-  """
-  url: String
-  """
-  The trust center this entity belongs to
-  """
-  trustCenterID: String
-  """
-  The name of the tag definition
-  """
-  name: String!
-  """
-  The entity type for the customer entity
-  """
-  entityTypeID: String
-}
-"""
-A connection to a list of items.
-"""
-type TrustcenterEntityHistoryConnection {
-  """
-  A list of edges.
-  """
-  edges: [TrustcenterEntityHistoryEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type TrustcenterEntityHistoryEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: TrustcenterEntityHistory
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-TrustcenterEntityHistoryOpType is enum for the field operation
-"""
-enum TrustcenterEntityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-  INSERT
-  UPDATE
-  DELETE
-}
-"""
-Ordering options for TrustcenterEntityHistory connections
-"""
-input TrustcenterEntityHistoryOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order TrustcenterEntityHistories.
-  """
-  field: TrustcenterEntityHistoryOrderField!
-}
-"""
-Properties by which TrustcenterEntityHistory connections can be ordered.
-"""
-enum TrustcenterEntityHistoryOrderField {
-  history_time
-  created_at
-  updated_at
-  NAME
-}
-"""
-TrustcenterEntityHistoryWhereInput is used for filtering TrustcenterEntityHistory objects.
-Input was generated by ent.
-"""
-input TrustcenterEntityHistoryWhereInput {
-  not: TrustcenterEntityHistoryWhereInput
-  and: [TrustcenterEntityHistoryWhereInput!]
-  or: [TrustcenterEntityHistoryWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  history_time field predicates
-  """
-  historyTime: Time
-  historyTimeNEQ: Time
-  historyTimeIn: [Time!]
-  historyTimeNotIn: [Time!]
-  historyTimeGT: Time
-  historyTimeGTE: Time
-  historyTimeLT: Time
-  historyTimeLTE: Time
-  """
-  ref field predicates
-  """
-  ref: String
-  refNEQ: String
-  refIn: [String!]
-  refNotIn: [String!]
-  refGT: String
-  refGTE: String
-  refLT: String
-  refLTE: String
-  refContains: String
-  refHasPrefix: String
-  refHasSuffix: String
-  refIsNil: Boolean
-  refNotNil: Boolean
-  refEqualFold: String
-  refContainsFold: String
-  """
-  operation field predicates
-  """
-  operation: TrustcenterEntityHistoryOpType
-  operationNEQ: TrustcenterEntityHistoryOpType
-  operationIn: [TrustcenterEntityHistoryOpType!]
-  operationNotIn: [TrustcenterEntityHistoryOpType!]
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  logo_file_id field predicates
-  """
-  logoFileID: String
-  logoFileIDNEQ: String
-  logoFileIDIn: [String!]
-  logoFileIDNotIn: [String!]
-  logoFileIDGT: String
-  logoFileIDGTE: String
-  logoFileIDLT: String
-  logoFileIDLTE: String
-  logoFileIDContains: String
-  logoFileIDHasPrefix: String
-  logoFileIDHasSuffix: String
-  logoFileIDIsNil: Boolean
-  logoFileIDNotNil: Boolean
-  logoFileIDEqualFold: String
-  logoFileIDContainsFold: String
-  """
-  url field predicates
-  """
-  url: String
-  urlNEQ: String
-  urlIn: [String!]
-  urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
-  urlContains: String
-  urlHasPrefix: String
-  urlHasSuffix: String
-  urlIsNil: Boolean
-  urlNotNil: Boolean
-  urlEqualFold: String
-  urlContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
 }
 type UserHistory implements Node {
   id: ID!
@@ -43227,6 +43284,18 @@ type WorkflowAssignmentHistory implements Node {
   Optional metadata for the assignment
   """
   metadata: Map
+  """
+  structured approval metadata
+  """
+  approvalMetadata: WorkflowAssignmentApproval
+  """
+  structured rejection metadata
+  """
+  rejectionMetadata: WorkflowAssignmentRejection
+  """
+  structured invalidation metadata
+  """
+  invalidationMetadata: WorkflowAssignmentInvalidation
   """
   Timestamp when the assignment was decided
   """

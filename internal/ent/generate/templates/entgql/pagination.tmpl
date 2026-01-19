@@ -307,7 +307,9 @@ func (p *{{ $pager }}) applyCursors(query *{{ $query }}, after, before *Cursor) 
 		for i, predicate := range predicates {
 			query = query.Where(func(s *sql.Selector) {
 				predicate(s)
-				s.Or().Where(sql.IsNull(fields[i]))
+				if i < len(fields) {
+					s.Or().Where(sql.IsNull(fields[i]))
+				}
 		})
 		}
 	{{- else }}

@@ -76,6 +76,15 @@ models:
   Any:
     model:
       - github.com/99designs/gqlgen/graphql.Any
+  WorkflowAssignmentApproval:
+    model:
+      - github.com/theopenlane/core/common/models.WorkflowAssignmentApproval
+  WorkflowAssignmentInvalidation:
+    model:
+      - github.com/theopenlane/core/common/models.WorkflowAssignmentInvalidation
+  WorkflowAssignmentRejection:
+    model:
+      - github.com/theopenlane/core/common/models.WorkflowAssignmentRejection
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

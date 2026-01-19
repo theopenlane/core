@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -144,6 +145,36 @@ func (_c *TrustCenterComplianceCreate) SetNillableID(v *string) *TrustCenterComp
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_c *TrustCenterComplianceCreate) AddBlockedGroupIDs(ids ...string) *TrustCenterComplianceCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_c *TrustCenterComplianceCreate) AddBlockedGroups(v ...*Group) *TrustCenterComplianceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_c *TrustCenterComplianceCreate) AddEditorIDs(ids ...string) *TrustCenterComplianceCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_c *TrustCenterComplianceCreate) AddEditors(v ...*Group) *TrustCenterComplianceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEditorIDs(ids...)
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
@@ -302,6 +333,40 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(trustcentercompliance.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentercompliance.BlockedGroupsTable,
+			Columns: []string{trustcentercompliance.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentercompliance.EditorsTable,
+			Columns: []string{trustcentercompliance.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

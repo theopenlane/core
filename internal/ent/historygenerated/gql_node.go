@@ -338,6 +338,11 @@ var trustcenterdochistoryImplementors = []string{"TrustCenterDocHistory", "Node"
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterDocHistory) IsNode() {}
 
+var trustcenterentityhistoryImplementors = []string{"TrustCenterEntityHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterEntityHistory) IsNode() {}
+
 var trustcenterhistoryImplementors = []string{"TrustCenterHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -357,11 +362,6 @@ var trustcenterwatermarkconfighistoryImplementors = []string{"TrustCenterWaterma
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterWatermarkConfigHistory) IsNode() {}
-
-var trustcenterentityhistoryImplementors = []string{"TrustcenterEntityHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*TrustcenterEntityHistory) IsNode() {}
 
 var userhistoryImplementors = []string{"UserHistory", "Node"}
 
@@ -925,6 +925,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case trustcenterentityhistory.Table:
+		query := c.TrustCenterEntityHistory.Query().
+			Where(trustcenterentityhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterentityhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case trustcenterhistory.Table:
 		query := c.TrustCenterHistory.Query().
 			Where(trustcenterhistory.ID(id))
@@ -957,15 +966,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcenterwatermarkconfighistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterwatermarkconfighistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case trustcenterentityhistory.Table:
-		query := c.TrustcenterEntityHistory.Query().
-			Where(trustcenterentityhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterentityhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1940,6 +1940,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case trustcenterentityhistory.Table:
+		query := c.TrustCenterEntityHistory.Query().
+			Where(trustcenterentityhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterentityhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case trustcenterhistory.Table:
 		query := c.TrustCenterHistory.Query().
 			Where(trustcenterhistory.IDIn(ids...))
@@ -1992,22 +2008,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterWatermarkConfigHistory.Query().
 			Where(trustcenterwatermarkconfighistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcenterwatermarkconfighistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case trustcenterentityhistory.Table:
-		query := c.TrustcenterEntityHistory.Query().
-			Where(trustcenterentityhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, trustcenterentityhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

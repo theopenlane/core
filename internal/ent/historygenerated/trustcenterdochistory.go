@@ -54,7 +54,7 @@ type TrustCenterDocHistory struct {
 	FileID *string `json:"file_id,omitempty"`
 	// ID of the file containing the document, before any watermarking
 	OriginalFileID *string `json:"original_file_id,omitempty"`
-	// whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	// whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
 	WatermarkingEnabled bool `json:"watermarking_enabled,omitempty"`
 	// status of the watermarking
 	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`

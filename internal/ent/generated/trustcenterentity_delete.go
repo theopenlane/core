@@ -14,26 +14,26 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 )
 
-// TrustcenterEntityDelete is the builder for deleting a TrustcenterEntity entity.
-type TrustcenterEntityDelete struct {
+// TrustCenterEntityDelete is the builder for deleting a TrustCenterEntity entity.
+type TrustCenterEntityDelete struct {
 	config
 	hooks    []Hook
-	mutation *TrustcenterEntityMutation
+	mutation *TrustCenterEntityMutation
 }
 
-// Where appends a list predicates to the TrustcenterEntityDelete builder.
-func (_d *TrustcenterEntityDelete) Where(ps ...predicate.TrustcenterEntity) *TrustcenterEntityDelete {
+// Where appends a list predicates to the TrustCenterEntityDelete builder.
+func (_d *TrustCenterEntityDelete) Where(ps ...predicate.TrustCenterEntity) *TrustCenterEntityDelete {
 	_d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (_d *TrustcenterEntityDelete) Exec(ctx context.Context) (int, error) {
+func (_d *TrustCenterEntityDelete) Exec(ctx context.Context) (int, error) {
 	return withHooks(ctx, _d.sqlExec, _d.mutation, _d.hooks)
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *TrustcenterEntityDelete) ExecX(ctx context.Context) int {
+func (_d *TrustCenterEntityDelete) ExecX(ctx context.Context) int {
 	n, err := _d.Exec(ctx)
 	if err != nil {
 		panic(err)
@@ -41,9 +41,9 @@ func (_d *TrustcenterEntityDelete) ExecX(ctx context.Context) int {
 	return n
 }
 
-func (_d *TrustcenterEntityDelete) sqlExec(ctx context.Context) (int, error) {
+func (_d *TrustCenterEntityDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcenterentity.Table, sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.TrustcenterEntity
+	_spec.Node.Schema = _d.schemaConfig.TrustCenterEntity
 	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -60,19 +60,19 @@ func (_d *TrustcenterEntityDelete) sqlExec(ctx context.Context) (int, error) {
 	return affected, err
 }
 
-// TrustcenterEntityDeleteOne is the builder for deleting a single TrustcenterEntity entity.
-type TrustcenterEntityDeleteOne struct {
-	_d *TrustcenterEntityDelete
+// TrustCenterEntityDeleteOne is the builder for deleting a single TrustCenterEntity entity.
+type TrustCenterEntityDeleteOne struct {
+	_d *TrustCenterEntityDelete
 }
 
-// Where appends a list predicates to the TrustcenterEntityDelete builder.
-func (_d *TrustcenterEntityDeleteOne) Where(ps ...predicate.TrustcenterEntity) *TrustcenterEntityDeleteOne {
+// Where appends a list predicates to the TrustCenterEntityDelete builder.
+func (_d *TrustCenterEntityDeleteOne) Where(ps ...predicate.TrustCenterEntity) *TrustCenterEntityDeleteOne {
 	_d._d.mutation.Where(ps...)
 	return _d
 }
 
 // Exec executes the deletion query.
-func (_d *TrustcenterEntityDeleteOne) Exec(ctx context.Context) error {
+func (_d *TrustCenterEntityDeleteOne) Exec(ctx context.Context) error {
 	n, err := _d._d.Exec(ctx)
 	switch {
 	case err != nil:
@@ -85,7 +85,7 @@ func (_d *TrustcenterEntityDeleteOne) Exec(ctx context.Context) error {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_d *TrustcenterEntityDeleteOne) ExecX(ctx context.Context) {
+func (_d *TrustCenterEntityDeleteOne) ExecX(ctx context.Context) {
 	if err := _d.Exec(ctx); err != nil {
 		panic(err)
 	}

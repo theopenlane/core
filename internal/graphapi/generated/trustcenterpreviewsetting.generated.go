@@ -93,8 +93,10 @@ func (ec *executionContext) fieldContext_TrustCenterPreviewSettingCreatePayload_
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
 			case "environment":
 				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterSetting_editors(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustCenterSetting_logoFile(ctx, field)
 			case "faviconFile":

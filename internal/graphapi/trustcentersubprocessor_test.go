@@ -4,9 +4,12 @@ import (
 	"context"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -171,12 +174,13 @@ func TestMutationCreateTrustCenterSubprocessorAsAnonymousUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			// Create anonymous trust center context
+			// Create anonymous trust center context should fail
 			anonCtx := createAnonymousTrustCenterContext(tc.trustCenterID, tc.organizationID)
 
-			_, err := tc.client.CreateTrustCenterSubprocessor(anonCtx, tc.request)
+			resp, err := tc.client.CreateTrustCenterSubprocessor(anonCtx, tc.request)
 
 			assert.ErrorContains(t, err, tc.expectedErr)
+			assert.Check(t, resp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID == "")
 		})
 	}
 
@@ -631,8 +635,30 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	viewOnlyUserCtx := auth.NewTestContextWithOrgID(om.UserID, testUser.OrganizationID)
 
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	subprocessor1 := (&SubprocessorBuilder{client: suite.client, Description: gofakeit.Sentence()}).MustNew(testUser.UserCtx, t)
+
+	createLogoUpload := func() *graphql.Upload {
+		logoFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        logoFile.RawFile,
+			Filename:    logoFile.OriginalName,
+			Size:        logoFile.Size,
+			ContentType: logoFile.ContentType,
+		}
+	}
+	logoFile := createLogoUpload()
+
+	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
+
+	subprocessorWithFile, err := suite.client.api.CreateSubprocessor(testUser.UserCtx, testclient.CreateSubprocessorInput{
+		Name:        "Subprocessor With File",
+		Description: lo.ToPtr("A subprocessor with a logo file"),
+	}, logoFile)
+	assert.NilError(t, err)
+	assert.Assert(t, subprocessorWithFile != nil)
+	assert.Assert(t, subprocessorWithFile.CreateSubprocessor.Subprocessor.ID != "")
+	assert.Assert(t, subprocessorWithFile.CreateSubprocessor.Subprocessor.LogoFile.ID != "")
 
 	// Create trust center subprocessors
 	createResp1, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
@@ -645,7 +671,7 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	tcSubprocessor1 := createResp1.CreateTrustCenterSubprocessor.TrustCenterSubprocessor
 
 	createResp2, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
-		SubprocessorID: subprocessor2.ID,
+		SubprocessorID: subprocessorWithFile.CreateSubprocessor.Subprocessor.ID,
 		TrustCenterID:  &trustCenter.ID,
 		Category:       "Analytics",
 		Countries:      []string{"CA"},
@@ -741,6 +767,15 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 					assert.Check(t, edge.Node.ID != "")
 					assert.Check(t, edge.Node.Category != "")
 					assert.Check(t, edge.Node.Subprocessor.Name != "")
+					assert.Assert(t, edge.Node.Subprocessor.Description != nil)
+
+					if edge.Node.ID == tcSubprocessor2.ID {
+						assert.Check(t, *edge.Node.Subprocessor.Description == *tcSubprocessor2.Subprocessor.Description)
+						// Verify that the subprocessor with file has logo file details
+						assert.Assert(t, edge.Node.Subprocessor.LogoFile != nil)
+						assert.Check(t, edge.Node.Subprocessor.LogoFile.PresignedURL != nil)
+					}
+
 				}
 			}
 		})
@@ -751,6 +786,6 @@ func TestQueryTrustCenterSubprocessors(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterSubprocessorDeleteOne]{client: suite.client.db.TrustCenterSubprocessor, ID: tcSubprocessor3.ID}).MustDelete(testUserAnother.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUserAnother.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID}}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessorWithFile.CreateSubprocessor.Subprocessor.ID}}).MustDelete(testUser.UserCtx, t)
 	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor3.ID}).MustDelete(testUserAnother.UserCtx, t)
 }

@@ -48,15 +48,40 @@ type TrustCenterSubprocessor struct {
 
 // TrustCenterSubprocessorEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterSubprocessorEdges struct {
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Subprocessor holds the value of the subprocessor edge.
 	Subprocessor *Subprocessor `json:"subprocessor,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
+
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterSubprocessorEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[0] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterSubprocessorEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -64,7 +89,7 @@ type TrustCenterSubprocessorEdges struct {
 func (e TrustCenterSubprocessorEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -75,7 +100,7 @@ func (e TrustCenterSubprocessorEdges) TrustCenterOrErr() (*TrustCenter, error) {
 func (e TrustCenterSubprocessorEdges) SubprocessorOrErr() (*Subprocessor, error) {
 	if e.Subprocessor != nil {
 		return e.Subprocessor, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: subprocessor.Label}
 	}
 	return nil, &NotLoadedError{edge: "subprocessor"}
@@ -188,6 +213,16 @@ func (_m *TrustCenterSubprocessor) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterSubprocessor entity.
+func (_m *TrustCenterSubprocessor) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterSubprocessorClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenterSubprocessor entity.
+func (_m *TrustCenterSubprocessor) QueryEditors() *GroupQuery {
+	return NewTrustCenterSubprocessorClient(_m.config).QueryEditors(_m)
+}
+
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterSubprocessor entity.
 func (_m *TrustCenterSubprocessor) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterSubprocessorClient(_m.config).QueryTrustCenter(_m)
@@ -252,6 +287,54 @@ func (_m *TrustCenterSubprocessor) String() string {
 	builder.WriteString(_m.Category)
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterSubprocessor) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterSubprocessor) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterSubprocessor) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterSubprocessor) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
 }
 
 // TrustCenterSubprocessors is a parsable slice of TrustCenterSubprocessor.

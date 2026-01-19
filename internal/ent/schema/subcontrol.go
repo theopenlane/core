@@ -136,7 +136,7 @@ func (s Subcontrol) Mixin() []ent.Mixin {
 				withParents(Control{}),
 				withOrganizationOwner(true),
 			),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(s, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},
 		},

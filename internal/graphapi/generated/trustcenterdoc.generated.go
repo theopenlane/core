@@ -64,14 +64,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
 				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "originalFileID":
@@ -84,8 +82,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -166,14 +166,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
 				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "originalFileID":
@@ -186,8 +184,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -268,14 +268,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
 				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "originalFileID":
@@ -288,8 +286,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":
@@ -370,14 +370,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_updatedBy(ctx, field)
 			case "tags":
 				return ec.fieldContext_TrustCenterDoc_tags(ctx, field)
-			case "trustCenterDocKindName":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindName(ctx, field)
-			case "trustCenterDocKindID":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKindID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterDoc_trustCenterID(ctx, field)
 			case "title":
 				return ec.fieldContext_TrustCenterDoc_title(ctx, field)
+			case "category":
+				return ec.fieldContext_TrustCenterDoc_category(ctx, field)
 			case "fileID":
 				return ec.fieldContext_TrustCenterDoc_fileID(ctx, field)
 			case "originalFileID":
@@ -390,8 +388,10 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
 			case "standardID":
 				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
-			case "trustCenterDocKind":
-				return ec.fieldContext_TrustCenterDoc_trustCenterDocKind(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterDoc_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterDoc_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
 			case "standard":

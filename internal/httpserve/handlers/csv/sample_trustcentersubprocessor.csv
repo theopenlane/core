@@ -1,2 +1,2 @@
-Countries,Category,TrustCenterId,SubprocessorId
-example_countries,example_category,example_trustcenterid,example_subprocessorid
+Countries,Category,BlockedGroupIDs,EditorIDs,TrustCenterId,SubprocessorId
+example_countries,example_category,example_blockedgroupids,example_editorids,example_trustcenterid,example_subprocessorid

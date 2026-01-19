@@ -151,7 +151,7 @@ func (p Procedure) Mixin() []ent.Mixin {
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			// all procedures are documents
 			NewDocumentMixin(p),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(p, withWorkflowEnumEdges()),
 			WorkflowApprovalMixin{},
 		},

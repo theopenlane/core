@@ -16103,6 +16103,218 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *TrustCenterEntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.TrustCenterEntityHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if logoFileID, exists := m.LogoFileID(); exists {
+		create = create.SetNillableLogoFileID(&logoFileID)
+	}
+
+	if url, exists := m.URL(); exists {
+		create = create.SetURL(url)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if entityTypeID, exists := m.EntityTypeID(); exists {
+		create = create.SetEntityTypeID(entityTypeID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterentity, err := client.TrustCenterEntity.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterEntityHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcenterentity.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcenterentity.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcenterentity.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcenterentity.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcenterentity.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcenterentity.DeletedBy)
+		}
+
+		if logoFileID, exists := m.LogoFileID(); exists {
+			create = create.SetNillableLogoFileID(&logoFileID)
+		} else {
+			create = create.SetNillableLogoFileID(trustcenterentity.LogoFileID)
+		}
+
+		if url, exists := m.URL(); exists {
+			create = create.SetURL(url)
+		} else {
+			create = create.SetURL(trustcenterentity.URL)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterentity.TrustCenterID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(trustcenterentity.Name)
+		}
+
+		if entityTypeID, exists := m.EntityTypeID(); exists {
+			create = create.SetEntityTypeID(entityTypeID)
+		} else {
+			create = create.SetEntityTypeID(trustcenterentity.EntityTypeID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterentity, err := client.TrustCenterEntity.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterEntityHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcenterentity.CreatedAt).
+			SetUpdatedAt(trustcenterentity.UpdatedAt).
+			SetCreatedBy(trustcenterentity.CreatedBy).
+			SetUpdatedBy(trustcenterentity.UpdatedBy).
+			SetDeletedAt(trustcenterentity.DeletedAt).
+			SetDeletedBy(trustcenterentity.DeletedBy).
+			SetNillableLogoFileID(trustcenterentity.LogoFileID).
+			SetURL(trustcenterentity.URL).
+			SetTrustCenterID(trustcenterentity.TrustCenterID).
+			SetName(trustcenterentity.Name).
+			SetEntityTypeID(trustcenterentity.EntityTypeID).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -16895,218 +17107,6 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			SetRotation(trustcenterwatermarkconfig.Rotation).
 			SetColor(trustcenterwatermarkconfig.Color).
 			SetFont(trustcenterwatermarkconfig.Font).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *TrustcenterEntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.TrustcenterEntityHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if logoFileID, exists := m.LogoFileID(); exists {
-		create = create.SetNillableLogoFileID(&logoFileID)
-	}
-
-	if url, exists := m.URL(); exists {
-		create = create.SetURL(url)
-	}
-
-	if trustCenterID, exists := m.TrustCenterID(); exists {
-		create = create.SetTrustCenterID(trustCenterID)
-	}
-
-	if name, exists := m.Name(); exists {
-		create = create.SetName(name)
-	}
-
-	if entityTypeID, exists := m.EntityTypeID(); exists {
-		create = create.SetEntityTypeID(entityTypeID)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *TrustcenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		trustcenterentity, err := client.TrustcenterEntity.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.TrustcenterEntityHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(trustcenterentity.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(trustcenterentity.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(trustcenterentity.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(trustcenterentity.UpdatedBy)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(trustcenterentity.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(trustcenterentity.DeletedBy)
-		}
-
-		if logoFileID, exists := m.LogoFileID(); exists {
-			create = create.SetNillableLogoFileID(&logoFileID)
-		} else {
-			create = create.SetNillableLogoFileID(trustcenterentity.LogoFileID)
-		}
-
-		if url, exists := m.URL(); exists {
-			create = create.SetURL(url)
-		} else {
-			create = create.SetURL(trustcenterentity.URL)
-		}
-
-		if trustCenterID, exists := m.TrustCenterID(); exists {
-			create = create.SetTrustCenterID(trustCenterID)
-		} else {
-			create = create.SetTrustCenterID(trustcenterentity.TrustCenterID)
-		}
-
-		if name, exists := m.Name(); exists {
-			create = create.SetName(name)
-		} else {
-			create = create.SetName(trustcenterentity.Name)
-		}
-
-		if entityTypeID, exists := m.EntityTypeID(); exists {
-			create = create.SetEntityTypeID(entityTypeID)
-		} else {
-			create = create.SetEntityTypeID(trustcenterentity.EntityTypeID)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *TrustcenterEntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		trustcenterentity, err := client.TrustcenterEntity.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.TrustcenterEntityHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(trustcenterentity.CreatedAt).
-			SetUpdatedAt(trustcenterentity.UpdatedAt).
-			SetCreatedBy(trustcenterentity.CreatedBy).
-			SetUpdatedBy(trustcenterentity.UpdatedBy).
-			SetDeletedAt(trustcenterentity.DeletedAt).
-			SetDeletedBy(trustcenterentity.DeletedBy).
-			SetNillableLogoFileID(trustcenterentity.LogoFileID).
-			SetURL(trustcenterentity.URL).
-			SetTrustCenterID(trustcenterentity.TrustCenterID).
-			SetName(trustcenterentity.Name).
-			SetEntityTypeID(trustcenterentity.EntityTypeID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -18382,6 +18382,18 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetMetadata(metadata)
 	}
 
+	if approvalMetadata, exists := m.ApprovalMetadata(); exists {
+		create = create.SetApprovalMetadata(approvalMetadata)
+	}
+
+	if rejectionMetadata, exists := m.RejectionMetadata(); exists {
+		create = create.SetRejectionMetadata(rejectionMetadata)
+	}
+
+	if invalidationMetadata, exists := m.InvalidationMetadata(); exists {
+		create = create.SetInvalidationMetadata(invalidationMetadata)
+	}
+
 	if decidedAt, exists := m.DecidedAt(); exists {
 		create = create.SetNillableDecidedAt(&decidedAt)
 	}
@@ -18525,6 +18537,24 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetMetadata(workflowassignment.Metadata)
 		}
 
+		if approvalMetadata, exists := m.ApprovalMetadata(); exists {
+			create = create.SetApprovalMetadata(approvalMetadata)
+		} else {
+			create = create.SetApprovalMetadata(workflowassignment.ApprovalMetadata)
+		}
+
+		if rejectionMetadata, exists := m.RejectionMetadata(); exists {
+			create = create.SetRejectionMetadata(rejectionMetadata)
+		} else {
+			create = create.SetRejectionMetadata(workflowassignment.RejectionMetadata)
+		}
+
+		if invalidationMetadata, exists := m.InvalidationMetadata(); exists {
+			create = create.SetInvalidationMetadata(invalidationMetadata)
+		} else {
+			create = create.SetInvalidationMetadata(workflowassignment.InvalidationMetadata)
+		}
+
 		if decidedAt, exists := m.DecidedAt(); exists {
 			create = create.SetNillableDecidedAt(&decidedAt)
 		} else {
@@ -18600,6 +18630,9 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 			SetRequired(workflowassignment.Required).
 			SetStatus(workflowassignment.Status).
 			SetMetadata(workflowassignment.Metadata).
+			SetApprovalMetadata(workflowassignment.ApprovalMetadata).
+			SetRejectionMetadata(workflowassignment.RejectionMetadata).
+			SetInvalidationMetadata(workflowassignment.InvalidationMetadata).
 			SetNillableDecidedAt(workflowassignment.DecidedAt).
 			SetActorUserID(workflowassignment.ActorUserID).
 			SetActorGroupID(workflowassignment.ActorGroupID).

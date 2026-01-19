@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 
@@ -224,6 +225,66 @@ func (_u *WorkflowAssignmentHistoryUpdate) SetMetadata(v map[string]interface{})
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *WorkflowAssignmentHistoryUpdate) ClearMetadata() *WorkflowAssignmentHistoryUpdate {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetApprovalMetadata sets the "approval_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) SetApprovalMetadata(v models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.SetApprovalMetadata(v)
+	return _u
+}
+
+// SetNillableApprovalMetadata sets the "approval_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdate) SetNillableApprovalMetadata(v *models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdate {
+	if v != nil {
+		_u.SetApprovalMetadata(*v)
+	}
+	return _u
+}
+
+// ClearApprovalMetadata clears the value of the "approval_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) ClearApprovalMetadata() *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.ClearApprovalMetadata()
+	return _u
+}
+
+// SetRejectionMetadata sets the "rejection_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) SetRejectionMetadata(v models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.SetRejectionMetadata(v)
+	return _u
+}
+
+// SetNillableRejectionMetadata sets the "rejection_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdate) SetNillableRejectionMetadata(v *models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdate {
+	if v != nil {
+		_u.SetRejectionMetadata(*v)
+	}
+	return _u
+}
+
+// ClearRejectionMetadata clears the value of the "rejection_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) ClearRejectionMetadata() *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.ClearRejectionMetadata()
+	return _u
+}
+
+// SetInvalidationMetadata sets the "invalidation_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) SetInvalidationMetadata(v models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.SetInvalidationMetadata(v)
+	return _u
+}
+
+// SetNillableInvalidationMetadata sets the "invalidation_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdate) SetNillableInvalidationMetadata(v *models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdate {
+	if v != nil {
+		_u.SetInvalidationMetadata(*v)
+	}
+	return _u
+}
+
+// ClearInvalidationMetadata clears the value of the "invalidation_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) ClearInvalidationMetadata() *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.ClearInvalidationMetadata()
 	return _u
 }
 
@@ -455,6 +516,24 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.ApprovalMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RejectionMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.RejectionMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.InvalidationMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.InvalidationMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)
@@ -693,6 +772,66 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) SetMetadata(v map[string]interface
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *WorkflowAssignmentHistoryUpdateOne) ClearMetadata() *WorkflowAssignmentHistoryUpdateOne {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetApprovalMetadata sets the "approval_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetApprovalMetadata(v models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.SetApprovalMetadata(v)
+	return _u
+}
+
+// SetNillableApprovalMetadata sets the "approval_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableApprovalMetadata(v *models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovalMetadata(*v)
+	}
+	return _u
+}
+
+// ClearApprovalMetadata clears the value of the "approval_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) ClearApprovalMetadata() *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.ClearApprovalMetadata()
+	return _u
+}
+
+// SetRejectionMetadata sets the "rejection_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetRejectionMetadata(v models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.SetRejectionMetadata(v)
+	return _u
+}
+
+// SetNillableRejectionMetadata sets the "rejection_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableRejectionMetadata(v *models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetRejectionMetadata(*v)
+	}
+	return _u
+}
+
+// ClearRejectionMetadata clears the value of the "rejection_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) ClearRejectionMetadata() *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.ClearRejectionMetadata()
+	return _u
+}
+
+// SetInvalidationMetadata sets the "invalidation_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetInvalidationMetadata(v models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.SetInvalidationMetadata(v)
+	return _u
+}
+
+// SetNillableInvalidationMetadata sets the "invalidation_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableInvalidationMetadata(v *models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetInvalidationMetadata(*v)
+	}
+	return _u
+}
+
+// ClearInvalidationMetadata clears the value of the "invalidation_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) ClearInvalidationMetadata() *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.ClearInvalidationMetadata()
 	return _u
 }
 
@@ -954,6 +1093,24 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ApprovalMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.ApprovalMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RejectionMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.RejectionMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.InvalidationMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.InvalidationMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)

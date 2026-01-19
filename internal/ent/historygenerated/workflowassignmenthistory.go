@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -60,6 +61,12 @@ type WorkflowAssignmentHistory struct {
 	Status enums.WorkflowAssignmentStatus `json:"status,omitempty"`
 	// Optional metadata for the assignment
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// structured approval metadata
+	ApprovalMetadata models.WorkflowAssignmentApproval `json:"approval_metadata,omitempty"`
+	// structured rejection metadata
+	RejectionMetadata models.WorkflowAssignmentRejection `json:"rejection_metadata,omitempty"`
+	// structured invalidation metadata
+	InvalidationMetadata models.WorkflowAssignmentInvalidation `json:"invalidation_metadata,omitempty"`
 	// Timestamp when the assignment was decided
 	DecidedAt *time.Time `json:"decided_at,omitempty"`
 	// User who made the decision
@@ -76,7 +83,7 @@ func (*WorkflowAssignmentHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowassignmenthistory.FieldTags, workflowassignmenthistory.FieldMetadata:
+		case workflowassignmenthistory.FieldTags, workflowassignmenthistory.FieldMetadata, workflowassignmenthistory.FieldApprovalMetadata, workflowassignmenthistory.FieldRejectionMetadata, workflowassignmenthistory.FieldInvalidationMetadata:
 			values[i] = new([]byte)
 		case workflowassignmenthistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -225,6 +232,30 @@ func (_m *WorkflowAssignmentHistory) assignValues(columns []string, values []any
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case workflowassignmenthistory.FieldApprovalMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field approval_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.ApprovalMetadata); err != nil {
+					return fmt.Errorf("unmarshal field approval_metadata: %w", err)
+				}
+			}
+		case workflowassignmenthistory.FieldRejectionMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field rejection_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.RejectionMetadata); err != nil {
+					return fmt.Errorf("unmarshal field rejection_metadata: %w", err)
+				}
+			}
+		case workflowassignmenthistory.FieldInvalidationMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field invalidation_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.InvalidationMetadata); err != nil {
+					return fmt.Errorf("unmarshal field invalidation_metadata: %w", err)
+				}
+			}
 		case workflowassignmenthistory.FieldDecidedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field decided_at", values[i])
@@ -342,6 +373,15 @@ func (_m *WorkflowAssignmentHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("approval_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ApprovalMetadata))
+	builder.WriteString(", ")
+	builder.WriteString("rejection_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RejectionMetadata))
+	builder.WriteString(", ")
+	builder.WriteString("invalidation_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.InvalidationMetadata))
 	builder.WriteString(", ")
 	if v := _m.DecidedAt; v != nil {
 		builder.WriteString("decided_at=")

@@ -131,6 +131,33 @@ query GetAllTrustCenters {
             }
           }
         }
+        trustCenterEntities {
+          edges {
+            node {
+              id
+              name
+              logoFile {
+                id
+                base64
+                presignedURL
+              }
+            }
+          }
+        }
+        trustCenterSubprocessors {
+          edges {
+            node {
+              id
+              subprocessor {
+                name
+                description
+                logoFile {
+                  base64
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -180,6 +207,162 @@ query GetTrustCenterByID($trustCenterId: ID!) {
         node {
           id
           text
+        }
+      }
+    }
+    trustCenterEntities {
+      edges {
+        node {
+          id
+          name
+          logoFile {
+            id
+            base64
+            presignedURL
+          }
+        }
+      }
+    }
+    trustCenterSubprocessors {
+      edges {
+        node {
+          id
+          subprocessor {
+            name
+            description
+            logoFile {
+              base64
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetTrustCenterFrontendQuery {
+  trustCenters {
+    edges {
+      node {
+        id
+        slug
+        customDomain {
+          cnameRecord
+        }
+        previewDomain {
+          cnameRecord
+        }
+        setting {
+          id
+          title
+          overview
+          accentColor
+          backgroundColor
+          themeMode
+          primaryColor
+          secondaryForegroundColor
+          secondaryBackgroundColor
+          font
+          foregroundColor
+          logoRemoteURL
+          logoFile {
+            base64
+          }
+          faviconFile {
+            base64
+          }
+        }
+        previewSetting {
+          id
+          title
+          overview
+          accentColor
+          backgroundColor
+          themeMode
+          primaryColor
+          secondaryForegroundColor
+          secondaryBackgroundColor
+          font
+          foregroundColor
+          logoRemoteURL
+          logoFile {
+            base64
+          }
+          faviconFile {
+            base64
+          }
+        }
+        trustCenterCompliances {
+          edges {
+            node {
+              id
+              tags
+              standard {
+                description
+                name
+                id
+                shortName
+                logoFile {
+                  base64
+                }
+                governingBodyLogoURL
+              }
+            }
+          }
+        }
+        trustCenterSubprocessors {
+          edges {
+            node {
+              id
+              countries
+              category
+              subprocessor {
+                name
+                logoFile {
+                  base64
+                  presignedURL
+                }
+                logoRemoteURL
+              }
+            }
+          }
+        }
+        trustCenterEntities {
+          edges {
+            node {
+              id
+              name
+              logoFile {
+                base64
+              }
+              url
+            }
+          }
+        }
+        trustCenterDocs(orderBy: [{field: created_at, direction: DESC}]) {
+          edges {
+            node {
+              id
+              title
+              tags
+              visibility
+              category
+              tags
+              standard {
+                id
+                shortName
+              }
+            }
+          }
+        }
+        posts(orderBy: [{field: created_at, direction: DESC}]) {
+          edges {
+            node {
+              id
+              text
+              updatedAt
+            }
+          }
         }
       }
     }

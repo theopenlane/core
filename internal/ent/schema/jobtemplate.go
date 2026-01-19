@@ -118,9 +118,6 @@ func (j JobTemplate) Mixin() []ent.Mixin {
 		prefix: "JBT",
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(j),
-			// TODO: this was added but public access tuples are not
-			// yet implemented; so users cannot access job templates
-			// created by system admins
 			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(j)

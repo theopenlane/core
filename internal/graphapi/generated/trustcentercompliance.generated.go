@@ -68,6 +68,10 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceBulkCreatePayload_
 				return ec.fieldContext_TrustCenterCompliance_standardID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterCompliance_trustCenterID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterCompliance_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterCompliance_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterCompliance_trustCenter(ctx, field)
 			case "standard":
@@ -148,6 +152,10 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceCreatePayload_trus
 				return ec.fieldContext_TrustCenterCompliance_standardID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterCompliance_trustCenterID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterCompliance_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterCompliance_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterCompliance_trustCenter(ctx, field)
 			case "standard":
@@ -228,6 +236,10 @@ func (ec *executionContext) fieldContext_TrustCenterComplianceUpdatePayload_trus
 				return ec.fieldContext_TrustCenterCompliance_standardID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterCompliance_trustCenterID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterCompliance_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterCompliance_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterCompliance_trustCenter(ctx, field)
 			case "standard":

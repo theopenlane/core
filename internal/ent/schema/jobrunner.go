@@ -85,7 +85,7 @@ func (j JobRunner) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(j,
 				withSkipTokenTypesObjects(&token.JobRunnerRegistrationToken{}),
 			),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(j)
 }

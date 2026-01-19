@@ -338,7 +338,7 @@ func getParentObjectInfo(ctx *soiree.EventContext, fields *noteFields) (string, 
 		if err != nil {
 			return "", "", "", fmt.Errorf("failed to get control: %w", err)
 		}
-		return "Control", fields.controlID, control.Title, nil
+		return generated.TypeControl, fields.controlID, control.Title, nil
 	}
 
 	if fields.procedureID != "" {

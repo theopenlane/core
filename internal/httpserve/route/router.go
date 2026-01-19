@@ -8,7 +8,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
-	"github.com/theopenlane/echox/middleware"
 	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/httpserve/common"
@@ -679,7 +678,7 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 
 	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
 
-	return append(mw, middleware.Recover(), mimeMiddleware, transactionConfig.Middleware)
+	return append(mw, mimeMiddleware, transactionConfig.Middleware)
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes
