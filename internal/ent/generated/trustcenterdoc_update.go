@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -126,6 +127,46 @@ func (_u *TrustCenterDocUpdate) ClearTags() *TrustCenterDocUpdate {
 	return _u
 }
 
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocKindName(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterDocKindName(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocKindName(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocKindName() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocKindName()
+	return _u
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocKindID(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterDocKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocKindID() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocKindID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *TrustCenterDocUpdate) SetTitle(v string) *TrustCenterDocUpdate {
 	_u.mutation.SetTitle(v)
@@ -136,20 +177,6 @@ func (_u *TrustCenterDocUpdate) SetTitle(v string) *TrustCenterDocUpdate {
 func (_u *TrustCenterDocUpdate) SetNillableTitle(v *string) *TrustCenterDocUpdate {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocUpdate) SetCategory(v string) *TrustCenterDocUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocUpdate) SetNillableCategory(v *string) *TrustCenterDocUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -274,6 +301,11 @@ func (_u *TrustCenterDocUpdate) ClearStandardID() *TrustCenterDocUpdate {
 	return _u
 }
 
+// SetTrustCenterDocKind sets the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocKind(v *CustomTypeEnum) *TrustCenterDocUpdate {
+	return _u.SetTrustCenterDocKindID(v.ID)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterDocUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterDocUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -322,6 +354,12 @@ func (_u *TrustCenterDocUpdate) SetOriginalFile(v *File) *TrustCenterDocUpdate {
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdate) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenterDocKind clears the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocKind() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocKind()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -433,11 +471,6 @@ func (_u *TrustCenterDocUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {
 			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.watermark_status": %w`, err)}
@@ -515,11 +548,14 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindNameCleared() {
+		_spec.ClearField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -538,6 +574,37 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
+	}
+	if _u.mutation.TrustCenterDocKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -842,6 +909,46 @@ func (_u *TrustCenterDocUpdateOne) ClearTags() *TrustCenterDocUpdateOne {
 	return _u
 }
 
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocKindName(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterDocKindName(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocKindName(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocKindName() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocKindName()
+	return _u
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocKindID(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterDocKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocKindID() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocKindID()
+	return _u
+}
+
 // SetTitle sets the "title" field.
 func (_u *TrustCenterDocUpdateOne) SetTitle(v string) *TrustCenterDocUpdateOne {
 	_u.mutation.SetTitle(v)
@@ -852,20 +959,6 @@ func (_u *TrustCenterDocUpdateOne) SetTitle(v string) *TrustCenterDocUpdateOne {
 func (_u *TrustCenterDocUpdateOne) SetNillableTitle(v *string) *TrustCenterDocUpdateOne {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocUpdateOne) SetCategory(v string) *TrustCenterDocUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocUpdateOne) SetNillableCategory(v *string) *TrustCenterDocUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -990,6 +1083,11 @@ func (_u *TrustCenterDocUpdateOne) ClearStandardID() *TrustCenterDocUpdateOne {
 	return _u
 }
 
+// SetTrustCenterDocKind sets the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocKind(v *CustomTypeEnum) *TrustCenterDocUpdateOne {
+	return _u.SetTrustCenterDocKindID(v.ID)
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *TrustCenterDocUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterDocUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1038,6 +1136,12 @@ func (_u *TrustCenterDocUpdateOne) SetOriginalFile(v *File) *TrustCenterDocUpdat
 // Mutation returns the TrustCenterDocMutation object of the builder.
 func (_u *TrustCenterDocUpdateOne) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
+}
+
+// ClearTrustCenterDocKind clears the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocKind() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocKind()
+	return _u
 }
 
 // ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
@@ -1162,11 +1266,6 @@ func (_u *TrustCenterDocUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {
 			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.watermark_status": %w`, err)}
@@ -1261,11 +1360,14 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindNameCleared() {
+		_spec.ClearField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -1284,6 +1386,37 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
+	}
+	if _u.mutation.TrustCenterDocKindCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{

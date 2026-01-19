@@ -4784,27 +4784,29 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDoc struct {
-		BlockedGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Category            func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		Editors             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		File                func(childComplexity int) int
-		FileID              func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		OriginalFile        func(childComplexity int) int
-		OriginalFileID      func(childComplexity int) int
-		Standard            func(childComplexity int) int
-		StandardID          func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		Title               func(childComplexity int) int
-		TrustCenter         func(childComplexity int) int
-		TrustCenterID       func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
-		Visibility          func(childComplexity int) int
-		WatermarkStatus     func(childComplexity int) int
-		WatermarkingEnabled func(childComplexity int) int
+		BlockedGroups          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Editors                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		File                   func(childComplexity int) int
+		FileID                 func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		OriginalFile           func(childComplexity int) int
+		OriginalFileID         func(childComplexity int) int
+		Standard               func(childComplexity int) int
+		StandardID             func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		TrustCenter            func(childComplexity int) int
+		TrustCenterDocKind     func(childComplexity int) int
+		TrustCenterDocKindID   func(childComplexity int) int
+		TrustCenterDocKindName func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Visibility             func(childComplexity int) int
+		WatermarkStatus        func(childComplexity int) int
+		WatermarkingEnabled    func(childComplexity int) int
 	}
 
 	TrustCenterDocBulkCreatePayload struct {
@@ -33329,13 +33331,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
-	case "TrustCenterDoc.category":
-		if e.complexity.TrustCenterDoc.Category == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterDoc.Category(childComplexity), true
-
 	case "TrustCenterDoc.createdAt":
 		if e.complexity.TrustCenterDoc.CreatedAt == nil {
 			break
@@ -33431,6 +33426,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDoc.TrustCenter(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterDocKind":
+		if e.complexity.TrustCenterDoc.TrustCenterDocKind == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterDocKind(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterDocKindID":
+		if e.complexity.TrustCenterDoc.TrustCenterDocKindID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterDocKindID(childComplexity), true
+
+	case "TrustCenterDoc.trustCenterDocKindName":
+		if e.complexity.TrustCenterDoc.TrustCenterDocKindName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.TrustCenterDocKindName(childComplexity), true
 
 	case "TrustCenterDoc.trustCenterID":
 		if e.complexity.TrustCenterDoc.TrustCenterID == nil {
@@ -49899,13 +49915,13 @@ input CreateTrustCenterDocInput {
   """
   tags: [String!]
   """
+  the kind of the trust_center_doc
+  """
+  trustCenterDocKindName: String
+  """
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
   """
@@ -49918,6 +49934,7 @@ input CreateTrustCenterDocInput {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  trustCenterDocKindID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   trustCenterID: ID
@@ -87564,6 +87581,14 @@ type TrustCenterDoc implements Node {
   """
   tags: [String!]
   """
+  the kind of the trust_center_doc
+  """
+  trustCenterDocKindName: String
+  """
+  the kind of the trust_center_doc
+  """
+  trustCenterDocKindID: ID
+  """
   ID of the trust center
   """
   trustCenterID: ID
@@ -87571,10 +87596,6 @@ type TrustCenterDoc implements Node {
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   ID of the file containing the document
   """
@@ -87599,6 +87620,7 @@ type TrustCenterDoc implements Node {
   ID of the standard
   """
   standardID: ID
+  trustCenterDocKind: CustomTypeEnum
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -87824,6 +87846,42 @@ input TrustCenterDocWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_doc_kind_name field predicates
+  """
+  trustCenterDocKindName: String
+  trustCenterDocKindNameNEQ: String
+  trustCenterDocKindNameIn: [String!]
+  trustCenterDocKindNameNotIn: [String!]
+  trustCenterDocKindNameGT: String
+  trustCenterDocKindNameGTE: String
+  trustCenterDocKindNameLT: String
+  trustCenterDocKindNameLTE: String
+  trustCenterDocKindNameContains: String
+  trustCenterDocKindNameHasPrefix: String
+  trustCenterDocKindNameHasSuffix: String
+  trustCenterDocKindNameIsNil: Boolean
+  trustCenterDocKindNameNotNil: Boolean
+  trustCenterDocKindNameEqualFold: String
+  trustCenterDocKindNameContainsFold: String
+  """
+  trust_center_doc_kind_id field predicates
+  """
+  trustCenterDocKindID: ID
+  trustCenterDocKindIDNEQ: ID
+  trustCenterDocKindIDIn: [ID!]
+  trustCenterDocKindIDNotIn: [ID!]
+  trustCenterDocKindIDGT: ID
+  trustCenterDocKindIDGTE: ID
+  trustCenterDocKindIDLT: ID
+  trustCenterDocKindIDLTE: ID
+  trustCenterDocKindIDContains: ID
+  trustCenterDocKindIDHasPrefix: ID
+  trustCenterDocKindIDHasSuffix: ID
+  trustCenterDocKindIDIsNil: Boolean
+  trustCenterDocKindIDNotNil: Boolean
+  trustCenterDocKindIDEqualFold: ID
+  trustCenterDocKindIDContainsFold: ID
+  """
   trust_center_id field predicates
   """
   trustCenterID: ID
@@ -87857,22 +87915,6 @@ input TrustCenterDocWhereInput {
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   file_id field predicates
   """
@@ -87952,6 +87994,11 @@ input TrustCenterDocWhereInput {
   standardIDNotNil: Boolean
   standardIDEqualFold: ID
   standardIDContainsFold: ID
+  """
+  trust_center_doc_kind edge predicates
+  """
+  hasTrustCenterDocKind: Boolean
+  hasTrustCenterDocKindWith: [CustomTypeEnumWhereInput!]
   """
   blocked_groups edge predicates
   """
@@ -95184,13 +95231,14 @@ input UpdateTrustCenterDocInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  the kind of the trust_center_doc
+  """
+  trustCenterDocKindName: String
+  clearTrustCenterDocKindName: Boolean
+  """
   title of the document
   """
   title: String
-  """
-  category of the document
-  """
-  category: String
   """
   whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
   """
@@ -95206,6 +95254,8 @@ input UpdateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   clearVisibility: Boolean
+  trustCenterDocKindID: ID
+  clearTrustCenterDocKind: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
