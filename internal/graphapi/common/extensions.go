@@ -60,8 +60,7 @@ func modulesExtension(h *handler.Server) {
 		resp := next(ctx)
 
 		// do not wrap subscriptions responses, they must return nil to close the connection
-		optctx := graphql.GetOperationContext(ctx)
-		if optctx.Operation.Operation == ast.Subscription {
+		if skipSubscriptionForExtensions(ctx) {
 			return resp
 		}
 
@@ -93,8 +92,7 @@ func authExtension(h *handler.Server) {
 		resp := next(ctx)
 
 		// do not wrap subscriptions responses, they must return nil to close the connection
-		optctx := graphql.GetOperationContext(ctx)
-		if optctx.Operation.Operation == ast.Subscription {
+		if skipSubscriptionForExtensions(ctx) {
 			return resp
 		}
 
@@ -110,8 +108,7 @@ func authExtension(h *handler.Server) {
 func latencyExtension(h *handler.Server) {
 	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
 		// do not wrap subscriptions responses, they must return nil to close the connection
-		optctx := graphql.GetOperationContext(ctx)
-		if optctx.Operation.Operation == ast.Subscription {
+		if skipSubscriptionForExtensions(ctx) {
 			return next(ctx)
 		}
 
@@ -133,8 +130,7 @@ func traceExtension(h *handler.Server) {
 		resp := next(ctx)
 
 		// do not wrap subscriptions responses, they must return nil to close the connection
-		optctx := graphql.GetOperationContext(ctx)
-		if optctx.Operation.Operation == ast.Subscription {
+		if skipSubscriptionForExtensions(ctx) {
 			return resp
 		}
 
@@ -209,4 +205,20 @@ func getAuthData(ctx context.Context) Auth {
 		RefreshToken:            rt,
 		SessionID:               session,
 	}
+}
+
+// skipSubscriptionForExtensions checks if the current operation is a subscription and returns true if it is or if there is no operation context
+// this ensure we don't fatal error when trying to get the operation context for subscriptions
+// and ensures subscription responses are not wrapped with extensions
+func skipSubscriptionForExtensions(ctx context.Context) bool {
+	if !graphql.HasOperationContext(ctx) {
+		return true
+	}
+
+	optctx := graphql.GetOperationContext(ctx)
+	if optctx.Operation != nil && optctx.Operation.Operation == ast.Subscription {
+		return true
+	}
+
+	return false
 }

@@ -149,6 +149,27 @@ var (
 		Help: "The total number of authentication attempts by type (jwt, jwt_anonymous, pat, api_token)",
 	}, []string{"type"})
 
+	ActiveSubscriptions = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "openlane_active_subscriptions",
+		Help: "Current number of active subscriptions",
+	})
+
+	SubscriptionOpen = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "openlane_subscription_open_total",
+		Help: "Total number of subscriptions opened",
+	})
+
+	SubscriptionClose = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "openlane_subscription_close_total",
+		Help: "Total number of subscriptions closed",
+	})
+
+	SubscriptionLifetime = prometheus.NewHistogram(prometheus.HistogramOpts{
+		Name:    "openlane_subscription_lifetime_seconds",
+		Help:    "Lifetime of subscriptions in seconds",
+		Buckets: prometheus.ExponentialBuckets(10, 2, 10), // 10s to ~3 hours
+	})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -175,6 +196,13 @@ var (
 		StorageProviderBytesDownloaded,
 		StorageProviderDeletes,
 		AuthenticationAttempts,
+	}
+
+	SubscriptionMetrics = []prometheus.Collector{
+		ActiveSubscriptions,
+		SubscriptionOpen,
+		SubscriptionClose,
+		SubscriptionLifetime,
 	}
 
 	QueueConsumerMetrics = []prometheus.Collector{

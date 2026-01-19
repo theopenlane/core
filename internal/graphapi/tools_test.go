@@ -4,22 +4,29 @@ import (
 	"context"
 	"encoding/json"
 	"flag"
+	"net/http"
 	"os"
 	"testing"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/Yamashou/gqlgenc/clientv2"
+	"github.com/mcuadros/go-defaults"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v84"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gotest.tools/v3/assert"
 
+	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
+	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/iam/sessions"
@@ -29,15 +36,22 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/graphapi/common"
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/validators"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/logx"
+	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -543,4 +557,82 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 		*mockCustomerUpdateResult = *mockCustomer
 
 	}).Return(nil)
+}
+
+// newTestGraphServer creates a new GraphQL server for testing
+// this is used when the test client can't be used such as subscriptions
+func newTestGraphServer(t *testing.T) http.Handler {
+	cfg := config.Config{}
+	defaults.SetDefaults(&cfg)
+
+	// get keys from the token manager
+	keys, err := suite.client.db.TokenManager.Keys()
+	require.NoError(t, err)
+
+	// local validator to avoid JWK cache issues
+	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
+
+	// register events for subscriptions
+	eventer := hooks.NewEventerPool(suite.client.db)
+	hooks.RegisterGlobalHooks(suite.client.db, eventer)
+
+	err = hooks.RegisterListeners(eventer)
+	require.NoError(t, err)
+
+	r := graphapi.NewResolver(suite.client.db, nil).
+		WithExtensions(true).
+		WithDevelopment(true).
+		WithSubscriptions(true).
+		WithAuthOptions(
+			authmw.WithSkipperFunc(
+				func(c echo.Context) bool {
+					return authmw.AuthenticateSkipperFuncForWebsockets(c)
+				},
+			),
+			authmw.WithDBClient(suite.client.db),
+			authmw.WithValidator(validator),
+		)
+
+	r.WithPool(10)
+
+	c := &gqlgenerated.Config{Resolvers: r}
+
+	srv := handler.New(gqlgenerated.NewExecutableSchema(
+		*c,
+	))
+
+	srv.AddTransport(transport.GET{})
+	srv.AddTransport(r.CreateWebsocketClient())
+
+	// add test case extension to signal tests on after cancel
+	testCaseExtension(srv)
+
+	// add common extensions
+	common.AddAllExtensions(srv)
+
+	return srv
+}
+
+// TestAfterCancel is used to signal when a response is returned after context cancellation in tests
+var TestAfterCancel = make(chan struct{}, 1)
+
+// testCaseExtension is used to signal tests when a response is returned after context cancellation
+func testCaseExtension(h *handler.Server) {
+	h.AroundResponses(func(ctx context.Context, next graphql.ResponseHandler) *graphql.Response {
+		resp := next(ctx)
+		if resp != nil {
+			// Signal the test that a response was returned after cancellation
+			select {
+			case TestAfterCancel <- struct{}{}:
+			default:
+
+			}
+
+			logx.FromContext(ctx).Warn().Msg("response returned after context cancelled in test case extension, returning nil response to close connection")
+
+			return nil
+		}
+
+		return resp
+	})
 }

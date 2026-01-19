@@ -3,11 +3,13 @@ package graphapi
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -27,11 +29,11 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 	}
 
 	// Create a channel with the interface type for the subscription manager
-	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.TaskChannelBufferSize)
+	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.NotificationChannelBufferSize)
 	r.subscriptionManager.Subscribe(userID, internalChan)
 
 	// Create a channel with the concrete type for the GraphQL response
-	notifChan := make(chan *generated.Notification, graphsubscriptions.TaskChannelBufferSize)
+	notifChan := make(chan *generated.Notification, graphsubscriptions.NotificationChannelBufferSize)
 
 	// Fetch existing notifications for the user so they see their old notifications
 	existingNotifications, err := r.db.Notification.Query().
@@ -43,7 +45,14 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 
 	// Forward notifications from internal channel to GraphQL channel
 	go func() {
-		defer close(notifChan)
+		startTime := time.Now()
+		defer func() {
+			close(notifChan)
+
+			// Record subscription closed metric
+			connectionTime := time.Since(startTime).Seconds()
+			metrics.RecordSubscriptionClosed(connectionTime)
+		}()
 
 		// First, send all existing notifications
 		for _, existingNotif := range existingNotifications {
