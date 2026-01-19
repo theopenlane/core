@@ -9,13 +9,14 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/gorilla/websocket"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/metrics"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 )
 
-// createWebsocketClient creates a websocket transport with the appropriate settings
-func (r *Resolver) createWebsocketClient() transport.Websocket {
+// CreateWebsocketClient creates a websocket transport with the appropriate settings
+func (r *Resolver) CreateWebsocketClient() transport.Websocket {
 	return transport.Websocket{
 		KeepAlivePingInterval: r.websocketPingInterval,
 		InitTimeout:           defaultInitTimeout,
@@ -47,7 +48,12 @@ func (r *Resolver) webSocketInit(
 		return ctx, nil, err
 	}
 
+	logx.FromContext(ctx).Debug().Str("user_id", au.SubjectID).Msg("websocket connection authenticated")
+
 	ctx = auth.WithAuthenticatedUser(ctx, au)
+
+	// increment websocket connections metric
+	metrics.RecordSubscriptionOpened()
 
 	return ctx, nil, nil
 }
@@ -88,7 +94,6 @@ func checkOrigin(o string, allowedOrigins map[string]struct{}) bool {
 	}
 
 	return ok
-
 }
 
 // allowedOriginsPatterns converts allowed origins with wildcards into regex patterns

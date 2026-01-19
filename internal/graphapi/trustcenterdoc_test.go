@@ -793,10 +793,10 @@ func TestMutationUpdateTrustCenterDoc(t *testing.T) {
 			name:             "happy path, update multiple fields",
 			trustCenterDocID: trustCenterDoc.ID,
 			request: testclient.UpdateTrustCenterDocInput{
-				Title:                      lo.ToPtr("Multi-field Update Title"),
+				Title:                  lo.ToPtr("Multi-field Update Title"),
 				TrustCenterDocKindName: lo.ToPtr("MultiCategory"),
-				Visibility:                 &enums.TrustCenterDocumentVisibilityPubliclyVisible,
-				Tags:                       []string{"multi", "update"},
+				Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+				Tags:                   []string{"multi", "update"},
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,

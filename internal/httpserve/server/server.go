@@ -195,6 +195,12 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		log.Error().Err(err).Msg("failed to register metrics")
 	}
 
+	if s.config.Settings.Server.EnableGraphSubscriptions {
+		if err := newMetrics.Register(metrics.SubscriptionMetrics); err != nil {
+			log.Error().Err(err).Msg("failed to register subscription metrics")
+		}
+	}
+
 	go func() {
 		metricsCtx := logx.SeedContext(ctx)
 		if err := newMetrics.Start(metricsCtx); err != nil {

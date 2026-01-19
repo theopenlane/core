@@ -7,8 +7,8 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// TaskChannelBufferSize is the buffer size for task subscription channels
-const TaskChannelBufferSize = 10
+// NotificationChannelBufferSize is the buffer size for task subscription channels
+const NotificationChannelBufferSize = 10
 
 var (
 	// globalManager is the singleton subscription manager instance

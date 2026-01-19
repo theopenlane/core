@@ -1537,11 +1537,11 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 
 		input := testclient.CreateTrustCenterDocInput{
-			Title:                      "Test Document with Standard",
+			Title:                  "Test Document with Standard",
 			TrustCenterDocKindName: lo.ToPtr("Policy"),
-			TrustCenterID:              &trustCenter.ID,
-			StandardID:                 &standard1.ID,
-			Tags:                       []string{"test", "standard"},
+			TrustCenterID:          &trustCenter.ID,
+			StandardID:             &standard1.ID,
+			Tags:                   []string{"test", "standard"},
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *fileUpload)
@@ -1573,10 +1573,10 @@ func TestTrustCenterDocStandards(t *testing.T) {
 		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 
 		createInput := testclient.CreateTrustCenterDocInput{
-			Title:                      "Test Document without Standard",
+			Title:                  "Test Document without Standard",
 			TrustCenterDocKindName: lo.ToPtr("Policy"),
-			TrustCenterID:              &trustCenter.ID,
-			Tags:                       []string{"test"},
+			TrustCenterID:          &trustCenter.ID,
+			Tags:                   []string{"test"},
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *fileUpload)

@@ -2335,10 +2335,10 @@ func (tcdb *TrustCenterDocBuilder) MustNew(ctx context.Context, t *testing.T) *e
 
 	// Prepare the GraphQL input
 	input := testclient.CreateTrustCenterDocInput{
-		Title:                      tcdb.Title,
+		Title:                  tcdb.Title,
 		TrustCenterDocKindName: &tcdb.Category,
-		TrustCenterID:              &tcdb.TrustCenterID,
-		Tags:                       tcdb.Tags,
+		TrustCenterID:          &tcdb.TrustCenterID,
+		Tags:                   tcdb.Tags,
 	}
 
 	if tcdb.Visibility != "" {

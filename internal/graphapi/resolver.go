@@ -122,7 +122,7 @@ func (r *Resolver) Handler() *Handler {
 	})
 
 	srv.AddTransport(r.createSSEClient())
-	srv.AddTransport(r.createWebsocketClient())
+	srv.AddTransport(r.CreateWebsocketClient())
 
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000)) //nolint:mnd
 

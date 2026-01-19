@@ -259,3 +259,16 @@ func RecordStorageDelete(provider string) {
 func RecordAuthentication(authType string) {
 	AuthenticationAttempts.WithLabelValues(authType).Inc()
 }
+
+// RecordSubscriptionOpened records when a subscription is opened
+func RecordSubscriptionOpened() {
+	ActiveSubscriptions.Inc()
+	SubscriptionOpen.Inc()
+}
+
+// RecordSubscriptionClosed records when a subscription is closed
+func RecordSubscriptionClosed(lifetimeSeconds float64) {
+	ActiveSubscriptions.Dec()
+	SubscriptionClose.Inc()
+	SubscriptionLifetime.Observe(lifetimeSeconds)
+}
