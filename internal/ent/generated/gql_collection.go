@@ -55722,6 +55722,21 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
+		case "trustCenterDocKind":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomTypeEnumClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customtypeenumImplementors)...); err != nil {
+				return err
+			}
+			_q.withTrustCenterDocKind = query
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterDocKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterDocKindID)
+				fieldSeen[trustcenterdoc.FieldTrustCenterDocKindID] = struct{}{}
+			}
+
 		case "blockedGroups":
 			var (
 				alias = field.Alias
@@ -55765,10 +55780,10 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -55776,10 +55791,10 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterDoc) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.BlockedGroups)
-							if nodes[i].Edges.totalCount[0] == nil {
-								nodes[i].Edges.totalCount[0] = make(map[string]int)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[0][alias] = n
+							nodes[i].Edges.totalCount[1][alias] = n
 						}
 						return nil
 					})
@@ -55854,10 +55869,10 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -55865,10 +55880,10 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterDoc) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Editors)
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[2][alias] = n
 						}
 						return nil
 					})
@@ -55984,6 +55999,16 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTags)
 				fieldSeen[trustcenterdoc.FieldTags] = struct{}{}
 			}
+		case "trustCenterDocKindName":
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterDocKindName]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterDocKindName)
+				fieldSeen[trustcenterdoc.FieldTrustCenterDocKindName] = struct{}{}
+			}
+		case "trustCenterDocKindID":
+			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterDocKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterDocKindID)
+				fieldSeen[trustcenterdoc.FieldTrustCenterDocKindID] = struct{}{}
+			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterdoc.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTrustCenterID)
@@ -55993,11 +56018,6 @@ func (_q *TrustCenterDocQuery) collectField(ctx context.Context, oneNode bool, o
 			if _, ok := fieldSeen[trustcenterdoc.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, trustcenterdoc.FieldTitle)
 				fieldSeen[trustcenterdoc.FieldTitle] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[trustcenterdoc.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, trustcenterdoc.FieldCategory)
-				fieldSeen[trustcenterdoc.FieldCategory] = struct{}{}
 			}
 		case "fileID":
 			if _, ok := fieldSeen[trustcenterdoc.FieldFileID]; !ok {

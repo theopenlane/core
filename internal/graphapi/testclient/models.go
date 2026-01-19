@@ -5639,22 +5639,23 @@ type CreateTrustCenterComplianceInput struct {
 type CreateTrustCenterDocInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the kind of the trust_center_doc
+	TrustCenterDocKindName *string `json:"trustCenterDocKindName,omitempty"`
 	// title of the document
 	Title string `json:"title"`
-	// category of the document
-	Category string `json:"category"`
 	// whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
 	WatermarkingEnabled *bool `json:"watermarkingEnabled,omitempty"`
 	// status of the watermarking
 	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility      *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	BlockedGroupIDs []string                             `json:"blockedGroupIDs,omitempty"`
-	EditorIDs       []string                             `json:"editorIDs,omitempty"`
-	TrustCenterID   *string                              `json:"trustCenterID,omitempty"`
-	StandardID      *string                              `json:"standardID,omitempty"`
-	FileID          *string                              `json:"fileID,omitempty"`
-	OriginalFileID  *string                              `json:"originalFileID,omitempty"`
+	Visibility           *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	TrustCenterDocKindID *string                              `json:"trustCenterDocKindID,omitempty"`
+	BlockedGroupIDs      []string                             `json:"blockedGroupIDs,omitempty"`
+	EditorIDs            []string                             `json:"editorIDs,omitempty"`
+	TrustCenterID        *string                              `json:"trustCenterID,omitempty"`
+	StandardID           *string                              `json:"standardID,omitempty"`
+	FileID               *string                              `json:"fileID,omitempty"`
+	OriginalFileID       *string                              `json:"originalFileID,omitempty"`
 }
 
 // Input for createTrustCenterDomain mutation
@@ -24520,12 +24521,14 @@ type TrustCenterDoc struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// the kind of the trust_center_doc
+	TrustCenterDocKindName *string `json:"trustCenterDocKindName,omitempty"`
+	// the kind of the trust_center_doc
+	TrustCenterDocKindID *string `json:"trustCenterDocKindID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// title of the document
 	Title string `json:"title"`
-	// category of the document
-	Category string `json:"category"`
 	// ID of the file containing the document
 	FileID *string `json:"fileID,omitempty"`
 	// ID of the file containing the document, before any watermarking
@@ -24537,11 +24540,12 @@ type TrustCenterDoc struct {
 	// visibility of the document
 	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	// ID of the standard
-	StandardID    *string          `json:"standardID,omitempty"`
-	BlockedGroups *GroupConnection `json:"blockedGroups"`
-	Editors       *GroupConnection `json:"editors"`
-	TrustCenter   *TrustCenter     `json:"trustCenter,omitempty"`
-	Standard      *Standard        `json:"standard,omitempty"`
+	StandardID         *string          `json:"standardID,omitempty"`
+	TrustCenterDocKind *CustomTypeEnum  `json:"trustCenterDocKind,omitempty"`
+	BlockedGroups      *GroupConnection `json:"blockedGroups"`
+	Editors            *GroupConnection `json:"editors"`
+	TrustCenter        *TrustCenter     `json:"trustCenter,omitempty"`
+	Standard           *Standard        `json:"standard,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
 	// the file containing the document content, pre watermarking
@@ -24685,6 +24689,38 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// trust_center_doc_kind_name field predicates
+	TrustCenterDocKindName             *string  `json:"trustCenterDocKindName,omitempty"`
+	TrustCenterDocKindNameNeq          *string  `json:"trustCenterDocKindNameNEQ,omitempty"`
+	TrustCenterDocKindNameIn           []string `json:"trustCenterDocKindNameIn,omitempty"`
+	TrustCenterDocKindNameNotIn        []string `json:"trustCenterDocKindNameNotIn,omitempty"`
+	TrustCenterDocKindNameGt           *string  `json:"trustCenterDocKindNameGT,omitempty"`
+	TrustCenterDocKindNameGte          *string  `json:"trustCenterDocKindNameGTE,omitempty"`
+	TrustCenterDocKindNameLt           *string  `json:"trustCenterDocKindNameLT,omitempty"`
+	TrustCenterDocKindNameLte          *string  `json:"trustCenterDocKindNameLTE,omitempty"`
+	TrustCenterDocKindNameContains     *string  `json:"trustCenterDocKindNameContains,omitempty"`
+	TrustCenterDocKindNameHasPrefix    *string  `json:"trustCenterDocKindNameHasPrefix,omitempty"`
+	TrustCenterDocKindNameHasSuffix    *string  `json:"trustCenterDocKindNameHasSuffix,omitempty"`
+	TrustCenterDocKindNameIsNil        *bool    `json:"trustCenterDocKindNameIsNil,omitempty"`
+	TrustCenterDocKindNameNotNil       *bool    `json:"trustCenterDocKindNameNotNil,omitempty"`
+	TrustCenterDocKindNameEqualFold    *string  `json:"trustCenterDocKindNameEqualFold,omitempty"`
+	TrustCenterDocKindNameContainsFold *string  `json:"trustCenterDocKindNameContainsFold,omitempty"`
+	// trust_center_doc_kind_id field predicates
+	TrustCenterDocKindID             *string  `json:"trustCenterDocKindID,omitempty"`
+	TrustCenterDocKindIdneq          *string  `json:"trustCenterDocKindIDNEQ,omitempty"`
+	TrustCenterDocKindIDIn           []string `json:"trustCenterDocKindIDIn,omitempty"`
+	TrustCenterDocKindIDNotIn        []string `json:"trustCenterDocKindIDNotIn,omitempty"`
+	TrustCenterDocKindIdgt           *string  `json:"trustCenterDocKindIDGT,omitempty"`
+	TrustCenterDocKindIdgte          *string  `json:"trustCenterDocKindIDGTE,omitempty"`
+	TrustCenterDocKindIdlt           *string  `json:"trustCenterDocKindIDLT,omitempty"`
+	TrustCenterDocKindIdlte          *string  `json:"trustCenterDocKindIDLTE,omitempty"`
+	TrustCenterDocKindIDContains     *string  `json:"trustCenterDocKindIDContains,omitempty"`
+	TrustCenterDocKindIDHasPrefix    *string  `json:"trustCenterDocKindIDHasPrefix,omitempty"`
+	TrustCenterDocKindIDHasSuffix    *string  `json:"trustCenterDocKindIDHasSuffix,omitempty"`
+	TrustCenterDocKindIDIsNil        *bool    `json:"trustCenterDocKindIDIsNil,omitempty"`
+	TrustCenterDocKindIDNotNil       *bool    `json:"trustCenterDocKindIDNotNil,omitempty"`
+	TrustCenterDocKindIDEqualFold    *string  `json:"trustCenterDocKindIDEqualFold,omitempty"`
+	TrustCenterDocKindIDContainsFold *string  `json:"trustCenterDocKindIDContainsFold,omitempty"`
 	// trust_center_id field predicates
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -24715,20 +24751,6 @@ type TrustCenterDocWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-	// category field predicates
-	Category             *string  `json:"category,omitempty"`
-	CategoryNeq          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGt           *string  `json:"categoryGT,omitempty"`
-	CategoryGte          *string  `json:"categoryGTE,omitempty"`
-	CategoryLt           *string  `json:"categoryLT,omitempty"`
-	CategoryLte          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 	// file_id field predicates
 	FileID             *string  `json:"fileID,omitempty"`
 	FileIdneq          *string  `json:"fileIDNEQ,omitempty"`
@@ -24796,6 +24818,9 @@ type TrustCenterDocWhereInput struct {
 	StandardIDNotNil       *bool    `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+	// trust_center_doc_kind edge predicates
+	HasTrustCenterDocKind     *bool                       `json:"hasTrustCenterDocKind,omitempty"`
+	HasTrustCenterDocKindWith []*CustomTypeEnumWhereInput `json:"hasTrustCenterDocKindWith,omitempty"`
 	// blocked_groups edge predicates
 	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
 	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
@@ -29854,10 +29879,11 @@ type UpdateTrustCenterDocInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// the kind of the trust_center_doc
+	TrustCenterDocKindName      *string `json:"trustCenterDocKindName,omitempty"`
+	ClearTrustCenterDocKindName *bool   `json:"clearTrustCenterDocKindName,omitempty"`
 	// title of the document
 	Title *string `json:"title,omitempty"`
-	// category of the document
-	Category *string `json:"category,omitempty"`
 	// whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
 	WatermarkingEnabled      *bool `json:"watermarkingEnabled,omitempty"`
 	ClearWatermarkingEnabled *bool `json:"clearWatermarkingEnabled,omitempty"`
@@ -29865,20 +29891,22 @@ type UpdateTrustCenterDocInput struct {
 	WatermarkStatus      *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	ClearWatermarkStatus *bool                  `json:"clearWatermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility            *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	ClearVisibility       *bool                                `json:"clearVisibility,omitempty"`
-	AddBlockedGroupIDs    []string                             `json:"addBlockedGroupIDs,omitempty"`
-	RemoveBlockedGroupIDs []string                             `json:"removeBlockedGroupIDs,omitempty"`
-	ClearBlockedGroups    *bool                                `json:"clearBlockedGroups,omitempty"`
-	AddEditorIDs          []string                             `json:"addEditorIDs,omitempty"`
-	RemoveEditorIDs       []string                             `json:"removeEditorIDs,omitempty"`
-	ClearEditors          *bool                                `json:"clearEditors,omitempty"`
-	StandardID            *string                              `json:"standardID,omitempty"`
-	ClearStandard         *bool                                `json:"clearStandard,omitempty"`
-	FileID                *string                              `json:"fileID,omitempty"`
-	ClearFile             *bool                                `json:"clearFile,omitempty"`
-	OriginalFileID        *string                              `json:"originalFileID,omitempty"`
-	ClearOriginalFile     *bool                                `json:"clearOriginalFile,omitempty"`
+	Visibility              *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	ClearVisibility         *bool                                `json:"clearVisibility,omitempty"`
+	TrustCenterDocKindID    *string                              `json:"trustCenterDocKindID,omitempty"`
+	ClearTrustCenterDocKind *bool                                `json:"clearTrustCenterDocKind,omitempty"`
+	AddBlockedGroupIDs      []string                             `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string                             `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool                                `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string                             `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string                             `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool                                `json:"clearEditors,omitempty"`
+	StandardID              *string                              `json:"standardID,omitempty"`
+	ClearStandard           *bool                                `json:"clearStandard,omitempty"`
+	FileID                  *string                              `json:"fileID,omitempty"`
+	ClearFile               *bool                                `json:"clearFile,omitempty"`
+	OriginalFileID          *string                              `json:"originalFileID,omitempty"`
+	ClearOriginalFile       *bool                                `json:"clearOriginalFile,omitempty"`
 }
 
 // UpdateTrustCenterEntityInput is used for update TrustCenterEntity object.

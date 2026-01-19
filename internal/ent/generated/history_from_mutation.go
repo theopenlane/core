@@ -15869,16 +15869,20 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetTags(tags)
 	}
 
+	if trustCenterDocKindName, exists := m.TrustCenterDocKindName(); exists {
+		create = create.SetTrustCenterDocKindName(trustCenterDocKindName)
+	}
+
+	if trustCenterDocKindID, exists := m.TrustCenterDocKindID(); exists {
+		create = create.SetTrustCenterDocKindID(trustCenterDocKindID)
+	}
+
 	if trustCenterID, exists := m.TrustCenterID(); exists {
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
 	if title, exists := m.Title(); exists {
 		create = create.SetTitle(title)
-	}
-
-	if category, exists := m.Category(); exists {
-		create = create.SetCategory(category)
 	}
 
 	if fileID, exists := m.FileID(); exists {
@@ -15978,6 +15982,18 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTags(trustcenterdoc.Tags)
 		}
 
+		if trustCenterDocKindName, exists := m.TrustCenterDocKindName(); exists {
+			create = create.SetTrustCenterDocKindName(trustCenterDocKindName)
+		} else {
+			create = create.SetTrustCenterDocKindName(trustcenterdoc.TrustCenterDocKindName)
+		}
+
+		if trustCenterDocKindID, exists := m.TrustCenterDocKindID(); exists {
+			create = create.SetTrustCenterDocKindID(trustCenterDocKindID)
+		} else {
+			create = create.SetTrustCenterDocKindID(trustcenterdoc.TrustCenterDocKindID)
+		}
+
 		if trustCenterID, exists := m.TrustCenterID(); exists {
 			create = create.SetTrustCenterID(trustCenterID)
 		} else {
@@ -15988,12 +16004,6 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetTitle(title)
 		} else {
 			create = create.SetTitle(trustcenterdoc.Title)
-		}
-
-		if category, exists := m.Category(); exists {
-			create = create.SetCategory(category)
-		} else {
-			create = create.SetCategory(trustcenterdoc.Category)
 		}
 
 		if fileID, exists := m.FileID(); exists {
@@ -16074,9 +16084,10 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetDeletedAt(trustcenterdoc.DeletedAt).
 			SetDeletedBy(trustcenterdoc.DeletedBy).
 			SetTags(trustcenterdoc.Tags).
+			SetTrustCenterDocKindName(trustcenterdoc.TrustCenterDocKindName).
+			SetTrustCenterDocKindID(trustcenterdoc.TrustCenterDocKindID).
 			SetTrustCenterID(trustcenterdoc.TrustCenterID).
 			SetTitle(trustcenterdoc.Title).
-			SetCategory(trustcenterdoc.Category).
 			SetNillableFileID(trustcenterdoc.FileID).
 			SetNillableOriginalFileID(trustcenterdoc.OriginalFileID).
 			SetWatermarkingEnabled(trustcenterdoc.WatermarkingEnabled).

@@ -40,12 +40,14 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
+	// FieldTrustCenterDocKindName holds the string denoting the trust_center_doc_kind_name field in the database.
+	FieldTrustCenterDocKindName = "trust_center_doc_kind_name"
+	// FieldTrustCenterDocKindID holds the string denoting the trust_center_doc_kind_id field in the database.
+	FieldTrustCenterDocKindID = "trust_center_doc_kind_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
-	// FieldCategory holds the string denoting the category field in the database.
-	FieldCategory = "category"
 	// FieldFileID holds the string denoting the file_id field in the database.
 	FieldFileID = "file_id"
 	// FieldOriginalFileID holds the string denoting the original_file_id field in the database.
@@ -75,9 +77,10 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldTags,
+	FieldTrustCenterDocKindName,
+	FieldTrustCenterDocKindID,
 	FieldTrustCenterID,
 	FieldTitle,
-	FieldCategory,
 	FieldFileID,
 	FieldOriginalFileID,
 	FieldWatermarkingEnabled,
@@ -206,6 +209,16 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
 }
 
+// ByTrustCenterDocKindName orders the results by the trust_center_doc_kind_name field.
+func ByTrustCenterDocKindName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterDocKindName, opts...).ToFunc()
+}
+
+// ByTrustCenterDocKindID orders the results by the trust_center_doc_kind_id field.
+func ByTrustCenterDocKindID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTrustCenterDocKindID, opts...).ToFunc()
+}
+
 // ByTrustCenterID orders the results by the trust_center_id field.
 func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
@@ -214,11 +227,6 @@ func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
-}
-
-// ByCategory orders the results by the category field.
-func ByCategory(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldCategory, opts...).ToFunc()
 }
 
 // ByFileID orders the results by the file_id field.

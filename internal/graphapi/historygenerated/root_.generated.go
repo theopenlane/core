@@ -1933,24 +1933,25 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDocHistory struct {
-		Category            func(childComplexity int) int
-		CreatedAt           func(childComplexity int) int
-		CreatedBy           func(childComplexity int) int
-		FileID              func(childComplexity int) int
-		HistoryTime         func(childComplexity int) int
-		ID                  func(childComplexity int) int
-		Operation           func(childComplexity int) int
-		OriginalFileID      func(childComplexity int) int
-		Ref                 func(childComplexity int) int
-		StandardID          func(childComplexity int) int
-		Tags                func(childComplexity int) int
-		Title               func(childComplexity int) int
-		TrustCenterID       func(childComplexity int) int
-		UpdatedAt           func(childComplexity int) int
-		UpdatedBy           func(childComplexity int) int
-		Visibility          func(childComplexity int) int
-		WatermarkStatus     func(childComplexity int) int
-		WatermarkingEnabled func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		FileID                 func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OriginalFileID         func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		StandardID             func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		Title                  func(childComplexity int) int
+		TrustCenterDocKindID   func(childComplexity int) int
+		TrustCenterDocKindName func(childComplexity int) int
+		TrustCenterID          func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		Visibility             func(childComplexity int) int
+		WatermarkStatus        func(childComplexity int) int
+		WatermarkingEnabled    func(childComplexity int) int
 	}
 
 	TrustCenterDocHistoryConnection struct {
@@ -12823,13 +12824,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterComplianceHistoryEdge.Node(childComplexity), true
 
-	case "TrustCenterDocHistory.category":
-		if e.complexity.TrustCenterDocHistory.Category == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterDocHistory.Category(childComplexity), true
-
 	case "TrustCenterDocHistory.createdAt":
 		if e.complexity.TrustCenterDocHistory.CreatedAt == nil {
 			break
@@ -12906,6 +12900,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Title(childComplexity), true
+
+	case "TrustCenterDocHistory.trustCenterDocKindID":
+		if e.complexity.TrustCenterDocHistory.TrustCenterDocKindID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.TrustCenterDocKindID(childComplexity), true
+
+	case "TrustCenterDocHistory.trustCenterDocKindName":
+		if e.complexity.TrustCenterDocHistory.TrustCenterDocKindName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.TrustCenterDocKindName(childComplexity), true
 
 	case "TrustCenterDocHistory.trustCenterID":
 		if e.complexity.TrustCenterDocHistory.TrustCenterID == nil {
@@ -39393,6 +39401,14 @@ type TrustCenterDocHistory implements Node {
   """
   tags: [String!]
   """
+  the kind of the trust_center_doc
+  """
+  trustCenterDocKindName: String
+  """
+  the kind of the trust_center_doc
+  """
+  trustCenterDocKindID: String
+  """
   ID of the trust center
   """
   trustCenterID: String
@@ -39400,10 +39416,6 @@ type TrustCenterDocHistory implements Node {
   title of the document
   """
   title: String!
-  """
-  category of the document
-  """
-  category: String!
   """
   ID of the file containing the document
   """
@@ -39626,6 +39638,42 @@ input TrustCenterDocHistoryWhereInput {
   updatedByEqualFold: String
   updatedByContainsFold: String
   """
+  trust_center_doc_kind_name field predicates
+  """
+  trustCenterDocKindName: String
+  trustCenterDocKindNameNEQ: String
+  trustCenterDocKindNameIn: [String!]
+  trustCenterDocKindNameNotIn: [String!]
+  trustCenterDocKindNameGT: String
+  trustCenterDocKindNameGTE: String
+  trustCenterDocKindNameLT: String
+  trustCenterDocKindNameLTE: String
+  trustCenterDocKindNameContains: String
+  trustCenterDocKindNameHasPrefix: String
+  trustCenterDocKindNameHasSuffix: String
+  trustCenterDocKindNameIsNil: Boolean
+  trustCenterDocKindNameNotNil: Boolean
+  trustCenterDocKindNameEqualFold: String
+  trustCenterDocKindNameContainsFold: String
+  """
+  trust_center_doc_kind_id field predicates
+  """
+  trustCenterDocKindID: String
+  trustCenterDocKindIDNEQ: String
+  trustCenterDocKindIDIn: [String!]
+  trustCenterDocKindIDNotIn: [String!]
+  trustCenterDocKindIDGT: String
+  trustCenterDocKindIDGTE: String
+  trustCenterDocKindIDLT: String
+  trustCenterDocKindIDLTE: String
+  trustCenterDocKindIDContains: String
+  trustCenterDocKindIDHasPrefix: String
+  trustCenterDocKindIDHasSuffix: String
+  trustCenterDocKindIDIsNil: Boolean
+  trustCenterDocKindIDNotNil: Boolean
+  trustCenterDocKindIDEqualFold: String
+  trustCenterDocKindIDContainsFold: String
+  """
   trust_center_id field predicates
   """
   trustCenterID: String
@@ -39659,22 +39707,6 @@ input TrustCenterDocHistoryWhereInput {
   titleHasSuffix: String
   titleEqualFold: String
   titleContainsFold: String
-  """
-  category field predicates
-  """
-  category: String
-  categoryNEQ: String
-  categoryIn: [String!]
-  categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
-  categoryContains: String
-  categoryHasPrefix: String
-  categoryHasSuffix: String
-  categoryEqualFold: String
-  categoryContainsFold: String
   """
   file_id field predicates
   """

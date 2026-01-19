@@ -9632,6 +9632,16 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldTags)
 				fieldSeen[trustcenterdochistory.FieldTags] = struct{}{}
 			}
+		case "trustCenterDocKindName":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindName]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterDocKindName)
+				fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindName] = struct{}{}
+			}
+		case "trustCenterDocKindID":
+			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindID]; !ok {
+				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterDocKindID)
+				fieldSeen[trustcenterdochistory.FieldTrustCenterDocKindID] = struct{}{}
+			}
 		case "trustCenterID":
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldTrustCenterID)
@@ -9641,11 +9651,6 @@ func (_q *TrustCenterDocHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterdochistory.FieldTitle]; !ok {
 				selectedFields = append(selectedFields, trustcenterdochistory.FieldTitle)
 				fieldSeen[trustcenterdochistory.FieldTitle] = struct{}{}
-			}
-		case "category":
-			if _, ok := fieldSeen[trustcenterdochistory.FieldCategory]; !ok {
-				selectedFields = append(selectedFields, trustcenterdochistory.FieldCategory)
-				fieldSeen[trustcenterdochistory.FieldCategory] = struct{}{}
 			}
 		case "fileID":
 			if _, ok := fieldSeen[trustcenterdochistory.FieldFileID]; !ok {

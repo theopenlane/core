@@ -5389,13 +5389,14 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_doc_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
-		{Name: "category", Type: field.TypeString},
 		{Name: "watermarking_enabled", Type: field.TypeBool, Nullable: true},
 		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "PENDING"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_doc_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -5418,14 +5419,20 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_center_docs_files_file",
+				Symbol:     "trust_center_docs_custom_type_enums_trust_center_doc_kind",
 				Columns:    []*schema.Column{TrustCenterDocsColumns[15]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_docs_files_file",
+				Columns:    []*schema.Column{TrustCenterDocsColumns[16]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_docs_files_original_file",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[16]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[17]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -10075,8 +10082,9 @@ func init() {
 	TrustCenterCompliancesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterDocsTable.ForeignKeys[0].RefTable = StandardsTable
 	TrustCenterDocsTable.ForeignKeys[1].RefTable = TrustCentersTable
-	TrustCenterDocsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	TrustCenterDocsTable.ForeignKeys[3].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[4].RefTable = FilesTable
 	TrustCenterEntitiesTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterEntitiesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterEntitiesTable.ForeignKeys[2].RefTable = FilesTable

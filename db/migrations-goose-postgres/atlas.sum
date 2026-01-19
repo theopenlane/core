@@ -1,4 +1,4 @@
-h1:QWqWEwGDtQFz/mCGwQeyA3CSMNoi42Iuc+uqZ+6oEro=
+h1:tnUA4A2dROmTV5dLNZZ/7vn6j5ny8GNrF+E/yr61pHM=
 20251229183203_init.sql h1:g/05irCXoqKFObJV2PPLuvDRqma+da41VPsZ5fXQgfE=
 20251229183205_init_history.sql h1:P/q2kAHb8zfNMOWzYkKtPbOwoh9GdJUQljSNAiPEjYI=
 20251231045229_workflow.sql h1:uUPRLO4yw2y//fPGeqIXRrL+fiEN1TRGkF4wHiqPaPk=
@@ -15,3 +15,5 @@ h1:QWqWEwGDtQFz/mCGwQeyA3CSMNoi42Iuc+uqZ+6oEro=
 20260116180005_trust_center_entity_history_fix.sql h1:cEgn+AKsCUjBMrJC7+S79ylqJd0AD20AnLoyxe4qhMk=
 20260117222541_workflowassignmenttypes.sql h1:K7YPcMW30yUPU2WzpStHbGfw/wMcSXjvSbvgGrF/s5s=
 20260117222543_workflowassignmenttypes_history.sql h1:grQtyEXV/n/icIsSN5JnM7Swqab4E5yCmJOTD1rIZ10=
+20260119162447_trustcenterdoc_category.sql h1:R8SMKkZB1yq7ey5KyStqt5Lc00R0DT+S7EPwb/zWdxw=
+20260119162454_trustcenterdoc_category_history.sql h1:0mZIi344mJhymCOLGj14xF6Hw/rIPh58KEaYd8Jelcw=
