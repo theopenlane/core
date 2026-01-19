@@ -2756,7 +2756,15 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "trust_center_nda_request": {"trust_center": {
+}, "trust_center_nda_request": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,

@@ -105,6 +105,8 @@ type Group struct {
 	trust_center_doc_editors                        *string
 	trust_center_entity_blocked_groups              *string
 	trust_center_entity_editors                     *string
+	trust_center_nda_request_blocked_groups         *string
+	trust_center_nda_request_editors                *string
 	trust_center_setting_blocked_groups             *string
 	trust_center_setting_editors                    *string
 	trust_center_subprocessor_blocked_groups        *string
@@ -723,25 +725,29 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[43]: // trust_center_entity_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[44]: // trust_center_setting_blocked_groups
+		case group.ForeignKeys[44]: // trust_center_nda_request_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[45]: // trust_center_setting_editors
+		case group.ForeignKeys[45]: // trust_center_nda_request_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[46]: // trust_center_subprocessor_blocked_groups
+		case group.ForeignKeys[46]: // trust_center_setting_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[47]: // trust_center_subprocessor_editors
+		case group.ForeignKeys[47]: // trust_center_setting_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[48]: // trust_center_watermark_config_blocked_groups
+		case group.ForeignKeys[48]: // trust_center_subprocessor_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[49]: // trust_center_watermark_config_editors
+		case group.ForeignKeys[49]: // trust_center_subprocessor_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[50]: // vulnerability_blocked_groups
+		case group.ForeignKeys[50]: // trust_center_watermark_config_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[51]: // vulnerability_editors
+		case group.ForeignKeys[51]: // trust_center_watermark_config_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[52]: // vulnerability_viewers
+		case group.ForeignKeys[52]: // vulnerability_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[53]: // workflow_definition_groups
+		case group.ForeignKeys[53]: // vulnerability_editors
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[54]: // vulnerability_viewers
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[55]: // workflow_definition_groups
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -1193,68 +1199,82 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[44]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_nda_request_blocked_groups", values[i])
+			} else if value.Valid {
+				_m.trust_center_nda_request_blocked_groups = new(string)
+				*_m.trust_center_nda_request_blocked_groups = value.String
+			}
+		case group.ForeignKeys[45]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_nda_request_editors", values[i])
+			} else if value.Valid {
+				_m.trust_center_nda_request_editors = new(string)
+				*_m.trust_center_nda_request_editors = value.String
+			}
+		case group.ForeignKeys[46]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_setting_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.trust_center_setting_blocked_groups = new(string)
 				*_m.trust_center_setting_blocked_groups = value.String
 			}
-		case group.ForeignKeys[45]:
+		case group.ForeignKeys[47]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_setting_editors", values[i])
 			} else if value.Valid {
 				_m.trust_center_setting_editors = new(string)
 				*_m.trust_center_setting_editors = value.String
 			}
-		case group.ForeignKeys[46]:
+		case group.ForeignKeys[48]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_subprocessor_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.trust_center_subprocessor_blocked_groups = new(string)
 				*_m.trust_center_subprocessor_blocked_groups = value.String
 			}
-		case group.ForeignKeys[47]:
+		case group.ForeignKeys[49]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_subprocessor_editors", values[i])
 			} else if value.Valid {
 				_m.trust_center_subprocessor_editors = new(string)
 				*_m.trust_center_subprocessor_editors = value.String
 			}
-		case group.ForeignKeys[48]:
+		case group.ForeignKeys[50]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_watermark_config_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.trust_center_watermark_config_blocked_groups = new(string)
 				*_m.trust_center_watermark_config_blocked_groups = value.String
 			}
-		case group.ForeignKeys[49]:
+		case group.ForeignKeys[51]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_watermark_config_editors", values[i])
 			} else if value.Valid {
 				_m.trust_center_watermark_config_editors = new(string)
 				*_m.trust_center_watermark_config_editors = value.String
 			}
-		case group.ForeignKeys[50]:
+		case group.ForeignKeys[52]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.vulnerability_blocked_groups = new(string)
 				*_m.vulnerability_blocked_groups = value.String
 			}
-		case group.ForeignKeys[51]:
+		case group.ForeignKeys[53]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_editors", values[i])
 			} else if value.Valid {
 				_m.vulnerability_editors = new(string)
 				*_m.vulnerability_editors = value.String
 			}
-		case group.ForeignKeys[52]:
+		case group.ForeignKeys[54]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_viewers", values[i])
 			} else if value.Valid {
 				_m.vulnerability_viewers = new(string)
 				*_m.vulnerability_viewers = value.String
 			}
-		case group.ForeignKeys[53]:
+		case group.ForeignKeys[55]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_definition_groups", values[i])
 			} else if value.Valid {

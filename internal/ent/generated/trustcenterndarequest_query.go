@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -29,10 +30,14 @@ type TrustCenterNDARequestQuery struct {
 	order                    []trustcenterndarequest.OrderOption
 	inters                   []Interceptor
 	predicates               []predicate.TrustCenterNDARequest
+	withBlockedGroups        *GroupQuery
+	withEditors              *GroupQuery
 	withTrustCenter          *TrustCenterQuery
 	withTrustCenterDocs      *TrustCenterDocQuery
 	loadTotal                []func(context.Context, []*TrustCenterNDARequest) error
 	modifiers                []func(*sql.Selector)
+	withNamedBlockedGroups   map[string]*GroupQuery
+	withNamedEditors         map[string]*GroupQuery
 	withNamedTrustCenterDocs map[string]*TrustCenterDocQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -68,6 +73,56 @@ func (_q *TrustCenterNDARequestQuery) Unique(unique bool) *TrustCenterNDARequest
 func (_q *TrustCenterNDARequestQuery) Order(o ...trustcenterndarequest.OrderOption) *TrustCenterNDARequestQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (_q *TrustCenterNDARequestQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterndarequest.BlockedGroupsTable, trustcenterndarequest.BlockedGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (_q *TrustCenterNDARequestQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterndarequest.EditorsTable, trustcenterndarequest.EditorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryTrustCenter chains the current query on the "trust_center" edge.
@@ -312,6 +367,8 @@ func (_q *TrustCenterNDARequestQuery) Clone() *TrustCenterNDARequestQuery {
 		order:               append([]trustcenterndarequest.OrderOption{}, _q.order...),
 		inters:              append([]Interceptor{}, _q.inters...),
 		predicates:          append([]predicate.TrustCenterNDARequest{}, _q.predicates...),
+		withBlockedGroups:   _q.withBlockedGroups.Clone(),
+		withEditors:         _q.withEditors.Clone(),
 		withTrustCenter:     _q.withTrustCenter.Clone(),
 		withTrustCenterDocs: _q.withTrustCenterDocs.Clone(),
 		// clone intermediate query.
@@ -319,6 +376,28 @@ func (_q *TrustCenterNDARequestQuery) Clone() *TrustCenterNDARequestQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterNDARequestQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *TrustCenterNDARequestQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBlockedGroups = query
+	return _q
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterNDARequestQuery) WithEditors(opts ...func(*GroupQuery)) *TrustCenterNDARequestQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEditors = query
+	return _q
 }
 
 // WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
@@ -427,7 +506,9 @@ func (_q *TrustCenterNDARequestQuery) sqlAll(ctx context.Context, hooks ...query
 	var (
 		nodes       = []*TrustCenterNDARequest{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [4]bool{
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
 			_q.withTrustCenter != nil,
 			_q.withTrustCenterDocs != nil,
 		}
@@ -455,6 +536,20 @@ func (_q *TrustCenterNDARequestQuery) sqlAll(ctx context.Context, hooks ...query
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterNDARequest) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *TrustCenterNDARequest, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterNDARequest) { n.Edges.Editors = []*Group{} },
+			func(n *TrustCenterNDARequest, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withTrustCenter; query != nil {
 		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
 			func(n *TrustCenterNDARequest, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
@@ -467,6 +562,20 @@ func (_q *TrustCenterNDARequestQuery) sqlAll(ctx context.Context, hooks ...query
 			func(n *TrustCenterNDARequest, e *TrustCenterDoc) {
 				n.Edges.TrustCenterDocs = append(n.Edges.TrustCenterDocs, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterNDARequest) { n.appendNamedBlockedGroups(name) },
+			func(n *TrustCenterNDARequest, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterNDARequest) { n.appendNamedEditors(name) },
+			func(n *TrustCenterNDARequest, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -485,6 +594,68 @@ func (_q *TrustCenterNDARequestQuery) sqlAll(ctx context.Context, hooks ...query
 	return nodes, nil
 }
 
+func (_q *TrustCenterNDARequestQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*TrustCenterNDARequest, init func(*TrustCenterNDARequest), assign func(*TrustCenterNDARequest, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterNDARequest)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenterndarequest.BlockedGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_nda_request_blocked_groups
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_nda_request_blocked_groups" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_nda_request_blocked_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterNDARequestQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*TrustCenterNDARequest, init func(*TrustCenterNDARequest), assign func(*TrustCenterNDARequest, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterNDARequest)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenterndarequest.EditorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_nda_request_editors
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_nda_request_editors" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_nda_request_editors" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *TrustCenterNDARequestQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterNDARequest, init func(*TrustCenterNDARequest), assign func(*TrustCenterNDARequest, *TrustCenter)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*TrustCenterNDARequest)
@@ -645,6 +816,34 @@ func (_q *TrustCenterNDARequestQuery) sqlQuery(ctx context.Context) *sql.Selecto
 func (_q *TrustCenterNDARequestQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterNDARequestSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
+}
+
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterNDARequestQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *TrustCenterNDARequestQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	_q.withNamedBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterNDARequestQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *TrustCenterNDARequestQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	_q.withNamedEditors[name] = query
+	return _q
 }
 
 // WithNamedTrustCenterDocs tells the query-builder to eager-load the nodes that are connected to the "trust_center_docs"

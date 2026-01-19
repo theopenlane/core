@@ -10993,6 +10993,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"EntityType",
 	)
 	graph.MustAddE(
+		"blocked_groups",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterndarequest.BlockedGroupsTable,
+			Columns: []string{trustcenterndarequest.BlockedGroupsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"Group",
+	)
+	graph.MustAddE(
+		"editors",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterndarequest.EditorsTable,
+			Columns: []string{trustcenterndarequest.EditorsColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"Group",
+	)
+	graph.MustAddE(
 		"trust_center",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -31715,6 +31739,34 @@ func (f *TrustCenterNDARequestFilter) WhereAccessLevel(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TrustCenterNDARequestFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(trustcenterndarequest.FieldStatus))
+}
+
+// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
+func (f *TrustCenterNDARequestFilter) WhereHasBlockedGroups() {
+	f.Where(entql.HasEdge("blocked_groups"))
+}
+
+// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEditors applies a predicate to check if query has an edge editors.
+func (f *TrustCenterNDARequestFilter) WhereHasEditors() {
+	f.Where(entql.HasEdge("editors"))
+}
+
+// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasEditorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.

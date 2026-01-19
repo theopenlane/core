@@ -18048,6 +18048,8 @@ type CreateTrustCenterNDARequestInput struct {
 	CompanyName       *string
 	Reason            *string
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel
+	BlockedGroupIDs   []string
+	EditorIDs         []string
 	TrustCenterID     *string
 	TrustCenterDocIDs []string
 }
@@ -18068,6 +18070,12 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.AccessLevel; v != nil {
 		m.SetAccessLevel(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -18099,6 +18107,12 @@ type UpdateTrustCenterNDARequestInput struct {
 	AccessLevel             *enums.TrustCenterNDARequestAccessLevel
 	ClearStatus             bool
 	Status                  *enums.TrustCenterNDARequestStatus
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
 	ClearTrustCenterDocs    bool
 	AddTrustCenterDocIDs    []string
 	RemoveTrustCenterDocIDs []string
@@ -18147,6 +18161,24 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
 	}
 	if i.ClearTrustCenterDocs {
 		m.ClearTrustCenterDocs()

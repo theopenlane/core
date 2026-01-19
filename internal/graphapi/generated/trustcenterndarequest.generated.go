@@ -80,6 +80,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestBulkCreatePayload_
 				return ec.fieldContext_TrustCenterNDARequest_accessLevel(ctx, field)
 			case "status":
 				return ec.fieldContext_TrustCenterNDARequest_status(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterNDARequest_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterNDARequest_trustCenter(ctx, field)
 			case "trustCenterDocs":
@@ -143,6 +147,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestCreatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_accessLevel(ctx, field)
 			case "status":
 				return ec.fieldContext_TrustCenterNDARequest_status(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterNDARequest_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterNDARequest_trustCenter(ctx, field)
 			case "trustCenterDocs":
@@ -235,6 +243,10 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequestUpdatePayload_trus
 				return ec.fieldContext_TrustCenterNDARequest_accessLevel(ctx, field)
 			case "status":
 				return ec.fieldContext_TrustCenterNDARequest_status(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterNDARequest_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterNDARequest_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterNDARequest_trustCenter(ctx, field)
 			case "trustCenterDocs":

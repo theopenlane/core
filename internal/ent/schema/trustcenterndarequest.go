@@ -9,9 +9,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -91,10 +93,10 @@ func (TrustCenterNDARequest) Fields() []ent.Field {
 func (t TrustCenterNDARequest) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			// newObjectOwnedMixin[generated.TrustCenterNDARequest](t,
-			// 	withParents(TrustCenter{}),
-			// ),
-			// newGroupPermissionsMixin(withSkipViewPermissions()),
+			newObjectOwnedMixin[generated.TrustCenterNDARequest](t,
+				withParents(TrustCenter{}),
+			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -135,7 +137,7 @@ func (TrustCenterNDARequest) Policy() ent.Policy {
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
-			// entfga.CheckEditAccess[*generated.TrustCenterNDARequestMutation](),
+			entfga.CheckEditAccess[*generated.TrustCenterNDARequestMutation](),
 		),
 	)
 }
@@ -154,7 +156,7 @@ func (TrustCenterNDARequest) Indexes() []ent.Index {
 // Annotations of the TrustCenterNDARequest
 func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		// entfga.SettingsChecks("trust_center"),
-		// entfga.SelfAccessChecks(),
+		entfga.SettingsChecks("trust_center"),
+		entfga.SelfAccessChecks(),
 	}
 }

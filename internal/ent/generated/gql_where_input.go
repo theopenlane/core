@@ -72771,6 +72771,14 @@ type TrustCenterNDARequestWhereInput struct {
 	StatusIsNil  bool                                `json:"statusIsNil,omitempty"`
 	StatusNotNil bool                                `json:"statusNotNil,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -73320,6 +73328,44 @@ func (i *TrustCenterNDARequestWhereInput) P() (predicate.TrustCenterNDARequest, 
 		predicates = append(predicates, trustcenterndarequest.StatusNotNil())
 	}
 
+	if i.HasBlockedGroups != nil {
+		p := trustcenterndarequest.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterndarequest.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterndarequest.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterndarequest.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterndarequest.HasTrustCenter()
 		if !*i.HasTrustCenter {

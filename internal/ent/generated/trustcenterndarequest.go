@@ -58,17 +58,41 @@ type TrustCenterNDARequest struct {
 
 // TrustCenterNDARequestEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterNDARequestEdges struct {
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// TrustCenterDocs holds the value of the trust_center_docs edge.
 	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [4]map[string]int
 
+	namedBlockedGroups   map[string][]*Group
+	namedEditors         map[string][]*Group
 	namedTrustCenterDocs map[string][]*TrustCenterDoc
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterNDARequestEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[0] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterNDARequestEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -76,7 +100,7 @@ type TrustCenterNDARequestEdges struct {
 func (e TrustCenterNDARequestEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -85,7 +109,7 @@ func (e TrustCenterNDARequestEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterNDARequestEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.TrustCenterDocs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
@@ -230,6 +254,16 @@ func (_m *TrustCenterNDARequest) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterNDARequest entity.
+func (_m *TrustCenterNDARequest) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterNDARequestClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenterNDARequest entity.
+func (_m *TrustCenterNDARequest) QueryEditors() *GroupQuery {
+	return NewTrustCenterNDARequestClient(_m.config).QueryEditors(_m)
+}
+
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterNDARequest entity.
 func (_m *TrustCenterNDARequest) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterNDARequestClient(_m.config).QueryTrustCenter(_m)
@@ -313,6 +347,54 @@ func (_m *TrustCenterNDARequest) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterNDARequest) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterNDARequest) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterNDARequest) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterNDARequest) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
 }
 
 // NamedTrustCenterDocs returns the TrustCenterDocs named value or an error if the edge was not

@@ -6258,16 +6258,26 @@ func init() {
 	trustcenterndarequestMixinHooks0 := trustcenterndarequestMixin[0].Hooks()
 	trustcenterndarequestMixinHooks1 := trustcenterndarequestMixin[1].Hooks()
 	trustcenterndarequestMixinHooks3 := trustcenterndarequestMixin[3].Hooks()
+	trustcenterndarequestMixinHooks5 := trustcenterndarequestMixin[5].Hooks()
+	trustcenterndarequestMixinHooks6 := trustcenterndarequestMixin[6].Hooks()
 
 	trustcenterndarequest.Hooks[1] = trustcenterndarequestMixinHooks0[0]
 
 	trustcenterndarequest.Hooks[2] = trustcenterndarequestMixinHooks1[0]
 
 	trustcenterndarequest.Hooks[3] = trustcenterndarequestMixinHooks3[0]
+
+	trustcenterndarequest.Hooks[4] = trustcenterndarequestMixinHooks5[0]
+
+	trustcenterndarequest.Hooks[5] = trustcenterndarequestMixinHooks6[0]
+
+	trustcenterndarequest.Hooks[6] = trustcenterndarequestMixinHooks6[1]
 	trustcenterndarequestMixinInters1 := trustcenterndarequestMixin[1].Interceptors()
+	trustcenterndarequestMixinInters5 := trustcenterndarequestMixin[5].Interceptors()
 	trustcenterndarequestInters := schema.TrustCenterNDARequest{}.Interceptors()
 	trustcenterndarequest.Interceptors[0] = trustcenterndarequestMixinInters1[0]
-	trustcenterndarequest.Interceptors[1] = trustcenterndarequestInters[0]
+	trustcenterndarequest.Interceptors[1] = trustcenterndarequestMixinInters5[0]
+	trustcenterndarequest.Interceptors[2] = trustcenterndarequestInters[0]
 	trustcenterndarequestMixinFields0 := trustcenterndarequestMixin[0].Fields()
 	_ = trustcenterndarequestMixinFields0
 	trustcenterndarequestMixinFields2 := trustcenterndarequestMixin[2].Fields()

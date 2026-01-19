@@ -4903,9 +4903,11 @@ type ComplexityRoot struct {
 
 	TrustCenterNDARequest struct {
 		AccessLevel     func(childComplexity int) int
+		BlockedGroups   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyName     func(childComplexity int) int
 		CreatedAt       func(childComplexity int) int
 		CreatedBy       func(childComplexity int) int
+		Editors         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Email           func(childComplexity int) int
 		FirstName       func(childComplexity int) int
 		ID              func(childComplexity int) int
@@ -33769,6 +33771,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDARequest.AccessLevel(childComplexity), true
 
+	case "TrustCenterNDARequest.blockedGroups":
+		if e.complexity.TrustCenterNDARequest.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenterNDARequest_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenterNDARequest.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "TrustCenterNDARequest.companyName":
 		if e.complexity.TrustCenterNDARequest.CompanyName == nil {
 			break
@@ -33789,6 +33803,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterNDARequest.CreatedBy(childComplexity), true
+
+	case "TrustCenterNDARequest.editors":
+		if e.complexity.TrustCenterNDARequest.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenterNDARequest_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenterNDARequest.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "TrustCenterNDARequest.email":
 		if e.complexity.TrustCenterNDARequest.Email == nil {
@@ -49992,6 +50018,8 @@ input CreateTrustCenterNDARequestInput {
   access level requested
   """
   accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
   trustCenterID: ID
   trustCenterDocIDs: [ID!]
 }
@@ -88332,6 +88360,68 @@ type TrustCenterNDARequest implements Node {
   status of the NDA request
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   trustCenter: TrustCenter
   trustCenterDocs(
     """
@@ -88634,6 +88724,16 @@ input TrustCenterNDARequestWhereInput {
   statusNotIn: [TrustCenterNDARequestTrustCenterNDARequestStatus!]
   statusIsNil: Boolean
   statusNotNil: Boolean
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
   """
   trust_center edge predicates
   """
@@ -95252,6 +95352,12 @@ input UpdateTrustCenterNDARequestInput {
   """
   status: TrustCenterNDARequestTrustCenterNDARequestStatus
   clearStatus: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
   addTrustCenterDocIDs: [ID!]
   removeTrustCenterDocIDs: [ID!]
   clearTrustCenterDocs: Boolean

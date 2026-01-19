@@ -2069,6 +2069,8 @@ var (
 		{Name: "trust_center_doc_editors", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_entity_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_entity_editors", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_nda_request_blocked_groups", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_nda_request_editors", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_setting_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_setting_editors", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_subprocessor_blocked_groups", Type: field.TypeString, Nullable: true},
@@ -2357,62 +2359,74 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_trust_center_settings_blocked_groups",
+				Symbol:     "groups_trust_center_nda_requests_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[64]},
+				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_trust_center_nda_requests_editors",
+				Columns:    []*schema.Column{GroupsColumns[65]},
+				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_trust_center_settings_blocked_groups",
+				Columns:    []*schema.Column{GroupsColumns[66]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_settings_editors",
-				Columns:    []*schema.Column{GroupsColumns[65]},
+				Columns:    []*schema.Column{GroupsColumns[67]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_subprocessors_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[66]},
+				Columns:    []*schema.Column{GroupsColumns[68]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_subprocessors_editors",
-				Columns:    []*schema.Column{GroupsColumns[67]},
+				Columns:    []*schema.Column{GroupsColumns[69]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_watermark_configs_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[68]},
+				Columns:    []*schema.Column{GroupsColumns[70]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_watermark_configs_editors",
-				Columns:    []*schema.Column{GroupsColumns[69]},
+				Columns:    []*schema.Column{GroupsColumns[71]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[70]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_vulnerabilities_editors",
-				Columns:    []*schema.Column{GroupsColumns[71]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_vulnerabilities_viewers",
 				Columns:    []*schema.Column{GroupsColumns[72]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_groups",
+				Symbol:     "groups_vulnerabilities_editors",
 				Columns:    []*schema.Column{GroupsColumns[73]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_vulnerabilities_viewers",
+				Columns:    []*schema.Column{GroupsColumns[74]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_groups",
+				Columns:    []*schema.Column{GroupsColumns[75]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -9948,16 +9962,18 @@ func init() {
 	GroupsTable.ForeignKeys[42].RefTable = TrustCenterDocsTable
 	GroupsTable.ForeignKeys[43].RefTable = TrustCenterEntitiesTable
 	GroupsTable.ForeignKeys[44].RefTable = TrustCenterEntitiesTable
-	GroupsTable.ForeignKeys[45].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[46].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[47].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[48].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[49].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[50].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[51].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[52].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[45].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[46].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[47].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[48].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[49].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[50].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[51].RefTable = TrustCenterWatermarkConfigsTable
+	GroupsTable.ForeignKeys[52].RefTable = TrustCenterWatermarkConfigsTable
 	GroupsTable.ForeignKeys[53].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[54].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[54].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[55].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[56].RefTable = WorkflowDefinitionsTable
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable

@@ -5734,6 +5734,8 @@ type CreateTrustCenterNDARequestInput struct {
 	Reason *string `json:"reason,omitempty"`
 	// access level requested
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
+	BlockedGroupIDs   []string                                `json:"blockedGroupIDs,omitempty"`
+	EditorIDs         []string                                `json:"editorIDs,omitempty"`
 	TrustCenterID     *string                                 `json:"trustCenterID,omitempty"`
 	TrustCenterDocIDs []string                                `json:"trustCenterDocIDs,omitempty"`
 }
@@ -25131,6 +25133,8 @@ type TrustCenterNDARequest struct {
 	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	// status of the NDA request
 	Status          *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
+	BlockedGroups   *GroupConnection                   `json:"blockedGroups"`
+	Editors         *GroupConnection                   `json:"editors"`
 	TrustCenter     *TrustCenter                       `json:"trustCenter,omitempty"`
 	TrustCenterDocs *TrustCenterDocConnection          `json:"trustCenterDocs"`
 }
@@ -25362,6 +25366,12 @@ type TrustCenterNDARequestWhereInput struct {
 	StatusNotIn  []enums.TrustCenterNDARequestStatus `json:"statusNotIn,omitempty"`
 	StatusIsNil  *bool                               `json:"statusIsNil,omitempty"`
 	StatusNotNil *bool                               `json:"statusNotNil,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -30355,6 +30365,12 @@ type UpdateTrustCenterNDARequestInput struct {
 	// status of the NDA request
 	Status                  *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
 	ClearStatus             *bool                              `json:"clearStatus,omitempty"`
+	AddBlockedGroupIDs      []string                           `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs   []string                           `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups      *bool                              `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs            []string                           `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs         []string                           `json:"removeEditorIDs,omitempty"`
+	ClearEditors            *bool                              `json:"clearEditors,omitempty"`
 	AddTrustCenterDocIDs    []string                           `json:"addTrustCenterDocIDs,omitempty"`
 	RemoveTrustCenterDocIDs []string                           `json:"removeTrustCenterDocIDs,omitempty"`
 	ClearTrustCenterDocs    *bool                              `json:"clearTrustCenterDocs,omitempty"`

@@ -9,12 +9,13 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
@@ -58,7 +59,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterNDARequest(ctx context.Contex
 func (r *mutationResolver) UpdateTrustCenterNDARequest(ctx context.Context, id string, input generated.UpdateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterndarequest"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequest"})
 	}
 
 	// setup update request
@@ -66,7 +67,7 @@ func (r *mutationResolver) UpdateTrustCenterNDARequest(ctx context.Context, id s
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterndarequest"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "trustcenterndarequest"})
 	}
 
 	return &model.TrustCenterNDARequestUpdatePayload{
@@ -77,11 +78,11 @@ func (r *mutationResolver) UpdateTrustCenterNDARequest(ctx context.Context, id s
 // DeleteTrustCenterNDARequest is the resolver for the deleteTrustCenterNDARequest field.
 func (r *mutationResolver) DeleteTrustCenterNDARequest(ctx context.Context, id string) (*model.TrustCenterNDARequestDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterNDARequest.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcenterndarequest"})
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "trustcenterndarequest"})
 	}
 
 	if err := generated.TrustCenterNDARequestEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(ctx, err)
+		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterNDARequestDeletePayload{

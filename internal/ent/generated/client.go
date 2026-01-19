@@ -24359,6 +24359,44 @@ func (c *TrustCenterNDARequestClient) GetX(ctx context.Context, id string) *Trus
 	return obj
 }
 
+// QueryBlockedGroups queries the blocked_groups edge of a TrustCenterNDARequest.
+func (c *TrustCenterNDARequestClient) QueryBlockedGroups(_m *TrustCenterNDARequest) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterndarequest.BlockedGroupsTable, trustcenterndarequest.BlockedGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a TrustCenterNDARequest.
+func (c *TrustCenterNDARequestClient) QueryEditors(_m *TrustCenterNDARequest) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterndarequest.EditorsTable, trustcenterndarequest.EditorsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenter queries the trust_center edge of a TrustCenterNDARequest.
 func (c *TrustCenterNDARequestClient) QueryTrustCenter(_m *TrustCenterNDARequest) *TrustCenterQuery {
 	query := (&TrustCenterClient{config: c.config}).Query()
