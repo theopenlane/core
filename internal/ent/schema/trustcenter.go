@@ -9,6 +9,10 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -17,9 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/iam/entfga"
 )
 
 const (
@@ -192,6 +193,12 @@ func (t TrustCenter) Edges() []ent.Edge {
 			fromSchema:    t,
 			name:          "entities",
 			edgeSchema:    TrustCenterEntity{},
+			cascadeDelete: "TrustCenter",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "nda_requests",
+			edgeSchema:    TrustCenterNDARequest{},
 			cascadeDelete: "TrustCenter",
 		}),
 	}
