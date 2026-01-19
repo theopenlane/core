@@ -1,5 +1,7 @@
 package jobspec
 
+import "github.com/riverqueue/river"
+
 // ExportContentArgs for the worker to process and update the record for the updated content
 type ExportContentArgs struct {
 	// ExportID is the ID of the export job
@@ -12,3 +14,8 @@ type ExportContentArgs struct {
 
 // Kind satisfies the river.Job interface
 func (ExportContentArgs) Kind() string { return "export_content" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (ExportContentArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueDefault}
+}
