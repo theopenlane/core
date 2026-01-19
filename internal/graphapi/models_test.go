@@ -2440,7 +2440,7 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	ctx = setContext(ctx, td.client.db)
 
 	if td.Name == "" {
-		td.Name = gofakeit.HipsterWord()
+		td.Name = gofakeit.HipsterWord() + "-" + ulids.New().String()
 	}
 
 	if td.ObjectType == "" {

@@ -722,6 +722,12 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
+	// create custom type enum for trust center doc kind
+	docKind := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		ObjectType: "trust_center_doc",
+	}).MustNew(testUser.UserCtx, t)
+
 	// create trust center doc
 	createFileUpload := func() *graphql.Upload {
 		logoFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
@@ -738,7 +744,7 @@ func TestQueryTrustCenterAsAnonymousUser(t *testing.T) {
 	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
 	doc, err := suite.client.api.CreateTrustCenterDoc(testUser.UserCtx, testclient.CreateTrustCenterDocInput{
 		Title:                  "Test Doc",
-		TrustCenterDocKindName: lo.ToPtr("test"),
+		TrustCenterDocKindName: &docKind.Name,
 		Visibility:             &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 	}, *fileUpload)
 	assert.NilError(t, err)
