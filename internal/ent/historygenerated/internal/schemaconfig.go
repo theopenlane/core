@@ -62,6 +62,7 @@ type SchemaConfig struct {
 	TrustCenterDocHistory             string // TrustCenterDocHistory table.
 	TrustCenterEntityHistory          string // TrustCenterEntityHistory table.
 	TrustCenterHistory                string // TrustCenterHistory table.
+	TrustCenterNDARequestHistory      string // TrustCenterNDARequestHistory table.
 	TrustCenterSettingHistory         string // TrustCenterSettingHistory table.
 	TrustCenterSubprocessorHistory    string // TrustCenterSubprocessorHistory table.
 	TrustCenterWatermarkConfigHistory string // TrustCenterWatermarkConfigHistory table.

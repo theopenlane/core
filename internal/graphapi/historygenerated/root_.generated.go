@@ -1169,6 +1169,7 @@ type ComplexityRoot struct {
 		Ref           func(childComplexity int) int
 		Text          func(childComplexity int) int
 		TextJSON      func(childComplexity int) int
+		Title         func(childComplexity int) int
 		TrustCenterID func(childComplexity int) int
 		UpdatedAt     func(childComplexity int) int
 		UpdatedBy     func(childComplexity int) int
@@ -1498,6 +1499,7 @@ type ComplexityRoot struct {
 		TrustCenterDocHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterDocHistoryOrder, where *historygenerated.TrustCenterDocHistoryWhereInput) int
 		TrustCenterEntityHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterEntityHistoryOrder, where *historygenerated.TrustCenterEntityHistoryWhereInput) int
 		TrustCenterHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterHistoryOrder, where *historygenerated.TrustCenterHistoryWhereInput) int
+		TrustCenterNdaRequestHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterNDARequestHistoryOrder, where *historygenerated.TrustCenterNDARequestHistoryWhereInput) int
 		TrustCenterSettingHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSettingHistoryOrder, where *historygenerated.TrustCenterSettingHistoryWhereInput) int
 		TrustCenterSubprocessorHistories    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterSubprocessorHistoryOrder, where *historygenerated.TrustCenterSubprocessorHistoryWhereInput) int
 		TrustCenterWatermarkConfigHistories func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.TrustCenterWatermarkConfigHistoryOrder, where *historygenerated.TrustCenterWatermarkConfigHistoryWhereInput) int
@@ -2023,9 +2025,41 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	TrustCenterNDARequestHistory struct {
+		AccessLevel   func(childComplexity int) int
+		CompanyName   func(childComplexity int) int
+		CreatedAt     func(childComplexity int) int
+		CreatedBy     func(childComplexity int) int
+		Email         func(childComplexity int) int
+		FirstName     func(childComplexity int) int
+		HistoryTime   func(childComplexity int) int
+		ID            func(childComplexity int) int
+		LastName      func(childComplexity int) int
+		Operation     func(childComplexity int) int
+		Reason        func(childComplexity int) int
+		Ref           func(childComplexity int) int
+		Status        func(childComplexity int) int
+		Tags          func(childComplexity int) int
+		TrustCenterID func(childComplexity int) int
+		UpdatedAt     func(childComplexity int) int
+		UpdatedBy     func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	TrustCenterSettingHistory struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
+		CompanyDomain            func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		Environment              func(childComplexity int) int
@@ -2037,12 +2071,15 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
 		LogoRemoteURL            func(childComplexity int) int
+		NdaApprovalRequired      func(childComplexity int) int
 		Operation                func(childComplexity int) int
 		Overview                 func(childComplexity int) int
 		PrimaryColor             func(childComplexity int) int
 		Ref                      func(childComplexity int) int
+		RemoveBranding           func(childComplexity int) int
 		SecondaryBackgroundColor func(childComplexity int) int
 		SecondaryForegroundColor func(childComplexity int) int
+		SecurityContact          func(childComplexity int) int
 		ThemeMode                func(childComplexity int) int
 		Title                    func(childComplexity int) int
 		TrustCenterID            func(childComplexity int) int
@@ -8380,6 +8417,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NoteHistory.TextJSON(childComplexity), true
 
+	case "NoteHistory.title":
+		if e.complexity.NoteHistory.Title == nil {
+			break
+		}
+
+		return e.complexity.NoteHistory.Title(childComplexity), true
+
 	case "NoteHistory.trustCenterID":
 		if e.complexity.NoteHistory.TrustCenterID == nil {
 			break
@@ -10432,6 +10476,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.TrustCenterHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterHistoryOrder), args["where"].(*historygenerated.TrustCenterHistoryWhereInput)), true
+
+	case "Query.trustCenterNdaRequestHistories":
+		if e.complexity.Query.TrustCenterNdaRequestHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterNdaRequestHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterNdaRequestHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.TrustCenterNDARequestHistoryOrder), args["where"].(*historygenerated.TrustCenterNDARequestHistoryWhereInput)), true
 
 	case "Query.trustCenterSettingHistories":
 		if e.complexity.Query.TrustCenterSettingHistories == nil {
@@ -13272,6 +13328,160 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterHistoryEdge.Node(childComplexity), true
 
+	case "TrustCenterNDARequestHistory.accessLevel":
+		if e.complexity.TrustCenterNDARequestHistory.AccessLevel == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.AccessLevel(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.companyName":
+		if e.complexity.TrustCenterNDARequestHistory.CompanyName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.CompanyName(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.createdAt":
+		if e.complexity.TrustCenterNDARequestHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.CreatedAt(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.createdBy":
+		if e.complexity.TrustCenterNDARequestHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.email":
+		if e.complexity.TrustCenterNDARequestHistory.Email == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.Email(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.firstName":
+		if e.complexity.TrustCenterNDARequestHistory.FirstName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.FirstName(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.historyTime":
+		if e.complexity.TrustCenterNDARequestHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.HistoryTime(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.id":
+		if e.complexity.TrustCenterNDARequestHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.ID(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.lastName":
+		if e.complexity.TrustCenterNDARequestHistory.LastName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.LastName(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.operation":
+		if e.complexity.TrustCenterNDARequestHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.Operation(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.reason":
+		if e.complexity.TrustCenterNDARequestHistory.Reason == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.Reason(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.ref":
+		if e.complexity.TrustCenterNDARequestHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.Ref(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.status":
+		if e.complexity.TrustCenterNDARequestHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.Status(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.tags":
+		if e.complexity.TrustCenterNDARequestHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.Tags(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.trustCenterID":
+		if e.complexity.TrustCenterNDARequestHistory.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.TrustCenterID(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.updatedAt":
+		if e.complexity.TrustCenterNDARequestHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.UpdatedAt(childComplexity), true
+
+	case "TrustCenterNDARequestHistory.updatedBy":
+		if e.complexity.TrustCenterNDARequestHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistory.UpdatedBy(childComplexity), true
+
+	case "TrustCenterNDARequestHistoryConnection.edges":
+		if e.complexity.TrustCenterNDARequestHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistoryConnection.Edges(childComplexity), true
+
+	case "TrustCenterNDARequestHistoryConnection.pageInfo":
+		if e.complexity.TrustCenterNDARequestHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistoryConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterNDARequestHistoryConnection.totalCount":
+		if e.complexity.TrustCenterNDARequestHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistoryConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterNDARequestHistoryEdge.cursor":
+		if e.complexity.TrustCenterNDARequestHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistoryEdge.Cursor(childComplexity), true
+
+	case "TrustCenterNDARequestHistoryEdge.node":
+		if e.complexity.TrustCenterNDARequestHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestHistoryEdge.Node(childComplexity), true
+
 	case "TrustCenterSettingHistory.accentColor":
 		if e.complexity.TrustCenterSettingHistory.AccentColor == nil {
 			break
@@ -13285,6 +13495,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.BackgroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.companyDomain":
+		if e.complexity.TrustCenterSettingHistory.CompanyDomain == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.CompanyDomain(childComplexity), true
 
 	case "TrustCenterSettingHistory.createdAt":
 		if e.complexity.TrustCenterSettingHistory.CreatedAt == nil {
@@ -13363,6 +13580,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSettingHistory.LogoRemoteURL(childComplexity), true
 
+	case "TrustCenterSettingHistory.ndaApprovalRequired":
+		if e.complexity.TrustCenterSettingHistory.NdaApprovalRequired == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.NdaApprovalRequired(childComplexity), true
+
 	case "TrustCenterSettingHistory.operation":
 		if e.complexity.TrustCenterSettingHistory.Operation == nil {
 			break
@@ -13391,6 +13615,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSettingHistory.Ref(childComplexity), true
 
+	case "TrustCenterSettingHistory.removeBranding":
+		if e.complexity.TrustCenterSettingHistory.RemoveBranding == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.RemoveBranding(childComplexity), true
+
 	case "TrustCenterSettingHistory.secondaryBackgroundColor":
 		if e.complexity.TrustCenterSettingHistory.SecondaryBackgroundColor == nil {
 			break
@@ -13404,6 +13635,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.SecondaryForegroundColor(childComplexity), true
+
+	case "TrustCenterSettingHistory.securityContact":
+		if e.complexity.TrustCenterSettingHistory.SecurityContact == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.SecurityContact(childComplexity), true
 
 	case "TrustCenterSettingHistory.themeMode":
 		if e.complexity.TrustCenterSettingHistory.ThemeMode == nil {
@@ -15682,6 +15920,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterEntityHistoryWhereInput,
 		ec.unmarshalInputTrustCenterHistoryOrder,
 		ec.unmarshalInputTrustCenterHistoryWhereInput,
+		ec.unmarshalInputTrustCenterNDARequestHistoryOrder,
+		ec.unmarshalInputTrustCenterNDARequestHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSettingHistoryOrder,
 		ec.unmarshalInputTrustCenterSettingHistoryWhereInput,
 		ec.unmarshalInputTrustCenterSubprocessorHistoryOrder,
@@ -28951,6 +29191,10 @@ type NoteHistory implements Node {
   """
   ownerID: String
   """
+  the title of the note
+  """
+  title: String
+  """
   the text of the note
   """
   text: String!
@@ -29187,6 +29431,24 @@ input NoteHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
   """
   text field predicates
   """
@@ -33825,6 +34087,37 @@ type Query {
     """
     where: TrustCenterHistoryWhereInput
   ): TrustCenterHistoryConnection!
+  trustCenterNdaRequestHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterNDARequestHistories returned from the connection.
+    """
+    orderBy: TrustCenterNDARequestHistoryOrder
+
+    """
+    Filtering options for TrustCenterNDARequestHistories returned from the connection.
+    """
+    where: TrustCenterNDARequestHistoryWhereInput
+  ): TrustCenterNDARequestHistoryConnection!
   trustCenterSettingHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -40437,6 +40730,367 @@ input TrustCenterHistoryWhereInput {
   subprocessorURLEqualFold: String
   subprocessorURLContainsFold: String
 }
+type TrustCenterNDARequestHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: TrustCenterNDARequestHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  ID of the trust center
+  """
+  trustCenterID: String
+  """
+  first name of the requester
+  """
+  firstName: String!
+  """
+  last name of the requester
+  """
+  lastName: String!
+  """
+  email address of the requester
+  """
+  email: String!
+  """
+  company name of the requester
+  """
+  companyName: String
+  """
+  reason for the NDA request
+  """
+  reason: String
+  """
+  access level requested
+  """
+  accessLevel: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
+  """
+  status of the NDA request
+  """
+  status: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterNDARequestHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterNDARequestHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterNDARequestHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterNDARequestHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+TrustCenterNDARequestHistoryOpType is enum for the field operation
+"""
+enum TrustCenterNDARequestHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for TrustCenterNDARequestHistory connections
+"""
+input TrustCenterNDARequestHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterNDARequestHistories.
+  """
+  field: TrustCenterNDARequestHistoryOrderField!
+}
+"""
+Properties by which TrustCenterNDARequestHistory connections can be ordered.
+"""
+enum TrustCenterNDARequestHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel is enum for the field access_level
+"""
+enum TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestAccessLevel") {
+  FULL
+  LIMITED
+}
+"""
+TrustCenterNDARequestHistoryTrustCenterNDARequestStatus is enum for the field status
+"""
+enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestStatus") {
+  REQUESTED
+  NEEDS_APPROVAL
+  APPROVED
+  SIGNED
+}
+"""
+TrustCenterNDARequestHistoryWhereInput is used for filtering TrustCenterNDARequestHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterNDARequestHistoryWhereInput {
+  not: TrustCenterNDARequestHistoryWhereInput
+  and: [TrustCenterNDARequestHistoryWhereInput!]
+  or: [TrustCenterNDARequestHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: TrustCenterNDARequestHistoryOpType
+  operationNEQ: TrustCenterNDARequestHistoryOpType
+  operationIn: [TrustCenterNDARequestHistoryOpType!]
+  operationNotIn: [TrustCenterNDARequestHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
+  """
+  first_name field predicates
+  """
+  firstName: String
+  firstNameNEQ: String
+  firstNameIn: [String!]
+  firstNameNotIn: [String!]
+  firstNameGT: String
+  firstNameGTE: String
+  firstNameLT: String
+  firstNameLTE: String
+  firstNameContains: String
+  firstNameHasPrefix: String
+  firstNameHasSuffix: String
+  firstNameEqualFold: String
+  firstNameContainsFold: String
+  """
+  last_name field predicates
+  """
+  lastName: String
+  lastNameNEQ: String
+  lastNameIn: [String!]
+  lastNameNotIn: [String!]
+  lastNameGT: String
+  lastNameGTE: String
+  lastNameLT: String
+  lastNameLTE: String
+  lastNameContains: String
+  lastNameHasPrefix: String
+  lastNameHasSuffix: String
+  lastNameEqualFold: String
+  lastNameContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  company_name field predicates
+  """
+  companyName: String
+  companyNameNEQ: String
+  companyNameIn: [String!]
+  companyNameNotIn: [String!]
+  companyNameGT: String
+  companyNameGTE: String
+  companyNameLT: String
+  companyNameLTE: String
+  companyNameContains: String
+  companyNameHasPrefix: String
+  companyNameHasSuffix: String
+  companyNameIsNil: Boolean
+  companyNameNotNil: Boolean
+  companyNameEqualFold: String
+  companyNameContainsFold: String
+  """
+  reason field predicates
+  """
+  reason: String
+  reasonNEQ: String
+  reasonIn: [String!]
+  reasonNotIn: [String!]
+  reasonGT: String
+  reasonGTE: String
+  reasonLT: String
+  reasonLTE: String
+  reasonContains: String
+  reasonHasPrefix: String
+  reasonHasSuffix: String
+  reasonIsNil: Boolean
+  reasonNotNil: Boolean
+  reasonEqualFold: String
+  reasonContainsFold: String
+  """
+  access_level field predicates
+  """
+  accessLevel: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
+  accessLevelNEQ: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
+  accessLevelIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel!]
+  accessLevelNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel!]
+  accessLevelIsNil: Boolean
+  accessLevelNotNil: Boolean
+  """
+  status field predicates
+  """
+  status: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+  statusNEQ: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+  statusIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
+  statusNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+}
 type TrustCenterSettingHistory implements Node {
   id: ID!
   historyTime: Time!
@@ -40510,6 +41164,22 @@ type TrustCenterSettingHistory implements Node {
   environment of the trust center
   """
   environment: TrustCenterSettingHistoryTrustCenterEnvironment
+  """
+  whether to remove branding from the trust center
+  """
+  removeBranding: Boolean
+  """
+  URL to the company's homepage
+  """
+  companyDomain: String
+  """
+  email address for security contact
+  """
+  securityContact: String
+  """
+  whether NDA requests require approval before being processed
+  """
+  ndaApprovalRequired: Boolean
 }
 """
 A connection to a list of items.
@@ -40973,6 +41643,56 @@ input TrustCenterSettingHistoryWhereInput {
   environmentNotIn: [TrustCenterSettingHistoryTrustCenterEnvironment!]
   environmentIsNil: Boolean
   environmentNotNil: Boolean
+  """
+  remove_branding field predicates
+  """
+  removeBranding: Boolean
+  removeBrandingNEQ: Boolean
+  removeBrandingIsNil: Boolean
+  removeBrandingNotNil: Boolean
+  """
+  company_domain field predicates
+  """
+  companyDomain: String
+  companyDomainNEQ: String
+  companyDomainIn: [String!]
+  companyDomainNotIn: [String!]
+  companyDomainGT: String
+  companyDomainGTE: String
+  companyDomainLT: String
+  companyDomainLTE: String
+  companyDomainContains: String
+  companyDomainHasPrefix: String
+  companyDomainHasSuffix: String
+  companyDomainIsNil: Boolean
+  companyDomainNotNil: Boolean
+  companyDomainEqualFold: String
+  companyDomainContainsFold: String
+  """
+  security_contact field predicates
+  """
+  securityContact: String
+  securityContactNEQ: String
+  securityContactIn: [String!]
+  securityContactNotIn: [String!]
+  securityContactGT: String
+  securityContactGTE: String
+  securityContactLT: String
+  securityContactLTE: String
+  securityContactContains: String
+  securityContactHasPrefix: String
+  securityContactHasSuffix: String
+  securityContactIsNil: Boolean
+  securityContactNotNil: Boolean
+  securityContactEqualFold: String
+  securityContactContainsFold: String
+  """
+  nda_approval_required field predicates
+  """
+  ndaApprovalRequired: Boolean
+  ndaApprovalRequiredNEQ: Boolean
+  ndaApprovalRequiredIsNil: Boolean
+  ndaApprovalRequiredNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
   id: ID!

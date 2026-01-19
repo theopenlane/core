@@ -9941,6 +9941,7 @@ func (c *NarrativeUpdateOne) SetInput(i UpdateNarrativeInput) *NarrativeUpdateOn
 
 // CreateNoteInput represents a mutation input for creating notes.
 type CreateNoteInput struct {
+	Title            *string
 	Text             string
 	TextJSON         []interface{}
 	NoteRef          *string
@@ -9960,6 +9961,9 @@ type CreateNoteInput struct {
 
 // Mutate applies the CreateNoteInput on the NoteMutation builder.
 func (i *CreateNoteInput) Mutate(m *NoteMutation) {
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
 	m.SetText(i.Text)
 	if v := i.TextJSON; v != nil {
 		m.SetTextJSON(v)
@@ -10013,6 +10017,8 @@ func (c *NoteCreate) SetInput(i CreateNoteInput) *NoteCreate {
 
 // UpdateNoteInput represents a mutation input for updating notes.
 type UpdateNoteInput struct {
+	ClearTitle          bool
+	Title               *string
 	Text                *string
 	ClearTextJSON       bool
 	TextJSON            []interface{}
@@ -10045,6 +10051,12 @@ type UpdateNoteInput struct {
 
 // Mutate applies the UpdateNoteInput on the NoteMutation builder.
 func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
+	if i.ClearTitle {
+		m.ClearTitle()
+	}
+	if v := i.Title; v != nil {
+		m.SetTitle(*v)
+	}
 	if v := i.Text; v != nil {
 		m.SetText(*v)
 	}
@@ -17372,6 +17384,7 @@ type CreateTrustCenterInput struct {
 	TemplateIDs                []string
 	PostIDs                    []string
 	TrustCenterEntityIDs       []string
+	TrustCenterNdaRequestIDs   []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -17433,6 +17446,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.TrustCenterEntityIDs; len(v) > 0 {
 		m.AddTrustCenterEntityIDs(v...)
 	}
+	if v := i.TrustCenterNdaRequestIDs; len(v) > 0 {
+		m.AddTrustCenterNdaRequestIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
@@ -17490,6 +17506,9 @@ type UpdateTrustCenterInput struct {
 	ClearTrustCenterEntities         bool
 	AddTrustCenterEntityIDs          []string
 	RemoveTrustCenterEntityIDs       []string
+	ClearTrustCenterNdaRequests      bool
+	AddTrustCenterNdaRequestIDs      []string
+	RemoveTrustCenterNdaRequestIDs   []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -17634,6 +17653,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTrustCenterEntityIDs; len(v) > 0 {
 		m.RemoveTrustCenterEntityIDs(v...)
+	}
+	if i.ClearTrustCenterNdaRequests {
+		m.ClearTrustCenterNdaRequests()
+	}
+	if v := i.AddTrustCenterNdaRequestIDs; len(v) > 0 {
+		m.AddTrustCenterNdaRequestIDs(v...)
+	}
+	if v := i.RemoveTrustCenterNdaRequestIDs; len(v) > 0 {
+		m.RemoveTrustCenterNdaRequestIDs(v...)
 	}
 }
 
@@ -18029,6 +18057,170 @@ func (c *TrustCenterEntityUpdateOne) SetInput(i UpdateTrustCenterEntityInput) *T
 	return c
 }
 
+// CreateTrustCenterNDARequestInput represents a mutation input for creating trustcenterndarequests.
+type CreateTrustCenterNDARequestInput struct {
+	Tags              []string
+	FirstName         string
+	LastName          string
+	Email             string
+	CompanyName       *string
+	Reason            *string
+	AccessLevel       *enums.TrustCenterNDARequestAccessLevel
+	BlockedGroupIDs   []string
+	EditorIDs         []string
+	TrustCenterID     *string
+	TrustCenterDocIDs []string
+}
+
+// Mutate applies the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
+func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetFirstName(i.FirstName)
+	m.SetLastName(i.LastName)
+	m.SetEmail(i.Email)
+	if v := i.CompanyName; v != nil {
+		m.SetCompanyName(*v)
+	}
+	if v := i.Reason; v != nil {
+		m.SetReason(*v)
+	}
+	if v := i.AccessLevel; v != nil {
+		m.SetAccessLevel(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestCreate builder.
+func (c *TrustCenterNDARequestCreate) SetInput(i CreateTrustCenterNDARequestInput) *TrustCenterNDARequestCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustCenterNDARequestInput represents a mutation input for updating trustcenterndarequests.
+type UpdateTrustCenterNDARequestInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	FirstName               *string
+	LastName                *string
+	Email                   *string
+	ClearCompanyName        bool
+	CompanyName             *string
+	ClearReason             bool
+	Reason                  *string
+	ClearAccessLevel        bool
+	AccessLevel             *enums.TrustCenterNDARequestAccessLevel
+	ClearStatus             bool
+	Status                  *enums.TrustCenterNDARequestStatus
+	ClearBlockedGroups      bool
+	AddBlockedGroupIDs      []string
+	RemoveBlockedGroupIDs   []string
+	ClearEditors            bool
+	AddEditorIDs            []string
+	RemoveEditorIDs         []string
+	ClearTrustCenterDocs    bool
+	AddTrustCenterDocIDs    []string
+	RemoveTrustCenterDocIDs []string
+}
+
+// Mutate applies the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
+func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.FirstName; v != nil {
+		m.SetFirstName(*v)
+	}
+	if v := i.LastName; v != nil {
+		m.SetLastName(*v)
+	}
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
+	if i.ClearCompanyName {
+		m.ClearCompanyName()
+	}
+	if v := i.CompanyName; v != nil {
+		m.SetCompanyName(*v)
+	}
+	if i.ClearReason {
+		m.ClearReason()
+	}
+	if v := i.Reason; v != nil {
+		m.SetReason(*v)
+	}
+	if i.ClearAccessLevel {
+		m.ClearAccessLevel()
+	}
+	if v := i.AccessLevel; v != nil {
+		m.SetAccessLevel(*v)
+	}
+	if i.ClearStatus {
+		m.ClearStatus()
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearTrustCenterDocs {
+		m.ClearTrustCenterDocs()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestUpdate builder.
+func (c *TrustCenterNDARequestUpdate) SetInput(i UpdateTrustCenterNDARequestInput) *TrustCenterNDARequestUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestUpdateOne builder.
+func (c *TrustCenterNDARequestUpdateOne) SetInput(i UpdateTrustCenterNDARequestInput) *TrustCenterNDARequestUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
 	TrustCenterID            *string
@@ -18045,6 +18237,9 @@ type CreateTrustCenterSettingInput struct {
 	SecondaryBackgroundColor *string
 	SecondaryForegroundColor *string
 	Environment              *enums.TrustCenterEnvironment
+	CompanyDomain            *string
+	SecurityContact          *string
+	NdaApprovalRequired      *bool
 	BlockedGroupIDs          []string
 	EditorIDs                []string
 	LogoFileID               *string
@@ -18095,6 +18290,15 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.Environment; v != nil {
 		m.SetEnvironment(*v)
 	}
+	if v := i.CompanyDomain; v != nil {
+		m.SetCompanyDomain(*v)
+	}
+	if v := i.SecurityContact; v != nil {
+		m.SetSecurityContact(*v)
+	}
+	if v := i.NdaApprovalRequired; v != nil {
+		m.SetNdaApprovalRequired(*v)
+	}
 	if v := i.BlockedGroupIDs; len(v) > 0 {
 		m.AddBlockedGroupIDs(v...)
 	}
@@ -18143,6 +18347,12 @@ type UpdateTrustCenterSettingInput struct {
 	SecondaryBackgroundColor      *string
 	ClearSecondaryForegroundColor bool
 	SecondaryForegroundColor      *string
+	ClearCompanyDomain            bool
+	CompanyDomain                 *string
+	ClearSecurityContact          bool
+	SecurityContact               *string
+	ClearNdaApprovalRequired      bool
+	NdaApprovalRequired           *bool
 	ClearBlockedGroups            bool
 	AddBlockedGroupIDs            []string
 	RemoveBlockedGroupIDs         []string
@@ -18234,6 +18444,24 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.SecondaryForegroundColor; v != nil {
 		m.SetSecondaryForegroundColor(*v)
+	}
+	if i.ClearCompanyDomain {
+		m.ClearCompanyDomain()
+	}
+	if v := i.CompanyDomain; v != nil {
+		m.SetCompanyDomain(*v)
+	}
+	if i.ClearSecurityContact {
+		m.ClearSecurityContact()
+	}
+	if v := i.SecurityContact; v != nil {
+		m.SetSecurityContact(*v)
+	}
+	if i.ClearNdaApprovalRequired {
+		m.ClearNdaApprovalRequired()
+	}
+	if v := i.NdaApprovalRequired; v != nil {
+		m.SetNdaApprovalRequired(*v)
 	}
 	if i.ClearBlockedGroups {
 		m.ClearBlockedGroups()

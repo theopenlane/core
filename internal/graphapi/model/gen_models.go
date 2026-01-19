@@ -2221,6 +2221,30 @@ type TrustCenterNDACreatePayload struct {
 	Template *generated.Template `json:"template"`
 }
 
+// Return response for createBulkTrustCenterNDARequest mutation
+type TrustCenterNDARequestBulkCreatePayload struct {
+	// Created trustCenterNDARequests
+	TrustCenterNDARequests []*generated.TrustCenterNDARequest `json:"trustCenterNDARequests,omitempty"`
+}
+
+// Return response for createTrustCenterNDARequest mutation
+type TrustCenterNDARequestCreatePayload struct {
+	// Created trustCenterNDARequest
+	TrustCenterNDARequest *generated.TrustCenterNDARequest `json:"trustCenterNDARequest"`
+}
+
+// Return response for deleteTrustCenterNDARequest mutation
+type TrustCenterNDARequestDeletePayload struct {
+	// Deleted trustCenterNDARequest ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterNDARequest mutation
+type TrustCenterNDARequestUpdatePayload struct {
+	// Updated trustCenterNDARequest
+	TrustCenterNDARequest *generated.TrustCenterNDARequest `json:"trustCenterNDARequest"`
+}
+
 type TrustCenterNDAUpdatePayload struct {
 	Template *generated.Template `json:"template"`
 }

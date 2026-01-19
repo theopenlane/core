@@ -43,6 +43,8 @@ type NoteHistory struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the title of the note
+	Title *string `json:"title,omitempty"`
 	// the text of the note
 	Text string `json:"text,omitempty"`
 	// structured details of the note in JSON format
@@ -69,7 +71,7 @@ func (*NoteHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case notehistory.FieldIsEdited:
 			values[i] = new(sql.NullBool)
-		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldText, notehistory.FieldNoteRef, notehistory.FieldDiscussionID, notehistory.FieldTrustCenterID:
+		case notehistory.FieldID, notehistory.FieldRef, notehistory.FieldCreatedBy, notehistory.FieldUpdatedBy, notehistory.FieldDeletedBy, notehistory.FieldDisplayID, notehistory.FieldOwnerID, notehistory.FieldTitle, notehistory.FieldText, notehistory.FieldNoteRef, notehistory.FieldDiscussionID, notehistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case notehistory.FieldHistoryTime, notehistory.FieldCreatedAt, notehistory.FieldUpdatedAt, notehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -159,6 +161,13 @@ func (_m *NoteHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case notehistory.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = new(string)
+				*_m.Title = value.String
 			}
 		case notehistory.FieldText:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -266,6 +275,11 @@ func (_m *NoteHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	if v := _m.Title; v != nil {
+		builder.WriteString("title=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("text=")
 	builder.WriteString(_m.Text)

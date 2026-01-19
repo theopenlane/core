@@ -1971,6 +1971,7 @@ func (_q *FileQuery) loadTrustCenterDoc(ctx context.Context, query *TrustCenterD
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(trustcenterdoc.FieldFileID)
 	}
@@ -2004,6 +2005,7 @@ func (_q *FileQuery) loadOriginalTrustCenterDoc(ctx context.Context, query *Trus
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(trustcenterdoc.FieldOriginalFileID)
 	}

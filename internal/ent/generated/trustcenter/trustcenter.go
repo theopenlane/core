@@ -76,6 +76,8 @@ const (
 	EdgePosts = "posts"
 	// EdgeTrustCenterEntities holds the string denoting the trust_center_entities edge name in mutations.
 	EdgeTrustCenterEntities = "trust_center_entities"
+	// EdgeTrustCenterNdaRequests holds the string denoting the trust_center_nda_requests edge name in mutations.
+	EdgeTrustCenterNdaRequests = "trust_center_nda_requests"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -176,6 +178,13 @@ const (
 	TrustCenterEntitiesInverseTable = "trust_center_entities"
 	// TrustCenterEntitiesColumn is the table column denoting the trust_center_entities relation/edge.
 	TrustCenterEntitiesColumn = "trust_center_id"
+	// TrustCenterNdaRequestsTable is the table that holds the trust_center_nda_requests relation/edge.
+	TrustCenterNdaRequestsTable = "trust_center_nda_requests"
+	// TrustCenterNdaRequestsInverseTable is the table name for the TrustCenterNDARequest entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterndarequest" package.
+	TrustCenterNdaRequestsInverseTable = "trust_center_nda_requests"
+	// TrustCenterNdaRequestsColumn is the table column denoting the trust_center_nda_requests relation/edge.
+	TrustCenterNdaRequestsColumn = "trust_center_id"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -489,6 +498,20 @@ func ByTrustCenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOpti
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterNdaRequestsCount orders the results by trust_center_nda_requests count.
+func ByTrustCenterNdaRequestsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterNdaRequestsStep(), opts...)
+	}
+}
+
+// ByTrustCenterNdaRequests orders the results by trust_center_nda_requests terms.
+func ByTrustCenterNdaRequests(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterNdaRequestsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -585,6 +608,13 @@ func newTrustCenterEntitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterEntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterEntitiesTable, TrustCenterEntitiesColumn),
+	)
+}
+func newTrustCenterNdaRequestsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterNdaRequestsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterNdaRequestsTable, TrustCenterNdaRequestsColumn),
 	)
 }
 

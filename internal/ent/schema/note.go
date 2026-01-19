@@ -43,6 +43,10 @@ func (Note) PluralName() string {
 // Fields of the Note
 func (Note) Fields() []ent.Field {
 	return []ent.Field{
+		field.String("title").
+			Comment("the title of the note").
+			Optional().
+			Nillable(),
 		field.Text("text").
 			Comment("the text of the note").
 			NotEmpty(),

@@ -330,6 +330,62 @@ func (_c *TrustCenterSettingCreate) SetNillableEnvironment(v *enums.TrustCenterE
 	return _c
 }
 
+// SetRemoveBranding sets the "remove_branding" field.
+func (_c *TrustCenterSettingCreate) SetRemoveBranding(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetRemoveBranding(v)
+	return _c
+}
+
+// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableRemoveBranding(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetRemoveBranding(*v)
+	}
+	return _c
+}
+
+// SetCompanyDomain sets the "company_domain" field.
+func (_c *TrustCenterSettingCreate) SetCompanyDomain(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetCompanyDomain(v)
+	return _c
+}
+
+// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableCompanyDomain(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetCompanyDomain(*v)
+	}
+	return _c
+}
+
+// SetSecurityContact sets the "security_contact" field.
+func (_c *TrustCenterSettingCreate) SetSecurityContact(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetSecurityContact(v)
+	return _c
+}
+
+// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableSecurityContact(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetSecurityContact(*v)
+	}
+	return _c
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_c *TrustCenterSettingCreate) SetNdaApprovalRequired(v bool) *TrustCenterSettingCreate {
+	_c.mutation.SetNdaApprovalRequired(v)
+	return _c
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetNdaApprovalRequired(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -471,6 +527,14 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 		v := trustcentersetting.DefaultEnvironment
 		_c.mutation.SetEnvironment(v)
 	}
+	if _, ok := _c.mutation.RemoveBranding(); !ok {
+		v := trustcentersetting.DefaultRemoveBranding
+		_c.mutation.SetRemoveBranding(v)
+	}
+	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
+		v := trustcentersetting.DefaultNdaApprovalRequired
+		_c.mutation.SetNdaApprovalRequired(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.DefaultID (forgotten import generated/runtime?)")
@@ -546,6 +610,16 @@ func (_c *TrustCenterSettingCreate) check() error {
 	if v, ok := _c.mutation.Environment(); ok {
 		if err := trustcentersetting.EnvironmentValidator(v); err != nil {
 			return &ValidationError{Name: "environment", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.environment": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.CompanyDomain(); ok {
+		if err := trustcentersetting.CompanyDomainValidator(v); err != nil {
+			return &ValidationError{Name: "company_domain", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_domain": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.SecurityContact(); ok {
+		if err := trustcentersetting.SecurityContactValidator(v); err != nil {
+			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
 		}
 	}
 	return nil
@@ -663,6 +737,22 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.Environment(); ok {
 		_spec.SetField(trustcentersetting.FieldEnvironment, field.TypeEnum, value)
 		_node.Environment = value
+	}
+	if value, ok := _c.mutation.RemoveBranding(); ok {
+		_spec.SetField(trustcentersetting.FieldRemoveBranding, field.TypeBool, value)
+		_node.RemoveBranding = value
+	}
+	if value, ok := _c.mutation.CompanyDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyDomain, field.TypeString, value)
+		_node.CompanyDomain = &value
+	}
+	if value, ok := _c.mutation.SecurityContact(); ok {
+		_spec.SetField(trustcentersetting.FieldSecurityContact, field.TypeString, value)
+		_node.SecurityContact = &value
+	}
+	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
+		_node.NdaApprovalRequired = value
 	}
 	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

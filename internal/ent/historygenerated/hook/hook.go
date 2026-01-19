@@ -647,6 +647,18 @@ func (f TrustCenterHistoryFunc) Mutate(ctx context.Context, m historygenerated.M
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.TrustCenterHistoryMutation", m)
 }
 
+// The TrustCenterNDARequestHistoryFunc type is an adapter to allow the use of ordinary
+// function as TrustCenterNDARequestHistory mutator.
+type TrustCenterNDARequestHistoryFunc func(context.Context, *historygenerated.TrustCenterNDARequestHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f TrustCenterNDARequestHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.TrustCenterNDARequestHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.TrustCenterNDARequestHistoryMutation", m)
+}
+
 // The TrustCenterSettingHistoryFunc type is an adapter to allow the use of ordinary
 // function as TrustCenterSettingHistory mutator.
 type TrustCenterSettingHistoryFunc func(context.Context, *historygenerated.TrustCenterSettingHistoryMutation) (historygenerated.Value, error)

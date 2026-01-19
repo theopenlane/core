@@ -237,6 +237,9 @@ type TrustCenterDoc func(*sql.Selector)
 // TrustCenterEntity is the predicate function for trustcenterentity builders.
 type TrustCenterEntity func(*sql.Selector)
 
+// TrustCenterNDARequest is the predicate function for trustcenterndarequest builders.
+type TrustCenterNDARequest func(*sql.Selector)
+
 // TrustCenterSetting is the predicate function for trustcentersetting builders.
 type TrustCenterSetting func(*sql.Selector)
 

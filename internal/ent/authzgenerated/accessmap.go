@@ -2688,6 +2688,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_entity",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_nda_requests": {
+	ObjectType:      "trust_center_nda_request",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center_compliance": {"blocked_groups": {
 	ObjectType:      "group",
@@ -2755,6 +2759,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+},
+}, "trust_center_nda_request": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "trust_center_docs": {
+	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "trust_center_setting": {"blocked_groups": {
 	ObjectType:      "group",

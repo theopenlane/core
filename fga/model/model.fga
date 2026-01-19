@@ -137,6 +137,9 @@ type organization
     define trust_center_entity_creator: [group#member]
     define can_create_trust_center_entity: can_edit or trust_center_entity_creator
 
+    define trust_center_nda_request_creator: [group#member]
+    define can_create_trust_center_nda_request: can_edit or trust_center_nda_request_creator
+
     define trust_center_compliance_creator: [group#member]
     define can_create_trust_center_compliance: can_edit or trust_center_compliance_creator
 
@@ -675,6 +678,18 @@ type trust_center_doc
     define viewer: editor
 
 type trust_center_entity
+  relations
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    define parent: [trust_center, user, service]
+    define editor: [group#member]
+    define viewer: editor
+
+type trust_center_nda_request
   relations
     define can_view: [user, service] or parent_viewer or viewer
     define can_edit: [user, service] or parent_editor or editor

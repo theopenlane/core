@@ -108,6 +108,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_posts(ctx, field)
 			case "trustCenterEntities":
 				return ec.fieldContext_TrustCenter_trustCenterEntities(ctx, field)
+			case "trustCenterNdaRequests":
+				return ec.fieldContext_TrustCenter_trustCenterNdaRequests(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},
@@ -224,6 +226,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_posts(ctx, field)
 			case "trustCenterEntities":
 				return ec.fieldContext_TrustCenter_trustCenterEntities(ctx, field)
+			case "trustCenterNdaRequests":
+				return ec.fieldContext_TrustCenter_trustCenterNdaRequests(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustCenter", field.Name)
 		},

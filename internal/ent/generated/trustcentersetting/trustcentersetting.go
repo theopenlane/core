@@ -62,6 +62,14 @@ const (
 	FieldSecondaryForegroundColor = "secondary_foreground_color"
 	// FieldEnvironment holds the string denoting the environment field in the database.
 	FieldEnvironment = "environment"
+	// FieldRemoveBranding holds the string denoting the remove_branding field in the database.
+	FieldRemoveBranding = "remove_branding"
+	// FieldCompanyDomain holds the string denoting the company_domain field in the database.
+	FieldCompanyDomain = "company_domain"
+	// FieldSecurityContact holds the string denoting the security_contact field in the database.
+	FieldSecurityContact = "security_contact"
+	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
+	FieldNdaApprovalRequired = "nda_approval_required"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
@@ -127,6 +135,10 @@ var Columns = []string{
 	FieldSecondaryBackgroundColor,
 	FieldSecondaryForegroundColor,
 	FieldEnvironment,
+	FieldRemoveBranding,
+	FieldCompanyDomain,
+	FieldSecurityContact,
+	FieldNdaApprovalRequired,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -176,6 +188,14 @@ var (
 	SecondaryBackgroundColorValidator func(string) error
 	// SecondaryForegroundColorValidator is a validator for the "secondary_foreground_color" field. It is called by the builders before save.
 	SecondaryForegroundColorValidator func(string) error
+	// DefaultRemoveBranding holds the default value on creation for the "remove_branding" field.
+	DefaultRemoveBranding bool
+	// CompanyDomainValidator is a validator for the "company_domain" field. It is called by the builders before save.
+	CompanyDomainValidator func(string) error
+	// SecurityContactValidator is a validator for the "security_contact" field. It is called by the builders before save.
+	SecurityContactValidator func(string) error
+	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
+	DefaultNdaApprovalRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -320,6 +340,26 @@ func BySecondaryForegroundColor(opts ...sql.OrderTermOption) OrderOption {
 // ByEnvironment orders the results by the environment field.
 func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnvironment, opts...).ToFunc()
+}
+
+// ByRemoveBranding orders the results by the remove_branding field.
+func ByRemoveBranding(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemoveBranding, opts...).ToFunc()
+}
+
+// ByCompanyDomain orders the results by the company_domain field.
+func ByCompanyDomain(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCompanyDomain, opts...).ToFunc()
+}
+
+// BySecurityContact orders the results by the security_contact field.
+func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityContact, opts...).ToFunc()
+}
+
+// ByNdaApprovalRequired orders the results by the nda_approval_required field.
+func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
 }
 
 // ByBlockedGroupsCount orders the results by blocked_groups count.
