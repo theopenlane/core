@@ -69,6 +69,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -20488,6 +20489,338 @@ func (_m *TrustCenterHistory) ToEdge(order *TrustCenterHistoryOrder) *TrustCente
 		order = DefaultTrustCenterHistoryOrder
 	}
 	return &TrustCenterHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// TrustCenterNDARequestHistoryEdge is the edge representation of TrustCenterNDARequestHistory.
+type TrustCenterNDARequestHistoryEdge struct {
+	Node   *TrustCenterNDARequestHistory `json:"node"`
+	Cursor Cursor                        `json:"cursor"`
+}
+
+// TrustCenterNDARequestHistoryConnection is the connection containing edges to TrustCenterNDARequestHistory.
+type TrustCenterNDARequestHistoryConnection struct {
+	Edges      []*TrustCenterNDARequestHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                            `json:"pageInfo"`
+	TotalCount int                                 `json:"totalCount"`
+}
+
+func (c *TrustCenterNDARequestHistoryConnection) build(nodes []*TrustCenterNDARequestHistory, pager *trustcenterndarequesthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterNDARequestHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterNDARequestHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterNDARequestHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterNDARequestHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterNDARequestHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterNDARequestHistoryPaginateOption enables pagination customization.
+type TrustCenterNDARequestHistoryPaginateOption func(*trustcenterndarequesthistoryPager) error
+
+// WithTrustCenterNDARequestHistoryOrder configures pagination ordering.
+func WithTrustCenterNDARequestHistoryOrder(order *TrustCenterNDARequestHistoryOrder) TrustCenterNDARequestHistoryPaginateOption {
+	if order == nil {
+		order = DefaultTrustCenterNDARequestHistoryOrder
+	}
+	o := *order
+	return func(pager *trustcenterndarequesthistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultTrustCenterNDARequestHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithTrustCenterNDARequestHistoryFilter configures pagination filter.
+func WithTrustCenterNDARequestHistoryFilter(filter func(*TrustCenterNDARequestHistoryQuery) (*TrustCenterNDARequestHistoryQuery, error)) TrustCenterNDARequestHistoryPaginateOption {
+	return func(pager *trustcenterndarequesthistoryPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterNDARequestHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcenterndarequesthistoryPager struct {
+	reverse bool
+	order   *TrustCenterNDARequestHistoryOrder
+	filter  func(*TrustCenterNDARequestHistoryQuery) (*TrustCenterNDARequestHistoryQuery, error)
+}
+
+func newTrustCenterNDARequestHistoryPager(opts []TrustCenterNDARequestHistoryPaginateOption, reverse bool) (*trustcenterndarequesthistoryPager, error) {
+	pager := &trustcenterndarequesthistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultTrustCenterNDARequestHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *trustcenterndarequesthistoryPager) applyFilter(query *TrustCenterNDARequestHistoryQuery) (*TrustCenterNDARequestHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcenterndarequesthistoryPager) toCursor(_m *TrustCenterNDARequestHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *trustcenterndarequesthistoryPager) applyCursors(query *TrustCenterNDARequestHistoryQuery, after, before *Cursor) (*TrustCenterNDARequestHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultTrustCenterNDARequestHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *trustcenterndarequesthistoryPager) applyOrder(query *TrustCenterNDARequestHistoryQuery) *TrustCenterNDARequestHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultTrustCenterNDARequestHistoryOrder.Field {
+		query = query.Order(DefaultTrustCenterNDARequestHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *trustcenterndarequesthistoryPager) orderExpr(query *TrustCenterNDARequestHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultTrustCenterNDARequestHistoryOrder.Field {
+			b.Comma().Ident(DefaultTrustCenterNDARequestHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterNDARequestHistory.
+func (_m *TrustCenterNDARequestHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterNDARequestHistoryPaginateOption,
+) (*TrustCenterNDARequestHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterNDARequestHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterNDARequestHistoryConnection{Edges: []*TrustCenterNDARequestHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterNDARequestHistoryOrderFieldHistoryTime orders TrustCenterNDARequestHistory by history_time.
+	TrustCenterNDARequestHistoryOrderFieldHistoryTime = &TrustCenterNDARequestHistoryOrderField{
+		Value: func(_m *TrustCenterNDARequestHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: trustcenterndarequesthistory.FieldHistoryTime,
+		toTerm: trustcenterndarequesthistory.ByHistoryTime,
+		toCursor: func(_m *TrustCenterNDARequestHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// TrustCenterNDARequestHistoryOrderFieldCreatedAt orders TrustCenterNDARequestHistory by created_at.
+	TrustCenterNDARequestHistoryOrderFieldCreatedAt = &TrustCenterNDARequestHistoryOrderField{
+		Value: func(_m *TrustCenterNDARequestHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: trustcenterndarequesthistory.FieldCreatedAt,
+		toTerm: trustcenterndarequesthistory.ByCreatedAt,
+		toCursor: func(_m *TrustCenterNDARequestHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterNDARequestHistoryOrderFieldUpdatedAt orders TrustCenterNDARequestHistory by updated_at.
+	TrustCenterNDARequestHistoryOrderFieldUpdatedAt = &TrustCenterNDARequestHistoryOrderField{
+		Value: func(_m *TrustCenterNDARequestHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: trustcenterndarequesthistory.FieldUpdatedAt,
+		toTerm: trustcenterndarequesthistory.ByUpdatedAt,
+		toCursor: func(_m *TrustCenterNDARequestHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterNDARequestHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterNDARequestHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case TrustCenterNDARequestHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterNDARequestHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterNDARequestHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterNDARequestHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterNDARequestHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *TrustCenterNDARequestHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *TrustCenterNDARequestHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterNDARequestHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterNDARequestHistoryOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterNDARequestHistoryOrderField defines the ordering field of TrustCenterNDARequestHistory.
+type TrustCenterNDARequestHistoryOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterNDARequestHistory.
+	Value    func(*TrustCenterNDARequestHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcenterndarequesthistory.OrderOption
+	toCursor func(*TrustCenterNDARequestHistory) Cursor
+}
+
+// TrustCenterNDARequestHistoryOrder defines the ordering of TrustCenterNDARequestHistory.
+type TrustCenterNDARequestHistoryOrder struct {
+	Direction OrderDirection                          `json:"direction"`
+	Field     *TrustCenterNDARequestHistoryOrderField `json:"field"`
+}
+
+// DefaultTrustCenterNDARequestHistoryOrder is the default ordering of TrustCenterNDARequestHistory.
+var DefaultTrustCenterNDARequestHistoryOrder = &TrustCenterNDARequestHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterNDARequestHistoryOrderField{
+		Value: func(_m *TrustCenterNDARequestHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: trustcenterndarequesthistory.FieldID,
+		toTerm: trustcenterndarequesthistory.ByID,
+		toCursor: func(_m *TrustCenterNDARequestHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterNDARequestHistory into TrustCenterNDARequestHistoryEdge.
+func (_m *TrustCenterNDARequestHistory) ToEdge(order *TrustCenterNDARequestHistoryOrder) *TrustCenterNDARequestHistoryEdge {
+	if order == nil {
+		order = DefaultTrustCenterNDARequestHistoryOrder
+	}
+	return &TrustCenterNDARequestHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

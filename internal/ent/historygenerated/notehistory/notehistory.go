@@ -41,6 +41,8 @@ const (
 	FieldDisplayID = "display_id"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldTitle holds the string denoting the title field in the database.
+	FieldTitle = "title"
 	// FieldText holds the string denoting the text field in the database.
 	FieldText = "text"
 	// FieldTextJSON holds the string denoting the text_json field in the database.
@@ -71,6 +73,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldDisplayID,
 	FieldOwnerID,
+	FieldTitle,
 	FieldText,
 	FieldTextJSON,
 	FieldNoteRef,
@@ -183,6 +186,11 @@ func ByDisplayID(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByTitle orders the results by the title field.
+func ByTitle(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
 // ByText orders the results by the text field.

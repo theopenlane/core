@@ -37,6 +37,7 @@ type TrustCenterDocQuery struct {
 	withStandard           *StandardQuery
 	withFile               *FileQuery
 	withOriginalFile       *FileQuery
+	withFKs                bool
 	loadTotal              []func(context.Context, []*TrustCenterDoc) error
 	modifiers              []func(*sql.Selector)
 	withNamedBlockedGroups map[string]*GroupQuery
@@ -581,6 +582,7 @@ func (_q *TrustCenterDocQuery) prepareQuery(ctx context.Context) error {
 func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterDoc, error) {
 	var (
 		nodes       = []*TrustCenterDoc{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [6]bool{
 			_q.withBlockedGroups != nil,
@@ -591,6 +593,9 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withOriginalFile != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, trustcenterdoc.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TrustCenterDoc).scanValues(nil, columns)
 	}

@@ -168,6 +168,26 @@ func SecondaryForegroundColor(v string) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldSecondaryForegroundColor, v))
 }
 
+// RemoveBranding applies equality check predicate on the "remove_branding" field. It's identical to RemoveBrandingEQ.
+func RemoveBranding(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldRemoveBranding, v))
+}
+
+// CompanyDomain applies equality check predicate on the "company_domain" field. It's identical to CompanyDomainEQ.
+func CompanyDomain(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCompanyDomain, v))
+}
+
+// SecurityContact applies equality check predicate on the "security_contact" field. It's identical to SecurityContactEQ.
+func SecurityContact(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldSecurityContact, v))
+}
+
+// NdaApprovalRequired applies equality check predicate on the "nda_approval_required" field. It's identical to NdaApprovalRequiredEQ.
+func NdaApprovalRequired(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApprovalRequired, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCreatedAt, v))
@@ -1671,6 +1691,196 @@ func EnvironmentIsNil() predicate.TrustCenterSetting {
 // EnvironmentNotNil applies the NotNil predicate on the "environment" field.
 func EnvironmentNotNil() predicate.TrustCenterSetting {
 	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldEnvironment))
+}
+
+// RemoveBrandingEQ applies the EQ predicate on the "remove_branding" field.
+func RemoveBrandingEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldRemoveBranding, v))
+}
+
+// RemoveBrandingNEQ applies the NEQ predicate on the "remove_branding" field.
+func RemoveBrandingNEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldRemoveBranding, v))
+}
+
+// RemoveBrandingIsNil applies the IsNil predicate on the "remove_branding" field.
+func RemoveBrandingIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldRemoveBranding))
+}
+
+// RemoveBrandingNotNil applies the NotNil predicate on the "remove_branding" field.
+func RemoveBrandingNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldRemoveBranding))
+}
+
+// CompanyDomainEQ applies the EQ predicate on the "company_domain" field.
+func CompanyDomainEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldCompanyDomain, v))
+}
+
+// CompanyDomainNEQ applies the NEQ predicate on the "company_domain" field.
+func CompanyDomainNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldCompanyDomain, v))
+}
+
+// CompanyDomainIn applies the In predicate on the "company_domain" field.
+func CompanyDomainIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldCompanyDomain, vs...))
+}
+
+// CompanyDomainNotIn applies the NotIn predicate on the "company_domain" field.
+func CompanyDomainNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldCompanyDomain, vs...))
+}
+
+// CompanyDomainGT applies the GT predicate on the "company_domain" field.
+func CompanyDomainGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldCompanyDomain, v))
+}
+
+// CompanyDomainGTE applies the GTE predicate on the "company_domain" field.
+func CompanyDomainGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldCompanyDomain, v))
+}
+
+// CompanyDomainLT applies the LT predicate on the "company_domain" field.
+func CompanyDomainLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldCompanyDomain, v))
+}
+
+// CompanyDomainLTE applies the LTE predicate on the "company_domain" field.
+func CompanyDomainLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldCompanyDomain, v))
+}
+
+// CompanyDomainContains applies the Contains predicate on the "company_domain" field.
+func CompanyDomainContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldCompanyDomain, v))
+}
+
+// CompanyDomainHasPrefix applies the HasPrefix predicate on the "company_domain" field.
+func CompanyDomainHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldCompanyDomain, v))
+}
+
+// CompanyDomainHasSuffix applies the HasSuffix predicate on the "company_domain" field.
+func CompanyDomainHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldCompanyDomain, v))
+}
+
+// CompanyDomainIsNil applies the IsNil predicate on the "company_domain" field.
+func CompanyDomainIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldCompanyDomain))
+}
+
+// CompanyDomainNotNil applies the NotNil predicate on the "company_domain" field.
+func CompanyDomainNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldCompanyDomain))
+}
+
+// CompanyDomainEqualFold applies the EqualFold predicate on the "company_domain" field.
+func CompanyDomainEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldCompanyDomain, v))
+}
+
+// CompanyDomainContainsFold applies the ContainsFold predicate on the "company_domain" field.
+func CompanyDomainContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldCompanyDomain, v))
+}
+
+// SecurityContactEQ applies the EQ predicate on the "security_contact" field.
+func SecurityContactEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldSecurityContact, v))
+}
+
+// SecurityContactNEQ applies the NEQ predicate on the "security_contact" field.
+func SecurityContactNEQ(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldSecurityContact, v))
+}
+
+// SecurityContactIn applies the In predicate on the "security_contact" field.
+func SecurityContactIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldSecurityContact, vs...))
+}
+
+// SecurityContactNotIn applies the NotIn predicate on the "security_contact" field.
+func SecurityContactNotIn(vs ...string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldSecurityContact, vs...))
+}
+
+// SecurityContactGT applies the GT predicate on the "security_contact" field.
+func SecurityContactGT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGT(FieldSecurityContact, v))
+}
+
+// SecurityContactGTE applies the GTE predicate on the "security_contact" field.
+func SecurityContactGTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldGTE(FieldSecurityContact, v))
+}
+
+// SecurityContactLT applies the LT predicate on the "security_contact" field.
+func SecurityContactLT(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLT(FieldSecurityContact, v))
+}
+
+// SecurityContactLTE applies the LTE predicate on the "security_contact" field.
+func SecurityContactLTE(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldLTE(FieldSecurityContact, v))
+}
+
+// SecurityContactContains applies the Contains predicate on the "security_contact" field.
+func SecurityContactContains(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContains(FieldSecurityContact, v))
+}
+
+// SecurityContactHasPrefix applies the HasPrefix predicate on the "security_contact" field.
+func SecurityContactHasPrefix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasPrefix(FieldSecurityContact, v))
+}
+
+// SecurityContactHasSuffix applies the HasSuffix predicate on the "security_contact" field.
+func SecurityContactHasSuffix(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldHasSuffix(FieldSecurityContact, v))
+}
+
+// SecurityContactIsNil applies the IsNil predicate on the "security_contact" field.
+func SecurityContactIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldSecurityContact))
+}
+
+// SecurityContactNotNil applies the NotNil predicate on the "security_contact" field.
+func SecurityContactNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldSecurityContact))
+}
+
+// SecurityContactEqualFold applies the EqualFold predicate on the "security_contact" field.
+func SecurityContactEqualFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEqualFold(FieldSecurityContact, v))
+}
+
+// SecurityContactContainsFold applies the ContainsFold predicate on the "security_contact" field.
+func SecurityContactContainsFold(v string) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldSecurityContact, v))
+}
+
+// NdaApprovalRequiredEQ applies the EQ predicate on the "nda_approval_required" field.
+func NdaApprovalRequiredEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldNdaApprovalRequired, v))
+}
+
+// NdaApprovalRequiredNEQ applies the NEQ predicate on the "nda_approval_required" field.
+func NdaApprovalRequiredNEQ(v bool) predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldNdaApprovalRequired, v))
+}
+
+// NdaApprovalRequiredIsNil applies the IsNil predicate on the "nda_approval_required" field.
+func NdaApprovalRequiredIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldNdaApprovalRequired))
+}
+
+// NdaApprovalRequiredNotNil applies the NotNil predicate on the "nda_approval_required" field.
+func NdaApprovalRequiredNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldNdaApprovalRequired))
 }
 
 // HasBlockedGroups applies the HasEdge predicate on the "blocked_groups" edge.

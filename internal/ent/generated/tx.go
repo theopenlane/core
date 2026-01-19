@@ -166,6 +166,8 @@ type Tx struct {
 	TrustCenterDoc *TrustCenterDocClient
 	// TrustCenterEntity is the client for interacting with the TrustCenterEntity builders.
 	TrustCenterEntity *TrustCenterEntityClient
+	// TrustCenterNDARequest is the client for interacting with the TrustCenterNDARequest builders.
+	TrustCenterNDARequest *TrustCenterNDARequestClient
 	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
 	TrustCenterSetting *TrustCenterSettingClient
 	// TrustCenterSubprocessor is the client for interacting with the TrustCenterSubprocessor builders.
@@ -402,6 +404,7 @@ func (tx *Tx) init() {
 	tx.TrustCenterCompliance = NewTrustCenterComplianceClient(tx.config)
 	tx.TrustCenterDoc = NewTrustCenterDocClient(tx.config)
 	tx.TrustCenterEntity = NewTrustCenterEntityClient(tx.config)
+	tx.TrustCenterNDARequest = NewTrustCenterNDARequestClient(tx.config)
 	tx.TrustCenterSetting = NewTrustCenterSettingClient(tx.config)
 	tx.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(tx.config)
 	tx.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(tx.config)

@@ -167,6 +167,9 @@ type TrustCenterEntityHistory func(*sql.Selector)
 // TrustCenterHistory is the predicate function for trustcenterhistory builders.
 type TrustCenterHistory func(*sql.Selector)
 
+// TrustCenterNDARequestHistory is the predicate function for trustcenterndarequesthistory builders.
+type TrustCenterNDARequestHistory func(*sql.Selector)
+
 // TrustCenterSettingHistory is the predicate function for trustcentersettinghistory builders.
 type TrustCenterSettingHistory func(*sql.Selector)
 

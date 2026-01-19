@@ -2356,6 +2356,40 @@ func (r *queryResolver) TrustCenterEntities(ctx context.Context, after *entgql.C
 	return res, err
 }
 
+// TrustCenterNdaRequests is the resolver for the trustCenterNdaRequests field.
+func (r *queryResolver) TrustCenterNdaRequests(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestOrder, where *generated.TrustCenterNDARequestWhereInput) (*generated.TrustCenterNDARequestConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustCenterNDARequestOrder{
+			{
+				Field:     generated.TrustCenterNDARequestOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustCenterNDARequest.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterndarequest"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustCenterNDARequestOrder(orderBy),
+		generated.WithTrustCenterNDARequestFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "trustcenterndarequest"})
+	}
+
+	return res, err
+}
+
 // TrustCenterSettings is the resolver for the trustCenterSettings field.
 func (r *queryResolver) TrustCenterSettings(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) (*generated.TrustCenterSettingConnection, error) {
 	// set page limit if nothing was set

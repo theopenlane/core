@@ -94,6 +94,14 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
 			case "environment":
 				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
+			case "removeBranding":
+				return ec.fieldContext_TrustCenterSetting_removeBranding(ctx, field)
+			case "companyDomain":
+				return ec.fieldContext_TrustCenterSetting_companyDomain(ctx, field)
+			case "securityContact":
+				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
+			case "ndaApprovalRequired":
+				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -175,6 +183,14 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
 			case "environment":
 				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
+			case "removeBranding":
+				return ec.fieldContext_TrustCenterSetting_removeBranding(ctx, field)
+			case "companyDomain":
+				return ec.fieldContext_TrustCenterSetting_companyDomain(ctx, field)
+			case "securityContact":
+				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
+			case "ndaApprovalRequired":
+				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":
@@ -285,6 +301,14 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
 			case "environment":
 				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
+			case "removeBranding":
+				return ec.fieldContext_TrustCenterSetting_removeBranding(ctx, field)
+			case "companyDomain":
+				return ec.fieldContext_TrustCenterSetting_companyDomain(ctx, field)
+			case "securityContact":
+				return ec.fieldContext_TrustCenterSetting_securityContact(ctx, field)
+			case "ndaApprovalRequired":
+				return ec.fieldContext_TrustCenterSetting_ndaApprovalRequired(ctx, field)
 			case "blockedGroups":
 				return ec.fieldContext_TrustCenterSetting_blockedGroups(ctx, field)
 			case "editors":

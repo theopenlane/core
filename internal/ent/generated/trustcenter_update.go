@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -486,6 +487,21 @@ func (_u *TrustCenterUpdate) AddTrustCenterEntities(v ...*TrustCenterEntity) *Tr
 	return _u.AddTrustCenterEntityIDs(ids...)
 }
 
+// AddTrustCenterNdaRequestIDs adds the "trust_center_nda_requests" edge to the TrustCenterNDARequest entity by IDs.
+func (_u *TrustCenterUpdate) AddTrustCenterNdaRequestIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.AddTrustCenterNdaRequestIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterNdaRequests adds the "trust_center_nda_requests" edges to the TrustCenterNDARequest entity.
+func (_u *TrustCenterUpdate) AddTrustCenterNdaRequests(v ...*TrustCenterNDARequest) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterNdaRequestIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdate) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -693,6 +709,27 @@ func (_u *TrustCenterUpdate) RemoveTrustCenterEntities(v ...*TrustCenterEntity) 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterEntityIDs(ids...)
+}
+
+// ClearTrustCenterNdaRequests clears all "trust_center_nda_requests" edges to the TrustCenterNDARequest entity.
+func (_u *TrustCenterUpdate) ClearTrustCenterNdaRequests() *TrustCenterUpdate {
+	_u.mutation.ClearTrustCenterNdaRequests()
+	return _u
+}
+
+// RemoveTrustCenterNdaRequestIDs removes the "trust_center_nda_requests" edge to TrustCenterNDARequest entities by IDs.
+func (_u *TrustCenterUpdate) RemoveTrustCenterNdaRequestIDs(ids ...string) *TrustCenterUpdate {
+	_u.mutation.RemoveTrustCenterNdaRequestIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterNdaRequests removes "trust_center_nda_requests" edges to TrustCenterNDARequest entities.
+func (_u *TrustCenterUpdate) RemoveTrustCenterNdaRequests(v ...*TrustCenterNDARequest) *TrustCenterUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterNdaRequestIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -1416,6 +1453,54 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterNdaRequestsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterNdaRequestsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterNdaRequestsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterNdaRequestsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenter
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1882,6 +1967,21 @@ func (_u *TrustCenterUpdateOne) AddTrustCenterEntities(v ...*TrustCenterEntity) 
 	return _u.AddTrustCenterEntityIDs(ids...)
 }
 
+// AddTrustCenterNdaRequestIDs adds the "trust_center_nda_requests" edge to the TrustCenterNDARequest entity by IDs.
+func (_u *TrustCenterUpdateOne) AddTrustCenterNdaRequestIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.AddTrustCenterNdaRequestIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterNdaRequests adds the "trust_center_nda_requests" edges to the TrustCenterNDARequest entity.
+func (_u *TrustCenterUpdateOne) AddTrustCenterNdaRequests(v ...*TrustCenterNDARequest) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterNdaRequestIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_u *TrustCenterUpdateOne) Mutation() *TrustCenterMutation {
 	return _u.mutation
@@ -2089,6 +2189,27 @@ func (_u *TrustCenterUpdateOne) RemoveTrustCenterEntities(v ...*TrustCenterEntit
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterEntityIDs(ids...)
+}
+
+// ClearTrustCenterNdaRequests clears all "trust_center_nda_requests" edges to the TrustCenterNDARequest entity.
+func (_u *TrustCenterUpdateOne) ClearTrustCenterNdaRequests() *TrustCenterUpdateOne {
+	_u.mutation.ClearTrustCenterNdaRequests()
+	return _u
+}
+
+// RemoveTrustCenterNdaRequestIDs removes the "trust_center_nda_requests" edge to TrustCenterNDARequest entities by IDs.
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterNdaRequestIDs(ids ...string) *TrustCenterUpdateOne {
+	_u.mutation.RemoveTrustCenterNdaRequestIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterNdaRequests removes "trust_center_nda_requests" edges to TrustCenterNDARequest entities.
+func (_u *TrustCenterUpdateOne) RemoveTrustCenterNdaRequests(v ...*TrustCenterNDARequest) *TrustCenterUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterNdaRequestIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustCenterUpdate builder.
@@ -2837,6 +2958,54 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterEntity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterNdaRequestsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterNdaRequestsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterNdaRequestsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterNdaRequestsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

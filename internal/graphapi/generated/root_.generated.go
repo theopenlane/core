@@ -2508,6 +2508,7 @@ type ComplexityRoot struct {
 		CreateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterEntity       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterNDARequest   func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
@@ -2562,6 +2563,7 @@ type ComplexityRoot struct {
 		CreateBulkTrustCenterCompliance      func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
 		CreateBulkTrustCenterDoc             func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
 		CreateBulkTrustCenterEntity          func(childComplexity int, input []*generated.CreateTrustCenterEntityInput) int
+		CreateBulkTrustCenterNDARequest      func(childComplexity int, input []*generated.CreateTrustCenterNDARequestInput) int
 		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
 		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
 		CreateBulkVulnerability              func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
@@ -2636,6 +2638,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
 		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
 		CreateTrustCenterEntity              func(childComplexity int, input generated.CreateTrustCenterEntityInput, logoFile *graphql.Upload) int
+		CreateTrustCenterNDARequest          func(childComplexity int, input generated.CreateTrustCenterNDARequestInput) int
 		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
 		CreateTrustCenterPreviewSetting      func(childComplexity int, input model.CreateTrustCenterPreviewSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
@@ -2757,6 +2760,7 @@ type ComplexityRoot struct {
 		DeleteTrustCenterCompliance          func(childComplexity int, id string) int
 		DeleteTrustCenterDoc                 func(childComplexity int, id string) int
 		DeleteTrustCenterEntity              func(childComplexity int, id string) int
+		DeleteTrustCenterNDARequest          func(childComplexity int, id string) int
 		DeleteTrustCenterSetting             func(childComplexity int, id string) int
 		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
 		DeleteTrustCenterWatermarkConfig     func(childComplexity int, id string) int
@@ -2853,6 +2857,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
 		UpdateTrustCenterEntity              func(childComplexity int, id string, input generated.UpdateTrustCenterEntityInput, logoFile *graphql.Upload) int
+		UpdateTrustCenterNDARequest          func(childComplexity int, id string, input generated.UpdateTrustCenterNDARequestInput) int
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTrustCenterPreviewSetting      func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
@@ -2944,6 +2949,7 @@ type ComplexityRoot struct {
 		Task           func(childComplexity int) int
 		Text           func(childComplexity int) int
 		TextJSON       func(childComplexity int) int
+		Title          func(childComplexity int) int
 		TrustCenter    func(childComplexity int) int
 		TrustCenterID  func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
@@ -3730,6 +3736,8 @@ type ComplexityRoot struct {
 		TrustCenterEntities             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterEntityOrder, where *generated.TrustCenterEntityWhereInput) int
 		TrustCenterEntity               func(childComplexity int, id string) int
 		TrustCenterEntitySearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		TrustCenterNDARequest           func(childComplexity int, id string) int
+		TrustCenterNdaRequests          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestOrder, where *generated.TrustCenterNDARequestWhereInput) int
 		TrustCenterSetting              func(childComplexity int, id string) int
 		TrustCenterSettings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) int
 		TrustCenterSubprocessor         func(childComplexity int, id string) int
@@ -4708,6 +4716,7 @@ type ComplexityRoot struct {
 		TrustCenterCompliances   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
 		TrustCenterDocs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		TrustCenterEntities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterEntityOrder, where *generated.TrustCenterEntityWhereInput) int
+		TrustCenterNdaRequests   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterNDARequestOrder, where *generated.TrustCenterNDARequestWhereInput) int
 		TrustCenterSubprocessors func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
@@ -4892,6 +4901,52 @@ type ComplexityRoot struct {
 		Template func(childComplexity int) int
 	}
 
+	TrustCenterNDARequest struct {
+		AccessLevel     func(childComplexity int) int
+		CompanyName     func(childComplexity int) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Email           func(childComplexity int) int
+		FirstName       func(childComplexity int) int
+		ID              func(childComplexity int) int
+		LastName        func(childComplexity int) int
+		Reason          func(childComplexity int) int
+		Status          func(childComplexity int) int
+		Tags            func(childComplexity int) int
+		TrustCenter     func(childComplexity int) int
+		TrustCenterDocs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
+		TrustCenterID   func(childComplexity int) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestBulkCreatePayload struct {
+		TrustCenterNDARequests func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestCreatePayload struct {
+		TrustCenterNDARequest func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	TrustCenterNDARequestUpdatePayload struct {
+		TrustCenterNDARequest func(childComplexity int) int
+	}
+
 	TrustCenterNDAUpdatePayload struct {
 		Template func(childComplexity int) int
 	}
@@ -4904,6 +4959,7 @@ type ComplexityRoot struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
 		BlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		CompanyDomain            func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		Editors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -4917,10 +4973,13 @@ type ComplexityRoot struct {
 		LogoFile                 func(childComplexity int) int
 		LogoLocalFileID          func(childComplexity int) int
 		LogoRemoteURL            func(childComplexity int) int
+		NdaApprovalRequired      func(childComplexity int) int
 		Overview                 func(childComplexity int) int
 		PrimaryColor             func(childComplexity int) int
+		RemoveBranding           func(childComplexity int) int
 		SecondaryBackgroundColor func(childComplexity int) int
 		SecondaryForegroundColor func(childComplexity int) int
+		SecurityContact          func(childComplexity int) int
 		ThemeMode                func(childComplexity int) int
 		Title                    func(childComplexity int) int
 		TrustCenterID            func(childComplexity int) int
@@ -17575,6 +17634,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVTrustCenterEntity(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVTrustCenterNDARequest":
+		if e.complexity.Mutation.CreateBulkCSVTrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVTrustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVTrustCenterNDARequest(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVTrustCenterSubprocessor":
 		if e.complexity.Mutation.CreateBulkCSVTrustCenterSubprocessor == nil {
 			break
@@ -18222,6 +18293,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkTrustCenterEntity(childComplexity, args["input"].([]*generated.CreateTrustCenterEntityInput)), true
+
+	case "Mutation.createBulkTrustCenterNDARequest":
+		if e.complexity.Mutation.CreateBulkTrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkTrustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkTrustCenterNDARequest(childComplexity, args["input"].([]*generated.CreateTrustCenterNDARequestInput)), true
 
 	case "Mutation.createBulkTrustCenterSubprocessor":
 		if e.complexity.Mutation.CreateBulkTrustCenterSubprocessor == nil {
@@ -19110,6 +19193,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateTrustCenterEntity(childComplexity, args["input"].(generated.CreateTrustCenterEntityInput), args["logoFile"].(*graphql.Upload)), true
+
+	case "Mutation.createTrustCenterNDARequest":
+		if e.complexity.Mutation.CreateTrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createTrustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateTrustCenterNDARequest(childComplexity, args["input"].(generated.CreateTrustCenterNDARequestInput)), true
 
 	case "Mutation.createTrustCenterNDA":
 		if e.complexity.Mutation.CreateTrustCenterNda == nil {
@@ -20563,6 +20658,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteTrustCenterEntity(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteTrustCenterNDARequest":
+		if e.complexity.Mutation.DeleteTrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteTrustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteTrustCenterNDARequest(childComplexity, args["id"].(string)), true
+
 	case "Mutation.deleteTrustCenterSetting":
 		if e.complexity.Mutation.DeleteTrustCenterSetting == nil {
 			break
@@ -21710,6 +21817,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateTrustCenterEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterEntityInput), args["logoFile"].(*graphql.Upload)), true
 
+	case "Mutation.updateTrustCenterNDARequest":
+		if e.complexity.Mutation.UpdateTrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterNDARequest(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustCenterNDARequestInput)), true
+
 	case "Mutation.updateTrustCenterNDA":
 		if e.complexity.Mutation.UpdateTrustCenterNda == nil {
 			break
@@ -22257,6 +22376,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.TextJSON(childComplexity), true
+
+	case "Note.title":
+		if e.complexity.Note.Title == nil {
+			break
+		}
+
+		return e.complexity.Note.Title(childComplexity), true
 
 	case "Note.trustCenter":
 		if e.complexity.Note.TrustCenter == nil {
@@ -27828,6 +27954,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterEntitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.trustCenterNDARequest":
+		if e.complexity.Query.TrustCenterNDARequest == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterNDARequest_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterNDARequest(childComplexity, args["id"].(string)), true
+
+	case "Query.trustCenterNdaRequests":
+		if e.complexity.Query.TrustCenterNdaRequests == nil {
+			break
+		}
+
+		args, err := ec.field_Query_trustCenterNdaRequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.TrustCenterNdaRequests(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterNDARequestOrder), args["where"].(*generated.TrustCenterNDARequestWhereInput)), true
+
 	case "Query.trustCenterSetting":
 		if e.complexity.Query.TrustCenterSetting == nil {
 			break
@@ -32921,6 +33071,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.TrustCenterEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterEntityOrder), args["where"].(*generated.TrustCenterEntityWhereInput)), true
 
+	case "TrustCenter.trustCenterNdaRequests":
+		if e.complexity.TrustCenter.TrustCenterNdaRequests == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_trustCenterNdaRequests_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.TrustCenterNdaRequests(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterNDARequestOrder), args["where"].(*generated.TrustCenterNDARequestWhereInput)), true
+
 	case "TrustCenter.trustCenterSubprocessors":
 		if e.complexity.TrustCenter.TrustCenterSubprocessors == nil {
 			break
@@ -33600,6 +33762,186 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterNDACreatePayload.Template(childComplexity), true
 
+	case "TrustCenterNDARequest.accessLevel":
+		if e.complexity.TrustCenterNDARequest.AccessLevel == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.AccessLevel(childComplexity), true
+
+	case "TrustCenterNDARequest.companyName":
+		if e.complexity.TrustCenterNDARequest.CompanyName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.CompanyName(childComplexity), true
+
+	case "TrustCenterNDARequest.createdAt":
+		if e.complexity.TrustCenterNDARequest.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.CreatedAt(childComplexity), true
+
+	case "TrustCenterNDARequest.createdBy":
+		if e.complexity.TrustCenterNDARequest.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.CreatedBy(childComplexity), true
+
+	case "TrustCenterNDARequest.email":
+		if e.complexity.TrustCenterNDARequest.Email == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.Email(childComplexity), true
+
+	case "TrustCenterNDARequest.firstName":
+		if e.complexity.TrustCenterNDARequest.FirstName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.FirstName(childComplexity), true
+
+	case "TrustCenterNDARequest.id":
+		if e.complexity.TrustCenterNDARequest.ID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.ID(childComplexity), true
+
+	case "TrustCenterNDARequest.lastName":
+		if e.complexity.TrustCenterNDARequest.LastName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.LastName(childComplexity), true
+
+	case "TrustCenterNDARequest.reason":
+		if e.complexity.TrustCenterNDARequest.Reason == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.Reason(childComplexity), true
+
+	case "TrustCenterNDARequest.status":
+		if e.complexity.TrustCenterNDARequest.Status == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.Status(childComplexity), true
+
+	case "TrustCenterNDARequest.tags":
+		if e.complexity.TrustCenterNDARequest.Tags == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.Tags(childComplexity), true
+
+	case "TrustCenterNDARequest.trustCenter":
+		if e.complexity.TrustCenterNDARequest.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.TrustCenter(childComplexity), true
+
+	case "TrustCenterNDARequest.trustCenterDocs":
+		if e.complexity.TrustCenterNDARequest.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenterNDARequest_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenterNDARequest.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
+
+	case "TrustCenterNDARequest.trustCenterID":
+		if e.complexity.TrustCenterNDARequest.TrustCenterID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.TrustCenterID(childComplexity), true
+
+	case "TrustCenterNDARequest.updatedAt":
+		if e.complexity.TrustCenterNDARequest.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.UpdatedAt(childComplexity), true
+
+	case "TrustCenterNDARequest.updatedBy":
+		if e.complexity.TrustCenterNDARequest.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequest.UpdatedBy(childComplexity), true
+
+	case "TrustCenterNDARequestBulkCreatePayload.trustCenterNDARequests":
+		if e.complexity.TrustCenterNDARequestBulkCreatePayload.TrustCenterNDARequests == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestBulkCreatePayload.TrustCenterNDARequests(childComplexity), true
+
+	case "TrustCenterNDARequestConnection.edges":
+		if e.complexity.TrustCenterNDARequestConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestConnection.Edges(childComplexity), true
+
+	case "TrustCenterNDARequestConnection.pageInfo":
+		if e.complexity.TrustCenterNDARequestConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestConnection.PageInfo(childComplexity), true
+
+	case "TrustCenterNDARequestConnection.totalCount":
+		if e.complexity.TrustCenterNDARequestConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestConnection.TotalCount(childComplexity), true
+
+	case "TrustCenterNDARequestCreatePayload.trustCenterNDARequest":
+		if e.complexity.TrustCenterNDARequestCreatePayload.TrustCenterNDARequest == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestCreatePayload.TrustCenterNDARequest(childComplexity), true
+
+	case "TrustCenterNDARequestDeletePayload.deletedID":
+		if e.complexity.TrustCenterNDARequestDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestDeletePayload.DeletedID(childComplexity), true
+
+	case "TrustCenterNDARequestEdge.cursor":
+		if e.complexity.TrustCenterNDARequestEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestEdge.Cursor(childComplexity), true
+
+	case "TrustCenterNDARequestEdge.node":
+		if e.complexity.TrustCenterNDARequestEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestEdge.Node(childComplexity), true
+
+	case "TrustCenterNDARequestUpdatePayload.trustCenterNDARequest":
+		if e.complexity.TrustCenterNDARequestUpdatePayload.TrustCenterNDARequest == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterNDARequestUpdatePayload.TrustCenterNDARequest(childComplexity), true
+
 	case "TrustCenterNDAUpdatePayload.template":
 		if e.complexity.TrustCenterNDAUpdatePayload.Template == nil {
 			break
@@ -33639,6 +33981,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSetting.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "TrustCenterSetting.companyDomain":
+		if e.complexity.TrustCenterSetting.CompanyDomain == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.CompanyDomain(childComplexity), true
 
 	case "TrustCenterSetting.createdAt":
 		if e.complexity.TrustCenterSetting.CreatedAt == nil {
@@ -33736,6 +34085,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.LogoRemoteURL(childComplexity), true
 
+	case "TrustCenterSetting.ndaApprovalRequired":
+		if e.complexity.TrustCenterSetting.NdaApprovalRequired == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.NdaApprovalRequired(childComplexity), true
+
 	case "TrustCenterSetting.overview":
 		if e.complexity.TrustCenterSetting.Overview == nil {
 			break
@@ -33750,6 +34106,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.PrimaryColor(childComplexity), true
 
+	case "TrustCenterSetting.removeBranding":
+		if e.complexity.TrustCenterSetting.RemoveBranding == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.RemoveBranding(childComplexity), true
+
 	case "TrustCenterSetting.secondaryBackgroundColor":
 		if e.complexity.TrustCenterSetting.SecondaryBackgroundColor == nil {
 			break
@@ -33763,6 +34126,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSetting.SecondaryForegroundColor(childComplexity), true
+
+	case "TrustCenterSetting.securityContact":
+		if e.complexity.TrustCenterSetting.SecurityContact == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.SecurityContact(childComplexity), true
 
 	case "TrustCenterSetting.themeMode":
 		if e.complexity.TrustCenterSetting.ThemeMode == nil {
@@ -37072,6 +37442,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateTrustCenterEntityInput,
 		ec.unmarshalInputCreateTrustCenterInput,
 		ec.unmarshalInputCreateTrustCenterNDAInput,
+		ec.unmarshalInputCreateTrustCenterNDARequestInput,
 		ec.unmarshalInputCreateTrustCenterPreviewSettingInput,
 		ec.unmarshalInputCreateTrustCenterSettingInput,
 		ec.unmarshalInputCreateTrustCenterSubprocessorInput,
@@ -37205,6 +37576,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputTrustCenterDocWhereInput,
 		ec.unmarshalInputTrustCenterEntityOrder,
 		ec.unmarshalInputTrustCenterEntityWhereInput,
+		ec.unmarshalInputTrustCenterNDARequestOrder,
+		ec.unmarshalInputTrustCenterNDARequestWhereInput,
 		ec.unmarshalInputTrustCenterOrder,
 		ec.unmarshalInputTrustCenterSettingOrder,
 		ec.unmarshalInputTrustCenterSettingWhereInput,
@@ -37279,6 +37652,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateTrustCenterDocInput,
 		ec.unmarshalInputUpdateTrustCenterEntityInput,
 		ec.unmarshalInputUpdateTrustCenterInput,
+		ec.unmarshalInputUpdateTrustCenterNDARequestInput,
 		ec.unmarshalInputUpdateTrustCenterSettingInput,
 		ec.unmarshalInputUpdateTrustCenterSubprocessorInput,
 		ec.unmarshalInputUpdateTrustCenterWatermarkConfigInput,
@@ -48117,6 +48491,10 @@ Input was generated by ent.
 """
 input CreateNoteInput {
   """
+  the title of the note
+  """
+  title: String
+  """
   the text of the note
   """
   text: String!
@@ -49579,6 +49957,43 @@ input CreateTrustCenterInput {
   templateIDs: [ID!]
   postIDs: [ID!]
   trustCenterEntityIDs: [ID!]
+  trustCenterNdaRequestIDs: [ID!]
+}
+"""
+CreateTrustCenterNDARequestInput is used for create TrustCenterNDARequest object.
+Input was generated by ent.
+"""
+input CreateTrustCenterNDARequestInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  first name of the requester
+  """
+  firstName: String!
+  """
+  last name of the requester
+  """
+  lastName: String!
+  """
+  email address of the requester
+  """
+  email: String!
+  """
+  company name of the requester
+  """
+  companyName: String
+  """
+  reason for the NDA request
+  """
+  reason: String
+  """
+  access level requested
+  """
+  accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  trustCenterID: ID
+  trustCenterDocIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -49641,6 +50056,18 @@ input CreateTrustCenterSettingInput {
   environment of the trust center
   """
   environment: TrustCenterSettingTrustCenterEnvironment
+  """
+  URL to the company's homepage
+  """
+  companyDomain: String
+  """
+  email address for security contact
+  """
+  securityContact: String
+  """
+  whether NDA requests require approval before being processed
+  """
+  ndaApprovalRequired: Boolean
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   logoFileID: ID
@@ -67204,6 +67631,10 @@ type Note implements Node {
   """
   ownerID: ID
   """
+  the title of the note
+  """
+  title: String
+  """
   the text of the note
   """
   text: String!
@@ -67436,6 +67867,24 @@ input NoteWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  title field predicates
+  """
+  title: String
+  titleNEQ: String
+  titleIn: [String!]
+  titleNotIn: [String!]
+  titleGT: String
+  titleGTE: String
+  titleLT: String
+  titleLTE: String
+  titleContains: String
+  titleHasPrefix: String
+  titleHasSuffix: String
+  titleIsNil: Boolean
+  titleNotNil: Boolean
+  titleEqualFold: String
+  titleContainsFold: String
   """
   text field predicates
   """
@@ -77081,6 +77530,37 @@ type Query {
     """
     where: TrustCenterEntityWhereInput
   ): TrustCenterEntityConnection!
+  trustCenterNdaRequests(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterNDARequests returned from the connection.
+    """
+    orderBy: [TrustCenterNDARequestOrder!]
+
+    """
+    Filtering options for TrustCenterNDARequests returned from the connection.
+    """
+    where: TrustCenterNDARequestWhereInput
+  ): TrustCenterNDARequestConnection!
   trustCenterSettings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -86725,6 +87205,37 @@ type TrustCenter implements Node {
     """
     where: TrustCenterEntityWhereInput
   ): TrustCenterEntityConnection!
+  trustCenterNdaRequests(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterNDARequests returned from the connection.
+    """
+    orderBy: [TrustCenterNDARequestOrder!]
+
+    """
+    Filtering options for TrustCenterNDARequests returned from the connection.
+    """
+    where: TrustCenterNDARequestWhereInput
+  ): TrustCenterNDARequestConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -87779,6 +88290,361 @@ input TrustCenterEntityWhereInput {
   hasEntityType: Boolean
   hasEntityTypeWith: [EntityTypeWhereInput!]
 }
+type TrustCenterNDARequest implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  ID of the trust center
+  """
+  trustCenterID: ID
+  """
+  first name of the requester
+  """
+  firstName: String!
+  """
+  last name of the requester
+  """
+  lastName: String!
+  """
+  email address of the requester
+  """
+  email: String!
+  """
+  company name of the requester
+  """
+  companyName: String
+  """
+  reason for the NDA request
+  """
+  reason: String
+  """
+  access level requested
+  """
+  accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  """
+  status of the NDA request
+  """
+  status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  trustCenter: TrustCenter
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterNDARequestConnection {
+  """
+  A list of edges.
+  """
+  edges: [TrustCenterNDARequestEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterNDARequestEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: TrustCenterNDARequest
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for TrustCenterNDARequest connections
+"""
+input TrustCenterNDARequestOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order TrustCenterNDARequests.
+  """
+  field: TrustCenterNDARequestOrderField!
+}
+"""
+Properties by which TrustCenterNDARequest connections can be ordered.
+"""
+enum TrustCenterNDARequestOrderField {
+  created_at
+  updated_at
+}
+"""
+TrustCenterNDARequestTrustCenterNDARequestAccessLevel is enum for the field access_level
+"""
+enum TrustCenterNDARequestTrustCenterNDARequestAccessLevel @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestAccessLevel") {
+  FULL
+  LIMITED
+}
+"""
+TrustCenterNDARequestTrustCenterNDARequestStatus is enum for the field status
+"""
+enum TrustCenterNDARequestTrustCenterNDARequestStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestStatus") {
+  REQUESTED
+  NEEDS_APPROVAL
+  APPROVED
+  SIGNED
+}
+"""
+TrustCenterNDARequestWhereInput is used for filtering TrustCenterNDARequest objects.
+Input was generated by ent.
+"""
+input TrustCenterNDARequestWhereInput {
+  not: TrustCenterNDARequestWhereInput
+  and: [TrustCenterNDARequestWhereInput!]
+  or: [TrustCenterNDARequestWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  trust_center_id field predicates
+  """
+  trustCenterID: ID
+  trustCenterIDNEQ: ID
+  trustCenterIDIn: [ID!]
+  trustCenterIDNotIn: [ID!]
+  trustCenterIDGT: ID
+  trustCenterIDGTE: ID
+  trustCenterIDLT: ID
+  trustCenterIDLTE: ID
+  trustCenterIDContains: ID
+  trustCenterIDHasPrefix: ID
+  trustCenterIDHasSuffix: ID
+  trustCenterIDIsNil: Boolean
+  trustCenterIDNotNil: Boolean
+  trustCenterIDEqualFold: ID
+  trustCenterIDContainsFold: ID
+  """
+  first_name field predicates
+  """
+  firstName: String
+  firstNameNEQ: String
+  firstNameIn: [String!]
+  firstNameNotIn: [String!]
+  firstNameGT: String
+  firstNameGTE: String
+  firstNameLT: String
+  firstNameLTE: String
+  firstNameContains: String
+  firstNameHasPrefix: String
+  firstNameHasSuffix: String
+  firstNameEqualFold: String
+  firstNameContainsFold: String
+  """
+  last_name field predicates
+  """
+  lastName: String
+  lastNameNEQ: String
+  lastNameIn: [String!]
+  lastNameNotIn: [String!]
+  lastNameGT: String
+  lastNameGTE: String
+  lastNameLT: String
+  lastNameLTE: String
+  lastNameContains: String
+  lastNameHasPrefix: String
+  lastNameHasSuffix: String
+  lastNameEqualFold: String
+  lastNameContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  company_name field predicates
+  """
+  companyName: String
+  companyNameNEQ: String
+  companyNameIn: [String!]
+  companyNameNotIn: [String!]
+  companyNameGT: String
+  companyNameGTE: String
+  companyNameLT: String
+  companyNameLTE: String
+  companyNameContains: String
+  companyNameHasPrefix: String
+  companyNameHasSuffix: String
+  companyNameIsNil: Boolean
+  companyNameNotNil: Boolean
+  companyNameEqualFold: String
+  companyNameContainsFold: String
+  """
+  reason field predicates
+  """
+  reason: String
+  reasonNEQ: String
+  reasonIn: [String!]
+  reasonNotIn: [String!]
+  reasonGT: String
+  reasonGTE: String
+  reasonLT: String
+  reasonLTE: String
+  reasonContains: String
+  reasonHasPrefix: String
+  reasonHasSuffix: String
+  reasonIsNil: Boolean
+  reasonNotNil: Boolean
+  reasonEqualFold: String
+  reasonContainsFold: String
+  """
+  access_level field predicates
+  """
+  accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  accessLevelNEQ: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  accessLevelIn: [TrustCenterNDARequestTrustCenterNDARequestAccessLevel!]
+  accessLevelNotIn: [TrustCenterNDARequestTrustCenterNDARequestAccessLevel!]
+  accessLevelIsNil: Boolean
+  accessLevelNotNil: Boolean
+  """
+  status field predicates
+  """
+  status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  statusNEQ: TrustCenterNDARequestTrustCenterNDARequestStatus
+  statusIn: [TrustCenterNDARequestTrustCenterNDARequestStatus!]
+  statusNotIn: [TrustCenterNDARequestTrustCenterNDARequestStatus!]
+  statusIsNil: Boolean
+  statusNotNil: Boolean
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+}
 """
 Ordering options for TrustCenter connections
 """
@@ -87869,6 +88735,22 @@ type TrustCenterSetting implements Node {
   environment of the trust center
   """
   environment: TrustCenterSettingTrustCenterEnvironment
+  """
+  whether to remove branding from the trust center
+  """
+  removeBranding: Boolean
+  """
+  URL to the company's homepage
+  """
+  companyDomain: String
+  """
+  email address for security contact
+  """
+  securityContact: String
+  """
+  whether NDA requests require approval before being processed
+  """
+  ndaApprovalRequired: Boolean
   blockedGroups(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -88351,6 +89233,56 @@ input TrustCenterSettingWhereInput {
   environmentNotIn: [TrustCenterSettingTrustCenterEnvironment!]
   environmentIsNil: Boolean
   environmentNotNil: Boolean
+  """
+  remove_branding field predicates
+  """
+  removeBranding: Boolean
+  removeBrandingNEQ: Boolean
+  removeBrandingIsNil: Boolean
+  removeBrandingNotNil: Boolean
+  """
+  company_domain field predicates
+  """
+  companyDomain: String
+  companyDomainNEQ: String
+  companyDomainIn: [String!]
+  companyDomainNotIn: [String!]
+  companyDomainGT: String
+  companyDomainGTE: String
+  companyDomainLT: String
+  companyDomainLTE: String
+  companyDomainContains: String
+  companyDomainHasPrefix: String
+  companyDomainHasSuffix: String
+  companyDomainIsNil: Boolean
+  companyDomainNotNil: Boolean
+  companyDomainEqualFold: String
+  companyDomainContainsFold: String
+  """
+  security_contact field predicates
+  """
+  securityContact: String
+  securityContactNEQ: String
+  securityContactIn: [String!]
+  securityContactNotIn: [String!]
+  securityContactGT: String
+  securityContactGTE: String
+  securityContactLT: String
+  securityContactLTE: String
+  securityContactContains: String
+  securityContactHasPrefix: String
+  securityContactHasSuffix: String
+  securityContactIsNil: Boolean
+  securityContactNotNil: Boolean
+  securityContactEqualFold: String
+  securityContactContainsFold: String
+  """
+  nda_approval_required field predicates
+  """
+  ndaApprovalRequired: Boolean
+  ndaApprovalRequiredNEQ: Boolean
+  ndaApprovalRequiredIsNil: Boolean
+  ndaApprovalRequiredNotNil: Boolean
   """
   blocked_groups edge predicates
   """
@@ -89398,6 +90330,11 @@ input TrustCenterWhereInput {
   """
   hasTrustCenterEntities: Boolean
   hasTrustCenterEntitiesWith: [TrustCenterEntityWhereInput!]
+  """
+  trust_center_nda_requests edge predicates
+  """
+  hasTrustCenterNdaRequests: Boolean
+  hasTrustCenterNdaRequestsWith: [TrustCenterNDARequestWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -92168,6 +93105,11 @@ Input was generated by ent.
 """
 input UpdateNoteInput {
   """
+  the title of the note
+  """
+  title: String
+  clearTitle: Boolean
+  """
   the text of the note
   """
   text: String
@@ -94263,6 +95205,56 @@ input UpdateTrustCenterInput {
   addTrustCenterEntityIDs: [ID!]
   removeTrustCenterEntityIDs: [ID!]
   clearTrustCenterEntities: Boolean
+  addTrustCenterNdaRequestIDs: [ID!]
+  removeTrustCenterNdaRequestIDs: [ID!]
+  clearTrustCenterNdaRequests: Boolean
+}
+"""
+UpdateTrustCenterNDARequestInput is used for update TrustCenterNDARequest object.
+Input was generated by ent.
+"""
+input UpdateTrustCenterNDARequestInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  first name of the requester
+  """
+  firstName: String
+  """
+  last name of the requester
+  """
+  lastName: String
+  """
+  email address of the requester
+  """
+  email: String
+  """
+  company name of the requester
+  """
+  companyName: String
+  clearCompanyName: Boolean
+  """
+  reason for the NDA request
+  """
+  reason: String
+  clearReason: Boolean
+  """
+  access level requested
+  """
+  accessLevel: TrustCenterNDARequestTrustCenterNDARequestAccessLevel
+  clearAccessLevel: Boolean
+  """
+  status of the NDA request
+  """
+  status: TrustCenterNDARequestTrustCenterNDARequestStatus
+  clearStatus: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -94334,6 +95326,21 @@ input UpdateTrustCenterSettingInput {
   """
   secondaryForegroundColor: String
   clearSecondaryForegroundColor: Boolean
+  """
+  URL to the company's homepage
+  """
+  companyDomain: String
+  clearCompanyDomain: Boolean
+  """
+  email address for security contact
+  """
+  securityContact: String
+  clearSecurityContact: Boolean
+  """
+  whether NDA requests require approval before being processed
+  """
+  ndaApprovalRequired: Boolean
+  clearNdaApprovalRequired: Boolean
   addBlockedGroupIDs: [ID!]
   removeBlockedGroupIDs: [ID!]
   clearBlockedGroups: Boolean
@@ -107734,6 +108741,109 @@ type SubmitTrustCenterNDAResponsePayload {
     documentData: DocumentData!
 }
 `, BuiltIn: false},
+	{Name: "../schema/trustcenterndarequest.graphql", Input: `extend type Query {
+    """
+    Look up trustCenterNDARequest by ID
+    """
+     trustCenterNDARequest(
+        """
+        ID of the trustCenterNDARequest
+        """
+        id: ID!
+    ):  TrustCenterNDARequest!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterNDARequest
+    """
+    createTrustCenterNDARequest(
+        """
+        values of the trustCenterNDARequest
+        """
+        input: CreateTrustCenterNDARequestInput!
+    ): TrustCenterNDARequestCreatePayload!
+    """
+    Create multiple new trustCenterNDARequests
+    """
+    createBulkTrustCenterNDARequest(
+        """
+        values of the trustCenterNDARequest
+        """
+        input: [CreateTrustCenterNDARequestInput!]
+    ): TrustCenterNDARequestBulkCreatePayload!
+    """
+    Create multiple new trustCenterNDARequests via file upload
+    """
+    createBulkCSVTrustCenterNDARequest(
+        """
+        csv file containing values of the trustCenterNDARequest
+        """
+        input: Upload!
+    ): TrustCenterNDARequestBulkCreatePayload!
+    """
+    Update an existing trustCenterNDARequest
+    """
+    updateTrustCenterNDARequest(
+        """
+        ID of the trustCenterNDARequest
+        """
+        id: ID!
+        """
+        New values for the trustCenterNDARequest
+        """
+        input: UpdateTrustCenterNDARequestInput!
+    ): TrustCenterNDARequestUpdatePayload!
+    """
+    Delete an existing trustCenterNDARequest
+    """
+    deleteTrustCenterNDARequest(
+        """
+        ID of the trustCenterNDARequest
+        """
+        id: ID!
+    ): TrustCenterNDARequestDeletePayload!
+}
+
+"""
+Return response for createTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestCreatePayload {
+    """
+    Created trustCenterNDARequest
+    """
+    trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for updateTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestUpdatePayload {
+    """
+    Updated trustCenterNDARequest
+    """
+    trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for deleteTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestDeletePayload {
+    """
+    Deleted trustCenterNDARequest ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestBulkCreatePayload {
+    """
+    Created trustCenterNDARequests
+    """
+    trustCenterNDARequests: [TrustCenterNDARequest!]
+}`, BuiltIn: false},
 	{Name: "../schema/trustcenterpreviewsetting.graphql", Input: `extend type Mutation {
   """
   Create or replace preview environment trust center settings

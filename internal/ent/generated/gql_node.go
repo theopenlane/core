@@ -79,6 +79,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -448,6 +449,11 @@ var trustcenterentityImplementors = []string{"TrustCenterEntity", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterEntity) IsNode() {}
+
+var trustcenterndarequestImplementors = []string{"TrustCenterNDARequest", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterNDARequest) IsNode() {}
 
 var trustcentersettingImplementors = []string{"TrustCenterSetting", "Node"}
 
@@ -1198,6 +1204,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcenterentity.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterentityImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterndarequest.Table:
+		query := c.TrustCenterNDARequest.Query().
+			Where(trustcenterndarequest.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterndarequestImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2500,6 +2515,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterEntity.Query().
 			Where(trustcenterentity.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcenterentityImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterndarequest.Table:
+		query := c.TrustCenterNDARequest.Query().
+			Where(trustcenterndarequest.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterndarequestImplementors...)
 		if err != nil {
 			return nil, err
 		}

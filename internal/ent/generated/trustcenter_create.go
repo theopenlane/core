@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -439,6 +440,21 @@ func (_c *TrustCenterCreate) AddTrustCenterEntities(v ...*TrustCenterEntity) *Tr
 	return _c.AddTrustCenterEntityIDs(ids...)
 }
 
+// AddTrustCenterNdaRequestIDs adds the "trust_center_nda_requests" edge to the TrustCenterNDARequest entity by IDs.
+func (_c *TrustCenterCreate) AddTrustCenterNdaRequestIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddTrustCenterNdaRequestIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterNdaRequests adds the "trust_center_nda_requests" edges to the TrustCenterNDARequest entity.
+func (_c *TrustCenterCreate) AddTrustCenterNdaRequests(v ...*TrustCenterNDARequest) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterNdaRequestIDs(ids...)
+}
+
 // Mutation returns the TrustCenterMutation object of the builder.
 func (_c *TrustCenterCreate) Mutation() *TrustCenterMutation {
 	return _c.mutation
@@ -848,6 +864,23 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterEntity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterNdaRequestsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.TrustCenterNdaRequestsTable,
+			Columns: []string{trustcenter.TrustCenterNdaRequestsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterndarequest.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

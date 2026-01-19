@@ -56,8 +56,9 @@ type TrustCenterDoc struct {
 	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterDocQuery when eager-loading is set.
-	Edges        TrustCenterDocEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                                      TrustCenterDocEdges `json:"edges"`
+	trust_center_nda_request_trust_center_docs *string
+	selectValues                               sql.SelectValues
 }
 
 // TrustCenterDocEdges holds the relations/edges for other nodes in the graph.
@@ -159,6 +160,8 @@ func (*TrustCenterDoc) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case trustcenterdoc.FieldCreatedAt, trustcenterdoc.FieldUpdatedAt, trustcenterdoc.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case trustcenterdoc.ForeignKeys[0]: // trust_center_nda_request_trust_center_docs
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -279,6 +282,13 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
 			} else if value.Valid {
 				_m.StandardID = value.String
+			}
+		case trustcenterdoc.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_nda_request_trust_center_docs", values[i])
+			} else if value.Valid {
+				_m.trust_center_nda_request_trust_center_docs = new(string)
+				*_m.trust_center_nda_request_trust_center_docs = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

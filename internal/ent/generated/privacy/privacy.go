@@ -1959,6 +1959,30 @@ func (f TrustCenterEntityMutationRuleFunc) EvalMutation(ctx context.Context, m g
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterEntityMutation", m)
 }
 
+// The TrustCenterNDARequestQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustCenterNDARequestQueryRuleFunc func(context.Context, *generated.TrustCenterNDARequestQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustCenterNDARequestQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustCenterNDARequestQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustCenterNDARequestQuery", q)
+}
+
+// The TrustCenterNDARequestMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustCenterNDARequestMutationRuleFunc func(context.Context, *generated.TrustCenterNDARequestMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustCenterNDARequestMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustCenterNDARequestMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterNDARequestMutation", m)
+}
+
 // The TrustCenterSettingQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type TrustCenterSettingQueryRuleFunc func(context.Context, *generated.TrustCenterSettingQuery) error
@@ -2484,6 +2508,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TrustCenterEntityQuery:
 		return q.Filter(), nil
+	case *generated.TrustCenterNDARequestQuery:
+		return q.Filter(), nil
 	case *generated.TrustCenterSettingQuery:
 		return q.Filter(), nil
 	case *generated.TrustCenterSubprocessorQuery:
@@ -2672,6 +2698,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.TrustCenterDocMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterEntityMutation:
+		return m.Filter(), nil
+	case *generated.TrustCenterNDARequestMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterSettingMutation:
 		return m.Filter(), nil

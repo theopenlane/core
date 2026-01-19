@@ -9565,6 +9565,10 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if title, exists := m.Title(); exists {
+		create = create.SetNillableTitle(&title)
+	}
+
 	if text, exists := m.Text(); exists {
 		create = create.SetText(text)
 	}
@@ -9668,6 +9672,12 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(note.OwnerID)
 		}
 
+		if title, exists := m.Title(); exists {
+			create = create.SetNillableTitle(&title)
+		} else {
+			create = create.SetNillableTitle(note.Title)
+		}
+
 		if text, exists := m.Text(); exists {
 			create = create.SetText(text)
 		} else {
@@ -9747,6 +9757,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(note.DeletedBy).
 			SetDisplayID(note.DisplayID).
 			SetOwnerID(note.OwnerID).
+			SetNillableTitle(note.Title).
 			SetText(note.Text).
 			SetTextJSON(note.TextJSON).
 			SetNoteRef(note.NoteRef).
@@ -16304,6 +16315,262 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 	return nil
 }
 
+func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.TrustCenterNDARequestHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if trustCenterID, exists := m.TrustCenterID(); exists {
+		create = create.SetTrustCenterID(trustCenterID)
+	}
+
+	if firstName, exists := m.FirstName(); exists {
+		create = create.SetFirstName(firstName)
+	}
+
+	if lastName, exists := m.LastName(); exists {
+		create = create.SetLastName(lastName)
+	}
+
+	if email, exists := m.Email(); exists {
+		create = create.SetEmail(email)
+	}
+
+	if companyName, exists := m.CompanyName(); exists {
+		create = create.SetNillableCompanyName(&companyName)
+	}
+
+	if reason, exists := m.Reason(); exists {
+		create = create.SetNillableReason(&reason)
+	}
+
+	if accessLevel, exists := m.AccessLevel(); exists {
+		create = create.SetAccessLevel(accessLevel)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterndarequest, err := client.TrustCenterNDARequest.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterNDARequestHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(trustcenterndarequest.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(trustcenterndarequest.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(trustcenterndarequest.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(trustcenterndarequest.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(trustcenterndarequest.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(trustcenterndarequest.DeletedBy)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(trustcenterndarequest.Tags)
+		}
+
+		if trustCenterID, exists := m.TrustCenterID(); exists {
+			create = create.SetTrustCenterID(trustCenterID)
+		} else {
+			create = create.SetTrustCenterID(trustcenterndarequest.TrustCenterID)
+		}
+
+		if firstName, exists := m.FirstName(); exists {
+			create = create.SetFirstName(firstName)
+		} else {
+			create = create.SetFirstName(trustcenterndarequest.FirstName)
+		}
+
+		if lastName, exists := m.LastName(); exists {
+			create = create.SetLastName(lastName)
+		} else {
+			create = create.SetLastName(trustcenterndarequest.LastName)
+		}
+
+		if email, exists := m.Email(); exists {
+			create = create.SetEmail(email)
+		} else {
+			create = create.SetEmail(trustcenterndarequest.Email)
+		}
+
+		if companyName, exists := m.CompanyName(); exists {
+			create = create.SetNillableCompanyName(&companyName)
+		} else {
+			create = create.SetNillableCompanyName(trustcenterndarequest.CompanyName)
+		}
+
+		if reason, exists := m.Reason(); exists {
+			create = create.SetNillableReason(&reason)
+		} else {
+			create = create.SetNillableReason(trustcenterndarequest.Reason)
+		}
+
+		if accessLevel, exists := m.AccessLevel(); exists {
+			create = create.SetAccessLevel(accessLevel)
+		} else {
+			create = create.SetAccessLevel(trustcenterndarequest.AccessLevel)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(trustcenterndarequest.Status)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		trustcenterndarequest, err := client.TrustCenterNDARequest.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.TrustCenterNDARequestHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(trustcenterndarequest.CreatedAt).
+			SetUpdatedAt(trustcenterndarequest.UpdatedAt).
+			SetCreatedBy(trustcenterndarequest.CreatedBy).
+			SetUpdatedBy(trustcenterndarequest.UpdatedBy).
+			SetDeletedAt(trustcenterndarequest.DeletedAt).
+			SetDeletedBy(trustcenterndarequest.DeletedBy).
+			SetTags(trustcenterndarequest.Tags).
+			SetTrustCenterID(trustcenterndarequest.TrustCenterID).
+			SetFirstName(trustcenterndarequest.FirstName).
+			SetLastName(trustcenterndarequest.LastName).
+			SetEmail(trustcenterndarequest.Email).
+			SetNillableCompanyName(trustcenterndarequest.CompanyName).
+			SetNillableReason(trustcenterndarequest.Reason).
+			SetAccessLevel(trustcenterndarequest.AccessLevel).
+			SetStatus(trustcenterndarequest.Status).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -16406,6 +16673,22 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if environment, exists := m.Environment(); exists {
 		create = create.SetEnvironment(environment)
+	}
+
+	if removeBranding, exists := m.RemoveBranding(); exists {
+		create = create.SetRemoveBranding(removeBranding)
+	}
+
+	if companyDomain, exists := m.CompanyDomain(); exists {
+		create = create.SetNillableCompanyDomain(&companyDomain)
+	}
+
+	if securityContact, exists := m.SecurityContact(); exists {
+		create = create.SetNillableSecurityContact(&securityContact)
+	}
+
+	if ndaApprovalRequired, exists := m.NdaApprovalRequired(); exists {
+		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
 	_, err := create.Save(ctx)
@@ -16571,6 +16854,30 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetEnvironment(trustcentersetting.Environment)
 		}
 
+		if removeBranding, exists := m.RemoveBranding(); exists {
+			create = create.SetRemoveBranding(removeBranding)
+		} else {
+			create = create.SetRemoveBranding(trustcentersetting.RemoveBranding)
+		}
+
+		if companyDomain, exists := m.CompanyDomain(); exists {
+			create = create.SetNillableCompanyDomain(&companyDomain)
+		} else {
+			create = create.SetNillableCompanyDomain(trustcentersetting.CompanyDomain)
+		}
+
+		if securityContact, exists := m.SecurityContact(); exists {
+			create = create.SetNillableSecurityContact(&securityContact)
+		} else {
+			create = create.SetNillableSecurityContact(trustcentersetting.SecurityContact)
+		}
+
+		if ndaApprovalRequired, exists := m.NdaApprovalRequired(); exists {
+			create = create.SetNdaApprovalRequired(ndaApprovalRequired)
+		} else {
+			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -16628,6 +16935,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetSecondaryBackgroundColor(trustcentersetting.SecondaryBackgroundColor).
 			SetSecondaryForegroundColor(trustcentersetting.SecondaryForegroundColor).
 			SetEnvironment(trustcentersetting.Environment).
+			SetRemoveBranding(trustcentersetting.RemoveBranding).
+			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
+			SetNillableSecurityContact(trustcentersetting.SecurityContact).
+			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
 			Save(ctx)
 		if err != nil {
 			return err

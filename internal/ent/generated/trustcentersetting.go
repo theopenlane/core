@@ -63,6 +63,14 @@ type TrustCenterSetting struct {
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 	// environment of the trust center
 	Environment enums.TrustCenterEnvironment `json:"environment,omitempty"`
+	// whether to remove branding from the trust center
+	RemoveBranding bool `json:"remove_branding,omitempty"`
+	// URL to the company's homepage
+	CompanyDomain *string `json:"company_domain,omitempty"`
+	// email address for security contact
+	SecurityContact *string `json:"security_contact,omitempty"`
+	// whether NDA requests require approval before being processed
+	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -134,7 +142,9 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment:
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -295,6 +305,32 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.Environment = enums.TrustCenterEnvironment(value.String)
 			}
+		case trustcentersetting.FieldRemoveBranding:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field remove_branding", values[i])
+			} else if value.Valid {
+				_m.RemoveBranding = value.Bool
+			}
+		case trustcentersetting.FieldCompanyDomain:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field company_domain", values[i])
+			} else if value.Valid {
+				_m.CompanyDomain = new(string)
+				*_m.CompanyDomain = value.String
+			}
+		case trustcentersetting.FieldSecurityContact:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_contact", values[i])
+			} else if value.Valid {
+				_m.SecurityContact = new(string)
+				*_m.SecurityContact = value.String
+			}
+		case trustcentersetting.FieldNdaApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field nda_approval_required", values[i])
+			} else if value.Valid {
+				_m.NdaApprovalRequired = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -424,6 +460,22 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("environment=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Environment))
+	builder.WriteString(", ")
+	builder.WriteString("remove_branding=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RemoveBranding))
+	builder.WriteString(", ")
+	if v := _m.CompanyDomain; v != nil {
+		builder.WriteString("company_domain=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SecurityContact; v != nil {
+		builder.WriteString("security_contact=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("nda_approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
 	builder.WriteByte(')')
 	return builder.String()
 }

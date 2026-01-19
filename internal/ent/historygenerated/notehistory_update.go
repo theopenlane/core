@@ -106,6 +106,26 @@ func (_u *NoteHistoryUpdate) ClearDeletedBy() *NoteHistoryUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *NoteHistoryUpdate) SetTitle(v string) *NoteHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableTitle(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *NoteHistoryUpdate) ClearTitle() *NoteHistoryUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
 // SetText sets the "text" field.
 func (_u *NoteHistoryUpdate) SetText(v string) *NoteHistoryUpdate {
 	_u.mutation.SetText(v)
@@ -310,6 +330,12 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(notehistory.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(notehistory.FieldTitle, field.TypeString)
+	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
 	}
@@ -438,6 +464,26 @@ func (_u *NoteHistoryUpdateOne) SetNillableDeletedBy(v *string) *NoteHistoryUpda
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *NoteHistoryUpdateOne) ClearDeletedBy() *NoteHistoryUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *NoteHistoryUpdateOne) SetTitle(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableTitle(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *NoteHistoryUpdateOne) ClearTitle() *NoteHistoryUpdateOne {
+	_u.mutation.ClearTitle()
 	return _u
 }
 
@@ -674,6 +720,12 @@ func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(notehistory.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(notehistory.FieldTitle, field.TypeString)
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)

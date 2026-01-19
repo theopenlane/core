@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustCenterNDARequest by ID
+    """
+     trustCenterNDARequest(
+        """
+        ID of the trustCenterNDARequest
+        """
+        id: ID!
+    ):  TrustCenterNDARequest!
+}
+
+extend type Mutation{
+    """
+    Create a new trustCenterNDARequest
+    """
+    createTrustCenterNDARequest(
+        """
+        values of the trustCenterNDARequest
+        """
+        input: CreateTrustCenterNDARequestInput!
+    ): TrustCenterNDARequestCreatePayload!
+    """
+    Create multiple new trustCenterNDARequests
+    """
+    createBulkTrustCenterNDARequest(
+        """
+        values of the trustCenterNDARequest
+        """
+        input: [CreateTrustCenterNDARequestInput!]
+    ): TrustCenterNDARequestBulkCreatePayload!
+    """
+    Create multiple new trustCenterNDARequests via file upload
+    """
+    createBulkCSVTrustCenterNDARequest(
+        """
+        csv file containing values of the trustCenterNDARequest
+        """
+        input: Upload!
+    ): TrustCenterNDARequestBulkCreatePayload!
+    """
+    Update an existing trustCenterNDARequest
+    """
+    updateTrustCenterNDARequest(
+        """
+        ID of the trustCenterNDARequest
+        """
+        id: ID!
+        """
+        New values for the trustCenterNDARequest
+        """
+        input: UpdateTrustCenterNDARequestInput!
+    ): TrustCenterNDARequestUpdatePayload!
+    """
+    Delete an existing trustCenterNDARequest
+    """
+    deleteTrustCenterNDARequest(
+        """
+        ID of the trustCenterNDARequest
+        """
+        id: ID!
+    ): TrustCenterNDARequestDeletePayload!
+}
+
+"""
+Return response for createTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestCreatePayload {
+    """
+    Created trustCenterNDARequest
+    """
+    trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for updateTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestUpdatePayload {
+    """
+    Updated trustCenterNDARequest
+    """
+    trustCenterNDARequest: TrustCenterNDARequest!
+}
+
+"""
+Return response for deleteTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestDeletePayload {
+    """
+    Deleted trustCenterNDARequest ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustCenterNDARequest mutation
+"""
+type TrustCenterNDARequestBulkCreatePayload {
+    """
+    Created trustCenterNDARequests
+    """
+    trustCenterNDARequests: [TrustCenterNDARequest!]
+}

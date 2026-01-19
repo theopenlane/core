@@ -70,8 +70,16 @@ type TrustCenterSettingHistory struct {
 	// secondary foreground color for the trust center
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 	// environment of the trust center
-	Environment  enums.TrustCenterEnvironment `json:"environment,omitempty"`
-	selectValues sql.SelectValues
+	Environment enums.TrustCenterEnvironment `json:"environment,omitempty"`
+	// whether to remove branding from the trust center
+	RemoveBranding bool `json:"remove_branding,omitempty"`
+	// URL to the company's homepage
+	CompanyDomain *string `json:"company_domain,omitempty"`
+	// email address for security contact
+	SecurityContact *string `json:"security_contact,omitempty"`
+	// whether NDA requests require approval before being processed
+	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
+	selectValues        sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -81,7 +89,9 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment:
+		case trustcentersettinghistory.FieldRemoveBranding, trustcentersettinghistory.FieldNdaApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment, trustcentersettinghistory.FieldCompanyDomain, trustcentersettinghistory.FieldSecurityContact:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -260,6 +270,32 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.Environment = enums.TrustCenterEnvironment(value.String)
 			}
+		case trustcentersettinghistory.FieldRemoveBranding:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field remove_branding", values[i])
+			} else if value.Valid {
+				_m.RemoveBranding = value.Bool
+			}
+		case trustcentersettinghistory.FieldCompanyDomain:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field company_domain", values[i])
+			} else if value.Valid {
+				_m.CompanyDomain = new(string)
+				*_m.CompanyDomain = value.String
+			}
+		case trustcentersettinghistory.FieldSecurityContact:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_contact", values[i])
+			} else if value.Valid {
+				_m.SecurityContact = new(string)
+				*_m.SecurityContact = value.String
+			}
+		case trustcentersettinghistory.FieldNdaApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field nda_approval_required", values[i])
+			} else if value.Valid {
+				_m.NdaApprovalRequired = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -378,6 +414,22 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("environment=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Environment))
+	builder.WriteString(", ")
+	builder.WriteString("remove_branding=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RemoveBranding))
+	builder.WriteString(", ")
+	if v := _m.CompanyDomain; v != nil {
+		builder.WriteString("company_domain=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SecurityContact; v != nil {
+		builder.WriteString("security_contact=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("nda_approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
 	builder.WriteByte(')')
 	return builder.String()
 }

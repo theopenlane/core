@@ -366,6 +366,62 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableEnvironment(v *enums.Trust
 	return _c
 }
 
+// SetRemoveBranding sets the "remove_branding" field.
+func (_c *TrustCenterSettingHistoryCreate) SetRemoveBranding(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetRemoveBranding(v)
+	return _c
+}
+
+// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableRemoveBranding(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetRemoveBranding(*v)
+	}
+	return _c
+}
+
+// SetCompanyDomain sets the "company_domain" field.
+func (_c *TrustCenterSettingHistoryCreate) SetCompanyDomain(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetCompanyDomain(v)
+	return _c
+}
+
+// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableCompanyDomain(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetCompanyDomain(*v)
+	}
+	return _c
+}
+
+// SetSecurityContact sets the "security_contact" field.
+func (_c *TrustCenterSettingHistoryCreate) SetSecurityContact(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetSecurityContact(v)
+	return _c
+}
+
+// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableSecurityContact(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetSecurityContact(*v)
+	}
+	return _c
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_c *TrustCenterSettingHistoryCreate) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetNdaApprovalRequired(v)
+	return _c
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetNdaApprovalRequired(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -445,6 +501,14 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.Environment(); !ok {
 		v := trustcentersettinghistory.DefaultEnvironment
 		_c.mutation.SetEnvironment(v)
+	}
+	if _, ok := _c.mutation.RemoveBranding(); !ok {
+		v := trustcentersettinghistory.DefaultRemoveBranding
+		_c.mutation.SetRemoveBranding(v)
+	}
+	if _, ok := _c.mutation.NdaApprovalRequired(); !ok {
+		v := trustcentersettinghistory.DefaultNdaApprovalRequired
+		_c.mutation.SetNdaApprovalRequired(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
@@ -614,6 +678,22 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.Environment(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum, value)
 		_node.Environment = value
+	}
+	if value, ok := _c.mutation.RemoveBranding(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool, value)
+		_node.RemoveBranding = value
+	}
+	if value, ok := _c.mutation.CompanyDomain(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString, value)
+		_node.CompanyDomain = &value
+	}
+	if value, ok := _c.mutation.SecurityContact(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecurityContact, field.TypeString, value)
+		_node.SecurityContact = &value
+	}
+	if value, ok := _c.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
+		_node.NdaApprovalRequired = value
 	}
 	return _node, _spec
 }

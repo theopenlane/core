@@ -67,6 +67,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -192,6 +193,7 @@ func checkColumn(t, c string) error {
 			trustcenterdochistory.Table:             trustcenterdochistory.ValidColumn,
 			trustcenterentityhistory.Table:          trustcenterentityhistory.ValidColumn,
 			trustcenterhistory.Table:                trustcenterhistory.ValidColumn,
+			trustcenterndarequesthistory.Table:      trustcenterndarequesthistory.ValidColumn,
 			trustcentersettinghistory.Table:         trustcentersettinghistory.ValidColumn,
 			trustcentersubprocessorhistory.Table:    trustcentersubprocessorhistory.ValidColumn,
 			trustcenterwatermarkconfighistory.Table: trustcenterwatermarkconfighistory.ValidColumn,

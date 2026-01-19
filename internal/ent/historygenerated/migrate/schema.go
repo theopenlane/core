@@ -1251,6 +1251,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "text_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "note_ref", Type: field.TypeString, Nullable: true},
@@ -2112,6 +2113,41 @@ var (
 			},
 		},
 	}
+	// TrustCenterNdaRequestHistoryColumns holds the columns for the "trust_center_nda_request_history" table.
+	TrustCenterNdaRequestHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "first_name", Type: field.TypeString},
+		{Name: "last_name", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString},
+		{Name: "company_name", Type: field.TypeString, Nullable: true},
+		{Name: "reason", Type: field.TypeString, Nullable: true},
+		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED"}, Default: "REQUESTED"},
+	}
+	// TrustCenterNdaRequestHistoryTable holds the schema information for the "trust_center_nda_request_history" table.
+	TrustCenterNdaRequestHistoryTable = &schema.Table{
+		Name:       "trust_center_nda_request_history",
+		Columns:    TrustCenterNdaRequestHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterNdaRequestHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterndarequesthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterSettingHistoryColumns holds the columns for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2140,6 +2176,10 @@ var (
 		{Name: "secondary_background_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_foreground_color", Type: field.TypeString, Nullable: true},
 		{Name: "environment", Type: field.TypeEnum, Nullable: true, Enums: []string{"LIVE", "PREVIEW"}, Default: "LIVE"},
+		{Name: "remove_branding", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "security_contact", Type: field.TypeString, Nullable: true},
+		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -2656,6 +2696,7 @@ var (
 		TrustCenterDocHistoryTable,
 		TrustCenterEntityHistoryTable,
 		TrustCenterHistoryTable,
+		TrustCenterNdaRequestHistoryTable,
 		TrustCenterSettingHistoryTable,
 		TrustCenterSubprocessorHistoryTable,
 		TrustCenterWatermarkConfigHistoryTable,
@@ -2830,6 +2871,9 @@ func init() {
 	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",
+	}
+	TrustCenterNdaRequestHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_nda_request_history",
 	}
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
