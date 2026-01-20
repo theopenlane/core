@@ -506,10 +506,6 @@ func buildTrustCenterURL(customDomain, slug string) string {
 
 // triggerCacheRefresh makes an HTTP request to the trust center URL with the fresh query parameter
 func triggerCacheRefresh(ctx context.Context, targetURL string) error {
-	if targetURL == "" {
-		return nil
-	}
-
 	requester, err := httpsling.New(httpsling.Client(httpclient.Timeout(cacheRefreshTimeout)))
 	if err != nil {
 		return err
