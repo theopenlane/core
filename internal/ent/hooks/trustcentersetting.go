@@ -24,6 +24,7 @@ type TrustCenterConfig struct {
 	PreviewZoneID            string
 	CnameTarget              string
 	DefaultTrustCenterDomain string
+	CacheRefreshScheme       string
 }
 
 // HookTrustCenterSetting process files for trust center settings

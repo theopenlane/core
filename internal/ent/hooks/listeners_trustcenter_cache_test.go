@@ -16,6 +16,7 @@ func TestBuildTrustCenterURL(t *testing.T) {
 		customDomain  string
 		slug          string
 		defaultDomain string
+		scheme        string
 		expected      string
 	}{
 		{
@@ -46,6 +47,14 @@ func TestBuildTrustCenterURL(t *testing.T) {
 			defaultDomain: "trust.openlane.io",
 			expected:      "",
 		},
+		{
+			name:          "http scheme uses default domain for all requests",
+			customDomain:  "custom.example.com",
+			slug:          "my-org",
+			defaultDomain: "127.0.0.1:12345",
+			scheme:        "http",
+			expected:      "http://127.0.0.1:12345",
+		},
 	}
 
 	for _, tt := range tests {
@@ -54,6 +63,7 @@ func TestBuildTrustCenterURL(t *testing.T) {
 			defer func() { trustCenterConfig = oldConfig }()
 
 			trustCenterConfig.DefaultTrustCenterDomain = tt.defaultDomain
+			trustCenterConfig.CacheRefreshScheme = tt.scheme
 
 			result := buildTrustCenterURL(tt.customDomain, tt.slug)
 			assert.Equal(t, tt.expected, result)

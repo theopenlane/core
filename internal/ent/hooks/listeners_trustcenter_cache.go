@@ -483,12 +483,22 @@ func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenter
 
 // buildTrustCenterURL constructs the trust center URL from custom domain or slug
 func buildTrustCenterURL(customDomain, slug string) string {
+	scheme := trustCenterConfig.CacheRefreshScheme
+	if scheme == "" {
+		scheme = "https"
+	}
+
+	// In test mode (http scheme), use DefaultTrustCenterDomain for all requests
+	if scheme == "http" && trustCenterConfig.DefaultTrustCenterDomain != "" {
+		return fmt.Sprintf("%s://%s", scheme, trustCenterConfig.DefaultTrustCenterDomain)
+	}
+
 	if customDomain != "" {
-		return fmt.Sprintf("https://%s", customDomain)
+		return fmt.Sprintf("%s://%s", scheme, customDomain)
 	}
 
 	if slug != "" && trustCenterConfig.DefaultTrustCenterDomain != "" {
-		return fmt.Sprintf("https://%s/%s", trustCenterConfig.DefaultTrustCenterDomain, slug)
+		return fmt.Sprintf("%s://%s/%s", scheme, trustCenterConfig.DefaultTrustCenterDomain, slug)
 	}
 
 	return ""
@@ -496,6 +506,10 @@ func buildTrustCenterURL(customDomain, slug string) string {
 
 // triggerCacheRefresh makes an HTTP request to the trust center URL with the fresh query parameter
 func triggerCacheRefresh(ctx context.Context, targetURL string) error {
+	if targetURL == "" {
+		return nil
+	}
+
 	requester, err := httpsling.New(httpsling.Client(httpclient.Timeout(cacheRefreshTimeout)))
 	if err != nil {
 		return err
