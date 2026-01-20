@@ -1,0 +1,175 @@
+package workflows
+
+import (
+	"time"
+
+	"github.com/mcuadros/go-defaults"
+)
+
+// Config contains the configuration for the workflows engine
+type Config struct {
+	// Enabled determines if the workflows engine is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// CEL contains configuration for CEL evaluation and validation
+	CEL CELConfig `json:"cel" koanf:"cel"`
+}
+
+// CELConfig contains CEL evaluation and validation settings for workflows
+type CELConfig struct {
+	// Timeout is the maximum duration allowed for evaluating a CEL expression
+	Timeout time.Duration `json:"timeout" koanf:"timeout" default:"100ms"`
+	// CostLimit caps the runtime cost of CEL evaluation, 0 disables the limit
+	CostLimit uint64 `json:"costlimit" koanf:"costlimit" default:"0"`
+	// InterruptCheckFrequency controls how often CEL checks for interrupts during comprehensions
+	InterruptCheckFrequency uint `json:"interruptcheckfrequency" koanf:"interruptcheckfrequency" default:"100"`
+	// ParserRecursionLimit caps the parser recursion depth, 0 uses CEL defaults
+	ParserRecursionLimit int `json:"parserrecursionlimit" koanf:"parserrecursionlimit" default:"250"`
+	// ParserExpressionSizeLimit caps expression size (code points), 0 uses CEL defaults
+	ParserExpressionSizeLimit int `json:"parserexpressionsizelimit" koanf:"parserexpressionsizelimit" default:"100000"`
+	// ComprehensionNestingLimit caps nested comprehensions, 0 disables the check
+	ComprehensionNestingLimit int `json:"comprehensionnestinglimit" koanf:"comprehensionnestinglimit" default:"0"`
+	// ExtendedValidations enables extra AST validations (regex, duration, timestamps, homogeneous aggregates)
+	ExtendedValidations bool `json:"extendedvalidations" koanf:"extendedvalidations" default:"true"`
+	// OptionalTypes enables CEL optional types and optional field syntax
+	OptionalTypes bool `json:"optionaltypes" koanf:"optionaltypes" default:"false"`
+	// IdentifierEscapeSyntax enables backtick escaped identifiers
+	IdentifierEscapeSyntax bool `json:"identifierescapesyntax" koanf:"identifierescapesyntax" default:"false"`
+	// CrossTypeNumericComparisons enables comparisons across numeric types
+	CrossTypeNumericComparisons bool `json:"crosstypenumericcomparisons" koanf:"crosstypenumericcomparisons" default:"false"`
+	// MacroCallTracking records macro calls in AST source info for debugging
+	MacroCallTracking bool `json:"macrocalltracking" koanf:"macrocalltracking" default:"false"`
+	// EvalOptimize enables evaluation-time optimizations for repeated program runs
+	EvalOptimize bool `json:"evaloptimize" koanf:"evaloptimize" default:"true"`
+	// TrackState enables evaluation state tracking for debugging
+	TrackState bool `json:"trackstate" koanf:"trackstate" default:"false"`
+}
+
+// NewDefaultConfig creates a new workflows config with default values applied.
+func NewDefaultConfig(opts ...ConfigOpts) *Config {
+	c := &Config{}
+	defaults.SetDefaults(c)
+
+	for _, opt := range opts {
+		opt(c)
+	}
+
+	return c
+}
+
+// ConfigOpts configures the Config
+type ConfigOpts func(*Config)
+
+// WithEnabled sets the enabled field
+func WithEnabled(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.Enabled = enabled
+	}
+}
+
+// WithCELTimeout sets the CEL evaluation timeout
+func WithCELTimeout(timeout time.Duration) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.Timeout = timeout
+	}
+}
+
+// WithCELCostLimit sets the CEL cost limit
+func WithCELCostLimit(limit uint64) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.CostLimit = limit
+	}
+}
+
+// WithCELInterruptCheckFrequency sets the CEL interrupt check frequency
+func WithCELInterruptCheckFrequency(freq uint) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.InterruptCheckFrequency = freq
+	}
+}
+
+// WithCELParserRecursionLimit sets the CEL parser recursion limit
+func WithCELParserRecursionLimit(limit int) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.ParserRecursionLimit = limit
+	}
+}
+
+// WithCELParserExpressionSizeLimit sets the CEL parser expression size limit
+func WithCELParserExpressionSizeLimit(limit int) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.ParserExpressionSizeLimit = limit
+	}
+}
+
+// WithCELComprehensionNestingLimit sets the CEL comprehension nesting limit
+func WithCELComprehensionNestingLimit(limit int) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.ComprehensionNestingLimit = limit
+	}
+}
+
+// WithCELExtendedValidations toggles CEL extended validations
+func WithCELExtendedValidations(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.ExtendedValidations = enabled
+	}
+}
+
+// WithCELOptionalTypes toggles CEL optional types
+func WithCELOptionalTypes(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.OptionalTypes = enabled
+	}
+}
+
+// WithCELIdentifierEscapeSyntax toggles CEL identifier escape syntax
+func WithCELIdentifierEscapeSyntax(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.IdentifierEscapeSyntax = enabled
+	}
+}
+
+// WithCELCrossTypeNumericComparisons toggles CEL cross-type numeric comparisons
+func WithCELCrossTypeNumericComparisons(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.CrossTypeNumericComparisons = enabled
+	}
+}
+
+// WithCELMacroCallTracking toggles CEL macro call tracking
+func WithCELMacroCallTracking(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.MacroCallTracking = enabled
+	}
+}
+
+// WithCELEvalOptimize toggles CEL evaluation optimizations
+func WithCELEvalOptimize(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.EvalOptimize = enabled
+	}
+}
+
+// WithCELTrackState toggles CEL evaluation state tracking
+func WithCELTrackState(enabled bool) ConfigOpts {
+	return func(c *Config) {
+		c.CEL.TrackState = enabled
+	}
+}
+
+// WithConfig applies all settings from a Config struct
+func WithConfig(cfg Config) ConfigOpts {
+	return func(c *Config) {
+		c.Enabled = cfg.Enabled
+		c.CEL = cfg.CEL
+	}
+}
+
+// IsEnabled checks if the workflows feature is enabled
+func (c *Config) IsEnabled() bool {
+	if c == nil {
+		return false
+	}
+
+	return c.Enabled
+}

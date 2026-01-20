@@ -1123,4 +1123,52 @@ data:
       successredirecturl: ""
       {{- end }}
     {{- end }}
+    {{- if .Values.openlane.coreConfiguration.workflows }}
+    workflows:
+      {{- if .Values.openlane.coreConfiguration.workflows.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.workflows.enabled }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.workflows.cel }}
+      cel:
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.timeout }}
+        timeout: {{ .Values.openlane.coreConfiguration.workflows.cel.timeout | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.costlimit }}
+        costlimit: {{ .Values.openlane.coreConfiguration.workflows.cel.costlimit }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.interruptcheckfrequency }}
+        interruptcheckfrequency: {{ .Values.openlane.coreConfiguration.workflows.cel.interruptcheckfrequency }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.parserrecursionlimit }}
+        parserrecursionlimit: {{ .Values.openlane.coreConfiguration.workflows.cel.parserrecursionlimit }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.parserexpressionsizelimit }}
+        parserexpressionsizelimit: {{ .Values.openlane.coreConfiguration.workflows.cel.parserexpressionsizelimit }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.comprehensionnestinglimit }}
+        comprehensionnestinglimit: {{ .Values.openlane.coreConfiguration.workflows.cel.comprehensionnestinglimit }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.extendedvalidations }}
+        extendedvalidations: {{ .Values.openlane.coreConfiguration.workflows.cel.extendedvalidations }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.optionaltypes }}
+        optionaltypes: {{ .Values.openlane.coreConfiguration.workflows.cel.optionaltypes }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.identifierescapesyntax }}
+        identifierescapesyntax: {{ .Values.openlane.coreConfiguration.workflows.cel.identifierescapesyntax }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.crosstypenumericcomparisons }}
+        crosstypenumericcomparisons: {{ .Values.openlane.coreConfiguration.workflows.cel.crosstypenumericcomparisons }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.macrocalltracking }}
+        macrocalltracking: {{ .Values.openlane.coreConfiguration.workflows.cel.macrocalltracking }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.evaloptimize }}
+        evaloptimize: {{ .Values.openlane.coreConfiguration.workflows.cel.evaloptimize }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.workflows.cel.trackstate }}
+        trackstate: {{ .Values.openlane.coreConfiguration.workflows.cel.trackstate }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
 {{- end }}

@@ -8,9 +8,20 @@ import (
 // TypedTopic represents a strongly typed event topic. It carries helpers that convert
 // between the strongly typed payload and the internal soiree.Event representation
 type TypedTopic[T any] struct {
-	name   string
-	wrap   func(T) Event
-	unwrap func(Event) (T, error)
+	name          string
+	wrap          func(T) Event
+	unwrap        func(Event) (T, error)
+	observability *ObservabilitySpec[T]
+}
+
+// ObservabilitySpec describes logging/metrics metadata for a typed topic
+type ObservabilitySpec[T any] struct {
+	// Operation is the operation name to record
+	Operation string
+	// Origin is the component emitting the observation
+	Origin string
+	// TriggerFunc overrides how trigger event values are derived
+	TriggerFunc func(*EventContext, T) string
 }
 
 // TypedListener represents a listener that expects a strongly typed payload
@@ -30,6 +41,13 @@ func WithWrap[T any](wrap func(T) Event) TypedTopicOption[T] {
 func WithUnwrap[T any](unwrap func(Event) (T, error)) TypedTopicOption[T] {
 	return func(t *TypedTopic[T]) {
 		t.unwrap = unwrap
+	}
+}
+
+// WithObservability sets an observability spec for the typed topic
+func WithObservability[T any](spec ObservabilitySpec[T]) TypedTopicOption[T] {
+	return func(t *TypedTopic[T]) {
+		t.observability = &spec
 	}
 }
 
@@ -157,4 +175,13 @@ func (b ListenerBinding) Register(bus *EventBus) (string, error) {
 	}
 
 	return b.register(bus)
+}
+
+// Observability returns the topic observability spec if configured
+func (t TypedTopic[T]) Observability() (ObservabilitySpec[T], bool) {
+	if t.observability == nil {
+		return ObservabilitySpec[T]{}, false
+	}
+
+	return *t.observability, true
 }

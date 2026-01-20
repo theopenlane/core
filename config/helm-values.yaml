@@ -555,6 +555,23 @@ coreConfiguration:
     enabled: false  # @schema type:boolean; default:false
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
     successredirecturl: ""  # @schema type:string
+  # -- Workflows contains the configuration for the workflows engine
+  workflows:
+    enabled: false  # @schema type:boolean; default:false
+    cel:
+      timeout: "100ms"  # @schema type:integer; default:100ms
+      costlimit: 0  # @schema default:0
+      interruptcheckfrequency: 100  # @schema default:100
+      parserrecursionlimit: 250  # @schema type:integer; default:250
+      parserexpressionsizelimit: 100000  # @schema type:integer; default:100000
+      comprehensionnestinglimit: 0  # @schema type:integer; default:0
+      extendedvalidations: true  # @schema type:boolean; default:true
+      optionaltypes: false  # @schema type:boolean; default:false
+      identifierescapesyntax: false  # @schema type:boolean; default:false
+      crosstypenumericcomparisons: false  # @schema type:boolean; default:false
+      macrocalltracking: false  # @schema type:boolean; default:false
+      evaloptimize: true  # @schema type:boolean; default:true
+      trackstate: false  # @schema type:boolean; default:false
 
 # -- External Secrets configuration
 externalSecrets:
