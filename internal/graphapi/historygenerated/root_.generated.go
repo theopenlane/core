@@ -2060,6 +2060,7 @@ type ComplexityRoot struct {
 		AccentColor              func(childComplexity int) int
 		BackgroundColor          func(childComplexity int) int
 		CompanyDomain            func(childComplexity int) int
+		CompanyName              func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		Environment              func(childComplexity int) int
@@ -13502,6 +13503,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.CompanyDomain(childComplexity), true
+
+	case "TrustCenterSettingHistory.companyName":
+		if e.complexity.TrustCenterSettingHistory.CompanyName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.CompanyName(childComplexity), true
 
 	case "TrustCenterSettingHistory.createdAt":
 		if e.complexity.TrustCenterSettingHistory.CreatedAt == nil {
@@ -41109,6 +41117,10 @@ type TrustCenterSettingHistory implements Node {
   """
   title: String
   """
+  company name for the trust center, defaults to the organization's display name
+  """
+  companyName: String
+  """
   overview of the trust center
   """
   overview: String
@@ -41409,6 +41421,24 @@ input TrustCenterSettingHistoryWhereInput {
   titleNotNil: Boolean
   titleEqualFold: String
   titleContainsFold: String
+  """
+  company_name field predicates
+  """
+  companyName: String
+  companyNameNEQ: String
+  companyNameIn: [String!]
+  companyNameNotIn: [String!]
+  companyNameGT: String
+  companyNameGTE: String
+  companyNameLT: String
+  companyNameLTE: String
+  companyNameContains: String
+  companyNameHasPrefix: String
+  companyNameHasSuffix: String
+  companyNameIsNil: Boolean
+  companyNameNotNil: Boolean
+  companyNameEqualFold: String
+  companyNameContainsFold: String
   """
   overview field predicates
   """

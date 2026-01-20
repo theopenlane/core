@@ -5778,6 +5778,8 @@ type CreateTrustCenterSettingInput struct {
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// title of the trust center
 	Title *string `json:"title,omitempty"`
+	// company name for the trust center, defaults to the organization's display name
+	CompanyName *string `json:"companyName,omitempty"`
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
 	// URL of the logo
@@ -25433,6 +25435,8 @@ type TrustCenterSetting struct {
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// title of the trust center
 	Title *string `json:"title,omitempty"`
+	// company name for the trust center, defaults to the organization's display name
+	CompanyName *string `json:"companyName,omitempty"`
 	// overview of the trust center
 	Overview *string `json:"overview,omitempty"`
 	// URL of the logo
@@ -25630,6 +25634,22 @@ type TrustCenterSettingWhereInput struct {
 	TitleNotNil       *bool    `json:"titleNotNil,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+	// company_name field predicates
+	CompanyName             *string  `json:"companyName,omitempty"`
+	CompanyNameNeq          *string  `json:"companyNameNEQ,omitempty"`
+	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
+	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
+	CompanyNameGt           *string  `json:"companyNameGT,omitempty"`
+	CompanyNameGte          *string  `json:"companyNameGTE,omitempty"`
+	CompanyNameLt           *string  `json:"companyNameLT,omitempty"`
+	CompanyNameLte          *string  `json:"companyNameLTE,omitempty"`
+	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
+	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
+	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
+	CompanyNameIsNil        *bool    `json:"companyNameIsNil,omitempty"`
+	CompanyNameNotNil       *bool    `json:"companyNameNotNil,omitempty"`
+	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
+	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
 	// overview field predicates
 	Overview             *string  `json:"overview,omitempty"`
 	OverviewNeq          *string  `json:"overviewNEQ,omitempty"`
@@ -30413,6 +30433,9 @@ type UpdateTrustCenterSettingInput struct {
 	// title of the trust center
 	Title      *string `json:"title,omitempty"`
 	ClearTitle *bool   `json:"clearTitle,omitempty"`
+	// company name for the trust center, defaults to the organization's display name
+	CompanyName      *string `json:"companyName,omitempty"`
+	ClearCompanyName *bool   `json:"clearCompanyName,omitempty"`
 	// overview of the trust center
 	Overview      *string `json:"overview,omitempty"`
 	ClearOverview *bool   `json:"clearOverview,omitempty"`
