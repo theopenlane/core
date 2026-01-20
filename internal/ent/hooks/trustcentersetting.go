@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -42,6 +43,10 @@ func HookTrustCenterSetting() ent.Hook {
 				if err != nil {
 					return nil, err
 				}
+			}
+
+			if err := setDefaultCompanyName(ctx, m); err != nil {
+				return nil, err
 			}
 
 			return next.Mutate(ctx, m)
@@ -172,4 +177,13 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	}
 
 	return ctx, nil
+}
+
+func setDefaultCompanyName(ctx context.Context, m *generated.TrustCenterSettingMutation) error {
+	if !m.Op().Is(ent.OpCreate) {
+		return nil
+	}
+
+
+	return nil
 }

@@ -134,6 +134,20 @@ func (_c *TrustCenterSettingCreate) SetNillableTitle(v *string) *TrustCenterSett
 	return _c
 }
 
+// SetCompanyName sets the "company_name" field.
+func (_c *TrustCenterSettingCreate) SetCompanyName(v string) *TrustCenterSettingCreate {
+	_c.mutation.SetCompanyName(v)
+	return _c
+}
+
+// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableCompanyName(v *string) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetCompanyName(*v)
+	}
+	return _c
+}
+
 // SetOverview sets the "overview" field.
 func (_c *TrustCenterSettingCreate) SetOverview(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetOverview(v)
@@ -557,6 +571,11 @@ func (_c *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.CompanyName(); ok {
+		if err := trustcentersetting.CompanyNameValidator(v); err != nil {
+			return &ValidationError{Name: "company_name", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_name": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
@@ -689,6 +708,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if value, ok := _c.mutation.CompanyName(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyName, field.TypeString, value)
+		_node.CompanyName = value
 	}
 	if value, ok := _c.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)

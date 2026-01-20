@@ -54899,6 +54899,23 @@ type TrustCenterSettingHistoryWhereInput struct {
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 
+	// "company_name" field predicates.
+	CompanyName             *string  `json:"companyName,omitempty"`
+	CompanyNameNEQ          *string  `json:"companyNameNEQ,omitempty"`
+	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
+	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
+	CompanyNameGT           *string  `json:"companyNameGT,omitempty"`
+	CompanyNameGTE          *string  `json:"companyNameGTE,omitempty"`
+	CompanyNameLT           *string  `json:"companyNameLT,omitempty"`
+	CompanyNameLTE          *string  `json:"companyNameLTE,omitempty"`
+	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
+	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
+	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
+	CompanyNameIsNil        bool     `json:"companyNameIsNil,omitempty"`
+	CompanyNameNotNil       bool     `json:"companyNameNotNil,omitempty"`
+	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
+	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
+
 	// "overview" field predicates.
 	Overview             *string  `json:"overview,omitempty"`
 	OverviewNEQ          *string  `json:"overviewNEQ,omitempty"`
@@ -55587,6 +55604,51 @@ func (i *TrustCenterSettingHistoryWhereInput) P() (predicate.TrustCenterSettingH
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, trustcentersettinghistory.TitleContainsFold(*i.TitleContainsFold))
+	}
+	if i.CompanyName != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameEQ(*i.CompanyName))
+	}
+	if i.CompanyNameNEQ != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameNEQ(*i.CompanyNameNEQ))
+	}
+	if len(i.CompanyNameIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameIn(i.CompanyNameIn...))
+	}
+	if len(i.CompanyNameNotIn) > 0 {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameNotIn(i.CompanyNameNotIn...))
+	}
+	if i.CompanyNameGT != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameGT(*i.CompanyNameGT))
+	}
+	if i.CompanyNameGTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameGTE(*i.CompanyNameGTE))
+	}
+	if i.CompanyNameLT != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameLT(*i.CompanyNameLT))
+	}
+	if i.CompanyNameLTE != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameLTE(*i.CompanyNameLTE))
+	}
+	if i.CompanyNameContains != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameContains(*i.CompanyNameContains))
+	}
+	if i.CompanyNameHasPrefix != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameHasPrefix(*i.CompanyNameHasPrefix))
+	}
+	if i.CompanyNameHasSuffix != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameHasSuffix(*i.CompanyNameHasSuffix))
+	}
+	if i.CompanyNameIsNil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameIsNil())
+	}
+	if i.CompanyNameNotNil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameNotNil())
+	}
+	if i.CompanyNameEqualFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameEqualFold(*i.CompanyNameEqualFold))
+	}
+	if i.CompanyNameContainsFold != nil {
+		predicates = append(predicates, trustcentersettinghistory.CompanyNameContainsFold(*i.CompanyNameContainsFold))
 	}
 	if i.Overview != nil {
 		predicates = append(predicates, trustcentersettinghistory.OverviewEQ(*i.Overview))

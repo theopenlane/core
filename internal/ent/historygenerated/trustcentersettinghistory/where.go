@@ -118,6 +118,11 @@ func Title(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldTitle, v))
 }
 
+// CompanyName applies equality check predicate on the "company_name" field. It's identical to CompanyNameEQ.
+func CompanyName(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldCompanyName, v))
+}
+
 // Overview applies equality check predicate on the "overview" field. It's identical to OverviewEQ.
 func Overview(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldOverview, v))
@@ -856,6 +861,81 @@ func TitleEqualFold(v string) predicate.TrustCenterSettingHistory {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldTitle, v))
+}
+
+// CompanyNameEQ applies the EQ predicate on the "company_name" field.
+func CompanyNameEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldCompanyName, v))
+}
+
+// CompanyNameNEQ applies the NEQ predicate on the "company_name" field.
+func CompanyNameNEQ(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldCompanyName, v))
+}
+
+// CompanyNameIn applies the In predicate on the "company_name" field.
+func CompanyNameIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldCompanyName, vs...))
+}
+
+// CompanyNameNotIn applies the NotIn predicate on the "company_name" field.
+func CompanyNameNotIn(vs ...string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldCompanyName, vs...))
+}
+
+// CompanyNameGT applies the GT predicate on the "company_name" field.
+func CompanyNameGT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGT(FieldCompanyName, v))
+}
+
+// CompanyNameGTE applies the GTE predicate on the "company_name" field.
+func CompanyNameGTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldGTE(FieldCompanyName, v))
+}
+
+// CompanyNameLT applies the LT predicate on the "company_name" field.
+func CompanyNameLT(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLT(FieldCompanyName, v))
+}
+
+// CompanyNameLTE applies the LTE predicate on the "company_name" field.
+func CompanyNameLTE(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldLTE(FieldCompanyName, v))
+}
+
+// CompanyNameContains applies the Contains predicate on the "company_name" field.
+func CompanyNameContains(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContains(FieldCompanyName, v))
+}
+
+// CompanyNameHasPrefix applies the HasPrefix predicate on the "company_name" field.
+func CompanyNameHasPrefix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasPrefix(FieldCompanyName, v))
+}
+
+// CompanyNameHasSuffix applies the HasSuffix predicate on the "company_name" field.
+func CompanyNameHasSuffix(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldHasSuffix(FieldCompanyName, v))
+}
+
+// CompanyNameIsNil applies the IsNil predicate on the "company_name" field.
+func CompanyNameIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldCompanyName))
+}
+
+// CompanyNameNotNil applies the NotNil predicate on the "company_name" field.
+func CompanyNameNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldCompanyName))
+}
+
+// CompanyNameEqualFold applies the EqualFold predicate on the "company_name" field.
+func CompanyNameEqualFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldEqualFold(FieldCompanyName, v))
+}
+
+// CompanyNameContainsFold applies the ContainsFold predicate on the "company_name" field.
+func CompanyNameContainsFold(v string) predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldCompanyName, v))
 }
 
 // OverviewEQ applies the EQ predicate on the "overview" field.
