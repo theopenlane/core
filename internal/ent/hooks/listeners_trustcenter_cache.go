@@ -2,15 +2,21 @@ package hooks
 
 import (
 	"context"
+	"fmt"
+	"net/http"
+	"time"
 
 	"entgo.io/ent"
+	"github.com/cenkalti/backoff/v5"
 	"github.com/samber/lo"
-	"github.com/theopenlane/riverboat/pkg/riverqueue"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/events"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/pkg/events/soiree"
@@ -76,7 +82,7 @@ func handleTrustCenterDocMutation(ctx *soiree.EventContext, payload *events.Muta
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID)
 }
 
 // handleNoteMutation processes Note mutations and invalidates cache
@@ -96,8 +102,8 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 	}
 
 	for _, tcID := range tcIDs {
-		if err := enqueueCacheRefresh(ctx.Context(), mut.Job, tcID); err != nil {
-			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to enqueue cache invalidation for note")
+		if err := enqueueCacheRefresh(ctx.Context(), payload.Client, tcID); err != nil {
+			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for note")
 		}
 	}
 
@@ -140,7 +146,7 @@ func handleTrustCenterEntityMutation(ctx *soiree.EventContext, payload *events.M
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID)
 }
 
 // handleTrustCenterSubprocessorMutation processes TrustCenterSubprocessor mutations and invalidates cache
@@ -179,7 +185,7 @@ func handleTrustCenterSubprocessorMutation(ctx *soiree.EventContext, payload *ev
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID)
 }
 
 // handleTrustCenterComplianceMutation processes TrustCenterCompliance mutations and invalidates cache
@@ -218,7 +224,7 @@ func handleTrustCenterComplianceMutation(ctx *soiree.EventContext, payload *even
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID)
 }
 
 // handleSubprocessorMutation processes Subprocessor mutations and invalidates cache for related trust centers
@@ -265,8 +271,8 @@ func handleSubprocessorMutation(ctx *soiree.EventContext, payload *events.Mutati
 	}))
 
 	for _, tcID := range trustCenterIDs {
-		if err := enqueueCacheRefresh(ctx.Context(), mut.Job, tcID); err != nil {
-			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to enqueue cache invalidation for subprocessor")
+		if err := enqueueCacheRefresh(ctx.Context(), payload.Client, tcID); err != nil {
+			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for subprocessor")
 		}
 	}
 
@@ -317,8 +323,8 @@ func handleStandardMutation(ctx *soiree.EventContext, payload *events.MutationPa
 	}))
 
 	for _, tcID := range trustCenterIDs {
-		if err := enqueueCacheRefresh(ctx.Context(), mut.Job, tcID); err != nil {
-			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to enqueue cache invalidation for standard")
+		if err := enqueueCacheRefresh(ctx.Context(), payload.Client, tcID); err != nil {
+			logx.FromContext(ctx.Context()).Warn().Err(err).Str("trust_center_id", tcID).Msg("failed to trigger cache invalidation for standard")
 		}
 	}
 
@@ -357,7 +363,7 @@ func handleTrustCenterSettingMutation(ctx *soiree.EventContext, payload *events.
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID)
 }
 
 // handleTrustCenterMutation processes TrustCenter mutations and refreshes cache
@@ -387,7 +393,7 @@ func handleTrustCenterMutation(ctx *soiree.EventContext, payload *events.Mutatio
 		return nil
 	}
 
-	return enqueueCacheRefresh(ctx.Context(), mut.Job, trustCenterID)
+	return enqueueCacheRefresh(ctx.Context(), payload.Client, trustCenterID)
 }
 
 // shouldInvalidateCacheForSubprocessor determines if subprocessor changes warrant cache invalidation
@@ -430,24 +436,110 @@ func shouldInvalidateCacheForStandard(mut *entgen.StandardMutation, operation st
 	return false
 }
 
-// enqueueCacheRefresh enqueues a job to refresh the trust center cache
-func enqueueCacheRefresh(ctx context.Context, jobClient riverqueue.JobClient, trustCenterID string) error {
-	if trustCenterID == "" {
+const (
+	cacheRefreshTimeout        = 10 * time.Second
+	cacheRefreshUserAgent      = "Openlane-CacheRefresh/1.0"
+	cacheRefreshParam          = "fresh"
+	cacheRefreshValue          = "1"
+	cacheRefreshMaxRetries     = 3
+	cacheRefreshInitialBackoff = 3 * time.Second
+	cacheRefreshMaxBackoff     = 30 * time.Second
+)
+
+// enqueueCacheRefresh triggers a cache refresh by hitting the trust center URL with ?fresh=1
+func enqueueCacheRefresh(ctx context.Context, client *entgen.Client, trustCenterID string) error {
+	tc, err := client.TrustCenter.Query().
+		Where(trustcenter.ID(trustCenterID)).
+		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to query trust center for cache invalidation")
+
+		return err
+	}
+
+	var customDomain string
+	if tc.CustomDomainID != nil {
+		cd, err := client.CustomDomain.Query().
+			Where(customdomain.ID(*tc.CustomDomainID)).
+			Select(customdomain.FieldCnameRecord).
+			Only(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Str("custom_domain_id", *tc.CustomDomainID).Msg("failed to query custom domain for cache invalidation")
+
+			return err
+		}
+
+		customDomain = cd.CnameRecord
+	}
+
+	targetURL := buildTrustCenterURL(customDomain, tc.Slug)
+	if targetURL == "" {
 		return nil
 	}
 
-	if jobClient == nil {
-		logx.FromContext(ctx).Debug().Msg("no job client available, skipping cache refresh job")
+	return triggerCacheRefresh(ctx, targetURL)
+}
 
-		return nil
+// buildTrustCenterURL constructs the trust center URL from custom domain or slug
+func buildTrustCenterURL(customDomain, slug string) string {
+	if customDomain != "" {
+		return fmt.Sprintf("https://%s", customDomain)
 	}
 
-	if err := enqueueJob(ctx, jobClient, jobspec.SyncTrustCenterCacheArgs{
-		TrustCenterID: trustCenterID,
-	}, nil); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to insert sync trust center cache job")
+	if slug != "" && trustCenterConfig.DefaultTrustCenterDomain != "" {
+		return fmt.Sprintf("https://%s/%s", trustCenterConfig.DefaultTrustCenterDomain, slug)
+	}
 
-		return nil
+	return ""
+}
+
+// triggerCacheRefresh makes an HTTP request to the trust center URL with the fresh query parameter
+func triggerCacheRefresh(ctx context.Context, targetURL string) error {
+	requester, err := httpsling.New(httpsling.Client(httpclient.Timeout(cacheRefreshTimeout)))
+	if err != nil {
+		return err
+	}
+
+	policy := backoff.NewExponentialBackOff()
+	policy.InitialInterval = cacheRefreshInitialBackoff
+	policy.MaxInterval = cacheRefreshMaxBackoff
+
+	requestOpts := []httpsling.Option{
+		httpsling.Get(targetURL),
+		httpsling.QueryParam(cacheRefreshParam, cacheRefreshValue),
+		httpsling.Header(httpsling.HeaderUserAgent, cacheRefreshUserAgent),
+	}
+
+	for attempt := range cacheRefreshMaxRetries {
+		resp, err := requester.ReceiveWithContext(ctx, nil, append(requestOpts, httpsling.Header("X-Cache-Refresh-Attempt", fmt.Sprintf("%d", attempt+1)))...)
+
+		if err == nil && resp != nil {
+			defer resp.Body.Close()
+
+			if httpsling.IsSuccess(resp) {
+				return nil
+			}
+
+			if resp.StatusCode >= http.StatusBadRequest && resp.StatusCode < http.StatusInternalServerError {
+				return ErrCacheRefreshFailed
+			}
+		}
+
+		if attempt == cacheRefreshMaxRetries-1 {
+			if err != nil {
+				return fmt.Errorf("%w: %w", ErrCacheRefreshFailed, err)
+			}
+
+			return ErrCacheRefreshFailed
+		}
+
+		wait := policy.NextBackOff()
+		if wait == backoff.Stop {
+			wait = cacheRefreshInitialBackoff
+		}
+
+		time.Sleep(wait)
 	}
 
 	return nil

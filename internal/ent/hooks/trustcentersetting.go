@@ -21,8 +21,9 @@ func SetTrustCenterConfig(cfg TrustCenterConfig) {
 
 // TrustCenterConfig holds the trust center configuration
 type TrustCenterConfig struct {
-	PreviewZoneID string
-	CnameTarget   string
+	PreviewZoneID            string
+	CnameTarget              string
+	DefaultTrustCenterDomain string
 }
 
 // HookTrustCenterSetting process files for trust center settings
