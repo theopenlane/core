@@ -5,10 +5,13 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
@@ -52,6 +55,40 @@ func HookTrustCenterSetting() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+// setDefaultCompanyName will add the company name either from the org display name or if provided in the mutation
+func setDefaultCompanyName(ctx context.Context, m *generated.TrustCenterSettingMutation) error {
+
+	if m.Op().Is(ent.OpUpdateOne) {
+		oldName, err := m.OldCompanyName(ctx)
+		if err == nil && oldName != "" {
+			return nil
+		}
+	}
+
+	name, ok := m.CompanyName()
+	if ok && name != "" {
+		return nil
+	}
+
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	org, err := m.Client().Organization.
+		Query().Select(organization.FieldDisplayName).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).
+			Str("owner_id", orgID).
+			Msg("failed to get organization for company name default")
+		return err
+	}
+
+	m.SetCompanyName(org.DisplayName)
+	return nil
 }
 
 // HookTrustCenterSettingCreatePreview is a hook that runs on trust center setting create or update
@@ -177,13 +214,4 @@ func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingM
 	}
 
 	return ctx, nil
-}
-
-func setDefaultCompanyName(ctx context.Context, m *generated.TrustCenterSettingMutation) error {
-	if !m.Op().Is(ent.OpCreate) {
-		return nil
-	}
-
-
-	return nil
 }
