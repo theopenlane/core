@@ -29,9 +29,7 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "trust center document id to update")
 
 	// command line flags for the update command
-	updateCmd.Flags().StringP("trust-center-id", "t", "", "trust center id for the document")
 	updateCmd.Flags().StringP("title", "n", "", "title of the document")
-	updateCmd.Flags().StringP("category", "c", "", "category of the document")
 	updateCmd.Flags().StringP("visibility", "v", "", "visibility of the document (NOT_VISIBLE, PROTECTED, PUBLICLY_VISIBLE)")
 	updateCmd.Flags().StringSliceP("tags", "g", []string{}, "tags associated with the document")
 	updateCmd.Flags().StringSliceP("append-tags", "a", []string{}, "append tags to the document")
@@ -51,16 +49,6 @@ func updateValidation() (string, graphclient.UpdateTrustCenterDocInput, *graphql
 	title := cmd.Config.String("title")
 	if title != "" {
 		input.Title = &title
-	}
-
-	category := cmd.Config.String("category")
-	if category != "" {
-		input.Category = &category
-	}
-
-	trustCenterID := cmd.Config.String("trust-center-id")
-	if trustCenterID != "" {
-		input.TrustCenterID = &trustCenterID
 	}
 
 	visibility := cmd.Config.String("visibility")
