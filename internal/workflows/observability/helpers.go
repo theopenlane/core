@@ -42,7 +42,7 @@ func BeginListenerTopic[T any](observer *Observer, ctx *soiree.EventContext, top
 }
 
 // BeginEngine starts an observation for workflow engine operations
-func BeginEngine(observer *Observer, ctx context.Context, op OperationName, triggerEvent string, fields Fields) *Scope {
+func BeginEngine(ctx context.Context, observer *Observer, op OperationName, triggerEvent string, fields Fields) *Scope {
 	return observer.begin(ctx, Operation{
 		Name:         op,
 		Origin:       OriginEngine,

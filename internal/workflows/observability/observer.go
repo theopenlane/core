@@ -59,7 +59,7 @@ const (
 const (
 	msgOpFailed   = "workflow op failed"
 	msgOpSkipped  = "workflow op skipped"
-	msgOpWarning  = "workflow op warning"
+	msgOpWarning  = "workflow op warning" //nolint:gosec
 	msgOpInfo     = "workflow op info"
 	msgEmitFailed = "workflow emit failed"
 )
