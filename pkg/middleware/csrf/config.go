@@ -4,10 +4,11 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/theopenlane/core/pkg/middleware/graphapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/pkg/middleware/graphapi"
 )
 
 // Config defines configuration for the CSRF middleware wrapper.
@@ -72,13 +73,17 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 }
 
 // csrfSkipperFunc is the function that determines if the csrf token check should be skipped
-// due to the request being a PAT or API Token auth request
-// or a graphql read-only query request
+// due to the request being a PAT or API Token auth request,
+// an anonymous trustcenter request, or a graphql read-only query request
 var csrfSkipperFunc = func(c echo.Context) bool {
 	ac := auth.GetAuthTypeFromEchoContext(c)
 
 	// only skip CSRF checks for API Token or PAT authentication
 	if ac == auth.APITokenAuthentication || ac == auth.PATAuthentication {
+		return true
+	}
+
+	if _, ok := auth.GetAnonymousTrustCenterUserContext(c); ok {
 		return true
 	}
 
