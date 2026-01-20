@@ -8,34 +8,14 @@ package graphapi
 import (
 	"context"
 
-	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
-// CreateNotification is the resolver for the createNotification field.
-// Notifications can only be created internally by the system, not via GraphQL API
-func (r *mutationResolver) CreateNotification(ctx context.Context, input generated.CreateNotificationInput) (*model.NotificationCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// CreateBulkNotification is the resolver for the createBulkNotification field.
-// Notifications can only be created internally by the system, not via GraphQL API
-func (r *mutationResolver) CreateBulkNotification(ctx context.Context, input []*generated.CreateNotificationInput) (*model.NotificationBulkCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// CreateBulkCSVNotification is the resolver for the createBulkCSVNotification field.
-// Notifications can only be created internally by the system, not via GraphQL API
-func (r *mutationResolver) CreateBulkCSVNotification(ctx context.Context, input graphql.Upload) (*model.NotificationBulkCreatePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// UpdateNotification is the resolver for the updateNotification field.
+// is the resolver for the updateNotification field.
 func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, input generated.UpdateNotificationInput) (*model.NotificationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Notification.Get(ctx, id)
 	if err != nil {
@@ -60,25 +40,4 @@ func (r *mutationResolver) UpdateNotification(ctx context.Context, id string, in
 	return &model.NotificationUpdatePayload{
 		Notification: res,
 	}, nil
-}
-
-// DeleteNotification is the resolver for the deleteNotification field.
-// Notifications can only be deleted internally by the system, not via GraphQL API
-func (r *mutationResolver) DeleteNotification(ctx context.Context, id string) (*model.NotificationDeletePayload, error) {
-	return nil, rout.ErrPermissionDenied
-}
-
-// Notification is the resolver for the notification field.
-func (r *queryResolver) Notification(ctx context.Context, id string) (*generated.Notification, error) {
-	query, err := withTransactionalMutation(ctx).Notification.Query().Where(notification.ID(id)).CollectFields(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notification"})
-	}
-
-	res, err := query.Only(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "notification"})
-	}
-
-	return res, nil
 }

@@ -18154,6 +18154,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.
 	SUBPROCESSOR
 	SUBSCRIBER
 	TASK
+	TRUST_CENTER_SUBPROCESSOR
 	VULNERABILITY
 }
 """
@@ -31345,33 +31346,6 @@ type Mutation {
 		id: ID!
 	): NoteDeletePayload!
 	"""
-	Create a new notification
-	"""
-	createNotification(
-		"""
-		values of the notification
-		"""
-		input: CreateNotificationInput!
-	): NotificationCreatePayload!
-	"""
-	Create multiple new notifications
-	"""
-	createBulkNotification(
-		"""
-		values of the notification
-		"""
-		input: [CreateNotificationInput!]
-	): NotificationBulkCreatePayload!
-	"""
-	Create multiple new notifications via file upload
-	"""
-	createBulkCSVNotification(
-		"""
-		csv file containing values of the notification
-		"""
-		input: Upload!
-	): NotificationBulkCreatePayload!
-	"""
 	Update an existing notification
 	"""
 	updateNotification(
@@ -31385,15 +31359,6 @@ type Mutation {
 		"""
 		input: UpdateNotificationInput!
 	): NotificationUpdatePayload!
-	"""
-	Delete an existing notification
-	"""
-	deleteNotification(
-		"""
-		ID of the notification
-		"""
-		id: ID!
-	): NotificationDeletePayload!
 	"""
 	Create a new onboarding
 	"""
@@ -34544,33 +34509,6 @@ type Notification implements Node {
 	"""
 	topic: String
 	owner: Organization
-}
-"""
-Return response for createBulkNotification mutation
-"""
-type NotificationBulkCreatePayload {
-	"""
-	Created notifications
-	"""
-	notifications: [Notification!]
-}
-"""
-Return response for createNotification mutation
-"""
-type NotificationCreatePayload {
-	"""
-	Created notification
-	"""
-	notification: Notification!
-}
-"""
-Return response for deleteNotification mutation
-"""
-type NotificationDeletePayload {
-	"""
-	Deleted notification ID
-	"""
-	deletedID: ID!
 }
 """
 NotificationNotificationType is enum for the field notification_type
@@ -45257,15 +45195,6 @@ type Query {
 		"""
 		id: ID!
 	): Note!
-	"""
-	Look up notification by ID
-	"""
-	notification(
-		"""
-		ID of the notification
-		"""
-		id: ID!
-	): Notification!
 	"""
 	Look up organization by ID
 	"""
