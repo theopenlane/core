@@ -216,7 +216,7 @@ const (
 	defaultOverview = `
 # Welcome to your Trust Center
 
-This is the default overview for your trust center. You can customize this by editing the trust center settings.
+This is the default overview for your Trust Center. You can customize this by editing the Trust Center settings.
 `
 )
 
@@ -276,6 +276,7 @@ func HookTrustCenterDelete() ent.Hook {
 				}
 			}
 
+			// Clear cache for the deleted trust center (cascade deletes files)
 			if m.Job != nil {
 				cacheArgs := jobspec.ClearTrustCenterCacheArgs{
 					TrustCenterSlug: tc.Slug,
@@ -349,10 +350,10 @@ func HookTrustCenterUpdate() ent.Hook {
 
 				if previousCustomDomainID != nil {
 					if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
-						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
-							CustomDomain: cd.CnameRecord,
-						}, nil); err != nil {
-							return nil, err
+						if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
+							if err := triggerCacheRefresh(ctx, targetURL); err != nil {
+								return nil, err
+							}
 						}
 					}
 				}
@@ -374,13 +375,12 @@ func HookTrustCenterUpdate() ent.Hook {
 				}
 
 				if cd, err := m.Client().CustomDomain.Get(ctx, *previousCustomDomainID); err == nil && cd.CnameRecord != "" {
-					if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
-						CustomDomain: cd.CnameRecord,
-					}, nil); err != nil {
-						return nil, err
+					if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
+						if err := triggerCacheRefresh(ctx, targetURL); err != nil {
+							return nil, err
+						}
 					}
 				}
-
 			}
 
 			return v, nil
