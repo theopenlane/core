@@ -23,15 +23,15 @@ func TestBuildTrustCenterURL(t *testing.T) {
 			name:          "custom domain takes precedence",
 			customDomain:  "trust.example.com",
 			slug:          "my-org",
-			defaultDomain: "trust.openlane.io",
+			defaultDomain: "trust.theopenlane.io",
 			expected:      "https://trust.example.com",
 		},
 		{
 			name:          "slug with default domain",
 			customDomain:  "",
 			slug:          "my-org",
-			defaultDomain: "trust.openlane.io",
-			expected:      "https://trust.openlane.io/my-org",
+			defaultDomain: "trust.theopenlane.io",
+			expected:      "https://trust.theopenlane.io/my-org",
 		},
 		{
 			name:          "empty when no custom domain and no default",
@@ -44,7 +44,7 @@ func TestBuildTrustCenterURL(t *testing.T) {
 			name:          "empty when no custom domain and no slug",
 			customDomain:  "",
 			slug:          "",
-			defaultDomain: "trust.openlane.io",
+			defaultDomain: "trust.theopenlane.io",
 			expected:      "",
 		},
 		{
