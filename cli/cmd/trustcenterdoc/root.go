@@ -118,7 +118,12 @@ func tableOutput(out []graphclient.GetAllTrustCenterDocs_TrustCenterDocs_Edges_N
 			updatedAt = i.UpdatedAt.Format("2006-01-02 15:04:05")
 		}
 
-		writer.AddRow(i.ID, i.Title, i.Category, trustCenterID, fileID, visibility, strings.Join(i.Tags, ","), createdAt, updatedAt)
+		kindName := ""
+		if i.TrustCenterDocKindName != nil {
+			kindName = *i.TrustCenterDocKindName
+		}
+
+		writer.AddRow(i.ID, i.Title, kindName, trustCenterID, fileID, visibility, strings.Join(i.Tags, ","), createdAt, updatedAt)
 	}
 
 	writer.Render()
