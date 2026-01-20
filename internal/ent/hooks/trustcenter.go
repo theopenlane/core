@@ -276,24 +276,29 @@ func HookTrustCenterDelete() ent.Hook {
 				}
 			}
 
-			// Trigger cache refresh for the deleted trust center
-			var customDomain string
-			if tc.CustomDomainID != nil {
-				if cd, err := m.Client().CustomDomain.Get(ctx, *tc.CustomDomainID); err == nil && cd.CnameRecord != "" {
-					customDomain = cd.CnameRecord
+			// Clear cache for the deleted trust center (cascade deletes files)
+			if m.Job != nil {
+				cacheArgs := jobspec.ClearTrustCenterCacheArgs{
+					TrustCenterSlug: tc.Slug,
 				}
-			}
 
-			if targetURL := buildTrustCenterURL(customDomain, tc.Slug); targetURL != "" {
-				if err := triggerCacheRefresh(ctx, targetURL); err != nil {
-					return nil, err
+				if tc.CustomDomainID != nil {
+					if cd, err := m.Client().CustomDomain.Get(ctx, *tc.CustomDomainID); err == nil && cd.CnameRecord != "" {
+						cacheArgs.CustomDomain = cd.CnameRecord
+					}
 				}
-			}
 
-			if tc.PreviewDomainID != "" {
-				if cd, err := m.Client().CustomDomain.Get(ctx, tc.PreviewDomainID); err == nil && cd.CnameRecord != "" {
-					if targetURL := buildTrustCenterURL(cd.CnameRecord, ""); targetURL != "" {
-						if err := triggerCacheRefresh(ctx, targetURL); err != nil {
+				if cacheArgs.CustomDomain != "" || cacheArgs.TrustCenterSlug != "" {
+					if err := enqueueJob(ctx, m.Job, cacheArgs, nil); err != nil {
+						return nil, err
+					}
+				}
+
+				if tc.PreviewDomainID != "" {
+					if cd, err := m.Client().CustomDomain.Get(ctx, tc.PreviewDomainID); err == nil && cd.CnameRecord != "" {
+						if err := enqueueJob(ctx, m.Job, jobspec.ClearTrustCenterCacheArgs{
+							CustomDomain: cd.CnameRecord,
+						}, nil); err != nil {
 							return nil, err
 						}
 					}
