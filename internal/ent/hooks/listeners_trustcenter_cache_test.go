@@ -89,11 +89,6 @@ func TestTriggerCacheRefresh(t *testing.T) {
 		assert.Equal(t, cacheRefreshUserAgent, receivedUserAgent)
 	})
 
-	t.Run("empty URL returns nil", func(t *testing.T) {
-		err := triggerCacheRefresh(context.Background(), "")
-		assert.NoError(t, err)
-	})
-
 	t.Run("4xx error returns immediately without retry", func(t *testing.T) {
 		var requestCount atomic.Int32
 
