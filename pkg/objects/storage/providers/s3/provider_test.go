@@ -313,8 +313,9 @@ func TestS3ProviderPresignURLProxyDisabled(t *testing.T) {
 
 	url, err := provider.GetPresignedURL(ctx, &storagetypes.File{
 		FileMetadata: storagetypes.FileMetadata{
-			Bucket: minioBucket,
-			Key:    "folder/object.txt",
+			Bucket:      minioBucket,
+			Key:         "folder/object.txt",
+			ContentType: "text/plain",
 		},
 	}, &storagetypes.PresignedURLOptions{Duration: time.Minute})
 	require.NoError(t, err)
@@ -323,6 +324,7 @@ func TestS3ProviderPresignURLProxyDisabled(t *testing.T) {
 	require.Contains(t, url, "X-Amz-Credential=", "URL should contain AWS credentials")
 	require.Contains(t, url, "X-Amz-Signature=", "URL should contain AWS signature")
 	require.Contains(t, url, "folder/object.txt", "URL should contain object key")
+	require.Contains(t, url, "response-content-type=text%2Fplain", "URL should contain response content type")
 
 	resp, err := http.Get(url)
 	require.NoError(t, err)

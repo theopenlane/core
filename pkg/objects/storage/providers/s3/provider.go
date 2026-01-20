@@ -345,8 +345,8 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 	presignURL, err := p.presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
 		Bucket:                     aws.String(file.Bucket),
 		Key:                        aws.String(file.Key),
-		ResponseContentType:        lo.ToPtr("application/octet-stream"),
-		ResponseContentDisposition: lo.ToPtr("attachment"),
+		ResponseContentType:        aws.String(file.ContentType),
+		ResponseContentDisposition: aws.String("attachment"),
 	}, func(s3opts *s3.PresignOptions) {
 		s3opts.Expires = opts.Duration
 		s3opts.ClientOptions = []func(*s3.Options){
