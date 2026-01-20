@@ -79,6 +79,7 @@ func setDefaultCompanyName(ctx context.Context, m *generated.TrustCenterSettingM
 
 	org, err := m.Client().Organization.
 		Query().Select(organization.FieldDisplayName).
+		Where(organization.ID(orgID)).
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).
