@@ -14,6 +14,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// Emitter defines the minimal interface for emitting events
+type Emitter interface {
+	Emit(topic string, payload any) <-chan error
+}
+
 // EventBus manages subscribing and unsubscribing listeners to topics and emitting events to subscribers
 type EventBus struct {
 	topics            sync.Map

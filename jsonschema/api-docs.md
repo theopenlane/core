@@ -26,6 +26,7 @@ Config contains the configuration for the core server
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
 |[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
+|[**workflows**](#workflows)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -131,7 +132,10 @@ Config contains the configuration for the core server
     },
     "keywatcher": {},
     "slack": {},
-    "integrationoauthprovider": {}
+    "integrationoauthprovider": {},
+    "workflows": {
+        "cel": {}
+    }
 }
 ```
 
@@ -1672,6 +1676,47 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled toggles initialization of the integration provider registry.<br/>||
 |**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
+
+**Additional Properties:** not allowed  
+<a name="workflows"></a>
+## workflows: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|[**cel**](#workflowscel)|`object`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "cel": {}
+}
+```
+
+<a name="workflowscel"></a>
+### workflows\.cel: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**timeout**|`integer`|||
+|**costlimit**|`integer`|||
+|**interruptcheckfrequency**|`integer`|||
+|**parserrecursionlimit**|`integer`|||
+|**parserexpressionsizelimit**|`integer`|||
+|**comprehensionnestinglimit**|`integer`|||
+|**extendedvalidations**|`boolean`|||
+|**optionaltypes**|`boolean`|||
+|**identifierescapesyntax**|`boolean`|||
+|**crosstypenumericcomparisons**|`boolean`|||
+|**macrocalltracking**|`boolean`|||
+|**evaloptimize**|`boolean`|||
+|**trackstate**|`boolean`|||
 
 **Additional Properties:** not allowed  
 

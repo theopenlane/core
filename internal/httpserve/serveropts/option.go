@@ -38,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/integrations/registry"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
@@ -605,6 +606,15 @@ func WithCSRF() ServerOption {
 			// this ensures it can be applied after any auth middleware
 			s.Config.GraphMiddleware = append(s.Config.GraphMiddleware, csrf.Middleware(cfg))
 			s.Config.Handler.AdditionalMiddleware = append(s.Config.Handler.AdditionalMiddleware, csrf.Middleware(cfg))
+		}
+	})
+}
+
+// WithWorkflows sets up the workflows engine for the server
+func WithWorkflows(wf *engine.WorkflowEngine) ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if s.Config.Settings.Workflows.Enabled {
+			s.Config.Handler.WorkflowEngine = wf
 		}
 	})
 }

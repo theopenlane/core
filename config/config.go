@@ -29,6 +29,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
 	"github.com/theopenlane/core/pkg/middleware/cors"
@@ -85,6 +86,8 @@ type Config struct {
 	Slack Slack `json:"slack" koanf:"slack"`
 	// IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
 	IntegrationOauthProvider handlers.IntegrationOauthProviderConfig `json:"integrationoauthprovider" koanf:"integrationoauthprovider"`
+	// Workflows contains the configuration for the workflows engine
+	Workflows workflows.Config `json:"workflows" koanf:"workflows"`
 }
 
 // Server settings for the echo server

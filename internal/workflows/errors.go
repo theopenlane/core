@@ -21,4 +21,6 @@ var (
 	ErrUnsupportedObjectType = errors.New("object type does not support workflows")
 	// ErrMissingObjectID is returned when a workflow object is missing an ID
 	ErrMissingObjectID = errors.New("workflow object is missing an ID")
+	// ErrFailedToBuildCELEnv is returned when the CEL environment cannot be built
+	ErrFailedToBuildCELEnv = errors.New("failed to build CEL environment")
 )

@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
@@ -132,6 +133,8 @@ type Handler struct {
 	IntegrationOperations *keystore.OperationManager
 	// KeymakerService orchestrates integration activation flows
 	KeymakerService *keymaker.Service
+	// WorkflowEngine orchestrates workflow execution.
+	WorkflowEngine *engine.WorkflowEngine
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user
