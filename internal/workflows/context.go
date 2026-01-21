@@ -2,7 +2,6 @@ package workflows
 
 import (
 	"context"
-	"fmt"
 
 	"entgo.io/ent/privacy"
 	"github.com/theopenlane/iam/auth"
@@ -41,20 +40,10 @@ func AllowBypassContext(ctx context.Context) context.Context {
 	return WithContext(AllowContext(ctx))
 }
 
-// OrganizationIDFromContext extracts the organization ID from the context
-func OrganizationIDFromContext(ctx context.Context) (string, error) {
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	if err != nil {
-		return "", fmt.Errorf("failed to get organization id from context: %w", err)
-	}
-
-	return orgID, nil
-}
-
 // AllowContextWithOrg returns an allow context plus the organization ID.
 func AllowContextWithOrg(ctx context.Context) (context.Context, string, error) {
 	allowCtx := AllowContext(ctx)
-	orgID, err := OrganizationIDFromContext(ctx)
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 
 	return allowCtx, orgID, err
 }
@@ -62,7 +51,7 @@ func AllowContextWithOrg(ctx context.Context) (context.Context, string, error) {
 // AllowBypassContextWithOrg returns an allow/bypass context plus the organization ID.
 func AllowBypassContextWithOrg(ctx context.Context) (context.Context, string, error) {
 	bypassCtx := AllowBypassContext(ctx)
-	orgID, err := OrganizationIDFromContext(ctx)
+	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 
 	return bypassCtx, orgID, err
 }

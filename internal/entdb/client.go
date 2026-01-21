@@ -54,15 +54,10 @@ type client struct {
 type Option func(*ent.Client)
 
 // WithEventer adds the eventer hooks and listeners to the ent client
-func WithEventer(out *hooks.Eventer) Option {
+func WithEventer(eventer *hooks.Eventer) Option {
 	return func(c *ent.Client) {
-		// add event emission for mutations
-		eventer := hooks.NewEventerPool(c)
+		eventer.Initialize(c)
 		hooks.RegisterGlobalHooks(c, eventer)
-
-		if out != nil {
-			out = eventer
-		}
 
 		if err := hooks.RegisterListeners(eventer); err != nil {
 			log.Fatal().Err(err).Msg("failed registering listeners")

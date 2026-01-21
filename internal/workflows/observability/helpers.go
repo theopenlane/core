@@ -8,7 +8,7 @@ import (
 )
 
 // BeginListenerTopic starts an observation for a workflow listener using topic metadata
-func BeginListenerTopic[T any](observer *Observer, ctx *soiree.EventContext, topic soiree.TypedTopic[T], payload T, extra Fields) *Scope {
+func BeginListenerTopic[T any](ctx *soiree.EventContext, observer *Observer, topic soiree.TypedTopic[T], payload T, extra Fields) *Scope {
 	baseCtx := context.Background()
 	triggerEvent := ""
 	if ctx != nil {

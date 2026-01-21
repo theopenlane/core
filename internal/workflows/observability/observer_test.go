@@ -116,7 +116,7 @@ func TestBeginListenerTopicAppliesSpec(t *testing.T) {
 	defer func() { log.Logger = oldLogger }()
 
 	payload := testPayload{ID: "payload-1"}
-	topic := soiree.NewTypedTopic[testPayload]("workflow.listener.test",
+	topic := soiree.NewTypedTopic("workflow.listener.test",
 		soiree.WithObservability(soiree.ObservabilitySpec[testPayload]{
 			Operation: "custom_op",
 			Origin:    "custom_origin",
@@ -127,7 +127,7 @@ func TestBeginListenerTopicAppliesSpec(t *testing.T) {
 	)
 
 	// nil EventContext causes fallback to context.Background() and global logger
-	scope := BeginListenerTopic(New(), nil, topic, payload, Fields{"extra": "value"})
+	scope := BeginListenerTopic(nil, New(), topic, payload, Fields{"extra": "value"})
 
 	// Verify the scope was created with correct operation from topic spec
 	if scope.op.Name != "custom_op" {
