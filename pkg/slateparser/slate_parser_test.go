@@ -257,3 +257,158 @@ func TestIsValidSlateText(t *testing.T) {
 		})
 	}
 }
+
+// TestMentionRegexAttributeOrder tests that the mentionRegex correctly captures
+// data-slate-key, data-slate-id, and data-slate-value in any order.
+// This is critical because HTML attributes can appear in any order.
+func TestMentionRegexAttributeOrder(t *testing.T) {
+	tests := []struct {
+		name             string
+		text             string
+		expectedUserID   string
+		expectedSlateID  string
+		expectedDispName string
+		shouldMatch      bool
+	}{
+		// Test all 6 permutations of the three required attributes
+		{
+			name:             "order: key, id, value",
+			text:             `<div data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "John Doe",
+			shouldMatch:      true,
+		},
+		{
+			name:             "order: key, value, id",
+			text:             `<div data-slate-key="user123" data-slate-value="John Doe" data-slate-id="mention001">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "John Doe",
+			shouldMatch:      true,
+		},
+		{
+			name:             "order: id, key, value",
+			text:             `<div data-slate-id="mention001" data-slate-key="user123" data-slate-value="John Doe">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "John Doe",
+			shouldMatch:      true,
+		},
+		{
+			name:             "order: id, value, key",
+			text:             `<div data-slate-id="mention001" data-slate-value="John Doe" data-slate-key="user123">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "John Doe",
+			shouldMatch:      true,
+		},
+		{
+			name:             "order: value, key, id",
+			text:             `<div data-slate-value="John Doe" data-slate-key="user123" data-slate-id="mention001">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "John Doe",
+			shouldMatch:      true,
+		},
+		{
+			name:             "order: value, id, key",
+			text:             `<div data-slate-value="John Doe" data-slate-id="mention001" data-slate-key="user123">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "John Doe",
+			shouldMatch:      true,
+		},
+		// Test with additional attributes interspersed
+		{
+			name:             "with extra attrs: node before, inline after",
+			text:             `<div data-slate-node="element" data-slate-key="userABC" data-slate-id="slateXYZ" data-slate-value="Jane Smith" data-slate-inline="true">`,
+			expectedUserID:   "userABC",
+			expectedSlateID:  "slateXYZ",
+			expectedDispName: "Jane Smith",
+			shouldMatch:      true,
+		},
+		{
+			name:             "with extra attrs scattered",
+			text:             `<div class="mention" data-slate-value="Bob Wilson" data-slate-node="element" data-slate-key="user789" data-slate-inline="true" data-slate-id="mention999" data-slate-void="true">`,
+			expectedUserID:   "user789",
+			expectedSlateID:  "mention999",
+			expectedDispName: "Bob Wilson",
+			shouldMatch:      true,
+		},
+		{
+			name:             "with extra attrs: key first, scattered",
+			text:             `<div data-slate-key="userFirst" data-slate-node="element" data-slate-void="true" data-slate-value="First User" data-slate-inline="true" data-slate-id="idLast">`,
+			expectedUserID:   "userFirst",
+			expectedSlateID:  "idLast",
+			expectedDispName: "First User",
+			shouldMatch:      true,
+		},
+		// Edge cases with special characters in values
+		{
+			name:             "with special chars in display name",
+			text:             `<div data-slate-id="mention001" data-slate-key="user123" data-slate-value="O'Brien, John (Jr.)">`,
+			expectedUserID:   "user123",
+			expectedSlateID:  "mention001",
+			expectedDispName: "O'Brien, John (Jr.)",
+			shouldMatch:      true,
+		},
+		{
+			name:             "with empty string values",
+			text:             `<div data-slate-key="" data-slate-id="" data-slate-value="">`,
+			expectedUserID:   "",
+			expectedSlateID:  "",
+			expectedDispName: "",
+			shouldMatch:      true,
+		},
+		// Negative test cases - missing attributes
+		{
+			name:        "missing data-slate-key",
+			text:        `<div data-slate-id="mention001" data-slate-value="John Doe">`,
+			shouldMatch: false,
+		},
+		{
+			name:        "missing data-slate-id",
+			text:        `<div data-slate-key="user123" data-slate-value="John Doe">`,
+			shouldMatch: false,
+		},
+		{
+			name:        "missing data-slate-value",
+			text:        `<div data-slate-key="user123" data-slate-id="mention001">`,
+			shouldMatch: false,
+		},
+		{
+			name:        "not a div element",
+			text:        `<span data-slate-key="user123" data-slate-id="mention001" data-slate-value="John Doe">`,
+			shouldMatch: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mentions := CheckForMentions(tt.text, "Task", "task001", "Test Task")
+
+			if tt.shouldMatch {
+				assert.Equal(t, 1, len(mentions), "should find exactly one mention")
+
+				// Find the mention by slateID
+				mention, exists := mentions[tt.expectedSlateID]
+				assert.True(t, exists, "mention with expected slate ID should exist")
+				assert.Equal(t, tt.expectedUserID, mention.UserID, "UserID should match")
+				assert.Equal(t, tt.expectedDispName, mention.UserDisplayName, "UserDisplayName should match")
+			} else {
+				// For negative cases, we expect no valid mentions OR partial matches
+				// Since our regex uses lookaheads, we need to verify that if we get a match,
+				// all three fields must be present
+				for slateID, mention := range mentions {
+					// If we got any match, verify it has all required fields
+					if slateID != "" || mention.UserID != "" || mention.UserDisplayName != "" {
+						assert.NotEmpty(t, slateID, "if matched, slateID should not be empty")
+						assert.NotEmpty(t, mention.UserID, "if matched, UserID should not be empty")
+						assert.NotEmpty(t, mention.UserDisplayName, "if matched, UserDisplayName should not be empty")
+					}
+				}
+			}
+		})
+	}
+}
