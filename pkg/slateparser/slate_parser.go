@@ -20,18 +20,13 @@ type Mention struct {
 	ObjectName string
 }
 
-// mentionMatchGroups is the expected number of elements in a regex match result.
-// match[0] = entire matched string (the full div element, not used)
-// match[1] = data-slate-key (userID)
-// match[2] = data-slate-id (slateID)
-// match[3] = data-slate-value (displayName)
-const mentionMatchGroups = 4
-
 var (
-	// mentionRegex matches Slate mention elements with data-slate attributes in any order.
-	// It has 3 capture groups for key, id, and value attributes.
-	mentionRegex = regexp.MustCompile(`<div[^>]*data-slate-key="([^"]*)"[^>]*data-slate-id="([^"]*)"[^>]*data-slate-value="([^"]*)"[^>]*>`)
-
+	// divTagRegex matches div tags with their attributes
+	divTagRegex = regexp.MustCompile(`<div\b([^>]*)>`)
+	// Individual attribute regexes for extracting data-slate-* values
+	slateKeyRegex   = regexp.MustCompile(`\bdata-slate-key="([^"]*)"`)
+	slateIDRegex    = regexp.MustCompile(`\bdata-slate-id="([^"]*)"`)
+	slateValueRegex = regexp.MustCompile(`\bdata-slate-value="([^"]*)"`)
 	// slateAttrRegex matches data-slate-* attributes within HTML tags to verify valid Slate content
 	slateAttrRegex = regexp.MustCompile(`<[^>]+data-slate-(node|key|id)="[^"]*"[^>]*>`)
 )
@@ -41,22 +36,36 @@ var (
 func CheckForMentions(text string, objectType string, objectID string, objectName string) map[string]Mention {
 	mentions := make(map[string]Mention)
 
-	// Find all matches
-	matches := mentionRegex.FindAllStringSubmatch(text, -1)
+	// Find all div tags
+	matches := divTagRegex.FindAllStringSubmatch(text, -1)
 
 	for _, match := range matches {
-		if len(match) >= mentionMatchGroups {
-			userID := match[1]      // data-slate-key (user.ID)
-			slateID := match[2]     // data-slate-id (unique identifier)
-			displayName := match[3] // data-slate-value (user.DisplayName)
+		if len(match) < 2 { //nolint:mnd
+			continue
+		}
 
-			mentions[slateID] = Mention{
-				UserID:          userID,
-				UserDisplayName: displayName,
-				ObjectType:      objectType,
-				ObjectID:        objectID,
-				ObjectName:      objectName,
-			}
+		attrs := match[1] // The attributes portion of the div tag
+
+		// Extract all three required attributes
+		keyMatch := slateKeyRegex.FindStringSubmatch(attrs)
+		idMatch := slateIDRegex.FindStringSubmatch(attrs)
+		valueMatch := slateValueRegex.FindStringSubmatch(attrs)
+
+		// All three attributes must be present
+		if keyMatch == nil || idMatch == nil || valueMatch == nil {
+			continue
+		}
+
+		userID := keyMatch[1]        // data-slate-key (user.ID)
+		slateID := idMatch[1]        // data-slate-id (unique identifier)
+		displayName := valueMatch[1] // data-slate-value (user.DisplayName)
+
+		mentions[slateID] = Mention{
+			UserID:          userID,
+			UserDisplayName: displayName,
+			ObjectType:      objectType,
+			ObjectID:        objectID,
+			ObjectName:      objectName,
 		}
 	}
 
