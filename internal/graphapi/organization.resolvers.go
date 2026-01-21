@@ -84,12 +84,6 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "organization"})
 	}
 
-	if err := generated.OrganizationEdgeCleanup(ctx, id); err != nil {
-		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to cascade delete organization edges")
-
-		return nil, common.NewCascadeDeleteError(ctx, err)
-	}
-
 	return &model.OrganizationDeletePayload{
 		DeletedID: id,
 	}, nil
