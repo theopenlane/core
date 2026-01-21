@@ -116,8 +116,13 @@ var (
 	ErrMissingFileID = errors.New("missing file id")
 	// ErrCannotSetFileOnCreate is returned when trying to set a file id on create mutations
 	ErrCannotSetFileOnCreate = errors.New("cannot set file id on create")
+<<<<<<< Updated upstream
 	// ErrCacheRefreshFailed is returned when the cache refresh request fails
 	ErrCacheRefreshFailed = errors.New("cache refresh request failed")
+=======
+	// ErrNoOrganizationID is returned when no organization ID is found in context
+	ErrNoOrganizationID = errors.New("no valid organization ID found")
+>>>>>>> Stashed changes
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
