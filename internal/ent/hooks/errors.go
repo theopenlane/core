@@ -116,6 +116,8 @@ var (
 	ErrMissingFileID = errors.New("missing file id")
 	// ErrCannotSetFileOnCreate is returned when trying to set a file id on create mutations
 	ErrCannotSetFileOnCreate = errors.New("cannot set file id on create")
+	// ErrNoOrganizationID is returned when no organization ID is found in context
+	ErrNoOrganizationID = errors.New("no valid organization ID found")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
