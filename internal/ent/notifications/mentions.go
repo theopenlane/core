@@ -65,6 +65,10 @@ type mentionNotificationInput struct {
 	// applicable. It is optional and may be empty when the mention is not
 	// tied to a specific note or when that context is unavailable.
 	noteID string
+	// isComment indicates whether the mention occurred within a comment/note
+	// (true) or directly in an object's details field (false). This affects
+	// the notification message wording.
+	isComment bool
 }
 
 // handleNoteMutation processes note mutations and creates notifications for mentioned users
@@ -124,6 +128,7 @@ func handleNoteMutation(ctx *soiree.EventContext, payload *events.MutationPayloa
 		objectName:       parentName,
 		ownerID:          fields.ownerID,
 		noteID:           fields.entityID,
+		isComment:        true, // This is a mention from a comment/note
 	}
 
 	if err := addMentionNotification(ctx, input); err != nil {
@@ -418,10 +423,19 @@ func addMentionNotification(ctx *soiree.EventContext, input mentionNotificationI
 	}
 
 	topic := enums.NotificationTopicMention
+
+	// Build the notification body based on whether this is a comment mention or direct mention
+	var body string
+	if input.isComment {
+		body = fmt.Sprintf("You were mentioned in a comment on %s: %s", input.objectType, input.objectName)
+	} else {
+		body = fmt.Sprintf("You were mentioned in %s: %s", input.objectType, input.objectName)
+	}
+
 	notifInput := &generated.CreateNotificationInput{
 		NotificationType: enums.NotificationTypeUser,
 		Title:            "You were mentioned",
-		Body:             fmt.Sprintf("You were mentioned in a comment on %s: %s", input.objectType, input.objectName),
+		Body:             body,
 		Data:             dataMap,
 		OwnerID:          &input.ownerID,
 		Topic:            &topic,
@@ -568,7 +582,8 @@ func handleObjectMentions(ctx *soiree.EventContext, payload *events.MutationPayl
 		objectID:         details.objectID,
 		objectName:       details.objectName,
 		ownerID:          details.ownerID,
-		noteID:           "", // No note ID for direct object mentions
+		noteID:           "",    // No note ID for direct object mentions
+		isComment:        false, // This is a direct mention in object details, not a comment
 	}
 
 	if err := addMentionNotification(ctx, input); err != nil {

@@ -252,7 +252,7 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
 	}
 	if _u.mutation.TopicCleared() {
-		_spec.ClearField(notification.FieldTopic, field.TypeString)
+		_spec.ClearField(notification.FieldTopic, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -557,7 +557,7 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
 	}
 	if _u.mutation.TopicCleared() {
-		_spec.ClearField(notification.FieldTopic, field.TypeString)
+		_spec.ClearField(notification.FieldTopic, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
