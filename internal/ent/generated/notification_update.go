@@ -12,12 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -106,94 +104,6 @@ func (_u *NotificationUpdate) ClearOwnerID() *NotificationUpdate {
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *NotificationUpdate) SetUserID(v string) *NotificationUpdate {
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableUserID(v *string) *NotificationUpdate {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// ClearUserID clears the value of the "user_id" field.
-func (_u *NotificationUpdate) ClearUserID() *NotificationUpdate {
-	_u.mutation.ClearUserID()
-	return _u
-}
-
-// SetNotificationType sets the "notification_type" field.
-func (_u *NotificationUpdate) SetNotificationType(v enums.NotificationType) *NotificationUpdate {
-	_u.mutation.SetNotificationType(v)
-	return _u
-}
-
-// SetNillableNotificationType sets the "notification_type" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableNotificationType(v *enums.NotificationType) *NotificationUpdate {
-	if v != nil {
-		_u.SetNotificationType(*v)
-	}
-	return _u
-}
-
-// SetObjectType sets the "object_type" field.
-func (_u *NotificationUpdate) SetObjectType(v string) *NotificationUpdate {
-	_u.mutation.SetObjectType(v)
-	return _u
-}
-
-// SetNillableObjectType sets the "object_type" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableObjectType(v *string) *NotificationUpdate {
-	if v != nil {
-		_u.SetObjectType(*v)
-	}
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *NotificationUpdate) SetTitle(v string) *NotificationUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableTitle(v *string) *NotificationUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetBody sets the "body" field.
-func (_u *NotificationUpdate) SetBody(v string) *NotificationUpdate {
-	_u.mutation.SetBody(v)
-	return _u
-}
-
-// SetNillableBody sets the "body" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableBody(v *string) *NotificationUpdate {
-	if v != nil {
-		_u.SetBody(*v)
-	}
-	return _u
-}
-
-// SetData sets the "data" field.
-func (_u *NotificationUpdate) SetData(v map[string]interface{}) *NotificationUpdate {
-	_u.mutation.SetData(v)
-	return _u
-}
-
-// ClearData clears the value of the "data" field.
-func (_u *NotificationUpdate) ClearData() *NotificationUpdate {
-	_u.mutation.ClearData()
-	return _u
-}
-
 // SetReadAt sets the "read_at" field.
 func (_u *NotificationUpdate) SetReadAt(v models.DateTime) *NotificationUpdate {
 	_u.mutation.SetReadAt(v)
@@ -214,52 +124,9 @@ func (_u *NotificationUpdate) ClearReadAt() *NotificationUpdate {
 	return _u
 }
 
-// SetChannels sets the "channels" field.
-func (_u *NotificationUpdate) SetChannels(v []enums.Channel) *NotificationUpdate {
-	_u.mutation.SetChannels(v)
-	return _u
-}
-
-// AppendChannels appends value to the "channels" field.
-func (_u *NotificationUpdate) AppendChannels(v []enums.Channel) *NotificationUpdate {
-	_u.mutation.AppendChannels(v)
-	return _u
-}
-
-// ClearChannels clears the value of the "channels" field.
-func (_u *NotificationUpdate) ClearChannels() *NotificationUpdate {
-	_u.mutation.ClearChannels()
-	return _u
-}
-
-// SetTopic sets the "topic" field.
-func (_u *NotificationUpdate) SetTopic(v enums.NotificationTopic) *NotificationUpdate {
-	_u.mutation.SetTopic(v)
-	return _u
-}
-
-// SetNillableTopic sets the "topic" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableTopic(v *enums.NotificationTopic) *NotificationUpdate {
-	if v != nil {
-		_u.SetTopic(*v)
-	}
-	return _u
-}
-
-// ClearTopic clears the value of the "topic" field.
-func (_u *NotificationUpdate) ClearTopic() *NotificationUpdate {
-	_u.mutation.ClearTopic()
-	return _u
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *NotificationUpdate) SetOwner(v *Organization) *NotificationUpdate {
 	return _u.SetOwnerID(v.ID)
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (_u *NotificationUpdate) SetUser(v *User) *NotificationUpdate {
-	return _u.SetUserID(v.ID)
 }
 
 // Mutation returns the NotificationMutation object of the builder.
@@ -270,12 +137,6 @@ func (_u *NotificationUpdate) Mutation() *NotificationMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *NotificationUpdate) ClearOwner() *NotificationUpdate {
 	_u.mutation.ClearOwner()
-	return _u
-}
-
-// ClearUser clears the "user" edge to the User entity.
-func (_u *NotificationUpdate) ClearUser() *NotificationUpdate {
-	_u.mutation.ClearUser()
 	return _u
 }
 
@@ -328,31 +189,6 @@ func (_u *NotificationUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Notification.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.NotificationType(); ok {
-		if err := notification.NotificationTypeValidator(v); err != nil {
-			return &ValidationError{Name: "notification_type", err: fmt.Errorf(`generated: validator failed for field "Notification.notification_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ObjectType(); ok {
-		if err := notification.ObjectTypeValidator(v); err != nil {
-			return &ValidationError{Name: "object_type", err: fmt.Errorf(`generated: validator failed for field "Notification.object_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Title(); ok {
-		if err := notification.TitleValidator(v); err != nil {
-			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Notification.title": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Body(); ok {
-		if err := notification.BodyValidator(v); err != nil {
-			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Topic(); ok {
-		if err := notification.TopicValidator(v); err != nil {
-			return &ValidationError{Name: "topic", err: fmt.Errorf(`generated: validator failed for field "Notification.topic": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -403,21 +239,6 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(notification.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.NotificationType(); ok {
-		_spec.SetField(notification.FieldNotificationType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ObjectType(); ok {
-		_spec.SetField(notification.FieldObjectType, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(notification.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Body(); ok {
-		_spec.SetField(notification.FieldBody, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Data(); ok {
-		_spec.SetField(notification.FieldData, field.TypeJSON, value)
-	}
 	if _u.mutation.DataCleared() {
 		_spec.ClearField(notification.FieldData, field.TypeJSON)
 	}
@@ -427,22 +248,11 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.ReadAtCleared() {
 		_spec.ClearField(notification.FieldReadAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Channels(); ok {
-		_spec.SetField(notification.FieldChannels, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedChannels(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, notification.FieldChannels, value)
-		})
-	}
 	if _u.mutation.ChannelsCleared() {
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Topic(); ok {
-		_spec.SetField(notification.FieldTopic, field.TypeEnum, value)
-	}
 	if _u.mutation.TopicCleared() {
-		_spec.ClearField(notification.FieldTopic, field.TypeEnum)
+		_spec.ClearField(notification.FieldTopic, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -467,37 +277,6 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Notification
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   notification.UserTable,
-			Columns: []string{notification.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Notification
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   notification.UserTable,
-			Columns: []string{notification.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Notification
@@ -600,94 +379,6 @@ func (_u *NotificationUpdateOne) ClearOwnerID() *NotificationUpdateOne {
 	return _u
 }
 
-// SetUserID sets the "user_id" field.
-func (_u *NotificationUpdateOne) SetUserID(v string) *NotificationUpdateOne {
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableUserID(v *string) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// ClearUserID clears the value of the "user_id" field.
-func (_u *NotificationUpdateOne) ClearUserID() *NotificationUpdateOne {
-	_u.mutation.ClearUserID()
-	return _u
-}
-
-// SetNotificationType sets the "notification_type" field.
-func (_u *NotificationUpdateOne) SetNotificationType(v enums.NotificationType) *NotificationUpdateOne {
-	_u.mutation.SetNotificationType(v)
-	return _u
-}
-
-// SetNillableNotificationType sets the "notification_type" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableNotificationType(v *enums.NotificationType) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetNotificationType(*v)
-	}
-	return _u
-}
-
-// SetObjectType sets the "object_type" field.
-func (_u *NotificationUpdateOne) SetObjectType(v string) *NotificationUpdateOne {
-	_u.mutation.SetObjectType(v)
-	return _u
-}
-
-// SetNillableObjectType sets the "object_type" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableObjectType(v *string) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetObjectType(*v)
-	}
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *NotificationUpdateOne) SetTitle(v string) *NotificationUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableTitle(v *string) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetBody sets the "body" field.
-func (_u *NotificationUpdateOne) SetBody(v string) *NotificationUpdateOne {
-	_u.mutation.SetBody(v)
-	return _u
-}
-
-// SetNillableBody sets the "body" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableBody(v *string) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetBody(*v)
-	}
-	return _u
-}
-
-// SetData sets the "data" field.
-func (_u *NotificationUpdateOne) SetData(v map[string]interface{}) *NotificationUpdateOne {
-	_u.mutation.SetData(v)
-	return _u
-}
-
-// ClearData clears the value of the "data" field.
-func (_u *NotificationUpdateOne) ClearData() *NotificationUpdateOne {
-	_u.mutation.ClearData()
-	return _u
-}
-
 // SetReadAt sets the "read_at" field.
 func (_u *NotificationUpdateOne) SetReadAt(v models.DateTime) *NotificationUpdateOne {
 	_u.mutation.SetReadAt(v)
@@ -708,52 +399,9 @@ func (_u *NotificationUpdateOne) ClearReadAt() *NotificationUpdateOne {
 	return _u
 }
 
-// SetChannels sets the "channels" field.
-func (_u *NotificationUpdateOne) SetChannels(v []enums.Channel) *NotificationUpdateOne {
-	_u.mutation.SetChannels(v)
-	return _u
-}
-
-// AppendChannels appends value to the "channels" field.
-func (_u *NotificationUpdateOne) AppendChannels(v []enums.Channel) *NotificationUpdateOne {
-	_u.mutation.AppendChannels(v)
-	return _u
-}
-
-// ClearChannels clears the value of the "channels" field.
-func (_u *NotificationUpdateOne) ClearChannels() *NotificationUpdateOne {
-	_u.mutation.ClearChannels()
-	return _u
-}
-
-// SetTopic sets the "topic" field.
-func (_u *NotificationUpdateOne) SetTopic(v enums.NotificationTopic) *NotificationUpdateOne {
-	_u.mutation.SetTopic(v)
-	return _u
-}
-
-// SetNillableTopic sets the "topic" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableTopic(v *enums.NotificationTopic) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetTopic(*v)
-	}
-	return _u
-}
-
-// ClearTopic clears the value of the "topic" field.
-func (_u *NotificationUpdateOne) ClearTopic() *NotificationUpdateOne {
-	_u.mutation.ClearTopic()
-	return _u
-}
-
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *NotificationUpdateOne) SetOwner(v *Organization) *NotificationUpdateOne {
 	return _u.SetOwnerID(v.ID)
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (_u *NotificationUpdateOne) SetUser(v *User) *NotificationUpdateOne {
-	return _u.SetUserID(v.ID)
 }
 
 // Mutation returns the NotificationMutation object of the builder.
@@ -764,12 +412,6 @@ func (_u *NotificationUpdateOne) Mutation() *NotificationMutation {
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (_u *NotificationUpdateOne) ClearOwner() *NotificationUpdateOne {
 	_u.mutation.ClearOwner()
-	return _u
-}
-
-// ClearUser clears the "user" edge to the User entity.
-func (_u *NotificationUpdateOne) ClearUser() *NotificationUpdateOne {
-	_u.mutation.ClearUser()
 	return _u
 }
 
@@ -833,31 +475,6 @@ func (_u *NotificationUpdateOne) check() error {
 	if v, ok := _u.mutation.OwnerID(); ok {
 		if err := notification.OwnerIDValidator(v); err != nil {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Notification.owner_id": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.NotificationType(); ok {
-		if err := notification.NotificationTypeValidator(v); err != nil {
-			return &ValidationError{Name: "notification_type", err: fmt.Errorf(`generated: validator failed for field "Notification.notification_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ObjectType(); ok {
-		if err := notification.ObjectTypeValidator(v); err != nil {
-			return &ValidationError{Name: "object_type", err: fmt.Errorf(`generated: validator failed for field "Notification.object_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Title(); ok {
-		if err := notification.TitleValidator(v); err != nil {
-			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "Notification.title": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Body(); ok {
-		if err := notification.BodyValidator(v); err != nil {
-			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Topic(); ok {
-		if err := notification.TopicValidator(v); err != nil {
-			return &ValidationError{Name: "topic", err: fmt.Errorf(`generated: validator failed for field "Notification.topic": %w`, err)}
 		}
 	}
 	return nil
@@ -927,21 +544,6 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(notification.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.NotificationType(); ok {
-		_spec.SetField(notification.FieldNotificationType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ObjectType(); ok {
-		_spec.SetField(notification.FieldObjectType, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(notification.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Body(); ok {
-		_spec.SetField(notification.FieldBody, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Data(); ok {
-		_spec.SetField(notification.FieldData, field.TypeJSON, value)
-	}
 	if _u.mutation.DataCleared() {
 		_spec.ClearField(notification.FieldData, field.TypeJSON)
 	}
@@ -951,22 +553,11 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	if _u.mutation.ReadAtCleared() {
 		_spec.ClearField(notification.FieldReadAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Channels(); ok {
-		_spec.SetField(notification.FieldChannels, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedChannels(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, notification.FieldChannels, value)
-		})
-	}
 	if _u.mutation.ChannelsCleared() {
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Topic(); ok {
-		_spec.SetField(notification.FieldTopic, field.TypeEnum, value)
-	}
 	if _u.mutation.TopicCleared() {
-		_spec.ClearField(notification.FieldTopic, field.TypeEnum)
+		_spec.ClearField(notification.FieldTopic, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -991,37 +582,6 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Notification
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   notification.UserTable,
-			Columns: []string{notification.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Notification
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   notification.UserTable,
-			Columns: []string{notification.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Notification
