@@ -4964,6 +4964,7 @@ type ComplexityRoot struct {
 		BackgroundColor          func(childComplexity int) int
 		BlockedGroups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CompanyDomain            func(childComplexity int) int
+		CompanyName              func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		Editors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -34031,6 +34032,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.CompanyDomain(childComplexity), true
 
+	case "TrustCenterSetting.companyName":
+		if e.complexity.TrustCenterSetting.CompanyName == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.CompanyName(childComplexity), true
+
 	case "TrustCenterSetting.createdAt":
 		if e.complexity.TrustCenterSetting.CreatedAt == nil {
 			break
@@ -50053,6 +50061,10 @@ input CreateTrustCenterSettingInput {
   title of the trust center
   """
   title: String
+  """
+  company name for the trust center, defaults to the organization's display name
+  """
+  companyName: String
   """
   overview of the trust center
   """
@@ -88827,6 +88839,10 @@ type TrustCenterSetting implements Node {
   """
   title: String
   """
+  company name for the trust center, defaults to the organization's display name
+  """
+  companyName: String
+  """
   overview of the trust center
   """
   overview: String
@@ -89146,6 +89162,24 @@ input TrustCenterSettingWhereInput {
   titleNotNil: Boolean
   titleEqualFold: String
   titleContainsFold: String
+  """
+  company_name field predicates
+  """
+  companyName: String
+  companyNameNEQ: String
+  companyNameIn: [String!]
+  companyNameNotIn: [String!]
+  companyNameGT: String
+  companyNameGTE: String
+  companyNameLT: String
+  companyNameLTE: String
+  companyNameContains: String
+  companyNameHasPrefix: String
+  companyNameHasSuffix: String
+  companyNameIsNil: Boolean
+  companyNameNotNil: Boolean
+  companyNameEqualFold: String
+  companyNameContainsFold: String
   """
   overview field predicates
   """
@@ -95427,6 +95461,11 @@ input UpdateTrustCenterSettingInput {
   """
   title: String
   clearTitle: Boolean
+  """
+  company name for the trust center, defaults to the organization's display name
+  """
+  companyName: String
+  clearCompanyName: Boolean
   """
   overview of the trust center
   """

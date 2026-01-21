@@ -170,6 +170,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableTitle(v *string) *TrustCen
 	return _c
 }
 
+// SetCompanyName sets the "company_name" field.
+func (_c *TrustCenterSettingHistoryCreate) SetCompanyName(v string) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetCompanyName(v)
+	return _c
+}
+
+// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableCompanyName(v *string) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetCompanyName(*v)
+	}
+	return _c
+}
+
 // SetOverview sets the "overview" field.
 func (_c *TrustCenterSettingHistoryCreate) SetOverview(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetOverview(v)
@@ -622,6 +636,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if value, ok := _c.mutation.CompanyName(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyName, field.TypeString, value)
+		_node.CompanyName = value
 	}
 	if value, ok := _c.mutation.Overview(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)

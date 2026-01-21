@@ -135,8 +135,9 @@ func serve(ctx context.Context) error {
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		PreviewZoneID: so.Config.Settings.Server.TrustCenterPreviewZoneID,
-		CnameTarget:   so.Config.Settings.Server.TrustCenterCnameTarget,
+		PreviewZoneID:            so.Config.Settings.Server.TrustCenterPreviewZoneID,
+		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
+		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
 	})
 
 	// create history client

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 	"time"
@@ -77,10 +78,11 @@ const (
 
 // GraphTestSuite handles the setup and teardown between tests
 type GraphTestSuite struct {
-	client            *client
-	tf                *testutils.TestFixture
-	ofgaTF            *fgatest.OpenFGATestFixture
-	stripeMockBackend *mocks.MockStripeBackend
+	client             *client
+	tf                 *testutils.TestFixture
+	ofgaTF             *fgatest.OpenFGATestFixture
+	stripeMockBackend  *mocks.MockStripeBackend
+	cacheRefreshServer *httptest.Server
 }
 
 // client contains all the clients the test need to interact with
@@ -126,6 +128,19 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	if testing.Verbose() {
 		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
 	}
+
+	// setup test server for cache refresh requests
+	suite.cacheRefreshServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	// Extract host from test server URL (e.g., "127.0.0.1:12345" from "http://127.0.0.1:12345")
+	testServerHost := suite.cacheRefreshServer.URL[len("http://"):]
+
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		CacheRefreshScheme:       "http",
+		DefaultTrustCenterDomain: testServerHost,
+	})
 
 	// setup db container
 	suite.tf = entdb.NewTestFixture()
@@ -257,6 +272,11 @@ func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	// terminate all fga containers
 	err = suite.ofgaTF.TeardownFixture()
 	requireNoError(t, err)
+
+	// close the cache refresh test server
+	if suite.cacheRefreshServer != nil {
+		suite.cacheRefreshServer.Close()
+	}
 }
 
 // expectUpload sets up the mock object store to expect an upload and related operations
