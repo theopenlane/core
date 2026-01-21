@@ -109,21 +109,21 @@ func getHeadingLevel(p *docx.Paragraph) int {
 
 	switch style {
 	case "title":
-		return 1
+		return 1 //nolint:mnd
 	case "subtitle":
-		return 2
+		return 2 //nolint:mnd
 	case "h1":
-		return 1
+		return 1 //nolint:mnd
 	case "h2":
-		return 2
+		return 2 //nolint:mnd
 	case "h3":
-		return 3
+		return 3 //nolint:mnd
 	case "h4":
-		return 4
+		return 4 //nolint:mnd
 	case "h5":
-		return 5
+		return 5 //nolint:mnd
 	case "h6":
-		return 6
+		return 6 //nolint:mnd
 	}
 
 	return 0
