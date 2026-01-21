@@ -11,7 +11,7 @@ query GetAllTrustCenterDocHistories {
     }
     edges {
       node {
-        category
+        trustCenterDocKindName
         createdAt
         createdBy
         fileID
@@ -45,7 +45,7 @@ query GetTrustCenterDocHistories($first: Int, $last: Int, $where: TrustCenterDoc
     }
     edges {
       node {
-        category
+        trustCenterDocKindName
         createdAt
         createdBy
         fileID

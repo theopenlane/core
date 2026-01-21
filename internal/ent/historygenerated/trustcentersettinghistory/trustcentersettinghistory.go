@@ -42,6 +42,8 @@ const (
 	FieldTrustCenterID = "trust_center_id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// FieldCompanyName holds the string denoting the company_name field in the database.
+	FieldCompanyName = "company_name"
 	// FieldOverview holds the string denoting the overview field in the database.
 	FieldOverview = "overview"
 	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
@@ -70,6 +72,14 @@ const (
 	FieldSecondaryForegroundColor = "secondary_foreground_color"
 	// FieldEnvironment holds the string denoting the environment field in the database.
 	FieldEnvironment = "environment"
+	// FieldRemoveBranding holds the string denoting the remove_branding field in the database.
+	FieldRemoveBranding = "remove_branding"
+	// FieldCompanyDomain holds the string denoting the company_domain field in the database.
+	FieldCompanyDomain = "company_domain"
+	// FieldSecurityContact holds the string denoting the security_contact field in the database.
+	FieldSecurityContact = "security_contact"
+	// FieldNdaApprovalRequired holds the string denoting the nda_approval_required field in the database.
+	FieldNdaApprovalRequired = "nda_approval_required"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -88,6 +98,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTrustCenterID,
 	FieldTitle,
+	FieldCompanyName,
 	FieldOverview,
 	FieldLogoRemoteURL,
 	FieldLogoLocalFileID,
@@ -102,6 +113,10 @@ var Columns = []string{
 	FieldSecondaryBackgroundColor,
 	FieldSecondaryForegroundColor,
 	FieldEnvironment,
+	FieldRemoveBranding,
+	FieldCompanyDomain,
+	FieldSecurityContact,
+	FieldNdaApprovalRequired,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -131,6 +146,10 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultRemoveBranding holds the default value on creation for the "remove_branding" field.
+	DefaultRemoveBranding bool
+	// DefaultNdaApprovalRequired holds the default value on creation for the "nda_approval_required" field.
+	DefaultNdaApprovalRequired bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -232,6 +251,11 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
+// ByCompanyName orders the results by the company_name field.
+func ByCompanyName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCompanyName, opts...).ToFunc()
+}
+
 // ByOverview orders the results by the overview field.
 func ByOverview(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOverview, opts...).ToFunc()
@@ -300,6 +324,26 @@ func BySecondaryForegroundColor(opts ...sql.OrderTermOption) OrderOption {
 // ByEnvironment orders the results by the environment field.
 func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnvironment, opts...).ToFunc()
+}
+
+// ByRemoveBranding orders the results by the remove_branding field.
+func ByRemoveBranding(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRemoveBranding, opts...).ToFunc()
+}
+
+// ByCompanyDomain orders the results by the company_domain field.
+func ByCompanyDomain(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCompanyDomain, opts...).ToFunc()
+}
+
+// BySecurityContact orders the results by the security_contact field.
+func BySecurityContact(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityContact, opts...).ToFunc()
+}
+
+// ByNdaApprovalRequired orders the results by the nda_approval_required field.
+func ByNdaApprovalRequired(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNdaApprovalRequired, opts...).ToFunc()
 }
 
 var (

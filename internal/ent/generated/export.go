@@ -32,6 +32,8 @@ type Export struct {
 	DeletedAt time.Time `json:"deleted_at,omitempty"`
 	// DeletedBy holds the value of the "deleted_by" field.
 	DeletedBy string `json:"deleted_by,omitempty"`
+	// the user who initiated the request
+	RequestorID string `json:"requestor_id,omitempty"`
 	// the organization id that owns the object
 	OwnerID string `json:"owner_id,omitempty"`
 	// the type of export, e.g., control, policy, etc.
@@ -40,8 +42,6 @@ type Export struct {
 	Format enums.ExportFormat `json:"format,omitempty"`
 	// the status of the export, e.g., pending, ready, failed
 	Status enums.ExportStatus `json:"status,omitempty"`
-	// the user who initiated the export
-	RequestorID string `json:"requestor_id,omitempty"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
 	// the specific filters to run against the exported data. This should be a well formatted graphql query
@@ -108,7 +108,7 @@ func (*Export) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case export.FieldFields:
 			values[i] = new([]byte)
-		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldRequestorID, export.FieldFilters, export.FieldErrorMessage:
+		case export.FieldID, export.FieldCreatedBy, export.FieldUpdatedBy, export.FieldDeletedBy, export.FieldRequestorID, export.FieldOwnerID, export.FieldExportType, export.FieldFormat, export.FieldStatus, export.FieldFilters, export.FieldErrorMessage:
 			values[i] = new(sql.NullString)
 		case export.FieldCreatedAt, export.FieldUpdatedAt, export.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -169,6 +169,12 @@ func (_m *Export) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.DeletedBy = value.String
 			}
+		case export.FieldRequestorID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field requestor_id", values[i])
+			} else if value.Valid {
+				_m.RequestorID = value.String
+			}
 		case export.FieldOwnerID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
@@ -192,12 +198,6 @@ func (_m *Export) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.ExportStatus(value.String)
-			}
-		case export.FieldRequestorID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field requestor_id", values[i])
-			} else if value.Valid {
-				_m.RequestorID = value.String
 			}
 		case export.FieldFields:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -288,6 +288,9 @@ func (_m *Export) String() string {
 	builder.WriteString("deleted_by=")
 	builder.WriteString(_m.DeletedBy)
 	builder.WriteString(", ")
+	builder.WriteString("requestor_id=")
+	builder.WriteString(_m.RequestorID)
+	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
@@ -299,9 +302,6 @@ func (_m *Export) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
-	builder.WriteString(", ")
-	builder.WriteString("requestor_id=")
-	builder.WriteString(_m.RequestorID)
 	builder.WriteString(", ")
 	builder.WriteString("fields=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Fields))

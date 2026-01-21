@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"net/mail"
+
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -8,14 +10,17 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // TrustCenterSetting holds the schema definition for the TrustCenterSetting entity
@@ -47,6 +52,10 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Optional(),
 		field.String("title").
 			Comment("title of the trust center").
+			MaxLen(trustCenterNameMaxLen).
+			Optional(),
+		field.String("company_name").
+			Comment("company name for the trust center, defaults to the organization's display name").
 			MaxLen(trustCenterNameMaxLen).
 			Optional(),
 		field.Text("overview").
@@ -122,6 +131,31 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Immutable().
 			Optional().
 			Comment("environment of the trust center"),
+		field.Bool("remove_branding").
+			Comment("whether to remove branding from the trust center").
+			Default(false).
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			),
+		field.String("company_domain").
+			Comment("URL to the company's homepage").
+			MaxLen(urlMaxLen).
+			Validate(validator.ValidateURL()).
+			Optional().
+			Nillable(),
+		field.String("security_contact").
+			Comment("email address for security contact").
+			Optional().
+			Nillable().
+			Validate(func(email string) error {
+				_, err := mail.ParseAddress(email)
+				return err
+			}),
+		field.Bool("nda_approval_required").
+			Comment("whether NDA requests require approval before being processed").
+			Default(false).
+			Optional(),
 	}
 }
 
@@ -133,6 +167,7 @@ func (t TrustCenterSetting) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.TrustCenterSetting](t,
 				withParents(TrustCenter{}),
 			),
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -140,18 +175,23 @@ func (t TrustCenterSetting) Mixin() []ent.Mixin {
 // Edges of the TrustCenterSetting
 func (t TrustCenterSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(t, File{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
 			name:       "logo_file",
 			t:          File.Type,
 			field:      "logo_local_file_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(File{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
 			name:       "favicon_file",
 			t:          File.Type,
 			field:      "favicon_local_file_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(File{}.Name()),
+			},
 		}),
 	}
 }
@@ -175,6 +215,7 @@ func (TrustCenterSetting) Hooks() []ent.Hook {
 func (t TrustCenterSetting) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			rule.AllowIfTrustCenterEditor(),
 			policy.CanCreateObjectsUnderParents([]string{
 				TrustCenter{}.Name(),
 			}),
@@ -199,6 +240,5 @@ func (TrustCenterSetting) Modules() []models.OrgModule {
 func (t TrustCenterSetting) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SettingsChecks("trust_center"),
-		entfga.SelfAccessChecks(),
 	}
 }

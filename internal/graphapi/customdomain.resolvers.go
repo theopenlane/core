@@ -153,6 +153,11 @@ func (r *mutationResolver) DeleteBulkCustomDomain(ctx context.Context, ids []str
 	return r.bulkDeleteCustomDomain(ctx, ids)
 }
 
+// ValidateCustomDomain is the resolver for the validateCustomDomain field.
+func (r *mutationResolver) ValidateCustomDomain(ctx context.Context, id string) (*model.CustomDomainValidatePayload, error) {
+	return validateCustomDomain(ctx, id, r)
+}
+
 // CustomDomain is the resolver for the customDomain field.
 func (r *queryResolver) CustomDomain(ctx context.Context, id string) (*generated.CustomDomain, error) {
 	query, err := withTransactionalMutation(ctx).CustomDomain.Query().Where(customdomain.ID(id)).CollectFields(ctx)

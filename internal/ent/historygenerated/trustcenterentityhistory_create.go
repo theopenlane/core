@@ -16,21 +16,21 @@ import (
 	"github.com/theopenlane/entx/history"
 )
 
-// TrustcenterEntityHistoryCreate is the builder for creating a TrustcenterEntityHistory entity.
-type TrustcenterEntityHistoryCreate struct {
+// TrustCenterEntityHistoryCreate is the builder for creating a TrustCenterEntityHistory entity.
+type TrustCenterEntityHistoryCreate struct {
 	config
-	mutation *TrustcenterEntityHistoryMutation
+	mutation *TrustCenterEntityHistoryMutation
 	hooks    []Hook
 }
 
 // SetHistoryTime sets the "history_time" field.
-func (_c *TrustcenterEntityHistoryCreate) SetHistoryTime(v time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetHistoryTime(v time.Time) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetHistoryTime(v)
 	return _c
 }
 
 // SetNillableHistoryTime sets the "history_time" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableHistoryTime(v *time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableHistoryTime(v *time.Time) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetHistoryTime(*v)
 	}
@@ -38,13 +38,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableHistoryTime(v *time.Time) *
 }
 
 // SetRef sets the "ref" field.
-func (_c *TrustcenterEntityHistoryCreate) SetRef(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetRef(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetRef(v)
 	return _c
 }
 
 // SetNillableRef sets the "ref" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableRef(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableRef(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetRef(*v)
 	}
@@ -52,19 +52,19 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableRef(v *string) *Trustcenter
 }
 
 // SetOperation sets the "operation" field.
-func (_c *TrustcenterEntityHistoryCreate) SetOperation(v history.OpType) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetOperation(v history.OpType) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetOperation(v)
 	return _c
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (_c *TrustcenterEntityHistoryCreate) SetCreatedAt(v time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetCreatedAt(v time.Time) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetCreatedAt(v)
 	return _c
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableCreatedAt(v *time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableCreatedAt(v *time.Time) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetCreatedAt(*v)
 	}
@@ -72,13 +72,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableCreatedAt(v *time.Time) *Tr
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (_c *TrustcenterEntityHistoryCreate) SetUpdatedAt(v time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetUpdatedAt(v time.Time) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetUpdatedAt(v)
 	return _c
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableUpdatedAt(v *time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableUpdatedAt(v *time.Time) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetUpdatedAt(*v)
 	}
@@ -86,13 +86,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableUpdatedAt(v *time.Time) *Tr
 }
 
 // SetCreatedBy sets the "created_by" field.
-func (_c *TrustcenterEntityHistoryCreate) SetCreatedBy(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetCreatedBy(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetCreatedBy(v)
 	return _c
 }
 
 // SetNillableCreatedBy sets the "created_by" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableCreatedBy(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableCreatedBy(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetCreatedBy(*v)
 	}
@@ -100,13 +100,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableCreatedBy(v *string) *Trust
 }
 
 // SetUpdatedBy sets the "updated_by" field.
-func (_c *TrustcenterEntityHistoryCreate) SetUpdatedBy(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetUpdatedBy(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetUpdatedBy(v)
 	return _c
 }
 
 // SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableUpdatedBy(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableUpdatedBy(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetUpdatedBy(*v)
 	}
@@ -114,13 +114,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableUpdatedBy(v *string) *Trust
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (_c *TrustcenterEntityHistoryCreate) SetDeletedAt(v time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetDeletedAt(v time.Time) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetDeletedAt(v)
 	return _c
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableDeletedAt(v *time.Time) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableDeletedAt(v *time.Time) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetDeletedAt(*v)
 	}
@@ -128,13 +128,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableDeletedAt(v *time.Time) *Tr
 }
 
 // SetDeletedBy sets the "deleted_by" field.
-func (_c *TrustcenterEntityHistoryCreate) SetDeletedBy(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetDeletedBy(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetDeletedBy(v)
 	return _c
 }
 
 // SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableDeletedBy(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableDeletedBy(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetDeletedBy(*v)
 	}
@@ -142,13 +142,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableDeletedBy(v *string) *Trust
 }
 
 // SetLogoFileID sets the "logo_file_id" field.
-func (_c *TrustcenterEntityHistoryCreate) SetLogoFileID(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetLogoFileID(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetLogoFileID(v)
 	return _c
 }
 
 // SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableLogoFileID(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableLogoFileID(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetLogoFileID(*v)
 	}
@@ -156,13 +156,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableLogoFileID(v *string) *Trus
 }
 
 // SetURL sets the "url" field.
-func (_c *TrustcenterEntityHistoryCreate) SetURL(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetURL(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetURL(v)
 	return _c
 }
 
 // SetNillableURL sets the "url" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableURL(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableURL(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetURL(*v)
 	}
@@ -170,13 +170,13 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableURL(v *string) *Trustcenter
 }
 
 // SetTrustCenterID sets the "trust_center_id" field.
-func (_c *TrustcenterEntityHistoryCreate) SetTrustCenterID(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetTrustCenterID(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetTrustCenterID(v)
 	return _c
 }
 
 // SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableTrustCenterID(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableTrustCenterID(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetTrustCenterID(*v)
 	}
@@ -184,19 +184,19 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableTrustCenterID(v *string) *T
 }
 
 // SetName sets the "name" field.
-func (_c *TrustcenterEntityHistoryCreate) SetName(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetName(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetName(v)
 	return _c
 }
 
 // SetEntityTypeID sets the "entity_type_id" field.
-func (_c *TrustcenterEntityHistoryCreate) SetEntityTypeID(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetEntityTypeID(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetEntityTypeID(v)
 	return _c
 }
 
 // SetNillableEntityTypeID sets the "entity_type_id" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableEntityTypeID(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableEntityTypeID(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetEntityTypeID(*v)
 	}
@@ -204,26 +204,26 @@ func (_c *TrustcenterEntityHistoryCreate) SetNillableEntityTypeID(v *string) *Tr
 }
 
 // SetID sets the "id" field.
-func (_c *TrustcenterEntityHistoryCreate) SetID(v string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetID(v string) *TrustCenterEntityHistoryCreate {
 	_c.mutation.SetID(v)
 	return _c
 }
 
 // SetNillableID sets the "id" field if the given value is not nil.
-func (_c *TrustcenterEntityHistoryCreate) SetNillableID(v *string) *TrustcenterEntityHistoryCreate {
+func (_c *TrustCenterEntityHistoryCreate) SetNillableID(v *string) *TrustCenterEntityHistoryCreate {
 	if v != nil {
 		_c.SetID(*v)
 	}
 	return _c
 }
 
-// Mutation returns the TrustcenterEntityHistoryMutation object of the builder.
-func (_c *TrustcenterEntityHistoryCreate) Mutation() *TrustcenterEntityHistoryMutation {
+// Mutation returns the TrustCenterEntityHistoryMutation object of the builder.
+func (_c *TrustCenterEntityHistoryCreate) Mutation() *TrustCenterEntityHistoryMutation {
 	return _c.mutation
 }
 
-// Save creates the TrustcenterEntityHistory in the database.
-func (_c *TrustcenterEntityHistoryCreate) Save(ctx context.Context) (*TrustcenterEntityHistory, error) {
+// Save creates the TrustCenterEntityHistory in the database.
+func (_c *TrustCenterEntityHistoryCreate) Save(ctx context.Context) (*TrustCenterEntityHistory, error) {
 	if err := _c.defaults(); err != nil {
 		return nil, err
 	}
@@ -231,7 +231,7 @@ func (_c *TrustcenterEntityHistoryCreate) Save(ctx context.Context) (*Trustcente
 }
 
 // SaveX calls Save and panics if Save returns an error.
-func (_c *TrustcenterEntityHistoryCreate) SaveX(ctx context.Context) *TrustcenterEntityHistory {
+func (_c *TrustCenterEntityHistoryCreate) SaveX(ctx context.Context) *TrustCenterEntityHistory {
 	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -240,20 +240,20 @@ func (_c *TrustcenterEntityHistoryCreate) SaveX(ctx context.Context) *Trustcente
 }
 
 // Exec executes the query.
-func (_c *TrustcenterEntityHistoryCreate) Exec(ctx context.Context) error {
+func (_c *TrustCenterEntityHistoryCreate) Exec(ctx context.Context) error {
 	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_c *TrustcenterEntityHistoryCreate) ExecX(ctx context.Context) {
+func (_c *TrustCenterEntityHistoryCreate) ExecX(ctx context.Context) {
 	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *TrustcenterEntityHistoryCreate) defaults() error {
+func (_c *TrustCenterEntityHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
 		if trustcenterentityhistory.DefaultHistoryTime == nil {
 			return fmt.Errorf("historygenerated: uninitialized trustcenterentityhistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
@@ -286,25 +286,25 @@ func (_c *TrustcenterEntityHistoryCreate) defaults() error {
 }
 
 // check runs all checks and user-defined validators on the builder.
-func (_c *TrustcenterEntityHistoryCreate) check() error {
+func (_c *TrustCenterEntityHistoryCreate) check() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
-		return &ValidationError{Name: "history_time", err: errors.New(`historygenerated: missing required field "TrustcenterEntityHistory.history_time"`)}
+		return &ValidationError{Name: "history_time", err: errors.New(`historygenerated: missing required field "TrustCenterEntityHistory.history_time"`)}
 	}
 	if _, ok := _c.mutation.Operation(); !ok {
-		return &ValidationError{Name: "operation", err: errors.New(`historygenerated: missing required field "TrustcenterEntityHistory.operation"`)}
+		return &ValidationError{Name: "operation", err: errors.New(`historygenerated: missing required field "TrustCenterEntityHistory.operation"`)}
 	}
 	if v, ok := _c.mutation.Operation(); ok {
 		if err := trustcenterentityhistory.OperationValidator(v); err != nil {
-			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "TrustcenterEntityHistory.operation": %w`, err)}
+			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterEntityHistory.operation": %w`, err)}
 		}
 	}
 	if _, ok := _c.mutation.Name(); !ok {
-		return &ValidationError{Name: "name", err: errors.New(`historygenerated: missing required field "TrustcenterEntityHistory.name"`)}
+		return &ValidationError{Name: "name", err: errors.New(`historygenerated: missing required field "TrustCenterEntityHistory.name"`)}
 	}
 	return nil
 }
 
-func (_c *TrustcenterEntityHistoryCreate) sqlSave(ctx context.Context) (*TrustcenterEntityHistory, error) {
+func (_c *TrustCenterEntityHistoryCreate) sqlSave(ctx context.Context) (*TrustCenterEntityHistory, error) {
 	if err := _c.check(); err != nil {
 		return nil, err
 	}
@@ -319,7 +319,7 @@ func (_c *TrustcenterEntityHistoryCreate) sqlSave(ctx context.Context) (*Trustce
 		if id, ok := _spec.ID.Value.(string); ok {
 			_node.ID = id
 		} else {
-			return nil, fmt.Errorf("unexpected TrustcenterEntityHistory.ID type: %T", _spec.ID.Value)
+			return nil, fmt.Errorf("unexpected TrustCenterEntityHistory.ID type: %T", _spec.ID.Value)
 		}
 	}
 	_c.mutation.id = &_node.ID
@@ -327,12 +327,12 @@ func (_c *TrustcenterEntityHistoryCreate) sqlSave(ctx context.Context) (*Trustce
 	return _node, nil
 }
 
-func (_c *TrustcenterEntityHistoryCreate) createSpec() (*TrustcenterEntityHistory, *sqlgraph.CreateSpec) {
+func (_c *TrustCenterEntityHistoryCreate) createSpec() (*TrustCenterEntityHistory, *sqlgraph.CreateSpec) {
 	var (
-		_node = &TrustcenterEntityHistory{config: _c.config}
+		_node = &TrustCenterEntityHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterentityhistory.Table, sqlgraph.NewFieldSpec(trustcenterentityhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustcenterEntityHistory
+	_spec.Schema = _c.schemaConfig.TrustCenterEntityHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -396,27 +396,27 @@ func (_c *TrustcenterEntityHistoryCreate) createSpec() (*TrustcenterEntityHistor
 	return _node, _spec
 }
 
-// TrustcenterEntityHistoryCreateBulk is the builder for creating many TrustcenterEntityHistory entities in bulk.
-type TrustcenterEntityHistoryCreateBulk struct {
+// TrustCenterEntityHistoryCreateBulk is the builder for creating many TrustCenterEntityHistory entities in bulk.
+type TrustCenterEntityHistoryCreateBulk struct {
 	config
 	err      error
-	builders []*TrustcenterEntityHistoryCreate
+	builders []*TrustCenterEntityHistoryCreate
 }
 
-// Save creates the TrustcenterEntityHistory entities in the database.
-func (_c *TrustcenterEntityHistoryCreateBulk) Save(ctx context.Context) ([]*TrustcenterEntityHistory, error) {
+// Save creates the TrustCenterEntityHistory entities in the database.
+func (_c *TrustCenterEntityHistoryCreateBulk) Save(ctx context.Context) ([]*TrustCenterEntityHistory, error) {
 	if _c.err != nil {
 		return nil, _c.err
 	}
 	specs := make([]*sqlgraph.CreateSpec, len(_c.builders))
-	nodes := make([]*TrustcenterEntityHistory, len(_c.builders))
+	nodes := make([]*TrustCenterEntityHistory, len(_c.builders))
 	mutators := make([]Mutator, len(_c.builders))
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
 			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-				mutation, ok := m.(*TrustcenterEntityHistoryMutation)
+				mutation, ok := m.(*TrustCenterEntityHistoryMutation)
 				if !ok {
 					return nil, fmt.Errorf("unexpected mutation type %T", m)
 				}
@@ -459,7 +459,7 @@ func (_c *TrustcenterEntityHistoryCreateBulk) Save(ctx context.Context) ([]*Trus
 }
 
 // SaveX is like Save, but panics if an error occurs.
-func (_c *TrustcenterEntityHistoryCreateBulk) SaveX(ctx context.Context) []*TrustcenterEntityHistory {
+func (_c *TrustCenterEntityHistoryCreateBulk) SaveX(ctx context.Context) []*TrustCenterEntityHistory {
 	v, err := _c.Save(ctx)
 	if err != nil {
 		panic(err)
@@ -468,13 +468,13 @@ func (_c *TrustcenterEntityHistoryCreateBulk) SaveX(ctx context.Context) []*Trus
 }
 
 // Exec executes the query.
-func (_c *TrustcenterEntityHistoryCreateBulk) Exec(ctx context.Context) error {
+func (_c *TrustCenterEntityHistoryCreateBulk) Exec(ctx context.Context) error {
 	_, err := _c.Save(ctx)
 	return err
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (_c *TrustcenterEntityHistoryCreateBulk) ExecX(ctx context.Context) {
+func (_c *TrustCenterEntityHistoryCreateBulk) ExecX(ctx context.Context) {
 	if err := _c.Exec(ctx); err != nil {
 		panic(err)
 	}

@@ -164,14 +164,16 @@ type Tx struct {
 	TrustCenterCompliance *TrustCenterComplianceClient
 	// TrustCenterDoc is the client for interacting with the TrustCenterDoc builders.
 	TrustCenterDoc *TrustCenterDocClient
+	// TrustCenterEntity is the client for interacting with the TrustCenterEntity builders.
+	TrustCenterEntity *TrustCenterEntityClient
+	// TrustCenterNDARequest is the client for interacting with the TrustCenterNDARequest builders.
+	TrustCenterNDARequest *TrustCenterNDARequestClient
 	// TrustCenterSetting is the client for interacting with the TrustCenterSetting builders.
 	TrustCenterSetting *TrustCenterSettingClient
 	// TrustCenterSubprocessor is the client for interacting with the TrustCenterSubprocessor builders.
 	TrustCenterSubprocessor *TrustCenterSubprocessorClient
 	// TrustCenterWatermarkConfig is the client for interacting with the TrustCenterWatermarkConfig builders.
 	TrustCenterWatermarkConfig *TrustCenterWatermarkConfigClient
-	// TrustcenterEntity is the client for interacting with the TrustcenterEntity builders.
-	TrustcenterEntity *TrustcenterEntityClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserSetting is the client for interacting with the UserSetting builders.
@@ -401,10 +403,11 @@ func (tx *Tx) init() {
 	tx.TrustCenter = NewTrustCenterClient(tx.config)
 	tx.TrustCenterCompliance = NewTrustCenterComplianceClient(tx.config)
 	tx.TrustCenterDoc = NewTrustCenterDocClient(tx.config)
+	tx.TrustCenterEntity = NewTrustCenterEntityClient(tx.config)
+	tx.TrustCenterNDARequest = NewTrustCenterNDARequestClient(tx.config)
 	tx.TrustCenterSetting = NewTrustCenterSettingClient(tx.config)
 	tx.TrustCenterSubprocessor = NewTrustCenterSubprocessorClient(tx.config)
 	tx.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(tx.config)
-	tx.TrustcenterEntity = NewTrustcenterEntityClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)
 	tx.Vulnerability = NewVulnerabilityClient(tx.config)

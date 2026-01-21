@@ -4,6 +4,14 @@ river:
   queues:
     - name: email
       maxWorkers: 100
+    - name: default
+      maxWorkers: 100
+    - name: compliance
+      maxWorkers: 100
+    - name: trustcenter
+      maxWorkers: 100
+    - name: notifications
+      maxWorkers: 100
   workers:
     openlaneconfig:
       openlaneapihost: "http://host.docker.internal:17608"

@@ -1,8 +1,10 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -124,4 +126,11 @@ func (WorkflowAssignmentTarget) Policy() ent.Policy {
 			policy.CheckOrgWriteAccess(),
 		),
 	)
+}
+
+// Annotations of the WorkflowAssignmentTarget
+func (WorkflowAssignmentTarget) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+	}
 }

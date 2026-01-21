@@ -229,7 +229,7 @@ func TestScheduledJobs(t *testing.T) {
 
 func TestMutationCreateScheduledJob(t *testing.T) {
 	job := (&JobTemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	// jobSystemOwned := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	jobSystemOwned := (&JobTemplateBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
 
 	runner := (&JobRunnerBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	control := (&ControlBuilder{client: suite.client, RefCode: "Test Control"}).MustNew(testUser1.UserCtx, t)
@@ -257,14 +257,14 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 			ctx:    testUser1.UserCtx,
 		},
 		// TODO: see comment on schema, public tuples need to be implemented for this to work
-		// {
-		// 	name: "happy path, minimal input, cron inherited from job template, system owned job",
-		// 	request: testclient.CreateScheduledJobInput{
-		// 		JobTemplateID: jobSystemOwned.ID,
-		// 	},
-		// 	client: suite.client.api,
-		// 	ctx:    testUser1.UserCtx,
-		// },
+		{
+			name: "happy path, minimal input, cron inherited from job template, system owned job",
+			request: testclient.CreateScheduledJobInput{
+				JobTemplateID: jobSystemOwned.ID,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
 		{
 			name: "happy path, all input",
 			request: testclient.CreateScheduledJobInput{
@@ -314,7 +314,7 @@ func TestMutationCreateScheduledJob(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: notFoundErrorMsg,
 		},
 		{
 			name: "user not authorized, job runner not in organization",

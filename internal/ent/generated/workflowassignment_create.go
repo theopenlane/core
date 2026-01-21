@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -207,6 +208,48 @@ func (_c *WorkflowAssignmentCreate) SetNillableStatus(v *enums.WorkflowAssignmen
 // SetMetadata sets the "metadata" field.
 func (_c *WorkflowAssignmentCreate) SetMetadata(v map[string]interface{}) *WorkflowAssignmentCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetApprovalMetadata sets the "approval_metadata" field.
+func (_c *WorkflowAssignmentCreate) SetApprovalMetadata(v models.WorkflowAssignmentApproval) *WorkflowAssignmentCreate {
+	_c.mutation.SetApprovalMetadata(v)
+	return _c
+}
+
+// SetNillableApprovalMetadata sets the "approval_metadata" field if the given value is not nil.
+func (_c *WorkflowAssignmentCreate) SetNillableApprovalMetadata(v *models.WorkflowAssignmentApproval) *WorkflowAssignmentCreate {
+	if v != nil {
+		_c.SetApprovalMetadata(*v)
+	}
+	return _c
+}
+
+// SetRejectionMetadata sets the "rejection_metadata" field.
+func (_c *WorkflowAssignmentCreate) SetRejectionMetadata(v models.WorkflowAssignmentRejection) *WorkflowAssignmentCreate {
+	_c.mutation.SetRejectionMetadata(v)
+	return _c
+}
+
+// SetNillableRejectionMetadata sets the "rejection_metadata" field if the given value is not nil.
+func (_c *WorkflowAssignmentCreate) SetNillableRejectionMetadata(v *models.WorkflowAssignmentRejection) *WorkflowAssignmentCreate {
+	if v != nil {
+		_c.SetRejectionMetadata(*v)
+	}
+	return _c
+}
+
+// SetInvalidationMetadata sets the "invalidation_metadata" field.
+func (_c *WorkflowAssignmentCreate) SetInvalidationMetadata(v models.WorkflowAssignmentInvalidation) *WorkflowAssignmentCreate {
+	_c.mutation.SetInvalidationMetadata(v)
+	return _c
+}
+
+// SetNillableInvalidationMetadata sets the "invalidation_metadata" field if the given value is not nil.
+func (_c *WorkflowAssignmentCreate) SetNillableInvalidationMetadata(v *models.WorkflowAssignmentInvalidation) *WorkflowAssignmentCreate {
+	if v != nil {
+		_c.SetInvalidationMetadata(*v)
+	}
 	return _c
 }
 
@@ -559,6 +602,18 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(workflowassignment.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.ApprovalMetadata(); ok {
+		_spec.SetField(workflowassignment.FieldApprovalMetadata, field.TypeJSON, value)
+		_node.ApprovalMetadata = value
+	}
+	if value, ok := _c.mutation.RejectionMetadata(); ok {
+		_spec.SetField(workflowassignment.FieldRejectionMetadata, field.TypeJSON, value)
+		_node.RejectionMetadata = value
+	}
+	if value, ok := _c.mutation.InvalidationMetadata(); ok {
+		_spec.SetField(workflowassignment.FieldInvalidationMetadata, field.TypeJSON, value)
+		_node.InvalidationMetadata = value
 	}
 	if value, ok := _c.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignment.FieldDecidedAt, field.TypeTime, value)

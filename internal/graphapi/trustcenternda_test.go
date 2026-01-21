@@ -39,7 +39,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Assert(t, trustCenterNDA != nil)
 
 	// Create anonymous trust center context helper
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,
@@ -96,22 +96,6 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 	trustCenter1 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	// Create anonymous trust center context helper
-	createAnonymousTrustCenterContext := func(trustCenterID, organizationID string) context.Context {
-		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
-
-		anonUser := &auth.AnonymousTrustCenterUser{
-			SubjectID:          anonUserID,
-			SubjectName:        "Anonymous User",
-			OrganizationID:     organizationID,
-			AuthenticationType: auth.JWTAuthentication,
-			TrustCenterID:      trustCenterID,
-		}
-
-		ctx := context.Background()
-		return auth.WithAnonymousTrustCenterUser(ctx, anonUser)
-	}
-
 	// First, let's test the scenario where user has already signed NDA
 	t.Run("Test email scenarios with existing NDA", func(t *testing.T) {
 		// Create NDA template for trustCenter1
@@ -133,7 +117,7 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 
 		// Create a user who has already signed the NDA
 		testEmail := gofakeit.Email()
-		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 		anonUser := &auth.AnonymousTrustCenterUser{
 			SubjectID:          anonUserID,
 			SubjectName:        "Anonymous User",
@@ -509,8 +493,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, trustCenterNDA != nil)
 
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
-	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
+	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,

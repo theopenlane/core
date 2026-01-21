@@ -492,6 +492,12 @@ type CustomDomainUpdatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for validateCustomDomain mutation
+type CustomDomainValidatePayload struct {
+	// CustomDomain that validation was triggered for
+	CustomDomain *generated.CustomDomain `json:"customDomain"`
+}
+
 // Return response for createBulkCustomTypeEnum mutation
 type CustomTypeEnumBulkCreatePayload struct {
 	// Created customTypeEnums
@@ -1871,7 +1877,7 @@ type SearchResults struct {
 	TagDefinitions      *generated.TagDefinitionConnection      `json:"tagDefinitions,omitempty"`
 	Tasks               *generated.TaskConnection               `json:"tasks,omitempty"`
 	Templates           *generated.TemplateConnection           `json:"templates,omitempty"`
-	TrustcenterEntities *generated.TrustcenterEntityConnection  `json:"trustcenterEntities,omitempty"`
+	TrustCenterEntities *generated.TrustCenterEntityConnection  `json:"trustCenterEntities,omitempty"`
 	Vulnerabilities     *generated.VulnerabilityConnection      `json:"vulnerabilities,omitempty"`
 	SearchContext       []*models.SearchContext                 `json:"searchContext,omitempty"`
 }
@@ -2211,8 +2217,56 @@ type TrustCenterDomainCreatePayload struct {
 	CustomDomain *generated.CustomDomain `json:"customDomain"`
 }
 
+// Return response for createBulkTrustCenterEntity mutation
+type TrustCenterEntityBulkCreatePayload struct {
+	// Created trustCenterEntitys
+	TrustCenterEntities []*generated.TrustCenterEntity `json:"trustCenterEntities,omitempty"`
+}
+
+// Return response for createTrustCenterEntity mutation
+type TrustCenterEntityCreatePayload struct {
+	// Created trustCenterEntity
+	TrustCenterEntity *generated.TrustCenterEntity `json:"trustCenterEntity"`
+}
+
+// Return response for deleteTrustCenterEntity mutation
+type TrustCenterEntityDeletePayload struct {
+	// Deleted trustCenterEntity ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterEntity mutation
+type TrustCenterEntityUpdatePayload struct {
+	// Updated trustCenterEntity
+	TrustCenterEntity *generated.TrustCenterEntity `json:"trustCenterEntity"`
+}
+
 type TrustCenterNDACreatePayload struct {
 	Template *generated.Template `json:"template"`
+}
+
+// Return response for createBulkTrustCenterNDARequest mutation
+type TrustCenterNDARequestBulkCreatePayload struct {
+	// Created trustCenterNDARequests
+	TrustCenterNDARequests []*generated.TrustCenterNDARequest `json:"trustCenterNDARequests,omitempty"`
+}
+
+// Return response for createTrustCenterNDARequest mutation
+type TrustCenterNDARequestCreatePayload struct {
+	// Created trustCenterNDARequest
+	TrustCenterNDARequest *generated.TrustCenterNDARequest `json:"trustCenterNDARequest"`
+}
+
+// Return response for deleteTrustCenterNDARequest mutation
+type TrustCenterNDARequestDeletePayload struct {
+	// Deleted trustCenterNDARequest ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateTrustCenterNDARequest mutation
+type TrustCenterNDARequestUpdatePayload struct {
+	// Updated trustCenterNDARequest
+	TrustCenterNDARequest *generated.TrustCenterNDARequest `json:"trustCenterNDARequest"`
 }
 
 type TrustCenterNDAUpdatePayload struct {
@@ -2317,30 +2371,6 @@ type TrustCenterWatermarkConfigUpdatePayload struct {
 	TrustCenterWatermarkConfig *generated.TrustCenterWatermarkConfig `json:"trustCenterWatermarkConfig"`
 }
 
-// Return response for createBulkTrustcenterEntity mutation
-type TrustcenterEntityBulkCreatePayload struct {
-	// Created trustcenterEntitys
-	TrustcenterEntities []*generated.TrustcenterEntity `json:"trustcenterEntities,omitempty"`
-}
-
-// Return response for createTrustcenterEntity mutation
-type TrustcenterEntityCreatePayload struct {
-	// Created trustcenterEntity
-	TrustcenterEntity *generated.TrustcenterEntity `json:"trustcenterEntity"`
-}
-
-// Return response for deleteTrustcenterEntity mutation
-type TrustcenterEntityDeletePayload struct {
-	// Deleted trustcenterEntity ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateTrustcenterEntity mutation
-type TrustcenterEntityUpdatePayload struct {
-	// Updated trustcenterEntity
-	TrustcenterEntity *generated.TrustcenterEntity `json:"trustcenterEntity"`
-}
-
 // Update discussions related to an object
 type UpdateDiscussionsInput struct {
 	// id of the discussion to update
@@ -2426,51 +2456,15 @@ type WebauthnDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for createBulkWorkflowAssignment mutation
-type WorkflowAssignmentBulkCreatePayload struct {
-	// Created workflowAssignments
-	WorkflowAssignments []*generated.WorkflowAssignment `json:"workflowAssignments,omitempty"`
-}
-
-// Return response for createWorkflowAssignment mutation
-type WorkflowAssignmentCreatePayload struct {
-	// Created workflowAssignment
+// Return response for approveWorkflowAssignment mutation
+type WorkflowAssignmentApprovePayload struct {
+	// Approved workflow assignment
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
 }
 
-// Return response for deleteWorkflowAssignment mutation
-type WorkflowAssignmentDeletePayload struct {
-	// Deleted workflowAssignment ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetBulkCreatePayload struct {
-	// Created workflowAssignmentTargets
-	WorkflowAssignmentTargets []*generated.WorkflowAssignmentTarget `json:"workflowAssignmentTargets,omitempty"`
-}
-
-// Return response for createWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetCreatePayload struct {
-	// Created workflowAssignmentTarget
-	WorkflowAssignmentTarget *generated.WorkflowAssignmentTarget `json:"workflowAssignmentTarget"`
-}
-
-// Return response for deleteWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetDeletePayload struct {
-	// Deleted workflowAssignmentTarget ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowAssignmentTarget mutation
-type WorkflowAssignmentTargetUpdatePayload struct {
-	// Updated workflowAssignmentTarget
-	WorkflowAssignmentTarget *generated.WorkflowAssignmentTarget `json:"workflowAssignmentTarget"`
-}
-
-// Return response for updateWorkflowAssignment mutation
-type WorkflowAssignmentUpdatePayload struct {
-	// Updated workflowAssignment
+// Return response for rejectWorkflowAssignment mutation
+type WorkflowAssignmentRejectPayload struct {
+	// Rejected workflow assignment
 	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
 }
 
@@ -2522,28 +2516,20 @@ type WorkflowEventUpdatePayload struct {
 	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
 }
 
-// Return response for createBulkWorkflowInstance mutation
-type WorkflowInstanceBulkCreatePayload struct {
-	// Created workflowInstances
-	WorkflowInstances []*generated.WorkflowInstance `json:"workflowInstances,omitempty"`
+// Metadata for a workflow-eligible field
+type WorkflowFieldMetadata struct {
+	// The field name (snake_case)
+	Name string `json:"name"`
+	// Human-readable label for the field
+	Label string `json:"label"`
+	// Field data type
+	Type string `json:"type"`
 }
 
-// Return response for createWorkflowInstance mutation
-type WorkflowInstanceCreatePayload struct {
-	// Created workflowInstance
-	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
-}
-
-// Return response for deleteWorkflowInstance mutation
-type WorkflowInstanceDeletePayload struct {
-	// Deleted workflowInstance ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowInstance mutation
-type WorkflowInstanceUpdatePayload struct {
-	// Updated workflowInstance
-	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
+// Workflow metadata including supported object types and their fields
+type WorkflowMetadata struct {
+	// Available workflow object types
+	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
 }
 
 // Return response for createBulkWorkflowObjectRef mutation
@@ -2562,6 +2548,20 @@ type WorkflowObjectRefCreatePayload struct {
 type WorkflowObjectRefDeletePayload struct {
 	// Deleted workflowObjectRef ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Metadata for a workflow object type
+type WorkflowObjectTypeMetadata struct {
+	// The object type name (e.g., CONTROL, EVIDENCE, POLICY)
+	Type string `json:"type"`
+	// Human-readable label for the type
+	Label string `json:"label"`
+	// Description of the object type
+	Description string `json:"description"`
+	// List of fields that can be tracked in workflows for this type
+	EligibleFields []*WorkflowFieldMetadata `json:"eligibleFields"`
+	// Available resolver keys for this object type
+	ResolverKeys []string `json:"resolverKeys"`
 }
 
 // Properties by which ControlCategory connections can be ordered.

@@ -165,13 +165,13 @@ func (_c *NotificationCreate) SetChannels(v []enums.Channel) *NotificationCreate
 }
 
 // SetTopic sets the "topic" field.
-func (_c *NotificationCreate) SetTopic(v string) *NotificationCreate {
+func (_c *NotificationCreate) SetTopic(v enums.NotificationTopic) *NotificationCreate {
 	_c.mutation.SetTopic(v)
 	return _c
 }
 
 // SetNillableTopic sets the "topic" field if the given value is not nil.
-func (_c *NotificationCreate) SetNillableTopic(v *string) *NotificationCreate {
+func (_c *NotificationCreate) SetNillableTopic(v *enums.NotificationTopic) *NotificationCreate {
 	if v != nil {
 		_c.SetTopic(*v)
 	}
@@ -306,6 +306,11 @@ func (_c *NotificationCreate) check() error {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Topic(); ok {
+		if err := notification.TopicValidator(v); err != nil {
+			return &ValidationError{Name: "topic", err: fmt.Errorf(`generated: validator failed for field "Notification.topic": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -391,7 +396,7 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 		_node.Channels = value
 	}
 	if value, ok := _c.mutation.Topic(); ok {
-		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+		_spec.SetField(notification.FieldTopic, field.TypeEnum, value)
 		_node.Topic = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
@@ -142,6 +143,26 @@ func (_u *TrustCenterSettingUpdate) SetNillableTitle(v *string) *TrustCenterSett
 // ClearTitle clears the value of the "title" field.
 func (_u *TrustCenterSettingUpdate) ClearTitle() *TrustCenterSettingUpdate {
 	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetCompanyName sets the "company_name" field.
+func (_u *TrustCenterSettingUpdate) SetCompanyName(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetCompanyName(v)
+	return _u
+}
+
+// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableCompanyName(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetCompanyName(*v)
+	}
+	return _u
+}
+
+// ClearCompanyName clears the value of the "company_name" field.
+func (_u *TrustCenterSettingUpdate) ClearCompanyName() *TrustCenterSettingUpdate {
+	_u.mutation.ClearCompanyName()
 	return _u
 }
 
@@ -405,19 +426,114 @@ func (_u *TrustCenterSettingUpdate) ClearSecondaryForegroundColor() *TrustCenter
 	return _u
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
-	_u.mutation.AddFileIDs(ids...)
+// SetRemoveBranding sets the "remove_branding" field.
+func (_u *TrustCenterSettingUpdate) SetRemoveBranding(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetRemoveBranding(v)
 	return _u
 }
 
-// AddFiles adds the "files" edges to the File entity.
-func (_u *TrustCenterSettingUpdate) AddFiles(v ...*File) *TrustCenterSettingUpdate {
+// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableRemoveBranding(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetRemoveBranding(*v)
+	}
+	return _u
+}
+
+// ClearRemoveBranding clears the value of the "remove_branding" field.
+func (_u *TrustCenterSettingUpdate) ClearRemoveBranding() *TrustCenterSettingUpdate {
+	_u.mutation.ClearRemoveBranding()
+	return _u
+}
+
+// SetCompanyDomain sets the "company_domain" field.
+func (_u *TrustCenterSettingUpdate) SetCompanyDomain(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetCompanyDomain(v)
+	return _u
+}
+
+// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableCompanyDomain(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetCompanyDomain(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDomain clears the value of the "company_domain" field.
+func (_u *TrustCenterSettingUpdate) ClearCompanyDomain() *TrustCenterSettingUpdate {
+	_u.mutation.ClearCompanyDomain()
+	return _u
+}
+
+// SetSecurityContact sets the "security_contact" field.
+func (_u *TrustCenterSettingUpdate) SetSecurityContact(v string) *TrustCenterSettingUpdate {
+	_u.mutation.SetSecurityContact(v)
+	return _u
+}
+
+// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableSecurityContact(v *string) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetSecurityContact(*v)
+	}
+	return _u
+}
+
+// ClearSecurityContact clears the value of the "security_contact" field.
+func (_u *TrustCenterSettingUpdate) ClearSecurityContact() *TrustCenterSettingUpdate {
+	_u.mutation.ClearSecurityContact()
+	return _u
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdate) SetNdaApprovalRequired(v bool) *TrustCenterSettingUpdate {
+	_u.mutation.SetNdaApprovalRequired(v)
+	return _u
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingUpdate {
+	if v != nil {
+		_u.SetNdaApprovalRequired(*v)
+	}
+	return _u
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdate) ClearNdaApprovalRequired() *TrustCenterSettingUpdate {
+	_u.mutation.ClearNdaApprovalRequired()
+	return _u
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) AddBlockedGroups(v ...*Group) *TrustCenterSettingUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddFileIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdate) AddEditorIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) AddEditors(v ...*Group) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
@@ -463,25 +579,46 @@ func (_u *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
 }
 
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *TrustCenterSettingUpdate) ClearFiles() *TrustCenterSettingUpdate {
-	_u.mutation.ClearFiles()
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) ClearBlockedGroups() *TrustCenterSettingUpdate {
+	_u.mutation.ClearBlockedGroups()
 	return _u
 }
 
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *TrustCenterSettingUpdate) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdate {
-	_u.mutation.RemoveFileIDs(ids...)
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdate) RemoveBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
 	return _u
 }
 
-// RemoveFiles removes "files" edges to File entities.
-func (_u *TrustCenterSettingUpdate) RemoveFiles(v ...*File) *TrustCenterSettingUpdate {
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterSettingUpdate) RemoveBlockedGroups(v ...*Group) *TrustCenterSettingUpdate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemoveFileIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdate) ClearEditors() *TrustCenterSettingUpdate {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdate) RemoveEditorIDs(ids ...string) *TrustCenterSettingUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterSettingUpdate) RemoveEditors(v ...*Group) *TrustCenterSettingUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -550,6 +687,11 @@ func (_u *TrustCenterSettingUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CompanyName(); ok {
+		if err := trustcentersetting.CompanyNameValidator(v); err != nil {
+			return &ValidationError{Name: "company_name", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_name": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
@@ -598,6 +740,16 @@ func (_u *TrustCenterSettingUpdate) check() error {
 	if v, ok := _u.mutation.SecondaryForegroundColor(); ok {
 		if err := trustcentersetting.SecondaryForegroundColorValidator(v); err != nil {
 			return &ValidationError{Name: "secondary_foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_foreground_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CompanyDomain(); ok {
+		if err := trustcentersetting.CompanyDomainValidator(v); err != nil {
+			return &ValidationError{Name: "company_domain", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_domain": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SecurityContact(); ok {
+		if err := trustcentersetting.SecurityContactValidator(v); err != nil {
+			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
 		}
 	}
 	return nil
@@ -662,6 +814,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersetting.FieldTitle, field.TypeString)
+	}
+	if value, ok := _u.mutation.CompanyName(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyName, field.TypeString, value)
+	}
+	if _u.mutation.CompanyNameCleared() {
+		_spec.ClearField(trustcentersetting.FieldCompanyName, field.TypeString)
 	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
@@ -732,49 +890,121 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersetting.FieldEnvironment, field.TypeEnum)
 	}
-	if _u.mutation.FilesCleared() {
+	if value, ok := _u.mutation.RemoveBranding(); ok {
+		_spec.SetField(trustcentersetting.FieldRemoveBranding, field.TypeBool, value)
+	}
+	if _u.mutation.RemoveBrandingCleared() {
+		_spec.ClearField(trustcentersetting.FieldRemoveBranding, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CompanyDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyDomain, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDomainCleared() {
+		_spec.ClearField(trustcentersetting.FieldCompanyDomain, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityContact(); ok {
+		_spec.SetField(trustcentersetting.FieldSecurityContact, field.TypeString, value)
+	}
+	if _u.mutation.SecurityContactCleared() {
+		_spec.ClearField(trustcentersetting.FieldSecurityContact, field.TypeString)
+	}
+	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -975,6 +1205,26 @@ func (_u *TrustCenterSettingUpdateOne) SetNillableTitle(v *string) *TrustCenterS
 // ClearTitle clears the value of the "title" field.
 func (_u *TrustCenterSettingUpdateOne) ClearTitle() *TrustCenterSettingUpdateOne {
 	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetCompanyName sets the "company_name" field.
+func (_u *TrustCenterSettingUpdateOne) SetCompanyName(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetCompanyName(v)
+	return _u
+}
+
+// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableCompanyName(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetCompanyName(*v)
+	}
+	return _u
+}
+
+// ClearCompanyName clears the value of the "company_name" field.
+func (_u *TrustCenterSettingUpdateOne) ClearCompanyName() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearCompanyName()
 	return _u
 }
 
@@ -1238,19 +1488,114 @@ func (_u *TrustCenterSettingUpdateOne) ClearSecondaryForegroundColor() *TrustCen
 	return _u
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
-	_u.mutation.AddFileIDs(ids...)
+// SetRemoveBranding sets the "remove_branding" field.
+func (_u *TrustCenterSettingUpdateOne) SetRemoveBranding(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetRemoveBranding(v)
 	return _u
 }
 
-// AddFiles adds the "files" edges to the File entity.
-func (_u *TrustCenterSettingUpdateOne) AddFiles(v ...*File) *TrustCenterSettingUpdateOne {
+// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableRemoveBranding(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetRemoveBranding(*v)
+	}
+	return _u
+}
+
+// ClearRemoveBranding clears the value of the "remove_branding" field.
+func (_u *TrustCenterSettingUpdateOne) ClearRemoveBranding() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearRemoveBranding()
+	return _u
+}
+
+// SetCompanyDomain sets the "company_domain" field.
+func (_u *TrustCenterSettingUpdateOne) SetCompanyDomain(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetCompanyDomain(v)
+	return _u
+}
+
+// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableCompanyDomain(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetCompanyDomain(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDomain clears the value of the "company_domain" field.
+func (_u *TrustCenterSettingUpdateOne) ClearCompanyDomain() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearCompanyDomain()
+	return _u
+}
+
+// SetSecurityContact sets the "security_contact" field.
+func (_u *TrustCenterSettingUpdateOne) SetSecurityContact(v string) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetSecurityContact(v)
+	return _u
+}
+
+// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableSecurityContact(v *string) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetSecurityContact(*v)
+	}
+	return _u
+}
+
+// ClearSecurityContact clears the value of the "security_contact" field.
+func (_u *TrustCenterSettingUpdateOne) ClearSecurityContact() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearSecurityContact()
+	return _u
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdateOne) SetNdaApprovalRequired(v bool) *TrustCenterSettingUpdateOne {
+	_u.mutation.SetNdaApprovalRequired(v)
+	return _u
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_u *TrustCenterSettingUpdateOne) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingUpdateOne {
+	if v != nil {
+		_u.SetNdaApprovalRequired(*v)
+	}
+	return _u
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (_u *TrustCenterSettingUpdateOne) ClearNdaApprovalRequired() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearNdaApprovalRequired()
+	return _u
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) AddBlockedGroups(v ...*Group) *TrustCenterSettingUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.AddFileIDs(ids...)
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterSettingUpdateOne) AddEditorIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) AddEditors(v ...*Group) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
 }
 
 // SetLogoFileID sets the "logo_file" edge to the File entity by ID.
@@ -1296,25 +1641,46 @@ func (_u *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
 }
 
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *TrustCenterSettingUpdateOne) ClearFiles() *TrustCenterSettingUpdateOne {
-	_u.mutation.ClearFiles()
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) ClearBlockedGroups() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearBlockedGroups()
 	return _u
 }
 
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *TrustCenterSettingUpdateOne) RemoveFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
-	_u.mutation.RemoveFileIDs(ids...)
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdateOne) RemoveBlockedGroupIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
 	return _u
 }
 
-// RemoveFiles removes "files" edges to File entities.
-func (_u *TrustCenterSettingUpdateOne) RemoveFiles(v ...*File) *TrustCenterSettingUpdateOne {
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterSettingUpdateOne) RemoveBlockedGroups(v ...*Group) *TrustCenterSettingUpdateOne {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
-	return _u.RemoveFileIDs(ids...)
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterSettingUpdateOne) ClearEditors() *TrustCenterSettingUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterSettingUpdateOne) RemoveEditorIDs(ids ...string) *TrustCenterSettingUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterSettingUpdateOne) RemoveEditors(v ...*Group) *TrustCenterSettingUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -1396,6 +1762,11 @@ func (_u *TrustCenterSettingUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.title": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.CompanyName(); ok {
+		if err := trustcentersetting.CompanyNameValidator(v); err != nil {
+			return &ValidationError{Name: "company_name", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_name": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Overview(); ok {
 		if err := trustcentersetting.OverviewValidator(v); err != nil {
 			return &ValidationError{Name: "overview", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.overview": %w`, err)}
@@ -1444,6 +1815,16 @@ func (_u *TrustCenterSettingUpdateOne) check() error {
 	if v, ok := _u.mutation.SecondaryForegroundColor(); ok {
 		if err := trustcentersetting.SecondaryForegroundColorValidator(v); err != nil {
 			return &ValidationError{Name: "secondary_foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_foreground_color": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.CompanyDomain(); ok {
+		if err := trustcentersetting.CompanyDomainValidator(v); err != nil {
+			return &ValidationError{Name: "company_domain", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.company_domain": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SecurityContact(); ok {
+		if err := trustcentersetting.SecurityContactValidator(v); err != nil {
+			return &ValidationError{Name: "security_contact", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.security_contact": %w`, err)}
 		}
 	}
 	return nil
@@ -1526,6 +1907,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersetting.FieldTitle, field.TypeString)
 	}
+	if value, ok := _u.mutation.CompanyName(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyName, field.TypeString, value)
+	}
+	if _u.mutation.CompanyNameCleared() {
+		_spec.ClearField(trustcentersetting.FieldCompanyName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersetting.FieldOverview, field.TypeString, value)
 	}
@@ -1595,49 +1982,121 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersetting.FieldEnvironment, field.TypeEnum)
 	}
-	if _u.mutation.FilesCleared() {
+	if value, ok := _u.mutation.RemoveBranding(); ok {
+		_spec.SetField(trustcentersetting.FieldRemoveBranding, field.TypeBool, value)
+	}
+	if _u.mutation.RemoveBrandingCleared() {
+		_spec.ClearField(trustcentersetting.FieldRemoveBranding, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CompanyDomain(); ok {
+		_spec.SetField(trustcentersetting.FieldCompanyDomain, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDomainCleared() {
+		_spec.ClearField(trustcentersetting.FieldCompanyDomain, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityContact(); ok {
+		_spec.SetField(trustcentersetting.FieldSecurityContact, field.TypeString, value)
+	}
+	if _u.mutation.SecurityContactCleared() {
+		_spec.ClearField(trustcentersetting.FieldSecurityContact, field.TypeString)
+	}
+	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool, value)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersetting.FieldNdaApprovalRequired, field.TypeBool)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   trustcentersetting.FilesTable,
-			Columns: trustcentersetting.FilesPrimaryKey,
+			Table:   trustcentersetting.BlockedGroupsTable,
+			Columns: []string{trustcentersetting.BlockedGroupsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcentersetting.EditorsTable,
+			Columns: []string{trustcentersetting.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

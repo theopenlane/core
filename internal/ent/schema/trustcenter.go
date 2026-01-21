@@ -9,6 +9,10 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -17,9 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/iam/entfga"
 )
 
 const (
@@ -91,7 +92,13 @@ func (TrustCenter) Fields() []ent.Field {
 func (t TrustCenter) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			newOrgOwnedMixin(t, withAllowAnonymousTrustCenterAccess(true), withSkipForSystemAdmin(true)),
+			newOrgOwnedMixin(t,
+				withAllowAnonymousTrustCenterAccess(true),
+				withSkipForSystemAdmin(true),
+			),
+			// allow for group group permissions to be assigned to trust centers, to give users full edit access
+			// to trust center objects and their children
+			newGroupPermissionsMixin(withSkipViewPermissions()),
 		},
 	}.getMixins(t)
 }
@@ -125,6 +132,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -133,6 +141,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
+			cascadeDelete: "TrustCenterID",
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -141,6 +150,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				entx.CascadeAnnotationField("TrustCenter"),
 			},
+			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
@@ -177,11 +187,18 @@ func (t TrustCenter) Edges() []ent.Edge {
 			annotations: []schema.Annotation{
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
+			cascadeDelete: "TrustCenter",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    t,
 			name:          "entities",
-			edgeSchema:    TrustcenterEntity{},
+			edgeSchema:    TrustCenterEntity{},
+			cascadeDelete: "TrustCenter",
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:    t,
+			name:          "nda_requests",
+			edgeSchema:    TrustCenterNDARequest{},
 			cascadeDelete: "TrustCenter",
 		}),
 	}

@@ -83,6 +83,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -1772,7 +1773,9 @@ func init() {
 
 	entity.Hooks[9] = entityMixinHooks7[0]
 
-	entity.Hooks[10] = entityHooks[0]
+	entity.Hooks[10] = entityMixinHooks7[1]
+
+	entity.Hooks[11] = entityHooks[0]
 	entityMixinInters1 := entityMixin[1].Interceptors()
 	entityMixinInters5 := entityMixin[5].Interceptors()
 	entity.Interceptors[0] = entityMixinInters1[0]
@@ -2093,26 +2096,31 @@ func init() {
 	}
 	exportMixinHooks0 := exportMixin[0].Hooks()
 	exportMixinHooks1 := exportMixin[1].Hooks()
-	exportMixinHooks4 := exportMixin[4].Hooks()
+	exportMixinHooks3 := exportMixin[3].Hooks()
+	exportMixinHooks5 := exportMixin[5].Hooks()
 	exportHooks := schema.Export{}.Hooks()
 
 	export.Hooks[1] = exportMixinHooks0[0]
 
 	export.Hooks[2] = exportMixinHooks1[0]
 
-	export.Hooks[3] = exportMixinHooks4[0]
+	export.Hooks[3] = exportMixinHooks3[0]
 
-	export.Hooks[4] = exportHooks[0]
+	export.Hooks[4] = exportMixinHooks5[0]
 
-	export.Hooks[5] = exportHooks[1]
+	export.Hooks[5] = exportHooks[0]
+
+	export.Hooks[6] = exportHooks[1]
 	exportMixinInters1 := exportMixin[1].Interceptors()
-	exportMixinInters4 := exportMixin[4].Interceptors()
+	exportMixinInters5 := exportMixin[5].Interceptors()
 	export.Interceptors[0] = exportMixinInters1[0]
-	export.Interceptors[1] = exportMixinInters4[0]
+	export.Interceptors[1] = exportMixinInters5[0]
 	exportMixinFields0 := exportMixin[0].Fields()
 	_ = exportMixinFields0
 	exportMixinFields2 := exportMixin[2].Fields()
 	_ = exportMixinFields2
+	exportMixinFields3 := exportMixin[3].Fields()
+	_ = exportMixinFields3
 	exportFields := schema.Export{}.Fields()
 	_ = exportFields
 	// exportDescCreatedAt is the schema descriptor for created_at field.
@@ -2126,11 +2134,11 @@ func init() {
 	// export.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	export.UpdateDefaultUpdatedAt = exportDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// exportDescRequestorID is the schema descriptor for requestor_id field.
-	exportDescRequestorID := exportFields[3].Descriptor()
+	exportDescRequestorID := exportMixinFields3[0].Descriptor()
 	// export.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
 	export.RequestorIDValidator = exportDescRequestorID.Validators[0].(func(string) error)
 	// exportDescFields is the schema descriptor for fields field.
-	exportDescFields := exportFields[4].Descriptor()
+	exportDescFields := exportFields[3].Descriptor()
 	// export.DefaultFields holds the default value on creation for the fields field.
 	export.DefaultFields = exportDescFields.Default.([]string)
 	// exportDescID is the schema descriptor for id field.
@@ -2911,32 +2919,37 @@ func init() {
 	}
 	inviteMixinHooks0 := inviteMixin[0].Hooks()
 	inviteMixinHooks1 := inviteMixin[1].Hooks()
-	inviteMixinHooks4 := inviteMixin[4].Hooks()
+	inviteMixinHooks3 := inviteMixin[3].Hooks()
+	inviteMixinHooks5 := inviteMixin[5].Hooks()
 	inviteHooks := schema.Invite{}.Hooks()
 
 	invite.Hooks[1] = inviteMixinHooks0[0]
 
 	invite.Hooks[2] = inviteMixinHooks1[0]
 
-	invite.Hooks[3] = inviteMixinHooks4[0]
+	invite.Hooks[3] = inviteMixinHooks3[0]
 
-	invite.Hooks[4] = inviteHooks[0]
+	invite.Hooks[4] = inviteMixinHooks5[0]
 
-	invite.Hooks[5] = inviteHooks[1]
+	invite.Hooks[5] = inviteHooks[0]
 
-	invite.Hooks[6] = inviteHooks[2]
+	invite.Hooks[6] = inviteHooks[1]
 
-	invite.Hooks[7] = inviteHooks[3]
+	invite.Hooks[7] = inviteHooks[2]
+
+	invite.Hooks[8] = inviteHooks[3]
 	inviteMixinInters1 := inviteMixin[1].Interceptors()
-	inviteMixinInters4 := inviteMixin[4].Interceptors()
+	inviteMixinInters5 := inviteMixin[5].Interceptors()
 	invite.Interceptors[0] = inviteMixinInters1[0]
-	invite.Interceptors[1] = inviteMixinInters4[0]
+	invite.Interceptors[1] = inviteMixinInters5[0]
 	inviteMixinFields0 := inviteMixin[0].Fields()
 	_ = inviteMixinFields0
 	inviteMixinFields2 := inviteMixin[2].Fields()
 	_ = inviteMixinFields2
-	inviteMixinFields4 := inviteMixin[4].Fields()
-	_ = inviteMixinFields4
+	inviteMixinFields3 := inviteMixin[3].Fields()
+	_ = inviteMixinFields3
+	inviteMixinFields5 := inviteMixin[5].Fields()
+	_ = inviteMixinFields5
 	inviteFields := schema.Invite{}.Fields()
 	_ = inviteFields
 	// inviteDescCreatedAt is the schema descriptor for created_at field.
@@ -2949,8 +2962,12 @@ func init() {
 	invite.DefaultUpdatedAt = inviteDescUpdatedAt.Default.(func() time.Time)
 	// invite.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	invite.UpdateDefaultUpdatedAt = inviteDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// inviteDescRequestorID is the schema descriptor for requestor_id field.
+	inviteDescRequestorID := inviteMixinFields3[0].Descriptor()
+	// invite.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
+	invite.RequestorIDValidator = inviteDescRequestorID.Validators[0].(func(string) error)
 	// inviteDescOwnerID is the schema descriptor for owner_id field.
-	inviteDescOwnerID := inviteMixinFields4[0].Descriptor()
+	inviteDescOwnerID := inviteMixinFields5[0].Descriptor()
 	// invite.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	invite.OwnerIDValidator = inviteDescOwnerID.Validators[0].(func(string) error)
 	// inviteDescToken is the schema descriptor for token field.
@@ -2983,16 +3000,12 @@ func init() {
 	inviteDescSendAttempts := inviteFields[5].Descriptor()
 	// invite.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	invite.DefaultSendAttempts = inviteDescSendAttempts.Default.(int)
-	// inviteDescRequestorID is the schema descriptor for requestor_id field.
-	inviteDescRequestorID := inviteFields[6].Descriptor()
-	// invite.RequestorIDValidator is a validator for the "requestor_id" field. It is called by the builders before save.
-	invite.RequestorIDValidator = inviteDescRequestorID.Validators[0].(func(string) error)
 	// inviteDescSecret is the schema descriptor for secret field.
-	inviteDescSecret := inviteFields[7].Descriptor()
+	inviteDescSecret := inviteFields[6].Descriptor()
 	// invite.SecretValidator is a validator for the "secret" field. It is called by the builders before save.
 	invite.SecretValidator = inviteDescSecret.Validators[0].(func([]byte) error)
 	// inviteDescOwnershipTransfer is the schema descriptor for ownership_transfer field.
-	inviteDescOwnershipTransfer := inviteFields[8].Descriptor()
+	inviteDescOwnershipTransfer := inviteFields[7].Descriptor()
 	// invite.DefaultOwnershipTransfer holds the default value on creation for the ownership_transfer field.
 	invite.DefaultOwnershipTransfer = inviteDescOwnershipTransfer.Default.(bool)
 	// inviteDescID is the schema descriptor for id field.
@@ -3309,7 +3322,9 @@ func init() {
 
 	jobtemplate.Hooks[6] = jobtemplateMixinHooks6[0]
 
-	jobtemplate.Hooks[7] = jobtemplateHooks[0]
+	jobtemplate.Hooks[7] = jobtemplateMixinHooks6[1]
+
+	jobtemplate.Hooks[8] = jobtemplateHooks[0]
 	jobtemplateMixinInters1 := jobtemplateMixin[1].Interceptors()
 	jobtemplateMixinInters5 := jobtemplateMixin[5].Interceptors()
 	jobtemplate.Interceptors[0] = jobtemplateMixinInters1[0]
@@ -3670,11 +3685,11 @@ func init() {
 	// note.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	note.OwnerIDValidator = noteDescOwnerID.Validators[0].(func(string) error)
 	// noteDescText is the schema descriptor for text field.
-	noteDescText := noteFields[0].Descriptor()
+	noteDescText := noteFields[1].Descriptor()
 	// note.TextValidator is a validator for the "text" field. It is called by the builders before save.
 	note.TextValidator = noteDescText.Validators[0].(func(string) error)
 	// noteDescIsEdited is the schema descriptor for is_edited field.
-	noteDescIsEdited := noteFields[4].Descriptor()
+	noteDescIsEdited := noteFields[5].Descriptor()
 	// note.DefaultIsEdited holds the default value on creation for the is_edited field.
 	note.DefaultIsEdited = noteDescIsEdited.Default.(bool)
 	// noteDescID is the schema descriptor for id field.
@@ -4213,6 +4228,8 @@ func init() {
 	organizationsetting.Hooks[5] = organizationsettingHooks[1]
 
 	organizationsetting.Hooks[6] = organizationsettingHooks[2]
+
+	organizationsetting.Hooks[7] = organizationsettingHooks[3]
 	organizationsettingMixinInters1 := organizationsettingMixin[1].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters1[0]
@@ -5450,23 +5467,30 @@ func init() {
 
 	subprocessor.Hooks[4] = subprocessorMixinHooks5[0]
 
-	subprocessor.Hooks[5] = subprocessorMixinHooks6[0]
+	subprocessor.Hooks[5] = subprocessorMixinHooks5[1]
 
-	subprocessor.Hooks[6] = subprocessorHooks[0]
+	subprocessor.Hooks[6] = subprocessorMixinHooks6[0]
 
-	subprocessor.Hooks[7] = subprocessorHooks[1]
+	subprocessor.Hooks[7] = subprocessorMixinHooks6[1]
+
+	subprocessor.Hooks[8] = subprocessorHooks[0]
+
+	subprocessor.Hooks[9] = subprocessorHooks[1]
 	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
 	subprocessorMixinInters5 := subprocessorMixin[5].Interceptors()
 	subprocessorInters := schema.Subprocessor{}.Interceptors()
 	subprocessor.Interceptors[0] = subprocessorMixinInters1[0]
 	subprocessor.Interceptors[1] = subprocessorMixinInters5[0]
-	subprocessor.Interceptors[2] = subprocessorInters[0]
+	subprocessor.Interceptors[2] = subprocessorMixinInters5[1]
+	subprocessor.Interceptors[3] = subprocessorInters[0]
 	subprocessorMixinFields0 := subprocessorMixin[0].Fields()
 	_ = subprocessorMixinFields0
 	subprocessorMixinFields2 := subprocessorMixin[2].Fields()
 	_ = subprocessorMixinFields2
 	subprocessorMixinFields3 := subprocessorMixin[3].Fields()
 	_ = subprocessorMixinFields3
+	subprocessorMixinFields5 := subprocessorMixin[5].Fields()
+	_ = subprocessorMixinFields5
 	subprocessorMixinFields6 := subprocessorMixin[6].Fields()
 	_ = subprocessorMixinFields6
 	subprocessorFields := schema.Subprocessor{}.Fields()
@@ -5485,6 +5509,10 @@ func init() {
 	subprocessorDescTags := subprocessorMixinFields3[0].Descriptor()
 	// subprocessor.DefaultTags holds the default value on creation for the tags field.
 	subprocessor.DefaultTags = subprocessorDescTags.Default.([]string)
+	// subprocessorDescOwnerID is the schema descriptor for owner_id field.
+	subprocessorDescOwnerID := subprocessorMixinFields5[0].Descriptor()
+	// subprocessor.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	subprocessor.OwnerIDValidator = subprocessorDescOwnerID.Validators[0].(func(string) error)
 	// subprocessorDescSystemOwned is the schema descriptor for system_owned field.
 	subprocessorDescSystemOwned := subprocessorMixinFields6[0].Descriptor()
 	// subprocessor.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -5860,11 +5888,13 @@ func init() {
 
 	template.Hooks[6] = templateMixinHooks6[0]
 
-	template.Hooks[7] = templateHooks[0]
+	template.Hooks[7] = templateMixinHooks6[1]
 
-	template.Hooks[8] = templateHooks[1]
+	template.Hooks[8] = templateHooks[0]
 
-	template.Hooks[9] = templateHooks[2]
+	template.Hooks[9] = templateHooks[1]
+
+	template.Hooks[10] = templateHooks[2]
 	templateMixinInters1 := templateMixin[1].Interceptors()
 	templateMixinInters5 := templateMixin[5].Interceptors()
 	template.Interceptors[0] = templateMixinInters1[0]
@@ -5926,6 +5956,7 @@ func init() {
 	trustcenterMixinHooks1 := trustcenterMixin[1].Hooks()
 	trustcenterMixinHooks3 := trustcenterMixin[3].Hooks()
 	trustcenterMixinHooks5 := trustcenterMixin[5].Hooks()
+	trustcenterMixinHooks6 := trustcenterMixin[6].Hooks()
 	trustcenterHooks := schema.TrustCenter{}.Hooks()
 
 	trustcenter.Hooks[1] = trustcenterMixinHooks0[0]
@@ -5936,13 +5967,17 @@ func init() {
 
 	trustcenter.Hooks[4] = trustcenterMixinHooks5[0]
 
-	trustcenter.Hooks[5] = trustcenterHooks[0]
+	trustcenter.Hooks[5] = trustcenterMixinHooks6[0]
 
-	trustcenter.Hooks[6] = trustcenterHooks[1]
+	trustcenter.Hooks[6] = trustcenterMixinHooks6[1]
 
-	trustcenter.Hooks[7] = trustcenterHooks[2]
+	trustcenter.Hooks[7] = trustcenterHooks[0]
 
-	trustcenter.Hooks[8] = trustcenterHooks[3]
+	trustcenter.Hooks[8] = trustcenterHooks[1]
+
+	trustcenter.Hooks[9] = trustcenterHooks[2]
+
+	trustcenter.Hooks[10] = trustcenterHooks[3]
 	trustcenterMixinInters1 := trustcenterMixin[1].Interceptors()
 	trustcenterMixinInters5 := trustcenterMixin[5].Interceptors()
 	trustcenterInters := schema.TrustCenter{}.Interceptors()
@@ -5997,6 +6032,7 @@ func init() {
 	trustcentercomplianceMixinHooks1 := trustcentercomplianceMixin[1].Hooks()
 	trustcentercomplianceMixinHooks3 := trustcentercomplianceMixin[3].Hooks()
 	trustcentercomplianceMixinHooks5 := trustcentercomplianceMixin[5].Hooks()
+	trustcentercomplianceMixinHooks6 := trustcentercomplianceMixin[6].Hooks()
 	trustcentercomplianceHooks := schema.TrustCenterCompliance{}.Hooks()
 
 	trustcentercompliance.Hooks[1] = trustcentercomplianceMixinHooks0[0]
@@ -6007,7 +6043,11 @@ func init() {
 
 	trustcentercompliance.Hooks[4] = trustcentercomplianceMixinHooks5[0]
 
-	trustcentercompliance.Hooks[5] = trustcentercomplianceHooks[0]
+	trustcentercompliance.Hooks[5] = trustcentercomplianceMixinHooks6[0]
+
+	trustcentercompliance.Hooks[6] = trustcentercomplianceMixinHooks6[1]
+
+	trustcentercompliance.Hooks[7] = trustcentercomplianceHooks[0]
 	trustcentercomplianceMixinInters1 := trustcentercomplianceMixin[1].Interceptors()
 	trustcentercomplianceMixinInters5 := trustcentercomplianceMixin[5].Interceptors()
 	trustcentercomplianceInters := schema.TrustCenterCompliance{}.Interceptors()
@@ -6062,6 +6102,8 @@ func init() {
 	trustcenterdocMixinHooks1 := trustcenterdocMixin[1].Hooks()
 	trustcenterdocMixinHooks3 := trustcenterdocMixin[3].Hooks()
 	trustcenterdocMixinHooks5 := trustcenterdocMixin[5].Hooks()
+	trustcenterdocMixinHooks6 := trustcenterdocMixin[6].Hooks()
+	trustcenterdocMixinHooks7 := trustcenterdocMixin[7].Hooks()
 	trustcenterdocHooks := schema.TrustCenterDoc{}.Hooks()
 
 	trustcenterdoc.Hooks[1] = trustcenterdocMixinHooks0[0]
@@ -6072,9 +6114,15 @@ func init() {
 
 	trustcenterdoc.Hooks[4] = trustcenterdocMixinHooks5[0]
 
-	trustcenterdoc.Hooks[5] = trustcenterdocHooks[0]
+	trustcenterdoc.Hooks[5] = trustcenterdocMixinHooks6[0]
 
-	trustcenterdoc.Hooks[6] = trustcenterdocHooks[1]
+	trustcenterdoc.Hooks[6] = trustcenterdocMixinHooks7[0]
+
+	trustcenterdoc.Hooks[7] = trustcenterdocMixinHooks7[1]
+
+	trustcenterdoc.Hooks[8] = trustcenterdocHooks[0]
+
+	trustcenterdoc.Hooks[9] = trustcenterdocHooks[1]
 	trustcenterdocMixinInters1 := trustcenterdocMixin[1].Interceptors()
 	trustcenterdocMixinInters5 := trustcenterdocMixin[5].Interceptors()
 	trustcenterdocInters := schema.TrustCenterDoc{}.Interceptors()
@@ -6111,18 +6159,180 @@ func init() {
 	trustcenterdocDescTitle := trustcenterdocFields[1].Descriptor()
 	// trustcenterdoc.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	trustcenterdoc.TitleValidator = trustcenterdocDescTitle.Validators[0].(func(string) error)
-	// trustcenterdocDescCategory is the schema descriptor for category field.
-	trustcenterdocDescCategory := trustcenterdocFields[2].Descriptor()
-	// trustcenterdoc.CategoryValidator is a validator for the "category" field. It is called by the builders before save.
-	trustcenterdoc.CategoryValidator = trustcenterdocDescCategory.Validators[0].(func(string) error)
 	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
-	trustcenterdocDescStandardID := trustcenterdocFields[8].Descriptor()
+	trustcenterdocDescStandardID := trustcenterdocFields[7].Descriptor()
 	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
 	trustcenterdoc.StandardIDValidator = trustcenterdocDescStandardID.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.
 	trustcenterdocDescID := trustcenterdocMixinFields2[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.
 	trustcenterdoc.DefaultID = trustcenterdocDescID.Default.(func() string)
+	trustcenterentityMixin := schema.TrustCenterEntity{}.Mixin()
+	trustcenterentity.Policy = privacy.NewPolicies(schema.TrustCenterEntity{})
+	trustcenterentity.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterentity.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterentityMixinHooks0 := trustcenterentityMixin[0].Hooks()
+	trustcenterentityMixinHooks1 := trustcenterentityMixin[1].Hooks()
+	trustcenterentityMixinHooks4 := trustcenterentityMixin[4].Hooks()
+	trustcenterentityMixinHooks5 := trustcenterentityMixin[5].Hooks()
+	trustcenterentityHooks := schema.TrustCenterEntity{}.Hooks()
+
+	trustcenterentity.Hooks[1] = trustcenterentityMixinHooks0[0]
+
+	trustcenterentity.Hooks[2] = trustcenterentityMixinHooks1[0]
+
+	trustcenterentity.Hooks[3] = trustcenterentityMixinHooks4[0]
+
+	trustcenterentity.Hooks[4] = trustcenterentityMixinHooks5[0]
+
+	trustcenterentity.Hooks[5] = trustcenterentityMixinHooks5[1]
+
+	trustcenterentity.Hooks[6] = trustcenterentityHooks[0]
+
+	trustcenterentity.Hooks[7] = trustcenterentityHooks[1]
+	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
+	trustcenterentityMixinInters4 := trustcenterentityMixin[4].Interceptors()
+	trustcenterentityInters := schema.TrustCenterEntity{}.Interceptors()
+	trustcenterentity.Interceptors[0] = trustcenterentityMixinInters1[0]
+	trustcenterentity.Interceptors[1] = trustcenterentityMixinInters4[0]
+	trustcenterentity.Interceptors[2] = trustcenterentityInters[0]
+	trustcenterentityMixinFields0 := trustcenterentityMixin[0].Fields()
+	_ = trustcenterentityMixinFields0
+	trustcenterentityMixinFields2 := trustcenterentityMixin[2].Fields()
+	_ = trustcenterentityMixinFields2
+	trustcenterentityFields := schema.TrustCenterEntity{}.Fields()
+	_ = trustcenterentityFields
+	// trustcenterentityDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterentityDescCreatedAt := trustcenterentityMixinFields0[0].Descriptor()
+	// trustcenterentity.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterentity.DefaultCreatedAt = trustcenterentityDescCreatedAt.Default.(func() time.Time)
+	// trustcenterentityDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterentityDescUpdatedAt := trustcenterentityMixinFields0[1].Descriptor()
+	// trustcenterentity.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterentity.DefaultUpdatedAt = trustcenterentityDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterentity.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterentity.UpdateDefaultUpdatedAt = trustcenterentityDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterentityDescURL is the schema descriptor for url field.
+	trustcenterentityDescURL := trustcenterentityFields[1].Descriptor()
+	// trustcenterentity.URLValidator is a validator for the "url" field. It is called by the builders before save.
+	trustcenterentity.URLValidator = func() func(string) error {
+		validators := trustcenterentityDescURL.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(url string) error {
+			for _, fn := range fns {
+				if err := fn(url); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcenterentityDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcenterentityDescTrustCenterID := trustcenterentityFields[2].Descriptor()
+	// trustcenterentity.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcenterentity.TrustCenterIDValidator = trustcenterentityDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcenterentityDescID is the schema descriptor for id field.
+	trustcenterentityDescID := trustcenterentityMixinFields2[0].Descriptor()
+	// trustcenterentity.DefaultID holds the default value on creation for the id field.
+	trustcenterentity.DefaultID = trustcenterentityDescID.Default.(func() string)
+	trustcenterndarequestMixin := schema.TrustCenterNDARequest{}.Mixin()
+	trustcenterndarequest.Policy = privacy.NewPolicies(schema.TrustCenterNDARequest{})
+	trustcenterndarequest.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterndarequest.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterndarequestMixinHooks0 := trustcenterndarequestMixin[0].Hooks()
+	trustcenterndarequestMixinHooks1 := trustcenterndarequestMixin[1].Hooks()
+	trustcenterndarequestMixinHooks3 := trustcenterndarequestMixin[3].Hooks()
+	trustcenterndarequestMixinHooks5 := trustcenterndarequestMixin[5].Hooks()
+	trustcenterndarequestMixinHooks6 := trustcenterndarequestMixin[6].Hooks()
+
+	trustcenterndarequest.Hooks[1] = trustcenterndarequestMixinHooks0[0]
+
+	trustcenterndarequest.Hooks[2] = trustcenterndarequestMixinHooks1[0]
+
+	trustcenterndarequest.Hooks[3] = trustcenterndarequestMixinHooks3[0]
+
+	trustcenterndarequest.Hooks[4] = trustcenterndarequestMixinHooks5[0]
+
+	trustcenterndarequest.Hooks[5] = trustcenterndarequestMixinHooks6[0]
+
+	trustcenterndarequest.Hooks[6] = trustcenterndarequestMixinHooks6[1]
+	trustcenterndarequestMixinInters1 := trustcenterndarequestMixin[1].Interceptors()
+	trustcenterndarequestMixinInters5 := trustcenterndarequestMixin[5].Interceptors()
+	trustcenterndarequestInters := schema.TrustCenterNDARequest{}.Interceptors()
+	trustcenterndarequest.Interceptors[0] = trustcenterndarequestMixinInters1[0]
+	trustcenterndarequest.Interceptors[1] = trustcenterndarequestMixinInters5[0]
+	trustcenterndarequest.Interceptors[2] = trustcenterndarequestInters[0]
+	trustcenterndarequestMixinFields0 := trustcenterndarequestMixin[0].Fields()
+	_ = trustcenterndarequestMixinFields0
+	trustcenterndarequestMixinFields2 := trustcenterndarequestMixin[2].Fields()
+	_ = trustcenterndarequestMixinFields2
+	trustcenterndarequestMixinFields3 := trustcenterndarequestMixin[3].Fields()
+	_ = trustcenterndarequestMixinFields3
+	trustcenterndarequestFields := schema.TrustCenterNDARequest{}.Fields()
+	_ = trustcenterndarequestFields
+	// trustcenterndarequestDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterndarequestDescCreatedAt := trustcenterndarequestMixinFields0[0].Descriptor()
+	// trustcenterndarequest.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterndarequest.DefaultCreatedAt = trustcenterndarequestDescCreatedAt.Default.(func() time.Time)
+	// trustcenterndarequestDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterndarequestDescUpdatedAt := trustcenterndarequestMixinFields0[1].Descriptor()
+	// trustcenterndarequest.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterndarequest.DefaultUpdatedAt = trustcenterndarequestDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterndarequest.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterndarequest.UpdateDefaultUpdatedAt = trustcenterndarequestDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterndarequestDescTags is the schema descriptor for tags field.
+	trustcenterndarequestDescTags := trustcenterndarequestMixinFields3[0].Descriptor()
+	// trustcenterndarequest.DefaultTags holds the default value on creation for the tags field.
+	trustcenterndarequest.DefaultTags = trustcenterndarequestDescTags.Default.([]string)
+	// trustcenterndarequestDescTrustCenterID is the schema descriptor for trust_center_id field.
+	trustcenterndarequestDescTrustCenterID := trustcenterndarequestFields[0].Descriptor()
+	// trustcenterndarequest.TrustCenterIDValidator is a validator for the "trust_center_id" field. It is called by the builders before save.
+	trustcenterndarequest.TrustCenterIDValidator = trustcenterndarequestDescTrustCenterID.Validators[0].(func(string) error)
+	// trustcenterndarequestDescFirstName is the schema descriptor for first_name field.
+	trustcenterndarequestDescFirstName := trustcenterndarequestFields[1].Descriptor()
+	// trustcenterndarequest.FirstNameValidator is a validator for the "first_name" field. It is called by the builders before save.
+	trustcenterndarequest.FirstNameValidator = trustcenterndarequestDescFirstName.Validators[0].(func(string) error)
+	// trustcenterndarequestDescLastName is the schema descriptor for last_name field.
+	trustcenterndarequestDescLastName := trustcenterndarequestFields[2].Descriptor()
+	// trustcenterndarequest.LastNameValidator is a validator for the "last_name" field. It is called by the builders before save.
+	trustcenterndarequest.LastNameValidator = trustcenterndarequestDescLastName.Validators[0].(func(string) error)
+	// trustcenterndarequestDescEmail is the schema descriptor for email field.
+	trustcenterndarequestDescEmail := trustcenterndarequestFields[3].Descriptor()
+	// trustcenterndarequest.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	trustcenterndarequest.EmailValidator = func() func(string) error {
+		validators := trustcenterndarequestDescEmail.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(email string) error {
+			for _, fn := range fns {
+				if err := fn(email); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcenterndarequestDescID is the schema descriptor for id field.
+	trustcenterndarequestDescID := trustcenterndarequestMixinFields2[0].Descriptor()
+	// trustcenterndarequest.DefaultID holds the default value on creation for the id field.
+	trustcenterndarequest.DefaultID = trustcenterndarequestDescID.Default.(func() string)
 	trustcentersettingMixin := schema.TrustCenterSetting{}.Mixin()
 	trustcentersetting.Policy = privacy.NewPolicies(schema.TrustCenterSetting{})
 	trustcentersetting.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -6136,6 +6346,7 @@ func init() {
 	trustcentersettingMixinHooks0 := trustcentersettingMixin[0].Hooks()
 	trustcentersettingMixinHooks1 := trustcentersettingMixin[1].Hooks()
 	trustcentersettingMixinHooks4 := trustcentersettingMixin[4].Hooks()
+	trustcentersettingMixinHooks5 := trustcentersettingMixin[5].Hooks()
 	trustcentersettingHooks := schema.TrustCenterSetting{}.Hooks()
 
 	trustcentersetting.Hooks[1] = trustcentersettingMixinHooks0[0]
@@ -6144,9 +6355,13 @@ func init() {
 
 	trustcentersetting.Hooks[3] = trustcentersettingMixinHooks4[0]
 
-	trustcentersetting.Hooks[4] = trustcentersettingHooks[0]
+	trustcentersetting.Hooks[4] = trustcentersettingMixinHooks5[0]
 
-	trustcentersetting.Hooks[5] = trustcentersettingHooks[1]
+	trustcentersetting.Hooks[5] = trustcentersettingMixinHooks5[1]
+
+	trustcentersetting.Hooks[6] = trustcentersettingHooks[0]
+
+	trustcentersetting.Hooks[7] = trustcentersettingHooks[1]
 	trustcentersettingMixinInters1 := trustcentersettingMixin[1].Interceptors()
 	trustcentersettingMixinInters4 := trustcentersettingMixin[4].Interceptors()
 	trustcentersettingInters := schema.TrustCenterSetting{}.Interceptors()
@@ -6177,12 +6392,16 @@ func init() {
 	trustcentersettingDescTitle := trustcentersettingFields[1].Descriptor()
 	// trustcentersetting.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	trustcentersetting.TitleValidator = trustcentersettingDescTitle.Validators[0].(func(string) error)
+	// trustcentersettingDescCompanyName is the schema descriptor for company_name field.
+	trustcentersettingDescCompanyName := trustcentersettingFields[2].Descriptor()
+	// trustcentersetting.CompanyNameValidator is a validator for the "company_name" field. It is called by the builders before save.
+	trustcentersetting.CompanyNameValidator = trustcentersettingDescCompanyName.Validators[0].(func(string) error)
 	// trustcentersettingDescOverview is the schema descriptor for overview field.
-	trustcentersettingDescOverview := trustcentersettingFields[2].Descriptor()
+	trustcentersettingDescOverview := trustcentersettingFields[3].Descriptor()
 	// trustcentersetting.OverviewValidator is a validator for the "overview" field. It is called by the builders before save.
 	trustcentersetting.OverviewValidator = trustcentersettingDescOverview.Validators[0].(func(string) error)
 	// trustcentersettingDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
-	trustcentersettingDescLogoRemoteURL := trustcentersettingFields[3].Descriptor()
+	trustcentersettingDescLogoRemoteURL := trustcentersettingFields[4].Descriptor()
 	// trustcentersetting.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
 	trustcentersetting.LogoRemoteURLValidator = func() func(string) error {
 		validators := trustcentersettingDescLogoRemoteURL.Validators
@@ -6200,7 +6419,7 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescFaviconRemoteURL is the schema descriptor for favicon_remote_url field.
-	trustcentersettingDescFaviconRemoteURL := trustcentersettingFields[5].Descriptor()
+	trustcentersettingDescFaviconRemoteURL := trustcentersettingFields[6].Descriptor()
 	// trustcentersetting.FaviconRemoteURLValidator is a validator for the "favicon_remote_url" field. It is called by the builders before save.
 	trustcentersetting.FaviconRemoteURLValidator = func() func(string) error {
 		validators := trustcentersettingDescFaviconRemoteURL.Validators
@@ -6218,29 +6437,59 @@ func init() {
 		}
 	}()
 	// trustcentersettingDescPrimaryColor is the schema descriptor for primary_color field.
-	trustcentersettingDescPrimaryColor := trustcentersettingFields[8].Descriptor()
+	trustcentersettingDescPrimaryColor := trustcentersettingFields[9].Descriptor()
 	// trustcentersetting.PrimaryColorValidator is a validator for the "primary_color" field. It is called by the builders before save.
 	trustcentersetting.PrimaryColorValidator = trustcentersettingDescPrimaryColor.Validators[0].(func(string) error)
 	// trustcentersettingDescForegroundColor is the schema descriptor for foreground_color field.
-	trustcentersettingDescForegroundColor := trustcentersettingFields[10].Descriptor()
+	trustcentersettingDescForegroundColor := trustcentersettingFields[11].Descriptor()
 	// trustcentersetting.ForegroundColorValidator is a validator for the "foreground_color" field. It is called by the builders before save.
 	trustcentersetting.ForegroundColorValidator = trustcentersettingDescForegroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescBackgroundColor is the schema descriptor for background_color field.
-	trustcentersettingDescBackgroundColor := trustcentersettingFields[11].Descriptor()
+	trustcentersettingDescBackgroundColor := trustcentersettingFields[12].Descriptor()
 	// trustcentersetting.BackgroundColorValidator is a validator for the "background_color" field. It is called by the builders before save.
 	trustcentersetting.BackgroundColorValidator = trustcentersettingDescBackgroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescAccentColor is the schema descriptor for accent_color field.
-	trustcentersettingDescAccentColor := trustcentersettingFields[12].Descriptor()
+	trustcentersettingDescAccentColor := trustcentersettingFields[13].Descriptor()
 	// trustcentersetting.AccentColorValidator is a validator for the "accent_color" field. It is called by the builders before save.
 	trustcentersetting.AccentColorValidator = trustcentersettingDescAccentColor.Validators[0].(func(string) error)
 	// trustcentersettingDescSecondaryBackgroundColor is the schema descriptor for secondary_background_color field.
-	trustcentersettingDescSecondaryBackgroundColor := trustcentersettingFields[13].Descriptor()
+	trustcentersettingDescSecondaryBackgroundColor := trustcentersettingFields[14].Descriptor()
 	// trustcentersetting.SecondaryBackgroundColorValidator is a validator for the "secondary_background_color" field. It is called by the builders before save.
 	trustcentersetting.SecondaryBackgroundColorValidator = trustcentersettingDescSecondaryBackgroundColor.Validators[0].(func(string) error)
 	// trustcentersettingDescSecondaryForegroundColor is the schema descriptor for secondary_foreground_color field.
-	trustcentersettingDescSecondaryForegroundColor := trustcentersettingFields[14].Descriptor()
+	trustcentersettingDescSecondaryForegroundColor := trustcentersettingFields[15].Descriptor()
 	// trustcentersetting.SecondaryForegroundColorValidator is a validator for the "secondary_foreground_color" field. It is called by the builders before save.
 	trustcentersetting.SecondaryForegroundColorValidator = trustcentersettingDescSecondaryForegroundColor.Validators[0].(func(string) error)
+	// trustcentersettingDescRemoveBranding is the schema descriptor for remove_branding field.
+	trustcentersettingDescRemoveBranding := trustcentersettingFields[17].Descriptor()
+	// trustcentersetting.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
+	trustcentersetting.DefaultRemoveBranding = trustcentersettingDescRemoveBranding.Default.(bool)
+	// trustcentersettingDescCompanyDomain is the schema descriptor for company_domain field.
+	trustcentersettingDescCompanyDomain := trustcentersettingFields[18].Descriptor()
+	// trustcentersetting.CompanyDomainValidator is a validator for the "company_domain" field. It is called by the builders before save.
+	trustcentersetting.CompanyDomainValidator = func() func(string) error {
+		validators := trustcentersettingDescCompanyDomain.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(company_domain string) error {
+			for _, fn := range fns {
+				if err := fn(company_domain); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// trustcentersettingDescSecurityContact is the schema descriptor for security_contact field.
+	trustcentersettingDescSecurityContact := trustcentersettingFields[19].Descriptor()
+	// trustcentersetting.SecurityContactValidator is a validator for the "security_contact" field. It is called by the builders before save.
+	trustcentersetting.SecurityContactValidator = trustcentersettingDescSecurityContact.Validators[0].(func(string) error)
+	// trustcentersettingDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
+	trustcentersettingDescNdaApprovalRequired := trustcentersettingFields[20].Descriptor()
+	// trustcentersetting.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
+	trustcentersetting.DefaultNdaApprovalRequired = trustcentersettingDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettingDescID is the schema descriptor for id field.
 	trustcentersettingDescID := trustcentersettingMixinFields2[0].Descriptor()
 	// trustcentersetting.DefaultID holds the default value on creation for the id field.
@@ -6258,12 +6507,17 @@ func init() {
 	trustcentersubprocessorMixinHooks0 := trustcentersubprocessorMixin[0].Hooks()
 	trustcentersubprocessorMixinHooks1 := trustcentersubprocessorMixin[1].Hooks()
 	trustcentersubprocessorMixinHooks4 := trustcentersubprocessorMixin[4].Hooks()
+	trustcentersubprocessorMixinHooks5 := trustcentersubprocessorMixin[5].Hooks()
 
 	trustcentersubprocessor.Hooks[1] = trustcentersubprocessorMixinHooks0[0]
 
 	trustcentersubprocessor.Hooks[2] = trustcentersubprocessorMixinHooks1[0]
 
 	trustcentersubprocessor.Hooks[3] = trustcentersubprocessorMixinHooks4[0]
+
+	trustcentersubprocessor.Hooks[4] = trustcentersubprocessorMixinHooks5[0]
+
+	trustcentersubprocessor.Hooks[5] = trustcentersubprocessorMixinHooks5[1]
 	trustcentersubprocessorMixinInters1 := trustcentersubprocessorMixin[1].Interceptors()
 	trustcentersubprocessorMixinInters4 := trustcentersubprocessorMixin[4].Interceptors()
 	trustcentersubprocessorInters := schema.TrustCenterSubprocessor{}.Interceptors()
@@ -6329,6 +6583,7 @@ func init() {
 	trustcenterwatermarkconfigMixinHooks0 := trustcenterwatermarkconfigMixin[0].Hooks()
 	trustcenterwatermarkconfigMixinHooks1 := trustcenterwatermarkconfigMixin[1].Hooks()
 	trustcenterwatermarkconfigMixinHooks4 := trustcenterwatermarkconfigMixin[4].Hooks()
+	trustcenterwatermarkconfigMixinHooks5 := trustcenterwatermarkconfigMixin[5].Hooks()
 	trustcenterwatermarkconfigHooks := schema.TrustCenterWatermarkConfig{}.Hooks()
 
 	trustcenterwatermarkconfig.Hooks[1] = trustcenterwatermarkconfigMixinHooks0[0]
@@ -6339,7 +6594,11 @@ func init() {
 
 	trustcenterwatermarkconfig.Hooks[4] = trustcenterwatermarkconfigMixinHooks4[1]
 
-	trustcenterwatermarkconfig.Hooks[5] = trustcenterwatermarkconfigHooks[0]
+	trustcenterwatermarkconfig.Hooks[5] = trustcenterwatermarkconfigMixinHooks5[0]
+
+	trustcenterwatermarkconfig.Hooks[6] = trustcenterwatermarkconfigMixinHooks5[1]
+
+	trustcenterwatermarkconfig.Hooks[7] = trustcenterwatermarkconfigHooks[0]
 	trustcenterwatermarkconfigMixinInters1 := trustcenterwatermarkconfigMixin[1].Interceptors()
 	trustcenterwatermarkconfigMixinInters4 := trustcenterwatermarkconfigMixin[4].Interceptors()
 	trustcenterwatermarkconfigInters := schema.TrustCenterWatermarkConfig{}.Interceptors()
@@ -6435,74 +6694,6 @@ func init() {
 	trustcenterwatermarkconfigDescID := trustcenterwatermarkconfigMixinFields2[0].Descriptor()
 	// trustcenterwatermarkconfig.DefaultID holds the default value on creation for the id field.
 	trustcenterwatermarkconfig.DefaultID = trustcenterwatermarkconfigDescID.Default.(func() string)
-	trustcenterentityMixin := schema.TrustcenterEntity{}.Mixin()
-	trustcenterentity.Policy = privacy.NewPolicies(schema.TrustcenterEntity{})
-	trustcenterentity.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := trustcenterentity.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	trustcenterentityMixinHooks0 := trustcenterentityMixin[0].Hooks()
-	trustcenterentityMixinHooks1 := trustcenterentityMixin[1].Hooks()
-	trustcenterentityMixinHooks4 := trustcenterentityMixin[4].Hooks()
-	trustcenterentityHooks := schema.TrustcenterEntity{}.Hooks()
-
-	trustcenterentity.Hooks[1] = trustcenterentityMixinHooks0[0]
-
-	trustcenterentity.Hooks[2] = trustcenterentityMixinHooks1[0]
-
-	trustcenterentity.Hooks[3] = trustcenterentityMixinHooks4[0]
-
-	trustcenterentity.Hooks[4] = trustcenterentityHooks[0]
-
-	trustcenterentity.Hooks[5] = trustcenterentityHooks[1]
-	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
-	trustcenterentityMixinInters4 := trustcenterentityMixin[4].Interceptors()
-	trustcenterentityInters := schema.TrustcenterEntity{}.Interceptors()
-	trustcenterentity.Interceptors[0] = trustcenterentityMixinInters1[0]
-	trustcenterentity.Interceptors[1] = trustcenterentityMixinInters4[0]
-	trustcenterentity.Interceptors[2] = trustcenterentityInters[0]
-	trustcenterentityMixinFields0 := trustcenterentityMixin[0].Fields()
-	_ = trustcenterentityMixinFields0
-	trustcenterentityMixinFields2 := trustcenterentityMixin[2].Fields()
-	_ = trustcenterentityMixinFields2
-	trustcenterentityFields := schema.TrustcenterEntity{}.Fields()
-	_ = trustcenterentityFields
-	// trustcenterentityDescCreatedAt is the schema descriptor for created_at field.
-	trustcenterentityDescCreatedAt := trustcenterentityMixinFields0[0].Descriptor()
-	// trustcenterentity.DefaultCreatedAt holds the default value on creation for the created_at field.
-	trustcenterentity.DefaultCreatedAt = trustcenterentityDescCreatedAt.Default.(func() time.Time)
-	// trustcenterentityDescUpdatedAt is the schema descriptor for updated_at field.
-	trustcenterentityDescUpdatedAt := trustcenterentityMixinFields0[1].Descriptor()
-	// trustcenterentity.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	trustcenterentity.DefaultUpdatedAt = trustcenterentityDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterentity.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterentity.UpdateDefaultUpdatedAt = trustcenterentityDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcenterentityDescURL is the schema descriptor for url field.
-	trustcenterentityDescURL := trustcenterentityFields[1].Descriptor()
-	// trustcenterentity.URLValidator is a validator for the "url" field. It is called by the builders before save.
-	trustcenterentity.URLValidator = func() func(string) error {
-		validators := trustcenterentityDescURL.Validators
-		fns := [...]func(string) error{
-			validators[0].(func(string) error),
-			validators[1].(func(string) error),
-		}
-		return func(url string) error {
-			for _, fn := range fns {
-				if err := fn(url); err != nil {
-					return err
-				}
-			}
-			return nil
-		}
-	}()
-	// trustcenterentityDescID is the schema descriptor for id field.
-	trustcenterentityDescID := trustcenterentityMixinFields2[0].Descriptor()
-	// trustcenterentity.DefaultID holds the default value on creation for the id field.
-	trustcenterentity.DefaultID = trustcenterentityDescID.Default.(func() string)
 	userMixin := schema.User{}.Mixin()
 	user.Policy = privacy.NewPolicies(schema.User{})
 	user.Hooks[0] = func(next ent.Mutator) ent.Mutator {

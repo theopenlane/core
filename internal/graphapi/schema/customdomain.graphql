@@ -69,6 +69,15 @@ extend type Mutation{
         """
         ids: [ID!]!
     ): CustomDomainBulkDeletePayload!
+    """
+    Trigger validation for an existing customDomain
+    """
+    validateCustomDomain(
+        """
+        ID of the customDomain to validate
+        """
+        id: ID!
+    ): CustomDomainValidatePayload!
 }
 
 """
@@ -119,4 +128,14 @@ type CustomDomainBulkDeletePayload {
     Deleted customDomain IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for validateCustomDomain mutation
+"""
+type CustomDomainValidatePayload {
+    """
+    CustomDomain that validation was triggered for
+    """
+    customDomain: CustomDomain!
 }

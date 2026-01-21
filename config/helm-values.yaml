@@ -374,6 +374,7 @@ coreConfiguration:
     year: 0  # @schema type:integer
     fromemail: ""  # @schema type:string
     supportemail: ""  # @schema type:string
+    questionnaireemail: ""  # @schema type:string
     logourl: ""  # @schema type:string
     urls:
       root: ""  # @schema type:string

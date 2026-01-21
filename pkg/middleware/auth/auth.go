@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/gorilla/websocket"
 	"github.com/rs/zerolog"
 	echo "github.com/theopenlane/echox"
 
@@ -54,6 +56,11 @@ var SessionSkipperFunc = func(c echo.Context) bool {
 var AuthenticateSkipperFuncForImpersonation = func(c echo.Context) bool {
 	_, ok := auth.ImpersonatedUserFromContext(c.Request().Context())
 	return ok
+}
+
+// AuthenticateSkipperFuncForWebsockets determines whether Authenticate middleware should be skipped for websocket upgrades
+var AuthenticateSkipperFuncForWebsockets = func(c echo.Context) bool {
+	return websocket.IsWebSocketUpgrade(c.Request())
 }
 
 // Authenticate is a middleware function that is used to authenticate requests - it is not applied to all routes so be cognizant of that
@@ -117,7 +124,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				}
 
 			default:
-				claims, err := validator.Verify(bearerToken)
+				claims, err := validator.VerifyWithContext(reqCtx, bearerToken)
 				if err != nil {
 					return unauthorized(c, err, conf, validator)
 				}
@@ -184,6 +191,30 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			return next(c)
 		}
 	}
+}
+
+// AuthenticateTransport authenticates a websocket transport init payload and returns the authenticated user
+func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayload, authOptions *Options) (*auth.AuthenticatedUser, error) {
+	bearerToken, err := auth.GetBearerTokenFromWebsocketRequest(initPayload)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get bearer token from websocket init payload")
+
+		return nil, ErrUnableToAuthenticateTransport
+	}
+
+	validator, err := authOptions.Validator()
+	if err != nil {
+		return nil, err
+	}
+
+	claims, err := validator.VerifyWithContext(ctx, bearerToken)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to verify token in websocket init payload")
+
+		return nil, ErrUnableToAuthenticateTransport
+	}
+
+	return createAuthenticatedUserFromClaims(ctx, authOptions.DBClient, claims, auth.JWTAuthentication)
 }
 
 // getTokenType returns the authentication type based on the bearer token

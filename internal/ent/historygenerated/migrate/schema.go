@@ -1251,6 +1251,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "display_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "text_json", Type: field.TypeJSON, Nullable: true},
 		{Name: "note_ref", Type: field.TypeString, Nullable: true},
@@ -2023,9 +2024,10 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_doc_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_doc_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString},
-		{Name: "category", Type: field.TypeString},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "watermarking_enabled", Type: field.TypeBool, Nullable: true},
@@ -2043,6 +2045,37 @@ var (
 				Name:    "trustcenterdochistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCenterDocHistoryColumns[1]},
+			},
+		},
+	}
+	// TrustCenterEntityHistoryColumns holds the columns for the "trust_center_entity_history" table.
+	TrustCenterEntityHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustCenterEntityHistoryTable holds the schema information for the "trust_center_entity_history" table.
+	TrustCenterEntityHistoryTable = &schema.Table{
+		Name:       "trust_center_entity_history",
+		Columns:    TrustCenterEntityHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterEntityHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterentityhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterEntityHistoryColumns[1]},
 			},
 		},
 	}
@@ -2081,6 +2114,41 @@ var (
 			},
 		},
 	}
+	// TrustCenterNdaRequestHistoryColumns holds the columns for the "trust_center_nda_request_history" table.
+	TrustCenterNdaRequestHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "first_name", Type: field.TypeString},
+		{Name: "last_name", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString},
+		{Name: "company_name", Type: field.TypeString, Nullable: true},
+		{Name: "reason", Type: field.TypeString, Nullable: true},
+		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED"}, Default: "REQUESTED"},
+	}
+	// TrustCenterNdaRequestHistoryTable holds the schema information for the "trust_center_nda_request_history" table.
+	TrustCenterNdaRequestHistoryTable = &schema.Table{
+		Name:       "trust_center_nda_request_history",
+		Columns:    TrustCenterNdaRequestHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustCenterNdaRequestHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterndarequesthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestHistoryColumns[1]},
+			},
+		},
+	}
 	// TrustCenterSettingHistoryColumns holds the columns for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -2095,6 +2163,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
+		{Name: "company_name", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
@@ -2109,6 +2178,10 @@ var (
 		{Name: "secondary_background_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_foreground_color", Type: field.TypeString, Nullable: true},
 		{Name: "environment", Type: field.TypeEnum, Nullable: true, Enums: []string{"LIVE", "PREVIEW"}, Default: "LIVE"},
+		{Name: "remove_branding", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "company_domain", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "security_contact", Type: field.TypeString, Nullable: true},
+		{Name: "nda_approval_required", Type: field.TypeBool, Nullable: true, Default: false},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -2186,37 +2259,6 @@ var (
 				Name:    "trustcenterwatermarkconfighistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCenterWatermarkConfigHistoryColumns[1]},
-			},
-		},
-	}
-	// TrustcenterEntityHistoryColumns holds the columns for the "trustcenter_entity_history" table.
-	TrustcenterEntityHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
-	}
-	// TrustcenterEntityHistoryTable holds the schema information for the "trustcenter_entity_history" table.
-	TrustcenterEntityHistoryTable = &schema.Table{
-		Name:       "trustcenter_entity_history",
-		Columns:    TrustcenterEntityHistoryColumns,
-		PrimaryKey: []*schema.Column{TrustcenterEntityHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "trustcenterentityhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{TrustcenterEntityHistoryColumns[1]},
 			},
 		},
 	}
@@ -2385,6 +2427,9 @@ var (
 		{Name: "required", Type: field.TypeBool, Default: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "APPROVED", "REJECTED"}, Default: "PENDING"},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "approval_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "rejection_metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "invalidation_metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "decided_at", Type: field.TypeTime, Nullable: true},
 		{Name: "actor_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "actor_group_id", Type: field.TypeString, Nullable: true},
@@ -2651,11 +2696,12 @@ var (
 		TemplateHistoryTable,
 		TrustCenterComplianceHistoryTable,
 		TrustCenterDocHistoryTable,
+		TrustCenterEntityHistoryTable,
 		TrustCenterHistoryTable,
+		TrustCenterNdaRequestHistoryTable,
 		TrustCenterSettingHistoryTable,
 		TrustCenterSubprocessorHistoryTable,
 		TrustCenterWatermarkConfigHistoryTable,
-		TrustcenterEntityHistoryTable,
 		UserHistoryTable,
 		UserSettingHistoryTable,
 		VulnerabilityHistoryTable,
@@ -2822,8 +2868,14 @@ func init() {
 	TrustCenterDocHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_doc_history",
 	}
+	TrustCenterEntityHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_entity_history",
+	}
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",
+	}
+	TrustCenterNdaRequestHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trust_center_nda_request_history",
 	}
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
@@ -2833,9 +2885,6 @@ func init() {
 	}
 	TrustCenterWatermarkConfigHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_watermark_config_history",
-	}
-	TrustcenterEntityHistoryTable.Annotation = &entsql.Annotation{
-		Table: "trustcenter_entity_history",
 	}
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",

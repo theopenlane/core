@@ -151,6 +151,7 @@ var validObjectTypes = map[string]struct{}{
 	Procedure{}.Name():      {},
 	ActionPlan{}.Name():     {},
 	Program{}.Name():        {},
+	TrustCenterDoc{}.Name(): {},
 }
 
 // validateObjectType validates the object type field

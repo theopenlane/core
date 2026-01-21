@@ -178,7 +178,7 @@ func (c Control) Mixin() []ent.Mixin {
 				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
 				withWorkflowOwnedEdges(),
 			),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			// add groups permissions with editor, and blocked groups
 			// skip view because controls are automatically viewable by all users in the organization
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),

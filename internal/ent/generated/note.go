@@ -44,6 +44,8 @@ type Note struct {
 	DisplayID string `json:"display_id,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the title of the note
+	Title *string `json:"title,omitempty"`
 	// the text of the note
 	Text string `json:"text,omitempty"`
 	// structured details of the note in JSON format
@@ -236,7 +238,7 @@ func (*Note) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case note.FieldIsEdited:
 			values[i] = new(sql.NullBool)
-		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID, note.FieldTrustCenterID:
+		case note.FieldID, note.FieldCreatedBy, note.FieldUpdatedBy, note.FieldDeletedBy, note.FieldDisplayID, note.FieldOwnerID, note.FieldTitle, note.FieldText, note.FieldNoteRef, note.FieldDiscussionID, note.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case note.FieldCreatedAt, note.FieldUpdatedAt, note.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -334,6 +336,13 @@ func (_m *Note) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case note.FieldTitle:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field title", values[i])
+			} else if value.Valid {
+				_m.Title = new(string)
+				*_m.Title = value.String
 			}
 		case note.FieldText:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -578,6 +587,11 @@ func (_m *Note) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
+	builder.WriteString(", ")
+	if v := _m.Title; v != nil {
+		builder.WriteString("title=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	builder.WriteString("text=")
 	builder.WriteString(_m.Text)

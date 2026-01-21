@@ -84,6 +84,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -323,7 +324,9 @@ func (p *apitokenPager) applyCursors(query *APITokenQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -774,7 +777,9 @@ func (p *actionplanPager) applyCursors(query *ActionPlanQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -1289,7 +1294,9 @@ func (p *assessmentPager) applyCursors(query *AssessmentQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -1696,7 +1703,9 @@ func (p *assessmentresponsePager) applyCursors(query *AssessmentResponseQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -2175,7 +2184,9 @@ func (p *assetPager) applyCursors(query *AssetQuery, after, before *Cursor) (*As
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -2564,7 +2575,9 @@ func (p *contactPager) applyCursors(query *ContactQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -3007,7 +3020,9 @@ func (p *controlPager) applyCursors(query *ControlQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -3584,7 +3599,9 @@ func (p *controlimplementationPager) applyCursors(query *ControlImplementationQu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -4009,7 +4026,9 @@ func (p *controlobjectivePager) applyCursors(query *ControlObjectiveQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -4488,7 +4507,9 @@ func (p *customdomainPager) applyCursors(query *CustomDomainQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -4859,7 +4880,9 @@ func (p *customtypeenumPager) applyCursors(query *CustomTypeEnumQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -5266,7 +5289,9 @@ func (p *dnsverificationPager) applyCursors(query *DNSVerificationQuery, after, 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -5619,7 +5644,9 @@ func (p *directoryaccountPager) applyCursors(query *DirectoryAccountQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -6039,7 +6066,9 @@ func (p *directorygroupPager) applyCursors(query *DirectoryGroupQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -6459,7 +6488,9 @@ func (p *directorymembershipPager) applyCursors(query *DirectoryMembershipQuery,
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -6812,7 +6843,9 @@ func (p *directorysyncrunPager) applyCursors(query *DirectorySyncRunQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -7183,7 +7216,9 @@ func (p *discussionPager) applyCursors(query *DiscussionQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -7536,7 +7571,9 @@ func (p *documentdataPager) applyCursors(query *DocumentDataQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -7889,7 +7926,9 @@ func (p *entityPager) applyCursors(query *EntityQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -8296,7 +8335,9 @@ func (p *entitytypePager) applyCursors(query *EntityTypeQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -8667,7 +8708,9 @@ func (p *eventPager) applyCursors(query *EventQuery, after, before *Cursor) (*Ev
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -9020,7 +9063,9 @@ func (p *evidencePager) applyCursors(query *EvidenceQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -9445,7 +9490,9 @@ func (p *exportPager) applyCursors(query *ExportQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -9852,7 +9899,9 @@ func (p *filePager) applyCursors(query *FileQuery, after, before *Cursor) (*File
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -10236,7 +10285,9 @@ func (p *findingPager) applyCursors(query *FindingQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -10661,7 +10712,9 @@ func (p *findingcontrolPager) applyCursors(query *FindingControlQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -11014,7 +11067,9 @@ func (p *groupPager) applyCursors(query *GroupQuery, after, before *Cursor) (*Gr
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -11403,7 +11458,9 @@ func (p *groupmembershipPager) applyCursors(query *GroupMembershipQuery, after, 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -11774,7 +11831,9 @@ func (p *groupsettingPager) applyCursors(query *GroupSettingQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -12127,7 +12186,9 @@ func (p *hushPager) applyCursors(query *HushQuery, after, before *Cursor) (*Hush
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -12578,7 +12639,9 @@ func (p *integrationPager) applyCursors(query *IntegrationQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -12985,7 +13048,9 @@ func (p *internalpolicyPager) applyCursors(query *InternalPolicyQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -13428,7 +13493,9 @@ func (p *invitePager) applyCursors(query *InviteQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -13835,7 +13902,9 @@ func (p *jobresultPager) applyCursors(query *JobResultQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -14273,7 +14342,9 @@ func (p *jobrunnerPager) applyCursors(query *JobRunnerQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -14644,7 +14715,9 @@ func (p *jobrunnerregistrationtokenPager) applyCursors(query *JobRunnerRegistrat
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -15028,7 +15101,9 @@ func (p *jobrunnertokenPager) applyCursors(query *JobRunnerTokenQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -15443,7 +15518,9 @@ func (p *jobtemplatePager) applyCursors(query *JobTemplateQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -15832,7 +15909,9 @@ func (p *mappabledomainPager) applyCursors(query *MappableDomainQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -16203,7 +16282,9 @@ func (p *mappedcontrolPager) applyCursors(query *MappedControlQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -16592,7 +16673,9 @@ func (p *narrativePager) applyCursors(query *NarrativeQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -16963,7 +17046,9 @@ func (p *notePager) applyCursors(query *NoteQuery, after, before *Cursor) (*Note
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -17879,7 +17964,9 @@ func (p *orgmembershipPager) applyCursors(query *OrgMembershipQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -18693,7 +18780,9 @@ func (p *organizationPager) applyCursors(query *OrganizationQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -19082,7 +19171,9 @@ func (p *organizationsettingPager) applyCursors(query *OrganizationSettingQuery,
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -19435,7 +19526,9 @@ func (p *personalaccesstokenPager) applyCursors(query *PersonalAccessTokenQuery,
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -19886,7 +19979,9 @@ func (p *procedurePager) applyCursors(query *ProcedureQuery, after, before *Curs
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -20329,7 +20424,9 @@ func (p *programPager) applyCursors(query *ProgramQuery, after, before *Cursor) 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -20772,7 +20869,9 @@ func (p *programmembershipPager) applyCursors(query *ProgramMembershipQuery, aft
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -21143,7 +21242,9 @@ func (p *remediationPager) applyCursors(query *RemediationQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -21568,7 +21669,9 @@ func (p *reviewPager) applyCursors(query *ReviewQuery, after, before *Cursor) (*
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -21993,7 +22096,9 @@ func (p *riskPager) applyCursors(query *RiskQuery, after, before *Cursor) (*Risk
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -22454,7 +22559,9 @@ func (p *scanPager) applyCursors(query *ScanQuery, after, before *Cursor) (*Scan
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -22843,7 +22950,9 @@ func (p *scheduledjobPager) applyCursors(query *ScheduledJobQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -23196,7 +23305,9 @@ func (p *scheduledjobrunPager) applyCursors(query *ScheduledJobRunQuery, after, 
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -23549,7 +23660,9 @@ func (p *standardPager) applyCursors(query *StandardQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -24028,7 +24141,9 @@ func (p *subcontrolPager) applyCursors(query *SubcontrolQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -24605,7 +24720,9 @@ func (p *subprocessorPager) applyCursors(query *SubprocessorQuery, after, before
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -24976,7 +25093,9 @@ func (p *subscriberPager) applyCursors(query *SubscriberQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -25401,7 +25520,9 @@ func (p *tfasettingPager) applyCursors(query *TFASettingQuery, after, before *Cu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -25754,7 +25875,9 @@ func (p *tagdefinitionPager) applyCursors(query *TagDefinitionQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -26143,7 +26266,9 @@ func (p *taskPager) applyCursors(query *TaskQuery, after, before *Cursor) (*Task
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -26594,7 +26719,9 @@ func (p *templatePager) applyCursors(query *TemplateQuery, after, before *Cursor
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27001,7 +27128,9 @@ func (p *trustcenterPager) applyCursors(query *TrustCenterQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27354,7 +27483,9 @@ func (p *trustcentercompliancePager) applyCursors(query *TrustCenterComplianceQu
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27707,7 +27838,9 @@ func (p *trustcenterdocPager) applyCursors(query *TrustCenterDocQuery, after, be
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -27920,6 +28053,734 @@ func (_m *TrustCenterDoc) ToEdge(order *TrustCenterDocOrder) *TrustCenterDocEdge
 	}
 }
 
+// TrustCenterEntityEdge is the edge representation of TrustCenterEntity.
+type TrustCenterEntityEdge struct {
+	Node   *TrustCenterEntity `json:"node"`
+	Cursor Cursor             `json:"cursor"`
+}
+
+// TrustCenterEntityConnection is the connection containing edges to TrustCenterEntity.
+type TrustCenterEntityConnection struct {
+	Edges      []*TrustCenterEntityEdge `json:"edges"`
+	PageInfo   PageInfo                 `json:"pageInfo"`
+	TotalCount int                      `json:"totalCount"`
+}
+
+func (c *TrustCenterEntityConnection) build(nodes []*TrustCenterEntity, pager *trustcenterentityPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterEntity
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterEntity {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterEntity {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterEntityEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterEntityEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterEntityPaginateOption enables pagination customization.
+type TrustCenterEntityPaginateOption func(*trustcenterentityPager) error
+
+// WithTrustCenterEntityOrder configures pagination ordering.
+func WithTrustCenterEntityOrder(order []*TrustCenterEntityOrder) TrustCenterEntityPaginateOption {
+	return func(pager *trustcenterentityPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTrustCenterEntityFilter configures pagination filter.
+func WithTrustCenterEntityFilter(filter func(*TrustCenterEntityQuery) (*TrustCenterEntityQuery, error)) TrustCenterEntityPaginateOption {
+	return func(pager *trustcenterentityPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterEntityQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcenterentityPager struct {
+	reverse bool
+	order   []*TrustCenterEntityOrder
+	filter  func(*TrustCenterEntityQuery) (*TrustCenterEntityQuery, error)
+}
+
+func newTrustCenterEntityPager(opts []TrustCenterEntityPaginateOption, reverse bool) (*trustcenterentityPager, error) {
+	pager := &trustcenterentityPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *trustcenterentityPager) applyFilter(query *TrustCenterEntityQuery) (*TrustCenterEntityQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcenterentityPager) toCursor(_m *TrustCenterEntity) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *trustcenterentityPager) applyCursors(query *TrustCenterEntityQuery, after, before *Cursor) (*TrustCenterEntityQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTrustCenterEntityOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *trustcenterentityPager) applyOrder(query *TrustCenterEntityQuery) *TrustCenterEntityQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTrustCenterEntityOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTrustCenterEntityOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *trustcenterentityPager) orderExpr(query *TrustCenterEntityQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTrustCenterEntityOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterEntity.
+func (_m *TrustCenterEntityQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterEntityPaginateOption,
+) (*TrustCenterEntityConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterEntityPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterEntityConnection{Edges: []*TrustCenterEntityEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterEntityOrderFieldCreatedAt orders TrustCenterEntity by created_at.
+	TrustCenterEntityOrderFieldCreatedAt = &TrustCenterEntityOrderField{
+		Value: func(_m *TrustCenterEntity) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: trustcenterentity.FieldCreatedAt,
+		toTerm: trustcenterentity.ByCreatedAt,
+		toCursor: func(_m *TrustCenterEntity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterEntityOrderFieldUpdatedAt orders TrustCenterEntity by updated_at.
+	TrustCenterEntityOrderFieldUpdatedAt = &TrustCenterEntityOrderField{
+		Value: func(_m *TrustCenterEntity) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: trustcenterentity.FieldUpdatedAt,
+		toTerm: trustcenterentity.ByUpdatedAt,
+		toCursor: func(_m *TrustCenterEntity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// TrustCenterEntityOrderFieldName orders TrustCenterEntity by name.
+	TrustCenterEntityOrderFieldName = &TrustCenterEntityOrderField{
+		Value: func(_m *TrustCenterEntity) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: trustcenterentity.FieldName,
+		toTerm: trustcenterentity.ByName,
+		toCursor: func(_m *TrustCenterEntity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterEntityOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterEntityOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterEntityOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case TrustCenterEntityOrderFieldName.column:
+		str = "NAME"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterEntityOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterEntityOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterEntityOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TrustCenterEntityOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterEntityOrderFieldUpdatedAt
+	case "NAME":
+		*f = *TrustCenterEntityOrderFieldName
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterEntityOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterEntityOrderField defines the ordering field of TrustCenterEntity.
+type TrustCenterEntityOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterEntity.
+	Value    func(*TrustCenterEntity) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcenterentity.OrderOption
+	toCursor func(*TrustCenterEntity) Cursor
+}
+
+// TrustCenterEntityOrder defines the ordering of TrustCenterEntity.
+type TrustCenterEntityOrder struct {
+	Direction OrderDirection               `json:"direction"`
+	Field     *TrustCenterEntityOrderField `json:"field"`
+}
+
+// DefaultTrustCenterEntityOrder is the default ordering of TrustCenterEntity.
+var DefaultTrustCenterEntityOrder = &TrustCenterEntityOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterEntityOrderField{
+		Value: func(_m *TrustCenterEntity) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: trustcenterentity.FieldID,
+		toTerm: trustcenterentity.ByID,
+		toCursor: func(_m *TrustCenterEntity) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterEntity into TrustCenterEntityEdge.
+func (_m *TrustCenterEntity) ToEdge(order *TrustCenterEntityOrder) *TrustCenterEntityEdge {
+	if order == nil {
+		order = DefaultTrustCenterEntityOrder
+	}
+	return &TrustCenterEntityEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// TrustCenterNDARequestEdge is the edge representation of TrustCenterNDARequest.
+type TrustCenterNDARequestEdge struct {
+	Node   *TrustCenterNDARequest `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// TrustCenterNDARequestConnection is the connection containing edges to TrustCenterNDARequest.
+type TrustCenterNDARequestConnection struct {
+	Edges      []*TrustCenterNDARequestEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *TrustCenterNDARequestConnection) build(nodes []*TrustCenterNDARequest, pager *trustcenterndarequestPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *TrustCenterNDARequest
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *TrustCenterNDARequest {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *TrustCenterNDARequest {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*TrustCenterNDARequestEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &TrustCenterNDARequestEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// TrustCenterNDARequestPaginateOption enables pagination customization.
+type TrustCenterNDARequestPaginateOption func(*trustcenterndarequestPager) error
+
+// WithTrustCenterNDARequestOrder configures pagination ordering.
+func WithTrustCenterNDARequestOrder(order []*TrustCenterNDARequestOrder) TrustCenterNDARequestPaginateOption {
+	return func(pager *trustcenterndarequestPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithTrustCenterNDARequestFilter configures pagination filter.
+func WithTrustCenterNDARequestFilter(filter func(*TrustCenterNDARequestQuery) (*TrustCenterNDARequestQuery, error)) TrustCenterNDARequestPaginateOption {
+	return func(pager *trustcenterndarequestPager) error {
+		if filter == nil {
+			return errors.New("TrustCenterNDARequestQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type trustcenterndarequestPager struct {
+	reverse bool
+	order   []*TrustCenterNDARequestOrder
+	filter  func(*TrustCenterNDARequestQuery) (*TrustCenterNDARequestQuery, error)
+}
+
+func newTrustCenterNDARequestPager(opts []TrustCenterNDARequestPaginateOption, reverse bool) (*trustcenterndarequestPager, error) {
+	pager := &trustcenterndarequestPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *trustcenterndarequestPager) applyFilter(query *TrustCenterNDARequestQuery) (*TrustCenterNDARequestQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *trustcenterndarequestPager) toCursor(_m *TrustCenterNDARequest) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *trustcenterndarequestPager) applyCursors(query *TrustCenterNDARequestQuery, after, before *Cursor) (*TrustCenterNDARequestQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultTrustCenterNDARequestOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *trustcenterndarequestPager) applyOrder(query *TrustCenterNDARequestQuery) *TrustCenterNDARequestQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultTrustCenterNDARequestOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultTrustCenterNDARequestOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *trustcenterndarequestPager) orderExpr(query *TrustCenterNDARequestQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultTrustCenterNDARequestOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to TrustCenterNDARequest.
+func (_m *TrustCenterNDARequestQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...TrustCenterNDARequestPaginateOption,
+) (*TrustCenterNDARequestConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newTrustCenterNDARequestPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &TrustCenterNDARequestConnection{Edges: []*TrustCenterNDARequestEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// TrustCenterNDARequestOrderFieldCreatedAt orders TrustCenterNDARequest by created_at.
+	TrustCenterNDARequestOrderFieldCreatedAt = &TrustCenterNDARequestOrderField{
+		Value: func(_m *TrustCenterNDARequest) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: trustcenterndarequest.FieldCreatedAt,
+		toTerm: trustcenterndarequest.ByCreatedAt,
+		toCursor: func(_m *TrustCenterNDARequest) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// TrustCenterNDARequestOrderFieldUpdatedAt orders TrustCenterNDARequest by updated_at.
+	TrustCenterNDARequestOrderFieldUpdatedAt = &TrustCenterNDARequestOrderField{
+		Value: func(_m *TrustCenterNDARequest) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: trustcenterndarequest.FieldUpdatedAt,
+		toTerm: trustcenterndarequest.ByUpdatedAt,
+		toCursor: func(_m *TrustCenterNDARequest) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f TrustCenterNDARequestOrderField) String() string {
+	var str string
+	switch f.column {
+	case TrustCenterNDARequestOrderFieldCreatedAt.column:
+		str = "created_at"
+	case TrustCenterNDARequestOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f TrustCenterNDARequestOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *TrustCenterNDARequestOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("TrustCenterNDARequestOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *TrustCenterNDARequestOrderFieldCreatedAt
+	case "updated_at":
+		*f = *TrustCenterNDARequestOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid TrustCenterNDARequestOrderField", str)
+	}
+	return nil
+}
+
+// TrustCenterNDARequestOrderField defines the ordering field of TrustCenterNDARequest.
+type TrustCenterNDARequestOrderField struct {
+	// Value extracts the ordering value from the given TrustCenterNDARequest.
+	Value    func(*TrustCenterNDARequest) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) trustcenterndarequest.OrderOption
+	toCursor func(*TrustCenterNDARequest) Cursor
+}
+
+// TrustCenterNDARequestOrder defines the ordering of TrustCenterNDARequest.
+type TrustCenterNDARequestOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *TrustCenterNDARequestOrderField `json:"field"`
+}
+
+// DefaultTrustCenterNDARequestOrder is the default ordering of TrustCenterNDARequest.
+var DefaultTrustCenterNDARequestOrder = &TrustCenterNDARequestOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &TrustCenterNDARequestOrderField{
+		Value: func(_m *TrustCenterNDARequest) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: trustcenterndarequest.FieldID,
+		toTerm: trustcenterndarequest.ByID,
+		toCursor: func(_m *TrustCenterNDARequest) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts TrustCenterNDARequest into TrustCenterNDARequestEdge.
+func (_m *TrustCenterNDARequest) ToEdge(order *TrustCenterNDARequestOrder) *TrustCenterNDARequestEdge {
+	if order == nil {
+		order = DefaultTrustCenterNDARequestOrder
+	}
+	return &TrustCenterNDARequestEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // TrustCenterSettingEdge is the edge representation of TrustCenterSetting.
 type TrustCenterSettingEdge struct {
 	Node   *TrustCenterSetting `json:"node"`
@@ -28060,7 +28921,9 @@ func (p *trustcentersettingPager) applyCursors(query *TrustCenterSettingQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -28413,7 +29276,9 @@ func (p *trustcentersubprocessorPager) applyCursors(query *TrustCenterSubprocess
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -28766,7 +29631,9 @@ func (p *trustcenterwatermarkconfigPager) applyCursors(query *TrustCenterWaterma
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -28979,377 +29846,6 @@ func (_m *TrustCenterWatermarkConfig) ToEdge(order *TrustCenterWatermarkConfigOr
 	}
 }
 
-// TrustcenterEntityEdge is the edge representation of TrustcenterEntity.
-type TrustcenterEntityEdge struct {
-	Node   *TrustcenterEntity `json:"node"`
-	Cursor Cursor             `json:"cursor"`
-}
-
-// TrustcenterEntityConnection is the connection containing edges to TrustcenterEntity.
-type TrustcenterEntityConnection struct {
-	Edges      []*TrustcenterEntityEdge `json:"edges"`
-	PageInfo   PageInfo                 `json:"pageInfo"`
-	TotalCount int                      `json:"totalCount"`
-}
-
-func (c *TrustcenterEntityConnection) build(nodes []*TrustcenterEntity, pager *trustcenterentityPager, after *Cursor, first *int, before *Cursor, last *int) {
-	c.PageInfo.HasNextPage = before != nil
-	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) >= *first+1 {
-		c.PageInfo.HasNextPage = true
-		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) >= *last+1 {
-		c.PageInfo.HasPreviousPage = true
-		nodes = nodes[:*last]
-	}
-	var nodeAt func(int) *TrustcenterEntity
-	if last != nil {
-		n := len(nodes) - 1
-		nodeAt = func(i int) *TrustcenterEntity {
-			return nodes[n-i]
-		}
-	} else {
-		nodeAt = func(i int) *TrustcenterEntity {
-			return nodes[i]
-		}
-	}
-	c.Edges = make([]*TrustcenterEntityEdge, len(nodes))
-	for i := range nodes {
-		node := nodeAt(i)
-		c.Edges[i] = &TrustcenterEntityEdge{
-			Node:   node,
-			Cursor: pager.toCursor(node),
-		}
-	}
-	if l := len(c.Edges); l > 0 {
-		c.PageInfo.StartCursor = &c.Edges[0].Cursor
-		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
-	}
-	if c.TotalCount == 0 {
-		c.TotalCount = len(nodes)
-	}
-}
-
-// TrustcenterEntityPaginateOption enables pagination customization.
-type TrustcenterEntityPaginateOption func(*trustcenterentityPager) error
-
-// WithTrustcenterEntityOrder configures pagination ordering.
-func WithTrustcenterEntityOrder(order []*TrustcenterEntityOrder) TrustcenterEntityPaginateOption {
-	return func(pager *trustcenterentityPager) error {
-		for _, o := range order {
-			if err := o.Direction.Validate(); err != nil {
-				return err
-			}
-		}
-		pager.order = append(pager.order, order...)
-		return nil
-	}
-}
-
-// WithTrustcenterEntityFilter configures pagination filter.
-func WithTrustcenterEntityFilter(filter func(*TrustcenterEntityQuery) (*TrustcenterEntityQuery, error)) TrustcenterEntityPaginateOption {
-	return func(pager *trustcenterentityPager) error {
-		if filter == nil {
-			return errors.New("TrustcenterEntityQuery filter cannot be nil")
-		}
-		pager.filter = filter
-		return nil
-	}
-}
-
-type trustcenterentityPager struct {
-	reverse bool
-	order   []*TrustcenterEntityOrder
-	filter  func(*TrustcenterEntityQuery) (*TrustcenterEntityQuery, error)
-}
-
-func newTrustcenterEntityPager(opts []TrustcenterEntityPaginateOption, reverse bool) (*trustcenterentityPager, error) {
-	pager := &trustcenterentityPager{reverse: reverse}
-	for _, opt := range opts {
-		if err := opt(pager); err != nil {
-			return nil, err
-		}
-	}
-	for i, o := range pager.order {
-		if i > 0 && o.Field == pager.order[i-1].Field {
-			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
-		}
-	}
-	return pager, nil
-}
-
-func (p *trustcenterentityPager) applyFilter(query *TrustcenterEntityQuery) (*TrustcenterEntityQuery, error) {
-	if p.filter != nil {
-		return p.filter(query)
-	}
-	return query, nil
-}
-
-func (p *trustcenterentityPager) toCursor(_m *TrustcenterEntity) Cursor {
-	cs_ := make([]any, 0, len(p.order))
-	for _, o_ := range p.order {
-		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
-	}
-	return Cursor{ID: _m.ID, Value: cs_}
-}
-
-func (p *trustcenterentityPager) applyCursors(query *TrustcenterEntityQuery, after, before *Cursor) (*TrustcenterEntityQuery, error) {
-	idDirection := entgql.OrderDirectionAsc
-	if p.reverse {
-		idDirection = entgql.OrderDirectionDesc
-	}
-	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
-	for _, o := range p.order {
-		fields = append(fields, o.Field.column)
-		direction := o.Direction
-		if p.reverse {
-			direction = direction.Reverse()
-		}
-		directions = append(directions, direction)
-	}
-	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
-		FieldID:     DefaultTrustcenterEntityOrder.Field.column,
-		DirectionID: idDirection,
-		Fields:      fields,
-		Directions:  directions,
-	})
-	if err != nil {
-		return nil, err
-	}
-	for i, predicate := range predicates {
-		query = query.Where(func(s *sql.Selector) {
-			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
-		})
-	}
-	return query, nil
-}
-
-func (p *trustcenterentityPager) applyOrder(query *TrustcenterEntityQuery) *TrustcenterEntityQuery {
-	var defaultOrdered bool
-	for _, o := range p.order {
-		direction := o.Direction
-		if p.reverse {
-			direction = direction.Reverse()
-		}
-		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
-		if o.Field.column == DefaultTrustcenterEntityOrder.Field.column {
-			defaultOrdered = true
-		}
-		if len(query.ctx.Fields) > 0 {
-			query.ctx.AppendFieldOnce(o.Field.column)
-		}
-	}
-	if !defaultOrdered {
-		direction := entgql.OrderDirectionAsc
-		if p.reverse {
-			direction = direction.Reverse()
-		}
-		query = query.Order(DefaultTrustcenterEntityOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	return query
-}
-
-func (p *trustcenterentityPager) orderExpr(query *TrustcenterEntityQuery) sql.Querier {
-	if len(query.ctx.Fields) > 0 {
-		for _, o := range p.order {
-			query.ctx.AppendFieldOnce(o.Field.column)
-		}
-	}
-	return sql.ExprFunc(func(b *sql.Builder) {
-		for _, o := range p.order {
-			direction := o.Direction
-			if p.reverse {
-				direction = direction.Reverse()
-			}
-			b.Ident(o.Field.column).Pad().WriteString(string(direction))
-			b.Comma()
-		}
-		direction := entgql.OrderDirectionAsc
-		if p.reverse {
-			direction = direction.Reverse()
-		}
-		b.Ident(DefaultTrustcenterEntityOrder.Field.column).Pad().WriteString(string(direction))
-	})
-}
-
-// Paginate executes the query and returns a relay based cursor connection to TrustcenterEntity.
-func (_m *TrustcenterEntityQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...TrustcenterEntityPaginateOption,
-) (*TrustcenterEntityConnection, error) {
-	if err := validateFirstLast(first, last); err != nil {
-		return nil, err
-	}
-	pager, err := newTrustcenterEntityPager(opts, last != nil)
-	if err != nil {
-		return nil, err
-	}
-	if _m, err = pager.applyFilter(_m); err != nil {
-		return nil, err
-	}
-	conn := &TrustcenterEntityConnection{Edges: []*TrustcenterEntityEdge{}}
-	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
-		if hasPagination || ignoredEdges {
-			c := _m.Clone()
-			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
-				return nil, err
-			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
-		}
-	}
-	if (first != nil && *first == 0) || (last != nil && *last == 0) {
-		return conn, nil
-	}
-	if _m, err = pager.applyCursors(_m, after, before); err != nil {
-		return nil, err
-	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	conn.build(nodes, pager, after, first, before, last)
-	return conn, nil
-}
-
-var (
-	// TrustcenterEntityOrderFieldCreatedAt orders TrustcenterEntity by created_at.
-	TrustcenterEntityOrderFieldCreatedAt = &TrustcenterEntityOrderField{
-		Value: func(_m *TrustcenterEntity) (ent.Value, error) {
-			return _m.CreatedAt, nil
-		},
-		column: trustcenterentity.FieldCreatedAt,
-		toTerm: trustcenterentity.ByCreatedAt,
-		toCursor: func(_m *TrustcenterEntity) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.CreatedAt,
-			}
-		},
-	}
-	// TrustcenterEntityOrderFieldUpdatedAt orders TrustcenterEntity by updated_at.
-	TrustcenterEntityOrderFieldUpdatedAt = &TrustcenterEntityOrderField{
-		Value: func(_m *TrustcenterEntity) (ent.Value, error) {
-			return _m.UpdatedAt, nil
-		},
-		column: trustcenterentity.FieldUpdatedAt,
-		toTerm: trustcenterentity.ByUpdatedAt,
-		toCursor: func(_m *TrustcenterEntity) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.UpdatedAt,
-			}
-		},
-	}
-	// TrustcenterEntityOrderFieldName orders TrustcenterEntity by name.
-	TrustcenterEntityOrderFieldName = &TrustcenterEntityOrderField{
-		Value: func(_m *TrustcenterEntity) (ent.Value, error) {
-			return _m.Name, nil
-		},
-		column: trustcenterentity.FieldName,
-		toTerm: trustcenterentity.ByName,
-		toCursor: func(_m *TrustcenterEntity) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Name,
-			}
-		},
-	}
-)
-
-// String implement fmt.Stringer interface.
-func (f TrustcenterEntityOrderField) String() string {
-	var str string
-	switch f.column {
-	case TrustcenterEntityOrderFieldCreatedAt.column:
-		str = "created_at"
-	case TrustcenterEntityOrderFieldUpdatedAt.column:
-		str = "updated_at"
-	case TrustcenterEntityOrderFieldName.column:
-		str = "NAME"
-	}
-	return str
-}
-
-// MarshalGQL implements graphql.Marshaler interface.
-func (f TrustcenterEntityOrderField) MarshalGQL(w io.Writer) {
-	io.WriteString(w, strconv.Quote(f.String()))
-}
-
-// UnmarshalGQL implements graphql.Unmarshaler interface.
-func (f *TrustcenterEntityOrderField) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("TrustcenterEntityOrderField %T must be a string", v)
-	}
-	switch str {
-	case "created_at":
-		*f = *TrustcenterEntityOrderFieldCreatedAt
-	case "updated_at":
-		*f = *TrustcenterEntityOrderFieldUpdatedAt
-	case "NAME":
-		*f = *TrustcenterEntityOrderFieldName
-	default:
-		return fmt.Errorf("%s is not a valid TrustcenterEntityOrderField", str)
-	}
-	return nil
-}
-
-// TrustcenterEntityOrderField defines the ordering field of TrustcenterEntity.
-type TrustcenterEntityOrderField struct {
-	// Value extracts the ordering value from the given TrustcenterEntity.
-	Value    func(*TrustcenterEntity) (ent.Value, error)
-	column   string // field or computed.
-	toTerm   func(...sql.OrderTermOption) trustcenterentity.OrderOption
-	toCursor func(*TrustcenterEntity) Cursor
-}
-
-// TrustcenterEntityOrder defines the ordering of TrustcenterEntity.
-type TrustcenterEntityOrder struct {
-	Direction OrderDirection               `json:"direction"`
-	Field     *TrustcenterEntityOrderField `json:"field"`
-}
-
-// DefaultTrustcenterEntityOrder is the default ordering of TrustcenterEntity.
-var DefaultTrustcenterEntityOrder = &TrustcenterEntityOrder{
-	Direction: entgql.OrderDirectionAsc,
-	Field: &TrustcenterEntityOrderField{
-		Value: func(_m *TrustcenterEntity) (ent.Value, error) {
-			return _m.ID, nil
-		},
-		column: trustcenterentity.FieldID,
-		toTerm: trustcenterentity.ByID,
-		toCursor: func(_m *TrustcenterEntity) Cursor {
-			return Cursor{ID: _m.ID}
-		},
-	},
-}
-
-// ToEdge converts TrustcenterEntity into TrustcenterEntityEdge.
-func (_m *TrustcenterEntity) ToEdge(order *TrustcenterEntityOrder) *TrustcenterEntityEdge {
-	if order == nil {
-		order = DefaultTrustcenterEntityOrder
-	}
-	return &TrustcenterEntityEdge{
-		Node:   _m,
-		Cursor: order.Field.toCursor(_m),
-	}
-}
-
 // UserEdge is the edge representation of User.
 type UserEdge struct {
 	Node   *User  `json:"node"`
@@ -29490,7 +29986,9 @@ func (p *userPager) applyCursors(query *UserQuery, after, before *Cursor) (*User
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -29897,7 +30395,9 @@ func (p *usersettingPager) applyCursors(query *UserSettingQuery, after, before *
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -30250,7 +30750,9 @@ func (p *vulnerabilityPager) applyCursors(query *VulnerabilityQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -31007,7 +31509,9 @@ func (p *workflowassignmentPager) applyCursors(query *WorkflowAssignmentQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -31360,7 +31864,9 @@ func (p *workflowassignmenttargetPager) applyCursors(query *WorkflowAssignmentTa
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -31713,7 +32219,9 @@ func (p *workflowdefinitionPager) applyCursors(query *WorkflowDefinitionQuery, a
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -32066,7 +32574,9 @@ func (p *workfloweventPager) applyCursors(query *WorkflowEventQuery, after, befo
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -32419,7 +32929,9 @@ func (p *workflowinstancePager) applyCursors(query *WorkflowInstanceQuery, after
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil
@@ -32772,7 +33284,9 @@ func (p *workflowobjectrefPager) applyCursors(query *WorkflowObjectRefQuery, aft
 	for i, predicate := range predicates {
 		query = query.Where(func(s *sql.Selector) {
 			predicate(s)
-			s.Or().Where(sql.IsNull(fields[i]))
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
 		})
 	}
 	return query, nil

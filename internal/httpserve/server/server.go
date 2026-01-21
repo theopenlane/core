@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"net/http"
 	"os"
 
 	"github.com/getkin/kin-openapi/openapi3gen"
@@ -43,7 +44,6 @@ type LogConfig struct {
 func ConfigureEcho(c LogConfig) *echo.Echo {
 	e := echo.New()
 	e.HTTPErrorHandler = CustomHTTPErrorHandler
-	e.Use(middleware.Recover())
 
 	zLvl, _ := logx.MatchEchoLevel(c.LogLevel)
 	loggers := logx.Configure(logx.LoggerConfig{
@@ -66,6 +66,17 @@ func ConfigureEcho(c LogConfig) *echo.Echo {
 		RequestIDKey:          "request_id",
 		HandleError:           true,
 		AttachRequestMetadata: true,
+	}))
+
+	// placing recover to be after logging so we can get the benefit of the logger in context
+	// the main risk is that if the logging middleware itself panics it won't be recovered
+	// but that is highly unlikely
+	e.Use(middleware.RecoverWithConfig(middleware.RecoverConfig{
+		LogErrorFunc: func(c echo.Context, err error, stack []byte) error {
+			logx.FromContext(c.Request().Context()).Error().Err(err).Str("stack", string(stack)).Str("path", c.Request().URL.Path).Msg("panic recovered")
+
+			return echo.NewHTTPError(http.StatusInternalServerError, "internal server error")
+		},
 	}))
 
 	return e
@@ -182,6 +193,12 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 
 	if err := newMetrics.Register(metrics.APIMetrics); err != nil {
 		log.Error().Err(err).Msg("failed to register metrics")
+	}
+
+	if s.config.Settings.Server.EnableGraphSubscriptions {
+		if err := newMetrics.Register(metrics.SubscriptionMetrics); err != nil {
+			log.Error().Err(err).Msg("failed to register subscription metrics")
+		}
 	}
 
 	go func() {

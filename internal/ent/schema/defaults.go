@@ -50,6 +50,8 @@ type mixinConfig struct {
 	includeRevision bool
 	// excludeAnnotations if true, the AnnotationMixin will be excluded
 	excludeAnnotations bool
+	// includeRequestor if true, the RequestorMixin will be included
+	includeRequestor bool
 	// additionalMixins are any additional mixins that will be included
 	additionalMixins []ent.Mixin
 }
@@ -69,6 +71,7 @@ var baseDefaultMixins = []ent.Mixin{
 // - IDMixin (with or without prefix)
 // - TagMixin (set excludeTags to true to disable)
 // - RevisionMixin (set includeRevision to true to enable)
+// - RequestorMixin (set includeRequestor to true to enable)
 // - any additional mixins can  be appended using the additionalMixins field
 func (m mixinConfig) getMixins(_ ent.Interface) []ent.Mixin {
 	// Start with base mixins and add auto-encryption using the passed schema
@@ -116,6 +119,11 @@ func (m mixinConfig) getMixins(_ ent.Interface) []ent.Mixin {
 	// include revision if specified
 	if m.includeRevision {
 		mixins = append(mixins, mixin.RevisionMixin{})
+	}
+
+	// include requestor if specified
+	if m.includeRequestor {
+		mixins = append(mixins, mixin.RequestorMixin{})
 	}
 
 	// exclude annotations if specified

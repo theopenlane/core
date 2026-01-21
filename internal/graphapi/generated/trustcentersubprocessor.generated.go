@@ -70,6 +70,10 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkCreatePayloa
 				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
 			case "category":
 				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
 			case "subprocessor":
@@ -152,6 +156,10 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorBulkUpdatePayloa
 				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
 			case "category":
 				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
 			case "subprocessor":
@@ -234,6 +242,10 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorCreatePayload_tr
 				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
 			case "category":
 				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
 			case "subprocessor":
@@ -316,6 +328,10 @@ func (ec *executionContext) fieldContext_TrustCenterSubprocessorUpdatePayload_tr
 				return ec.fieldContext_TrustCenterSubprocessor_countries(ctx, field)
 			case "category":
 				return ec.fieldContext_TrustCenterSubprocessor_category(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterSubprocessor_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterSubprocessor_editors(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterSubprocessor_trustCenter(ctx, field)
 			case "subprocessor":

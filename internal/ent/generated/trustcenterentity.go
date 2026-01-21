@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 )
 
-// TrustcenterEntity is the model entity for the TrustcenterEntity schema.
-type TrustcenterEntity struct {
+// TrustCenterEntity is the model entity for the TrustCenterEntity schema.
+type TrustCenterEntity struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID string `json:"id,omitempty"`
@@ -43,15 +43,18 @@ type TrustcenterEntity struct {
 	// The entity type for the customer entity
 	EntityTypeID string `json:"entity_type_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the TrustcenterEntityQuery when eager-loading is set.
-	Edges                             TrustcenterEntityEdges `json:"edges"`
-	file_trustcenter_entities         *string
-	trust_center_trustcenter_entities *string
-	selectValues                      sql.SelectValues
+	// The values are being populated by the TrustCenterEntityQuery when eager-loading is set.
+	Edges                      TrustCenterEntityEdges `json:"edges"`
+	file_trust_center_entities *string
+	selectValues               sql.SelectValues
 }
 
-// TrustcenterEntityEdges holds the relations/edges for other nodes in the graph.
-type TrustcenterEntityEdges struct {
+// TrustCenterEntityEdges holds the relations/edges for other nodes in the graph.
+type TrustCenterEntityEdges struct {
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
@@ -60,17 +63,38 @@ type TrustcenterEntityEdges struct {
 	EntityType *EntityType `json:"entity_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
+
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
+}
+
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEntityEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[0] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterEntityEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
 }
 
 // LogoFileOrErr returns the LogoFile value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TrustcenterEntityEdges) LogoFileOrErr() (*File, error) {
+func (e TrustCenterEntityEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -78,10 +102,10 @@ func (e TrustcenterEntityEdges) LogoFileOrErr() (*File, error) {
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TrustcenterEntityEdges) TrustCenterOrErr() (*TrustCenter, error) {
+func (e TrustCenterEntityEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -89,17 +113,17 @@ func (e TrustcenterEntityEdges) TrustCenterOrErr() (*TrustCenter, error) {
 
 // EntityTypeOrErr returns the EntityType value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e TrustcenterEntityEdges) EntityTypeOrErr() (*EntityType, error) {
+func (e TrustCenterEntityEdges) EntityTypeOrErr() (*EntityType, error) {
 	if e.EntityType != nil {
 		return e.EntityType, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: entitytype.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity_type"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*TrustcenterEntity) scanValues(columns []string) ([]any, error) {
+func (*TrustCenterEntity) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
@@ -107,9 +131,7 @@ func (*TrustcenterEntity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case trustcenterentity.FieldCreatedAt, trustcenterentity.FieldUpdatedAt, trustcenterentity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case trustcenterentity.ForeignKeys[0]: // file_trustcenter_entities
-			values[i] = new(sql.NullString)
-		case trustcenterentity.ForeignKeys[1]: // trust_center_trustcenter_entities
+		case trustcenterentity.ForeignKeys[0]: // file_trust_center_entities
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -119,8 +141,8 @@ func (*TrustcenterEntity) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the TrustcenterEntity fields.
-func (_m *TrustcenterEntity) assignValues(columns []string, values []any) error {
+// to the TrustCenterEntity fields.
+func (_m *TrustCenterEntity) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
@@ -201,17 +223,10 @@ func (_m *TrustcenterEntity) assignValues(columns []string, values []any) error 
 			}
 		case trustcenterentity.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field file_trustcenter_entities", values[i])
+				return fmt.Errorf("unexpected type %T for field file_trust_center_entities", values[i])
 			} else if value.Valid {
-				_m.file_trustcenter_entities = new(string)
-				*_m.file_trustcenter_entities = value.String
-			}
-		case trustcenterentity.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field trust_center_trustcenter_entities", values[i])
-			} else if value.Valid {
-				_m.trust_center_trustcenter_entities = new(string)
-				*_m.trust_center_trustcenter_entities = value.String
+				_m.file_trust_center_entities = new(string)
+				*_m.file_trust_center_entities = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -220,49 +235,59 @@ func (_m *TrustcenterEntity) assignValues(columns []string, values []any) error 
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the TrustcenterEntity.
+// Value returns the ent.Value that was dynamically selected and assigned to the TrustCenterEntity.
 // This includes values selected through modifiers, order, etc.
-func (_m *TrustcenterEntity) Value(name string) (ent.Value, error) {
+func (_m *TrustCenterEntity) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// QueryLogoFile queries the "logo_file" edge of the TrustcenterEntity entity.
-func (_m *TrustcenterEntity) QueryLogoFile() *FileQuery {
-	return NewTrustcenterEntityClient(_m.config).QueryLogoFile(_m)
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterEntity entity.
+func (_m *TrustCenterEntity) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterEntityClient(_m.config).QueryBlockedGroups(_m)
 }
 
-// QueryTrustCenter queries the "trust_center" edge of the TrustcenterEntity entity.
-func (_m *TrustcenterEntity) QueryTrustCenter() *TrustCenterQuery {
-	return NewTrustcenterEntityClient(_m.config).QueryTrustCenter(_m)
+// QueryEditors queries the "editors" edge of the TrustCenterEntity entity.
+func (_m *TrustCenterEntity) QueryEditors() *GroupQuery {
+	return NewTrustCenterEntityClient(_m.config).QueryEditors(_m)
 }
 
-// QueryEntityType queries the "entity_type" edge of the TrustcenterEntity entity.
-func (_m *TrustcenterEntity) QueryEntityType() *EntityTypeQuery {
-	return NewTrustcenterEntityClient(_m.config).QueryEntityType(_m)
+// QueryLogoFile queries the "logo_file" edge of the TrustCenterEntity entity.
+func (_m *TrustCenterEntity) QueryLogoFile() *FileQuery {
+	return NewTrustCenterEntityClient(_m.config).QueryLogoFile(_m)
 }
 
-// Update returns a builder for updating this TrustcenterEntity.
-// Note that you need to call TrustcenterEntity.Unwrap() before calling this method if this TrustcenterEntity
+// QueryTrustCenter queries the "trust_center" edge of the TrustCenterEntity entity.
+func (_m *TrustCenterEntity) QueryTrustCenter() *TrustCenterQuery {
+	return NewTrustCenterEntityClient(_m.config).QueryTrustCenter(_m)
+}
+
+// QueryEntityType queries the "entity_type" edge of the TrustCenterEntity entity.
+func (_m *TrustCenterEntity) QueryEntityType() *EntityTypeQuery {
+	return NewTrustCenterEntityClient(_m.config).QueryEntityType(_m)
+}
+
+// Update returns a builder for updating this TrustCenterEntity.
+// Note that you need to call TrustCenterEntity.Unwrap() before calling this method if this TrustCenterEntity
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (_m *TrustcenterEntity) Update() *TrustcenterEntityUpdateOne {
-	return NewTrustcenterEntityClient(_m.config).UpdateOne(_m)
+func (_m *TrustCenterEntity) Update() *TrustCenterEntityUpdateOne {
+	return NewTrustCenterEntityClient(_m.config).UpdateOne(_m)
 }
 
-// Unwrap unwraps the TrustcenterEntity entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the TrustCenterEntity entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (_m *TrustcenterEntity) Unwrap() *TrustcenterEntity {
+func (_m *TrustCenterEntity) Unwrap() *TrustCenterEntity {
 	_tx, ok := _m.config.driver.(*txDriver)
 	if !ok {
-		panic("generated: TrustcenterEntity is not a transactional entity")
+		panic("generated: TrustCenterEntity is not a transactional entity")
 	}
 	_m.config.driver = _tx.drv
 	return _m
 }
 
 // String implements the fmt.Stringer.
-func (_m *TrustcenterEntity) String() string {
+func (_m *TrustCenterEntity) String() string {
 	var builder strings.Builder
-	builder.WriteString("TrustcenterEntity(")
+	builder.WriteString("TrustCenterEntity(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
 	builder.WriteString("created_at=")
 	builder.WriteString(_m.CreatedAt.Format(time.ANSIC))
@@ -302,5 +327,53 @@ func (_m *TrustcenterEntity) String() string {
 	return builder.String()
 }
 
-// TrustcenterEntities is a parsable slice of TrustcenterEntity.
-type TrustcenterEntities []*TrustcenterEntity
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterEntity) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterEntity) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterEntity) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterEntity) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// TrustCenterEntities is a parsable slice of TrustCenterEntity.
+type TrustCenterEntities []*TrustCenterEntity

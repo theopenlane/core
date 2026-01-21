@@ -114,6 +114,26 @@ func (_u *NoteUpdate) ClearDeletedBy() *NoteUpdate {
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *NoteUpdate) SetTitle(v string) *NoteUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *NoteUpdate) SetNillableTitle(v *string) *NoteUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *NoteUpdate) ClearTitle() *NoteUpdate {
+	_u.mutation.ClearTitle()
+	return _u
+}
+
 // SetText sets the "text" field.
 func (_u *NoteUpdate) SetText(v string) *NoteUpdate {
 	_u.mutation.SetText(v)
@@ -558,6 +578,12 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(note.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(note.FieldTitle, field.TypeString)
+	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)
 	}
@@ -1001,6 +1027,26 @@ func (_u *NoteUpdateOne) SetNillableDeletedBy(v *string) *NoteUpdateOne {
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *NoteUpdateOne) ClearDeletedBy() *NoteUpdateOne {
 	_u.mutation.ClearDeletedBy()
+	return _u
+}
+
+// SetTitle sets the "title" field.
+func (_u *NoteUpdateOne) SetTitle(v string) *NoteUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableTitle(v *string) *NoteUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// ClearTitle clears the value of the "title" field.
+func (_u *NoteUpdateOne) ClearTitle() *NoteUpdateOne {
+	_u.mutation.ClearTitle()
 	return _u
 }
 
@@ -1477,6 +1523,12 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(note.FieldDeletedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(note.FieldTitle, field.TypeString, value)
+	}
+	if _u.mutation.TitleCleared() {
+		_spec.ClearField(note.FieldTitle, field.TypeString)
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(note.FieldText, field.TypeString, value)

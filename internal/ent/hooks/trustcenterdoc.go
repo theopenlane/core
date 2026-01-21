@@ -91,6 +91,11 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				m.SetFileID(origFileID)
 			}
 
+			// set watermark status to DISABLED when watermarking is not enabled
+			if !watermarkingEnabled {
+				m.SetWatermarkStatus(enums.WatermarkStatusDisabled)
+			}
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
@@ -146,9 +151,15 @@ func HookUpdateTrustCenterDoc() ent.Hook {
 			logx.FromContext(ctx).Debug().Msg("trust center doc hook")
 
 			// if the watermark status is true already, we do not want to be able to revert it under any circumstances
-			if _, ok := m.WatermarkingEnabled(); ok {
-				if oldWatermarkingEnabled, err := m.OldWatermarkingEnabled(ctx); err == nil && oldWatermarkingEnabled {
+			if newWatermarkingEnabled, ok := m.WatermarkingEnabled(); ok {
+				oldWatermarkingEnabled, err := m.OldWatermarkingEnabled(ctx)
+				if err == nil && oldWatermarkingEnabled {
 					m.ResetWatermarkingEnabled()
+				}
+
+				// but if watermarking is being toggled to enabled state, we need to set status to PENDING
+				if err == nil && newWatermarkingEnabled && !oldWatermarkingEnabled {
+					m.SetWatermarkStatus(enums.WatermarkStatusPending)
 				}
 			}
 

@@ -548,7 +548,7 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    trustcenterEntities {
+    trustCenterEntities {
       totalCount
       pageInfo {
         hasNextPage

@@ -125,23 +125,43 @@ func (_u *TrustCenterDocHistoryUpdate) ClearTags() *TrustCenterDocHistoryUpdate 
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterDocKindName(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetTrustCenterDocKindName(v)
 	return _u
 }
 
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryUpdate {
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocHistoryUpdate {
 	if v != nil {
-		_u.SetTrustCenterID(*v)
+		_u.SetTrustCenterDocKindName(*v)
 	}
 	return _u
 }
 
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterID() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
+// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterDocKindName() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearTrustCenterDocKindName()
+	return _u
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterDocKindID(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetTrustCenterDocKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterDocKindID() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearTrustCenterDocKindID()
 	return _u
 }
 
@@ -155,20 +175,6 @@ func (_u *TrustCenterDocHistoryUpdate) SetTitle(v string) *TrustCenterDocHistory
 func (_u *TrustCenterDocHistoryUpdate) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdate {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocHistoryUpdate) SetCategory(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableCategory(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -417,17 +423,23 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
+	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindNameCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterDocKindID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
@@ -579,23 +591,43 @@ func (_u *TrustCenterDocHistoryUpdateOne) ClearTags() *TrustCenterDocHistoryUpda
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterDocKindName(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetTrustCenterDocKindName(v)
 	return _u
 }
 
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterDocHistoryUpdateOne {
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocHistoryUpdateOne {
 	if v != nil {
-		_u.SetTrustCenterID(*v)
+		_u.SetTrustCenterDocKindName(*v)
 	}
 	return _u
 }
 
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterID() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
+// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterDocKindName() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterDocKindName()
+	return _u
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterDocKindID(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetTrustCenterDocKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterDocKindID() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearTrustCenterDocKindID()
 	return _u
 }
 
@@ -609,20 +641,6 @@ func (_u *TrustCenterDocHistoryUpdateOne) SetTitle(v string) *TrustCenterDocHist
 func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdateOne {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetCategory(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableCategory(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -901,17 +919,23 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterID, field.TypeString, value)
+	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindNameCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString)
+	}
+	if value, ok := _u.mutation.TrustCenterDocKindID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdochistory.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.FileID(); ok {
 		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)

@@ -1,0 +1,23 @@
+-- +goose Up
+-- modify "notes" table
+ALTER TABLE "notes" ADD COLUMN "title" character varying NULL;
+-- modify "trust_center_settings" table
+ALTER TABLE "trust_center_settings" ADD COLUMN "remove_branding" boolean NULL DEFAULT false, ADD COLUMN "company_domain" character varying NULL, ADD COLUMN "security_contact" character varying NULL, ADD COLUMN "nda_approval_required" boolean NULL DEFAULT false;
+-- create "trust_center_nda_requests" table
+CREATE TABLE "trust_center_nda_requests" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "first_name" character varying NOT NULL, "last_name" character varying NOT NULL, "email" character varying NOT NULL, "company_name" character varying NULL, "reason" character varying NULL, "access_level" character varying NULL DEFAULT 'FULL', "status" character varying NULL DEFAULT 'REQUESTED', "trust_center_id" character varying NULL, PRIMARY KEY ("id"), CONSTRAINT "trust_center_nda_requests_trus_166c4573710ee5957bac7d4b99111f81" FOREIGN KEY ("trust_center_id") REFERENCES "trust_centers" ("id") ON UPDATE NO ACTION ON DELETE SET NULL);
+-- modify "groups" table
+ALTER TABLE "groups" ADD COLUMN "trust_center_nda_request_blocked_groups" character varying NULL, ADD COLUMN "trust_center_nda_request_editors" character varying NULL, ADD CONSTRAINT "groups_trust_center_nda_requests_blocked_groups" FOREIGN KEY ("trust_center_nda_request_blocked_groups") REFERENCES "trust_center_nda_requests" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, ADD CONSTRAINT "groups_trust_center_nda_requests_editors" FOREIGN KEY ("trust_center_nda_request_editors") REFERENCES "trust_center_nda_requests" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+-- modify "trust_center_docs" table
+ALTER TABLE "trust_center_docs" ADD COLUMN "trust_center_nda_request_trust_center_docs" character varying NULL, ADD CONSTRAINT "trust_center_docs_trust_center_nda_requests_trust_center_docs" FOREIGN KEY ("trust_center_nda_request_trust_center_docs") REFERENCES "trust_center_nda_requests" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
+
+-- +goose Down
+-- reverse: modify "trust_center_docs" table
+ALTER TABLE "trust_center_docs" DROP CONSTRAINT "trust_center_docs_trust_center_nda_requests_trust_center_docs", DROP COLUMN "trust_center_nda_request_trust_center_docs";
+-- reverse: modify "groups" table
+ALTER TABLE "groups" DROP CONSTRAINT "groups_trust_center_nda_requests_editors", DROP CONSTRAINT "groups_trust_center_nda_requests_blocked_groups", DROP COLUMN "trust_center_nda_request_editors", DROP COLUMN "trust_center_nda_request_blocked_groups";
+-- reverse: create "trust_center_nda_requests" table
+DROP TABLE "trust_center_nda_requests";
+-- reverse: modify "trust_center_settings" table
+ALTER TABLE "trust_center_settings" DROP COLUMN "nda_approval_required", DROP COLUMN "security_contact", DROP COLUMN "company_domain", DROP COLUMN "remove_branding";
+-- reverse: modify "notes" table
+ALTER TABLE "notes" DROP COLUMN "title";

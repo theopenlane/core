@@ -161,6 +161,20 @@ func (_c *NoteHistoryCreate) SetNillableOwnerID(v *string) *NoteHistoryCreate {
 	return _c
 }
 
+// SetTitle sets the "title" field.
+func (_c *NoteHistoryCreate) SetTitle(v string) *NoteHistoryCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_c *NoteHistoryCreate) SetNillableTitle(v *string) *NoteHistoryCreate {
+	if v != nil {
+		_c.SetTitle(*v)
+	}
+	return _c
+}
+
 // SetText sets the "text" field.
 func (_c *NoteHistoryCreate) SetText(v string) *NoteHistoryCreate {
 	_c.mutation.SetText(v)
@@ -416,6 +430,10 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(notehistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(notehistory.FieldTitle, field.TypeString, value)
+		_node.Title = &value
 	}
 	if value, ok := _c.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)

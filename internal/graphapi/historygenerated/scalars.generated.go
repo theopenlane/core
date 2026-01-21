@@ -518,6 +518,36 @@ func (ec *executionContext) marshalOTestingProcedures2ᚕgithubᚗcomᚋtheopenl
 	return ret
 }
 
+func (ec *executionContext) unmarshalOWorkflowAssignmentApproval2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentApproval(ctx context.Context, v any) (models.WorkflowAssignmentApproval, error) {
+	var res models.WorkflowAssignmentApproval
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowAssignmentApproval2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentApproval(ctx context.Context, sel ast.SelectionSet, v models.WorkflowAssignmentApproval) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowAssignmentInvalidation2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentInvalidation(ctx context.Context, v any) (models.WorkflowAssignmentInvalidation, error) {
+	var res models.WorkflowAssignmentInvalidation
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowAssignmentInvalidation2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentInvalidation(ctx context.Context, sel ast.SelectionSet, v models.WorkflowAssignmentInvalidation) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowAssignmentRejection2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentRejection(ctx context.Context, v any) (models.WorkflowAssignmentRejection, error) {
+	var res models.WorkflowAssignmentRejection
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowAssignmentRejection2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowAssignmentRejection(ctx context.Context, sel ast.SelectionSet, v models.WorkflowAssignmentRejection) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (models.WorkflowDefinitionDocument, error) {
 	var res models.WorkflowDefinitionDocument
 	err := res.UnmarshalGQL(v)

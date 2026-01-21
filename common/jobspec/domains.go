@@ -1,5 +1,7 @@
 package jobspec
 
+import "github.com/riverqueue/river"
+
 // CreateCustomDomainArgs for the worker to process the custom domain
 type CreateCustomDomainArgs struct {
 	// ID of the custom domain in our system
@@ -8,6 +10,11 @@ type CreateCustomDomainArgs struct {
 
 // Kind satisfies the river.Job interface
 func (CreateCustomDomainArgs) Kind() string { return "create_custom_domain" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (CreateCustomDomainArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
 
 // CreatePreviewDomainArgs for the worker to process the preview domain creation
 type CreatePreviewDomainArgs struct {
@@ -21,6 +28,11 @@ type CreatePreviewDomainArgs struct {
 
 // Kind satisfies the river.Job interface
 func (CreatePreviewDomainArgs) Kind() string { return "create_preview_domain" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (CreatePreviewDomainArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
 
 // DeleteCustomDomainArgs for the worker to process the custom domain
 type DeleteCustomDomainArgs struct {
@@ -37,6 +49,11 @@ type DeleteCustomDomainArgs struct {
 // Kind satisfies the river.Job interface
 func (DeleteCustomDomainArgs) Kind() string { return "delete_custom_domain" }
 
+// InsertOpts provides the default configuration when processing this job.
+func (DeleteCustomDomainArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
+
 // DeletePreviewDomainArgs for the worker to process the preview domain deletion
 type DeletePreviewDomainArgs struct {
 	// CustomDomainID is the ID of the custom domain to delete
@@ -48,6 +65,11 @@ type DeletePreviewDomainArgs struct {
 // Kind satisfies the river.Job interface
 func (DeletePreviewDomainArgs) Kind() string { return "delete_preview_domain" }
 
+// InsertOpts provides the default configuration when processing this job.
+func (DeletePreviewDomainArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
+
 // ValidateCustomDomainArgs for the worker to process the custom domain
 type ValidateCustomDomainArgs struct {
 	CustomDomainID string `json:"custom_domain_id"`
@@ -55,6 +77,11 @@ type ValidateCustomDomainArgs struct {
 
 // Kind satisfies the river.Job interface
 func (ValidateCustomDomainArgs) Kind() string { return "validate_custom_domain" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (ValidateCustomDomainArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
 
 // ValidatePreviewDomainArgs for the worker to process the preview domain creation
 type ValidatePreviewDomainArgs struct {
@@ -66,6 +93,11 @@ type ValidatePreviewDomainArgs struct {
 
 // Kind satisfies the river.Job interface
 func (ValidatePreviewDomainArgs) Kind() string { return "validate_preview_domain" }
+
+// InsertOpts provides the default configuration when processing this job.
+func (ValidatePreviewDomainArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
+}
 
 // ClearTrustCenterCacheArgs for the worker to clear trust center cache
 type ClearTrustCenterCacheArgs struct {
@@ -82,11 +114,8 @@ type ClearTrustCenterCacheArgs struct {
 // Kind satisfies the river.Job interface
 func (ClearTrustCenterCacheArgs) Kind() string { return "clear_trust_center_cache" }
 
-// SyncTrustCenterCacheArgs for the worker to refresh trust center cache entries
-type SyncTrustCenterCacheArgs struct {
-	// TrustCenterID is the ID of the trust center to refresh cache for
-	TrustCenterID string `json:"trust_center_id"`
+// InsertOpts provides the default configuration when processing this job.
+func (ClearTrustCenterCacheArgs) InsertOpts() river.InsertOpts {
+	return river.InsertOpts{Queue: QueueTrustcenter}
 }
 
-// Kind satisfies the river.Job interface
-func (SyncTrustCenterCacheArgs) Kind() string { return "sync_trust_center_cache" }

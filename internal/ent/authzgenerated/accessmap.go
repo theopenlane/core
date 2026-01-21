@@ -779,10 +779,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "event",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "trust_center_setting": {
-	ObjectType:      "trust_center_setting",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
@@ -791,8 +787,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "secret",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "trustcenter_entities": {
-	ObjectType:      "trustcenter_entity",
+}, "trust_center_entities": {
+	ObjectType:      "trust_center_entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "trust_center_doc": {
+	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "original_trust_center_doc": {
+	ObjectType:      "original_trust_center_doc",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -2632,6 +2636,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "custom_domain": {
 	ObjectType:      "organization",
 	SkipEditCheck:   false,
@@ -2672,12 +2684,24 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "trustcenter_entities": {
-	ObjectType:      "trustcenter_entity",
+}, "trust_center_entities": {
+	ObjectType:      "trust_center_entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "trust_center_nda_requests": {
+	ObjectType:      "trust_center_nda_request",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "trust_center_compliance": {"trust_center": {
+}, "trust_center_compliance": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -2686,7 +2710,19 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 },
-}, "trust_center_doc": {"trust_center": {
+}, "trust_center_doc": {"trust_center_doc_kind": {
+	ObjectType:      "trust_center_doc_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -2703,20 +2739,70 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "trust_center_setting": {"files": {
-	ObjectType:      "file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+}, "trust_center_entity": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "logo_file": {
 	ObjectType:      "logo_file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "favicon_file": {
-	ObjectType:      "favicon_file",
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entity_type": {
+	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "trust_center_subprocessor": {"trust_center": {
+}, "trust_center_nda_request": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "trust_center_docs": {
+	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+},
+}, "trust_center_setting": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "logo_file": {
+	ObjectType:      "file",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "favicon_file": {
+	ObjectType:      "file",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+},
+}, "trust_center_subprocessor": {"blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -2729,25 +2815,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "trust_center": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "file": {
 	ObjectType:      "file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-},
-}, "trustcenter_entity": {"logo_file": {
-	ObjectType:      "logo_file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "trust_center": {
-	ObjectType:      "trust_center",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "entity_type": {
-	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },

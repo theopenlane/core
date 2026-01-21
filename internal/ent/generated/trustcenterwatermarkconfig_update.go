@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -103,26 +104,6 @@ func (_u *TrustCenterWatermarkConfigUpdate) SetNillableDeletedBy(v *string) *Tru
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *TrustCenterWatermarkConfigUpdate) ClearDeletedBy() *TrustCenterWatermarkConfigUpdate {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdate) SetTrustCenterID(v string) *TrustCenterWatermarkConfigUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigUpdate) SetNillableTrustCenterID(v *string) *TrustCenterWatermarkConfigUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdate) ClearTrustCenterID() *TrustCenterWatermarkConfigUpdate {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -307,6 +288,36 @@ func (_u *TrustCenterWatermarkConfigUpdate) ClearFont() *TrustCenterWatermarkCon
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterWatermarkConfigUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdate) AddBlockedGroups(v ...*Group) *TrustCenterWatermarkConfigUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterWatermarkConfigUpdate) AddEditorIDs(ids ...string) *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdate) AddEditors(v ...*Group) *TrustCenterWatermarkConfigUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
 // AddTrustCenterIDs adds the "trust_center" edge to the TrustCenter entity by IDs.
 func (_u *TrustCenterWatermarkConfigUpdate) AddTrustCenterIDs(ids ...string) *TrustCenterWatermarkConfigUpdate {
 	_u.mutation.AddTrustCenterIDs(ids...)
@@ -344,6 +355,48 @@ func (_u *TrustCenterWatermarkConfigUpdate) SetFile(v *File) *TrustCenterWaterma
 // Mutation returns the TrustCenterWatermarkConfigMutation object of the builder.
 func (_u *TrustCenterWatermarkConfigUpdate) Mutation() *TrustCenterWatermarkConfigMutation {
 	return _u.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdate) ClearBlockedGroups() *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterWatermarkConfigUpdate) RemoveBlockedGroupIDs(ids ...string) *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterWatermarkConfigUpdate) RemoveBlockedGroups(v ...*Group) *TrustCenterWatermarkConfigUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdate) ClearEditors() *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterWatermarkConfigUpdate) RemoveEditorIDs(ids ...string) *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterWatermarkConfigUpdate) RemoveEditors(v ...*Group) *TrustCenterWatermarkConfigUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearTrustCenter clears all "trust_center" edges to the TrustCenter entity.
@@ -417,11 +470,6 @@ func (_u *TrustCenterWatermarkConfigUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterWatermarkConfigUpdate) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcenterwatermarkconfig.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Text(); ok {
 		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
@@ -498,9 +546,6 @@ func (_u *TrustCenterWatermarkConfigUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString)
 	}
@@ -554,6 +599,102 @@ func (_u *TrustCenterWatermarkConfigUpdate) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.FontCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -727,26 +868,6 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableDeletedBy(v *string) *
 // ClearDeletedBy clears the value of the "deleted_by" field.
 func (_u *TrustCenterWatermarkConfigUpdateOne) ClearDeletedBy() *TrustCenterWatermarkConfigUpdateOne {
 	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdateOne) SetTrustCenterID(v string) *TrustCenterWatermarkConfigUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterWatermarkConfigUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterWatermarkConfigUpdateOne) ClearTrustCenterID() *TrustCenterWatermarkConfigUpdateOne {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -931,6 +1052,36 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) ClearFont() *TrustCenterWatermark
 	return _u
 }
 
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterWatermarkConfigUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdateOne) AddBlockedGroups(v ...*Group) *TrustCenterWatermarkConfigUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterWatermarkConfigUpdateOne) AddEditorIDs(ids ...string) *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdateOne) AddEditors(v ...*Group) *TrustCenterWatermarkConfigUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
+}
+
 // AddTrustCenterIDs adds the "trust_center" edge to the TrustCenter entity by IDs.
 func (_u *TrustCenterWatermarkConfigUpdateOne) AddTrustCenterIDs(ids ...string) *TrustCenterWatermarkConfigUpdateOne {
 	_u.mutation.AddTrustCenterIDs(ids...)
@@ -968,6 +1119,48 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) SetFile(v *File) *TrustCenterWate
 // Mutation returns the TrustCenterWatermarkConfigMutation object of the builder.
 func (_u *TrustCenterWatermarkConfigUpdateOne) Mutation() *TrustCenterWatermarkConfigMutation {
 	return _u.mutation
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdateOne) ClearBlockedGroups() *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterWatermarkConfigUpdateOne) RemoveBlockedGroupIDs(ids ...string) *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterWatermarkConfigUpdateOne) RemoveBlockedGroups(v ...*Group) *TrustCenterWatermarkConfigUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterWatermarkConfigUpdateOne) ClearEditors() *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterWatermarkConfigUpdateOne) RemoveEditorIDs(ids ...string) *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterWatermarkConfigUpdateOne) RemoveEditors(v ...*Group) *TrustCenterWatermarkConfigUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearTrustCenter clears all "trust_center" edges to the TrustCenter entity.
@@ -1054,11 +1247,6 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterWatermarkConfigUpdateOne) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcenterwatermarkconfig.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Text(); ok {
 		if err := trustcenterwatermarkconfig.TextValidator(v); err != nil {
 			return &ValidationError{Name: "text", err: fmt.Errorf(`generated: validator failed for field "TrustCenterWatermarkConfig.text": %w`, err)}
@@ -1152,9 +1340,6 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString)
 	}
@@ -1208,6 +1393,102 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.FontCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldFont, field.TypeEnum)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.BlockedGroupsTable,
+			Columns: []string{trustcenterwatermarkconfig.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterwatermarkconfig.EditorsTable,
+			Columns: []string{trustcenterwatermarkconfig.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{

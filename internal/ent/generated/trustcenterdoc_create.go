@@ -11,7 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
@@ -114,6 +116,34 @@ func (_c *TrustCenterDocCreate) SetTags(v []string) *TrustCenterDocCreate {
 	return _c
 }
 
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_c *TrustCenterDocCreate) SetTrustCenterDocKindName(v string) *TrustCenterDocCreate {
+	_c.mutation.SetTrustCenterDocKindName(v)
+	return _c
+}
+
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_c *TrustCenterDocCreate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocCreate {
+	if v != nil {
+		_c.SetTrustCenterDocKindName(*v)
+	}
+	return _c
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_c *TrustCenterDocCreate) SetTrustCenterDocKindID(v string) *TrustCenterDocCreate {
+	_c.mutation.SetTrustCenterDocKindID(v)
+	return _c
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_c *TrustCenterDocCreate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocCreate {
+	if v != nil {
+		_c.SetTrustCenterDocKindID(*v)
+	}
+	return _c
+}
+
 // SetTrustCenterID sets the "trust_center_id" field.
 func (_c *TrustCenterDocCreate) SetTrustCenterID(v string) *TrustCenterDocCreate {
 	_c.mutation.SetTrustCenterID(v)
@@ -131,12 +161,6 @@ func (_c *TrustCenterDocCreate) SetNillableTrustCenterID(v *string) *TrustCenter
 // SetTitle sets the "title" field.
 func (_c *TrustCenterDocCreate) SetTitle(v string) *TrustCenterDocCreate {
 	_c.mutation.SetTitle(v)
-	return _c
-}
-
-// SetCategory sets the "category" field.
-func (_c *TrustCenterDocCreate) SetCategory(v string) *TrustCenterDocCreate {
-	_c.mutation.SetCategory(v)
 	return _c
 }
 
@@ -236,6 +260,41 @@ func (_c *TrustCenterDocCreate) SetNillableID(v *string) *TrustCenterDocCreate {
 		_c.SetID(*v)
 	}
 	return _c
+}
+
+// SetTrustCenterDocKind sets the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_c *TrustCenterDocCreate) SetTrustCenterDocKind(v *CustomTypeEnum) *TrustCenterDocCreate {
+	return _c.SetTrustCenterDocKindID(v.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_c *TrustCenterDocCreate) AddBlockedGroupIDs(ids ...string) *TrustCenterDocCreate {
+	_c.mutation.AddBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_c *TrustCenterDocCreate) AddBlockedGroups(v ...*Group) *TrustCenterDocCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_c *TrustCenterDocCreate) AddEditorIDs(ids ...string) *TrustCenterDocCreate {
+	_c.mutation.AddEditorIDs(ids...)
+	return _c
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_c *TrustCenterDocCreate) AddEditors(v ...*Group) *TrustCenterDocCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEditorIDs(ids...)
 }
 
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
@@ -346,14 +405,6 @@ func (_c *TrustCenterDocCreate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.Category(); !ok {
-		return &ValidationError{Name: "category", err: errors.New(`generated: missing required field "TrustCenterDoc.category"`)}
-	}
-	if v, ok := _c.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
-		}
-	}
 	if v, ok := _c.mutation.WatermarkStatus(); ok {
 		if err := trustcenterdoc.WatermarkStatusValidator(v); err != nil {
 			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.watermark_status": %w`, err)}
@@ -433,13 +484,13 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 		_spec.SetField(trustcenterdoc.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString, value)
+		_node.TrustCenterDocKindName = value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
 		_node.Title = value
-	}
-	if value, ok := _c.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
-		_node.Category = value
 	}
 	if value, ok := _c.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -452,6 +503,58 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdoc.FieldVisibility, field.TypeEnum, value)
 		_node.Visibility = value
+	}
+	if nodes := _c.mutation.TrustCenterDocKindIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TrustCenterDocKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

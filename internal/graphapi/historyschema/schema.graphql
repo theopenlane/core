@@ -788,6 +788,9 @@ This scalar can be used to store and validate address information in the GraphQL
 It contains `Line1`, `Line2`, `City`, `State`, `PostalCode`, and `Country`
 """
 scalar Address
+"""
+Any is a generic fallback type
+"""
 scalar Any
 type AssessmentHistory implements Node {
 	id: ID!
@@ -13113,6 +13116,10 @@ type NoteHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	the title of the note
+	"""
+	title: String
+	"""
 	the text of the note
 	"""
 	text: String!
@@ -13349,6 +13356,24 @@ input NoteHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	title field predicates
+	"""
+	title: String
+	titleNEQ: String
+	titleIn: [String!]
+	titleNotIn: [String!]
+	titleGT: String
+	titleGTE: String
+	titleLT: String
+	titleLTE: String
+	titleContains: String
+	titleHasPrefix: String
+	titleHasSuffix: String
+	titleIsNil: Boolean
+	titleNotNil: Boolean
+	titleEqualFold: String
+	titleContainsFold: String
 	"""
 	text field predicates
 	"""
@@ -17929,6 +17954,37 @@ type Query {
 		"""
 		where: TrustCenterDocHistoryWhereInput
 	): TrustCenterDocHistoryConnection!
+	trustCenterEntityHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterEntityHistories returned from the connection.
+		"""
+		orderBy: TrustCenterEntityHistoryOrder
+
+		"""
+		Filtering options for TrustCenterEntityHistories returned from the connection.
+		"""
+		where: TrustCenterEntityHistoryWhereInput
+	): TrustCenterEntityHistoryConnection!
 	trustCenterHistories(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -17960,6 +18016,37 @@ type Query {
 		"""
 		where: TrustCenterHistoryWhereInput
 	): TrustCenterHistoryConnection!
+	trustCenterNdaRequestHistories(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterNDARequestHistories returned from the connection.
+		"""
+		orderBy: TrustCenterNDARequestHistoryOrder
+
+		"""
+		Filtering options for TrustCenterNDARequestHistories returned from the connection.
+		"""
+		where: TrustCenterNDARequestHistoryWhereInput
+	): TrustCenterNDARequestHistoryConnection!
 	trustCenterSettingHistories(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -18053,37 +18140,6 @@ type Query {
 		"""
 		where: TrustCenterWatermarkConfigHistoryWhereInput
 	): TrustCenterWatermarkConfigHistoryConnection!
-	trustcenterEntityHistories(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for TrustcenterEntityHistories returned from the connection.
-		"""
-		orderBy: TrustcenterEntityHistoryOrder
-
-		"""
-		Filtering options for TrustcenterEntityHistories returned from the connection.
-		"""
-		where: TrustcenterEntityHistoryWhereInput
-	): TrustcenterEntityHistoryConnection!
 	userHistories(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -22112,7 +22168,7 @@ type SubprocessorHistory implements Node {
 	"""
 	tags: [String!]
 	"""
-	the organization id that owns the object
+	the ID of the organization owner of the object
 	"""
 	ownerID: String
 	"""
@@ -23580,6 +23636,14 @@ type TrustCenterDocHistory implements Node {
 	"""
 	tags: [String!]
 	"""
+	the kind of the trust_center_doc
+	"""
+	trustCenterDocKindName: String
+	"""
+	the kind of the trust_center_doc
+	"""
+	trustCenterDocKindID: String
+	"""
 	ID of the trust center
 	"""
 	trustCenterID: String
@@ -23587,10 +23651,6 @@ type TrustCenterDocHistory implements Node {
 	title of the document
 	"""
 	title: String!
-	"""
-	category of the document
-	"""
-	category: String!
 	"""
 	ID of the file containing the document
 	"""
@@ -23600,7 +23660,7 @@ type TrustCenterDocHistory implements Node {
 	"""
 	originalFileID: String
 	"""
-	whether watermarking is enabled for the document. this will only take effect if watermarking is configured for the trust center
+	whether watermarking is enabled for the document, this will only take effect if there is a global watermarking config for the trust center
 	"""
 	watermarkingEnabled: Boolean
 	"""
@@ -23813,6 +23873,42 @@ input TrustCenterDocHistoryWhereInput {
 	updatedByEqualFold: String
 	updatedByContainsFold: String
 	"""
+	trust_center_doc_kind_name field predicates
+	"""
+	trustCenterDocKindName: String
+	trustCenterDocKindNameNEQ: String
+	trustCenterDocKindNameIn: [String!]
+	trustCenterDocKindNameNotIn: [String!]
+	trustCenterDocKindNameGT: String
+	trustCenterDocKindNameGTE: String
+	trustCenterDocKindNameLT: String
+	trustCenterDocKindNameLTE: String
+	trustCenterDocKindNameContains: String
+	trustCenterDocKindNameHasPrefix: String
+	trustCenterDocKindNameHasSuffix: String
+	trustCenterDocKindNameIsNil: Boolean
+	trustCenterDocKindNameNotNil: Boolean
+	trustCenterDocKindNameEqualFold: String
+	trustCenterDocKindNameContainsFold: String
+	"""
+	trust_center_doc_kind_id field predicates
+	"""
+	trustCenterDocKindID: String
+	trustCenterDocKindIDNEQ: String
+	trustCenterDocKindIDIn: [String!]
+	trustCenterDocKindIDNotIn: [String!]
+	trustCenterDocKindIDGT: String
+	trustCenterDocKindIDGTE: String
+	trustCenterDocKindIDLT: String
+	trustCenterDocKindIDLTE: String
+	trustCenterDocKindIDContains: String
+	trustCenterDocKindIDHasPrefix: String
+	trustCenterDocKindIDHasSuffix: String
+	trustCenterDocKindIDIsNil: Boolean
+	trustCenterDocKindIDNotNil: Boolean
+	trustCenterDocKindIDEqualFold: String
+	trustCenterDocKindIDContainsFold: String
+	"""
 	trust_center_id field predicates
 	"""
 	trustCenterID: String
@@ -23846,22 +23942,6 @@ input TrustCenterDocHistoryWhereInput {
 	titleHasSuffix: String
 	titleEqualFold: String
 	titleContainsFold: String
-	"""
-	category field predicates
-	"""
-	category: String
-	categoryNEQ: String
-	categoryIn: [String!]
-	categoryNotIn: [String!]
-	categoryGT: String
-	categoryGTE: String
-	categoryLT: String
-	categoryLTE: String
-	categoryContains: String
-	categoryHasPrefix: String
-	categoryHasSuffix: String
-	categoryEqualFold: String
-	categoryContainsFold: String
 	"""
 	file_id field predicates
 	"""
@@ -23941,6 +24021,286 @@ input TrustCenterDocHistoryWhereInput {
 	standardIDNotNil: Boolean
 	standardIDEqualFold: String
 	standardIDContainsFold: String
+}
+type TrustCenterEntityHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: TrustCenterEntityHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	The local logo file id
+	"""
+	logoFileID: String
+	"""
+	URL of customer's website
+	"""
+	url: String
+	"""
+	The trust center this entity belongs to
+	"""
+	trustCenterID: String
+	"""
+	The name of the tag definition
+	"""
+	name: String!
+	"""
+	The entity type for the customer entity
+	"""
+	entityTypeID: String
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterEntityHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [TrustCenterEntityHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterEntityHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: TrustCenterEntityHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+TrustCenterEntityHistoryOpType is enum for the field operation
+"""
+enum TrustCenterEntityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for TrustCenterEntityHistory connections
+"""
+input TrustCenterEntityHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order TrustCenterEntityHistories.
+	"""
+	field: TrustCenterEntityHistoryOrderField!
+}
+"""
+Properties by which TrustCenterEntityHistory connections can be ordered.
+"""
+enum TrustCenterEntityHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+	NAME
+}
+"""
+TrustCenterEntityHistoryWhereInput is used for filtering TrustCenterEntityHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterEntityHistoryWhereInput {
+	not: TrustCenterEntityHistoryWhereInput
+	and: [TrustCenterEntityHistoryWhereInput!]
+	or: [TrustCenterEntityHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: TrustCenterEntityHistoryOpType
+	operationNEQ: TrustCenterEntityHistoryOpType
+	operationIn: [TrustCenterEntityHistoryOpType!]
+	operationNotIn: [TrustCenterEntityHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: String
+	logoFileIDNEQ: String
+	logoFileIDIn: [String!]
+	logoFileIDNotIn: [String!]
+	logoFileIDGT: String
+	logoFileIDGTE: String
+	logoFileIDLT: String
+	logoFileIDLTE: String
+	logoFileIDContains: String
+	logoFileIDHasPrefix: String
+	logoFileIDHasSuffix: String
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: String
+	logoFileIDContainsFold: String
+	"""
+	url field predicates
+	"""
+	url: String
+	urlNEQ: String
+	urlIn: [String!]
+	urlNotIn: [String!]
+	urlGT: String
+	urlGTE: String
+	urlLT: String
+	urlLTE: String
+	urlContains: String
+	urlHasPrefix: String
+	urlHasSuffix: String
+	urlIsNil: Boolean
+	urlNotNil: Boolean
+	urlEqualFold: String
+	urlContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
+	"""
+	name field predicates
+	"""
+	name: String
+	nameNEQ: String
+	nameIn: [String!]
+	nameNotIn: [String!]
+	nameGT: String
+	nameGTE: String
+	nameLT: String
+	nameLTE: String
+	nameContains: String
+	nameHasPrefix: String
+	nameHasSuffix: String
+	nameEqualFold: String
+	nameContainsFold: String
 }
 type TrustCenterHistory implements Node {
 	id: ID!
@@ -24312,6 +24672,367 @@ input TrustCenterHistoryWhereInput {
 	subprocessorURLEqualFold: String
 	subprocessorURLContainsFold: String
 }
+type TrustCenterNDARequestHistory implements Node {
+	id: ID!
+	historyTime: Time!
+	ref: String
+	operation: TrustCenterNDARequestHistoryOpType!
+	createdAt: Time
+	updatedAt: Time
+	createdBy: String
+	updatedBy: String
+	"""
+	tags associated with the object
+	"""
+	tags: [String!]
+	"""
+	ID of the trust center
+	"""
+	trustCenterID: String
+	"""
+	first name of the requester
+	"""
+	firstName: String!
+	"""
+	last name of the requester
+	"""
+	lastName: String!
+	"""
+	email address of the requester
+	"""
+	email: String!
+	"""
+	company name of the requester
+	"""
+	companyName: String
+	"""
+	reason for the NDA request
+	"""
+	reason: String
+	"""
+	access level requested
+	"""
+	accessLevel: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
+	"""
+	status of the NDA request
+	"""
+	status: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+}
+"""
+A connection to a list of items.
+"""
+type TrustCenterNDARequestHistoryConnection {
+	"""
+	A list of edges.
+	"""
+	edges: [TrustCenterNDARequestHistoryEdge]
+	"""
+	Information to aid in pagination.
+	"""
+	pageInfo: PageInfo!
+	"""
+	Identifies the total count of items in the connection.
+	"""
+	totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type TrustCenterNDARequestHistoryEdge {
+	"""
+	The item at the end of the edge.
+	"""
+	node: TrustCenterNDARequestHistory
+	"""
+	A cursor for use in pagination.
+	"""
+	cursor: Cursor!
+}
+"""
+TrustCenterNDARequestHistoryOpType is enum for the field operation
+"""
+enum TrustCenterNDARequestHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+	INSERT
+	UPDATE
+	DELETE
+}
+"""
+Ordering options for TrustCenterNDARequestHistory connections
+"""
+input TrustCenterNDARequestHistoryOrder {
+	"""
+	The ordering direction.
+	"""
+	direction: OrderDirection! = ASC
+	"""
+	The field by which to order TrustCenterNDARequestHistories.
+	"""
+	field: TrustCenterNDARequestHistoryOrderField!
+}
+"""
+Properties by which TrustCenterNDARequestHistory connections can be ordered.
+"""
+enum TrustCenterNDARequestHistoryOrderField {
+	history_time
+	created_at
+	updated_at
+}
+"""
+TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel is enum for the field access_level
+"""
+enum TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestAccessLevel") {
+	FULL
+	LIMITED
+}
+"""
+TrustCenterNDARequestHistoryTrustCenterNDARequestStatus is enum for the field status
+"""
+enum TrustCenterNDARequestHistoryTrustCenterNDARequestStatus @goModel(model: "github.com/theopenlane/core/common/enums.TrustCenterNDARequestStatus") {
+	REQUESTED
+	NEEDS_APPROVAL
+	APPROVED
+	SIGNED
+}
+"""
+TrustCenterNDARequestHistoryWhereInput is used for filtering TrustCenterNDARequestHistory objects.
+Input was generated by ent.
+"""
+input TrustCenterNDARequestHistoryWhereInput {
+	not: TrustCenterNDARequestHistoryWhereInput
+	and: [TrustCenterNDARequestHistoryWhereInput!]
+	or: [TrustCenterNDARequestHistoryWhereInput!]
+	"""
+	id field predicates
+	"""
+	id: ID
+	idNEQ: ID
+	idIn: [ID!]
+	idNotIn: [ID!]
+	idGT: ID
+	idGTE: ID
+	idLT: ID
+	idLTE: ID
+	idEqualFold: ID
+	idContainsFold: ID
+	"""
+	history_time field predicates
+	"""
+	historyTime: Time
+	historyTimeNEQ: Time
+	historyTimeIn: [Time!]
+	historyTimeNotIn: [Time!]
+	historyTimeGT: Time
+	historyTimeGTE: Time
+	historyTimeLT: Time
+	historyTimeLTE: Time
+	"""
+	ref field predicates
+	"""
+	ref: String
+	refNEQ: String
+	refIn: [String!]
+	refNotIn: [String!]
+	refGT: String
+	refGTE: String
+	refLT: String
+	refLTE: String
+	refContains: String
+	refHasPrefix: String
+	refHasSuffix: String
+	refIsNil: Boolean
+	refNotNil: Boolean
+	refEqualFold: String
+	refContainsFold: String
+	"""
+	operation field predicates
+	"""
+	operation: TrustCenterNDARequestHistoryOpType
+	operationNEQ: TrustCenterNDARequestHistoryOpType
+	operationIn: [TrustCenterNDARequestHistoryOpType!]
+	operationNotIn: [TrustCenterNDARequestHistoryOpType!]
+	"""
+	created_at field predicates
+	"""
+	createdAt: Time
+	createdAtNEQ: Time
+	createdAtIn: [Time!]
+	createdAtNotIn: [Time!]
+	createdAtGT: Time
+	createdAtGTE: Time
+	createdAtLT: Time
+	createdAtLTE: Time
+	createdAtIsNil: Boolean
+	createdAtNotNil: Boolean
+	"""
+	updated_at field predicates
+	"""
+	updatedAt: Time
+	updatedAtNEQ: Time
+	updatedAtIn: [Time!]
+	updatedAtNotIn: [Time!]
+	updatedAtGT: Time
+	updatedAtGTE: Time
+	updatedAtLT: Time
+	updatedAtLTE: Time
+	updatedAtIsNil: Boolean
+	updatedAtNotNil: Boolean
+	"""
+	created_by field predicates
+	"""
+	createdBy: String
+	createdByNEQ: String
+	createdByIn: [String!]
+	createdByNotIn: [String!]
+	createdByGT: String
+	createdByGTE: String
+	createdByLT: String
+	createdByLTE: String
+	createdByContains: String
+	createdByHasPrefix: String
+	createdByHasSuffix: String
+	createdByIsNil: Boolean
+	createdByNotNil: Boolean
+	createdByEqualFold: String
+	createdByContainsFold: String
+	"""
+	updated_by field predicates
+	"""
+	updatedBy: String
+	updatedByNEQ: String
+	updatedByIn: [String!]
+	updatedByNotIn: [String!]
+	updatedByGT: String
+	updatedByGTE: String
+	updatedByLT: String
+	updatedByLTE: String
+	updatedByContains: String
+	updatedByHasPrefix: String
+	updatedByHasSuffix: String
+	updatedByIsNil: Boolean
+	updatedByNotNil: Boolean
+	updatedByEqualFold: String
+	updatedByContainsFold: String
+	"""
+	trust_center_id field predicates
+	"""
+	trustCenterID: String
+	trustCenterIDNEQ: String
+	trustCenterIDIn: [String!]
+	trustCenterIDNotIn: [String!]
+	trustCenterIDGT: String
+	trustCenterIDGTE: String
+	trustCenterIDLT: String
+	trustCenterIDLTE: String
+	trustCenterIDContains: String
+	trustCenterIDHasPrefix: String
+	trustCenterIDHasSuffix: String
+	trustCenterIDIsNil: Boolean
+	trustCenterIDNotNil: Boolean
+	trustCenterIDEqualFold: String
+	trustCenterIDContainsFold: String
+	"""
+	first_name field predicates
+	"""
+	firstName: String
+	firstNameNEQ: String
+	firstNameIn: [String!]
+	firstNameNotIn: [String!]
+	firstNameGT: String
+	firstNameGTE: String
+	firstNameLT: String
+	firstNameLTE: String
+	firstNameContains: String
+	firstNameHasPrefix: String
+	firstNameHasSuffix: String
+	firstNameEqualFold: String
+	firstNameContainsFold: String
+	"""
+	last_name field predicates
+	"""
+	lastName: String
+	lastNameNEQ: String
+	lastNameIn: [String!]
+	lastNameNotIn: [String!]
+	lastNameGT: String
+	lastNameGTE: String
+	lastNameLT: String
+	lastNameLTE: String
+	lastNameContains: String
+	lastNameHasPrefix: String
+	lastNameHasSuffix: String
+	lastNameEqualFold: String
+	lastNameContainsFold: String
+	"""
+	email field predicates
+	"""
+	email: String
+	emailNEQ: String
+	emailIn: [String!]
+	emailNotIn: [String!]
+	emailGT: String
+	emailGTE: String
+	emailLT: String
+	emailLTE: String
+	emailContains: String
+	emailHasPrefix: String
+	emailHasSuffix: String
+	emailEqualFold: String
+	emailContainsFold: String
+	"""
+	company_name field predicates
+	"""
+	companyName: String
+	companyNameNEQ: String
+	companyNameIn: [String!]
+	companyNameNotIn: [String!]
+	companyNameGT: String
+	companyNameGTE: String
+	companyNameLT: String
+	companyNameLTE: String
+	companyNameContains: String
+	companyNameHasPrefix: String
+	companyNameHasSuffix: String
+	companyNameIsNil: Boolean
+	companyNameNotNil: Boolean
+	companyNameEqualFold: String
+	companyNameContainsFold: String
+	"""
+	reason field predicates
+	"""
+	reason: String
+	reasonNEQ: String
+	reasonIn: [String!]
+	reasonNotIn: [String!]
+	reasonGT: String
+	reasonGTE: String
+	reasonLT: String
+	reasonLTE: String
+	reasonContains: String
+	reasonHasPrefix: String
+	reasonHasSuffix: String
+	reasonIsNil: Boolean
+	reasonNotNil: Boolean
+	reasonEqualFold: String
+	reasonContainsFold: String
+	"""
+	access_level field predicates
+	"""
+	accessLevel: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
+	accessLevelNEQ: TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel
+	accessLevelIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel!]
+	accessLevelNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestAccessLevel!]
+	accessLevelIsNil: Boolean
+	accessLevelNotNil: Boolean
+	"""
+	status field predicates
+	"""
+	status: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+	statusNEQ: TrustCenterNDARequestHistoryTrustCenterNDARequestStatus
+	statusIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
+	statusNotIn: [TrustCenterNDARequestHistoryTrustCenterNDARequestStatus!]
+	statusIsNil: Boolean
+	statusNotNil: Boolean
+}
 type TrustCenterSettingHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -24329,6 +25050,10 @@ type TrustCenterSettingHistory implements Node {
 	title of the trust center
 	"""
 	title: String
+	"""
+	company name for the trust center, defaults to the organization's display name
+	"""
+	companyName: String
 	"""
 	overview of the trust center
 	"""
@@ -24385,6 +25110,22 @@ type TrustCenterSettingHistory implements Node {
 	environment of the trust center
 	"""
 	environment: TrustCenterSettingHistoryTrustCenterEnvironment
+	"""
+	whether to remove branding from the trust center
+	"""
+	removeBranding: Boolean
+	"""
+	URL to the company's homepage
+	"""
+	companyDomain: String
+	"""
+	email address for security contact
+	"""
+	securityContact: String
+	"""
+	whether NDA requests require approval before being processed
+	"""
+	ndaApprovalRequired: Boolean
 }
 """
 A connection to a list of items.
@@ -24614,6 +25355,24 @@ input TrustCenterSettingHistoryWhereInput {
 	titleNotNil: Boolean
 	titleEqualFold: String
 	titleContainsFold: String
+	"""
+	company_name field predicates
+	"""
+	companyName: String
+	companyNameNEQ: String
+	companyNameIn: [String!]
+	companyNameNotIn: [String!]
+	companyNameGT: String
+	companyNameGTE: String
+	companyNameLT: String
+	companyNameLTE: String
+	companyNameContains: String
+	companyNameHasPrefix: String
+	companyNameHasSuffix: String
+	companyNameIsNil: Boolean
+	companyNameNotNil: Boolean
+	companyNameEqualFold: String
+	companyNameContainsFold: String
 	"""
 	overview field predicates
 	"""
@@ -24848,6 +25607,56 @@ input TrustCenterSettingHistoryWhereInput {
 	environmentNotIn: [TrustCenterSettingHistoryTrustCenterEnvironment!]
 	environmentIsNil: Boolean
 	environmentNotNil: Boolean
+	"""
+	remove_branding field predicates
+	"""
+	removeBranding: Boolean
+	removeBrandingNEQ: Boolean
+	removeBrandingIsNil: Boolean
+	removeBrandingNotNil: Boolean
+	"""
+	company_domain field predicates
+	"""
+	companyDomain: String
+	companyDomainNEQ: String
+	companyDomainIn: [String!]
+	companyDomainNotIn: [String!]
+	companyDomainGT: String
+	companyDomainGTE: String
+	companyDomainLT: String
+	companyDomainLTE: String
+	companyDomainContains: String
+	companyDomainHasPrefix: String
+	companyDomainHasSuffix: String
+	companyDomainIsNil: Boolean
+	companyDomainNotNil: Boolean
+	companyDomainEqualFold: String
+	companyDomainContainsFold: String
+	"""
+	security_contact field predicates
+	"""
+	securityContact: String
+	securityContactNEQ: String
+	securityContactIn: [String!]
+	securityContactNotIn: [String!]
+	securityContactGT: String
+	securityContactGTE: String
+	securityContactLT: String
+	securityContactLTE: String
+	securityContactContains: String
+	securityContactHasPrefix: String
+	securityContactHasSuffix: String
+	securityContactIsNil: Boolean
+	securityContactNotNil: Boolean
+	securityContactEqualFold: String
+	securityContactContainsFold: String
+	"""
+	nda_approval_required field predicates
+	"""
+	ndaApprovalRequired: Boolean
+	ndaApprovalRequiredNEQ: Boolean
+	ndaApprovalRequiredIsNil: Boolean
+	ndaApprovalRequiredNotNil: Boolean
 }
 type TrustCenterSubprocessorHistory implements Node {
 	id: ID!
@@ -25495,268 +26304,6 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
 	fontNotIn: [TrustCenterWatermarkConfigHistoryFont!]
 	fontIsNil: Boolean
 	fontNotNil: Boolean
-}
-type TrustcenterEntityHistory implements Node {
-	id: ID!
-	historyTime: Time!
-	ref: String
-	operation: TrustcenterEntityHistoryOpType!
-	createdAt: Time
-	updatedAt: Time
-	createdBy: String
-	updatedBy: String
-	"""
-	The local logo file id
-	"""
-	logoFileID: String
-	"""
-	URL of customer's website
-	"""
-	url: String
-	"""
-	The trust center this entity belongs to
-	"""
-	trustCenterID: String
-	"""
-	The name of the tag definition
-	"""
-	name: String!
-	"""
-	The entity type for the customer entity
-	"""
-	entityTypeID: String
-}
-"""
-A connection to a list of items.
-"""
-type TrustcenterEntityHistoryConnection {
-	"""
-	A list of edges.
-	"""
-	edges: [TrustcenterEntityHistoryEdge]
-	"""
-	Information to aid in pagination.
-	"""
-	pageInfo: PageInfo!
-	"""
-	Identifies the total count of items in the connection.
-	"""
-	totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type TrustcenterEntityHistoryEdge {
-	"""
-	The item at the end of the edge.
-	"""
-	node: TrustcenterEntityHistory
-	"""
-	A cursor for use in pagination.
-	"""
-	cursor: Cursor!
-}
-"""
-TrustcenterEntityHistoryOpType is enum for the field operation
-"""
-enum TrustcenterEntityHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
-	INSERT
-	UPDATE
-	DELETE
-}
-"""
-Ordering options for TrustcenterEntityHistory connections
-"""
-input TrustcenterEntityHistoryOrder {
-	"""
-	The ordering direction.
-	"""
-	direction: OrderDirection! = ASC
-	"""
-	The field by which to order TrustcenterEntityHistories.
-	"""
-	field: TrustcenterEntityHistoryOrderField!
-}
-"""
-Properties by which TrustcenterEntityHistory connections can be ordered.
-"""
-enum TrustcenterEntityHistoryOrderField {
-	history_time
-	created_at
-	updated_at
-	NAME
-}
-"""
-TrustcenterEntityHistoryWhereInput is used for filtering TrustcenterEntityHistory objects.
-Input was generated by ent.
-"""
-input TrustcenterEntityHistoryWhereInput {
-	not: TrustcenterEntityHistoryWhereInput
-	and: [TrustcenterEntityHistoryWhereInput!]
-	or: [TrustcenterEntityHistoryWhereInput!]
-	"""
-	id field predicates
-	"""
-	id: ID
-	idNEQ: ID
-	idIn: [ID!]
-	idNotIn: [ID!]
-	idGT: ID
-	idGTE: ID
-	idLT: ID
-	idLTE: ID
-	idEqualFold: ID
-	idContainsFold: ID
-	"""
-	history_time field predicates
-	"""
-	historyTime: Time
-	historyTimeNEQ: Time
-	historyTimeIn: [Time!]
-	historyTimeNotIn: [Time!]
-	historyTimeGT: Time
-	historyTimeGTE: Time
-	historyTimeLT: Time
-	historyTimeLTE: Time
-	"""
-	ref field predicates
-	"""
-	ref: String
-	refNEQ: String
-	refIn: [String!]
-	refNotIn: [String!]
-	refGT: String
-	refGTE: String
-	refLT: String
-	refLTE: String
-	refContains: String
-	refHasPrefix: String
-	refHasSuffix: String
-	refIsNil: Boolean
-	refNotNil: Boolean
-	refEqualFold: String
-	refContainsFold: String
-	"""
-	operation field predicates
-	"""
-	operation: TrustcenterEntityHistoryOpType
-	operationNEQ: TrustcenterEntityHistoryOpType
-	operationIn: [TrustcenterEntityHistoryOpType!]
-	operationNotIn: [TrustcenterEntityHistoryOpType!]
-	"""
-	created_at field predicates
-	"""
-	createdAt: Time
-	createdAtNEQ: Time
-	createdAtIn: [Time!]
-	createdAtNotIn: [Time!]
-	createdAtGT: Time
-	createdAtGTE: Time
-	createdAtLT: Time
-	createdAtLTE: Time
-	createdAtIsNil: Boolean
-	createdAtNotNil: Boolean
-	"""
-	updated_at field predicates
-	"""
-	updatedAt: Time
-	updatedAtNEQ: Time
-	updatedAtIn: [Time!]
-	updatedAtNotIn: [Time!]
-	updatedAtGT: Time
-	updatedAtGTE: Time
-	updatedAtLT: Time
-	updatedAtLTE: Time
-	updatedAtIsNil: Boolean
-	updatedAtNotNil: Boolean
-	"""
-	created_by field predicates
-	"""
-	createdBy: String
-	createdByNEQ: String
-	createdByIn: [String!]
-	createdByNotIn: [String!]
-	createdByGT: String
-	createdByGTE: String
-	createdByLT: String
-	createdByLTE: String
-	createdByContains: String
-	createdByHasPrefix: String
-	createdByHasSuffix: String
-	createdByIsNil: Boolean
-	createdByNotNil: Boolean
-	createdByEqualFold: String
-	createdByContainsFold: String
-	"""
-	updated_by field predicates
-	"""
-	updatedBy: String
-	updatedByNEQ: String
-	updatedByIn: [String!]
-	updatedByNotIn: [String!]
-	updatedByGT: String
-	updatedByGTE: String
-	updatedByLT: String
-	updatedByLTE: String
-	updatedByContains: String
-	updatedByHasPrefix: String
-	updatedByHasSuffix: String
-	updatedByIsNil: Boolean
-	updatedByNotNil: Boolean
-	updatedByEqualFold: String
-	updatedByContainsFold: String
-	"""
-	logo_file_id field predicates
-	"""
-	logoFileID: String
-	logoFileIDNEQ: String
-	logoFileIDIn: [String!]
-	logoFileIDNotIn: [String!]
-	logoFileIDGT: String
-	logoFileIDGTE: String
-	logoFileIDLT: String
-	logoFileIDLTE: String
-	logoFileIDContains: String
-	logoFileIDHasPrefix: String
-	logoFileIDHasSuffix: String
-	logoFileIDIsNil: Boolean
-	logoFileIDNotNil: Boolean
-	logoFileIDEqualFold: String
-	logoFileIDContainsFold: String
-	"""
-	url field predicates
-	"""
-	url: String
-	urlNEQ: String
-	urlIn: [String!]
-	urlNotIn: [String!]
-	urlGT: String
-	urlGTE: String
-	urlLT: String
-	urlLTE: String
-	urlContains: String
-	urlHasPrefix: String
-	urlHasSuffix: String
-	urlIsNil: Boolean
-	urlNotNil: Boolean
-	urlEqualFold: String
-	urlContainsFold: String
-	"""
-	name field predicates
-	"""
-	name: String
-	nameNEQ: String
-	nameIn: [String!]
-	nameNotIn: [String!]
-	nameGT: String
-	nameGTE: String
-	nameLT: String
-	nameLTE: String
-	nameContains: String
-	nameHasPrefix: String
-	nameHasSuffix: String
-	nameEqualFold: String
-	nameContainsFold: String
 }
 """
 The `Upload` scalar type represents a file upload.
@@ -27381,6 +27928,10 @@ input VulnerabilityHistoryWhereInput {
 	externalURIEqualFold: String
 	externalURIContainsFold: String
 }
+"""
+WorkflowAssignmentApproval captures structured metadata for workflow assignment approvals.
+"""
+scalar WorkflowAssignmentApproval
 type WorkflowAssignmentHistory implements Node {
 	id: ID!
 	historyTime: Time!
@@ -27430,6 +27981,18 @@ type WorkflowAssignmentHistory implements Node {
 	Optional metadata for the assignment
 	"""
 	metadata: Map
+	"""
+	structured approval metadata
+	"""
+	approvalMetadata: WorkflowAssignmentApproval
+	"""
+	structured rejection metadata
+	"""
+	rejectionMetadata: WorkflowAssignmentRejection
+	"""
+	structured invalidation metadata
+	"""
+	invalidationMetadata: WorkflowAssignmentInvalidation
 	"""
 	Timestamp when the assignment was decided
 	"""
@@ -27813,6 +28376,14 @@ enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.c
 	APPROVED
 	REJECTED
 }
+"""
+WorkflowAssignmentInvalidation captures details when an approval is invalidated.
+"""
+scalar WorkflowAssignmentInvalidation
+"""
+WorkflowAssignmentRejection captures details when an approval is rejected or denied.
+"""
+scalar WorkflowAssignmentRejection
 type WorkflowAssignmentTargetHistory implements Node {
 	id: ID!
 	historyTime: Time!

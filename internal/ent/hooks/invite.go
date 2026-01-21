@@ -31,13 +31,6 @@ import (
 func HookInvite() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.InviteFunc(func(ctx context.Context, m *generated.InviteMutation) (generated.Value, error) {
-			m, err := setRequestor(ctx, m)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("unable to determine requestor")
-
-				return nil, err
-			}
-
 			// validate the invite
 			if err := validateCanCreateInvite(ctx, m); err != nil {
 				logx.FromContext(ctx).Info().Err(err).Msg("unable to add user to specified organization")
@@ -46,7 +39,7 @@ func HookInvite() ent.Hook {
 			}
 
 			// generate token based on recipient + target org ID
-			m, err = setRecipientAndToken(m)
+			m, err := setRecipientAndToken(m)
 			if err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to create verification token")
 
@@ -385,18 +378,6 @@ func setRecipientAndToken(m *generated.InviteMutation) (*generated.InviteMutatio
 	m.SetToken(token)
 	m.SetExpires(verify.ExpiresAt)
 	m.SetSecret(secret)
-
-	return m, nil
-}
-
-// setRequestor sets the requestor on the mutation
-func setRequestor(ctx context.Context, m *generated.InviteMutation) (*generated.InviteMutation, error) {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		return m, err
-	}
-
-	m.SetRequestorID(userID)
 
 	return m, nil
 }

@@ -1,6 +1,7 @@
 package schema
 
 import (
+	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
@@ -65,6 +66,15 @@ func (WorkflowAssignment) Fields() []ent.Field {
 			Default(string(enums.WorkflowAssignmentStatusPending)),
 		field.JSON("metadata", map[string]any{}).
 			Comment("Optional metadata for the assignment").
+			Optional(),
+		field.JSON("approval_metadata", models.WorkflowAssignmentApproval{}).
+			Comment("structured approval metadata").
+			Optional(),
+		field.JSON("rejection_metadata", models.WorkflowAssignmentRejection{}).
+			Comment("structured rejection metadata").
+			Optional(),
+		field.JSON("invalidation_metadata", models.WorkflowAssignmentInvalidation{}).
+			Comment("structured invalidation metadata").
 			Optional(),
 		field.Time("decided_at").
 			Comment("Timestamp when the assignment was decided").
@@ -147,6 +157,7 @@ func (WorkflowAssignment) Modules() []models.OrgModule {
 func (WorkflowAssignment) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 	}
 }
 

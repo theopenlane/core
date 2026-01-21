@@ -61,6 +61,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
@@ -1428,7 +1429,7 @@ func init() {
 	// notehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	notehistory.UpdateDefaultUpdatedAt = notehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// notehistoryDescIsEdited is the schema descriptor for is_edited field.
-	notehistoryDescIsEdited := notehistoryFields[16].Descriptor()
+	notehistoryDescIsEdited := notehistoryFields[17].Descriptor()
 	// notehistory.DefaultIsEdited holds the default value on creation for the is_edited field.
 	notehistory.DefaultIsEdited = notehistoryDescIsEdited.Default.(bool)
 	// notehistoryDescID is the schema descriptor for id field.
@@ -2235,6 +2236,37 @@ func init() {
 	trustcenterdochistoryDescID := trustcenterdochistoryFields[9].Descriptor()
 	// trustcenterdochistory.DefaultID holds the default value on creation for the id field.
 	trustcenterdochistory.DefaultID = trustcenterdochistoryDescID.Default.(func() string)
+	trustcenterentityhistory.Policy = privacy.NewPolicies(historyschema.TrustCenterEntityHistory{})
+	trustcenterentityhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterentityhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterentityhistoryInters := historyschema.TrustCenterEntityHistory{}.Interceptors()
+	trustcenterentityhistory.Interceptors[0] = trustcenterentityhistoryInters[0]
+	trustcenterentityhistoryFields := historyschema.TrustCenterEntityHistory{}.Fields()
+	_ = trustcenterentityhistoryFields
+	// trustcenterentityhistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcenterentityhistoryDescHistoryTime := trustcenterentityhistoryFields[0].Descriptor()
+	// trustcenterentityhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcenterentityhistory.DefaultHistoryTime = trustcenterentityhistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcenterentityhistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterentityhistoryDescCreatedAt := trustcenterentityhistoryFields[3].Descriptor()
+	// trustcenterentityhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterentityhistory.DefaultCreatedAt = trustcenterentityhistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcenterentityhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterentityhistoryDescUpdatedAt := trustcenterentityhistoryFields[4].Descriptor()
+	// trustcenterentityhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterentityhistory.DefaultUpdatedAt = trustcenterentityhistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterentityhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterentityhistory.UpdateDefaultUpdatedAt = trustcenterentityhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterentityhistoryDescID is the schema descriptor for id field.
+	trustcenterentityhistoryDescID := trustcenterentityhistoryFields[9].Descriptor()
+	// trustcenterentityhistory.DefaultID holds the default value on creation for the id field.
+	trustcenterentityhistory.DefaultID = trustcenterentityhistoryDescID.Default.(func() string)
 	trustcenterhistory.Policy = privacy.NewPolicies(historyschema.TrustCenterHistory{})
 	trustcenterhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -2270,6 +2302,41 @@ func init() {
 	trustcenterhistoryDescID := trustcenterhistoryFields[9].Descriptor()
 	// trustcenterhistory.DefaultID holds the default value on creation for the id field.
 	trustcenterhistory.DefaultID = trustcenterhistoryDescID.Default.(func() string)
+	trustcenterndarequesthistory.Policy = privacy.NewPolicies(historyschema.TrustCenterNDARequestHistory{})
+	trustcenterndarequesthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := trustcenterndarequesthistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	trustcenterndarequesthistoryInters := historyschema.TrustCenterNDARequestHistory{}.Interceptors()
+	trustcenterndarequesthistory.Interceptors[0] = trustcenterndarequesthistoryInters[0]
+	trustcenterndarequesthistoryFields := historyschema.TrustCenterNDARequestHistory{}.Fields()
+	_ = trustcenterndarequesthistoryFields
+	// trustcenterndarequesthistoryDescHistoryTime is the schema descriptor for history_time field.
+	trustcenterndarequesthistoryDescHistoryTime := trustcenterndarequesthistoryFields[0].Descriptor()
+	// trustcenterndarequesthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	trustcenterndarequesthistory.DefaultHistoryTime = trustcenterndarequesthistoryDescHistoryTime.Default.(func() time.Time)
+	// trustcenterndarequesthistoryDescCreatedAt is the schema descriptor for created_at field.
+	trustcenterndarequesthistoryDescCreatedAt := trustcenterndarequesthistoryFields[3].Descriptor()
+	// trustcenterndarequesthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	trustcenterndarequesthistory.DefaultCreatedAt = trustcenterndarequesthistoryDescCreatedAt.Default.(func() time.Time)
+	// trustcenterndarequesthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	trustcenterndarequesthistoryDescUpdatedAt := trustcenterndarequesthistoryFields[4].Descriptor()
+	// trustcenterndarequesthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	trustcenterndarequesthistory.DefaultUpdatedAt = trustcenterndarequesthistoryDescUpdatedAt.Default.(func() time.Time)
+	// trustcenterndarequesthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	trustcenterndarequesthistory.UpdateDefaultUpdatedAt = trustcenterndarequesthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcenterndarequesthistoryDescTags is the schema descriptor for tags field.
+	trustcenterndarequesthistoryDescTags := trustcenterndarequesthistoryFields[10].Descriptor()
+	// trustcenterndarequesthistory.DefaultTags holds the default value on creation for the tags field.
+	trustcenterndarequesthistory.DefaultTags = trustcenterndarequesthistoryDescTags.Default.([]string)
+	// trustcenterndarequesthistoryDescID is the schema descriptor for id field.
+	trustcenterndarequesthistoryDescID := trustcenterndarequesthistoryFields[9].Descriptor()
+	// trustcenterndarequesthistory.DefaultID holds the default value on creation for the id field.
+	trustcenterndarequesthistory.DefaultID = trustcenterndarequesthistoryDescID.Default.(func() string)
 	trustcentersettinghistory.Policy = privacy.NewPolicies(historyschema.TrustCenterSettingHistory{})
 	trustcentersettinghistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -2297,6 +2364,14 @@ func init() {
 	trustcentersettinghistory.DefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.Default.(func() time.Time)
 	// trustcentersettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	trustcentersettinghistory.UpdateDefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// trustcentersettinghistoryDescRemoveBranding is the schema descriptor for remove_branding field.
+	trustcentersettinghistoryDescRemoveBranding := trustcentersettinghistoryFields[27].Descriptor()
+	// trustcentersettinghistory.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
+	trustcentersettinghistory.DefaultRemoveBranding = trustcentersettinghistoryDescRemoveBranding.Default.(bool)
+	// trustcentersettinghistoryDescNdaApprovalRequired is the schema descriptor for nda_approval_required field.
+	trustcentersettinghistoryDescNdaApprovalRequired := trustcentersettinghistoryFields[30].Descriptor()
+	// trustcentersettinghistory.DefaultNdaApprovalRequired holds the default value on creation for the nda_approval_required field.
+	trustcentersettinghistory.DefaultNdaApprovalRequired = trustcentersettinghistoryDescNdaApprovalRequired.Default.(bool)
 	// trustcentersettinghistoryDescID is the schema descriptor for id field.
 	trustcentersettinghistoryDescID := trustcentersettinghistoryFields[9].Descriptor()
 	// trustcentersettinghistory.DefaultID holds the default value on creation for the id field.
@@ -2383,37 +2458,6 @@ func init() {
 	trustcenterwatermarkconfighistoryDescID := trustcenterwatermarkconfighistoryFields[9].Descriptor()
 	// trustcenterwatermarkconfighistory.DefaultID holds the default value on creation for the id field.
 	trustcenterwatermarkconfighistory.DefaultID = trustcenterwatermarkconfighistoryDescID.Default.(func() string)
-	trustcenterentityhistory.Policy = privacy.NewPolicies(historyschema.TrustcenterEntityHistory{})
-	trustcenterentityhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := trustcenterentityhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	trustcenterentityhistoryInters := historyschema.TrustcenterEntityHistory{}.Interceptors()
-	trustcenterentityhistory.Interceptors[0] = trustcenterentityhistoryInters[0]
-	trustcenterentityhistoryFields := historyschema.TrustcenterEntityHistory{}.Fields()
-	_ = trustcenterentityhistoryFields
-	// trustcenterentityhistoryDescHistoryTime is the schema descriptor for history_time field.
-	trustcenterentityhistoryDescHistoryTime := trustcenterentityhistoryFields[0].Descriptor()
-	// trustcenterentityhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	trustcenterentityhistory.DefaultHistoryTime = trustcenterentityhistoryDescHistoryTime.Default.(func() time.Time)
-	// trustcenterentityhistoryDescCreatedAt is the schema descriptor for created_at field.
-	trustcenterentityhistoryDescCreatedAt := trustcenterentityhistoryFields[3].Descriptor()
-	// trustcenterentityhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	trustcenterentityhistory.DefaultCreatedAt = trustcenterentityhistoryDescCreatedAt.Default.(func() time.Time)
-	// trustcenterentityhistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	trustcenterentityhistoryDescUpdatedAt := trustcenterentityhistoryFields[4].Descriptor()
-	// trustcenterentityhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	trustcenterentityhistory.DefaultUpdatedAt = trustcenterentityhistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterentityhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterentityhistory.UpdateDefaultUpdatedAt = trustcenterentityhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// trustcenterentityhistoryDescID is the schema descriptor for id field.
-	trustcenterentityhistoryDescID := trustcenterentityhistoryFields[9].Descriptor()
-	// trustcenterentityhistory.DefaultID holds the default value on creation for the id field.
-	trustcenterentityhistory.DefaultID = trustcenterentityhistoryDescID.Default.(func() string)
 	userhistory.Policy = privacy.NewPolicies(historyschema.UserHistory{})
 	userhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

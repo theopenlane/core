@@ -35,6 +35,8 @@ type TrustCenterSetting struct {
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// title of the trust center
 	Title string `json:"title,omitempty"`
+	// company name for the trust center, defaults to the organization's display name
+	CompanyName string `json:"company_name,omitempty"`
 	// overview of the trust center
 	Overview string `json:"overview,omitempty"`
 	// URL of the logo
@@ -63,6 +65,14 @@ type TrustCenterSetting struct {
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 	// environment of the trust center
 	Environment enums.TrustCenterEnvironment `json:"environment,omitempty"`
+	// whether to remove branding from the trust center
+	RemoveBranding bool `json:"remove_branding,omitempty"`
+	// URL to the company's homepage
+	CompanyDomain *string `json:"company_domain,omitempty"`
+	// email address for security contact
+	SecurityContact *string `json:"security_contact,omitempty"`
+	// whether NDA requests require approval before being processed
+	NdaApprovalRequired bool `json:"nda_approval_required,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -71,28 +81,40 @@ type TrustCenterSetting struct {
 
 // TrustCenterSettingEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterSettingEdges struct {
-	// Files holds the value of the files edge.
-	Files []*File `json:"files,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
 	// FaviconFile holds the value of the favicon_file edge.
 	FaviconFile *File `json:"favicon_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
-	namedFiles map[string][]*File
+	namedBlockedGroups map[string][]*Group
+	namedEditors       map[string][]*Group
 }
 
-// FilesOrErr returns the Files value or an error if the edge
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
 // was not loaded in eager-loading.
-func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
+func (e TrustCenterSettingEdges) BlockedGroupsOrErr() ([]*Group, error) {
 	if e.loadedTypes[0] {
-		return e.Files, nil
+		return e.BlockedGroups, nil
 	}
-	return nil, &NotLoadedError{edge: "files"}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e TrustCenterSettingEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
 }
 
 // LogoFileOrErr returns the LogoFile value or an error if the edge
@@ -100,7 +122,7 @@ func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
 func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -111,7 +133,7 @@ func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 func (e TrustCenterSettingEdges) FaviconFileOrErr() (*File, error) {
 	if e.FaviconFile != nil {
 		return e.FaviconFile, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "favicon_file"}
@@ -122,7 +144,9 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment:
+		case trustcentersetting.FieldRemoveBranding, trustcentersetting.FieldNdaApprovalRequired:
+			values[i] = new(sql.NullBool)
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldCompanyName, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment, trustcentersetting.FieldCompanyDomain, trustcentersetting.FieldSecurityContact:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -194,6 +218,12 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				_m.Title = value.String
+			}
+		case trustcentersetting.FieldCompanyName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field company_name", values[i])
+			} else if value.Valid {
+				_m.CompanyName = value.String
 			}
 		case trustcentersetting.FieldOverview:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -283,6 +313,32 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.Environment = enums.TrustCenterEnvironment(value.String)
 			}
+		case trustcentersetting.FieldRemoveBranding:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field remove_branding", values[i])
+			} else if value.Valid {
+				_m.RemoveBranding = value.Bool
+			}
+		case trustcentersetting.FieldCompanyDomain:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field company_domain", values[i])
+			} else if value.Valid {
+				_m.CompanyDomain = new(string)
+				*_m.CompanyDomain = value.String
+			}
+		case trustcentersetting.FieldSecurityContact:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_contact", values[i])
+			} else if value.Valid {
+				_m.SecurityContact = new(string)
+				*_m.SecurityContact = value.String
+			}
+		case trustcentersetting.FieldNdaApprovalRequired:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field nda_approval_required", values[i])
+			} else if value.Valid {
+				_m.NdaApprovalRequired = value.Bool
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -296,9 +352,14 @@ func (_m *TrustCenterSetting) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
-// QueryFiles queries the "files" edge of the TrustCenterSetting entity.
-func (_m *TrustCenterSetting) QueryFiles() *FileQuery {
-	return NewTrustCenterSettingClient(_m.config).QueryFiles(_m)
+// QueryBlockedGroups queries the "blocked_groups" edge of the TrustCenterSetting entity.
+func (_m *TrustCenterSetting) QueryBlockedGroups() *GroupQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the TrustCenterSetting entity.
+func (_m *TrustCenterSetting) QueryEditors() *GroupQuery {
+	return NewTrustCenterSettingClient(_m.config).QueryEditors(_m)
 }
 
 // QueryLogoFile queries the "logo_file" edge of the TrustCenterSetting entity.
@@ -358,6 +419,9 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)
 	builder.WriteString(", ")
+	builder.WriteString("company_name=")
+	builder.WriteString(_m.CompanyName)
+	builder.WriteString(", ")
 	builder.WriteString("overview=")
 	builder.WriteString(_m.Overview)
 	builder.WriteString(", ")
@@ -407,31 +471,71 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("environment=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Environment))
+	builder.WriteString(", ")
+	builder.WriteString("remove_branding=")
+	builder.WriteString(fmt.Sprintf("%v", _m.RemoveBranding))
+	builder.WriteString(", ")
+	if v := _m.CompanyDomain; v != nil {
+		builder.WriteString("company_domain=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SecurityContact; v != nil {
+		builder.WriteString("security_contact=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	builder.WriteString("nda_approval_required=")
+	builder.WriteString(fmt.Sprintf("%v", _m.NdaApprovalRequired))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// NamedFiles returns the Files named value or an error if the edge was not
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *TrustCenterSetting) NamedFiles(name string) ([]*File, error) {
-	if _m.Edges.namedFiles == nil {
+func (_m *TrustCenterSetting) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedFiles[name]
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *TrustCenterSetting) appendNamedFiles(name string, edges ...*File) {
-	if _m.Edges.namedFiles == nil {
-		_m.Edges.namedFiles = make(map[string][]*File)
+func (_m *TrustCenterSetting) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedFiles[name] = []*File{}
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
 	} else {
-		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *TrustCenterSetting) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *TrustCenterSetting) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
 	}
 }
 

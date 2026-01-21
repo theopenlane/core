@@ -146,6 +146,26 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearTitle() *TrustCenterSettingHisto
 	return _u
 }
 
+// SetCompanyName sets the "company_name" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetCompanyName(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetCompanyName(v)
+	return _u
+}
+
+// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableCompanyName(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetCompanyName(*v)
+	}
+	return _u
+}
+
+// ClearCompanyName clears the value of the "company_name" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyName() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearCompanyName()
+	return _u
+}
+
 // SetOverview sets the "overview" field.
 func (_u *TrustCenterSettingHistoryUpdate) SetOverview(v string) *TrustCenterSettingHistoryUpdate {
 	_u.mutation.SetOverview(v)
@@ -406,6 +426,86 @@ func (_u *TrustCenterSettingHistoryUpdate) ClearSecondaryForegroundColor() *Trus
 	return _u
 }
 
+// SetRemoveBranding sets the "remove_branding" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetRemoveBranding(v bool) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetRemoveBranding(v)
+	return _u
+}
+
+// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableRemoveBranding(v *bool) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetRemoveBranding(*v)
+	}
+	return _u
+}
+
+// ClearRemoveBranding clears the value of the "remove_branding" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearRemoveBranding() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearRemoveBranding()
+	return _u
+}
+
+// SetCompanyDomain sets the "company_domain" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetCompanyDomain(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetCompanyDomain(v)
+	return _u
+}
+
+// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableCompanyDomain(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetCompanyDomain(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDomain clears the value of the "company_domain" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyDomain() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearCompanyDomain()
+	return _u
+}
+
+// SetSecurityContact sets the "security_contact" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetSecurityContact(v string) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetSecurityContact(v)
+	return _u
+}
+
+// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableSecurityContact(v *string) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetSecurityContact(*v)
+	}
+	return _u
+}
+
+// ClearSecurityContact clears the value of the "security_contact" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearSecurityContact() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearSecurityContact()
+	return _u
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_u *TrustCenterSettingHistoryUpdate) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryUpdate {
+	_u.mutation.SetNdaApprovalRequired(v)
+	return _u
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryUpdate {
+	if v != nil {
+		_u.SetNdaApprovalRequired(*v)
+	}
+	return _u
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (_u *TrustCenterSettingHistoryUpdate) ClearNdaApprovalRequired() *TrustCenterSettingHistoryUpdate {
+	_u.mutation.ClearNdaApprovalRequired()
+	return _u
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (_u *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistoryMutation {
 	return _u.mutation
@@ -526,6 +626,12 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldTitle, field.TypeString)
 	}
+	if value, ok := _u.mutation.CompanyName(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyName, field.TypeString, value)
+	}
+	if _u.mutation.CompanyNameCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldCompanyName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)
 	}
@@ -606,6 +712,30 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.RemoveBranding(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool, value)
+	}
+	if _u.mutation.RemoveBrandingCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CompanyDomain(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDomainCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityContact(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecurityContact, field.TypeString, value)
+	}
+	if _u.mutation.SecurityContactCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSecurityContact, field.TypeString)
+	}
+	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -740,6 +870,26 @@ func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableTitle(v *string) *Trust
 // ClearTitle clears the value of the "title" field.
 func (_u *TrustCenterSettingHistoryUpdateOne) ClearTitle() *TrustCenterSettingHistoryUpdateOne {
 	_u.mutation.ClearTitle()
+	return _u
+}
+
+// SetCompanyName sets the "company_name" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetCompanyName(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetCompanyName(v)
+	return _u
+}
+
+// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyName(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetCompanyName(*v)
+	}
+	return _u
+}
+
+// ClearCompanyName clears the value of the "company_name" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyName() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearCompanyName()
 	return _u
 }
 
@@ -1003,6 +1153,86 @@ func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecondaryForegroundColor() *T
 	return _u
 }
 
+// SetRemoveBranding sets the "remove_branding" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetRemoveBranding(v bool) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetRemoveBranding(v)
+	return _u
+}
+
+// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableRemoveBranding(v *bool) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetRemoveBranding(*v)
+	}
+	return _u
+}
+
+// ClearRemoveBranding clears the value of the "remove_branding" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearRemoveBranding() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearRemoveBranding()
+	return _u
+}
+
+// SetCompanyDomain sets the "company_domain" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetCompanyDomain(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetCompanyDomain(v)
+	return _u
+}
+
+// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyDomain(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetCompanyDomain(*v)
+	}
+	return _u
+}
+
+// ClearCompanyDomain clears the value of the "company_domain" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyDomain() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearCompanyDomain()
+	return _u
+}
+
+// SetSecurityContact sets the "security_contact" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetSecurityContact(v string) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetSecurityContact(v)
+	return _u
+}
+
+// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSecurityContact(v *string) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetSecurityContact(*v)
+	}
+	return _u
+}
+
+// ClearSecurityContact clears the value of the "security_contact" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecurityContact() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearSecurityContact()
+	return _u
+}
+
+// SetNdaApprovalRequired sets the "nda_approval_required" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.SetNdaApprovalRequired(v)
+	return _u
+}
+
+// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
+func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryUpdateOne {
+	if v != nil {
+		_u.SetNdaApprovalRequired(*v)
+	}
+	return _u
+}
+
+// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
+func (_u *TrustCenterSettingHistoryUpdateOne) ClearNdaApprovalRequired() *TrustCenterSettingHistoryUpdateOne {
+	_u.mutation.ClearNdaApprovalRequired()
+	return _u
+}
+
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
 func (_u *TrustCenterSettingHistoryUpdateOne) Mutation() *TrustCenterSettingHistoryMutation {
 	return _u.mutation
@@ -1153,6 +1383,12 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldTitle, field.TypeString)
 	}
+	if value, ok := _u.mutation.CompanyName(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyName, field.TypeString, value)
+	}
+	if _u.mutation.CompanyNameCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldCompanyName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Overview(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)
 	}
@@ -1233,6 +1469,30 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.RemoveBranding(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool, value)
+	}
+	if _u.mutation.RemoveBrandingCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool)
+	}
+	if value, ok := _u.mutation.CompanyDomain(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString, value)
+	}
+	if _u.mutation.CompanyDomainCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityContact(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldSecurityContact, field.TypeString, value)
+	}
+	if _u.mutation.SecurityContactCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldSecurityContact, field.TypeString)
+	}
+	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
+	}
+	if _u.mutation.NdaApprovalRequiredCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

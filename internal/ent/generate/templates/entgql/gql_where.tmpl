@@ -191,8 +191,18 @@ import (
 				predicates = append(predicates, p)
 			}
 			{{- $func = print $func "With" }}
+			{{- /* Check if edge type has soft delete (deleted_at field) */}}
+			{{- $hasSoftDelete := false }}
+			{{- range $f := $e.Type.Fields }}
+				{{- if eq $f.Name "deleted_at" }}
+					{{- $hasSoftDelete = true }}
+				{{- end }}
+			{{- end }}
 			if len(i.{{ $func }}) > 0 {
 				with := make([]predicate.{{ $e.Type.Name }}, 0, len(i.{{ $func }}))
+				{{- if $hasSoftDelete }}
+				with = append(with, {{ $e.Type.Package }}.DeletedAtIsNil())
+				{{- end }}
 				for _, w := range i.{{ $func }} {
 					p, err := w.P()
 					if err != nil {

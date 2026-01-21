@@ -29,7 +29,6 @@ func init() {
 	// command line flags for the create command
 	createCmd.Flags().StringP("trust-center-id", "t", "", "trust center id for the document")
 	createCmd.Flags().StringP("title", "n", "", "title of the document")
-	createCmd.Flags().StringP("category", "c", "", "category of the document")
 	createCmd.Flags().StringP("visibility", "v", "NOT_VISIBLE", "visibility of the document (NOT_VISIBLE, PROTECTED, PUBLICLY_VISIBLE)")
 	createCmd.Flags().StringSliceP("tags", "g", []string{}, "tags associated with the document")
 	createCmd.Flags().StringP("file", "f", "", "file to upload as the trust center document (required)")
@@ -45,18 +44,12 @@ func createValidation() (graphclient.CreateTrustCenterDocInput, *graphql.Upload,
 		return input, nil, cmd.NewRequiredFieldMissingError("title")
 	}
 
-	category := cmd.Config.String("category")
-	if category == "" {
-		return input, nil, cmd.NewRequiredFieldMissingError("category")
-	}
-
 	filePath := cmd.Config.String("file")
 	if filePath == "" {
 		return input, nil, cmd.NewRequiredFieldMissingError("file")
 	}
 
 	input.Title = title
-	input.Category = category
 
 	trustCenterID := cmd.Config.String("trust-center-id")
 	if trustCenterID != "" {

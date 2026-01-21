@@ -116,16 +116,18 @@ type Tx struct {
 	TrustCenterComplianceHistory *TrustCenterComplianceHistoryClient
 	// TrustCenterDocHistory is the client for interacting with the TrustCenterDocHistory builders.
 	TrustCenterDocHistory *TrustCenterDocHistoryClient
+	// TrustCenterEntityHistory is the client for interacting with the TrustCenterEntityHistory builders.
+	TrustCenterEntityHistory *TrustCenterEntityHistoryClient
 	// TrustCenterHistory is the client for interacting with the TrustCenterHistory builders.
 	TrustCenterHistory *TrustCenterHistoryClient
+	// TrustCenterNDARequestHistory is the client for interacting with the TrustCenterNDARequestHistory builders.
+	TrustCenterNDARequestHistory *TrustCenterNDARequestHistoryClient
 	// TrustCenterSettingHistory is the client for interacting with the TrustCenterSettingHistory builders.
 	TrustCenterSettingHistory *TrustCenterSettingHistoryClient
 	// TrustCenterSubprocessorHistory is the client for interacting with the TrustCenterSubprocessorHistory builders.
 	TrustCenterSubprocessorHistory *TrustCenterSubprocessorHistoryClient
 	// TrustCenterWatermarkConfigHistory is the client for interacting with the TrustCenterWatermarkConfigHistory builders.
 	TrustCenterWatermarkConfigHistory *TrustCenterWatermarkConfigHistoryClient
-	// TrustcenterEntityHistory is the client for interacting with the TrustcenterEntityHistory builders.
-	TrustcenterEntityHistory *TrustcenterEntityHistoryClient
 	// UserHistory is the client for interacting with the UserHistory builders.
 	UserHistory *UserHistoryClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
@@ -326,11 +328,12 @@ func (tx *Tx) init() {
 	tx.TemplateHistory = NewTemplateHistoryClient(tx.config)
 	tx.TrustCenterComplianceHistory = NewTrustCenterComplianceHistoryClient(tx.config)
 	tx.TrustCenterDocHistory = NewTrustCenterDocHistoryClient(tx.config)
+	tx.TrustCenterEntityHistory = NewTrustCenterEntityHistoryClient(tx.config)
 	tx.TrustCenterHistory = NewTrustCenterHistoryClient(tx.config)
+	tx.TrustCenterNDARequestHistory = NewTrustCenterNDARequestHistoryClient(tx.config)
 	tx.TrustCenterSettingHistory = NewTrustCenterSettingHistoryClient(tx.config)
 	tx.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(tx.config)
 	tx.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(tx.config)
-	tx.TrustcenterEntityHistory = NewTrustcenterEntityHistoryClient(tx.config)
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSettingHistory = NewUserSettingHistoryClient(tx.config)
 	tx.VulnerabilityHistory = NewVulnerabilityHistoryClient(tx.config)

@@ -765,6 +765,13 @@ data:
       {{- else }}
       supportemail: ""
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.email.questionnaireemail }}
+      questionnaireemail: {{ .Values.openlane.coreConfiguration.email.questionnaireemail | quote }}
+      {{- else if .Values.domain }}
+      questionnaireemail: "questionnaire@{{ .Values.domain }}"
+      {{- else }}
+      questionnaireemail: ""
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.email.logourl }}
       logourl: {{ .Values.openlane.coreConfiguration.email.logourl | quote }}
       {{- end }}

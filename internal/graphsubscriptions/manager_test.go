@@ -22,7 +22,7 @@ func TestSubscribeAndPublish(t *testing.T) {
 	userID := "test-user-123"
 
 	// Create a channel with the interface type
-	notificationChan := make(chan Notification, TaskChannelBufferSize)
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
 
 	// Subscribe
 	manager.Subscribe(userID, notificationChan)
@@ -74,7 +74,7 @@ func TestUnsubscribe(t *testing.T) {
 	userID := "test-user-789"
 
 	// Create and subscribe a channel
-	notificationChan := make(chan Notification, TaskChannelBufferSize)
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
 	manager.Subscribe(userID, notificationChan)
 
 	// Verify subscription exists
@@ -100,9 +100,9 @@ func TestMultipleSubscribers(t *testing.T) {
 	userID := "test-user-multi"
 
 	// Create multiple channels
-	chan1 := make(chan Notification, TaskChannelBufferSize)
-	chan2 := make(chan Notification, TaskChannelBufferSize)
-	chan3 := make(chan Notification, TaskChannelBufferSize)
+	chan1 := make(chan Notification, NotificationChannelBufferSize)
+	chan2 := make(chan Notification, NotificationChannelBufferSize)
+	chan3 := make(chan Notification, NotificationChannelBufferSize)
 
 	// Subscribe all channels
 	manager.Subscribe(userID, chan1)
@@ -140,7 +140,7 @@ func TestUnsubscribeNonExistent(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-nonexistent"
 
-	notificationChan := make(chan Notification, TaskChannelBufferSize)
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
 
 	// Unsubscribe without subscribing should not panic
 	require.NotPanics(t, func() {
@@ -235,5 +235,5 @@ func TestPublishToFullChannel(t *testing.T) {
 
 func TestChannelBufferSize(t *testing.T) {
 	// Verify the constant is set to expected value
-	assert.Equal(t, 10, TaskChannelBufferSize)
+	assert.Equal(t, 10, NotificationChannelBufferSize)
 }

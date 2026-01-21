@@ -124,26 +124,6 @@ func (_u *SubprocessorHistoryUpdate) ClearTags() *SubprocessorHistoryUpdate {
 	return _u
 }
 
-// SetOwnerID sets the "owner_id" field.
-func (_u *SubprocessorHistoryUpdate) SetOwnerID(v string) *SubprocessorHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *SubprocessorHistoryUpdate) SetNillableOwnerID(v *string) *SubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *SubprocessorHistoryUpdate) ClearOwnerID() *SubprocessorHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *SubprocessorHistoryUpdate) SetInternalNotes(v string) *SubprocessorHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -364,9 +344,6 @@ func (_u *SubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subprocessorhistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(subprocessorhistory.FieldOwnerID, field.TypeString)
 	}
@@ -517,26 +494,6 @@ func (_u *SubprocessorHistoryUpdateOne) AppendTags(v []string) *SubprocessorHist
 // ClearTags clears the value of the "tags" field.
 func (_u *SubprocessorHistoryUpdateOne) ClearTags() *SubprocessorHistoryUpdateOne {
 	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *SubprocessorHistoryUpdateOne) SetOwnerID(v string) *SubprocessorHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *SubprocessorHistoryUpdateOne) SetNillableOwnerID(v *string) *SubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *SubprocessorHistoryUpdateOne) ClearOwnerID() *SubprocessorHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -789,9 +746,6 @@ func (_u *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(subprocessorhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(subprocessorhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(subprocessorhistory.FieldOwnerID, field.TypeString)

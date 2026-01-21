@@ -79,6 +79,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -444,6 +445,16 @@ var trustcenterdocImplementors = []string{"TrustCenterDoc", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterDoc) IsNode() {}
 
+var trustcenterentityImplementors = []string{"TrustCenterEntity", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterEntity) IsNode() {}
+
+var trustcenterndarequestImplementors = []string{"TrustCenterNDARequest", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*TrustCenterNDARequest) IsNode() {}
+
 var trustcentersettingImplementors = []string{"TrustCenterSetting", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -458,11 +469,6 @@ var trustcenterwatermarkconfigImplementors = []string{"TrustCenterWatermarkConfi
 
 // IsNode implements the Node interface check for GQLGen.
 func (*TrustCenterWatermarkConfig) IsNode() {}
-
-var trustcenterentityImplementors = []string{"TrustcenterEntity", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*TrustcenterEntity) IsNode() {}
 
 var userImplementors = []string{"User", "Node"}
 
@@ -1193,6 +1199,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case trustcenterentity.Table:
+		query := c.TrustCenterEntity.Query().
+			Where(trustcenterentity.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterentityImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case trustcenterndarequest.Table:
+		query := c.TrustCenterNDARequest.Query().
+			Where(trustcenterndarequest.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterndarequestImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case trustcentersetting.Table:
 		query := c.TrustCenterSetting.Query().
 			Where(trustcentersetting.ID(id))
@@ -1216,15 +1240,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(trustcenterwatermarkconfig.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterwatermarkconfigImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case trustcenterentity.Table:
-		query := c.TrustcenterEntity.Query().
-			Where(trustcenterentity.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, trustcenterentityImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2496,6 +2511,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case trustcenterentity.Table:
+		query := c.TrustCenterEntity.Query().
+			Where(trustcenterentity.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterentityImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case trustcenterndarequest.Table:
+		query := c.TrustCenterNDARequest.Query().
+			Where(trustcenterndarequest.IDIn(ids...))
+		query, err := query.CollectFields(ctx, trustcenterndarequestImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case trustcentersetting.Table:
 		query := c.TrustCenterSetting.Query().
 			Where(trustcentersetting.IDIn(ids...))
@@ -2532,22 +2579,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.TrustCenterWatermarkConfig.Query().
 			Where(trustcenterwatermarkconfig.IDIn(ids...))
 		query, err := query.CollectFields(ctx, trustcenterwatermarkconfigImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case trustcenterentity.Table:
-		query := c.TrustcenterEntity.Query().
-			Where(trustcenterentity.IDIn(ids...))
-		query, err := query.CollectFields(ctx, trustcenterentityImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -89,6 +89,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -239,10 +240,11 @@ func checkColumn(t, c string) error {
 			trustcenter.Table:                trustcenter.ValidColumn,
 			trustcentercompliance.Table:      trustcentercompliance.ValidColumn,
 			trustcenterdoc.Table:             trustcenterdoc.ValidColumn,
+			trustcenterentity.Table:          trustcenterentity.ValidColumn,
+			trustcenterndarequest.Table:      trustcenterndarequest.ValidColumn,
 			trustcentersetting.Table:         trustcentersetting.ValidColumn,
 			trustcentersubprocessor.Table:    trustcentersubprocessor.ValidColumn,
 			trustcenterwatermarkconfig.Table: trustcenterwatermarkconfig.ValidColumn,
-			trustcenterentity.Table:          trustcenterentity.ValidColumn,
 			user.Table:                       user.ValidColumn,
 			usersetting.Table:                usersetting.ValidColumn,
 			vulnerability.Table:              vulnerability.ValidColumn,

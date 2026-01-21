@@ -62,6 +62,8 @@ func (ec *executionContext) fieldContext_ExportBulkCreatePayload_exports(_ conte
 				return ec.fieldContext_Export_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Export_updatedBy(ctx, field)
+			case "requestorID":
+				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Export_ownerID(ctx, field)
 			case "exportType":
@@ -70,8 +72,6 @@ func (ec *executionContext) fieldContext_ExportBulkCreatePayload_exports(_ conte
 				return ec.fieldContext_Export_format(ctx, field)
 			case "status":
 				return ec.fieldContext_Export_status(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "fields":
 				return ec.fieldContext_Export_fields(ctx, field)
 			case "filters":
@@ -154,6 +154,8 @@ func (ec *executionContext) fieldContext_ExportCreatePayload_export(_ context.Co
 				return ec.fieldContext_Export_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Export_updatedBy(ctx, field)
+			case "requestorID":
+				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Export_ownerID(ctx, field)
 			case "exportType":
@@ -162,8 +164,6 @@ func (ec *executionContext) fieldContext_ExportCreatePayload_export(_ context.Co
 				return ec.fieldContext_Export_format(ctx, field)
 			case "status":
 				return ec.fieldContext_Export_status(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "fields":
 				return ec.fieldContext_Export_fields(ctx, field)
 			case "filters":
@@ -246,6 +246,8 @@ func (ec *executionContext) fieldContext_ExportUpdatePayload_export(_ context.Co
 				return ec.fieldContext_Export_createdBy(ctx, field)
 			case "updatedBy":
 				return ec.fieldContext_Export_updatedBy(ctx, field)
+			case "requestorID":
+				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "ownerID":
 				return ec.fieldContext_Export_ownerID(ctx, field)
 			case "exportType":
@@ -254,8 +256,6 @@ func (ec *executionContext) fieldContext_ExportUpdatePayload_export(_ context.Co
 				return ec.fieldContext_Export_format(ctx, field)
 			case "status":
 				return ec.fieldContext_Export_status(ctx, field)
-			case "requestorID":
-				return ec.fieldContext_Export_requestorID(ctx, field)
 			case "fields":
 				return ec.fieldContext_Export_fields(ctx, field)
 			case "filters":

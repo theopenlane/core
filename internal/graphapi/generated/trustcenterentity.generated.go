@@ -28,126 +28,134 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _TrustcenterEntityBulkCreatePayload_trustcenterEntities(ctx context.Context, field graphql.CollectedField, obj *model.TrustcenterEntityBulkCreatePayload) (ret graphql.Marshaler) {
+func (ec *executionContext) _TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterEntityBulkCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustcenterEntityBulkCreatePayload_trustcenterEntities,
+		ec.fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities,
 		func(ctx context.Context) (any, error) {
-			return obj.TrustcenterEntities, nil
+			return obj.TrustCenterEntities, nil
 		},
 		nil,
-		ec.marshalOTrustcenterEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntityᚄ,
+		ec.marshalOTrustCenterEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityᚄ,
 		true,
 		false,
 	)
 }
 
-func (ec *executionContext) fieldContext_TrustcenterEntityBulkCreatePayload_trustcenterEntities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TrustCenterEntityBulkCreatePayload_trustCenterEntities(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TrustcenterEntityBulkCreatePayload",
+		Object:     "TrustCenterEntityBulkCreatePayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_TrustcenterEntity_id(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_id(ctx, field)
 			case "createdAt":
-				return ec.fieldContext_TrustcenterEntity_createdAt(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_createdAt(ctx, field)
 			case "updatedAt":
-				return ec.fieldContext_TrustcenterEntity_updatedAt(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_updatedAt(ctx, field)
 			case "createdBy":
-				return ec.fieldContext_TrustcenterEntity_createdBy(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_createdBy(ctx, field)
 			case "updatedBy":
-				return ec.fieldContext_TrustcenterEntity_updatedBy(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_updatedBy(ctx, field)
 			case "logoFileID":
-				return ec.fieldContext_TrustcenterEntity_logoFileID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_logoFileID(ctx, field)
 			case "url":
-				return ec.fieldContext_TrustcenterEntity_url(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_url(ctx, field)
 			case "trustCenterID":
-				return ec.fieldContext_TrustcenterEntity_trustCenterID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_trustCenterID(ctx, field)
 			case "name":
-				return ec.fieldContext_TrustcenterEntity_name(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_name(ctx, field)
 			case "entityTypeID":
-				return ec.fieldContext_TrustcenterEntity_entityTypeID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_entityTypeID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterEntity_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterEntity_editors(ctx, field)
 			case "logoFile":
-				return ec.fieldContext_TrustcenterEntity_logoFile(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_logoFile(ctx, field)
 			case "trustCenter":
-				return ec.fieldContext_TrustcenterEntity_trustCenter(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_trustCenter(ctx, field)
 			case "entityType":
-				return ec.fieldContext_TrustcenterEntity_entityType(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_entityType(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntity", field.Name)
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _TrustcenterEntityCreatePayload_trustcenterEntity(ctx context.Context, field graphql.CollectedField, obj *model.TrustcenterEntityCreatePayload) (ret graphql.Marshaler) {
+func (ec *executionContext) _TrustCenterEntityCreatePayload_trustCenterEntity(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterEntityCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustcenterEntityCreatePayload_trustcenterEntity,
+		ec.fieldContext_TrustCenterEntityCreatePayload_trustCenterEntity,
 		func(ctx context.Context) (any, error) {
-			return obj.TrustcenterEntity, nil
+			return obj.TrustCenterEntity, nil
 		},
 		nil,
-		ec.marshalNTrustcenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntity,
+		ec.marshalNTrustCenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterEntity,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_TrustcenterEntityCreatePayload_trustcenterEntity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TrustCenterEntityCreatePayload_trustCenterEntity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TrustcenterEntityCreatePayload",
+		Object:     "TrustCenterEntityCreatePayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_TrustcenterEntity_id(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_id(ctx, field)
 			case "createdAt":
-				return ec.fieldContext_TrustcenterEntity_createdAt(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_createdAt(ctx, field)
 			case "updatedAt":
-				return ec.fieldContext_TrustcenterEntity_updatedAt(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_updatedAt(ctx, field)
 			case "createdBy":
-				return ec.fieldContext_TrustcenterEntity_createdBy(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_createdBy(ctx, field)
 			case "updatedBy":
-				return ec.fieldContext_TrustcenterEntity_updatedBy(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_updatedBy(ctx, field)
 			case "logoFileID":
-				return ec.fieldContext_TrustcenterEntity_logoFileID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_logoFileID(ctx, field)
 			case "url":
-				return ec.fieldContext_TrustcenterEntity_url(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_url(ctx, field)
 			case "trustCenterID":
-				return ec.fieldContext_TrustcenterEntity_trustCenterID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_trustCenterID(ctx, field)
 			case "name":
-				return ec.fieldContext_TrustcenterEntity_name(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_name(ctx, field)
 			case "entityTypeID":
-				return ec.fieldContext_TrustcenterEntity_entityTypeID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_entityTypeID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterEntity_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterEntity_editors(ctx, field)
 			case "logoFile":
-				return ec.fieldContext_TrustcenterEntity_logoFile(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_logoFile(ctx, field)
 			case "trustCenter":
-				return ec.fieldContext_TrustcenterEntity_trustCenter(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_trustCenter(ctx, field)
 			case "entityType":
-				return ec.fieldContext_TrustcenterEntity_entityType(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_entityType(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntity", field.Name)
 		},
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _TrustcenterEntityDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.TrustcenterEntityDeletePayload) (ret graphql.Marshaler) {
+func (ec *executionContext) _TrustCenterEntityDeletePayload_deletedID(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterEntityDeletePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustcenterEntityDeletePayload_deletedID,
+		ec.fieldContext_TrustCenterEntityDeletePayload_deletedID,
 		func(ctx context.Context) (any, error) {
 			return obj.DeletedID, nil
 		},
@@ -158,9 +166,9 @@ func (ec *executionContext) _TrustcenterEntityDeletePayload_deletedID(ctx contex
 	)
 }
 
-func (ec *executionContext) fieldContext_TrustcenterEntityDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TrustCenterEntityDeletePayload_deletedID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TrustcenterEntityDeletePayload",
+		Object:     "TrustCenterEntityDeletePayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -171,58 +179,62 @@ func (ec *executionContext) fieldContext_TrustcenterEntityDeletePayload_deletedI
 	return fc, nil
 }
 
-func (ec *executionContext) _TrustcenterEntityUpdatePayload_trustcenterEntity(ctx context.Context, field graphql.CollectedField, obj *model.TrustcenterEntityUpdatePayload) (ret graphql.Marshaler) {
+func (ec *executionContext) _TrustCenterEntityUpdatePayload_trustCenterEntity(ctx context.Context, field graphql.CollectedField, obj *model.TrustCenterEntityUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
 		ec.OperationContext,
 		field,
-		ec.fieldContext_TrustcenterEntityUpdatePayload_trustcenterEntity,
+		ec.fieldContext_TrustCenterEntityUpdatePayload_trustCenterEntity,
 		func(ctx context.Context) (any, error) {
-			return obj.TrustcenterEntity, nil
+			return obj.TrustCenterEntity, nil
 		},
 		nil,
-		ec.marshalNTrustcenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntity,
+		ec.marshalNTrustCenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterEntity,
 		true,
 		true,
 	)
 }
 
-func (ec *executionContext) fieldContext_TrustcenterEntityUpdatePayload_trustcenterEntity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_TrustCenterEntityUpdatePayload_trustCenterEntity(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "TrustcenterEntityUpdatePayload",
+		Object:     "TrustCenterEntityUpdatePayload",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_TrustcenterEntity_id(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_id(ctx, field)
 			case "createdAt":
-				return ec.fieldContext_TrustcenterEntity_createdAt(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_createdAt(ctx, field)
 			case "updatedAt":
-				return ec.fieldContext_TrustcenterEntity_updatedAt(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_updatedAt(ctx, field)
 			case "createdBy":
-				return ec.fieldContext_TrustcenterEntity_createdBy(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_createdBy(ctx, field)
 			case "updatedBy":
-				return ec.fieldContext_TrustcenterEntity_updatedBy(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_updatedBy(ctx, field)
 			case "logoFileID":
-				return ec.fieldContext_TrustcenterEntity_logoFileID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_logoFileID(ctx, field)
 			case "url":
-				return ec.fieldContext_TrustcenterEntity_url(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_url(ctx, field)
 			case "trustCenterID":
-				return ec.fieldContext_TrustcenterEntity_trustCenterID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_trustCenterID(ctx, field)
 			case "name":
-				return ec.fieldContext_TrustcenterEntity_name(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_name(ctx, field)
 			case "entityTypeID":
-				return ec.fieldContext_TrustcenterEntity_entityTypeID(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_entityTypeID(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_TrustCenterEntity_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_TrustCenterEntity_editors(ctx, field)
 			case "logoFile":
-				return ec.fieldContext_TrustcenterEntity_logoFile(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_logoFile(ctx, field)
 			case "trustCenter":
-				return ec.fieldContext_TrustcenterEntity_trustCenter(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_trustCenter(ctx, field)
 			case "entityType":
-				return ec.fieldContext_TrustcenterEntity_entityType(ctx, field)
+				return ec.fieldContext_TrustCenterEntity_entityType(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntity", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterEntity", field.Name)
 		},
 	}
 	return fc, nil
@@ -240,19 +252,19 @@ func (ec *executionContext) fieldContext_TrustcenterEntityUpdatePayload_trustcen
 
 // region    **************************** object.gotpl ****************************
 
-var trustcenterEntityBulkCreatePayloadImplementors = []string{"TrustcenterEntityBulkCreatePayload"}
+var trustCenterEntityBulkCreatePayloadImplementors = []string{"TrustCenterEntityBulkCreatePayload"}
 
-func (ec *executionContext) _TrustcenterEntityBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustcenterEntityBulkCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, trustcenterEntityBulkCreatePayloadImplementors)
+func (ec *executionContext) _TrustCenterEntityBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterEntityBulkCreatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterEntityBulkCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TrustcenterEntityBulkCreatePayload")
-		case "trustcenterEntities":
-			out.Values[i] = ec._TrustcenterEntityBulkCreatePayload_trustcenterEntities(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("TrustCenterEntityBulkCreatePayload")
+		case "trustCenterEntities":
+			out.Values[i] = ec._TrustCenterEntityBulkCreatePayload_trustCenterEntities(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -276,19 +288,19 @@ func (ec *executionContext) _TrustcenterEntityBulkCreatePayload(ctx context.Cont
 	return out
 }
 
-var trustcenterEntityCreatePayloadImplementors = []string{"TrustcenterEntityCreatePayload"}
+var trustCenterEntityCreatePayloadImplementors = []string{"TrustCenterEntityCreatePayload"}
 
-func (ec *executionContext) _TrustcenterEntityCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustcenterEntityCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, trustcenterEntityCreatePayloadImplementors)
+func (ec *executionContext) _TrustCenterEntityCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterEntityCreatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterEntityCreatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TrustcenterEntityCreatePayload")
-		case "trustcenterEntity":
-			out.Values[i] = ec._TrustcenterEntityCreatePayload_trustcenterEntity(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("TrustCenterEntityCreatePayload")
+		case "trustCenterEntity":
+			out.Values[i] = ec._TrustCenterEntityCreatePayload_trustCenterEntity(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -315,19 +327,19 @@ func (ec *executionContext) _TrustcenterEntityCreatePayload(ctx context.Context,
 	return out
 }
 
-var trustcenterEntityDeletePayloadImplementors = []string{"TrustcenterEntityDeletePayload"}
+var trustCenterEntityDeletePayloadImplementors = []string{"TrustCenterEntityDeletePayload"}
 
-func (ec *executionContext) _TrustcenterEntityDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustcenterEntityDeletePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, trustcenterEntityDeletePayloadImplementors)
+func (ec *executionContext) _TrustCenterEntityDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterEntityDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterEntityDeletePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TrustcenterEntityDeletePayload")
+			out.Values[i] = graphql.MarshalString("TrustCenterEntityDeletePayload")
 		case "deletedID":
-			out.Values[i] = ec._TrustcenterEntityDeletePayload_deletedID(ctx, field, obj)
+			out.Values[i] = ec._TrustCenterEntityDeletePayload_deletedID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -354,19 +366,19 @@ func (ec *executionContext) _TrustcenterEntityDeletePayload(ctx context.Context,
 	return out
 }
 
-var trustcenterEntityUpdatePayloadImplementors = []string{"TrustcenterEntityUpdatePayload"}
+var trustCenterEntityUpdatePayloadImplementors = []string{"TrustCenterEntityUpdatePayload"}
 
-func (ec *executionContext) _TrustcenterEntityUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustcenterEntityUpdatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, trustcenterEntityUpdatePayloadImplementors)
+func (ec *executionContext) _TrustCenterEntityUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.TrustCenterEntityUpdatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, trustCenterEntityUpdatePayloadImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("TrustcenterEntityUpdatePayload")
-		case "trustcenterEntity":
-			out.Values[i] = ec._TrustcenterEntityUpdatePayload_trustcenterEntity(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("TrustCenterEntityUpdatePayload")
+		case "trustCenterEntity":
+			out.Values[i] = ec._TrustCenterEntityUpdatePayload_trustCenterEntity(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -397,60 +409,60 @@ func (ec *executionContext) _TrustcenterEntityUpdatePayload(ctx context.Context,
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTrustcenterEntityBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustcenterEntityBulkCreatePayload) graphql.Marshaler {
-	return ec._TrustcenterEntityBulkCreatePayload(ctx, sel, &v)
+func (ec *executionContext) marshalNTrustCenterEntityBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterEntityBulkCreatePayload) graphql.Marshaler {
+	return ec._TrustCenterEntityBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustcenterEntityBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterEntityBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterEntityBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._TrustcenterEntityBulkCreatePayload(ctx, sel, v)
+	return ec._TrustCenterEntityBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustcenterEntityCreatePayload) graphql.Marshaler {
-	return ec._TrustcenterEntityCreatePayload(ctx, sel, &v)
+func (ec *executionContext) marshalNTrustCenterEntityCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterEntityCreatePayload) graphql.Marshaler {
+	return ec._TrustCenterEntityCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustcenterEntityCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterEntityCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._TrustcenterEntityCreatePayload(ctx, sel, v)
+	return ec._TrustCenterEntityCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustcenterEntityDeletePayload) graphql.Marshaler {
-	return ec._TrustcenterEntityDeletePayload(ctx, sel, &v)
+func (ec *executionContext) marshalNTrustCenterEntityDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterEntityDeletePayload) graphql.Marshaler {
+	return ec._TrustCenterEntityDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustcenterEntityDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterEntityDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterEntityDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._TrustcenterEntityDeletePayload(ctx, sel, v)
+	return ec._TrustCenterEntityDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustcenterEntityUpdatePayload) graphql.Marshaler {
-	return ec._TrustcenterEntityUpdatePayload(ctx, sel, &v)
+func (ec *executionContext) marshalNTrustCenterEntityUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterEntityUpdatePayload) graphql.Marshaler {
+	return ec._TrustCenterEntityUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustcenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustcenterEntityUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterEntityUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterEntityUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._TrustcenterEntityUpdatePayload(ctx, sel, v)
+	return ec._TrustCenterEntityUpdatePayload(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************

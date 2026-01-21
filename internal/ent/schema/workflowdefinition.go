@@ -140,7 +140,7 @@ func (w WorkflowDefinition) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.WorkflowDefinition](w,
 				withOrganizationOwner(true),
 			),
-			mixin.NewSystemOwnedMixin(),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 		},
 	}.getMixins(w)
 }
@@ -160,7 +160,9 @@ func (WorkflowDefinition) Annotations() []schema.Annotation {
 // Policy of the WorkflowDefinition.
 func (WorkflowDefinition) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(),
+		policy.WithQueryRules(
+			policy.CheckOrgEditAccess(),
+		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
 			entfga.CheckEditAccess[*generated.WorkflowDefinitionMutation](),

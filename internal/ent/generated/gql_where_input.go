@@ -79,6 +79,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
@@ -821,6 +822,7 @@ func (i *APITokenWhereInput) P() (predicate.APIToken, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -2505,6 +2507,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasApproverWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasApproverWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasApproverWith {
 			p, err := w.P()
 			if err != nil {
@@ -2523,6 +2526,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasDelegateWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasDelegateWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasDelegateWith {
 			p, err := w.P()
 			if err != nil {
@@ -2541,6 +2545,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -2559,6 +2564,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2577,6 +2583,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2595,6 +2602,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -2613,6 +2621,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasActionPlanKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasActionPlanKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -2631,6 +2640,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -2649,6 +2659,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2667,6 +2678,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2685,6 +2697,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2703,6 +2716,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasVulnerabilitiesWith) > 0 {
 		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -2721,6 +2735,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasReviewsWith) > 0 {
 		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
 		for _, w := range i.HasReviewsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2739,6 +2754,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasRemediationsWith) > 0 {
 		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
 		for _, w := range i.HasRemediationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2757,6 +2773,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -2775,6 +2792,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -2793,6 +2811,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	}
 	if len(i.HasFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -3431,6 +3450,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -3449,6 +3469,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -3467,6 +3488,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -3485,6 +3507,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -3503,6 +3526,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	}
 	if len(i.HasTemplateWith) > 0 {
 		with := make([]predicate.Template, 0, len(i.HasTemplateWith))
+		with = append(with, template.DeletedAtIsNil())
 		for _, w := range i.HasTemplateWith {
 			p, err := w.P()
 			if err != nil {
@@ -3521,6 +3545,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	}
 	if len(i.HasAssessmentResponsesWith) > 0 {
 		with := make([]predicate.AssessmentResponse, 0, len(i.HasAssessmentResponsesWith))
+		with = append(with, assessmentresponse.DeletedAtIsNil())
 		for _, w := range i.HasAssessmentResponsesWith {
 			p, err := w.P()
 			if err != nil {
@@ -4265,6 +4290,7 @@ func (i *AssessmentResponseWhereInput) P() (predicate.AssessmentResponse, error)
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -4283,6 +4309,7 @@ func (i *AssessmentResponseWhereInput) P() (predicate.AssessmentResponse, error)
 	}
 	if len(i.HasAssessmentWith) > 0 {
 		with := make([]predicate.Assessment, 0, len(i.HasAssessmentWith))
+		with = append(with, assessment.DeletedAtIsNil())
 		for _, w := range i.HasAssessmentWith {
 			p, err := w.P()
 			if err != nil {
@@ -4301,6 +4328,7 @@ func (i *AssessmentResponseWhereInput) P() (predicate.AssessmentResponse, error)
 	}
 	if len(i.HasDocumentWith) > 0 {
 		with := make([]predicate.DocumentData, 0, len(i.HasDocumentWith))
+		with = append(with, documentdata.DeletedAtIsNil())
 		for _, w := range i.HasDocumentWith {
 			p, err := w.P()
 			if err != nil {
@@ -5149,6 +5177,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -5167,6 +5196,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -5185,6 +5215,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -5203,6 +5234,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -5221,6 +5253,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -5239,6 +5272,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -5257,6 +5291,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -6079,6 +6114,7 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -6097,6 +6133,7 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -6115,6 +6152,7 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -7893,6 +7931,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -7911,6 +7950,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -7929,6 +7969,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -7947,6 +7988,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -7965,6 +8007,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -7983,6 +8026,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -8001,6 +8045,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -8019,6 +8064,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -8037,6 +8083,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8055,6 +8102,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasDiscussionsWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8073,6 +8121,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasControlOwnerWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasControlOwnerWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasControlOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -8091,6 +8140,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasDelegateWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasDelegateWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasDelegateWith {
 			p, err := w.P()
 			if err != nil {
@@ -8109,6 +8159,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasResponsiblePartyWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasResponsiblePartyWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasResponsiblePartyWith {
 			p, err := w.P()
 			if err != nil {
@@ -8127,6 +8178,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -8145,6 +8197,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8163,6 +8216,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8181,6 +8235,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasControlKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasControlKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasControlKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -8199,6 +8254,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasStandardWith) > 0 {
 		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
+		with = append(with, standard.DeletedAtIsNil())
 		for _, w := range i.HasStandardWith {
 			p, err := w.P()
 			if err != nil {
@@ -8217,6 +8273,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8235,6 +8292,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8253,6 +8311,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -8271,6 +8330,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8289,6 +8349,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasControlImplementationsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8307,6 +8368,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -8325,6 +8387,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	}
 	if len(i.HasScheduledJobsWith) > 0 {
 		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobsWith))
+		with = append(with, scheduledjob.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobsWith {
 			p, err := w.P()
 			if err != nil {
@@ -9141,6 +9204,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -9159,6 +9223,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -9177,6 +9242,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -9195,6 +9261,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -9213,6 +9280,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -9231,6 +9299,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -9249,6 +9318,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -10333,6 +10403,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -10351,6 +10422,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -10369,6 +10441,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -10387,6 +10460,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -10405,6 +10479,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -10423,6 +10498,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -10441,6 +10517,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -10459,6 +10536,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -10477,6 +10555,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -10495,6 +10574,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -10513,6 +10593,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -10531,6 +10612,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -10549,6 +10631,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -11293,6 +11376,7 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -11311,6 +11395,7 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	}
 	if len(i.HasMappableDomainWith) > 0 {
 		with := make([]predicate.MappableDomain, 0, len(i.HasMappableDomainWith))
+		with = append(with, mappabledomain.DeletedAtIsNil())
 		for _, w := range i.HasMappableDomainWith {
 			p, err := w.P()
 			if err != nil {
@@ -11329,6 +11414,7 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	}
 	if len(i.HasDNSVerificationWith) > 0 {
 		with := make([]predicate.DNSVerification, 0, len(i.HasDNSVerificationWith))
+		with = append(with, dnsverification.DeletedAtIsNil())
 		for _, w := range i.HasDNSVerificationWith {
 			p, err := w.P()
 			if err != nil {
@@ -12279,6 +12365,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -12297,6 +12384,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -12315,6 +12403,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -12333,6 +12422,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -12351,6 +12441,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -12369,6 +12460,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasRiskCategoriesWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRiskCategoriesWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRiskCategoriesWith {
 			p, err := w.P()
 			if err != nil {
@@ -12387,6 +12479,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -12405,6 +12498,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -12423,6 +12517,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -12441,6 +12536,7 @@ func (i *CustomTypeEnumWhereInput) P() (predicate.CustomTypeEnum, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -13315,6 +13411,7 @@ func (i *DNSVerificationWhereInput) P() (predicate.DNSVerification, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -13333,6 +13430,7 @@ func (i *DNSVerificationWhereInput) P() (predicate.DNSVerification, error) {
 	}
 	if len(i.HasCustomDomainsWith) > 0 {
 		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainsWith))
+		with = append(with, customdomain.DeletedAtIsNil())
 		for _, w := range i.HasCustomDomainsWith {
 			p, err := w.P()
 			if err != nil {
@@ -14805,6 +14903,7 @@ func (i *DirectoryAccountWhereInput) P() (predicate.DirectoryAccount, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -14823,6 +14922,7 @@ func (i *DirectoryAccountWhereInput) P() (predicate.DirectoryAccount, error) {
 	}
 	if len(i.HasIntegrationWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationWith {
 			p, err := w.P()
 			if err != nil {
@@ -15925,6 +16025,7 @@ func (i *DirectoryGroupWhereInput) P() (predicate.DirectoryGroup, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -15943,6 +16044,7 @@ func (i *DirectoryGroupWhereInput) P() (predicate.DirectoryGroup, error) {
 	}
 	if len(i.HasIntegrationWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationWith {
 			p, err := w.P()
 			if err != nil {
@@ -17001,6 +17103,7 @@ func (i *DirectoryMembershipWhereInput) P() (predicate.DirectoryMembership, erro
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -17019,6 +17122,7 @@ func (i *DirectoryMembershipWhereInput) P() (predicate.DirectoryMembership, erro
 	}
 	if len(i.HasIntegrationWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationWith {
 			p, err := w.P()
 			if err != nil {
@@ -18005,6 +18109,7 @@ func (i *DirectorySyncRunWhereInput) P() (predicate.DirectorySyncRun, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -18023,6 +18128,7 @@ func (i *DirectorySyncRunWhereInput) P() (predicate.DirectorySyncRun, error) {
 	}
 	if len(i.HasIntegrationWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationWith {
 			p, err := w.P()
 			if err != nil {
@@ -18597,6 +18703,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -18615,6 +18722,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -18633,6 +18741,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasControlWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlWith {
 			p, err := w.P()
 			if err != nil {
@@ -18651,6 +18760,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasSubcontrolWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolWith {
 			p, err := w.P()
 			if err != nil {
@@ -18669,6 +18779,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasProcedureWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProcedureWith {
 			p, err := w.P()
 			if err != nil {
@@ -18687,6 +18798,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasRiskWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRiskWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRiskWith {
 			p, err := w.P()
 			if err != nil {
@@ -18705,6 +18817,7 @@ func (i *DiscussionWhereInput) P() (predicate.Discussion, error) {
 	}
 	if len(i.HasInternalPolicyWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyWith {
 			p, err := w.P()
 			if err != nil {
@@ -19203,6 +19316,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -19221,6 +19335,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	}
 	if len(i.HasTemplateWith) > 0 {
 		with := make([]predicate.Template, 0, len(i.HasTemplateWith))
+		with = append(with, template.DeletedAtIsNil())
 		for _, w := range i.HasTemplateWith {
 			p, err := w.P()
 			if err != nil {
@@ -19239,6 +19354,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -19257,6 +19373,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -20111,6 +20228,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -20129,6 +20247,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -20147,6 +20266,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -20165,6 +20285,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -20183,6 +20304,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasContactsWith) > 0 {
 		with := make([]predicate.Contact, 0, len(i.HasContactsWith))
+		with = append(with, contact.DeletedAtIsNil())
 		for _, w := range i.HasContactsWith {
 			p, err := w.P()
 			if err != nil {
@@ -20201,6 +20323,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasDocumentsWith) > 0 {
 		with := make([]predicate.DocumentData, 0, len(i.HasDocumentsWith))
+		with = append(with, documentdata.DeletedAtIsNil())
 		for _, w := range i.HasDocumentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -20219,6 +20342,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasNotesWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasNotesWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasNotesWith {
 			p, err := w.P()
 			if err != nil {
@@ -20237,6 +20361,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -20255,6 +20380,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -20273,6 +20399,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -20291,6 +20418,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	}
 	if len(i.HasEntityTypeWith) > 0 {
 		with := make([]predicate.EntityType, 0, len(i.HasEntityTypeWith))
+		with = append(with, entitytype.DeletedAtIsNil())
 		for _, w := range i.HasEntityTypeWith {
 			p, err := w.P()
 			if err != nil {
@@ -20915,6 +21043,7 @@ func (i *EntityTypeWhereInput) P() (predicate.EntityType, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -20933,6 +21062,7 @@ func (i *EntityTypeWhereInput) P() (predicate.EntityType, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -21517,6 +21647,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasUsersWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUsersWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUsersWith {
 			p, err := w.P()
 			if err != nil {
@@ -21535,6 +21666,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -21553,6 +21685,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -21571,6 +21704,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasOrganizationsWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationsWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -21589,6 +21723,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasInvitesWith) > 0 {
 		with := make([]predicate.Invite, 0, len(i.HasInvitesWith))
+		with = append(with, invite.DeletedAtIsNil())
 		for _, w := range i.HasInvitesWith {
 			p, err := w.P()
 			if err != nil {
@@ -21607,6 +21742,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasPersonalAccessTokensWith) > 0 {
 		with := make([]predicate.PersonalAccessToken, 0, len(i.HasPersonalAccessTokensWith))
+		with = append(with, personalaccesstoken.DeletedAtIsNil())
 		for _, w := range i.HasPersonalAccessTokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -21625,6 +21761,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasSecretsWith) > 0 {
 		with := make([]predicate.Hush, 0, len(i.HasSecretsWith))
+		with = append(with, hush.DeletedAtIsNil())
 		for _, w := range i.HasSecretsWith {
 			p, err := w.P()
 			if err != nil {
@@ -21679,6 +21816,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasSubscribersWith) > 0 {
 		with := make([]predicate.Subscriber, 0, len(i.HasSubscribersWith))
+		with = append(with, subscriber.DeletedAtIsNil())
 		for _, w := range i.HasSubscribersWith {
 			p, err := w.P()
 			if err != nil {
@@ -21697,6 +21835,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -21715,6 +21854,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	}
 	if len(i.HasOrgSubscriptionsWith) > 0 {
 		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgSubscriptionsWith))
+		with = append(with, orgsubscription.DeletedAtIsNil())
 		for _, w := range i.HasOrgSubscriptionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -22669,6 +22809,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -22687,6 +22828,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -22705,6 +22847,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -22723,6 +22866,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -22741,6 +22885,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasControlImplementationsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -22759,6 +22904,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -22777,6 +22923,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -22795,6 +22942,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -22813,6 +22961,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -22927,6 +23076,23 @@ type ExportWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "requestor_id" field predicates.
+	RequestorID             *string  `json:"requestorID,omitempty"`
+	RequestorIDNEQ          *string  `json:"requestorIDNEQ,omitempty"`
+	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
+	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
+	RequestorIDGT           *string  `json:"requestorIDGT,omitempty"`
+	RequestorIDGTE          *string  `json:"requestorIDGTE,omitempty"`
+	RequestorIDLT           *string  `json:"requestorIDLT,omitempty"`
+	RequestorIDLTE          *string  `json:"requestorIDLTE,omitempty"`
+	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
+	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
+	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
+	RequestorIDIsNil        bool     `json:"requestorIDIsNil,omitempty"`
+	RequestorIDNotNil       bool     `json:"requestorIDNotNil,omitempty"`
+	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
+	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -22961,23 +23127,6 @@ type ExportWhereInput struct {
 	StatusNEQ   *enums.ExportStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.ExportStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.ExportStatus `json:"statusNotIn,omitempty"`
-
-	// "requestor_id" field predicates.
-	RequestorID             *string  `json:"requestorID,omitempty"`
-	RequestorIDNEQ          *string  `json:"requestorIDNEQ,omitempty"`
-	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
-	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
-	RequestorIDGT           *string  `json:"requestorIDGT,omitempty"`
-	RequestorIDGTE          *string  `json:"requestorIDGTE,omitempty"`
-	RequestorIDLT           *string  `json:"requestorIDLT,omitempty"`
-	RequestorIDLTE          *string  `json:"requestorIDLTE,omitempty"`
-	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
-	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
-	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
-	RequestorIDIsNil        bool     `json:"requestorIDIsNil,omitempty"`
-	RequestorIDNotNil       bool     `json:"requestorIDNotNil,omitempty"`
-	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
-	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
 
 	// "filters" field predicates.
 	Filters             *string  `json:"filters,omitempty"`
@@ -23277,6 +23426,51 @@ func (i *ExportWhereInput) P() (predicate.Export, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, export.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.RequestorID != nil {
+		predicates = append(predicates, export.RequestorIDEQ(*i.RequestorID))
+	}
+	if i.RequestorIDNEQ != nil {
+		predicates = append(predicates, export.RequestorIDNEQ(*i.RequestorIDNEQ))
+	}
+	if len(i.RequestorIDIn) > 0 {
+		predicates = append(predicates, export.RequestorIDIn(i.RequestorIDIn...))
+	}
+	if len(i.RequestorIDNotIn) > 0 {
+		predicates = append(predicates, export.RequestorIDNotIn(i.RequestorIDNotIn...))
+	}
+	if i.RequestorIDGT != nil {
+		predicates = append(predicates, export.RequestorIDGT(*i.RequestorIDGT))
+	}
+	if i.RequestorIDGTE != nil {
+		predicates = append(predicates, export.RequestorIDGTE(*i.RequestorIDGTE))
+	}
+	if i.RequestorIDLT != nil {
+		predicates = append(predicates, export.RequestorIDLT(*i.RequestorIDLT))
+	}
+	if i.RequestorIDLTE != nil {
+		predicates = append(predicates, export.RequestorIDLTE(*i.RequestorIDLTE))
+	}
+	if i.RequestorIDContains != nil {
+		predicates = append(predicates, export.RequestorIDContains(*i.RequestorIDContains))
+	}
+	if i.RequestorIDHasPrefix != nil {
+		predicates = append(predicates, export.RequestorIDHasPrefix(*i.RequestorIDHasPrefix))
+	}
+	if i.RequestorIDHasSuffix != nil {
+		predicates = append(predicates, export.RequestorIDHasSuffix(*i.RequestorIDHasSuffix))
+	}
+	if i.RequestorIDIsNil {
+		predicates = append(predicates, export.RequestorIDIsNil())
+	}
+	if i.RequestorIDNotNil {
+		predicates = append(predicates, export.RequestorIDNotNil())
+	}
+	if i.RequestorIDEqualFold != nil {
+		predicates = append(predicates, export.RequestorIDEqualFold(*i.RequestorIDEqualFold))
+	}
+	if i.RequestorIDContainsFold != nil {
+		predicates = append(predicates, export.RequestorIDContainsFold(*i.RequestorIDContainsFold))
+	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, export.OwnerIDEQ(*i.OwnerID))
 	}
@@ -23357,51 +23551,6 @@ func (i *ExportWhereInput) P() (predicate.Export, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, export.StatusNotIn(i.StatusNotIn...))
-	}
-	if i.RequestorID != nil {
-		predicates = append(predicates, export.RequestorIDEQ(*i.RequestorID))
-	}
-	if i.RequestorIDNEQ != nil {
-		predicates = append(predicates, export.RequestorIDNEQ(*i.RequestorIDNEQ))
-	}
-	if len(i.RequestorIDIn) > 0 {
-		predicates = append(predicates, export.RequestorIDIn(i.RequestorIDIn...))
-	}
-	if len(i.RequestorIDNotIn) > 0 {
-		predicates = append(predicates, export.RequestorIDNotIn(i.RequestorIDNotIn...))
-	}
-	if i.RequestorIDGT != nil {
-		predicates = append(predicates, export.RequestorIDGT(*i.RequestorIDGT))
-	}
-	if i.RequestorIDGTE != nil {
-		predicates = append(predicates, export.RequestorIDGTE(*i.RequestorIDGTE))
-	}
-	if i.RequestorIDLT != nil {
-		predicates = append(predicates, export.RequestorIDLT(*i.RequestorIDLT))
-	}
-	if i.RequestorIDLTE != nil {
-		predicates = append(predicates, export.RequestorIDLTE(*i.RequestorIDLTE))
-	}
-	if i.RequestorIDContains != nil {
-		predicates = append(predicates, export.RequestorIDContains(*i.RequestorIDContains))
-	}
-	if i.RequestorIDHasPrefix != nil {
-		predicates = append(predicates, export.RequestorIDHasPrefix(*i.RequestorIDHasPrefix))
-	}
-	if i.RequestorIDHasSuffix != nil {
-		predicates = append(predicates, export.RequestorIDHasSuffix(*i.RequestorIDHasSuffix))
-	}
-	if i.RequestorIDIsNil {
-		predicates = append(predicates, export.RequestorIDIsNil())
-	}
-	if i.RequestorIDNotNil {
-		predicates = append(predicates, export.RequestorIDNotNil())
-	}
-	if i.RequestorIDEqualFold != nil {
-		predicates = append(predicates, export.RequestorIDEqualFold(*i.RequestorIDEqualFold))
-	}
-	if i.RequestorIDContainsFold != nil {
-		predicates = append(predicates, export.RequestorIDContainsFold(*i.RequestorIDContainsFold))
 	}
 	if i.Filters != nil {
 		predicates = append(predicates, export.FiltersEQ(*i.Filters))
@@ -23503,6 +23652,7 @@ func (i *ExportWhereInput) P() (predicate.Export, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -23539,6 +23689,7 @@ func (i *ExportWhereInput) P() (predicate.Export, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -23966,10 +24117,6 @@ type FileWhereInput struct {
 	HasEvents     *bool              `json:"hasEvents,omitempty"`
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 
-	// "trust_center_setting" edge predicates.
-	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
-	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
-
 	// "integrations" edge predicates.
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -23978,9 +24125,17 @@ type FileWhereInput struct {
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
 
-	// "trustcenter_entities" edge predicates.
-	HasTrustcenterEntities     *bool                          `json:"hasTrustcenterEntities,omitempty"`
-	HasTrustcenterEntitiesWith []*TrustcenterEntityWhereInput `json:"hasTrustcenterEntitiesWith,omitempty"`
+	// "trust_center_entities" edge predicates.
+	HasTrustCenterEntities     *bool                          `json:"hasTrustCenterEntities,omitempty"`
+	HasTrustCenterEntitiesWith []*TrustCenterEntityWhereInput `json:"hasTrustCenterEntitiesWith,omitempty"`
+
+	// "trust_center_doc" edge predicates.
+	HasTrustCenterDoc     *bool                       `json:"hasTrustCenterDoc,omitempty"`
+	HasTrustCenterDocWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocWith,omitempty"`
+
+	// "original_trust_center_doc" edge predicates.
+	HasOriginalTrustCenterDoc     *bool                       `json:"hasOriginalTrustCenterDoc,omitempty"`
+	HasOriginalTrustCenterDocWith []*TrustCenterDocWhereInput `json:"hasOriginalTrustCenterDocWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -25003,6 +25158,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasOrganizationWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationWith {
 			p, err := w.P()
 			if err != nil {
@@ -25021,6 +25177,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -25039,6 +25196,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasContactWith) > 0 {
 		with := make([]predicate.Contact, 0, len(i.HasContactWith))
+		with = append(with, contact.DeletedAtIsNil())
 		for _, w := range i.HasContactWith {
 			p, err := w.P()
 			if err != nil {
@@ -25057,6 +25215,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasEntityWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntityWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntityWith {
 			p, err := w.P()
 			if err != nil {
@@ -25075,6 +25234,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasOrganizationSettingWith) > 0 {
 		with := make([]predicate.OrganizationSetting, 0, len(i.HasOrganizationSettingWith))
+		with = append(with, organizationsetting.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationSettingWith {
 			p, err := w.P()
 			if err != nil {
@@ -25093,6 +25253,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasTemplateWith) > 0 {
 		with := make([]predicate.Template, 0, len(i.HasTemplateWith))
+		with = append(with, template.DeletedAtIsNil())
 		for _, w := range i.HasTemplateWith {
 			p, err := w.P()
 			if err != nil {
@@ -25111,6 +25272,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasDocumentWith) > 0 {
 		with := make([]predicate.DocumentData, 0, len(i.HasDocumentWith))
+		with = append(with, documentdata.DeletedAtIsNil())
 		for _, w := range i.HasDocumentWith {
 			p, err := w.P()
 			if err != nil {
@@ -25129,6 +25291,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasProgramWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramWith {
 			p, err := w.P()
 			if err != nil {
@@ -25147,6 +25310,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -25174,24 +25338,6 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasEventsWith(with...))
 	}
-	if i.HasTrustCenterSetting != nil {
-		p := file.HasTrustCenterSetting()
-		if !*i.HasTrustCenterSetting {
-			p = file.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterSettingWith) > 0 {
-		with := make([]predicate.TrustCenterSetting, 0, len(i.HasTrustCenterSettingWith))
-		for _, w := range i.HasTrustCenterSettingWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterSettingWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, file.HasTrustCenterSettingWith(with...))
-	}
 	if i.HasIntegrations != nil {
 		p := file.HasIntegrations()
 		if !*i.HasIntegrations {
@@ -25201,6 +25347,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -25219,6 +25366,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if len(i.HasSecretsWith) > 0 {
 		with := make([]predicate.Hush, 0, len(i.HasSecretsWith))
+		with = append(with, hush.DeletedAtIsNil())
 		for _, w := range i.HasSecretsWith {
 			p, err := w.P()
 			if err != nil {
@@ -25228,23 +25376,62 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 		}
 		predicates = append(predicates, file.HasSecretsWith(with...))
 	}
-	if i.HasTrustcenterEntities != nil {
-		p := file.HasTrustcenterEntities()
-		if !*i.HasTrustcenterEntities {
+	if i.HasTrustCenterEntities != nil {
+		p := file.HasTrustCenterEntities()
+		if !*i.HasTrustCenterEntities {
 			p = file.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasTrustcenterEntitiesWith) > 0 {
-		with := make([]predicate.TrustcenterEntity, 0, len(i.HasTrustcenterEntitiesWith))
-		for _, w := range i.HasTrustcenterEntitiesWith {
+	if len(i.HasTrustCenterEntitiesWith) > 0 {
+		with := make([]predicate.TrustCenterEntity, 0, len(i.HasTrustCenterEntitiesWith))
+		with = append(with, trustcenterentity.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterEntitiesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustcenterEntitiesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterEntitiesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, file.HasTrustcenterEntitiesWith(with...))
+		predicates = append(predicates, file.HasTrustCenterEntitiesWith(with...))
+	}
+	if i.HasTrustCenterDoc != nil {
+		p := file.HasTrustCenterDoc()
+		if !*i.HasTrustCenterDoc {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterDocWith) > 0 {
+		with := make([]predicate.TrustCenterDoc, 0, len(i.HasTrustCenterDocWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterDocWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasTrustCenterDocWith(with...))
+	}
+	if i.HasOriginalTrustCenterDoc != nil {
+		p := file.HasOriginalTrustCenterDoc()
+		if !*i.HasOriginalTrustCenterDoc {
+			p = file.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasOriginalTrustCenterDocWith) > 0 {
+		with := make([]predicate.TrustCenterDoc, 0, len(i.HasOriginalTrustCenterDocWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
+		for _, w := range i.HasOriginalTrustCenterDocWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasOriginalTrustCenterDocWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, file.HasOriginalTrustCenterDocWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -27417,6 +27604,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -27435,6 +27623,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27453,6 +27642,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27471,6 +27661,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -27489,6 +27680,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27507,6 +27699,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasVulnerabilitiesWith) > 0 {
 		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -27525,6 +27718,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -27543,6 +27737,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27561,6 +27756,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27579,6 +27775,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -27597,6 +27794,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27615,6 +27813,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27633,6 +27832,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -27651,6 +27851,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -27669,6 +27870,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -27687,6 +27889,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasRemediationsWith) > 0 {
 		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
 		for _, w := range i.HasRemediationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27705,6 +27908,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasReviewsWith) > 0 {
 		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
 		for _, w := range i.HasReviewsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27723,6 +27927,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -27741,6 +27946,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -28607,6 +28813,7 @@ func (i *FindingControlWhereInput) P() (predicate.FindingControl, error) {
 	}
 	if len(i.HasFindingWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingWith {
 			p, err := w.P()
 			if err != nil {
@@ -28625,6 +28832,7 @@ func (i *FindingControlWhereInput) P() (predicate.FindingControl, error) {
 	}
 	if len(i.HasControlWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlWith {
 			p, err := w.P()
 			if err != nil {
@@ -28643,6 +28851,7 @@ func (i *FindingControlWhereInput) P() (predicate.FindingControl, error) {
 	}
 	if len(i.HasStandardWith) > 0 {
 		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
+		with = append(with, standard.DeletedAtIsNil())
 		for _, w := range i.HasStandardWith {
 			p, err := w.P()
 			if err != nil {
@@ -29607,6 +29816,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -29625,6 +29835,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasProgramEditorsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramEditorsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29643,6 +29854,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasProgramBlockedGroupsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramBlockedGroupsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29661,6 +29873,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasProgramViewersWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramViewersWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -29679,6 +29892,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasRiskEditorsWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRiskEditorsWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRiskEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29697,6 +29911,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasRiskBlockedGroupsWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRiskBlockedGroupsWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRiskBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29715,6 +29930,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasRiskViewersWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRiskViewersWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRiskViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -29733,6 +29949,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlObjectiveEditorsWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveEditorsWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectiveEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29751,6 +29968,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlObjectiveBlockedGroupsWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveBlockedGroupsWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectiveBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29769,6 +29987,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlObjectiveViewersWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectiveViewersWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectiveViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -29787,6 +30006,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasNarrativeEditorsWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativeEditorsWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativeEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29805,6 +30025,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasNarrativeBlockedGroupsWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativeBlockedGroupsWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativeBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29823,6 +30044,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasNarrativeViewersWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativeViewersWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativeViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -29841,6 +30063,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlImplementationEditorsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationEditorsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29859,6 +30082,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlImplementationBlockedGroupsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationBlockedGroupsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29877,6 +30101,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlImplementationViewersWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationViewersWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -29895,6 +30120,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasScanEditorsWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScanEditorsWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScanEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29913,6 +30139,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasScanBlockedGroupsWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScanBlockedGroupsWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScanBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29931,6 +30158,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasScanViewersWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScanViewersWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScanViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -29949,6 +30177,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasEntityEditorsWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntityEditorsWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntityEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29967,6 +30196,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasEntityBlockedGroupsWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntityBlockedGroupsWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntityBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -29985,6 +30215,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasEntityViewersWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntityViewersWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntityViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -30003,6 +30234,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasActionPlanEditorsWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanEditorsWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30021,6 +30253,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasActionPlanBlockedGroupsWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanBlockedGroupsWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30039,6 +30272,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasActionPlanViewersWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanViewersWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -30057,6 +30291,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasProcedureEditorsWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProcedureEditorsWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProcedureEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30075,6 +30310,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasProcedureBlockedGroupsWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProcedureBlockedGroupsWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProcedureBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30093,6 +30329,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasInternalPolicyEditorsWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyEditorsWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30111,6 +30348,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasInternalPolicyBlockedGroupsWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyBlockedGroupsWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30129,6 +30367,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlEditorsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlEditorsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30147,6 +30386,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasControlBlockedGroupsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlBlockedGroupsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30165,6 +30405,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasMappedControlEditorsWith) > 0 {
 		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlEditorsWith))
+		with = append(with, mappedcontrol.DeletedAtIsNil())
 		for _, w := range i.HasMappedControlEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30183,6 +30424,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasMappedControlBlockedGroupsWith) > 0 {
 		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlBlockedGroupsWith))
+		with = append(with, mappedcontrol.DeletedAtIsNil())
 		for _, w := range i.HasMappedControlBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30201,6 +30443,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasSettingWith) > 0 {
 		with := make([]predicate.GroupSetting, 0, len(i.HasSettingWith))
+		with = append(with, groupsetting.DeletedAtIsNil())
 		for _, w := range i.HasSettingWith {
 			p, err := w.P()
 			if err != nil {
@@ -30219,6 +30462,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasUsersWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUsersWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUsersWith {
 			p, err := w.P()
 			if err != nil {
@@ -30255,6 +30499,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -30273,6 +30518,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -30291,6 +30537,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -30805,6 +31052,7 @@ func (i *GroupMembershipWhereInput) P() (predicate.GroupMembership, error) {
 	}
 	if len(i.HasGroupWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupWith {
 			p, err := w.P()
 			if err != nil {
@@ -30823,6 +31071,7 @@ func (i *GroupMembershipWhereInput) P() (predicate.GroupMembership, error) {
 	}
 	if len(i.HasUserWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUserWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUserWith {
 			p, err := w.P()
 			if err != nil {
@@ -31337,6 +31586,7 @@ func (i *GroupSettingWhereInput) P() (predicate.GroupSetting, error) {
 	}
 	if len(i.HasGroupWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupWith {
 			p, err := w.P()
 			if err != nil {
@@ -32177,6 +32427,7 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -32195,6 +32446,7 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -32213,6 +32465,7 @@ func (i *HushWhereInput) P() (predicate.Hush, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -33027,6 +33280,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -33045,6 +33299,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasSecretsWith) > 0 {
 		with := make([]predicate.Hush, 0, len(i.HasSecretsWith))
+		with = append(with, hush.DeletedAtIsNil())
 		for _, w := range i.HasSecretsWith {
 			p, err := w.P()
 			if err != nil {
@@ -33063,6 +33318,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -33099,6 +33355,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -33117,6 +33374,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasVulnerabilitiesWith) > 0 {
 		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -33135,6 +33393,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasReviewsWith) > 0 {
 		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
 		for _, w := range i.HasReviewsWith {
 			p, err := w.P()
 			if err != nil {
@@ -33153,6 +33412,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasRemediationsWith) > 0 {
 		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
 		for _, w := range i.HasRemediationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -33171,6 +33431,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -33189,6 +33450,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -34633,6 +34895,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -34651,6 +34914,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34669,6 +34933,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34687,6 +34952,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasApproverWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasApproverWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasApproverWith {
 			p, err := w.P()
 			if err != nil {
@@ -34705,6 +34971,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasDelegateWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasDelegateWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasDelegateWith {
 			p, err := w.P()
 			if err != nil {
@@ -34723,6 +34990,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasInternalPolicyKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasInternalPolicyKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -34741,6 +35009,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -34759,6 +35028,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasControlImplementationsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34777,6 +35047,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34795,6 +35066,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34813,6 +35085,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -34831,6 +35104,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -34849,6 +35123,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -34867,6 +35142,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -34885,6 +35161,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34903,6 +35180,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -34921,6 +35199,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -34939,6 +35218,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	}
 	if len(i.HasDiscussionsWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -35053,6 +35333,23 @@ type InviteWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "requestor_id" field predicates.
+	RequestorID             *string  `json:"requestorID,omitempty"`
+	RequestorIDNEQ          *string  `json:"requestorIDNEQ,omitempty"`
+	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
+	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
+	RequestorIDGT           *string  `json:"requestorIDGT,omitempty"`
+	RequestorIDGTE          *string  `json:"requestorIDGTE,omitempty"`
+	RequestorIDLT           *string  `json:"requestorIDLT,omitempty"`
+	RequestorIDLTE          *string  `json:"requestorIDLTE,omitempty"`
+	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
+	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
+	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
+	RequestorIDIsNil        bool     `json:"requestorIDIsNil,omitempty"`
+	RequestorIDNotNil       bool     `json:"requestorIDNotNil,omitempty"`
+	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
+	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
+
 	// "owner_id" field predicates.
 	OwnerID             *string  `json:"ownerID,omitempty"`
 	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
@@ -35118,23 +35415,6 @@ type InviteWhereInput struct {
 	SendAttemptsGTE   *int  `json:"sendAttemptsGTE,omitempty"`
 	SendAttemptsLT    *int  `json:"sendAttemptsLT,omitempty"`
 	SendAttemptsLTE   *int  `json:"sendAttemptsLTE,omitempty"`
-
-	// "requestor_id" field predicates.
-	RequestorID             *string  `json:"requestorID,omitempty"`
-	RequestorIDNEQ          *string  `json:"requestorIDNEQ,omitempty"`
-	RequestorIDIn           []string `json:"requestorIDIn,omitempty"`
-	RequestorIDNotIn        []string `json:"requestorIDNotIn,omitempty"`
-	RequestorIDGT           *string  `json:"requestorIDGT,omitempty"`
-	RequestorIDGTE          *string  `json:"requestorIDGTE,omitempty"`
-	RequestorIDLT           *string  `json:"requestorIDLT,omitempty"`
-	RequestorIDLTE          *string  `json:"requestorIDLTE,omitempty"`
-	RequestorIDContains     *string  `json:"requestorIDContains,omitempty"`
-	RequestorIDHasPrefix    *string  `json:"requestorIDHasPrefix,omitempty"`
-	RequestorIDHasSuffix    *string  `json:"requestorIDHasSuffix,omitempty"`
-	RequestorIDIsNil        bool     `json:"requestorIDIsNil,omitempty"`
-	RequestorIDNotNil       bool     `json:"requestorIDNotNil,omitempty"`
-	RequestorIDEqualFold    *string  `json:"requestorIDEqualFold,omitempty"`
-	RequestorIDContainsFold *string  `json:"requestorIDContainsFold,omitempty"`
 
 	// "ownership_transfer" field predicates.
 	OwnershipTransfer       *bool `json:"ownershipTransfer,omitempty"`
@@ -35406,6 +35686,51 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, invite.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.RequestorID != nil {
+		predicates = append(predicates, invite.RequestorIDEQ(*i.RequestorID))
+	}
+	if i.RequestorIDNEQ != nil {
+		predicates = append(predicates, invite.RequestorIDNEQ(*i.RequestorIDNEQ))
+	}
+	if len(i.RequestorIDIn) > 0 {
+		predicates = append(predicates, invite.RequestorIDIn(i.RequestorIDIn...))
+	}
+	if len(i.RequestorIDNotIn) > 0 {
+		predicates = append(predicates, invite.RequestorIDNotIn(i.RequestorIDNotIn...))
+	}
+	if i.RequestorIDGT != nil {
+		predicates = append(predicates, invite.RequestorIDGT(*i.RequestorIDGT))
+	}
+	if i.RequestorIDGTE != nil {
+		predicates = append(predicates, invite.RequestorIDGTE(*i.RequestorIDGTE))
+	}
+	if i.RequestorIDLT != nil {
+		predicates = append(predicates, invite.RequestorIDLT(*i.RequestorIDLT))
+	}
+	if i.RequestorIDLTE != nil {
+		predicates = append(predicates, invite.RequestorIDLTE(*i.RequestorIDLTE))
+	}
+	if i.RequestorIDContains != nil {
+		predicates = append(predicates, invite.RequestorIDContains(*i.RequestorIDContains))
+	}
+	if i.RequestorIDHasPrefix != nil {
+		predicates = append(predicates, invite.RequestorIDHasPrefix(*i.RequestorIDHasPrefix))
+	}
+	if i.RequestorIDHasSuffix != nil {
+		predicates = append(predicates, invite.RequestorIDHasSuffix(*i.RequestorIDHasSuffix))
+	}
+	if i.RequestorIDIsNil {
+		predicates = append(predicates, invite.RequestorIDIsNil())
+	}
+	if i.RequestorIDNotNil {
+		predicates = append(predicates, invite.RequestorIDNotNil())
+	}
+	if i.RequestorIDEqualFold != nil {
+		predicates = append(predicates, invite.RequestorIDEqualFold(*i.RequestorIDEqualFold))
+	}
+	if i.RequestorIDContainsFold != nil {
+		predicates = append(predicates, invite.RequestorIDContainsFold(*i.RequestorIDContainsFold))
+	}
 	if i.OwnerID != nil {
 		predicates = append(predicates, invite.OwnerIDEQ(*i.OwnerID))
 	}
@@ -35568,51 +35893,6 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 	if i.SendAttemptsLTE != nil {
 		predicates = append(predicates, invite.SendAttemptsLTE(*i.SendAttemptsLTE))
 	}
-	if i.RequestorID != nil {
-		predicates = append(predicates, invite.RequestorIDEQ(*i.RequestorID))
-	}
-	if i.RequestorIDNEQ != nil {
-		predicates = append(predicates, invite.RequestorIDNEQ(*i.RequestorIDNEQ))
-	}
-	if len(i.RequestorIDIn) > 0 {
-		predicates = append(predicates, invite.RequestorIDIn(i.RequestorIDIn...))
-	}
-	if len(i.RequestorIDNotIn) > 0 {
-		predicates = append(predicates, invite.RequestorIDNotIn(i.RequestorIDNotIn...))
-	}
-	if i.RequestorIDGT != nil {
-		predicates = append(predicates, invite.RequestorIDGT(*i.RequestorIDGT))
-	}
-	if i.RequestorIDGTE != nil {
-		predicates = append(predicates, invite.RequestorIDGTE(*i.RequestorIDGTE))
-	}
-	if i.RequestorIDLT != nil {
-		predicates = append(predicates, invite.RequestorIDLT(*i.RequestorIDLT))
-	}
-	if i.RequestorIDLTE != nil {
-		predicates = append(predicates, invite.RequestorIDLTE(*i.RequestorIDLTE))
-	}
-	if i.RequestorIDContains != nil {
-		predicates = append(predicates, invite.RequestorIDContains(*i.RequestorIDContains))
-	}
-	if i.RequestorIDHasPrefix != nil {
-		predicates = append(predicates, invite.RequestorIDHasPrefix(*i.RequestorIDHasPrefix))
-	}
-	if i.RequestorIDHasSuffix != nil {
-		predicates = append(predicates, invite.RequestorIDHasSuffix(*i.RequestorIDHasSuffix))
-	}
-	if i.RequestorIDIsNil {
-		predicates = append(predicates, invite.RequestorIDIsNil())
-	}
-	if i.RequestorIDNotNil {
-		predicates = append(predicates, invite.RequestorIDNotNil())
-	}
-	if i.RequestorIDEqualFold != nil {
-		predicates = append(predicates, invite.RequestorIDEqualFold(*i.RequestorIDEqualFold))
-	}
-	if i.RequestorIDContainsFold != nil {
-		predicates = append(predicates, invite.RequestorIDContainsFold(*i.RequestorIDContainsFold))
-	}
 	if i.OwnershipTransfer != nil {
 		predicates = append(predicates, invite.OwnershipTransferEQ(*i.OwnershipTransfer))
 	}
@@ -35635,6 +35915,7 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -35671,6 +35952,7 @@ func (i *InviteWhereInput) P() (predicate.Invite, error) {
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -36393,6 +36675,7 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -36411,6 +36694,7 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 	}
 	if len(i.HasScheduledJobWith) > 0 {
 		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobWith))
+		with = append(with, scheduledjob.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobWith {
 			p, err := w.P()
 			if err != nil {
@@ -36429,6 +36713,7 @@ func (i *JobResultWhereInput) P() (predicate.JobResult, error) {
 	}
 	if len(i.HasFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -37353,6 +37638,7 @@ func (i *JobRunnerWhereInput) P() (predicate.JobRunner, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -37371,6 +37657,7 @@ func (i *JobRunnerWhereInput) P() (predicate.JobRunner, error) {
 	}
 	if len(i.HasJobRunnerTokensWith) > 0 {
 		with := make([]predicate.JobRunnerToken, 0, len(i.HasJobRunnerTokensWith))
+		with = append(with, jobrunnertoken.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnerTokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -37903,6 +38190,7 @@ func (i *JobRunnerRegistrationTokenWhereInput) P() (predicate.JobRunnerRegistrat
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -37921,6 +38209,7 @@ func (i *JobRunnerRegistrationTokenWhereInput) P() (predicate.JobRunnerRegistrat
 	}
 	if len(i.HasJobRunnerWith) > 0 {
 		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnerWith))
+		with = append(with, jobrunner.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -38617,6 +38906,7 @@ func (i *JobRunnerTokenWhereInput) P() (predicate.JobRunnerToken, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -38635,6 +38925,7 @@ func (i *JobRunnerTokenWhereInput) P() (predicate.JobRunnerToken, error) {
 	}
 	if len(i.HasJobRunnersWith) > 0 {
 		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnersWith))
+		with = append(with, jobrunner.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnersWith {
 			p, err := w.P()
 			if err != nil {
@@ -39393,6 +39684,7 @@ func (i *JobTemplateWhereInput) P() (predicate.JobTemplate, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -39411,6 +39703,7 @@ func (i *JobTemplateWhereInput) P() (predicate.JobTemplate, error) {
 	}
 	if len(i.HasScheduledJobsWith) > 0 {
 		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobsWith))
+		with = append(with, scheduledjob.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobsWith {
 			p, err := w.P()
 			if err != nil {
@@ -39881,6 +40174,7 @@ func (i *MappableDomainWhereInput) P() (predicate.MappableDomain, error) {
 	}
 	if len(i.HasCustomDomainsWith) > 0 {
 		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainsWith))
+		with = append(with, customdomain.DeletedAtIsNil())
 		for _, w := range i.HasCustomDomainsWith {
 			p, err := w.P()
 			if err != nil {
@@ -40619,6 +40913,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -40637,6 +40932,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -40655,6 +40951,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -40673,6 +40970,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasFromControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasFromControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasFromControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -40691,6 +40989,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasToControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasToControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasToControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -40709,6 +41008,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasFromSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasFromSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasFromSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -40727,6 +41027,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	}
 	if len(i.HasToSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasToSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasToSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -41553,6 +41854,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -41571,6 +41873,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -41589,6 +41892,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -41607,6 +41911,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -41625,6 +41930,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasSatisfiesWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasSatisfiesWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasSatisfiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -41643,6 +41949,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -41661,6 +41968,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -41679,6 +41987,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -41806,6 +42115,23 @@ type NoteWhereInput struct {
 	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
+	// "title" field predicates.
+	Title             *string  `json:"title,omitempty"`
+	TitleNEQ          *string  `json:"titleNEQ,omitempty"`
+	TitleIn           []string `json:"titleIn,omitempty"`
+	TitleNotIn        []string `json:"titleNotIn,omitempty"`
+	TitleGT           *string  `json:"titleGT,omitempty"`
+	TitleGTE          *string  `json:"titleGTE,omitempty"`
+	TitleLT           *string  `json:"titleLT,omitempty"`
+	TitleLTE          *string  `json:"titleLTE,omitempty"`
+	TitleContains     *string  `json:"titleContains,omitempty"`
+	TitleHasPrefix    *string  `json:"titleHasPrefix,omitempty"`
+	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
+	TitleIsNil        bool     `json:"titleIsNil,omitempty"`
+	TitleNotNil       bool     `json:"titleNotNil,omitempty"`
+	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
+	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
 
 	// "text" field predicates.
 	Text             *string  `json:"text,omitempty"`
@@ -42257,6 +42583,51 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, note.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
+	if i.Title != nil {
+		predicates = append(predicates, note.TitleEQ(*i.Title))
+	}
+	if i.TitleNEQ != nil {
+		predicates = append(predicates, note.TitleNEQ(*i.TitleNEQ))
+	}
+	if len(i.TitleIn) > 0 {
+		predicates = append(predicates, note.TitleIn(i.TitleIn...))
+	}
+	if len(i.TitleNotIn) > 0 {
+		predicates = append(predicates, note.TitleNotIn(i.TitleNotIn...))
+	}
+	if i.TitleGT != nil {
+		predicates = append(predicates, note.TitleGT(*i.TitleGT))
+	}
+	if i.TitleGTE != nil {
+		predicates = append(predicates, note.TitleGTE(*i.TitleGTE))
+	}
+	if i.TitleLT != nil {
+		predicates = append(predicates, note.TitleLT(*i.TitleLT))
+	}
+	if i.TitleLTE != nil {
+		predicates = append(predicates, note.TitleLTE(*i.TitleLTE))
+	}
+	if i.TitleContains != nil {
+		predicates = append(predicates, note.TitleContains(*i.TitleContains))
+	}
+	if i.TitleHasPrefix != nil {
+		predicates = append(predicates, note.TitleHasPrefix(*i.TitleHasPrefix))
+	}
+	if i.TitleHasSuffix != nil {
+		predicates = append(predicates, note.TitleHasSuffix(*i.TitleHasSuffix))
+	}
+	if i.TitleIsNil {
+		predicates = append(predicates, note.TitleIsNil())
+	}
+	if i.TitleNotNil {
+		predicates = append(predicates, note.TitleNotNil())
+	}
+	if i.TitleEqualFold != nil {
+		predicates = append(predicates, note.TitleEqualFold(*i.TitleEqualFold))
+	}
+	if i.TitleContainsFold != nil {
+		predicates = append(predicates, note.TitleContainsFold(*i.TitleContainsFold))
+	}
 	if i.Text != nil {
 		predicates = append(predicates, note.TextEQ(*i.Text))
 	}
@@ -42447,6 +42818,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -42465,6 +42837,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasTaskWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTaskWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTaskWith {
 			p, err := w.P()
 			if err != nil {
@@ -42483,6 +42856,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasControlWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlWith {
 			p, err := w.P()
 			if err != nil {
@@ -42501,6 +42875,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasSubcontrolWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolWith {
 			p, err := w.P()
 			if err != nil {
@@ -42519,6 +42894,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasProcedureWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProcedureWith {
 			p, err := w.P()
 			if err != nil {
@@ -42537,6 +42913,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasRiskWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRiskWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRiskWith {
 			p, err := w.P()
 			if err != nil {
@@ -42555,6 +42932,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasInternalPolicyWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyWith {
 			p, err := w.P()
 			if err != nil {
@@ -42573,6 +42951,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -42591,6 +42970,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasTrustCenterWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWith {
 			p, err := w.P()
 			if err != nil {
@@ -42609,6 +42989,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasDiscussionWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionWith {
 			p, err := w.P()
 			if err != nil {
@@ -42627,6 +43008,7 @@ func (i *NoteWhereInput) P() (predicate.Note, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -42897,6 +43279,7 @@ func (i *OnboardingWhereInput) P() (predicate.Onboarding, error) {
 	}
 	if len(i.HasOrganizationWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationWith {
 			p, err := w.P()
 			if err != nil {
@@ -43393,6 +43776,7 @@ func (i *OrgMembershipWhereInput) P() (predicate.OrgMembership, error) {
 	}
 	if len(i.HasOrganizationWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationWith {
 			p, err := w.P()
 			if err != nil {
@@ -43411,6 +43795,7 @@ func (i *OrgMembershipWhereInput) P() (predicate.OrgMembership, error) {
 	}
 	if len(i.HasUserWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUserWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUserWith {
 			p, err := w.P()
 			if err != nil {
@@ -44137,6 +44522,7 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -45177,6 +45563,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasControlCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasControlCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasControlCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45195,6 +45582,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasControlImplementationCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasControlImplementationCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45213,6 +45601,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasControlObjectiveCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasControlObjectiveCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectiveCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45231,6 +45620,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasEvidenceCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEvidenceCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45249,6 +45639,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasAssetCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasAssetCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasAssetCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45267,6 +45658,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasFindingCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasFindingCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasFindingCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45285,6 +45677,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasVulnerabilityCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasVulnerabilityCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilityCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45303,6 +45696,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasGroupCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45321,6 +45715,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasInternalPolicyCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasInternalPolicyCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45339,6 +45734,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasMappedControlCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasMappedControlCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasMappedControlCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45357,6 +45753,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasNarrativeCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasNarrativeCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasNarrativeCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45375,6 +45772,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasProcedureCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasProcedureCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasProcedureCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45393,6 +45791,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasProgramCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasProgramCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasProgramCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45411,6 +45810,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasRiskCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasRiskCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasRiskCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45429,6 +45829,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasScheduledJobCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasScheduledJobCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45447,6 +45848,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasStandardCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasStandardCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasStandardCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45465,6 +45867,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTemplateCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasTemplateCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasTemplateCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45483,6 +45886,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasSubprocessorCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasSubprocessorCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasSubprocessorCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45501,6 +45905,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTrustCenterDocCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasTrustCenterDocCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterDocCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45519,6 +45924,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTrustCenterSubprocessorCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasTrustCenterSubprocessorCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterSubprocessorCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45537,6 +45943,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasActionPlanCreatorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasActionPlanCreatorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanCreatorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45555,6 +45962,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasParentWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasParentWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasParentWith {
 			p, err := w.P()
 			if err != nil {
@@ -45573,6 +45981,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasChildrenWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasChildrenWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasChildrenWith {
 			p, err := w.P()
 			if err != nil {
@@ -45591,6 +46000,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasSettingWith) > 0 {
 		with := make([]predicate.OrganizationSetting, 0, len(i.HasSettingWith))
+		with = append(with, organizationsetting.DeletedAtIsNil())
 		for _, w := range i.HasSettingWith {
 			p, err := w.P()
 			if err != nil {
@@ -45609,6 +46019,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasPersonalAccessTokensWith) > 0 {
 		with := make([]predicate.PersonalAccessToken, 0, len(i.HasPersonalAccessTokensWith))
+		with = append(with, personalaccesstoken.DeletedAtIsNil())
 		for _, w := range i.HasPersonalAccessTokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -45627,6 +46038,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasAPITokensWith) > 0 {
 		with := make([]predicate.APIToken, 0, len(i.HasAPITokensWith))
+		with = append(with, apitoken.DeletedAtIsNil())
 		for _, w := range i.HasAPITokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -45645,6 +46057,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasUsersWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUsersWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUsersWith {
 			p, err := w.P()
 			if err != nil {
@@ -45663,6 +46076,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -45699,6 +46113,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasSecretsWith) > 0 {
 		with := make([]predicate.Hush, 0, len(i.HasSecretsWith))
+		with = append(with, hush.DeletedAtIsNil())
 		for _, w := range i.HasSecretsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45717,6 +46132,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasAvatarFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasAvatarFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasAvatarFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -45735,6 +46151,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45753,6 +46170,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTemplatesWith) > 0 {
 		with := make([]predicate.Template, 0, len(i.HasTemplatesWith))
+		with = append(with, template.DeletedAtIsNil())
 		for _, w := range i.HasTemplatesWith {
 			p, err := w.P()
 			if err != nil {
@@ -45771,6 +46189,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45789,6 +46208,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasDocumentsWith) > 0 {
 		with := make([]predicate.DocumentData, 0, len(i.HasDocumentsWith))
+		with = append(with, documentdata.DeletedAtIsNil())
 		for _, w := range i.HasDocumentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45807,6 +46227,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasOrgSubscriptionsWith) > 0 {
 		with := make([]predicate.OrgSubscription, 0, len(i.HasOrgSubscriptionsWith))
+		with = append(with, orgsubscription.DeletedAtIsNil())
 		for _, w := range i.HasOrgSubscriptionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45825,6 +46246,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasInvitesWith) > 0 {
 		with := make([]predicate.Invite, 0, len(i.HasInvitesWith))
+		with = append(with, invite.DeletedAtIsNil())
 		for _, w := range i.HasInvitesWith {
 			p, err := w.P()
 			if err != nil {
@@ -45843,6 +46265,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasSubscribersWith) > 0 {
 		with := make([]predicate.Subscriber, 0, len(i.HasSubscribersWith))
+		with = append(with, subscriber.DeletedAtIsNil())
 		for _, w := range i.HasSubscribersWith {
 			p, err := w.P()
 			if err != nil {
@@ -45861,6 +46284,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -45879,6 +46303,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasEntityTypesWith) > 0 {
 		with := make([]predicate.EntityType, 0, len(i.HasEntityTypesWith))
+		with = append(with, entitytype.DeletedAtIsNil())
 		for _, w := range i.HasEntityTypesWith {
 			p, err := w.P()
 			if err != nil {
@@ -45897,6 +46322,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasContactsWith) > 0 {
 		with := make([]predicate.Contact, 0, len(i.HasContactsWith))
+		with = append(with, contact.DeletedAtIsNil())
 		for _, w := range i.HasContactsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45915,6 +46341,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasNotesWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasNotesWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasNotesWith {
 			p, err := w.P()
 			if err != nil {
@@ -45933,6 +46360,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -45951,6 +46379,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -45969,6 +46398,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -45987,6 +46417,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46005,6 +46436,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -46023,6 +46455,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46041,6 +46474,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46059,6 +46493,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46077,6 +46512,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46095,6 +46531,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasControlImplementationsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46113,6 +46550,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasMappedControlsWith) > 0 {
 		with := make([]predicate.MappedControl, 0, len(i.HasMappedControlsWith))
+		with = append(with, mappedcontrol.DeletedAtIsNil())
 		for _, w := range i.HasMappedControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46131,6 +46569,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -46149,6 +46588,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasStandardsWith) > 0 {
 		with := make([]predicate.Standard, 0, len(i.HasStandardsWith))
+		with = append(with, standard.DeletedAtIsNil())
 		for _, w := range i.HasStandardsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46167,6 +46607,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -46185,6 +46626,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasCustomDomainsWith) > 0 {
 		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainsWith))
+		with = append(with, customdomain.DeletedAtIsNil())
 		for _, w := range i.HasCustomDomainsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46203,6 +46645,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasJobRunnersWith) > 0 {
 		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnersWith))
+		with = append(with, jobrunner.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnersWith {
 			p, err := w.P()
 			if err != nil {
@@ -46221,6 +46664,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasJobRunnerTokensWith) > 0 {
 		with := make([]predicate.JobRunnerToken, 0, len(i.HasJobRunnerTokensWith))
+		with = append(with, jobrunnertoken.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnerTokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -46239,6 +46683,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasJobRunnerRegistrationTokensWith) > 0 {
 		with := make([]predicate.JobRunnerRegistrationToken, 0, len(i.HasJobRunnerRegistrationTokensWith))
+		with = append(with, jobrunnerregistrationtoken.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnerRegistrationTokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -46257,6 +46702,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasDNSVerificationsWith) > 0 {
 		with := make([]predicate.DNSVerification, 0, len(i.HasDNSVerificationsWith))
+		with = append(with, dnsverification.DeletedAtIsNil())
 		for _, w := range i.HasDNSVerificationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46275,6 +46721,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasJobTemplatesWith) > 0 {
 		with := make([]predicate.JobTemplate, 0, len(i.HasJobTemplatesWith))
+		with = append(with, jobtemplate.DeletedAtIsNil())
 		for _, w := range i.HasJobTemplatesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46293,6 +46740,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasScheduledJobsWith) > 0 {
 		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobsWith))
+		with = append(with, scheduledjob.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46311,6 +46759,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasJobResultsWith) > 0 {
 		with := make([]predicate.JobResult, 0, len(i.HasJobResultsWith))
+		with = append(with, jobresult.DeletedAtIsNil())
 		for _, w := range i.HasJobResultsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46329,6 +46778,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasScheduledJobRunsWith) > 0 {
 		with := make([]predicate.ScheduledJobRun, 0, len(i.HasScheduledJobRunsWith))
+		with = append(with, scheduledjobrun.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobRunsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46347,6 +46797,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTrustCentersWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCentersWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCentersWith {
 			p, err := w.P()
 			if err != nil {
@@ -46365,6 +46816,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46383,6 +46835,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -46401,6 +46854,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasSubprocessorsWith) > 0 {
 		with := make([]predicate.Subprocessor, 0, len(i.HasSubprocessorsWith))
+		with = append(with, subprocessor.DeletedAtIsNil())
 		for _, w := range i.HasSubprocessorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46419,6 +46873,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasExportsWith) > 0 {
 		with := make([]predicate.Export, 0, len(i.HasExportsWith))
+		with = append(with, export.DeletedAtIsNil())
 		for _, w := range i.HasExportsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46437,6 +46892,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTrustCenterWatermarkConfigsWith) > 0 {
 		with := make([]predicate.TrustCenterWatermarkConfig, 0, len(i.HasTrustCenterWatermarkConfigsWith))
+		with = append(with, trustcenterwatermarkconfig.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWatermarkConfigsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46455,6 +46911,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasAssessmentsWith) > 0 {
 		with := make([]predicate.Assessment, 0, len(i.HasAssessmentsWith))
+		with = append(with, assessment.DeletedAtIsNil())
 		for _, w := range i.HasAssessmentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46473,6 +46930,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasAssessmentResponsesWith) > 0 {
 		with := make([]predicate.AssessmentResponse, 0, len(i.HasAssessmentResponsesWith))
+		with = append(with, assessmentresponse.DeletedAtIsNil())
 		for _, w := range i.HasAssessmentResponsesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46491,6 +46949,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasCustomTypeEnumsWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasCustomTypeEnumsWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasCustomTypeEnumsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46509,6 +46968,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasTagDefinitionsWith) > 0 {
 		with := make([]predicate.TagDefinition, 0, len(i.HasTagDefinitionsWith))
+		with = append(with, tagdefinition.DeletedAtIsNil())
 		for _, w := range i.HasTagDefinitionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46527,6 +46987,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasRemediationsWith) > 0 {
 		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
 		for _, w := range i.HasRemediationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46545,6 +47006,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46563,6 +47025,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasReviewsWith) > 0 {
 		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
 		for _, w := range i.HasReviewsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46581,6 +47044,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasVulnerabilitiesWith) > 0 {
 		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46599,6 +47063,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasWorkflowDefinitionsWith) > 0 {
 		with := make([]predicate.WorkflowDefinition, 0, len(i.HasWorkflowDefinitionsWith))
+		with = append(with, workflowdefinition.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowDefinitionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46617,6 +47082,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasWorkflowInstancesWith) > 0 {
 		with := make([]predicate.WorkflowInstance, 0, len(i.HasWorkflowInstancesWith))
+		with = append(with, workflowinstance.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowInstancesWith {
 			p, err := w.P()
 			if err != nil {
@@ -46635,6 +47101,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasWorkflowEventsWith) > 0 {
 		with := make([]predicate.WorkflowEvent, 0, len(i.HasWorkflowEventsWith))
+		with = append(with, workflowevent.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowEventsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46653,6 +47120,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasWorkflowAssignmentsWith) > 0 {
 		with := make([]predicate.WorkflowAssignment, 0, len(i.HasWorkflowAssignmentsWith))
+		with = append(with, workflowassignment.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowAssignmentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46671,6 +47139,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasWorkflowAssignmentTargetsWith) > 0 {
 		with := make([]predicate.WorkflowAssignmentTarget, 0, len(i.HasWorkflowAssignmentTargetsWith))
+		with = append(with, workflowassignmenttarget.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowAssignmentTargetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -46779,6 +47248,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	}
 	if len(i.HasDiscussionsWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -48149,6 +48619,7 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	}
 	if len(i.HasOrganizationWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationWith {
 			p, err := w.P()
 			if err != nil {
@@ -48167,6 +48638,7 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -48859,6 +49331,7 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasOwnerWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -48877,6 +49350,7 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 	}
 	if len(i.HasOrganizationsWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationsWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50259,6 +50733,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -50277,6 +50752,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50295,6 +50771,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50313,6 +50790,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasApproverWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasApproverWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasApproverWith {
 			p, err := w.P()
 			if err != nil {
@@ -50331,6 +50809,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasDelegateWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasDelegateWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasDelegateWith {
 			p, err := w.P()
 			if err != nil {
@@ -50349,6 +50828,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasProcedureKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasProcedureKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasProcedureKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -50367,6 +50847,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50385,6 +50866,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50403,6 +50885,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -50421,6 +50904,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50439,6 +50923,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -50457,6 +50942,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -50475,6 +50961,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -50493,6 +50980,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50511,6 +50999,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasDiscussionsWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -50529,6 +51018,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	}
 	if len(i.HasFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -51783,6 +52273,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -51801,6 +52292,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -51819,6 +52311,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -51837,6 +52330,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -51855,6 +52349,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasProgramKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasProgramKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasProgramKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -51873,6 +52368,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -51891,6 +52387,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -51909,6 +52406,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -51927,6 +52425,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -51945,6 +52444,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -51963,6 +52463,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -51981,6 +52482,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -51999,6 +52501,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasNotesWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasNotesWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasNotesWith {
 			p, err := w.P()
 			if err != nil {
@@ -52017,6 +52520,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -52035,6 +52539,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -52053,6 +52558,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -52071,6 +52577,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -52089,6 +52596,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasUsersWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUsersWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUsersWith {
 			p, err := w.P()
 			if err != nil {
@@ -52107,6 +52615,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	}
 	if len(i.HasProgramOwnerWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasProgramOwnerWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasProgramOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -52617,6 +53126,7 @@ func (i *ProgramMembershipWhereInput) P() (predicate.ProgramMembership, error) {
 	}
 	if len(i.HasProgramWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramWith {
 			p, err := w.P()
 			if err != nil {
@@ -52635,6 +53145,7 @@ func (i *ProgramMembershipWhereInput) P() (predicate.ProgramMembership, error) {
 	}
 	if len(i.HasUserWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUserWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUserWith {
 			p, err := w.P()
 			if err != nil {
@@ -54379,6 +54890,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -54397,6 +54909,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54415,6 +54928,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54433,6 +54947,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -54451,6 +54966,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54469,6 +54985,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54487,6 +55004,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasVulnerabilitiesWith) > 0 {
 		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -54505,6 +55023,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -54523,6 +55042,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -54541,6 +55061,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54559,6 +55080,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54577,6 +55099,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -54595,6 +55118,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54613,6 +55137,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54631,6 +55156,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -54649,6 +55175,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasReviewsWith) > 0 {
 		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
 		for _, w := range i.HasReviewsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54667,6 +55194,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -54685,6 +55213,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -56203,6 +56732,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -56221,6 +56751,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56239,6 +56770,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56257,6 +56789,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -56275,6 +56808,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56293,6 +56827,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56311,6 +56846,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasVulnerabilitiesWith) > 0 {
 		with := make([]predicate.Vulnerability, 0, len(i.HasVulnerabilitiesWith))
+		with = append(with, vulnerability.DeletedAtIsNil())
 		for _, w := range i.HasVulnerabilitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -56329,6 +56865,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -56347,6 +56884,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasRemediationsWith) > 0 {
 		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
 		for _, w := range i.HasRemediationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56365,6 +56903,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56383,6 +56922,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56401,6 +56941,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -56419,6 +56960,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56437,6 +56979,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56455,6 +56998,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -56473,6 +57017,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -56491,6 +57036,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasReviewerWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasReviewerWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasReviewerWith {
 			p, err := w.P()
 			if err != nil {
@@ -56509,6 +57055,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -56527,6 +57074,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -57813,6 +58361,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -57831,6 +58380,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -57849,6 +58399,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -57867,6 +58418,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -57885,6 +58437,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasRiskKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasRiskKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasRiskKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -57903,6 +58456,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasRiskCategoryWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasRiskCategoryWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasRiskCategoryWith {
 			p, err := w.P()
 			if err != nil {
@@ -57921,6 +58475,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -57939,6 +58494,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -57957,6 +58513,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -57975,6 +58532,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -57993,6 +58551,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58011,6 +58570,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -58029,6 +58589,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -58047,6 +58608,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58065,6 +58627,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -58083,6 +58646,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -58101,6 +58665,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasStakeholderWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasStakeholderWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasStakeholderWith {
 			p, err := w.P()
 			if err != nil {
@@ -58119,6 +58684,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasDelegateWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasDelegateWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasDelegateWith {
 			p, err := w.P()
 			if err != nil {
@@ -58137,6 +58703,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58155,6 +58722,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	}
 	if len(i.HasDiscussionsWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58689,6 +59257,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -58707,6 +59276,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58725,6 +59295,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58743,6 +59314,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -58761,6 +59333,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -58779,6 +59352,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -59399,6 +59973,7 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -59417,6 +59992,7 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	}
 	if len(i.HasJobTemplateWith) > 0 {
 		with := make([]predicate.JobTemplate, 0, len(i.HasJobTemplateWith))
+		with = append(with, jobtemplate.DeletedAtIsNil())
 		for _, w := range i.HasJobTemplateWith {
 			p, err := w.P()
 			if err != nil {
@@ -59435,6 +60011,7 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -59453,6 +60030,7 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -59471,6 +60049,7 @@ func (i *ScheduledJobWhereInput) P() (predicate.ScheduledJob, error) {
 	}
 	if len(i.HasJobRunnerWith) > 0 {
 		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnerWith))
+		with = append(with, jobrunner.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -60117,6 +60696,7 @@ func (i *ScheduledJobRunWhereInput) P() (predicate.ScheduledJobRun, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -60135,6 +60715,7 @@ func (i *ScheduledJobRunWhereInput) P() (predicate.ScheduledJobRun, error) {
 	}
 	if len(i.HasScheduledJobWith) > 0 {
 		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobWith))
+		with = append(with, scheduledjob.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobWith {
 			p, err := w.P()
 			if err != nil {
@@ -60153,6 +60734,7 @@ func (i *ScheduledJobRunWhereInput) P() (predicate.ScheduledJobRun, error) {
 	}
 	if len(i.HasJobRunnerWith) > 0 {
 		with := make([]predicate.JobRunner, 0, len(i.HasJobRunnerWith))
+		with = append(with, jobrunner.DeletedAtIsNil())
 		for _, w := range i.HasJobRunnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -61471,6 +62053,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -61489,6 +62072,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -61507,6 +62091,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	}
 	if len(i.HasTrustCenterCompliancesWith) > 0 {
 		with := make([]predicate.TrustCenterCompliance, 0, len(i.HasTrustCenterCompliancesWith))
+		with = append(with, trustcentercompliance.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterCompliancesWith {
 			p, err := w.P()
 			if err != nil {
@@ -61525,6 +62110,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	}
 	if len(i.HasTrustCenterDocsWith) > 0 {
 		with := make([]predicate.TrustCenterDoc, 0, len(i.HasTrustCenterDocsWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterDocsWith {
 			p, err := w.P()
 			if err != nil {
@@ -61543,6 +62129,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	}
 	if len(i.HasLogoFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasLogoFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -63281,6 +63868,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -63299,6 +63887,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -63317,6 +63906,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -63335,6 +63925,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasNarrativesWith) > 0 {
 		with := make([]predicate.Narrative, 0, len(i.HasNarrativesWith))
+		with = append(with, narrative.DeletedAtIsNil())
 		for _, w := range i.HasNarrativesWith {
 			p, err := w.P()
 			if err != nil {
@@ -63353,6 +63944,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -63371,6 +63963,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -63389,6 +63982,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -63407,6 +64001,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -63425,6 +64020,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -63443,6 +64039,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasDiscussionsWith) > 0 {
 		with := make([]predicate.Discussion, 0, len(i.HasDiscussionsWith))
+		with = append(with, discussion.DeletedAtIsNil())
 		for _, w := range i.HasDiscussionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -63461,6 +64058,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasControlOwnerWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasControlOwnerWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasControlOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -63479,6 +64077,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasDelegateWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasDelegateWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasDelegateWith {
 			p, err := w.P()
 			if err != nil {
@@ -63497,6 +64096,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasResponsiblePartyWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasResponsiblePartyWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasResponsiblePartyWith {
 			p, err := w.P()
 			if err != nil {
@@ -63515,6 +64115,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -63533,6 +64134,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasSubcontrolKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasSubcontrolKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -63551,6 +64153,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasControlWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlWith {
 			p, err := w.P()
 			if err != nil {
@@ -63569,6 +64172,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasControlImplementationsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -63587,6 +64191,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	}
 	if len(i.HasScheduledJobsWith) > 0 {
 		with := make([]predicate.ScheduledJob, 0, len(i.HasScheduledJobsWith))
+		with = append(with, scheduledjob.DeletedAtIsNil())
 		for _, w := range i.HasScheduledJobsWith {
 			p, err := w.P()
 			if err != nil {
@@ -64419,6 +65024,7 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -64437,6 +65043,7 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 	}
 	if len(i.HasLogoFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasLogoFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -64455,6 +65062,7 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 	}
 	if len(i.HasTrustCenterSubprocessorsWith) > 0 {
 		with := make([]predicate.TrustCenterSubprocessor, 0, len(i.HasTrustCenterSubprocessorsWith))
+		with = append(with, trustcentersubprocessor.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterSubprocessorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -65073,6 +65681,7 @@ func (i *SubscriberWhereInput) P() (predicate.Subscriber, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -65481,6 +66090,7 @@ func (i *TFASettingWhereInput) P() (predicate.TFASetting, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasOwnerWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -66287,6 +66897,7 @@ func (i *TagDefinitionWhereInput) P() (predicate.TagDefinition, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -67437,6 +68048,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -67455,6 +68067,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasTaskKindWith) > 0 {
 		with := make([]predicate.CustomTypeEnum, 0, len(i.HasTaskKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
 		for _, w := range i.HasTaskKindWith {
 			p, err := w.P()
 			if err != nil {
@@ -67473,6 +68086,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasAssignerWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasAssignerWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasAssignerWith {
 			p, err := w.P()
 			if err != nil {
@@ -67491,6 +68105,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasAssigneeWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasAssigneeWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasAssigneeWith {
 			p, err := w.P()
 			if err != nil {
@@ -67509,6 +68124,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -67527,6 +68143,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -67545,6 +68162,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasInternalPoliciesWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPoliciesWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPoliciesWith {
 			p, err := w.P()
 			if err != nil {
@@ -67563,6 +68181,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasProceduresWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProceduresWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProceduresWith {
 			p, err := w.P()
 			if err != nil {
@@ -67581,6 +68200,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -67599,6 +68219,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -67617,6 +68238,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasControlObjectivesWith) > 0 {
 		with := make([]predicate.ControlObjective, 0, len(i.HasControlObjectivesWith))
+		with = append(with, controlobjective.DeletedAtIsNil())
 		for _, w := range i.HasControlObjectivesWith {
 			p, err := w.P()
 			if err != nil {
@@ -67635,6 +68257,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -67653,6 +68276,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -67671,6 +68295,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasControlImplementationsWith) > 0 {
 		with := make([]predicate.ControlImplementation, 0, len(i.HasControlImplementationsWith))
+		with = append(with, controlimplementation.DeletedAtIsNil())
 		for _, w := range i.HasControlImplementationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -67689,6 +68314,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -67707,6 +68333,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -67743,6 +68370,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasParentWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasParentWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasParentWith {
 			p, err := w.P()
 			if err != nil {
@@ -67761,6 +68389,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -68565,6 +69194,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -68583,6 +69213,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	}
 	if len(i.HasDocumentsWith) > 0 {
 		with := make([]predicate.DocumentData, 0, len(i.HasDocumentsWith))
+		with = append(with, documentdata.DeletedAtIsNil())
 		for _, w := range i.HasDocumentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -68601,6 +69232,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -68619,6 +69251,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	}
 	if len(i.HasTrustCenterWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWith {
 			p, err := w.P()
 			if err != nil {
@@ -68637,6 +69270,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	}
 	if len(i.HasAssessmentsWith) > 0 {
 		with := make([]predicate.Assessment, 0, len(i.HasAssessmentsWith))
+		with = append(with, assessment.DeletedAtIsNil())
 		for _, w := range i.HasAssessmentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -68864,6 +69498,14 @@ type TrustCenterWhereInput struct {
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
 
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
 	// "custom_domain" edge predicates.
 	HasCustomDomain     *bool                     `json:"hasCustomDomain,omitempty"`
 	HasCustomDomainWith []*CustomDomainWhereInput `json:"hasCustomDomainWith,omitempty"`
@@ -68904,9 +69546,13 @@ type TrustCenterWhereInput struct {
 	HasPosts     *bool             `json:"hasPosts,omitempty"`
 	HasPostsWith []*NoteWhereInput `json:"hasPostsWith,omitempty"`
 
-	// "trustcenter_entities" edge predicates.
-	HasTrustcenterEntities     *bool                          `json:"hasTrustcenterEntities,omitempty"`
-	HasTrustcenterEntitiesWith []*TrustcenterEntityWhereInput `json:"hasTrustcenterEntitiesWith,omitempty"`
+	// "trust_center_entities" edge predicates.
+	HasTrustCenterEntities     *bool                          `json:"hasTrustCenterEntities,omitempty"`
+	HasTrustCenterEntitiesWith []*TrustCenterEntityWhereInput `json:"hasTrustCenterEntitiesWith,omitempty"`
+
+	// "trust_center_nda_requests" edge predicates.
+	HasTrustCenterNdaRequests     *bool                              `json:"hasTrustCenterNdaRequests,omitempty"`
+	HasTrustCenterNdaRequestsWith []*TrustCenterNDARequestWhereInput `json:"hasTrustCenterNdaRequestsWith,omitempty"`
 }
 
 // AddPredicates adds custom predicates to the where input to be used during the filtering phase.
@@ -69503,6 +70149,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -69511,6 +70158,44 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcenter.HasOwnerWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := trustcenter.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenter.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasEditorsWith(with...))
 	}
 	if i.HasCustomDomain != nil {
 		p := trustcenter.HasCustomDomain()
@@ -69521,6 +70206,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasCustomDomainWith) > 0 {
 		with := make([]predicate.CustomDomain, 0, len(i.HasCustomDomainWith))
+		with = append(with, customdomain.DeletedAtIsNil())
 		for _, w := range i.HasCustomDomainWith {
 			p, err := w.P()
 			if err != nil {
@@ -69539,6 +70225,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasPreviewDomainWith) > 0 {
 		with := make([]predicate.CustomDomain, 0, len(i.HasPreviewDomainWith))
+		with = append(with, customdomain.DeletedAtIsNil())
 		for _, w := range i.HasPreviewDomainWith {
 			p, err := w.P()
 			if err != nil {
@@ -69557,6 +70244,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasSettingWith) > 0 {
 		with := make([]predicate.TrustCenterSetting, 0, len(i.HasSettingWith))
+		with = append(with, trustcentersetting.DeletedAtIsNil())
 		for _, w := range i.HasSettingWith {
 			p, err := w.P()
 			if err != nil {
@@ -69575,6 +70263,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasPreviewSettingWith) > 0 {
 		with := make([]predicate.TrustCenterSetting, 0, len(i.HasPreviewSettingWith))
+		with = append(with, trustcentersetting.DeletedAtIsNil())
 		for _, w := range i.HasPreviewSettingWith {
 			p, err := w.P()
 			if err != nil {
@@ -69593,6 +70282,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasWatermarkConfigWith) > 0 {
 		with := make([]predicate.TrustCenterWatermarkConfig, 0, len(i.HasWatermarkConfigWith))
+		with = append(with, trustcenterwatermarkconfig.DeletedAtIsNil())
 		for _, w := range i.HasWatermarkConfigWith {
 			p, err := w.P()
 			if err != nil {
@@ -69611,6 +70301,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasTrustCenterSubprocessorsWith) > 0 {
 		with := make([]predicate.TrustCenterSubprocessor, 0, len(i.HasTrustCenterSubprocessorsWith))
+		with = append(with, trustcentersubprocessor.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterSubprocessorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -69629,6 +70320,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasTrustCenterDocsWith) > 0 {
 		with := make([]predicate.TrustCenterDoc, 0, len(i.HasTrustCenterDocsWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterDocsWith {
 			p, err := w.P()
 			if err != nil {
@@ -69647,6 +70339,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasTrustCenterCompliancesWith) > 0 {
 		with := make([]predicate.TrustCenterCompliance, 0, len(i.HasTrustCenterCompliancesWith))
+		with = append(with, trustcentercompliance.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterCompliancesWith {
 			p, err := w.P()
 			if err != nil {
@@ -69665,6 +70358,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasTemplatesWith) > 0 {
 		with := make([]predicate.Template, 0, len(i.HasTemplatesWith))
+		with = append(with, template.DeletedAtIsNil())
 		for _, w := range i.HasTemplatesWith {
 			p, err := w.P()
 			if err != nil {
@@ -69683,6 +70377,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	}
 	if len(i.HasPostsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasPostsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasPostsWith {
 			p, err := w.P()
 			if err != nil {
@@ -69692,23 +70387,43 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 		}
 		predicates = append(predicates, trustcenter.HasPostsWith(with...))
 	}
-	if i.HasTrustcenterEntities != nil {
-		p := trustcenter.HasTrustcenterEntities()
-		if !*i.HasTrustcenterEntities {
+	if i.HasTrustCenterEntities != nil {
+		p := trustcenter.HasTrustCenterEntities()
+		if !*i.HasTrustCenterEntities {
 			p = trustcenter.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasTrustcenterEntitiesWith) > 0 {
-		with := make([]predicate.TrustcenterEntity, 0, len(i.HasTrustcenterEntitiesWith))
-		for _, w := range i.HasTrustcenterEntitiesWith {
+	if len(i.HasTrustCenterEntitiesWith) > 0 {
+		with := make([]predicate.TrustCenterEntity, 0, len(i.HasTrustCenterEntitiesWith))
+		with = append(with, trustcenterentity.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterEntitiesWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustcenterEntitiesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterEntitiesWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, trustcenter.HasTrustcenterEntitiesWith(with...))
+		predicates = append(predicates, trustcenter.HasTrustCenterEntitiesWith(with...))
+	}
+	if i.HasTrustCenterNdaRequests != nil {
+		p := trustcenter.HasTrustCenterNdaRequests()
+		if !*i.HasTrustCenterNdaRequests {
+			p = trustcenter.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterNdaRequestsWith) > 0 {
+		with := make([]predicate.TrustCenterNDARequest, 0, len(i.HasTrustCenterNdaRequestsWith))
+		with = append(with, trustcenterndarequest.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterNdaRequestsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterNdaRequestsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenter.HasTrustCenterNdaRequestsWith(with...))
 	}
 	switch len(predicates) {
 	case 0:
@@ -69828,6 +70543,14 @@ type TrustCenterComplianceWhereInput struct {
 	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -70174,6 +70897,44 @@ func (i *TrustCenterComplianceWhereInput) P() (predicate.TrustCenterCompliance, 
 		predicates = append(predicates, trustcentercompliance.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
 	}
 
+	if i.HasBlockedGroups != nil {
+		p := trustcentercompliance.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcentercompliance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentercompliance.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcentercompliance.HasEditors()
+		if !*i.HasEditors {
+			p = trustcentercompliance.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentercompliance.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcentercompliance.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -70183,6 +70944,7 @@ func (i *TrustCenterComplianceWhereInput) P() (predicate.TrustCenterCompliance, 
 	}
 	if len(i.HasTrustCenterWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWith {
 			p, err := w.P()
 			if err != nil {
@@ -70201,6 +70963,7 @@ func (i *TrustCenterComplianceWhereInput) P() (predicate.TrustCenterCompliance, 
 	}
 	if len(i.HasStandardWith) > 0 {
 		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
+		with = append(with, standard.DeletedAtIsNil())
 		for _, w := range i.HasStandardWith {
 			p, err := w.P()
 			if err != nil {
@@ -70297,6 +71060,40 @@ type TrustCenterDocWhereInput struct {
 	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
 	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
 
+	// "trust_center_doc_kind_name" field predicates.
+	TrustCenterDocKindName             *string  `json:"trustCenterDocKindName,omitempty"`
+	TrustCenterDocKindNameNEQ          *string  `json:"trustCenterDocKindNameNEQ,omitempty"`
+	TrustCenterDocKindNameIn           []string `json:"trustCenterDocKindNameIn,omitempty"`
+	TrustCenterDocKindNameNotIn        []string `json:"trustCenterDocKindNameNotIn,omitempty"`
+	TrustCenterDocKindNameGT           *string  `json:"trustCenterDocKindNameGT,omitempty"`
+	TrustCenterDocKindNameGTE          *string  `json:"trustCenterDocKindNameGTE,omitempty"`
+	TrustCenterDocKindNameLT           *string  `json:"trustCenterDocKindNameLT,omitempty"`
+	TrustCenterDocKindNameLTE          *string  `json:"trustCenterDocKindNameLTE,omitempty"`
+	TrustCenterDocKindNameContains     *string  `json:"trustCenterDocKindNameContains,omitempty"`
+	TrustCenterDocKindNameHasPrefix    *string  `json:"trustCenterDocKindNameHasPrefix,omitempty"`
+	TrustCenterDocKindNameHasSuffix    *string  `json:"trustCenterDocKindNameHasSuffix,omitempty"`
+	TrustCenterDocKindNameIsNil        bool     `json:"trustCenterDocKindNameIsNil,omitempty"`
+	TrustCenterDocKindNameNotNil       bool     `json:"trustCenterDocKindNameNotNil,omitempty"`
+	TrustCenterDocKindNameEqualFold    *string  `json:"trustCenterDocKindNameEqualFold,omitempty"`
+	TrustCenterDocKindNameContainsFold *string  `json:"trustCenterDocKindNameContainsFold,omitempty"`
+
+	// "trust_center_doc_kind_id" field predicates.
+	TrustCenterDocKindID             *string  `json:"trustCenterDocKindID,omitempty"`
+	TrustCenterDocKindIDNEQ          *string  `json:"trustCenterDocKindIDNEQ,omitempty"`
+	TrustCenterDocKindIDIn           []string `json:"trustCenterDocKindIDIn,omitempty"`
+	TrustCenterDocKindIDNotIn        []string `json:"trustCenterDocKindIDNotIn,omitempty"`
+	TrustCenterDocKindIDGT           *string  `json:"trustCenterDocKindIDGT,omitempty"`
+	TrustCenterDocKindIDGTE          *string  `json:"trustCenterDocKindIDGTE,omitempty"`
+	TrustCenterDocKindIDLT           *string  `json:"trustCenterDocKindIDLT,omitempty"`
+	TrustCenterDocKindIDLTE          *string  `json:"trustCenterDocKindIDLTE,omitempty"`
+	TrustCenterDocKindIDContains     *string  `json:"trustCenterDocKindIDContains,omitempty"`
+	TrustCenterDocKindIDHasPrefix    *string  `json:"trustCenterDocKindIDHasPrefix,omitempty"`
+	TrustCenterDocKindIDHasSuffix    *string  `json:"trustCenterDocKindIDHasSuffix,omitempty"`
+	TrustCenterDocKindIDIsNil        bool     `json:"trustCenterDocKindIDIsNil,omitempty"`
+	TrustCenterDocKindIDNotNil       bool     `json:"trustCenterDocKindIDNotNil,omitempty"`
+	TrustCenterDocKindIDEqualFold    *string  `json:"trustCenterDocKindIDEqualFold,omitempty"`
+	TrustCenterDocKindIDContainsFold *string  `json:"trustCenterDocKindIDContainsFold,omitempty"`
+
 	// "trust_center_id" field predicates.
 	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
 	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
@@ -70328,21 +71125,6 @@ type TrustCenterDocWhereInput struct {
 	TitleHasSuffix    *string  `json:"titleHasSuffix,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
-
-	// "category" field predicates.
-	Category             *string  `json:"category,omitempty"`
-	CategoryNEQ          *string  `json:"categoryNEQ,omitempty"`
-	CategoryIn           []string `json:"categoryIn,omitempty"`
-	CategoryNotIn        []string `json:"categoryNotIn,omitempty"`
-	CategoryGT           *string  `json:"categoryGT,omitempty"`
-	CategoryGTE          *string  `json:"categoryGTE,omitempty"`
-	CategoryLT           *string  `json:"categoryLT,omitempty"`
-	CategoryLTE          *string  `json:"categoryLTE,omitempty"`
-	CategoryContains     *string  `json:"categoryContains,omitempty"`
-	CategoryHasPrefix    *string  `json:"categoryHasPrefix,omitempty"`
-	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
-	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
-	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
 
 	// "file_id" field predicates.
 	FileID             *string  `json:"fileID,omitempty"`
@@ -70416,6 +71198,18 @@ type TrustCenterDocWhereInput struct {
 	StandardIDNotNil       bool     `json:"standardIDNotNil,omitempty"`
 	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
 	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
+
+	// "trust_center_doc_kind" edge predicates.
+	HasTrustCenterDocKind     *bool                       `json:"hasTrustCenterDocKind,omitempty"`
+	HasTrustCenterDocKindWith []*CustomTypeEnumWhereInput `json:"hasTrustCenterDocKindWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -70685,6 +71479,96 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	if i.UpdatedByContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.UpdatedByContainsFold(*i.UpdatedByContainsFold))
 	}
+	if i.TrustCenterDocKindName != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameEQ(*i.TrustCenterDocKindName))
+	}
+	if i.TrustCenterDocKindNameNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNEQ(*i.TrustCenterDocKindNameNEQ))
+	}
+	if len(i.TrustCenterDocKindNameIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameIn(i.TrustCenterDocKindNameIn...))
+	}
+	if len(i.TrustCenterDocKindNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNotIn(i.TrustCenterDocKindNameNotIn...))
+	}
+	if i.TrustCenterDocKindNameGT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameGT(*i.TrustCenterDocKindNameGT))
+	}
+	if i.TrustCenterDocKindNameGTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameGTE(*i.TrustCenterDocKindNameGTE))
+	}
+	if i.TrustCenterDocKindNameLT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameLT(*i.TrustCenterDocKindNameLT))
+	}
+	if i.TrustCenterDocKindNameLTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameLTE(*i.TrustCenterDocKindNameLTE))
+	}
+	if i.TrustCenterDocKindNameContains != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameContains(*i.TrustCenterDocKindNameContains))
+	}
+	if i.TrustCenterDocKindNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameHasPrefix(*i.TrustCenterDocKindNameHasPrefix))
+	}
+	if i.TrustCenterDocKindNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameHasSuffix(*i.TrustCenterDocKindNameHasSuffix))
+	}
+	if i.TrustCenterDocKindNameIsNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameIsNil())
+	}
+	if i.TrustCenterDocKindNameNotNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameNotNil())
+	}
+	if i.TrustCenterDocKindNameEqualFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameEqualFold(*i.TrustCenterDocKindNameEqualFold))
+	}
+	if i.TrustCenterDocKindNameContainsFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindNameContainsFold(*i.TrustCenterDocKindNameContainsFold))
+	}
+	if i.TrustCenterDocKindID != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDEQ(*i.TrustCenterDocKindID))
+	}
+	if i.TrustCenterDocKindIDNEQ != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNEQ(*i.TrustCenterDocKindIDNEQ))
+	}
+	if len(i.TrustCenterDocKindIDIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDIn(i.TrustCenterDocKindIDIn...))
+	}
+	if len(i.TrustCenterDocKindIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNotIn(i.TrustCenterDocKindIDNotIn...))
+	}
+	if i.TrustCenterDocKindIDGT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDGT(*i.TrustCenterDocKindIDGT))
+	}
+	if i.TrustCenterDocKindIDGTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDGTE(*i.TrustCenterDocKindIDGTE))
+	}
+	if i.TrustCenterDocKindIDLT != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDLT(*i.TrustCenterDocKindIDLT))
+	}
+	if i.TrustCenterDocKindIDLTE != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDLTE(*i.TrustCenterDocKindIDLTE))
+	}
+	if i.TrustCenterDocKindIDContains != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDContains(*i.TrustCenterDocKindIDContains))
+	}
+	if i.TrustCenterDocKindIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDHasPrefix(*i.TrustCenterDocKindIDHasPrefix))
+	}
+	if i.TrustCenterDocKindIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDHasSuffix(*i.TrustCenterDocKindIDHasSuffix))
+	}
+	if i.TrustCenterDocKindIDIsNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDIsNil())
+	}
+	if i.TrustCenterDocKindIDNotNil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDNotNil())
+	}
+	if i.TrustCenterDocKindIDEqualFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDEqualFold(*i.TrustCenterDocKindIDEqualFold))
+	}
+	if i.TrustCenterDocKindIDContainsFold != nil {
+		predicates = append(predicates, trustcenterdoc.TrustCenterDocKindIDContainsFold(*i.TrustCenterDocKindIDContainsFold))
+	}
 	if i.TrustCenterID != nil {
 		predicates = append(predicates, trustcenterdoc.TrustCenterIDEQ(*i.TrustCenterID))
 	}
@@ -70768,45 +71652,6 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, trustcenterdoc.TitleContainsFold(*i.TitleContainsFold))
-	}
-	if i.Category != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryEQ(*i.Category))
-	}
-	if i.CategoryNEQ != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryNEQ(*i.CategoryNEQ))
-	}
-	if len(i.CategoryIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.CategoryIn(i.CategoryIn...))
-	}
-	if len(i.CategoryNotIn) > 0 {
-		predicates = append(predicates, trustcenterdoc.CategoryNotIn(i.CategoryNotIn...))
-	}
-	if i.CategoryGT != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryGT(*i.CategoryGT))
-	}
-	if i.CategoryGTE != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryGTE(*i.CategoryGTE))
-	}
-	if i.CategoryLT != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryLT(*i.CategoryLT))
-	}
-	if i.CategoryLTE != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryLTE(*i.CategoryLTE))
-	}
-	if i.CategoryContains != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryContains(*i.CategoryContains))
-	}
-	if i.CategoryHasPrefix != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryHasPrefix(*i.CategoryHasPrefix))
-	}
-	if i.CategoryHasSuffix != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryHasSuffix(*i.CategoryHasSuffix))
-	}
-	if i.CategoryEqualFold != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryEqualFold(*i.CategoryEqualFold))
-	}
-	if i.CategoryContainsFold != nil {
-		predicates = append(predicates, trustcenterdoc.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 	if i.FileID != nil {
 		predicates = append(predicates, trustcenterdoc.FileIDEQ(*i.FileID))
@@ -70992,6 +71837,63 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 		predicates = append(predicates, trustcenterdoc.StandardIDContainsFold(*i.StandardIDContainsFold))
 	}
 
+	if i.HasTrustCenterDocKind != nil {
+		p := trustcenterdoc.HasTrustCenterDocKind()
+		if !*i.HasTrustCenterDocKind {
+			p = trustcenterdoc.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterDocKindWith) > 0 {
+		with := make([]predicate.CustomTypeEnum, 0, len(i.HasTrustCenterDocKindWith))
+		with = append(with, customtypeenum.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterDocKindWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocKindWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterdoc.HasTrustCenterDocKindWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := trustcenterdoc.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterdoc.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterdoc.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterdoc.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterdoc.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterdoc.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterdoc.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -71001,6 +71903,7 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if len(i.HasTrustCenterWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWith {
 			p, err := w.P()
 			if err != nil {
@@ -71019,6 +71922,7 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if len(i.HasStandardWith) > 0 {
 		with := make([]predicate.Standard, 0, len(i.HasStandardWith))
+		with = append(with, standard.DeletedAtIsNil())
 		for _, w := range i.HasStandardWith {
 			p, err := w.P()
 			if err != nil {
@@ -71037,6 +71941,7 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if len(i.HasFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -71055,6 +71960,7 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	}
 	if len(i.HasOriginalFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasOriginalFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasOriginalFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -71071,6 +71977,1533 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 		return predicates[0], nil
 	default:
 		return trustcenterdoc.And(predicates...), nil
+	}
+}
+
+// TrustCenterEntityWhereInput represents a where input for filtering TrustCenterEntity queries.
+type TrustCenterEntityWhereInput struct {
+	Predicates []predicate.TrustCenterEntity  `json:"-"`
+	Not        *TrustCenterEntityWhereInput   `json:"not,omitempty"`
+	Or         []*TrustCenterEntityWhereInput `json:"or,omitempty"`
+	And        []*TrustCenterEntityWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "logo_file_id" field predicates.
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIDNEQ          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIDGT           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIDGTE          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIDLT           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIDLTE          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        bool     `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
+
+	// "url" field predicates.
+	URL             *string  `json:"url,omitempty"`
+	URLNEQ          *string  `json:"urlNEQ,omitempty"`
+	URLIn           []string `json:"urlIn,omitempty"`
+	URLNotIn        []string `json:"urlNotIn,omitempty"`
+	URLGT           *string  `json:"urlGT,omitempty"`
+	URLGTE          *string  `json:"urlGTE,omitempty"`
+	URLLT           *string  `json:"urlLT,omitempty"`
+	URLLTE          *string  `json:"urlLTE,omitempty"`
+	URLContains     *string  `json:"urlContains,omitempty"`
+	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
+	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
+	URLIsNil        bool     `json:"urlIsNil,omitempty"`
+	URLNotNil       bool     `json:"urlNotNil,omitempty"`
+	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
+	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "name" field predicates.
+	Name             *string  `json:"name,omitempty"`
+	NameNEQ          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGT           *string  `json:"nameGT,omitempty"`
+	NameGTE          *string  `json:"nameGTE,omitempty"`
+	NameLT           *string  `json:"nameLT,omitempty"`
+	NameLTE          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "logo_file" edge predicates.
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
+
+	// "trust_center" edge predicates.
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "entity_type" edge predicates.
+	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
+	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TrustCenterEntityWhereInput) AddPredicates(predicates ...predicate.TrustCenterEntity) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TrustCenterEntityWhereInput filter on the TrustCenterEntityQuery builder.
+func (i *TrustCenterEntityWhereInput) Filter(q *TrustCenterEntityQuery) (*TrustCenterEntityQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTrustCenterEntityWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTrustCenterEntityWhereInput is returned in case the TrustCenterEntityWhereInput is empty.
+var ErrEmptyTrustCenterEntityWhereInput = errors.New("generated: empty predicate TrustCenterEntityWhereInput")
+
+// P returns a predicate for filtering trustcenterentities.
+// An error is returned if the input is empty or invalid.
+func (i *TrustCenterEntityWhereInput) P() (predicate.TrustCenterEntity, error) {
+	var predicates []predicate.TrustCenterEntity
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, trustcenterentity.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TrustCenterEntity, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, trustcenterentity.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TrustCenterEntity, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, trustcenterentity.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, trustcenterentity.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, trustcenterentity.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, trustcenterentity.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, trustcenterentity.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, trustcenterentity.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, trustcenterentity.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, trustcenterentity.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, trustcenterentity.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, trustcenterentity.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, trustcenterentity.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, trustcenterentity.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, trustcenterentity.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, trustcenterentity.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, trustcenterentity.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.LogoFileID != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDEQ(*i.LogoFileID))
+	}
+	if i.LogoFileIDNEQ != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDNEQ(*i.LogoFileIDNEQ))
+	}
+	if len(i.LogoFileIDIn) > 0 {
+		predicates = append(predicates, trustcenterentity.LogoFileIDIn(i.LogoFileIDIn...))
+	}
+	if len(i.LogoFileIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.LogoFileIDNotIn(i.LogoFileIDNotIn...))
+	}
+	if i.LogoFileIDGT != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDGT(*i.LogoFileIDGT))
+	}
+	if i.LogoFileIDGTE != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDGTE(*i.LogoFileIDGTE))
+	}
+	if i.LogoFileIDLT != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDLT(*i.LogoFileIDLT))
+	}
+	if i.LogoFileIDLTE != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDLTE(*i.LogoFileIDLTE))
+	}
+	if i.LogoFileIDContains != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDContains(*i.LogoFileIDContains))
+	}
+	if i.LogoFileIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDHasPrefix(*i.LogoFileIDHasPrefix))
+	}
+	if i.LogoFileIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDHasSuffix(*i.LogoFileIDHasSuffix))
+	}
+	if i.LogoFileIDIsNil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDIsNil())
+	}
+	if i.LogoFileIDNotNil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDNotNil())
+	}
+	if i.LogoFileIDEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDEqualFold(*i.LogoFileIDEqualFold))
+	}
+	if i.LogoFileIDContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
+	}
+	if i.URL != nil {
+		predicates = append(predicates, trustcenterentity.URLEQ(*i.URL))
+	}
+	if i.URLNEQ != nil {
+		predicates = append(predicates, trustcenterentity.URLNEQ(*i.URLNEQ))
+	}
+	if len(i.URLIn) > 0 {
+		predicates = append(predicates, trustcenterentity.URLIn(i.URLIn...))
+	}
+	if len(i.URLNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.URLNotIn(i.URLNotIn...))
+	}
+	if i.URLGT != nil {
+		predicates = append(predicates, trustcenterentity.URLGT(*i.URLGT))
+	}
+	if i.URLGTE != nil {
+		predicates = append(predicates, trustcenterentity.URLGTE(*i.URLGTE))
+	}
+	if i.URLLT != nil {
+		predicates = append(predicates, trustcenterentity.URLLT(*i.URLLT))
+	}
+	if i.URLLTE != nil {
+		predicates = append(predicates, trustcenterentity.URLLTE(*i.URLLTE))
+	}
+	if i.URLContains != nil {
+		predicates = append(predicates, trustcenterentity.URLContains(*i.URLContains))
+	}
+	if i.URLHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.URLHasPrefix(*i.URLHasPrefix))
+	}
+	if i.URLHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.URLHasSuffix(*i.URLHasSuffix))
+	}
+	if i.URLIsNil {
+		predicates = append(predicates, trustcenterentity.URLIsNil())
+	}
+	if i.URLNotNil {
+		predicates = append(predicates, trustcenterentity.URLNotNil())
+	}
+	if i.URLEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.URLEqualFold(*i.URLEqualFold))
+	}
+	if i.URLContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.URLContainsFold(*i.URLContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.Name != nil {
+		predicates = append(predicates, trustcenterentity.NameEQ(*i.Name))
+	}
+	if i.NameNEQ != nil {
+		predicates = append(predicates, trustcenterentity.NameNEQ(*i.NameNEQ))
+	}
+	if len(i.NameIn) > 0 {
+		predicates = append(predicates, trustcenterentity.NameIn(i.NameIn...))
+	}
+	if len(i.NameNotIn) > 0 {
+		predicates = append(predicates, trustcenterentity.NameNotIn(i.NameNotIn...))
+	}
+	if i.NameGT != nil {
+		predicates = append(predicates, trustcenterentity.NameGT(*i.NameGT))
+	}
+	if i.NameGTE != nil {
+		predicates = append(predicates, trustcenterentity.NameGTE(*i.NameGTE))
+	}
+	if i.NameLT != nil {
+		predicates = append(predicates, trustcenterentity.NameLT(*i.NameLT))
+	}
+	if i.NameLTE != nil {
+		predicates = append(predicates, trustcenterentity.NameLTE(*i.NameLTE))
+	}
+	if i.NameContains != nil {
+		predicates = append(predicates, trustcenterentity.NameContains(*i.NameContains))
+	}
+	if i.NameHasPrefix != nil {
+		predicates = append(predicates, trustcenterentity.NameHasPrefix(*i.NameHasPrefix))
+	}
+	if i.NameHasSuffix != nil {
+		predicates = append(predicates, trustcenterentity.NameHasSuffix(*i.NameHasSuffix))
+	}
+	if i.NameEqualFold != nil {
+		predicates = append(predicates, trustcenterentity.NameEqualFold(*i.NameEqualFold))
+	}
+	if i.NameContainsFold != nil {
+		predicates = append(predicates, trustcenterentity.NameContainsFold(*i.NameContainsFold))
+	}
+
+	if i.HasBlockedGroups != nil {
+		p := trustcenterentity.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterentity.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasEditorsWith(with...))
+	}
+	if i.HasLogoFile != nil {
+		p := trustcenterentity.HasLogoFile()
+		if !*i.HasLogoFile {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasLogoFileWith) > 0 {
+		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		with = append(with, file.DeletedAtIsNil())
+		for _, w := range i.HasLogoFileWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasLogoFileWith(with...))
+	}
+	if i.HasTrustCenter != nil {
+		p := trustcenterentity.HasTrustCenter()
+		if !*i.HasTrustCenter {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasTrustCenterWith(with...))
+	}
+	if i.HasEntityType != nil {
+		p := trustcenterentity.HasEntityType()
+		if !*i.HasEntityType {
+			p = trustcenterentity.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEntityTypeWith) > 0 {
+		with := make([]predicate.EntityType, 0, len(i.HasEntityTypeWith))
+		with = append(with, entitytype.DeletedAtIsNil())
+		for _, w := range i.HasEntityTypeWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEntityTypeWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterentity.HasEntityTypeWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTrustCenterEntityWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return trustcenterentity.And(predicates...), nil
+	}
+}
+
+// TrustCenterNDARequestWhereInput represents a where input for filtering TrustCenterNDARequest queries.
+type TrustCenterNDARequestWhereInput struct {
+	Predicates []predicate.TrustCenterNDARequest  `json:"-"`
+	Not        *TrustCenterNDARequestWhereInput   `json:"not,omitempty"`
+	Or         []*TrustCenterNDARequestWhereInput `json:"or,omitempty"`
+	And        []*TrustCenterNDARequestWhereInput `json:"and,omitempty"`
+
+	// "id" field predicates.
+	ID             *string  `json:"id,omitempty"`
+	IDNEQ          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGT           *string  `json:"idGT,omitempty"`
+	IDGTE          *string  `json:"idGTE,omitempty"`
+	IDLT           *string  `json:"idLT,omitempty"`
+	IDLTE          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+
+	// "created_at" field predicates.
+	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
+	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
+	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
+	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
+	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
+
+	// "updated_at" field predicates.
+	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
+	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
+	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
+	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
+
+	// "created_by" field predicates.
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGT           *string  `json:"createdByGT,omitempty"`
+	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLT           *string  `json:"createdByLT,omitempty"`
+	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+
+	// "updated_by" field predicates.
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+
+	// "trust_center_id" field predicates.
+	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
+	TrustCenterIDNEQ          *string  `json:"trustCenterIDNEQ,omitempty"`
+	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
+	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
+	TrustCenterIDGT           *string  `json:"trustCenterIDGT,omitempty"`
+	TrustCenterIDGTE          *string  `json:"trustCenterIDGTE,omitempty"`
+	TrustCenterIDLT           *string  `json:"trustCenterIDLT,omitempty"`
+	TrustCenterIDLTE          *string  `json:"trustCenterIDLTE,omitempty"`
+	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
+	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
+	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
+	TrustCenterIDIsNil        bool     `json:"trustCenterIDIsNil,omitempty"`
+	TrustCenterIDNotNil       bool     `json:"trustCenterIDNotNil,omitempty"`
+	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
+	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+
+	// "first_name" field predicates.
+	FirstName             *string  `json:"firstName,omitempty"`
+	FirstNameNEQ          *string  `json:"firstNameNEQ,omitempty"`
+	FirstNameIn           []string `json:"firstNameIn,omitempty"`
+	FirstNameNotIn        []string `json:"firstNameNotIn,omitempty"`
+	FirstNameGT           *string  `json:"firstNameGT,omitempty"`
+	FirstNameGTE          *string  `json:"firstNameGTE,omitempty"`
+	FirstNameLT           *string  `json:"firstNameLT,omitempty"`
+	FirstNameLTE          *string  `json:"firstNameLTE,omitempty"`
+	FirstNameContains     *string  `json:"firstNameContains,omitempty"`
+	FirstNameHasPrefix    *string  `json:"firstNameHasPrefix,omitempty"`
+	FirstNameHasSuffix    *string  `json:"firstNameHasSuffix,omitempty"`
+	FirstNameEqualFold    *string  `json:"firstNameEqualFold,omitempty"`
+	FirstNameContainsFold *string  `json:"firstNameContainsFold,omitempty"`
+
+	// "last_name" field predicates.
+	LastName             *string  `json:"lastName,omitempty"`
+	LastNameNEQ          *string  `json:"lastNameNEQ,omitempty"`
+	LastNameIn           []string `json:"lastNameIn,omitempty"`
+	LastNameNotIn        []string `json:"lastNameNotIn,omitempty"`
+	LastNameGT           *string  `json:"lastNameGT,omitempty"`
+	LastNameGTE          *string  `json:"lastNameGTE,omitempty"`
+	LastNameLT           *string  `json:"lastNameLT,omitempty"`
+	LastNameLTE          *string  `json:"lastNameLTE,omitempty"`
+	LastNameContains     *string  `json:"lastNameContains,omitempty"`
+	LastNameHasPrefix    *string  `json:"lastNameHasPrefix,omitempty"`
+	LastNameHasSuffix    *string  `json:"lastNameHasSuffix,omitempty"`
+	LastNameEqualFold    *string  `json:"lastNameEqualFold,omitempty"`
+	LastNameContainsFold *string  `json:"lastNameContainsFold,omitempty"`
+
+	// "email" field predicates.
+	Email             *string  `json:"email,omitempty"`
+	EmailNEQ          *string  `json:"emailNEQ,omitempty"`
+	EmailIn           []string `json:"emailIn,omitempty"`
+	EmailNotIn        []string `json:"emailNotIn,omitempty"`
+	EmailGT           *string  `json:"emailGT,omitempty"`
+	EmailGTE          *string  `json:"emailGTE,omitempty"`
+	EmailLT           *string  `json:"emailLT,omitempty"`
+	EmailLTE          *string  `json:"emailLTE,omitempty"`
+	EmailContains     *string  `json:"emailContains,omitempty"`
+	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
+	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
+	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
+	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
+
+	// "company_name" field predicates.
+	CompanyName             *string  `json:"companyName,omitempty"`
+	CompanyNameNEQ          *string  `json:"companyNameNEQ,omitempty"`
+	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
+	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
+	CompanyNameGT           *string  `json:"companyNameGT,omitempty"`
+	CompanyNameGTE          *string  `json:"companyNameGTE,omitempty"`
+	CompanyNameLT           *string  `json:"companyNameLT,omitempty"`
+	CompanyNameLTE          *string  `json:"companyNameLTE,omitempty"`
+	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
+	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
+	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
+	CompanyNameIsNil        bool     `json:"companyNameIsNil,omitempty"`
+	CompanyNameNotNil       bool     `json:"companyNameNotNil,omitempty"`
+	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
+	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
+
+	// "reason" field predicates.
+	Reason             *string  `json:"reason,omitempty"`
+	ReasonNEQ          *string  `json:"reasonNEQ,omitempty"`
+	ReasonIn           []string `json:"reasonIn,omitempty"`
+	ReasonNotIn        []string `json:"reasonNotIn,omitempty"`
+	ReasonGT           *string  `json:"reasonGT,omitempty"`
+	ReasonGTE          *string  `json:"reasonGTE,omitempty"`
+	ReasonLT           *string  `json:"reasonLT,omitempty"`
+	ReasonLTE          *string  `json:"reasonLTE,omitempty"`
+	ReasonContains     *string  `json:"reasonContains,omitempty"`
+	ReasonHasPrefix    *string  `json:"reasonHasPrefix,omitempty"`
+	ReasonHasSuffix    *string  `json:"reasonHasSuffix,omitempty"`
+	ReasonIsNil        bool     `json:"reasonIsNil,omitempty"`
+	ReasonNotNil       bool     `json:"reasonNotNil,omitempty"`
+	ReasonEqualFold    *string  `json:"reasonEqualFold,omitempty"`
+	ReasonContainsFold *string  `json:"reasonContainsFold,omitempty"`
+
+	// "access_level" field predicates.
+	AccessLevel       *enums.TrustCenterNDARequestAccessLevel  `json:"accessLevel,omitempty"`
+	AccessLevelNEQ    *enums.TrustCenterNDARequestAccessLevel  `json:"accessLevelNEQ,omitempty"`
+	AccessLevelIn     []enums.TrustCenterNDARequestAccessLevel `json:"accessLevelIn,omitempty"`
+	AccessLevelNotIn  []enums.TrustCenterNDARequestAccessLevel `json:"accessLevelNotIn,omitempty"`
+	AccessLevelIsNil  bool                                     `json:"accessLevelIsNil,omitempty"`
+	AccessLevelNotNil bool                                     `json:"accessLevelNotNil,omitempty"`
+
+	// "status" field predicates.
+	Status       *enums.TrustCenterNDARequestStatus  `json:"status,omitempty"`
+	StatusNEQ    *enums.TrustCenterNDARequestStatus  `json:"statusNEQ,omitempty"`
+	StatusIn     []enums.TrustCenterNDARequestStatus `json:"statusIn,omitempty"`
+	StatusNotIn  []enums.TrustCenterNDARequestStatus `json:"statusNotIn,omitempty"`
+	StatusIsNil  bool                                `json:"statusIsNil,omitempty"`
+	StatusNotNil bool                                `json:"statusNotNil,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+
+	// "trust_center" edge predicates.
+	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
+	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+
+	// "trust_center_docs" edge predicates.
+	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
+	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
+}
+
+// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
+func (i *TrustCenterNDARequestWhereInput) AddPredicates(predicates ...predicate.TrustCenterNDARequest) {
+	i.Predicates = append(i.Predicates, predicates...)
+}
+
+// Filter applies the TrustCenterNDARequestWhereInput filter on the TrustCenterNDARequestQuery builder.
+func (i *TrustCenterNDARequestWhereInput) Filter(q *TrustCenterNDARequestQuery) (*TrustCenterNDARequestQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		if err == ErrEmptyTrustCenterNDARequestWhereInput {
+			return q, nil
+		}
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// ErrEmptyTrustCenterNDARequestWhereInput is returned in case the TrustCenterNDARequestWhereInput is empty.
+var ErrEmptyTrustCenterNDARequestWhereInput = errors.New("generated: empty predicate TrustCenterNDARequestWhereInput")
+
+// P returns a predicate for filtering trustcenterndarequests.
+// An error is returned if the input is empty or invalid.
+func (i *TrustCenterNDARequestWhereInput) P() (predicate.TrustCenterNDARequest, error) {
+	var predicates []predicate.TrustCenterNDARequest
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'not'", err)
+		}
+		predicates = append(predicates, trustcenterndarequest.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'or'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.TrustCenterNDARequest, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'or'", err)
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, fmt.Errorf("%w: field 'and'", err)
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.TrustCenterNDARequest, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'and'", err)
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.And(and...))
+	}
+	predicates = append(predicates, i.Predicates...)
+	if i.ID != nil {
+		predicates = append(predicates, trustcenterndarequest.IDEQ(*i.ID))
+	}
+	if i.IDNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.IDNEQ(*i.IDNEQ))
+	}
+	if len(i.IDIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.IDIn(i.IDIn...))
+	}
+	if len(i.IDNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.IDNotIn(i.IDNotIn...))
+	}
+	if i.IDGT != nil {
+		predicates = append(predicates, trustcenterndarequest.IDGT(*i.IDGT))
+	}
+	if i.IDGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.IDGTE(*i.IDGTE))
+	}
+	if i.IDLT != nil {
+		predicates = append(predicates, trustcenterndarequest.IDLT(*i.IDLT))
+	}
+	if i.IDLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.IDLTE(*i.IDLTE))
+	}
+	if i.IDEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.IDEqualFold(*i.IDEqualFold))
+	}
+	if i.IDContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.IDContainsFold(*i.IDContainsFold))
+	}
+	if i.CreatedAt != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtEQ(*i.CreatedAt))
+	}
+	if i.CreatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtNEQ(*i.CreatedAtNEQ))
+	}
+	if len(i.CreatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtIn(i.CreatedAtIn...))
+	}
+	if len(i.CreatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtNotIn(i.CreatedAtNotIn...))
+	}
+	if i.CreatedAtGT != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtGT(*i.CreatedAtGT))
+	}
+	if i.CreatedAtGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtGTE(*i.CreatedAtGTE))
+	}
+	if i.CreatedAtLT != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtLT(*i.CreatedAtLT))
+	}
+	if i.CreatedAtLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtLTE(*i.CreatedAtLTE))
+	}
+	if i.CreatedAtIsNil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtIsNil())
+	}
+	if i.CreatedAtNotNil {
+		predicates = append(predicates, trustcenterndarequest.CreatedAtNotNil())
+	}
+	if i.UpdatedAt != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtEQ(*i.UpdatedAt))
+	}
+	if i.UpdatedAtNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtNEQ(*i.UpdatedAtNEQ))
+	}
+	if len(i.UpdatedAtIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtIn(i.UpdatedAtIn...))
+	}
+	if len(i.UpdatedAtNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtNotIn(i.UpdatedAtNotIn...))
+	}
+	if i.UpdatedAtGT != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtGT(*i.UpdatedAtGT))
+	}
+	if i.UpdatedAtGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtGTE(*i.UpdatedAtGTE))
+	}
+	if i.UpdatedAtLT != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtLT(*i.UpdatedAtLT))
+	}
+	if i.UpdatedAtLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtLTE(*i.UpdatedAtLTE))
+	}
+	if i.UpdatedAtIsNil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtIsNil())
+	}
+	if i.UpdatedAtNotNil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedAtNotNil())
+	}
+	if i.CreatedBy != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByEQ(*i.CreatedBy))
+	}
+	if i.CreatedByNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByNEQ(*i.CreatedByNEQ))
+	}
+	if len(i.CreatedByIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.CreatedByIn(i.CreatedByIn...))
+	}
+	if len(i.CreatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.CreatedByNotIn(i.CreatedByNotIn...))
+	}
+	if i.CreatedByGT != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByGT(*i.CreatedByGT))
+	}
+	if i.CreatedByGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByGTE(*i.CreatedByGTE))
+	}
+	if i.CreatedByLT != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByLT(*i.CreatedByLT))
+	}
+	if i.CreatedByLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByLTE(*i.CreatedByLTE))
+	}
+	if i.CreatedByContains != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByContains(*i.CreatedByContains))
+	}
+	if i.CreatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByHasPrefix(*i.CreatedByHasPrefix))
+	}
+	if i.CreatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByHasSuffix(*i.CreatedByHasSuffix))
+	}
+	if i.CreatedByIsNil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByIsNil())
+	}
+	if i.CreatedByNotNil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByNotNil())
+	}
+	if i.CreatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByEqualFold(*i.CreatedByEqualFold))
+	}
+	if i.CreatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.CreatedByContainsFold(*i.CreatedByContainsFold))
+	}
+	if i.UpdatedBy != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByEQ(*i.UpdatedBy))
+	}
+	if i.UpdatedByNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByNEQ(*i.UpdatedByNEQ))
+	}
+	if len(i.UpdatedByIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByIn(i.UpdatedByIn...))
+	}
+	if len(i.UpdatedByNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByNotIn(i.UpdatedByNotIn...))
+	}
+	if i.UpdatedByGT != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByGT(*i.UpdatedByGT))
+	}
+	if i.UpdatedByGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByGTE(*i.UpdatedByGTE))
+	}
+	if i.UpdatedByLT != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByLT(*i.UpdatedByLT))
+	}
+	if i.UpdatedByLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByLTE(*i.UpdatedByLTE))
+	}
+	if i.UpdatedByContains != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByContains(*i.UpdatedByContains))
+	}
+	if i.UpdatedByHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
+	}
+	if i.UpdatedByHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
+	}
+	if i.UpdatedByIsNil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByIsNil())
+	}
+	if i.UpdatedByNotNil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByNotNil())
+	}
+	if i.UpdatedByEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByEqualFold(*i.UpdatedByEqualFold))
+	}
+	if i.UpdatedByContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.UpdatedByContainsFold(*i.UpdatedByContainsFold))
+	}
+	if i.TrustCenterID != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDEQ(*i.TrustCenterID))
+	}
+	if i.TrustCenterIDNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDNEQ(*i.TrustCenterIDNEQ))
+	}
+	if len(i.TrustCenterIDIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDIn(i.TrustCenterIDIn...))
+	}
+	if len(i.TrustCenterIDNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDNotIn(i.TrustCenterIDNotIn...))
+	}
+	if i.TrustCenterIDGT != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDGT(*i.TrustCenterIDGT))
+	}
+	if i.TrustCenterIDGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDGTE(*i.TrustCenterIDGTE))
+	}
+	if i.TrustCenterIDLT != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDLT(*i.TrustCenterIDLT))
+	}
+	if i.TrustCenterIDLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDLTE(*i.TrustCenterIDLTE))
+	}
+	if i.TrustCenterIDContains != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDContains(*i.TrustCenterIDContains))
+	}
+	if i.TrustCenterIDHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDHasPrefix(*i.TrustCenterIDHasPrefix))
+	}
+	if i.TrustCenterIDHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDHasSuffix(*i.TrustCenterIDHasSuffix))
+	}
+	if i.TrustCenterIDIsNil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDIsNil())
+	}
+	if i.TrustCenterIDNotNil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDNotNil())
+	}
+	if i.TrustCenterIDEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDEqualFold(*i.TrustCenterIDEqualFold))
+	}
+	if i.TrustCenterIDContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.TrustCenterIDContainsFold(*i.TrustCenterIDContainsFold))
+	}
+	if i.FirstName != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameEQ(*i.FirstName))
+	}
+	if i.FirstNameNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameNEQ(*i.FirstNameNEQ))
+	}
+	if len(i.FirstNameIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.FirstNameIn(i.FirstNameIn...))
+	}
+	if len(i.FirstNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.FirstNameNotIn(i.FirstNameNotIn...))
+	}
+	if i.FirstNameGT != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameGT(*i.FirstNameGT))
+	}
+	if i.FirstNameGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameGTE(*i.FirstNameGTE))
+	}
+	if i.FirstNameLT != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameLT(*i.FirstNameLT))
+	}
+	if i.FirstNameLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameLTE(*i.FirstNameLTE))
+	}
+	if i.FirstNameContains != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameContains(*i.FirstNameContains))
+	}
+	if i.FirstNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameHasPrefix(*i.FirstNameHasPrefix))
+	}
+	if i.FirstNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameHasSuffix(*i.FirstNameHasSuffix))
+	}
+	if i.FirstNameEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameEqualFold(*i.FirstNameEqualFold))
+	}
+	if i.FirstNameContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.FirstNameContainsFold(*i.FirstNameContainsFold))
+	}
+	if i.LastName != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameEQ(*i.LastName))
+	}
+	if i.LastNameNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameNEQ(*i.LastNameNEQ))
+	}
+	if len(i.LastNameIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.LastNameIn(i.LastNameIn...))
+	}
+	if len(i.LastNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.LastNameNotIn(i.LastNameNotIn...))
+	}
+	if i.LastNameGT != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameGT(*i.LastNameGT))
+	}
+	if i.LastNameGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameGTE(*i.LastNameGTE))
+	}
+	if i.LastNameLT != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameLT(*i.LastNameLT))
+	}
+	if i.LastNameLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameLTE(*i.LastNameLTE))
+	}
+	if i.LastNameContains != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameContains(*i.LastNameContains))
+	}
+	if i.LastNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameHasPrefix(*i.LastNameHasPrefix))
+	}
+	if i.LastNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameHasSuffix(*i.LastNameHasSuffix))
+	}
+	if i.LastNameEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameEqualFold(*i.LastNameEqualFold))
+	}
+	if i.LastNameContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.LastNameContainsFold(*i.LastNameContainsFold))
+	}
+	if i.Email != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailEQ(*i.Email))
+	}
+	if i.EmailNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailNEQ(*i.EmailNEQ))
+	}
+	if len(i.EmailIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.EmailIn(i.EmailIn...))
+	}
+	if len(i.EmailNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.EmailNotIn(i.EmailNotIn...))
+	}
+	if i.EmailGT != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailGT(*i.EmailGT))
+	}
+	if i.EmailGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailGTE(*i.EmailGTE))
+	}
+	if i.EmailLT != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailLT(*i.EmailLT))
+	}
+	if i.EmailLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailLTE(*i.EmailLTE))
+	}
+	if i.EmailContains != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailContains(*i.EmailContains))
+	}
+	if i.EmailHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailHasPrefix(*i.EmailHasPrefix))
+	}
+	if i.EmailHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailHasSuffix(*i.EmailHasSuffix))
+	}
+	if i.EmailEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailEqualFold(*i.EmailEqualFold))
+	}
+	if i.EmailContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.EmailContainsFold(*i.EmailContainsFold))
+	}
+	if i.CompanyName != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameEQ(*i.CompanyName))
+	}
+	if i.CompanyNameNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameNEQ(*i.CompanyNameNEQ))
+	}
+	if len(i.CompanyNameIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameIn(i.CompanyNameIn...))
+	}
+	if len(i.CompanyNameNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameNotIn(i.CompanyNameNotIn...))
+	}
+	if i.CompanyNameGT != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameGT(*i.CompanyNameGT))
+	}
+	if i.CompanyNameGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameGTE(*i.CompanyNameGTE))
+	}
+	if i.CompanyNameLT != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameLT(*i.CompanyNameLT))
+	}
+	if i.CompanyNameLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameLTE(*i.CompanyNameLTE))
+	}
+	if i.CompanyNameContains != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameContains(*i.CompanyNameContains))
+	}
+	if i.CompanyNameHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameHasPrefix(*i.CompanyNameHasPrefix))
+	}
+	if i.CompanyNameHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameHasSuffix(*i.CompanyNameHasSuffix))
+	}
+	if i.CompanyNameIsNil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameIsNil())
+	}
+	if i.CompanyNameNotNil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameNotNil())
+	}
+	if i.CompanyNameEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameEqualFold(*i.CompanyNameEqualFold))
+	}
+	if i.CompanyNameContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.CompanyNameContainsFold(*i.CompanyNameContainsFold))
+	}
+	if i.Reason != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonEQ(*i.Reason))
+	}
+	if i.ReasonNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonNEQ(*i.ReasonNEQ))
+	}
+	if len(i.ReasonIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.ReasonIn(i.ReasonIn...))
+	}
+	if len(i.ReasonNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.ReasonNotIn(i.ReasonNotIn...))
+	}
+	if i.ReasonGT != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonGT(*i.ReasonGT))
+	}
+	if i.ReasonGTE != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonGTE(*i.ReasonGTE))
+	}
+	if i.ReasonLT != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonLT(*i.ReasonLT))
+	}
+	if i.ReasonLTE != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonLTE(*i.ReasonLTE))
+	}
+	if i.ReasonContains != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonContains(*i.ReasonContains))
+	}
+	if i.ReasonHasPrefix != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonHasPrefix(*i.ReasonHasPrefix))
+	}
+	if i.ReasonHasSuffix != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonHasSuffix(*i.ReasonHasSuffix))
+	}
+	if i.ReasonIsNil {
+		predicates = append(predicates, trustcenterndarequest.ReasonIsNil())
+	}
+	if i.ReasonNotNil {
+		predicates = append(predicates, trustcenterndarequest.ReasonNotNil())
+	}
+	if i.ReasonEqualFold != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonEqualFold(*i.ReasonEqualFold))
+	}
+	if i.ReasonContainsFold != nil {
+		predicates = append(predicates, trustcenterndarequest.ReasonContainsFold(*i.ReasonContainsFold))
+	}
+	if i.AccessLevel != nil {
+		predicates = append(predicates, trustcenterndarequest.AccessLevelEQ(*i.AccessLevel))
+	}
+	if i.AccessLevelNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.AccessLevelNEQ(*i.AccessLevelNEQ))
+	}
+	if len(i.AccessLevelIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.AccessLevelIn(i.AccessLevelIn...))
+	}
+	if len(i.AccessLevelNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.AccessLevelNotIn(i.AccessLevelNotIn...))
+	}
+	if i.AccessLevelIsNil {
+		predicates = append(predicates, trustcenterndarequest.AccessLevelIsNil())
+	}
+	if i.AccessLevelNotNil {
+		predicates = append(predicates, trustcenterndarequest.AccessLevelNotNil())
+	}
+	if i.Status != nil {
+		predicates = append(predicates, trustcenterndarequest.StatusEQ(*i.Status))
+	}
+	if i.StatusNEQ != nil {
+		predicates = append(predicates, trustcenterndarequest.StatusNEQ(*i.StatusNEQ))
+	}
+	if len(i.StatusIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.StatusIn(i.StatusIn...))
+	}
+	if len(i.StatusNotIn) > 0 {
+		predicates = append(predicates, trustcenterndarequest.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.StatusIsNil {
+		predicates = append(predicates, trustcenterndarequest.StatusIsNil())
+	}
+	if i.StatusNotNil {
+		predicates = append(predicates, trustcenterndarequest.StatusNotNil())
+	}
+
+	if i.HasBlockedGroups != nil {
+		p := trustcenterndarequest.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterndarequest.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterndarequest.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterndarequest.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.HasEditorsWith(with...))
+	}
+	if i.HasTrustCenter != nil {
+		p := trustcenterndarequest.HasTrustCenter()
+		if !*i.HasTrustCenter {
+			p = trustcenterndarequest.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterWith) > 0 {
+		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.HasTrustCenterWith(with...))
+	}
+	if i.HasTrustCenterDocs != nil {
+		p := trustcenterndarequest.HasTrustCenterDocs()
+		if !*i.HasTrustCenterDocs {
+			p = trustcenterndarequest.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasTrustCenterDocsWith) > 0 {
+		with := make([]predicate.TrustCenterDoc, 0, len(i.HasTrustCenterDocsWith))
+		with = append(with, trustcenterdoc.DeletedAtIsNil())
+		for _, w := range i.HasTrustCenterDocsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasTrustCenterDocsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterndarequest.HasTrustCenterDocsWith(with...))
+	}
+	switch len(predicates) {
+	case 0:
+		return nil, ErrEmptyTrustCenterNDARequestWhereInput
+	case 1:
+		return predicates[0], nil
+	default:
+		return trustcenterndarequest.And(predicates...), nil
 	}
 }
 
@@ -71184,6 +73617,23 @@ type TrustCenterSettingWhereInput struct {
 	TitleNotNil       bool     `json:"titleNotNil,omitempty"`
 	TitleEqualFold    *string  `json:"titleEqualFold,omitempty"`
 	TitleContainsFold *string  `json:"titleContainsFold,omitempty"`
+
+	// "company_name" field predicates.
+	CompanyName             *string  `json:"companyName,omitempty"`
+	CompanyNameNEQ          *string  `json:"companyNameNEQ,omitempty"`
+	CompanyNameIn           []string `json:"companyNameIn,omitempty"`
+	CompanyNameNotIn        []string `json:"companyNameNotIn,omitempty"`
+	CompanyNameGT           *string  `json:"companyNameGT,omitempty"`
+	CompanyNameGTE          *string  `json:"companyNameGTE,omitempty"`
+	CompanyNameLT           *string  `json:"companyNameLT,omitempty"`
+	CompanyNameLTE          *string  `json:"companyNameLTE,omitempty"`
+	CompanyNameContains     *string  `json:"companyNameContains,omitempty"`
+	CompanyNameHasPrefix    *string  `json:"companyNameHasPrefix,omitempty"`
+	CompanyNameHasSuffix    *string  `json:"companyNameHasSuffix,omitempty"`
+	CompanyNameIsNil        bool     `json:"companyNameIsNil,omitempty"`
+	CompanyNameNotNil       bool     `json:"companyNameNotNil,omitempty"`
+	CompanyNameEqualFold    *string  `json:"companyNameEqualFold,omitempty"`
+	CompanyNameContainsFold *string  `json:"companyNameContainsFold,omitempty"`
 
 	// "overview" field predicates.
 	Overview             *string  `json:"overview,omitempty"`
@@ -71405,9 +73855,59 @@ type TrustCenterSettingWhereInput struct {
 	EnvironmentIsNil  bool                           `json:"environmentIsNil,omitempty"`
 	EnvironmentNotNil bool                           `json:"environmentNotNil,omitempty"`
 
-	// "files" edge predicates.
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// "remove_branding" field predicates.
+	RemoveBranding       *bool `json:"removeBranding,omitempty"`
+	RemoveBrandingNEQ    *bool `json:"removeBrandingNEQ,omitempty"`
+	RemoveBrandingIsNil  bool  `json:"removeBrandingIsNil,omitempty"`
+	RemoveBrandingNotNil bool  `json:"removeBrandingNotNil,omitempty"`
+
+	// "company_domain" field predicates.
+	CompanyDomain             *string  `json:"companyDomain,omitempty"`
+	CompanyDomainNEQ          *string  `json:"companyDomainNEQ,omitempty"`
+	CompanyDomainIn           []string `json:"companyDomainIn,omitempty"`
+	CompanyDomainNotIn        []string `json:"companyDomainNotIn,omitempty"`
+	CompanyDomainGT           *string  `json:"companyDomainGT,omitempty"`
+	CompanyDomainGTE          *string  `json:"companyDomainGTE,omitempty"`
+	CompanyDomainLT           *string  `json:"companyDomainLT,omitempty"`
+	CompanyDomainLTE          *string  `json:"companyDomainLTE,omitempty"`
+	CompanyDomainContains     *string  `json:"companyDomainContains,omitempty"`
+	CompanyDomainHasPrefix    *string  `json:"companyDomainHasPrefix,omitempty"`
+	CompanyDomainHasSuffix    *string  `json:"companyDomainHasSuffix,omitempty"`
+	CompanyDomainIsNil        bool     `json:"companyDomainIsNil,omitempty"`
+	CompanyDomainNotNil       bool     `json:"companyDomainNotNil,omitempty"`
+	CompanyDomainEqualFold    *string  `json:"companyDomainEqualFold,omitempty"`
+	CompanyDomainContainsFold *string  `json:"companyDomainContainsFold,omitempty"`
+
+	// "security_contact" field predicates.
+	SecurityContact             *string  `json:"securityContact,omitempty"`
+	SecurityContactNEQ          *string  `json:"securityContactNEQ,omitempty"`
+	SecurityContactIn           []string `json:"securityContactIn,omitempty"`
+	SecurityContactNotIn        []string `json:"securityContactNotIn,omitempty"`
+	SecurityContactGT           *string  `json:"securityContactGT,omitempty"`
+	SecurityContactGTE          *string  `json:"securityContactGTE,omitempty"`
+	SecurityContactLT           *string  `json:"securityContactLT,omitempty"`
+	SecurityContactLTE          *string  `json:"securityContactLTE,omitempty"`
+	SecurityContactContains     *string  `json:"securityContactContains,omitempty"`
+	SecurityContactHasPrefix    *string  `json:"securityContactHasPrefix,omitempty"`
+	SecurityContactHasSuffix    *string  `json:"securityContactHasSuffix,omitempty"`
+	SecurityContactIsNil        bool     `json:"securityContactIsNil,omitempty"`
+	SecurityContactNotNil       bool     `json:"securityContactNotNil,omitempty"`
+	SecurityContactEqualFold    *string  `json:"securityContactEqualFold,omitempty"`
+	SecurityContactContainsFold *string  `json:"securityContactContainsFold,omitempty"`
+
+	// "nda_approval_required" field predicates.
+	NdaApprovalRequired       *bool `json:"ndaApprovalRequired,omitempty"`
+	NdaApprovalRequiredNEQ    *bool `json:"ndaApprovalRequiredNEQ,omitempty"`
+	NdaApprovalRequiredIsNil  bool  `json:"ndaApprovalRequiredIsNil,omitempty"`
+	NdaApprovalRequiredNotNil bool  `json:"ndaApprovalRequiredNotNil,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "logo_file" edge predicates.
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
@@ -71758,6 +74258,51 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if i.TitleContainsFold != nil {
 		predicates = append(predicates, trustcentersetting.TitleContainsFold(*i.TitleContainsFold))
+	}
+	if i.CompanyName != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameEQ(*i.CompanyName))
+	}
+	if i.CompanyNameNEQ != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameNEQ(*i.CompanyNameNEQ))
+	}
+	if len(i.CompanyNameIn) > 0 {
+		predicates = append(predicates, trustcentersetting.CompanyNameIn(i.CompanyNameIn...))
+	}
+	if len(i.CompanyNameNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.CompanyNameNotIn(i.CompanyNameNotIn...))
+	}
+	if i.CompanyNameGT != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameGT(*i.CompanyNameGT))
+	}
+	if i.CompanyNameGTE != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameGTE(*i.CompanyNameGTE))
+	}
+	if i.CompanyNameLT != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameLT(*i.CompanyNameLT))
+	}
+	if i.CompanyNameLTE != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameLTE(*i.CompanyNameLTE))
+	}
+	if i.CompanyNameContains != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameContains(*i.CompanyNameContains))
+	}
+	if i.CompanyNameHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameHasPrefix(*i.CompanyNameHasPrefix))
+	}
+	if i.CompanyNameHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameHasSuffix(*i.CompanyNameHasSuffix))
+	}
+	if i.CompanyNameIsNil {
+		predicates = append(predicates, trustcentersetting.CompanyNameIsNil())
+	}
+	if i.CompanyNameNotNil {
+		predicates = append(predicates, trustcentersetting.CompanyNameNotNil())
+	}
+	if i.CompanyNameEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameEqualFold(*i.CompanyNameEqualFold))
+	}
+	if i.CompanyNameContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.CompanyNameContainsFold(*i.CompanyNameContainsFold))
 	}
 	if i.Overview != nil {
 		predicates = append(predicates, trustcentersetting.OverviewEQ(*i.Overview))
@@ -72335,24 +74880,158 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	if i.EnvironmentNotNil {
 		predicates = append(predicates, trustcentersetting.EnvironmentNotNil())
 	}
+	if i.RemoveBranding != nil {
+		predicates = append(predicates, trustcentersetting.RemoveBrandingEQ(*i.RemoveBranding))
+	}
+	if i.RemoveBrandingNEQ != nil {
+		predicates = append(predicates, trustcentersetting.RemoveBrandingNEQ(*i.RemoveBrandingNEQ))
+	}
+	if i.RemoveBrandingIsNil {
+		predicates = append(predicates, trustcentersetting.RemoveBrandingIsNil())
+	}
+	if i.RemoveBrandingNotNil {
+		predicates = append(predicates, trustcentersetting.RemoveBrandingNotNil())
+	}
+	if i.CompanyDomain != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainEQ(*i.CompanyDomain))
+	}
+	if i.CompanyDomainNEQ != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainNEQ(*i.CompanyDomainNEQ))
+	}
+	if len(i.CompanyDomainIn) > 0 {
+		predicates = append(predicates, trustcentersetting.CompanyDomainIn(i.CompanyDomainIn...))
+	}
+	if len(i.CompanyDomainNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.CompanyDomainNotIn(i.CompanyDomainNotIn...))
+	}
+	if i.CompanyDomainGT != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainGT(*i.CompanyDomainGT))
+	}
+	if i.CompanyDomainGTE != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainGTE(*i.CompanyDomainGTE))
+	}
+	if i.CompanyDomainLT != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainLT(*i.CompanyDomainLT))
+	}
+	if i.CompanyDomainLTE != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainLTE(*i.CompanyDomainLTE))
+	}
+	if i.CompanyDomainContains != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainContains(*i.CompanyDomainContains))
+	}
+	if i.CompanyDomainHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainHasPrefix(*i.CompanyDomainHasPrefix))
+	}
+	if i.CompanyDomainHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainHasSuffix(*i.CompanyDomainHasSuffix))
+	}
+	if i.CompanyDomainIsNil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainIsNil())
+	}
+	if i.CompanyDomainNotNil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainNotNil())
+	}
+	if i.CompanyDomainEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainEqualFold(*i.CompanyDomainEqualFold))
+	}
+	if i.CompanyDomainContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.CompanyDomainContainsFold(*i.CompanyDomainContainsFold))
+	}
+	if i.SecurityContact != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactEQ(*i.SecurityContact))
+	}
+	if i.SecurityContactNEQ != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactNEQ(*i.SecurityContactNEQ))
+	}
+	if len(i.SecurityContactIn) > 0 {
+		predicates = append(predicates, trustcentersetting.SecurityContactIn(i.SecurityContactIn...))
+	}
+	if len(i.SecurityContactNotIn) > 0 {
+		predicates = append(predicates, trustcentersetting.SecurityContactNotIn(i.SecurityContactNotIn...))
+	}
+	if i.SecurityContactGT != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactGT(*i.SecurityContactGT))
+	}
+	if i.SecurityContactGTE != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactGTE(*i.SecurityContactGTE))
+	}
+	if i.SecurityContactLT != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactLT(*i.SecurityContactLT))
+	}
+	if i.SecurityContactLTE != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactLTE(*i.SecurityContactLTE))
+	}
+	if i.SecurityContactContains != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactContains(*i.SecurityContactContains))
+	}
+	if i.SecurityContactHasPrefix != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactHasPrefix(*i.SecurityContactHasPrefix))
+	}
+	if i.SecurityContactHasSuffix != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactHasSuffix(*i.SecurityContactHasSuffix))
+	}
+	if i.SecurityContactIsNil {
+		predicates = append(predicates, trustcentersetting.SecurityContactIsNil())
+	}
+	if i.SecurityContactNotNil {
+		predicates = append(predicates, trustcentersetting.SecurityContactNotNil())
+	}
+	if i.SecurityContactEqualFold != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactEqualFold(*i.SecurityContactEqualFold))
+	}
+	if i.SecurityContactContainsFold != nil {
+		predicates = append(predicates, trustcentersetting.SecurityContactContainsFold(*i.SecurityContactContainsFold))
+	}
+	if i.NdaApprovalRequired != nil {
+		predicates = append(predicates, trustcentersetting.NdaApprovalRequiredEQ(*i.NdaApprovalRequired))
+	}
+	if i.NdaApprovalRequiredNEQ != nil {
+		predicates = append(predicates, trustcentersetting.NdaApprovalRequiredNEQ(*i.NdaApprovalRequiredNEQ))
+	}
+	if i.NdaApprovalRequiredIsNil {
+		predicates = append(predicates, trustcentersetting.NdaApprovalRequiredIsNil())
+	}
+	if i.NdaApprovalRequiredNotNil {
+		predicates = append(predicates, trustcentersetting.NdaApprovalRequiredNotNil())
+	}
 
-	if i.HasFiles != nil {
-		p := trustcentersetting.HasFiles()
-		if !*i.HasFiles {
+	if i.HasBlockedGroups != nil {
+		p := trustcentersetting.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
 			p = trustcentersetting.Not(p)
 		}
 		predicates = append(predicates, p)
 	}
-	if len(i.HasFilesWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasFilesWith))
-		for _, w := range i.HasFilesWith {
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasFilesWith'", err)
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
 			}
 			with = append(with, p)
 		}
-		predicates = append(predicates, trustcentersetting.HasFilesWith(with...))
+		predicates = append(predicates, trustcentersetting.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcentersetting.HasEditors()
+		if !*i.HasEditors {
+			p = trustcentersetting.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersetting.HasEditorsWith(with...))
 	}
 	if i.HasLogoFile != nil {
 		p := trustcentersetting.HasLogoFile()
@@ -72363,6 +75042,7 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if len(i.HasLogoFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasLogoFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -72381,6 +75061,7 @@ func (i *TrustCenterSettingWhereInput) P() (predicate.TrustCenterSetting, error)
 	}
 	if len(i.HasFaviconFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFaviconFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFaviconFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -72523,6 +75204,14 @@ type TrustCenterSubprocessorWhereInput struct {
 	CategoryHasSuffix    *string  `json:"categoryHasSuffix,omitempty"`
 	CategoryEqualFold    *string  `json:"categoryEqualFold,omitempty"`
 	CategoryContainsFold *string  `json:"categoryContainsFold,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -72908,6 +75597,44 @@ func (i *TrustCenterSubprocessorWhereInput) P() (predicate.TrustCenterSubprocess
 		predicates = append(predicates, trustcentersubprocessor.CategoryContainsFold(*i.CategoryContainsFold))
 	}
 
+	if i.HasBlockedGroups != nil {
+		p := trustcentersubprocessor.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcentersubprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersubprocessor.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcentersubprocessor.HasEditors()
+		if !*i.HasEditors {
+			p = trustcentersubprocessor.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcentersubprocessor.HasEditorsWith(with...))
+	}
 	if i.HasTrustCenter != nil {
 		p := trustcentersubprocessor.HasTrustCenter()
 		if !*i.HasTrustCenter {
@@ -72917,6 +75644,7 @@ func (i *TrustCenterSubprocessorWhereInput) P() (predicate.TrustCenterSubprocess
 	}
 	if len(i.HasTrustCenterWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWith {
 			p, err := w.P()
 			if err != nil {
@@ -72935,6 +75663,7 @@ func (i *TrustCenterSubprocessorWhereInput) P() (predicate.TrustCenterSubprocess
 	}
 	if len(i.HasSubprocessorWith) > 0 {
 		with := make([]predicate.Subprocessor, 0, len(i.HasSubprocessorWith))
+		with = append(with, subprocessor.DeletedAtIsNil())
 		for _, w := range i.HasSubprocessorWith {
 			p, err := w.P()
 			if err != nil {
@@ -73169,6 +75898,14 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	// "owner" edge predicates.
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+
+	// "blocked_groups" edge predicates.
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+
+	// "editors" edge predicates.
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
 
 	// "trust_center" edge predicates.
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
@@ -73785,6 +76522,7 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -73793,6 +76531,44 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 			with = append(with, p)
 		}
 		predicates = append(predicates, trustcenterwatermarkconfig.HasOwnerWith(with...))
+	}
+	if i.HasBlockedGroups != nil {
+		p := trustcenterwatermarkconfig.HasBlockedGroups()
+		if !*i.HasBlockedGroups {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasBlockedGroupsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasBlockedGroupsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasBlockedGroupsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasBlockedGroupsWith(with...))
+	}
+	if i.HasEditors != nil {
+		p := trustcenterwatermarkconfig.HasEditors()
+		if !*i.HasEditors {
+			p = trustcenterwatermarkconfig.Not(p)
+		}
+		predicates = append(predicates, p)
+	}
+	if len(i.HasEditorsWith) > 0 {
+		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
+		for _, w := range i.HasEditorsWith {
+			p, err := w.P()
+			if err != nil {
+				return nil, fmt.Errorf("%w: field 'HasEditorsWith'", err)
+			}
+			with = append(with, p)
+		}
+		predicates = append(predicates, trustcenterwatermarkconfig.HasEditorsWith(with...))
 	}
 	if i.HasTrustCenter != nil {
 		p := trustcenterwatermarkconfig.HasTrustCenter()
@@ -73803,6 +76579,7 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 	}
 	if len(i.HasTrustCenterWith) > 0 {
 		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
+		with = append(with, trustcenter.DeletedAtIsNil())
 		for _, w := range i.HasTrustCenterWith {
 			p, err := w.P()
 			if err != nil {
@@ -73821,6 +76598,7 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 	}
 	if len(i.HasFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -73837,590 +76615,6 @@ func (i *TrustCenterWatermarkConfigWhereInput) P() (predicate.TrustCenterWaterma
 		return predicates[0], nil
 	default:
 		return trustcenterwatermarkconfig.And(predicates...), nil
-	}
-}
-
-// TrustcenterEntityWhereInput represents a where input for filtering TrustcenterEntity queries.
-type TrustcenterEntityWhereInput struct {
-	Predicates []predicate.TrustcenterEntity  `json:"-"`
-	Not        *TrustcenterEntityWhereInput   `json:"not,omitempty"`
-	Or         []*TrustcenterEntityWhereInput `json:"or,omitempty"`
-	And        []*TrustcenterEntityWhereInput `json:"and,omitempty"`
-
-	// "id" field predicates.
-	ID             *string  `json:"id,omitempty"`
-	IDNEQ          *string  `json:"idNEQ,omitempty"`
-	IDIn           []string `json:"idIn,omitempty"`
-	IDNotIn        []string `json:"idNotIn,omitempty"`
-	IDGT           *string  `json:"idGT,omitempty"`
-	IDGTE          *string  `json:"idGTE,omitempty"`
-	IDLT           *string  `json:"idLT,omitempty"`
-	IDLTE          *string  `json:"idLTE,omitempty"`
-	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
-	IDContainsFold *string  `json:"idContainsFold,omitempty"`
-
-	// "created_at" field predicates.
-	CreatedAt       *time.Time  `json:"createdAt,omitempty"`
-	CreatedAtNEQ    *time.Time  `json:"createdAtNEQ,omitempty"`
-	CreatedAtIn     []time.Time `json:"createdAtIn,omitempty"`
-	CreatedAtNotIn  []time.Time `json:"createdAtNotIn,omitempty"`
-	CreatedAtGT     *time.Time  `json:"createdAtGT,omitempty"`
-	CreatedAtGTE    *time.Time  `json:"createdAtGTE,omitempty"`
-	CreatedAtLT     *time.Time  `json:"createdAtLT,omitempty"`
-	CreatedAtLTE    *time.Time  `json:"createdAtLTE,omitempty"`
-	CreatedAtIsNil  bool        `json:"createdAtIsNil,omitempty"`
-	CreatedAtNotNil bool        `json:"createdAtNotNil,omitempty"`
-
-	// "updated_at" field predicates.
-	UpdatedAt       *time.Time  `json:"updatedAt,omitempty"`
-	UpdatedAtNEQ    *time.Time  `json:"updatedAtNEQ,omitempty"`
-	UpdatedAtIn     []time.Time `json:"updatedAtIn,omitempty"`
-	UpdatedAtNotIn  []time.Time `json:"updatedAtNotIn,omitempty"`
-	UpdatedAtGT     *time.Time  `json:"updatedAtGT,omitempty"`
-	UpdatedAtGTE    *time.Time  `json:"updatedAtGTE,omitempty"`
-	UpdatedAtLT     *time.Time  `json:"updatedAtLT,omitempty"`
-	UpdatedAtLTE    *time.Time  `json:"updatedAtLTE,omitempty"`
-	UpdatedAtIsNil  bool        `json:"updatedAtIsNil,omitempty"`
-	UpdatedAtNotNil bool        `json:"updatedAtNotNil,omitempty"`
-
-	// "created_by" field predicates.
-	CreatedBy             *string  `json:"createdBy,omitempty"`
-	CreatedByNEQ          *string  `json:"createdByNEQ,omitempty"`
-	CreatedByIn           []string `json:"createdByIn,omitempty"`
-	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
-	CreatedByGT           *string  `json:"createdByGT,omitempty"`
-	CreatedByGTE          *string  `json:"createdByGTE,omitempty"`
-	CreatedByLT           *string  `json:"createdByLT,omitempty"`
-	CreatedByLTE          *string  `json:"createdByLTE,omitempty"`
-	CreatedByContains     *string  `json:"createdByContains,omitempty"`
-	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
-	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
-	CreatedByIsNil        bool     `json:"createdByIsNil,omitempty"`
-	CreatedByNotNil       bool     `json:"createdByNotNil,omitempty"`
-	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
-	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
-
-	// "updated_by" field predicates.
-	UpdatedBy             *string  `json:"updatedBy,omitempty"`
-	UpdatedByNEQ          *string  `json:"updatedByNEQ,omitempty"`
-	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
-	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
-	UpdatedByGT           *string  `json:"updatedByGT,omitempty"`
-	UpdatedByGTE          *string  `json:"updatedByGTE,omitempty"`
-	UpdatedByLT           *string  `json:"updatedByLT,omitempty"`
-	UpdatedByLTE          *string  `json:"updatedByLTE,omitempty"`
-	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
-	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
-	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
-	UpdatedByIsNil        bool     `json:"updatedByIsNil,omitempty"`
-	UpdatedByNotNil       bool     `json:"updatedByNotNil,omitempty"`
-	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
-	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
-
-	// "logo_file_id" field predicates.
-	LogoFileID             *string  `json:"logoFileID,omitempty"`
-	LogoFileIDNEQ          *string  `json:"logoFileIDNEQ,omitempty"`
-	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
-	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
-	LogoFileIDGT           *string  `json:"logoFileIDGT,omitempty"`
-	LogoFileIDGTE          *string  `json:"logoFileIDGTE,omitempty"`
-	LogoFileIDLT           *string  `json:"logoFileIDLT,omitempty"`
-	LogoFileIDLTE          *string  `json:"logoFileIDLTE,omitempty"`
-	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
-	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
-	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
-	LogoFileIDIsNil        bool     `json:"logoFileIDIsNil,omitempty"`
-	LogoFileIDNotNil       bool     `json:"logoFileIDNotNil,omitempty"`
-	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
-	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
-
-	// "url" field predicates.
-	URL             *string  `json:"url,omitempty"`
-	URLNEQ          *string  `json:"urlNEQ,omitempty"`
-	URLIn           []string `json:"urlIn,omitempty"`
-	URLNotIn        []string `json:"urlNotIn,omitempty"`
-	URLGT           *string  `json:"urlGT,omitempty"`
-	URLGTE          *string  `json:"urlGTE,omitempty"`
-	URLLT           *string  `json:"urlLT,omitempty"`
-	URLLTE          *string  `json:"urlLTE,omitempty"`
-	URLContains     *string  `json:"urlContains,omitempty"`
-	URLHasPrefix    *string  `json:"urlHasPrefix,omitempty"`
-	URLHasSuffix    *string  `json:"urlHasSuffix,omitempty"`
-	URLIsNil        bool     `json:"urlIsNil,omitempty"`
-	URLNotNil       bool     `json:"urlNotNil,omitempty"`
-	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
-	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
-
-	// "name" field predicates.
-	Name             *string  `json:"name,omitempty"`
-	NameNEQ          *string  `json:"nameNEQ,omitempty"`
-	NameIn           []string `json:"nameIn,omitempty"`
-	NameNotIn        []string `json:"nameNotIn,omitempty"`
-	NameGT           *string  `json:"nameGT,omitempty"`
-	NameGTE          *string  `json:"nameGTE,omitempty"`
-	NameLT           *string  `json:"nameLT,omitempty"`
-	NameLTE          *string  `json:"nameLTE,omitempty"`
-	NameContains     *string  `json:"nameContains,omitempty"`
-	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
-	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
-	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
-	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
-
-	// "logo_file" edge predicates.
-	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
-	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
-
-	// "trust_center" edge predicates.
-	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
-	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
-
-	// "entity_type" edge predicates.
-	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
-	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
-}
-
-// AddPredicates adds custom predicates to the where input to be used during the filtering phase.
-func (i *TrustcenterEntityWhereInput) AddPredicates(predicates ...predicate.TrustcenterEntity) {
-	i.Predicates = append(i.Predicates, predicates...)
-}
-
-// Filter applies the TrustcenterEntityWhereInput filter on the TrustcenterEntityQuery builder.
-func (i *TrustcenterEntityWhereInput) Filter(q *TrustcenterEntityQuery) (*TrustcenterEntityQuery, error) {
-	if i == nil {
-		return q, nil
-	}
-	p, err := i.P()
-	if err != nil {
-		if err == ErrEmptyTrustcenterEntityWhereInput {
-			return q, nil
-		}
-		return nil, err
-	}
-	return q.Where(p), nil
-}
-
-// ErrEmptyTrustcenterEntityWhereInput is returned in case the TrustcenterEntityWhereInput is empty.
-var ErrEmptyTrustcenterEntityWhereInput = errors.New("generated: empty predicate TrustcenterEntityWhereInput")
-
-// P returns a predicate for filtering trustcenterentities.
-// An error is returned if the input is empty or invalid.
-func (i *TrustcenterEntityWhereInput) P() (predicate.TrustcenterEntity, error) {
-	var predicates []predicate.TrustcenterEntity
-	if i.Not != nil {
-		p, err := i.Not.P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'not'", err)
-		}
-		predicates = append(predicates, trustcenterentity.Not(p))
-	}
-	switch n := len(i.Or); {
-	case n == 1:
-		p, err := i.Or[0].P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'or'", err)
-		}
-		predicates = append(predicates, p)
-	case n > 1:
-		or := make([]predicate.TrustcenterEntity, 0, n)
-		for _, w := range i.Or {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'or'", err)
-			}
-			or = append(or, p)
-		}
-		predicates = append(predicates, trustcenterentity.Or(or...))
-	}
-	switch n := len(i.And); {
-	case n == 1:
-		p, err := i.And[0].P()
-		if err != nil {
-			return nil, fmt.Errorf("%w: field 'and'", err)
-		}
-		predicates = append(predicates, p)
-	case n > 1:
-		and := make([]predicate.TrustcenterEntity, 0, n)
-		for _, w := range i.And {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'and'", err)
-			}
-			and = append(and, p)
-		}
-		predicates = append(predicates, trustcenterentity.And(and...))
-	}
-	predicates = append(predicates, i.Predicates...)
-	if i.ID != nil {
-		predicates = append(predicates, trustcenterentity.IDEQ(*i.ID))
-	}
-	if i.IDNEQ != nil {
-		predicates = append(predicates, trustcenterentity.IDNEQ(*i.IDNEQ))
-	}
-	if len(i.IDIn) > 0 {
-		predicates = append(predicates, trustcenterentity.IDIn(i.IDIn...))
-	}
-	if len(i.IDNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.IDNotIn(i.IDNotIn...))
-	}
-	if i.IDGT != nil {
-		predicates = append(predicates, trustcenterentity.IDGT(*i.IDGT))
-	}
-	if i.IDGTE != nil {
-		predicates = append(predicates, trustcenterentity.IDGTE(*i.IDGTE))
-	}
-	if i.IDLT != nil {
-		predicates = append(predicates, trustcenterentity.IDLT(*i.IDLT))
-	}
-	if i.IDLTE != nil {
-		predicates = append(predicates, trustcenterentity.IDLTE(*i.IDLTE))
-	}
-	if i.IDEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.IDEqualFold(*i.IDEqualFold))
-	}
-	if i.IDContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.IDContainsFold(*i.IDContainsFold))
-	}
-	if i.CreatedAt != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtEQ(*i.CreatedAt))
-	}
-	if i.CreatedAtNEQ != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtNEQ(*i.CreatedAtNEQ))
-	}
-	if len(i.CreatedAtIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedAtIn(i.CreatedAtIn...))
-	}
-	if len(i.CreatedAtNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedAtNotIn(i.CreatedAtNotIn...))
-	}
-	if i.CreatedAtGT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtGT(*i.CreatedAtGT))
-	}
-	if i.CreatedAtGTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtGTE(*i.CreatedAtGTE))
-	}
-	if i.CreatedAtLT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtLT(*i.CreatedAtLT))
-	}
-	if i.CreatedAtLTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedAtLTE(*i.CreatedAtLTE))
-	}
-	if i.CreatedAtIsNil {
-		predicates = append(predicates, trustcenterentity.CreatedAtIsNil())
-	}
-	if i.CreatedAtNotNil {
-		predicates = append(predicates, trustcenterentity.CreatedAtNotNil())
-	}
-	if i.UpdatedAt != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtEQ(*i.UpdatedAt))
-	}
-	if i.UpdatedAtNEQ != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtNEQ(*i.UpdatedAtNEQ))
-	}
-	if len(i.UpdatedAtIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedAtIn(i.UpdatedAtIn...))
-	}
-	if len(i.UpdatedAtNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedAtNotIn(i.UpdatedAtNotIn...))
-	}
-	if i.UpdatedAtGT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtGT(*i.UpdatedAtGT))
-	}
-	if i.UpdatedAtGTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtGTE(*i.UpdatedAtGTE))
-	}
-	if i.UpdatedAtLT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtLT(*i.UpdatedAtLT))
-	}
-	if i.UpdatedAtLTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtLTE(*i.UpdatedAtLTE))
-	}
-	if i.UpdatedAtIsNil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtIsNil())
-	}
-	if i.UpdatedAtNotNil {
-		predicates = append(predicates, trustcenterentity.UpdatedAtNotNil())
-	}
-	if i.CreatedBy != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByEQ(*i.CreatedBy))
-	}
-	if i.CreatedByNEQ != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByNEQ(*i.CreatedByNEQ))
-	}
-	if len(i.CreatedByIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedByIn(i.CreatedByIn...))
-	}
-	if len(i.CreatedByNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.CreatedByNotIn(i.CreatedByNotIn...))
-	}
-	if i.CreatedByGT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByGT(*i.CreatedByGT))
-	}
-	if i.CreatedByGTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByGTE(*i.CreatedByGTE))
-	}
-	if i.CreatedByLT != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByLT(*i.CreatedByLT))
-	}
-	if i.CreatedByLTE != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByLTE(*i.CreatedByLTE))
-	}
-	if i.CreatedByContains != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByContains(*i.CreatedByContains))
-	}
-	if i.CreatedByHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByHasPrefix(*i.CreatedByHasPrefix))
-	}
-	if i.CreatedByHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByHasSuffix(*i.CreatedByHasSuffix))
-	}
-	if i.CreatedByIsNil {
-		predicates = append(predicates, trustcenterentity.CreatedByIsNil())
-	}
-	if i.CreatedByNotNil {
-		predicates = append(predicates, trustcenterentity.CreatedByNotNil())
-	}
-	if i.CreatedByEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByEqualFold(*i.CreatedByEqualFold))
-	}
-	if i.CreatedByContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.CreatedByContainsFold(*i.CreatedByContainsFold))
-	}
-	if i.UpdatedBy != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByEQ(*i.UpdatedBy))
-	}
-	if i.UpdatedByNEQ != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByNEQ(*i.UpdatedByNEQ))
-	}
-	if len(i.UpdatedByIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedByIn(i.UpdatedByIn...))
-	}
-	if len(i.UpdatedByNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.UpdatedByNotIn(i.UpdatedByNotIn...))
-	}
-	if i.UpdatedByGT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByGT(*i.UpdatedByGT))
-	}
-	if i.UpdatedByGTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByGTE(*i.UpdatedByGTE))
-	}
-	if i.UpdatedByLT != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByLT(*i.UpdatedByLT))
-	}
-	if i.UpdatedByLTE != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByLTE(*i.UpdatedByLTE))
-	}
-	if i.UpdatedByContains != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByContains(*i.UpdatedByContains))
-	}
-	if i.UpdatedByHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByHasPrefix(*i.UpdatedByHasPrefix))
-	}
-	if i.UpdatedByHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByHasSuffix(*i.UpdatedByHasSuffix))
-	}
-	if i.UpdatedByIsNil {
-		predicates = append(predicates, trustcenterentity.UpdatedByIsNil())
-	}
-	if i.UpdatedByNotNil {
-		predicates = append(predicates, trustcenterentity.UpdatedByNotNil())
-	}
-	if i.UpdatedByEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByEqualFold(*i.UpdatedByEqualFold))
-	}
-	if i.UpdatedByContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.UpdatedByContainsFold(*i.UpdatedByContainsFold))
-	}
-	if i.LogoFileID != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDEQ(*i.LogoFileID))
-	}
-	if i.LogoFileIDNEQ != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDNEQ(*i.LogoFileIDNEQ))
-	}
-	if len(i.LogoFileIDIn) > 0 {
-		predicates = append(predicates, trustcenterentity.LogoFileIDIn(i.LogoFileIDIn...))
-	}
-	if len(i.LogoFileIDNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.LogoFileIDNotIn(i.LogoFileIDNotIn...))
-	}
-	if i.LogoFileIDGT != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDGT(*i.LogoFileIDGT))
-	}
-	if i.LogoFileIDGTE != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDGTE(*i.LogoFileIDGTE))
-	}
-	if i.LogoFileIDLT != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDLT(*i.LogoFileIDLT))
-	}
-	if i.LogoFileIDLTE != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDLTE(*i.LogoFileIDLTE))
-	}
-	if i.LogoFileIDContains != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDContains(*i.LogoFileIDContains))
-	}
-	if i.LogoFileIDHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDHasPrefix(*i.LogoFileIDHasPrefix))
-	}
-	if i.LogoFileIDHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDHasSuffix(*i.LogoFileIDHasSuffix))
-	}
-	if i.LogoFileIDIsNil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDIsNil())
-	}
-	if i.LogoFileIDNotNil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDNotNil())
-	}
-	if i.LogoFileIDEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDEqualFold(*i.LogoFileIDEqualFold))
-	}
-	if i.LogoFileIDContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.LogoFileIDContainsFold(*i.LogoFileIDContainsFold))
-	}
-	if i.URL != nil {
-		predicates = append(predicates, trustcenterentity.URLEQ(*i.URL))
-	}
-	if i.URLNEQ != nil {
-		predicates = append(predicates, trustcenterentity.URLNEQ(*i.URLNEQ))
-	}
-	if len(i.URLIn) > 0 {
-		predicates = append(predicates, trustcenterentity.URLIn(i.URLIn...))
-	}
-	if len(i.URLNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.URLNotIn(i.URLNotIn...))
-	}
-	if i.URLGT != nil {
-		predicates = append(predicates, trustcenterentity.URLGT(*i.URLGT))
-	}
-	if i.URLGTE != nil {
-		predicates = append(predicates, trustcenterentity.URLGTE(*i.URLGTE))
-	}
-	if i.URLLT != nil {
-		predicates = append(predicates, trustcenterentity.URLLT(*i.URLLT))
-	}
-	if i.URLLTE != nil {
-		predicates = append(predicates, trustcenterentity.URLLTE(*i.URLLTE))
-	}
-	if i.URLContains != nil {
-		predicates = append(predicates, trustcenterentity.URLContains(*i.URLContains))
-	}
-	if i.URLHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.URLHasPrefix(*i.URLHasPrefix))
-	}
-	if i.URLHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.URLHasSuffix(*i.URLHasSuffix))
-	}
-	if i.URLIsNil {
-		predicates = append(predicates, trustcenterentity.URLIsNil())
-	}
-	if i.URLNotNil {
-		predicates = append(predicates, trustcenterentity.URLNotNil())
-	}
-	if i.URLEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.URLEqualFold(*i.URLEqualFold))
-	}
-	if i.URLContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.URLContainsFold(*i.URLContainsFold))
-	}
-	if i.Name != nil {
-		predicates = append(predicates, trustcenterentity.NameEQ(*i.Name))
-	}
-	if i.NameNEQ != nil {
-		predicates = append(predicates, trustcenterentity.NameNEQ(*i.NameNEQ))
-	}
-	if len(i.NameIn) > 0 {
-		predicates = append(predicates, trustcenterentity.NameIn(i.NameIn...))
-	}
-	if len(i.NameNotIn) > 0 {
-		predicates = append(predicates, trustcenterentity.NameNotIn(i.NameNotIn...))
-	}
-	if i.NameGT != nil {
-		predicates = append(predicates, trustcenterentity.NameGT(*i.NameGT))
-	}
-	if i.NameGTE != nil {
-		predicates = append(predicates, trustcenterentity.NameGTE(*i.NameGTE))
-	}
-	if i.NameLT != nil {
-		predicates = append(predicates, trustcenterentity.NameLT(*i.NameLT))
-	}
-	if i.NameLTE != nil {
-		predicates = append(predicates, trustcenterentity.NameLTE(*i.NameLTE))
-	}
-	if i.NameContains != nil {
-		predicates = append(predicates, trustcenterentity.NameContains(*i.NameContains))
-	}
-	if i.NameHasPrefix != nil {
-		predicates = append(predicates, trustcenterentity.NameHasPrefix(*i.NameHasPrefix))
-	}
-	if i.NameHasSuffix != nil {
-		predicates = append(predicates, trustcenterentity.NameHasSuffix(*i.NameHasSuffix))
-	}
-	if i.NameEqualFold != nil {
-		predicates = append(predicates, trustcenterentity.NameEqualFold(*i.NameEqualFold))
-	}
-	if i.NameContainsFold != nil {
-		predicates = append(predicates, trustcenterentity.NameContainsFold(*i.NameContainsFold))
-	}
-
-	if i.HasLogoFile != nil {
-		p := trustcenterentity.HasLogoFile()
-		if !*i.HasLogoFile {
-			p = trustcenterentity.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasLogoFileWith) > 0 {
-		with := make([]predicate.File, 0, len(i.HasLogoFileWith))
-		for _, w := range i.HasLogoFileWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasLogoFileWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterentity.HasLogoFileWith(with...))
-	}
-	if i.HasTrustCenter != nil {
-		p := trustcenterentity.HasTrustCenter()
-		if !*i.HasTrustCenter {
-			p = trustcenterentity.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasTrustCenterWith) > 0 {
-		with := make([]predicate.TrustCenter, 0, len(i.HasTrustCenterWith))
-		for _, w := range i.HasTrustCenterWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasTrustCenterWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterentity.HasTrustCenterWith(with...))
-	}
-	if i.HasEntityType != nil {
-		p := trustcenterentity.HasEntityType()
-		if !*i.HasEntityType {
-			p = trustcenterentity.Not(p)
-		}
-		predicates = append(predicates, p)
-	}
-	if len(i.HasEntityTypeWith) > 0 {
-		with := make([]predicate.EntityType, 0, len(i.HasEntityTypeWith))
-		for _, w := range i.HasEntityTypeWith {
-			p, err := w.P()
-			if err != nil {
-				return nil, fmt.Errorf("%w: field 'HasEntityTypeWith'", err)
-			}
-			with = append(with, p)
-		}
-		predicates = append(predicates, trustcenterentity.HasEntityTypeWith(with...))
-	}
-	switch len(predicates) {
-	case 0:
-		return nil, ErrEmptyTrustcenterEntityWhereInput
-	case 1:
-		return predicates[0], nil
-	default:
-		return trustcenterentity.And(predicates...), nil
 	}
 }
 
@@ -75785,6 +77979,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasPersonalAccessTokensWith) > 0 {
 		with := make([]predicate.PersonalAccessToken, 0, len(i.HasPersonalAccessTokensWith))
+		with = append(with, personalaccesstoken.DeletedAtIsNil())
 		for _, w := range i.HasPersonalAccessTokensWith {
 			p, err := w.P()
 			if err != nil {
@@ -75803,6 +77998,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasTfaSettingsWith) > 0 {
 		with := make([]predicate.TFASetting, 0, len(i.HasTfaSettingsWith))
+		with = append(with, tfasetting.DeletedAtIsNil())
 		for _, w := range i.HasTfaSettingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -75821,6 +78017,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasSettingWith) > 0 {
 		with := make([]predicate.UserSetting, 0, len(i.HasSettingWith))
+		with = append(with, usersetting.DeletedAtIsNil())
 		for _, w := range i.HasSettingWith {
 			p, err := w.P()
 			if err != nil {
@@ -75839,6 +78036,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -75857,6 +78055,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasOrganizationsWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOrganizationsWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOrganizationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -75893,6 +78092,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasAvatarFileWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasAvatarFileWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasAvatarFileWith {
 			p, err := w.P()
 			if err != nil {
@@ -75929,6 +78129,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -75947,6 +78148,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -75965,6 +78167,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasAssignerTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasAssignerTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasAssignerTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -75983,6 +78186,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasAssigneeTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasAssigneeTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasAssigneeTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -76001,6 +78205,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -76019,6 +78224,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	}
 	if len(i.HasProgramsOwnedWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsOwnedWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsOwnedWith {
 			p, err := w.P()
 			if err != nil {
@@ -76641,6 +78847,7 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 	}
 	if len(i.HasUserWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUserWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUserWith {
 			p, err := w.P()
 			if err != nil {
@@ -76659,6 +78866,7 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 	}
 	if len(i.HasDefaultOrgWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasDefaultOrgWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasDefaultOrgWith {
 			p, err := w.P()
 			if err != nil {
@@ -78533,6 +80741,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -78551,6 +80760,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasBlockedGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasBlockedGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasBlockedGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78569,6 +80779,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasEditorsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasEditorsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasEditorsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78587,6 +80798,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasViewersWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasViewersWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasViewersWith {
 			p, err := w.P()
 			if err != nil {
@@ -78605,6 +80817,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasIntegrationsWith) > 0 {
 		with := make([]predicate.Integration, 0, len(i.HasIntegrationsWith))
+		with = append(with, integration.DeletedAtIsNil())
 		for _, w := range i.HasIntegrationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78623,6 +80836,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasFindingsWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingsWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78641,6 +80855,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasActionPlansWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlansWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlansWith {
 			p, err := w.P()
 			if err != nil {
@@ -78659,6 +80874,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasControlsWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlsWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78677,6 +80893,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasSubcontrolsWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolsWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78695,6 +80912,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasRisksWith) > 0 {
 		with := make([]predicate.Risk, 0, len(i.HasRisksWith))
+		with = append(with, risk.DeletedAtIsNil())
 		for _, w := range i.HasRisksWith {
 			p, err := w.P()
 			if err != nil {
@@ -78713,6 +80931,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasProgramsWith) > 0 {
 		with := make([]predicate.Program, 0, len(i.HasProgramsWith))
+		with = append(with, program.DeletedAtIsNil())
 		for _, w := range i.HasProgramsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78731,6 +80950,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasAssetsWith) > 0 {
 		with := make([]predicate.Asset, 0, len(i.HasAssetsWith))
+		with = append(with, asset.DeletedAtIsNil())
 		for _, w := range i.HasAssetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78749,6 +80969,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasEntitiesWith) > 0 {
 		with := make([]predicate.Entity, 0, len(i.HasEntitiesWith))
+		with = append(with, entity.DeletedAtIsNil())
 		for _, w := range i.HasEntitiesWith {
 			p, err := w.P()
 			if err != nil {
@@ -78767,6 +80988,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasScansWith) > 0 {
 		with := make([]predicate.Scan, 0, len(i.HasScansWith))
+		with = append(with, scan.DeletedAtIsNil())
 		for _, w := range i.HasScansWith {
 			p, err := w.P()
 			if err != nil {
@@ -78785,6 +81007,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasTasksWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTasksWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTasksWith {
 			p, err := w.P()
 			if err != nil {
@@ -78803,6 +81026,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasRemediationsWith) > 0 {
 		with := make([]predicate.Remediation, 0, len(i.HasRemediationsWith))
+		with = append(with, remediation.DeletedAtIsNil())
 		for _, w := range i.HasRemediationsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78821,6 +81045,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasReviewsWith) > 0 {
 		with := make([]predicate.Review, 0, len(i.HasReviewsWith))
+		with = append(with, review.DeletedAtIsNil())
 		for _, w := range i.HasReviewsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78839,6 +81064,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasCommentsWith) > 0 {
 		with := make([]predicate.Note, 0, len(i.HasCommentsWith))
+		with = append(with, note.DeletedAtIsNil())
 		for _, w := range i.HasCommentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -78857,6 +81083,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	}
 	if len(i.HasFilesWith) > 0 {
 		with := make([]predicate.File, 0, len(i.HasFilesWith))
+		with = append(with, file.DeletedAtIsNil())
 		for _, w := range i.HasFilesWith {
 			p, err := w.P()
 			if err != nil {
@@ -79219,6 +81446,7 @@ func (i *WebauthnWhereInput) P() (predicate.Webauthn, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasOwnerWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -80193,6 +82421,7 @@ func (i *WorkflowAssignmentWhereInput) P() (predicate.WorkflowAssignment, error)
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -80211,6 +82440,7 @@ func (i *WorkflowAssignmentWhereInput) P() (predicate.WorkflowAssignment, error)
 	}
 	if len(i.HasWorkflowInstanceWith) > 0 {
 		with := make([]predicate.WorkflowInstance, 0, len(i.HasWorkflowInstanceWith))
+		with = append(with, workflowinstance.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowInstanceWith {
 			p, err := w.P()
 			if err != nil {
@@ -80229,6 +82459,7 @@ func (i *WorkflowAssignmentWhereInput) P() (predicate.WorkflowAssignment, error)
 	}
 	if len(i.HasWorkflowAssignmentTargetsWith) > 0 {
 		with := make([]predicate.WorkflowAssignmentTarget, 0, len(i.HasWorkflowAssignmentTargetsWith))
+		with = append(with, workflowassignmenttarget.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowAssignmentTargetsWith {
 			p, err := w.P()
 			if err != nil {
@@ -80247,6 +82478,7 @@ func (i *WorkflowAssignmentWhereInput) P() (predicate.WorkflowAssignment, error)
 	}
 	if len(i.HasUserWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUserWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUserWith {
 			p, err := w.P()
 			if err != nil {
@@ -80265,6 +82497,7 @@ func (i *WorkflowAssignmentWhereInput) P() (predicate.WorkflowAssignment, error)
 	}
 	if len(i.HasGroupWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupWith {
 			p, err := w.P()
 			if err != nil {
@@ -81013,6 +83246,7 @@ func (i *WorkflowAssignmentTargetWhereInput) P() (predicate.WorkflowAssignmentTa
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -81031,6 +83265,7 @@ func (i *WorkflowAssignmentTargetWhereInput) P() (predicate.WorkflowAssignmentTa
 	}
 	if len(i.HasWorkflowAssignmentWith) > 0 {
 		with := make([]predicate.WorkflowAssignment, 0, len(i.HasWorkflowAssignmentWith))
+		with = append(with, workflowassignment.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowAssignmentWith {
 			p, err := w.P()
 			if err != nil {
@@ -81049,6 +83284,7 @@ func (i *WorkflowAssignmentTargetWhereInput) P() (predicate.WorkflowAssignmentTa
 	}
 	if len(i.HasUserWith) > 0 {
 		with := make([]predicate.User, 0, len(i.HasUserWith))
+		with = append(with, user.DeletedAtIsNil())
 		for _, w := range i.HasUserWith {
 			p, err := w.P()
 			if err != nil {
@@ -81067,6 +83303,7 @@ func (i *WorkflowAssignmentTargetWhereInput) P() (predicate.WorkflowAssignmentTa
 	}
 	if len(i.HasGroupWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupWith {
 			p, err := w.P()
 			if err != nil {
@@ -82023,6 +84260,7 @@ func (i *WorkflowDefinitionWhereInput) P() (predicate.WorkflowDefinition, error)
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -82041,6 +84279,7 @@ func (i *WorkflowDefinitionWhereInput) P() (predicate.WorkflowDefinition, error)
 	}
 	if len(i.HasTagDefinitionsWith) > 0 {
 		with := make([]predicate.TagDefinition, 0, len(i.HasTagDefinitionsWith))
+		with = append(with, tagdefinition.DeletedAtIsNil())
 		for _, w := range i.HasTagDefinitionsWith {
 			p, err := w.P()
 			if err != nil {
@@ -82059,6 +84298,7 @@ func (i *WorkflowDefinitionWhereInput) P() (predicate.WorkflowDefinition, error)
 	}
 	if len(i.HasGroupsWith) > 0 {
 		with := make([]predicate.Group, 0, len(i.HasGroupsWith))
+		with = append(with, group.DeletedAtIsNil())
 		for _, w := range i.HasGroupsWith {
 			p, err := w.P()
 			if err != nil {
@@ -82613,6 +84853,7 @@ func (i *WorkflowEventWhereInput) P() (predicate.WorkflowEvent, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -82631,6 +84872,7 @@ func (i *WorkflowEventWhereInput) P() (predicate.WorkflowEvent, error) {
 	}
 	if len(i.HasWorkflowInstanceWith) > 0 {
 		with := make([]predicate.WorkflowInstance, 0, len(i.HasWorkflowInstanceWith))
+		with = append(with, workflowinstance.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowInstanceWith {
 			p, err := w.P()
 			if err != nil {
@@ -83731,6 +85973,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -83749,6 +85992,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasWorkflowDefinitionWith) > 0 {
 		with := make([]predicate.WorkflowDefinition, 0, len(i.HasWorkflowDefinitionWith))
+		with = append(with, workflowdefinition.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowDefinitionWith {
 			p, err := w.P()
 			if err != nil {
@@ -83767,6 +86011,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasControlWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlWith {
 			p, err := w.P()
 			if err != nil {
@@ -83785,6 +86030,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasInternalPolicyWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyWith {
 			p, err := w.P()
 			if err != nil {
@@ -83803,6 +86049,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -83821,6 +86068,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasSubcontrolWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolWith {
 			p, err := w.P()
 			if err != nil {
@@ -83839,6 +86087,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasActionPlanWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanWith {
 			p, err := w.P()
 			if err != nil {
@@ -83857,6 +86106,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasProcedureWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProcedureWith {
 			p, err := w.P()
 			if err != nil {
@@ -83875,6 +86125,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasWorkflowAssignmentsWith) > 0 {
 		with := make([]predicate.WorkflowAssignment, 0, len(i.HasWorkflowAssignmentsWith))
+		with = append(with, workflowassignment.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowAssignmentsWith {
 			p, err := w.P()
 			if err != nil {
@@ -83893,6 +86144,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	}
 	if len(i.HasWorkflowEventsWith) > 0 {
 		with := make([]predicate.WorkflowEvent, 0, len(i.HasWorkflowEventsWith))
+		with = append(with, workflowevent.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowEventsWith {
 			p, err := w.P()
 			if err != nil {
@@ -85173,6 +87425,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasOwnerWith) > 0 {
 		with := make([]predicate.Organization, 0, len(i.HasOwnerWith))
+		with = append(with, organization.DeletedAtIsNil())
 		for _, w := range i.HasOwnerWith {
 			p, err := w.P()
 			if err != nil {
@@ -85191,6 +87444,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasWorkflowInstanceWith) > 0 {
 		with := make([]predicate.WorkflowInstance, 0, len(i.HasWorkflowInstanceWith))
+		with = append(with, workflowinstance.DeletedAtIsNil())
 		for _, w := range i.HasWorkflowInstanceWith {
 			p, err := w.P()
 			if err != nil {
@@ -85209,6 +87463,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasControlWith) > 0 {
 		with := make([]predicate.Control, 0, len(i.HasControlWith))
+		with = append(with, control.DeletedAtIsNil())
 		for _, w := range i.HasControlWith {
 			p, err := w.P()
 			if err != nil {
@@ -85227,6 +87482,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasTaskWith) > 0 {
 		with := make([]predicate.Task, 0, len(i.HasTaskWith))
+		with = append(with, task.DeletedAtIsNil())
 		for _, w := range i.HasTaskWith {
 			p, err := w.P()
 			if err != nil {
@@ -85245,6 +87501,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasInternalPolicyWith) > 0 {
 		with := make([]predicate.InternalPolicy, 0, len(i.HasInternalPolicyWith))
+		with = append(with, internalpolicy.DeletedAtIsNil())
 		for _, w := range i.HasInternalPolicyWith {
 			p, err := w.P()
 			if err != nil {
@@ -85263,6 +87520,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasFindingWith) > 0 {
 		with := make([]predicate.Finding, 0, len(i.HasFindingWith))
+		with = append(with, finding.DeletedAtIsNil())
 		for _, w := range i.HasFindingWith {
 			p, err := w.P()
 			if err != nil {
@@ -85335,6 +87593,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasEvidenceWith) > 0 {
 		with := make([]predicate.Evidence, 0, len(i.HasEvidenceWith))
+		with = append(with, evidence.DeletedAtIsNil())
 		for _, w := range i.HasEvidenceWith {
 			p, err := w.P()
 			if err != nil {
@@ -85353,6 +87612,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasSubcontrolWith) > 0 {
 		with := make([]predicate.Subcontrol, 0, len(i.HasSubcontrolWith))
+		with = append(with, subcontrol.DeletedAtIsNil())
 		for _, w := range i.HasSubcontrolWith {
 			p, err := w.P()
 			if err != nil {
@@ -85371,6 +87631,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasActionPlanWith) > 0 {
 		with := make([]predicate.ActionPlan, 0, len(i.HasActionPlanWith))
+		with = append(with, actionplan.DeletedAtIsNil())
 		for _, w := range i.HasActionPlanWith {
 			p, err := w.P()
 			if err != nil {
@@ -85389,6 +87650,7 @@ func (i *WorkflowObjectRefWhereInput) P() (predicate.WorkflowObjectRef, error) {
 	}
 	if len(i.HasProcedureWith) > 0 {
 		with := make([]predicate.Procedure, 0, len(i.HasProcedureWith))
+		with = append(with, procedure.DeletedAtIsNil())
 		for _, w := range i.HasProcedureWith {
 			p, err := w.P()
 			if err != nil {

@@ -2197,35 +2197,6 @@ func HasEventsWith(preds ...predicate.Event) predicate.File {
 	})
 }
 
-// HasTrustCenterSetting applies the HasEdge predicate on the "trust_center_setting" edge.
-func HasTrustCenterSetting() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasTrustCenterSettingWith applies the HasEdge predicate on the "trust_center_setting" edge with a given conditions (other predicates).
-func HasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newTrustCenterSettingStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasIntegrations applies the HasEdge predicate on the "integrations" edge.
 func HasIntegrations() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
@@ -2284,27 +2255,85 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.File {
 	})
 }
 
-// HasTrustcenterEntities applies the HasEdge predicate on the "trustcenter_entities" edge.
-func HasTrustcenterEntities() predicate.File {
+// HasTrustCenterEntities applies the HasEdge predicate on the "trust_center_entities" edge.
+func HasTrustCenterEntities() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TrustcenterEntitiesTable, TrustcenterEntitiesColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterEntitiesTable, TrustCenterEntitiesColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustcenterEntity
-		step.Edge.Schema = schemaConfig.TrustcenterEntity
+		step.To.Schema = schemaConfig.TrustCenterEntity
+		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasTrustcenterEntitiesWith applies the HasEdge predicate on the "trustcenter_entities" edge with a given conditions (other predicates).
-func HasTrustcenterEntitiesWith(preds ...predicate.TrustcenterEntity) predicate.File {
+// HasTrustCenterEntitiesWith applies the HasEdge predicate on the "trust_center_entities" edge with a given conditions (other predicates).
+func HasTrustCenterEntitiesWith(preds ...predicate.TrustCenterEntity) predicate.File {
 	return predicate.File(func(s *sql.Selector) {
-		step := newTrustcenterEntitiesStep()
+		step := newTrustCenterEntitiesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustcenterEntity
-		step.Edge.Schema = schemaConfig.TrustcenterEntity
+		step.To.Schema = schemaConfig.TrustCenterEntity
+		step.Edge.Schema = schemaConfig.TrustCenterEntity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenterDoc applies the HasEdge predicate on the "trust_center_doc" edge.
+func HasTrustCenterDoc() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterDocTable, TrustCenterDocColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterDocWith applies the HasEdge predicate on the "trust_center_doc" edge with a given conditions (other predicates).
+func HasTrustCenterDocWith(preds ...predicate.TrustCenterDoc) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustCenterDocStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasOriginalTrustCenterDoc applies the HasEdge predicate on the "original_trust_center_doc" edge.
+func HasOriginalTrustCenterDoc() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, OriginalTrustCenterDocTable, OriginalTrustCenterDocColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOriginalTrustCenterDocWith applies the HasEdge predicate on the "original_trust_center_doc" edge with a given conditions (other predicates).
+func HasOriginalTrustCenterDocWith(preds ...predicate.TrustCenterDoc) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newOriginalTrustCenterDocStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

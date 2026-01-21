@@ -91,14 +91,16 @@ const (
 	EdgeEvidence = "evidence"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
 	EdgeEvents = "events"
-	// EdgeTrustCenterSetting holds the string denoting the trust_center_setting edge name in mutations.
-	EdgeTrustCenterSetting = "trust_center_setting"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
-	// EdgeTrustcenterEntities holds the string denoting the trustcenter_entities edge name in mutations.
-	EdgeTrustcenterEntities = "trustcenter_entities"
+	// EdgeTrustCenterEntities holds the string denoting the trust_center_entities edge name in mutations.
+	EdgeTrustCenterEntities = "trust_center_entities"
+	// EdgeTrustCenterDoc holds the string denoting the trust_center_doc edge name in mutations.
+	EdgeTrustCenterDoc = "trust_center_doc"
+	// EdgeOriginalTrustCenterDoc holds the string denoting the original_trust_center_doc edge name in mutations.
+	EdgeOriginalTrustCenterDoc = "original_trust_center_doc"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
@@ -151,11 +153,6 @@ const (
 	// EventsInverseTable is the table name for the Event entity.
 	// It exists in this package in order to avoid circular dependency with the "event" package.
 	EventsInverseTable = "events"
-	// TrustCenterSettingTable is the table that holds the trust_center_setting relation/edge. The primary key declared below.
-	TrustCenterSettingTable = "trust_center_setting_files"
-	// TrustCenterSettingInverseTable is the table name for the TrustCenterSetting entity.
-	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
-	TrustCenterSettingInverseTable = "trust_center_settings"
 	// IntegrationsTable is the table that holds the integrations relation/edge.
 	IntegrationsTable = "integrations"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -168,13 +165,27 @@ const (
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
-	// TrustcenterEntitiesTable is the table that holds the trustcenter_entities relation/edge.
-	TrustcenterEntitiesTable = "trustcenter_entities"
-	// TrustcenterEntitiesInverseTable is the table name for the TrustcenterEntity entity.
+	// TrustCenterEntitiesTable is the table that holds the trust_center_entities relation/edge.
+	TrustCenterEntitiesTable = "trust_center_entities"
+	// TrustCenterEntitiesInverseTable is the table name for the TrustCenterEntity entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenterentity" package.
-	TrustcenterEntitiesInverseTable = "trustcenter_entities"
-	// TrustcenterEntitiesColumn is the table column denoting the trustcenter_entities relation/edge.
-	TrustcenterEntitiesColumn = "file_trustcenter_entities"
+	TrustCenterEntitiesInverseTable = "trust_center_entities"
+	// TrustCenterEntitiesColumn is the table column denoting the trust_center_entities relation/edge.
+	TrustCenterEntitiesColumn = "file_trust_center_entities"
+	// TrustCenterDocTable is the table that holds the trust_center_doc relation/edge.
+	TrustCenterDocTable = "trust_center_docs"
+	// TrustCenterDocInverseTable is the table name for the TrustCenterDoc entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterdoc" package.
+	TrustCenterDocInverseTable = "trust_center_docs"
+	// TrustCenterDocColumn is the table column denoting the trust_center_doc relation/edge.
+	TrustCenterDocColumn = "file_id"
+	// OriginalTrustCenterDocTable is the table that holds the original_trust_center_doc relation/edge.
+	OriginalTrustCenterDocTable = "trust_center_docs"
+	// OriginalTrustCenterDocInverseTable is the table name for the TrustCenterDoc entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterdoc" package.
+	OriginalTrustCenterDocInverseTable = "trust_center_docs"
+	// OriginalTrustCenterDocColumn is the table column denoting the original_trust_center_doc relation/edge.
+	OriginalTrustCenterDocColumn = "original_file_id"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -253,9 +264,6 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"file_id", "event_id"}
-	// TrustCenterSettingPrimaryKey and TrustCenterSettingColumn2 are the table columns denoting the
-	// primary key for the trust_center_setting relation (M2M).
-	TrustCenterSettingPrimaryKey = []string{"trust_center_setting_id", "file_id"}
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"file_id", "hush_id"}
@@ -576,20 +584,6 @@ func ByEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTrustCenterSettingCount orders the results by trust_center_setting count.
-func ByTrustCenterSettingCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSettingStep(), opts...)
-	}
-}
-
-// ByTrustCenterSetting orders the results by trust_center_setting terms.
-func ByTrustCenterSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByIntegrationsCount orders the results by integrations count.
 func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -618,17 +612,45 @@ func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTrustcenterEntitiesCount orders the results by trustcenter_entities count.
-func ByTrustcenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTrustCenterEntitiesCount orders the results by trust_center_entities count.
+func ByTrustCenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTrustcenterEntitiesStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterEntitiesStep(), opts...)
 	}
 }
 
-// ByTrustcenterEntities orders the results by trustcenter_entities terms.
-func ByTrustcenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTrustCenterEntities orders the results by trust_center_entities terms.
+func ByTrustCenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustcenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterDocCount orders the results by trust_center_doc count.
+func ByTrustCenterDocCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterDocStep(), opts...)
+	}
+}
+
+// ByTrustCenterDoc orders the results by trust_center_doc terms.
+func ByTrustCenterDoc(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOriginalTrustCenterDocCount orders the results by original_trust_center_doc count.
+func ByOriginalTrustCenterDocCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOriginalTrustCenterDocStep(), opts...)
+	}
+}
+
+// ByOriginalTrustCenterDoc orders the results by original_trust_center_doc terms.
+func ByOriginalTrustCenterDoc(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOriginalTrustCenterDocStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOrganizationStep() *sqlgraph.Step {
@@ -701,13 +723,6 @@ func newEventsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 	)
 }
-func newTrustCenterSettingStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustCenterSettingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
-	)
-}
 func newIntegrationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -722,10 +737,24 @@ func newSecretsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
 	)
 }
-func newTrustcenterEntitiesStep() *sqlgraph.Step {
+func newTrustCenterEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustcenterEntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, TrustcenterEntitiesTable, TrustcenterEntitiesColumn),
+		sqlgraph.To(TrustCenterEntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterEntitiesTable, TrustCenterEntitiesColumn),
+	)
+}
+func newTrustCenterDocStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterDocInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterDocTable, TrustCenterDocColumn),
+	)
+}
+func newOriginalTrustCenterDocStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OriginalTrustCenterDocInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, OriginalTrustCenterDocTable, OriginalTrustCenterDocColumn),
 	)
 }

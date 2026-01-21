@@ -382,7 +382,7 @@ func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificatio
 		"url": fmt.Sprintf("%s/tasks?id=%s", consoleURL, input.taskID),
 	}
 
-	topic := "task_assignment"
+	topic := enums.NotificationTopicTaskAssignment
 	notifInput := &generated.CreateNotificationInput{
 		NotificationType: enums.NotificationTypeUser,
 		Title:            "New task assigned",
@@ -430,7 +430,7 @@ func addInternalPolicyNotification(ctx *soiree.EventContext, input policyNotific
 		"url": fmt.Sprintf("%s/policies/%s", consoleURL, input.policyID),
 	}
 
-	topic := "policy_approval"
+	topic := enums.NotificationTopicApproval
 	notifInput := &generated.CreateNotificationInput{
 		NotificationType: enums.NotificationTypeOrganization,
 		Title:            "Policy approval required",
@@ -474,4 +474,5 @@ func RegisterListeners(addListener func(entityType string, handler func(*soiree.
 	addListener(generated.TypeRisk, handleRiskMutation)
 	addListener(generated.TypeProcedure, handleProcedureMutation)
 	addListener(generated.TypeNote, handleNoteMutation)
+	addListener(generated.TypeExport, handleExportMutation)
 }

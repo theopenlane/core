@@ -9,6 +9,8 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryStandard(t *testing.T) {
@@ -166,6 +167,7 @@ func TestQueryStandard(t *testing.T) {
 		})
 	}
 
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(testUser1.UserCtx, t)
 }
@@ -267,10 +269,58 @@ func TestQueryStandards(t *testing.T) {
 		})
 	}
 
-	systemOwnedIDs := notPublicStandardIDs
+	systemOwnedIDs := append(notPublicStandardIDs, publicStandardIDs...)
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryStandardsWithDeletedControls(t *testing.T) {
+	standard1 := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "Standard With Active Controls"}).MustNew(systemAdminUser.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "Standard With Deleted Controls"}).MustNew(systemAdminUser.UserCtx, t)
+	standard3 := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "Standard With No Controls"}).MustNew(systemAdminUser.UserCtx, t)
+
+	control1 := (&ControlBuilder{client: suite.client, StandardID: standard1.ID}).MustNew(testUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client, StandardID: standard1.ID}).MustNew(testUser1.UserCtx, t)
+
+	controlToDelete1 := (&ControlBuilder{client: suite.client, StandardID: standard2.ID}).MustNew(testUser1.UserCtx, t)
+	controlToDelete2 := (&ControlBuilder{client: suite.client, StandardID: standard2.ID}).MustNew(testUser1.UserCtx, t)
+
+	whereFilter := &testclient.StandardWhereInput{
+		HasControlsWith: []*testclient.ControlWhereInput{
+			{
+				HasOwnerWith: []*testclient.OrganizationWhereInput{
+					{
+						ID: &testUser1.OrganizationID,
+					},
+				},
+			},
+		},
+	}
+
+	// check to make sure there are 2 standards since we only linked to two standards
+	resp, err := suite.client.api.GetStandards(testUser1.UserCtx, nil, nil, whereFilter)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	assert.Check(t, is.Len(resp.Standards.Edges, 2))
+
+	// delete the controls linked to standard2
+	for _, id := range []string{controlToDelete1.ID, controlToDelete2.ID} {
+		_, err := suite.client.api.DeleteControl(testUser1.UserCtx, id)
+		assert.NilError(t, err)
+	}
+
+	resp, err = suite.client.api.GetStandards(testUser1.UserCtx, nil, nil, whereFilter)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	assert.Check(t, is.Len(resp.Standards.Edges, 1))
+	assert.Check(t, is.Equal(standard1.ID, resp.Standards.Edges[0].Node.ID), "expected standard1 only")
+
+	// cleanup
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID, standard3.ID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateStandard(t *testing.T) {

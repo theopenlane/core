@@ -1,0 +1,60 @@
+extend type Query {
+    """
+    Get workflow metadata including available object types and their eligible fields
+    """
+    workflowMetadata: WorkflowMetadata!
+}
+
+"""
+Workflow metadata including supported object types and their fields
+"""
+type WorkflowMetadata {
+    """
+    Available workflow object types
+    """
+    objectTypes: [WorkflowObjectTypeMetadata!]!
+}
+
+"""
+Metadata for a workflow object type
+"""
+type WorkflowObjectTypeMetadata {
+    """
+    The object type name (e.g., CONTROL, EVIDENCE, POLICY)
+    """
+    type: String!
+    """
+    Human-readable label for the type
+    """
+    label: String!
+    """
+    Description of the object type
+    """
+    description: String!
+    """
+    List of fields that can be tracked in workflows for this type
+    """
+    eligibleFields: [WorkflowFieldMetadata!]!
+    """
+    Available resolver keys for this object type
+    """
+    resolverKeys: [String!]!
+}
+
+"""
+Metadata for a workflow-eligible field
+"""
+type WorkflowFieldMetadata {
+    """
+    The field name (snake_case)
+    """
+    name: String!
+    """
+    Human-readable label for the field
+    """
+    label: String!
+    """
+    Field data type
+    """
+    type: String!
+}

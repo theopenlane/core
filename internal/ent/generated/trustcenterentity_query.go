@@ -4,6 +4,7 @@ package generated
 
 import (
 	"context"
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"math"
@@ -14,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
@@ -22,57 +24,111 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// TrustcenterEntityQuery is the builder for querying TrustcenterEntity entities.
-type TrustcenterEntityQuery struct {
+// TrustCenterEntityQuery is the builder for querying TrustCenterEntity entities.
+type TrustCenterEntityQuery struct {
 	config
-	ctx             *QueryContext
-	order           []trustcenterentity.OrderOption
-	inters          []Interceptor
-	predicates      []predicate.TrustcenterEntity
-	withLogoFile    *FileQuery
-	withTrustCenter *TrustCenterQuery
-	withEntityType  *EntityTypeQuery
-	withFKs         bool
-	loadTotal       []func(context.Context, []*TrustcenterEntity) error
-	modifiers       []func(*sql.Selector)
+	ctx                    *QueryContext
+	order                  []trustcenterentity.OrderOption
+	inters                 []Interceptor
+	predicates             []predicate.TrustCenterEntity
+	withBlockedGroups      *GroupQuery
+	withEditors            *GroupQuery
+	withLogoFile           *FileQuery
+	withTrustCenter        *TrustCenterQuery
+	withEntityType         *EntityTypeQuery
+	withFKs                bool
+	loadTotal              []func(context.Context, []*TrustCenterEntity) error
+	modifiers              []func(*sql.Selector)
+	withNamedBlockedGroups map[string]*GroupQuery
+	withNamedEditors       map[string]*GroupQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
 }
 
-// Where adds a new predicate for the TrustcenterEntityQuery builder.
-func (_q *TrustcenterEntityQuery) Where(ps ...predicate.TrustcenterEntity) *TrustcenterEntityQuery {
+// Where adds a new predicate for the TrustCenterEntityQuery builder.
+func (_q *TrustCenterEntityQuery) Where(ps ...predicate.TrustCenterEntity) *TrustCenterEntityQuery {
 	_q.predicates = append(_q.predicates, ps...)
 	return _q
 }
 
 // Limit the number of records to be returned by this query.
-func (_q *TrustcenterEntityQuery) Limit(limit int) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) Limit(limit int) *TrustCenterEntityQuery {
 	_q.ctx.Limit = &limit
 	return _q
 }
 
 // Offset to start from.
-func (_q *TrustcenterEntityQuery) Offset(offset int) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) Offset(offset int) *TrustCenterEntityQuery {
 	_q.ctx.Offset = &offset
 	return _q
 }
 
 // Unique configures the query builder to filter duplicate records on query.
 // By default, unique is set to true, and can be disabled using this method.
-func (_q *TrustcenterEntityQuery) Unique(unique bool) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) Unique(unique bool) *TrustCenterEntityQuery {
 	_q.ctx.Unique = &unique
 	return _q
 }
 
 // Order specifies how the records should be ordered.
-func (_q *TrustcenterEntityQuery) Order(o ...trustcenterentity.OrderOption) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) Order(o ...trustcenterentity.OrderOption) *TrustCenterEntityQuery {
 	_q.order = append(_q.order, o...)
 	return _q
 }
 
+// QueryBlockedGroups chains the current query on the "blocked_groups" edge.
+func (_q *TrustCenterEntityQuery) QueryBlockedGroups() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterentity.Table, trustcenterentity.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterentity.BlockedGroupsTable, trustcenterentity.BlockedGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEditors chains the current query on the "editors" edge.
+func (_q *TrustCenterEntityQuery) QueryEditors() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterentity.Table, trustcenterentity.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterentity.EditorsTable, trustcenterentity.EditorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryLogoFile chains the current query on the "logo_file" edge.
-func (_q *TrustcenterEntityQuery) QueryLogoFile() *FileQuery {
+func (_q *TrustCenterEntityQuery) QueryLogoFile() *FileQuery {
 	query := (&FileClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -89,7 +145,7 @@ func (_q *TrustcenterEntityQuery) QueryLogoFile() *FileQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustcenterEntity
+		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -97,7 +153,7 @@ func (_q *TrustcenterEntityQuery) QueryLogoFile() *FileQuery {
 }
 
 // QueryTrustCenter chains the current query on the "trust_center" edge.
-func (_q *TrustcenterEntityQuery) QueryTrustCenter() *TrustCenterQuery {
+func (_q *TrustCenterEntityQuery) QueryTrustCenter() *TrustCenterQuery {
 	query := (&TrustCenterClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -110,11 +166,11 @@ func (_q *TrustcenterEntityQuery) QueryTrustCenter() *TrustCenterQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenterentity.Table, trustcenterentity.FieldID, selector),
 			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterentity.TrustCenterTable, trustcenterentity.TrustCenterColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterentity.TrustCenterTable, trustcenterentity.TrustCenterColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustcenterEntity
+		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -122,7 +178,7 @@ func (_q *TrustcenterEntityQuery) QueryTrustCenter() *TrustCenterQuery {
 }
 
 // QueryEntityType chains the current query on the "entity_type" edge.
-func (_q *TrustcenterEntityQuery) QueryEntityType() *EntityTypeQuery {
+func (_q *TrustCenterEntityQuery) QueryEntityType() *EntityTypeQuery {
 	query := (&EntityTypeClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -139,16 +195,16 @@ func (_q *TrustcenterEntityQuery) QueryEntityType() *EntityTypeQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.EntityType
-		step.Edge.Schema = schemaConfig.TrustcenterEntity
+		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
 	return query
 }
 
-// First returns the first TrustcenterEntity entity from the query.
-// Returns a *NotFoundError when no TrustcenterEntity was found.
-func (_q *TrustcenterEntityQuery) First(ctx context.Context) (*TrustcenterEntity, error) {
+// First returns the first TrustCenterEntity entity from the query.
+// Returns a *NotFoundError when no TrustCenterEntity was found.
+func (_q *TrustCenterEntityQuery) First(ctx context.Context) (*TrustCenterEntity, error) {
 	nodes, err := _q.Limit(1).All(setContextOp(ctx, _q.ctx, ent.OpQueryFirst))
 	if err != nil {
 		return nil, err
@@ -160,7 +216,7 @@ func (_q *TrustcenterEntityQuery) First(ctx context.Context) (*TrustcenterEntity
 }
 
 // FirstX is like First, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) FirstX(ctx context.Context) *TrustcenterEntity {
+func (_q *TrustCenterEntityQuery) FirstX(ctx context.Context) *TrustCenterEntity {
 	node, err := _q.First(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -168,9 +224,9 @@ func (_q *TrustcenterEntityQuery) FirstX(ctx context.Context) *TrustcenterEntity
 	return node
 }
 
-// FirstID returns the first TrustcenterEntity ID from the query.
-// Returns a *NotFoundError when no TrustcenterEntity ID was found.
-func (_q *TrustcenterEntityQuery) FirstID(ctx context.Context) (id string, err error) {
+// FirstID returns the first TrustCenterEntity ID from the query.
+// Returns a *NotFoundError when no TrustCenterEntity ID was found.
+func (_q *TrustCenterEntityQuery) FirstID(ctx context.Context) (id string, err error) {
 	var ids []string
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
@@ -183,7 +239,7 @@ func (_q *TrustcenterEntityQuery) FirstID(ctx context.Context) (id string, err e
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) FirstIDX(ctx context.Context) string {
+func (_q *TrustCenterEntityQuery) FirstIDX(ctx context.Context) string {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -191,10 +247,10 @@ func (_q *TrustcenterEntityQuery) FirstIDX(ctx context.Context) string {
 	return id
 }
 
-// Only returns a single TrustcenterEntity entity found by the query, ensuring it only returns one.
-// Returns a *NotSingularError when more than one TrustcenterEntity entity is found.
-// Returns a *NotFoundError when no TrustcenterEntity entities are found.
-func (_q *TrustcenterEntityQuery) Only(ctx context.Context) (*TrustcenterEntity, error) {
+// Only returns a single TrustCenterEntity entity found by the query, ensuring it only returns one.
+// Returns a *NotSingularError when more than one TrustCenterEntity entity is found.
+// Returns a *NotFoundError when no TrustCenterEntity entities are found.
+func (_q *TrustCenterEntityQuery) Only(ctx context.Context) (*TrustCenterEntity, error) {
 	nodes, err := _q.Limit(2).All(setContextOp(ctx, _q.ctx, ent.OpQueryOnly))
 	if err != nil {
 		return nil, err
@@ -210,7 +266,7 @@ func (_q *TrustcenterEntityQuery) Only(ctx context.Context) (*TrustcenterEntity,
 }
 
 // OnlyX is like Only, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) OnlyX(ctx context.Context) *TrustcenterEntity {
+func (_q *TrustCenterEntityQuery) OnlyX(ctx context.Context) *TrustCenterEntity {
 	node, err := _q.Only(ctx)
 	if err != nil {
 		panic(err)
@@ -218,10 +274,10 @@ func (_q *TrustcenterEntityQuery) OnlyX(ctx context.Context) *TrustcenterEntity 
 	return node
 }
 
-// OnlyID is like Only, but returns the only TrustcenterEntity ID in the query.
-// Returns a *NotSingularError when more than one TrustcenterEntity ID is found.
+// OnlyID is like Only, but returns the only TrustCenterEntity ID in the query.
+// Returns a *NotSingularError when more than one TrustCenterEntity ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *TrustcenterEntityQuery) OnlyID(ctx context.Context) (id string, err error) {
+func (_q *TrustCenterEntityQuery) OnlyID(ctx context.Context) (id string, err error) {
 	var ids []string
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
@@ -238,7 +294,7 @@ func (_q *TrustcenterEntityQuery) OnlyID(ctx context.Context) (id string, err er
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) OnlyIDX(ctx context.Context) string {
+func (_q *TrustCenterEntityQuery) OnlyIDX(ctx context.Context) string {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -246,18 +302,18 @@ func (_q *TrustcenterEntityQuery) OnlyIDX(ctx context.Context) string {
 	return id
 }
 
-// All executes the query and returns a list of TrustcenterEntities.
-func (_q *TrustcenterEntityQuery) All(ctx context.Context) ([]*TrustcenterEntity, error) {
+// All executes the query and returns a list of TrustCenterEntities.
+func (_q *TrustCenterEntityQuery) All(ctx context.Context) ([]*TrustCenterEntity, error) {
 	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryAll)
 	if err := _q.prepareQuery(ctx); err != nil {
 		return nil, err
 	}
-	qr := querierAll[[]*TrustcenterEntity, *TrustcenterEntityQuery]()
-	return withInterceptors[[]*TrustcenterEntity](ctx, _q, qr, _q.inters)
+	qr := querierAll[[]*TrustCenterEntity, *TrustCenterEntityQuery]()
+	return withInterceptors[[]*TrustCenterEntity](ctx, _q, qr, _q.inters)
 }
 
 // AllX is like All, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) AllX(ctx context.Context) []*TrustcenterEntity {
+func (_q *TrustCenterEntityQuery) AllX(ctx context.Context) []*TrustCenterEntity {
 	nodes, err := _q.All(ctx)
 	if err != nil {
 		panic(err)
@@ -265,8 +321,8 @@ func (_q *TrustcenterEntityQuery) AllX(ctx context.Context) []*TrustcenterEntity
 	return nodes
 }
 
-// IDs executes the query and returns a list of TrustcenterEntity IDs.
-func (_q *TrustcenterEntityQuery) IDs(ctx context.Context) (ids []string, err error) {
+// IDs executes the query and returns a list of TrustCenterEntity IDs.
+func (_q *TrustCenterEntityQuery) IDs(ctx context.Context) (ids []string, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -278,7 +334,7 @@ func (_q *TrustcenterEntityQuery) IDs(ctx context.Context) (ids []string, err er
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) IDsX(ctx context.Context) []string {
+func (_q *TrustCenterEntityQuery) IDsX(ctx context.Context) []string {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -287,16 +343,16 @@ func (_q *TrustcenterEntityQuery) IDsX(ctx context.Context) []string {
 }
 
 // Count returns the count of the given query.
-func (_q *TrustcenterEntityQuery) Count(ctx context.Context) (int, error) {
+func (_q *TrustCenterEntityQuery) Count(ctx context.Context) (int, error) {
 	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryCount)
 	if err := _q.prepareQuery(ctx); err != nil {
 		return 0, err
 	}
-	return withInterceptors[int](ctx, _q, querierCount[*TrustcenterEntityQuery](), _q.inters)
+	return withInterceptors[int](ctx, _q, querierCount[*TrustCenterEntityQuery](), _q.inters)
 }
 
 // CountX is like Count, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) CountX(ctx context.Context) int {
+func (_q *TrustCenterEntityQuery) CountX(ctx context.Context) int {
 	count, err := _q.Count(ctx)
 	if err != nil {
 		panic(err)
@@ -305,7 +361,7 @@ func (_q *TrustcenterEntityQuery) CountX(ctx context.Context) int {
 }
 
 // Exist returns true if the query has elements in the graph.
-func (_q *TrustcenterEntityQuery) Exist(ctx context.Context) (bool, error) {
+func (_q *TrustCenterEntityQuery) Exist(ctx context.Context) (bool, error) {
 	ctx = setContextOp(ctx, _q.ctx, ent.OpQueryExist)
 	switch _, err := _q.FirstID(ctx); {
 	case IsNotFound(err):
@@ -318,7 +374,7 @@ func (_q *TrustcenterEntityQuery) Exist(ctx context.Context) (bool, error) {
 }
 
 // ExistX is like Exist, but panics if an error occurs.
-func (_q *TrustcenterEntityQuery) ExistX(ctx context.Context) bool {
+func (_q *TrustCenterEntityQuery) ExistX(ctx context.Context) bool {
 	exist, err := _q.Exist(ctx)
 	if err != nil {
 		panic(err)
@@ -326,21 +382,23 @@ func (_q *TrustcenterEntityQuery) ExistX(ctx context.Context) bool {
 	return exist
 }
 
-// Clone returns a duplicate of the TrustcenterEntityQuery builder, including all associated steps. It can be
+// Clone returns a duplicate of the TrustCenterEntityQuery builder, including all associated steps. It can be
 // used to prepare common query builders and use them differently after the clone is made.
-func (_q *TrustcenterEntityQuery) Clone() *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) Clone() *TrustCenterEntityQuery {
 	if _q == nil {
 		return nil
 	}
-	return &TrustcenterEntityQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]trustcenterentity.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.TrustcenterEntity{}, _q.predicates...),
-		withLogoFile:    _q.withLogoFile.Clone(),
-		withTrustCenter: _q.withTrustCenter.Clone(),
-		withEntityType:  _q.withEntityType.Clone(),
+	return &TrustCenterEntityQuery{
+		config:            _q.config,
+		ctx:               _q.ctx.Clone(),
+		order:             append([]trustcenterentity.OrderOption{}, _q.order...),
+		inters:            append([]Interceptor{}, _q.inters...),
+		predicates:        append([]predicate.TrustCenterEntity{}, _q.predicates...),
+		withBlockedGroups: _q.withBlockedGroups.Clone(),
+		withEditors:       _q.withEditors.Clone(),
+		withLogoFile:      _q.withLogoFile.Clone(),
+		withTrustCenter:   _q.withTrustCenter.Clone(),
+		withEntityType:    _q.withEntityType.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -348,9 +406,31 @@ func (_q *TrustcenterEntityQuery) Clone() *TrustcenterEntityQuery {
 	}
 }
 
+// WithBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterEntityQuery) WithBlockedGroups(opts ...func(*GroupQuery)) *TrustCenterEntityQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBlockedGroups = query
+	return _q
+}
+
+// WithEditors tells the query-builder to eager-load the nodes that are connected to
+// the "editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterEntityQuery) WithEditors(opts ...func(*GroupQuery)) *TrustCenterEntityQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEditors = query
+	return _q
+}
+
 // WithLogoFile tells the query-builder to eager-load the nodes that are connected to
 // the "logo_file" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustcenterEntityQuery) WithLogoFile(opts ...func(*FileQuery)) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) WithLogoFile(opts ...func(*FileQuery)) *TrustCenterEntityQuery {
 	query := (&FileClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
@@ -361,7 +441,7 @@ func (_q *TrustcenterEntityQuery) WithLogoFile(opts ...func(*FileQuery)) *Trustc
 
 // WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
 // the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustcenterEntityQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustCenterEntityQuery {
 	query := (&TrustCenterClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
@@ -372,7 +452,7 @@ func (_q *TrustcenterEntityQuery) WithTrustCenter(opts ...func(*TrustCenterQuery
 
 // WithEntityType tells the query-builder to eager-load the nodes that are connected to
 // the "entity_type" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustcenterEntityQuery) WithEntityType(opts ...func(*EntityTypeQuery)) *TrustcenterEntityQuery {
+func (_q *TrustCenterEntityQuery) WithEntityType(opts ...func(*EntityTypeQuery)) *TrustCenterEntityQuery {
 	query := (&EntityTypeClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
@@ -391,13 +471,13 @@ func (_q *TrustcenterEntityQuery) WithEntityType(opts ...func(*EntityTypeQuery))
 //		Count int `json:"count,omitempty"`
 //	}
 //
-//	client.TrustcenterEntity.Query().
+//	client.TrustCenterEntity.Query().
 //		GroupBy(trustcenterentity.FieldCreatedAt).
 //		Aggregate(generated.Count()).
 //		Scan(ctx, &v)
-func (_q *TrustcenterEntityQuery) GroupBy(field string, fields ...string) *TrustcenterEntityGroupBy {
+func (_q *TrustCenterEntityQuery) GroupBy(field string, fields ...string) *TrustCenterEntityGroupBy {
 	_q.ctx.Fields = append([]string{field}, fields...)
-	grbuild := &TrustcenterEntityGroupBy{build: _q}
+	grbuild := &TrustCenterEntityGroupBy{build: _q}
 	grbuild.flds = &_q.ctx.Fields
 	grbuild.label = trustcenterentity.Label
 	grbuild.scan = grbuild.Scan
@@ -413,23 +493,23 @@ func (_q *TrustcenterEntityQuery) GroupBy(field string, fields ...string) *Trust
 //		CreatedAt time.Time `json:"created_at,omitempty"`
 //	}
 //
-//	client.TrustcenterEntity.Query().
+//	client.TrustCenterEntity.Query().
 //		Select(trustcenterentity.FieldCreatedAt).
 //		Scan(ctx, &v)
-func (_q *TrustcenterEntityQuery) Select(fields ...string) *TrustcenterEntitySelect {
+func (_q *TrustCenterEntityQuery) Select(fields ...string) *TrustCenterEntitySelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
-	sbuild := &TrustcenterEntitySelect{TrustcenterEntityQuery: _q}
+	sbuild := &TrustCenterEntitySelect{TrustCenterEntityQuery: _q}
 	sbuild.label = trustcenterentity.Label
 	sbuild.flds, sbuild.scan = &_q.ctx.Fields, sbuild.Scan
 	return sbuild
 }
 
-// Aggregate returns a TrustcenterEntitySelect configured with the given aggregations.
-func (_q *TrustcenterEntityQuery) Aggregate(fns ...AggregateFunc) *TrustcenterEntitySelect {
+// Aggregate returns a TrustCenterEntitySelect configured with the given aggregations.
+func (_q *TrustCenterEntityQuery) Aggregate(fns ...AggregateFunc) *TrustCenterEntitySelect {
 	return _q.Select().Aggregate(fns...)
 }
 
-func (_q *TrustcenterEntityQuery) prepareQuery(ctx context.Context) error {
+func (_q *TrustCenterEntityQuery) prepareQuery(ctx context.Context) error {
 	for _, inter := range _q.inters {
 		if inter == nil {
 			return fmt.Errorf("generated: uninitialized interceptor (forgotten import generated/runtime?)")
@@ -461,12 +541,14 @@ func (_q *TrustcenterEntityQuery) prepareQuery(ctx context.Context) error {
 	return nil
 }
 
-func (_q *TrustcenterEntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustcenterEntity, error) {
+func (_q *TrustCenterEntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TrustCenterEntity, error) {
 	var (
-		nodes       = []*TrustcenterEntity{}
+		nodes       = []*TrustCenterEntity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [5]bool{
+			_q.withBlockedGroups != nil,
+			_q.withEditors != nil,
 			_q.withLogoFile != nil,
 			_q.withTrustCenter != nil,
 			_q.withEntityType != nil,
@@ -476,15 +558,15 @@ func (_q *TrustcenterEntityQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		_spec.Node.Columns = append(_spec.Node.Columns, trustcenterentity.ForeignKeys...)
 	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
-		return (*TrustcenterEntity).scanValues(nil, columns)
+		return (*TrustCenterEntity).scanValues(nil, columns)
 	}
 	_spec.Assign = func(columns []string, values []any) error {
-		node := &TrustcenterEntity{config: _q.config}
+		node := &TrustCenterEntity{config: _q.config}
 		nodes = append(nodes, node)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.TrustcenterEntity
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterEntity
 	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
@@ -498,21 +580,49 @@ func (_q *TrustcenterEntityQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withBlockedGroups; query != nil {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterEntity) { n.Edges.BlockedGroups = []*Group{} },
+			func(n *TrustCenterEntity, e *Group) { n.Edges.BlockedGroups = append(n.Edges.BlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEditors; query != nil {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterEntity) { n.Edges.Editors = []*Group{} },
+			func(n *TrustCenterEntity, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withLogoFile; query != nil {
 		if err := _q.loadLogoFile(ctx, query, nodes, nil,
-			func(n *TrustcenterEntity, e *File) { n.Edges.LogoFile = e }); err != nil {
+			func(n *TrustCenterEntity, e *File) { n.Edges.LogoFile = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withTrustCenter; query != nil {
 		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
-			func(n *TrustcenterEntity, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			func(n *TrustCenterEntity, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withEntityType; query != nil {
 		if err := _q.loadEntityType(ctx, query, nodes, nil,
-			func(n *TrustcenterEntity, e *EntityType) { n.Edges.EntityType = e }); err != nil {
+			func(n *TrustCenterEntity, e *EntityType) { n.Edges.EntityType = e }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedBlockedGroups {
+		if err := _q.loadBlockedGroups(ctx, query, nodes,
+			func(n *TrustCenterEntity) { n.appendNamedBlockedGroups(name) },
+			func(n *TrustCenterEntity, e *Group) { n.appendNamedBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEditors {
+		if err := _q.loadEditors(ctx, query, nodes,
+			func(n *TrustCenterEntity) { n.appendNamedEditors(name) },
+			func(n *TrustCenterEntity, e *Group) { n.appendNamedEditors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -524,9 +634,71 @@ func (_q *TrustcenterEntityQuery) sqlAll(ctx context.Context, hooks ...queryHook
 	return nodes, nil
 }
 
-func (_q *TrustcenterEntityQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*TrustcenterEntity, init func(*TrustcenterEntity), assign func(*TrustcenterEntity, *File)) error {
+func (_q *TrustCenterEntityQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, nodes []*TrustCenterEntity, init func(*TrustCenterEntity), assign func(*TrustCenterEntity, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterEntity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenterentity.BlockedGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_entity_blocked_groups
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_entity_blocked_groups" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_entity_blocked_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterEntityQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes []*TrustCenterEntity, init func(*TrustCenterEntity), assign func(*TrustCenterEntity, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenterEntity)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenterentity.EditorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_entity_editors
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_entity_editors" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_entity_editors" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *TrustCenterEntityQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*TrustCenterEntity, init func(*TrustCenterEntity), assign func(*TrustCenterEntity, *File)) error {
 	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*TrustcenterEntity)
+	nodeids := make(map[string][]*TrustCenterEntity)
 	for i := range nodes {
 		if nodes[i].LogoFileID == nil {
 			continue
@@ -556,9 +728,9 @@ func (_q *TrustcenterEntityQuery) loadLogoFile(ctx context.Context, query *FileQ
 	}
 	return nil
 }
-func (_q *TrustcenterEntityQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustcenterEntity, init func(*TrustcenterEntity), assign func(*TrustcenterEntity, *TrustCenter)) error {
+func (_q *TrustCenterEntityQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterEntity, init func(*TrustCenterEntity), assign func(*TrustCenterEntity, *TrustCenter)) error {
 	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*TrustcenterEntity)
+	nodeids := make(map[string][]*TrustCenterEntity)
 	for i := range nodes {
 		fk := nodes[i].TrustCenterID
 		if _, ok := nodeids[fk]; !ok {
@@ -585,9 +757,9 @@ func (_q *TrustcenterEntityQuery) loadTrustCenter(ctx context.Context, query *Tr
 	}
 	return nil
 }
-func (_q *TrustcenterEntityQuery) loadEntityType(ctx context.Context, query *EntityTypeQuery, nodes []*TrustcenterEntity, init func(*TrustcenterEntity), assign func(*TrustcenterEntity, *EntityType)) error {
+func (_q *TrustCenterEntityQuery) loadEntityType(ctx context.Context, query *EntityTypeQuery, nodes []*TrustCenterEntity, init func(*TrustCenterEntity), assign func(*TrustCenterEntity, *EntityType)) error {
 	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*TrustcenterEntity)
+	nodeids := make(map[string][]*TrustCenterEntity)
 	for i := range nodes {
 		fk := nodes[i].EntityTypeID
 		if _, ok := nodeids[fk]; !ok {
@@ -615,9 +787,9 @@ func (_q *TrustcenterEntityQuery) loadEntityType(ctx context.Context, query *Ent
 	return nil
 }
 
-func (_q *TrustcenterEntityQuery) sqlCount(ctx context.Context) (int, error) {
+func (_q *TrustCenterEntityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.TrustcenterEntity
+	_spec.Node.Schema = _q.schemaConfig.TrustCenterEntity
 	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
@@ -629,7 +801,7 @@ func (_q *TrustcenterEntityQuery) sqlCount(ctx context.Context) (int, error) {
 	return sqlgraph.CountNodes(ctx, _q.driver, _spec)
 }
 
-func (_q *TrustcenterEntityQuery) querySpec() *sqlgraph.QuerySpec {
+func (_q *TrustCenterEntityQuery) querySpec() *sqlgraph.QuerySpec {
 	_spec := sqlgraph.NewQuerySpec(trustcenterentity.Table, trustcenterentity.Columns, sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
@@ -678,7 +850,7 @@ func (_q *TrustcenterEntityQuery) querySpec() *sqlgraph.QuerySpec {
 	return _spec
 }
 
-func (_q *TrustcenterEntityQuery) sqlQuery(ctx context.Context) *sql.Selector {
+func (_q *TrustCenterEntityQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	builder := sql.Dialect(_q.driver.Dialect())
 	t1 := builder.Table(trustcenterentity.Table)
 	columns := _q.ctx.Fields
@@ -693,7 +865,7 @@ func (_q *TrustcenterEntityQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.TrustcenterEntity)
+	t1.Schema(_q.schemaConfig.TrustCenterEntity)
 	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
@@ -717,51 +889,79 @@ func (_q *TrustcenterEntityQuery) sqlQuery(ctx context.Context) *sql.Selector {
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (_q *TrustcenterEntityQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustcenterEntitySelect {
+func (_q *TrustCenterEntityQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterEntitySelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
 }
 
+// WithNamedBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterEntityQuery) WithNamedBlockedGroups(name string, opts ...func(*GroupQuery)) *TrustCenterEntityQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedBlockedGroups == nil {
+		_q.withNamedBlockedGroups = make(map[string]*GroupQuery)
+	}
+	_q.withNamedBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedEditors tells the query-builder to eager-load the nodes that are connected to the "editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterEntityQuery) WithNamedEditors(name string, opts ...func(*GroupQuery)) *TrustCenterEntityQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEditors == nil {
+		_q.withNamedEditors = make(map[string]*GroupQuery)
+	}
+	_q.withNamedEditors[name] = query
+	return _q
+}
+
 // CountIDs returns the count of ids with FGA batch filtering applied
-func (teq *TrustcenterEntityQuery) CountIDs(ctx context.Context) (int, error) {
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustcenterEntity").Str("operation", "count_ids").Msg("CountIDs: starting")
+func (tceq *TrustCenterEntityQuery) CountIDs(ctx context.Context) (int, error) {
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterEntity").Str("operation", "count_ids").Msg("CountIDs: starting")
 
-	ctx = setContextOp(ctx, teq.ctx, ent.OpQueryIDs)
+	ctx = setContextOp(ctx, tceq.ctx, ent.OpQueryIDs)
 
-	ids, err := teq.IDs(ctx)
+	ids, err := tceq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustcenterEntity").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterEntity").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}
 
-	logx.FromContext(ctx).Debug().Str("query_type", "TrustcenterEntity").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
+	logx.FromContext(ctx).Debug().Str("query_type", "TrustCenterEntity").Str("operation", "count_ids").Int("count", len(ids)).Msg("CountIDs: completed")
 
 	return len(ids), nil
 }
 
-// TrustcenterEntityGroupBy is the group-by builder for TrustcenterEntity entities.
-type TrustcenterEntityGroupBy struct {
+// TrustCenterEntityGroupBy is the group-by builder for TrustCenterEntity entities.
+type TrustCenterEntityGroupBy struct {
 	selector
-	build *TrustcenterEntityQuery
+	build *TrustCenterEntityQuery
 }
 
 // Aggregate adds the given aggregation functions to the group-by query.
-func (_g *TrustcenterEntityGroupBy) Aggregate(fns ...AggregateFunc) *TrustcenterEntityGroupBy {
+func (_g *TrustCenterEntityGroupBy) Aggregate(fns ...AggregateFunc) *TrustCenterEntityGroupBy {
 	_g.fns = append(_g.fns, fns...)
 	return _g
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (_g *TrustcenterEntityGroupBy) Scan(ctx context.Context, v any) error {
+func (_g *TrustCenterEntityGroupBy) Scan(ctx context.Context, v any) error {
 	ctx = setContextOp(ctx, _g.build.ctx, ent.OpQueryGroupBy)
 	if err := _g.build.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustcenterEntityQuery, *TrustcenterEntityGroupBy](ctx, _g.build, _g, _g.build.inters, v)
+	return scanWithInterceptors[*TrustCenterEntityQuery, *TrustCenterEntityGroupBy](ctx, _g.build, _g, _g.build.inters, v)
 }
 
-func (_g *TrustcenterEntityGroupBy) sqlScan(ctx context.Context, root *TrustcenterEntityQuery, v any) error {
+func (_g *TrustCenterEntityGroupBy) sqlScan(ctx context.Context, root *TrustCenterEntityQuery, v any) error {
 	selector := root.sqlQuery(ctx).Select()
 	aggregation := make([]string, 0, len(_g.fns))
 	for _, fn := range _g.fns {
@@ -788,28 +988,28 @@ func (_g *TrustcenterEntityGroupBy) sqlScan(ctx context.Context, root *Trustcent
 	return sql.ScanSlice(rows, v)
 }
 
-// TrustcenterEntitySelect is the builder for selecting fields of TrustcenterEntity entities.
-type TrustcenterEntitySelect struct {
-	*TrustcenterEntityQuery
+// TrustCenterEntitySelect is the builder for selecting fields of TrustCenterEntity entities.
+type TrustCenterEntitySelect struct {
+	*TrustCenterEntityQuery
 	selector
 }
 
 // Aggregate adds the given aggregation functions to the selector query.
-func (_s *TrustcenterEntitySelect) Aggregate(fns ...AggregateFunc) *TrustcenterEntitySelect {
+func (_s *TrustCenterEntitySelect) Aggregate(fns ...AggregateFunc) *TrustCenterEntitySelect {
 	_s.fns = append(_s.fns, fns...)
 	return _s
 }
 
 // Scan applies the selector query and scans the result into the given value.
-func (_s *TrustcenterEntitySelect) Scan(ctx context.Context, v any) error {
+func (_s *TrustCenterEntitySelect) Scan(ctx context.Context, v any) error {
 	ctx = setContextOp(ctx, _s.ctx, ent.OpQuerySelect)
 	if err := _s.prepareQuery(ctx); err != nil {
 		return err
 	}
-	return scanWithInterceptors[*TrustcenterEntityQuery, *TrustcenterEntitySelect](ctx, _s.TrustcenterEntityQuery, _s, _s.inters, v)
+	return scanWithInterceptors[*TrustCenterEntityQuery, *TrustCenterEntitySelect](ctx, _s.TrustCenterEntityQuery, _s, _s.inters, v)
 }
 
-func (_s *TrustcenterEntitySelect) sqlScan(ctx context.Context, root *TrustcenterEntityQuery, v any) error {
+func (_s *TrustCenterEntitySelect) sqlScan(ctx context.Context, root *TrustCenterEntityQuery, v any) error {
 	selector := root.sqlQuery(ctx)
 	aggregation := make([]string, 0, len(_s.fns))
 	for _, fn := range _s.fns {
@@ -831,7 +1031,7 @@ func (_s *TrustcenterEntitySelect) sqlScan(ctx context.Context, root *Trustcente
 }
 
 // Modify adds a query modifier for attaching custom logic to queries.
-func (_s *TrustcenterEntitySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustcenterEntitySelect {
+func (_s *TrustCenterEntitySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterEntitySelect {
 	_s.modifiers = append(_s.modifiers, modifiers...)
 	return _s
 }

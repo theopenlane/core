@@ -13,10 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -126,23 +127,43 @@ func (_u *TrustCenterDocUpdate) ClearTags() *TrustCenterDocUpdate {
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterDocUpdate) SetTrustCenterID(v string) *TrustCenterDocUpdate {
-	_u.mutation.SetTrustCenterID(v)
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocKindName(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterDocKindName(v)
 	return _u
 }
 
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterDocUpdate) SetNillableTrustCenterID(v *string) *TrustCenterDocUpdate {
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocUpdate {
 	if v != nil {
-		_u.SetTrustCenterID(*v)
+		_u.SetTrustCenterDocKindName(*v)
 	}
 	return _u
 }
 
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterDocUpdate) ClearTrustCenterID() *TrustCenterDocUpdate {
-	_u.mutation.ClearTrustCenterID()
+// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocKindName() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocKindName()
+	return _u
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocKindID(v string) *TrustCenterDocUpdate {
+	_u.mutation.SetTrustCenterDocKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocUpdate {
+	if v != nil {
+		_u.SetTrustCenterDocKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocKindID() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocKindID()
 	return _u
 }
 
@@ -156,20 +177,6 @@ func (_u *TrustCenterDocUpdate) SetTitle(v string) *TrustCenterDocUpdate {
 func (_u *TrustCenterDocUpdate) SetNillableTitle(v *string) *TrustCenterDocUpdate {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocUpdate) SetCategory(v string) *TrustCenterDocUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocUpdate) SetNillableCategory(v *string) *TrustCenterDocUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -294,9 +301,39 @@ func (_u *TrustCenterDocUpdate) ClearStandardID() *TrustCenterDocUpdate {
 	return _u
 }
 
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterDocUpdate) SetTrustCenter(v *TrustCenter) *TrustCenterDocUpdate {
-	return _u.SetTrustCenterID(v.ID)
+// SetTrustCenterDocKind sets the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdate) SetTrustCenterDocKind(v *CustomTypeEnum) *TrustCenterDocUpdate {
+	return _u.SetTrustCenterDocKindID(v.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterDocUpdate) AddBlockedGroupIDs(ids ...string) *TrustCenterDocUpdate {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterDocUpdate) AddBlockedGroups(v ...*Group) *TrustCenterDocUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterDocUpdate) AddEditorIDs(ids ...string) *TrustCenterDocUpdate {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterDocUpdate) AddEditors(v ...*Group) *TrustCenterDocUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
 }
 
 // SetStandard sets the "standard" edge to the Standard entity.
@@ -319,10 +356,52 @@ func (_u *TrustCenterDocUpdate) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
 }
 
-// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterDocUpdate) ClearTrustCenter() *TrustCenterDocUpdate {
-	_u.mutation.ClearTrustCenter()
+// ClearTrustCenterDocKind clears the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdate) ClearTrustCenterDocKind() *TrustCenterDocUpdate {
+	_u.mutation.ClearTrustCenterDocKind()
 	return _u
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterDocUpdate) ClearBlockedGroups() *TrustCenterDocUpdate {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterDocUpdate) RemoveBlockedGroupIDs(ids ...string) *TrustCenterDocUpdate {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterDocUpdate) RemoveBlockedGroups(v ...*Group) *TrustCenterDocUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterDocUpdate) ClearEditors() *TrustCenterDocUpdate {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterDocUpdate) RemoveEditorIDs(ids ...string) *TrustCenterDocUpdate {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterDocUpdate) RemoveEditors(v ...*Group) *TrustCenterDocUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearStandard clears the "standard" edge to the Standard entity.
@@ -387,19 +466,9 @@ func (_u *TrustCenterDocUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterDocUpdate) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcenterdoc.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcenterdoc.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.WatermarkStatus(); ok {
@@ -479,11 +548,14 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindNameCleared() {
+		_spec.ClearField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -503,32 +575,128 @@ func (_u *TrustCenterDocUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
 	}
-	if _u.mutation.TrustCenterCleared() {
+	if _u.mutation.TrustCenterDocKindCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   trustcenterdoc.TrustCenterTable,
-			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterDocKindIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   trustcenterdoc.TrustCenterTable,
-			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -741,23 +909,43 @@ func (_u *TrustCenterDocUpdateOne) ClearTags() *TrustCenterDocUpdateOne {
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterDocUpdateOne) SetTrustCenterID(v string) *TrustCenterDocUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
+// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocKindName(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterDocKindName(v)
 	return _u
 }
 
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterDocUpdateOne {
+// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocUpdateOne {
 	if v != nil {
-		_u.SetTrustCenterID(*v)
+		_u.SetTrustCenterDocKindName(*v)
 	}
 	return _u
 }
 
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterDocUpdateOne) ClearTrustCenterID() *TrustCenterDocUpdateOne {
-	_u.mutation.ClearTrustCenterID()
+// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocKindName() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocKindName()
+	return _u
+}
+
+// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocKindID(v string) *TrustCenterDocUpdateOne {
+	_u.mutation.SetTrustCenterDocKindID(v)
+	return _u
+}
+
+// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
+func (_u *TrustCenterDocUpdateOne) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocUpdateOne {
+	if v != nil {
+		_u.SetTrustCenterDocKindID(*v)
+	}
+	return _u
+}
+
+// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocKindID() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocKindID()
 	return _u
 }
 
@@ -771,20 +959,6 @@ func (_u *TrustCenterDocUpdateOne) SetTitle(v string) *TrustCenterDocUpdateOne {
 func (_u *TrustCenterDocUpdateOne) SetNillableTitle(v *string) *TrustCenterDocUpdateOne {
 	if v != nil {
 		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *TrustCenterDocUpdateOne) SetCategory(v string) *TrustCenterDocUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *TrustCenterDocUpdateOne) SetNillableCategory(v *string) *TrustCenterDocUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
 	}
 	return _u
 }
@@ -909,9 +1083,39 @@ func (_u *TrustCenterDocUpdateOne) ClearStandardID() *TrustCenterDocUpdateOne {
 	return _u
 }
 
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterDocUpdateOne) SetTrustCenter(v *TrustCenter) *TrustCenterDocUpdateOne {
-	return _u.SetTrustCenterID(v.ID)
+// SetTrustCenterDocKind sets the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdateOne) SetTrustCenterDocKind(v *CustomTypeEnum) *TrustCenterDocUpdateOne {
+	return _u.SetTrustCenterDocKindID(v.ID)
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
+func (_u *TrustCenterDocUpdateOne) AddBlockedGroupIDs(ids ...string) *TrustCenterDocUpdateOne {
+	_u.mutation.AddBlockedGroupIDs(ids...)
+	return _u
+}
+
+// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterDocUpdateOne) AddBlockedGroups(v ...*Group) *TrustCenterDocUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddBlockedGroupIDs(ids...)
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
+func (_u *TrustCenterDocUpdateOne) AddEditorIDs(ids ...string) *TrustCenterDocUpdateOne {
+	_u.mutation.AddEditorIDs(ids...)
+	return _u
+}
+
+// AddEditors adds the "editors" edges to the Group entity.
+func (_u *TrustCenterDocUpdateOne) AddEditors(v ...*Group) *TrustCenterDocUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEditorIDs(ids...)
 }
 
 // SetStandard sets the "standard" edge to the Standard entity.
@@ -934,10 +1138,52 @@ func (_u *TrustCenterDocUpdateOne) Mutation() *TrustCenterDocMutation {
 	return _u.mutation
 }
 
-// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterDocUpdateOne) ClearTrustCenter() *TrustCenterDocUpdateOne {
-	_u.mutation.ClearTrustCenter()
+// ClearTrustCenterDocKind clears the "trust_center_doc_kind" edge to the CustomTypeEnum entity.
+func (_u *TrustCenterDocUpdateOne) ClearTrustCenterDocKind() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearTrustCenterDocKind()
 	return _u
+}
+
+// ClearBlockedGroups clears all "blocked_groups" edges to the Group entity.
+func (_u *TrustCenterDocUpdateOne) ClearBlockedGroups() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearBlockedGroups()
+	return _u
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to Group entities by IDs.
+func (_u *TrustCenterDocUpdateOne) RemoveBlockedGroupIDs(ids ...string) *TrustCenterDocUpdateOne {
+	_u.mutation.RemoveBlockedGroupIDs(ids...)
+	return _u
+}
+
+// RemoveBlockedGroups removes "blocked_groups" edges to Group entities.
+func (_u *TrustCenterDocUpdateOne) RemoveBlockedGroups(v ...*Group) *TrustCenterDocUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveBlockedGroupIDs(ids...)
+}
+
+// ClearEditors clears all "editors" edges to the Group entity.
+func (_u *TrustCenterDocUpdateOne) ClearEditors() *TrustCenterDocUpdateOne {
+	_u.mutation.ClearEditors()
+	return _u
+}
+
+// RemoveEditorIDs removes the "editors" edge to Group entities by IDs.
+func (_u *TrustCenterDocUpdateOne) RemoveEditorIDs(ids ...string) *TrustCenterDocUpdateOne {
+	_u.mutation.RemoveEditorIDs(ids...)
+	return _u
+}
+
+// RemoveEditors removes "editors" edges to Group entities.
+func (_u *TrustCenterDocUpdateOne) RemoveEditors(v ...*Group) *TrustCenterDocUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEditorIDs(ids...)
 }
 
 // ClearStandard clears the "standard" edge to the Standard entity.
@@ -1015,19 +1261,9 @@ func (_u *TrustCenterDocUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TrustCenterDocUpdateOne) check() error {
-	if v, ok := _u.mutation.TrustCenterID(); ok {
-		if err := trustcenterdoc.TrustCenterIDValidator(v); err != nil {
-			return &ValidationError{Name: "trust_center_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.trust_center_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Title(); ok {
 		if err := trustcenterdoc.TitleValidator(v); err != nil {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.title": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Category(); ok {
-		if err := trustcenterdoc.CategoryValidator(v); err != nil {
-			return &ValidationError{Name: "category", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.category": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.WatermarkStatus(); ok {
@@ -1124,11 +1360,14 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdoc.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
+		_spec.SetField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterDocKindNameCleared() {
+		_spec.ClearField(trustcenterdoc.FieldTrustCenterDocKindName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcenterdoc.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(trustcenterdoc.FieldCategory, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
 		_spec.SetField(trustcenterdoc.FieldWatermarkingEnabled, field.TypeBool, value)
@@ -1148,32 +1387,128 @@ func (_u *TrustCenterDocUpdateOne) sqlSave(ctx context.Context) (_node *TrustCen
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdoc.FieldVisibility, field.TypeEnum)
 	}
-	if _u.mutation.TrustCenterCleared() {
+	if _u.mutation.TrustCenterDocKindCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   trustcenterdoc.TrustCenterTable,
-			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.TrustCenterDocKindIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   trustcenterdoc.TrustCenterTable,
-			Columns: []string{trustcenterdoc.TrustCenterColumn},
+			Inverse: false,
+			Table:   trustcenterdoc.TrustCenterDocKindTable,
+			Columns: []string{trustcenterdoc.TrustCenterDocKindColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.BlockedGroupsTable,
+			Columns: []string{trustcenterdoc.BlockedGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenterdoc.EditorsTable,
+			Columns: []string{trustcenterdoc.EditorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

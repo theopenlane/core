@@ -1,0 +1,93 @@
+mutation ApproveWorkflowAssignment($id: ID!) {
+  approveWorkflowAssignment(id: $id) {
+    workflowAssignment {
+      actorGroupID
+      actorUserID
+      assignmentKey
+      createdAt
+      createdBy
+      decidedAt
+      displayID
+      id
+      label
+      metadata
+      notes
+      ownerID
+      required
+      role
+      status
+      tags
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation RejectWorkflowAssignment($id: ID!, $reason: String) {
+  rejectWorkflowAssignment(id: $id, reason: $reason) {
+    workflowAssignment {
+      actorGroupID
+      actorUserID
+      assignmentKey
+      createdAt
+      createdBy
+      decidedAt
+      displayID
+      id
+      label
+      metadata
+      notes
+      ownerID
+      required
+      role
+      status
+      tags
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+query GetMyWorkflowAssignments($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowAssignmentOrder!], $where: WorkflowAssignmentWhereInput) {
+  myWorkflowAssignments(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        actorGroupID
+        actorUserID
+        assignmentKey
+        createdAt
+        createdBy
+        decidedAt
+        displayID
+        id
+        label
+        metadata
+        notes
+        ownerID
+        required
+        role
+        status
+        tags
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}

@@ -137,6 +137,15 @@ type organization
     define trust_center_entity_creator: [group#member]
     define can_create_trust_center_entity: can_edit or trust_center_entity_creator
 
+    define trust_center_nda_request_creator: [group#member]
+    define can_create_trust_center_nda_request: can_edit or trust_center_nda_request_creator
+
+    define trust_center_compliance_creator: [group#member]
+    define can_create_trust_center_compliance: can_edit or trust_center_compliance_creator
+
+    define trust_center_post_creator: [group#member]
+    define can_create_trust_center_post: can_edit or trust_center_post_creator
+
     define workflow_definition_creator: [group#member]
     define can_create_workflow_definition: can_edit or workflow_definition_creator
 
@@ -208,7 +217,7 @@ type file
     define tc_doc_deleter: can_delete from tc_doc_parent
     define tc_doc_parent: [trust_center_doc]
 
-    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_watermark_config, standard,trustcenter_entity]
+    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_watermark_config, standard,trust_center_entity]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
 # the program creator will be made the admin of the program and all other access with be assigned directly
@@ -445,7 +454,7 @@ type document_data
 # individual users or groups can also be given permission to an entity
 type entity
   relations
-    define can_view: [user, service] or can_edit or (viewer but not blocked)
+    define can_view: [user, service, user:*, service:*] or can_edit or (viewer but not blocked)
     define can_edit: [user, service] or (editor but not blocked)
     define can_delete: [user, service] or (editor but not blocked)
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
@@ -578,7 +587,7 @@ type job_runner
 
 type job_template
   relations
-    define can_view: [user, service, organization#member] or parent_viewer
+    define can_view: [user, service, user:*, service:*, organization#member] or parent_viewer
     define can_edit: [user, service, organization#member] or parent_editor or system_admin from system
     define can_delete: [user, service] or parent_deleter or system_admin from system
     define parent_viewer: can_delete or can_edit or can_view from parent
@@ -600,74 +609,103 @@ type scheduled_job
 
 type trust_center
   relations
-    define can_view: [user:*, service:*] or parent_viewer
-    define can_edit: [user, service] or parent_editor or system_admin from system
+    define can_view: [user:*, service:*] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor or system_admin from system
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
     define parent: [organization]
     define nda_signed: [user]
+    # allow group permissions for trust center editors, this will give them
+    # edit access to any child objects as well
+    define editor: [group#member]
+    define viewer: editor
     define member: member from parent
     define system: [system]
 
+
 type trust_center_setting
   relations
-    define can_view: [user, service] or parent_viewer
-    define can_edit: [user, service] or parent_editor
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
     define can_delete: [user, service] or parent_deleter
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
+    define editor: [group#member]
+    define viewer: editor
     define parent: [trust_center, user, service]
 
 type trust_center_compliance
   relations
-    define can_view: [user, service] or parent_viewer
-    define can_edit: [user, service] or parent_editor
-    define can_delete: [user, service] or parent_deleter
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
+    define editor: [group#member]
+    define viewer: editor
     define parent: [trust_center, user, service]
 
 type trust_center_subprocessor
   relations
-    define can_view: [user, service] or parent_viewer
-    define can_edit: [user, service] or parent_editor
-    define can_delete: [user, service] or parent_deleter
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
+    define editor: [group#member]
+    define viewer: editor
     define parent: [trust_center, user, service]
 
 type trust_center_doc
   relations
-    define can_view: [user, service, user:*, service:*] or parent_viewer
-    define can_edit: [user, service] or parent_editor
-    define can_delete: [user, service] or parent_deleter
+    # wildcard to allow public trust center documents to be viewed by all users vs
+    # protected documents that require nda_signed
+    define can_view: [user, service, user:*, service:*] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
     define parent_viewer: can_delete or can_edit or member from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
     define parent: [trust_center, user, service]
     define nda_signed: nda_signed from parent
     define member: member from parent
+    define editor: [group#member]
+    define viewer: editor
 
-type trustcenter_entity
+type trust_center_entity
   relations
-    define can_view: [user, service, user:*, service:*] or parent_viewer
-    define can_edit: [user, service] or parent_editor
-    define can_delete: [user, service] or parent_deleter
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
     define parent_viewer: can_delete or can_edit or can_view from parent
     define parent_editor: can_delete or can_edit from parent
     define parent_deleter:  can_delete from parent
     define parent: [trust_center, user, service]
+    define editor: [group#member]
+    define viewer: editor
+
+type trust_center_nda_request
+  relations
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    define parent: [trust_center, user, service]
+    define editor: [group#member]
+    define viewer: editor
 
 type trust_center_watermark_config
   relations
-    define can_view: [user, service] or parent_viewer
-    define can_edit: [user, service] or parent_editor
-    define can_delete: [user, service] or parent_deleter
+    define can_view: [user, service] or parent_viewer or viewer
+    define can_edit: [user, service] or parent_editor or editor
+    define can_delete: [user, service] or parent_deleter or editor
     # only allow org members to view the trust_center_watermark_config.
     # anonymous users should not be able to view this information.
     define parent_viewer: can_delete or can_edit or parent_viewer from parent
@@ -675,6 +713,7 @@ type trust_center_watermark_config
     define parent_deleter:  can_delete from parent
     define parent: [trust_center, user, service]
     define editor: [group#member, organization#owner] or can_edit from parent
+    define viewer: editor
 
 type export
   relations
@@ -707,7 +746,7 @@ type subprocessor
     define parent_editor: admin from parent or owner from parent
     define viewer: [user, service] or editor or parent_viewer
     define editor: [user, service, organization#owner] or admin or parent_editor
-    define parent: [organization, user]
+    define parent: [organization, user, trust_center_subprocessor]
     define system: [system]
 
 type assessment
