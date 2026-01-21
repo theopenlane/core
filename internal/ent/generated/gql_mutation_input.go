@@ -10163,7 +10163,6 @@ type CreateNotificationInput struct {
 	Title            string
 	Body             string
 	Data             map[string]interface{}
-	ReadAt           *models.DateTime
 	Channels         []enums.Channel
 	Topic            *enums.NotificationTopic
 	OwnerID          *string
@@ -10181,9 +10180,6 @@ func (i *CreateNotificationInput) Mutate(m *NotificationMutation) {
 	if v := i.Data; v != nil {
 		m.SetData(v)
 	}
-	if v := i.ReadAt; v != nil {
-		m.SetReadAt(*v)
-	}
 	if v := i.Channels; v != nil {
 		m.SetChannels(v)
 	}
@@ -10197,6 +10193,54 @@ func (i *CreateNotificationInput) Mutate(m *NotificationMutation) {
 
 // SetInput applies the change-set in the CreateNotificationInput on the NotificationCreate builder.
 func (c *NotificationCreate) SetInput(i CreateNotificationInput) *NotificationCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateNotificationInput represents a mutation input for updating notifications.
+type UpdateNotificationInput struct {
+	ClearTags   bool
+	Tags        []string
+	AppendTags  []string
+	ClearReadAt bool
+	ReadAt      *models.DateTime
+	ClearOwner  bool
+	OwnerID     *string
+}
+
+// Mutate applies the UpdateNotificationInput on the NotificationMutation builder.
+func (i *UpdateNotificationInput) Mutate(m *NotificationMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearReadAt {
+		m.ClearReadAt()
+	}
+	if v := i.ReadAt; v != nil {
+		m.SetReadAt(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateNotificationInput on the NotificationUpdate builder.
+func (c *NotificationUpdate) SetInput(i UpdateNotificationInput) *NotificationUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateNotificationInput on the NotificationUpdateOne builder.
+func (c *NotificationUpdateOne) SetInput(i UpdateNotificationInput) *NotificationUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

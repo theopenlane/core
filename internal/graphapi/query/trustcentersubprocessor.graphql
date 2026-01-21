@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVTrustCenterSubprocessor($input: Upload!) {
   createBulkCSVTrustCenterSubprocessor(input: $input) {
     trustCenterSubprocessors {
@@ -83,6 +82,7 @@ query GetAllTrustCenterSubprocessors {
     }
   }
 }
+
 query GetTrustCenterSubprocessorByID($trustCenterSubprocessorId: ID!) {
   trustCenterSubprocessor(id: $trustCenterSubprocessorId) {
     createdAt
@@ -135,28 +135,6 @@ query GetTrustCenterSubprocessors($first: Int, $last: Int, $where: TrustCenterSu
     }
   }
 }
-mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {
-  updateTrustCenterSubprocessor(id: $updateTrustCenterSubprocessorId, input: $input) {
-    trustCenterSubprocessor {
-      createdAt
-      createdBy
-      id
-      updatedAt
-      updatedBy
-      trustCenterID
-      countries
-      category
-      subprocessor {
-        name
-        description
-        logoFile {
-          presignedURL
-        }
-        logoRemoteURL
-      }
-    }
-  }
-}
 
 mutation UpdateBulkTrustCenterSubprocessor($ids: [ID!]!, $input: UpdateTrustCenterSubprocessorInput!) {
   updateBulkTrustCenterSubprocessor(ids: $ids, input: $input) {
@@ -179,5 +157,31 @@ mutation UpdateBulkTrustCenterSubprocessor($ids: [ID!]!, $input: UpdateTrustCent
       }
     }
     updatedIDs
+  }
+}
+
+mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {
+  updateTrustCenterSubprocessor(
+    id: $updateTrustCenterSubprocessorId
+    input: $input
+  ) {
+    trustCenterSubprocessor {
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+      trustCenterID
+      countries
+      category
+      subprocessor {
+        name
+        description
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+      }
+    }
   }
 }

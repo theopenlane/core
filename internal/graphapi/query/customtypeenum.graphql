@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVCustomTypeEnum($input: Upload!) {
   createBulkCSVCustomTypeEnum(input: $input) {
     customTypeEnums {
@@ -97,6 +96,7 @@ query GetAllCustomTypeEnums {
     }
   }
 }
+
 query GetCustomTypeEnumByID($customTypeEnumId: ID!) {
   customTypeEnum(id: $customTypeEnumId) {
     color
@@ -145,6 +145,7 @@ query GetCustomTypeEnums($first: Int, $last: Int, $where: CustomTypeEnumWhereInp
     }
   }
 }
+
 mutation UpdateCustomTypeEnum($updateCustomTypeEnumId: ID!, $input: UpdateCustomTypeEnumInput!) {
   updateCustomTypeEnum(id: $updateCustomTypeEnumId, input: $input) {
     customTypeEnum {
