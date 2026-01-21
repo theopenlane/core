@@ -118,6 +118,8 @@ var (
 	ErrCannotSetFileOnCreate = errors.New("cannot set file id on create")
 	// ErrCacheRefreshFailed is returned when the cache refresh request fails
 	ErrCacheRefreshFailed = errors.New("cache refresh request failed")
+	// ErrNoOrganizationID is returned when no organization ID is found in context
+	ErrNoOrganizationID = errors.New("no valid organization ID found")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

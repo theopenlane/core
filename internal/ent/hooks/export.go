@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
@@ -60,10 +61,23 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 		return v, err
 	}
 
+	orgID := au.OrganizationID
+	if au.OrganizationID == "" {
+		if len(au.OrganizationIDs) == 1 {
+			orgID = au.OrganizationIDs[0]
+		}
+	}
+
+	if orgID == "" || au.SubjectID == "" {
+		logx.FromContext(ctx).Error().Msg("authenticated user has no organization ID or user ID; unable to enqueue export job")
+
+		return v, ErrNoOrganizationID
+	}
+
 	_, err = m.Job.Insert(ctx, jobspec.ExportContentArgs{
 		ExportID:       id,
 		UserID:         au.SubjectID,
-		OrganizationID: au.OrganizationID,
+		OrganizationID: orgID,
 	}, nil)
 
 	return v, err
