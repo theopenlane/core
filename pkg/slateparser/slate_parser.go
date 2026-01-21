@@ -40,7 +40,7 @@ func CheckForMentions(text string, objectType string, objectID string, objectNam
 	matches := divTagRegex.FindAllStringSubmatch(text, -1)
 
 	for _, match := range matches {
-		if len(match) < 2 {
+		if len(match) < 2 { //nolint:mnd
 			continue
 		}
 
