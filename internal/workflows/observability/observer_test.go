@@ -103,9 +103,9 @@ func TestHandleEmitRecordsError(t *testing.T) {
 		t.Fatalf("expected nil error, got %v", err)
 	}
 
-	waitForMetric(t, func() float64 {
-		return testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin)))
-	}, before+1)
+	waitForCondition(t, func() bool {
+		return testutil.ToFloat64(metrics.WorkflowEmitErrorsTotal.WithLabelValues(topic, string(op.Origin))) == before+1
+	}, "metric to increment after emit error")
 }
 
 func TestBeginListenerTopicAppliesSpec(t *testing.T) {
@@ -201,18 +201,24 @@ func findLogEntry(t *testing.T, buf *bytes.Buffer, msg string) map[string]any {
 	return nil
 }
 
-func waitForMetric(t *testing.T, read func() float64, want float64) {
+func waitForCondition(t *testing.T, condition func() bool, msg string) {
 	t.Helper()
 
-	deadline := time.Now().Add(500 * time.Millisecond)
+	timeout := 500 * time.Millisecond
+	interval := 10 * time.Millisecond
+
+	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
-		if got := read(); got == want {
+		if condition() {
 			return
 		}
-		time.Sleep(10 * time.Millisecond)
+
+		time.Sleep(interval)
 	}
 
-	t.Fatalf("timed out waiting for metric, got %v want %v", read(), want)
+	if !condition() {
+		t.Fatalf("timed out waiting for condition: %s", msg)
+	}
 }
 
 func TestScopeSkipMarksSkippedAndLogsDebug(t *testing.T) {
