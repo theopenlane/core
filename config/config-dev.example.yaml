@@ -21,7 +21,7 @@ server:
       - https://studio.apollographql.com
       - https://sandbox.embed.apollographql.com
       - http://localhost:8000
-  defaulttrustcenterdomain: "localhost:3001"
+  defaulttrustcenterdomain: "localhost:3004"
   trustcentercnametarget: "openlane-dns.com"
 
   # tls settings
