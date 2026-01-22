@@ -94,6 +94,49 @@ func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 	}
 }
 
+func getHeadingLevel(p *docx.Paragraph) int {
+	if p.Properties == nil || p.Properties.Style == nil {
+		return 0
+	}
+
+	style := strings.ToLower(p.Properties.Style.Val)
+
+	if levelStr, found := strings.CutPrefix(style, "heading"); found {
+		if level := parseHeadingLevel(levelStr); level > 0 {
+			return level
+		}
+	}
+
+	switch style {
+	case "title":
+		return 1 //nolint:mnd
+	case "subtitle":
+		return 2 //nolint:mnd
+	case "h1":
+		return 1 //nolint:mnd
+	case "h2":
+		return 2 //nolint:mnd
+	case "h3":
+		return 3 //nolint:mnd
+	case "h4":
+		return 4 //nolint:mnd
+	case "h5":
+		return 5 //nolint:mnd
+	case "h6":
+		return 6 //nolint:mnd
+	}
+
+	return 0
+}
+
+func parseHeadingLevel(s string) int {
+	if len(s) == 1 && s[0] >= '1' && s[0] <= '6' {
+		return int(s[0] - '0')
+	}
+
+	return 0
+}
+
 // parseDocx extracts and returns the text content from a DOCX file preserving paragraph structure
 func parseDocx(content []byte) (string, error) {
 	reader := bytes.NewReader(content)
@@ -108,8 +151,14 @@ func parseDocx(content []byte) (string, error) {
 	for _, item := range doc.Document.Body.Items {
 		switch p := item.(type) {
 		case *docx.Paragraph:
+
 			if text := p.String(); text != "" {
-				paragraphs = append(paragraphs, text)
+				if lvl := getHeadingLevel(p); lvl > 0 {
+					prefix := strings.Repeat("#", lvl)
+					paragraphs = append(paragraphs, prefix+" "+text)
+				} else {
+					paragraphs = append(paragraphs, text)
+				}
 			}
 
 		case *docx.Table:
