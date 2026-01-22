@@ -417,7 +417,7 @@ func NewTestFixture() *testutils.TestFixture {
 }
 
 // NewTestClient creates a entdb client that can be used for TEST purposes ONLY
-func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, entOpts []ent.Option) (*ent.Client, error) {
+func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, clientOpts []Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
 		Debug:           true,
 		DriverName:      ctr.Dialect,
@@ -435,11 +435,7 @@ func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []ri
 	// run migrations for tests
 	jobOpts = append(jobOpts, riverqueue.WithRunMigrations(true))
 
-	// Do not enable eventer or metrics in test clients
-	// to avoid polluting test output
-	clientOpts := []Option{
-		WithModules(),
-	}
+	clientOpts = append([]Option{WithModules()}, clientOpts...)
 
 	// If a test container is used, retry the connection to the database to ensure it is up and running
 	if ctr.Pool != nil {

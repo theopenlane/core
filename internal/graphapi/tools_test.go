@@ -247,13 +247,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, opts)
-	requireNoError(t, err)
+	eventer := hooks.NewEventer()
+	clientOpts := []entdb.Option{entdb.WithEventer(eventer)}
 
-	eventer := hooks.NewEventerPool(db)
-	hooks.RegisterGlobalHooks(db, eventer)
-
-	err = hooks.RegisterListeners(eventer)
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
 	requireNoError(t, err)
 
 	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)

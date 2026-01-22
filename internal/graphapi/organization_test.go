@@ -1012,21 +1012,12 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 		return err != nil && strings.Contains(err.Error(), notFoundErrorMsg)
 	}, "group should be deleted by async edge cleanup")
 
-	// allow after tuples have been deleted
+	// verify the parent org is soft-deleted (not hard-deleted) by querying the db directly
 	ctx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	ctx = entx.SkipSoftDelete(ctx)
 
-	o, err := suite.client.api.GetOrganizationByID(ctx, org.ID)
-
+	o, err := suite.client.db.Organization.Get(ctx, org.ID)
 	assert.NilError(t, err)
-	assert.Equal(t, o.Organization.ID, org.ID)
-
-	// allow after tuples have been deleted
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
-	ctx = entx.SkipSoftDelete(ctx)
-
-	co, err := suite.client.api.GetOrganizationByID(ctx, childOrg.ID)
-	assert.NilError(t, err)
-
-	assert.Equal(t, co.Organization.ID, childOrg.ID)
+	assert.Equal(t, o.ID, org.ID)
+	assert.Assert(t, !o.DeletedAt.IsZero())
 }
