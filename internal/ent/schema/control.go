@@ -220,6 +220,14 @@ func (Control) Modules() []models.OrgModule {
 // Annotations of the Control
 func (c Control) Annotations() []schema.Annotation {
 	return []schema.Annotation{
+		entx.CascadeThroughAnnotationField(
+			[]entx.ThroughCleanup{
+				{
+					Field:   "Control",
+					Through: "FindingControl",
+				},
+			},
+		),
 		entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}

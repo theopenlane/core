@@ -54,8 +54,7 @@ func handleOrganizationSettingMutation(ctx *soiree.EventContext, payload *events
 	}
 }
 
-// handleOrganizationDelete deactivates an organization's customer subscription when it is deleted.
-// it also makes sure to clean up the edges to the data
+// handleOrganizationDelete cleans up organization edges and deactivates the Stripe subscription
 func handleOrganizationDelete(ctx *soiree.EventContext, payload *events.MutationPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
@@ -73,15 +72,15 @@ func handleOrganizationDelete(ctx *soiree.EventContext, payload *events.Mutation
 		return nil
 	}
 
-	if org.StripeCustomerID == nil {
-		return nil
-	}
-
-	cleanupContext := entgen.NewContext(inv.Context(), inv.client)
+	cleanupContext := entgen.NewContext(inv.Allow(), inv.client)
 	if err := entgen.OrganizationEdgeCleanup(cleanupContext, inv.orgID); err != nil {
 		inv.Logger().Error().Err(err).Str("organization_id", inv.orgID).
 			Msg("failed to cascade delete organization edges")
 		return err
+	}
+
+	if org.StripeCustomerID == nil {
+		return nil
 	}
 
 	if err := inv.client.EntitlementManager.FindAndDeactivateCustomerSubscription(inv.Context(), *org.StripeCustomerID); err != nil {

@@ -34,6 +34,20 @@
 							}
 						}
 						{{- else }}
+						{{/* clean up nested edges before deleting */}}
+						{
+							ids, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).IDs(ctx)
+							if err != nil {
+								logx.FromContext(ctx).Error().Err(err).Msg("error querying {{ $edge.Type.Name | lower }} ids for cleanup")
+								return err
+							}
+							for _, edgeID := range ids {
+								if err := {{ $edge.Type.Name }}EdgeCleanup(ctx, edgeID); err != nil {
+									logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up {{ $edge.Type.Name | lower }} edges")
+									return err
+								}
+							}
+						}
 						if exists, err := FromContext(ctx).{{ $edge.Type.Name }}.Query().Where(({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id)))).Exist(ctx); err == nil && exists {
 							if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
 								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting {{ $edge.Type.Name | lower }}")
