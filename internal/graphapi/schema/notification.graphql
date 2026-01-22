@@ -1,0 +1,25 @@
+extend type Mutation{
+    """
+    Update an existing notification
+    """
+    updateNotification(
+        """
+        ID of the notification
+        """
+        id: ID!
+        """
+        New values for the notification
+        """
+        input: UpdateNotificationInput!
+    ): NotificationUpdatePayload!
+}
+
+"""
+Return response for updateNotification mutation
+"""
+type NotificationUpdatePayload {
+    """
+    Updated notification
+    """
+    notification: Notification!
+}

@@ -82,19 +82,25 @@ func (e *Eventer) AddMutationListener(entity string, handler MutationHandler) {
 	e.listeners[entity] = append(e.listeners[entity], bound)
 }
 
-// NewEventerPool builds a fresh event bus, associates it with an Eventer, and wires the default
-// mutation listeners
-func NewEventerPool(client any) *Eventer {
+// Initialize configures the Eventer with an event bus bound to the provided client and registers
+// the default mutation listeners; use this when you need to pass the same Eventer to multiple
+// consumers (e.g., ent hooks and workflow engine)
+func (e *Eventer) Initialize(client any) {
 	bus := soiree.New(
 		soiree.Workers(eventerPoolWorkers),
 		soiree.Client(client))
 	soiree.WithPoolName("ent_event_pool")
 
-	eventer := NewEventer(
-		WithEventerEmitter(bus),
-	)
+	e.Emitter = bus
 
-	registerDefaultMutationListeners(eventer)
+	registerDefaultMutationListeners(e)
+}
+
+// NewEventerPool builds a fresh event bus, associates it with an Eventer, and wires the default
+// mutation listeners
+func NewEventerPool(client any) *Eventer {
+	eventer := NewEventer()
+	eventer.Initialize(client)
 
 	return eventer
 }

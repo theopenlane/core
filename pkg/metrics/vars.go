@@ -212,6 +212,22 @@ var (
 	})
 
 	// APIMetrics is the list of all API metrics collectors for the main server
+	WorkflowOperationsTotal = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_workflow_operations_total",
+		Help: "The total number of workflow operations by origin, trigger, and success",
+	}, []string{"operation", "origin", "trigger", "success"})
+
+	WorkflowOperationDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "openlane_workflow_operation_duration_seconds",
+		Help:    "The duration of workflow operations in seconds",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"operation", "origin", "trigger"})
+
+	WorkflowEmitErrorsTotal = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_workflow_emit_errors_total",
+		Help: "The total number of workflow emit errors by topic and origin",
+	}, []string{"topic", "origin"})
+
 	APIMetrics = []prometheus.Collector{
 		WorkerExecutions,
 		WorkerExecutionErrors,
@@ -238,6 +254,9 @@ var (
 		StorageProviderBytesDownloaded,
 		StorageProviderDeletes,
 		AuthenticationAttempts,
+		WorkflowOperationsTotal,
+		WorkflowOperationDuration,
+		WorkflowEmitErrorsTotal,
 	}
 
 	// SubscriptionMetrics is the list of all metrics specific to graph subscriptions and websocket connections

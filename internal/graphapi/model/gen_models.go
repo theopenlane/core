@@ -1418,6 +1418,12 @@ type NoteDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for updateNotification mutation
+type NotificationUpdatePayload struct {
+	// Updated notification
+	Notification *generated.Notification `json:"notification"`
+}
+
 // Return response for createOnboarding mutation
 type OnboardingCreatePayload struct {
 	// Created onboarding

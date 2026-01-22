@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
@@ -175,9 +176,11 @@ func serve(ctx context.Context) error {
 		riverqueue.WithConnectionURI(so.Config.Settings.JobQueue.ConnectionURI),
 	}
 
+	eventer := hooks.NewEventer()
+
 	clientOpts := []entdb.Option{}
 	clientOpts = append(clientOpts,
-		entdb.WithEventer(),
+		entdb.WithEventer(eventer),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	)
@@ -185,6 +188,19 @@ func serve(ctx context.Context) error {
 	dbClient, err := entdb.New(ctx, so.Config.Settings.DB, jobOpts, clientOpts, entOpts...)
 	if err != nil {
 		return err
+	}
+
+	if so.Config.Settings.Workflows.Enabled {
+		wfEngine, err := engine.NewWorkflowEngineWithConfig(dbClient, eventer.Emitter, &so.Config.Settings.Workflows)
+		if err != nil {
+			log.Error().Err(err).Msg("failed to initialize workflow engine")
+
+			return err
+		}
+
+		so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
+
+		log.Info().Msg("workflow engine initialized")
 	}
 
 	go func() {

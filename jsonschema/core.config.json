@@ -1660,6 +1660,63 @@
         "relyingpartyid",
         "requestorigins"
       ]
+    },
+    "workflows.CELConfig": {
+      "properties": {
+        "timeout": {
+          "type": "integer"
+        },
+        "costlimit": {
+          "type": "integer"
+        },
+        "interruptcheckfrequency": {
+          "type": "integer"
+        },
+        "parserrecursionlimit": {
+          "type": "integer"
+        },
+        "parserexpressionsizelimit": {
+          "type": "integer"
+        },
+        "comprehensionnestinglimit": {
+          "type": "integer"
+        },
+        "extendedvalidations": {
+          "type": "boolean"
+        },
+        "optionaltypes": {
+          "type": "boolean"
+        },
+        "identifierescapesyntax": {
+          "type": "boolean"
+        },
+        "crosstypenumericcomparisons": {
+          "type": "boolean"
+        },
+        "macrocalltracking": {
+          "type": "boolean"
+        },
+        "evaloptimize": {
+          "type": "boolean"
+        },
+        "trackstate": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "workflows.Config": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "cel": {
+          "$ref": "#/$defs/workflows.CELConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     }
   },
   "properties": {
@@ -1738,6 +1795,10 @@
     "integrationoauthprovider": {
       "$ref": "#/$defs/handlers.IntegrationOauthProviderConfig",
       "description": "IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)"
+    },
+    "workflows": {
+      "$ref": "#/$defs/workflows.Config",
+      "description": "Workflows contains the configuration for the workflows engine"
     }
   },
   "additionalProperties": false,

@@ -404,3 +404,19 @@ tracer:
     stdout:
         disabletimestamp: false
         pretty: true
+workflows:
+    cel:
+        comprehensionnestinglimit: 0
+        costlimit: 0
+        crosstypenumericcomparisons: false
+        evaloptimize: true
+        extendedvalidations: true
+        identifierescapesyntax: false
+        interruptcheckfrequency: 100
+        macrocalltracking: false
+        optionaltypes: false
+        parserexpressionsizelimit: 100000
+        parserrecursionlimit: 250
+        timeout: 100000000
+        trackstate: false
+    enabled: false

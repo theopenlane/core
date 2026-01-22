@@ -137,22 +137,52 @@ const (
 )
 
 // WorkflowTriggeredTopic is emitted when a workflow instance is created
-var WorkflowTriggeredTopic = NewTypedTopic[WorkflowTriggeredPayload](TopicWorkflowTriggered)
+var WorkflowTriggeredTopic = NewTypedTopic(TopicWorkflowTriggered,
+	WithObservability(ObservabilitySpec[WorkflowTriggeredPayload]{
+		Operation: "handle_workflow_triggered",
+		Origin:    "listeners",
+	}),
+)
 
 // WorkflowActionStartedTopic is emitted when a workflow action begins execution
-var WorkflowActionStartedTopic = NewTypedTopic[WorkflowActionStartedPayload](TopicWorkflowActionStarted)
+var WorkflowActionStartedTopic = NewTypedTopic(TopicWorkflowActionStarted,
+	WithObservability(ObservabilitySpec[WorkflowActionStartedPayload]{
+		Operation: "handle_action_started",
+		Origin:    "listeners",
+	}),
+)
 
 // WorkflowActionCompletedTopic is emitted when a workflow action finishes
-var WorkflowActionCompletedTopic = NewTypedTopic[WorkflowActionCompletedPayload](TopicWorkflowActionCompleted)
+var WorkflowActionCompletedTopic = NewTypedTopic(TopicWorkflowActionCompleted,
+	WithObservability(ObservabilitySpec[WorkflowActionCompletedPayload]{
+		Operation: "handle_action_completed",
+		Origin:    "listeners",
+	}),
+)
 
 // WorkflowAssignmentCreatedTopic is emitted when an approval is assigned
-var WorkflowAssignmentCreatedTopic = NewTypedTopic[WorkflowAssignmentCreatedPayload](TopicWorkflowAssignmentCreated)
+var WorkflowAssignmentCreatedTopic = NewTypedTopic(TopicWorkflowAssignmentCreated,
+	WithObservability(ObservabilitySpec[WorkflowAssignmentCreatedPayload]{
+		Operation: "handle_assignment_created",
+		Origin:    "listeners",
+	}),
+)
 
 // WorkflowAssignmentCompletedTopic is emitted when an approval decision is made
-var WorkflowAssignmentCompletedTopic = NewTypedTopic[WorkflowAssignmentCompletedPayload](TopicWorkflowAssignmentCompleted)
+var WorkflowAssignmentCompletedTopic = NewTypedTopic(TopicWorkflowAssignmentCompleted,
+	WithObservability(ObservabilitySpec[WorkflowAssignmentCompletedPayload]{
+		Operation: "handle_assignment_completed",
+		Origin:    "listeners",
+	}),
+)
 
 // WorkflowInstanceCompletedTopic is emitted when a workflow finishes
-var WorkflowInstanceCompletedTopic = NewTypedTopic[WorkflowInstanceCompletedPayload](TopicWorkflowInstanceCompleted)
+var WorkflowInstanceCompletedTopic = NewTypedTopic(TopicWorkflowInstanceCompleted,
+	WithObservability(ObservabilitySpec[WorkflowInstanceCompletedPayload]{
+		Operation: "handle_instance_completed",
+		Origin:    "listeners",
+	}),
+)
 
 // WorkflowTimeoutExpiredTopic is emitted when a timeout occurs
 var WorkflowTimeoutExpiredTopic = NewTypedTopic[WorkflowTimeoutExpiredPayload](TopicWorkflowTimeoutExpired)

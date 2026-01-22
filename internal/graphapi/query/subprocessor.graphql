@@ -165,6 +165,31 @@ query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) 
   }
 }
 
+mutation UpdateBulkSubprocessor($ids: [ID!]!, $input: UpdateSubprocessorInput!) {
+  updateBulkSubprocessor(ids: $ids, input: $input) {
+    subprocessors {
+      createdAt
+      createdBy
+      id
+      tags
+      updatedAt
+      updatedBy
+      name
+      description
+      logoRemoteURL
+      logoFileID
+      logoFile {
+        presignedURL
+      }
+      owner {
+        id
+        name
+      }
+    }
+    updatedIDs
+  }
+}
+
 mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
   updateSubprocessor(
     id: $updateSubprocessorId
@@ -190,30 +215,5 @@ mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocess
         name
       }
     }
-  }
-}
-
-mutation UpdateBulkSubprocessor($ids: [ID!]!, $input: UpdateSubprocessorInput!) {
-  updateBulkSubprocessor(ids: $ids, input: $input) {
-    subprocessors {
-      createdAt
-      createdBy
-      id
-      tags
-      updatedAt
-      updatedBy
-      name
-      description
-      logoRemoteURL
-      logoFileID
-      logoFile {
-        presignedURL
-      }
-      owner {
-        id
-        name
-      }
-    }
-    updatedIDs
   }
 }

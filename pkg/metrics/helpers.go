@@ -3,6 +3,7 @@ package metrics
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -271,4 +272,20 @@ func RecordSubscriptionClosed(lifetimeSeconds float64) {
 	ActiveSubscriptions.Dec()
 	SubscriptionClose.Inc()
 	SubscriptionLifetime.Observe(lifetimeSeconds)
+}
+
+// RecordWorkflowOperation records a workflow operation duration and success status.
+func RecordWorkflowOperation(operation, origin, trigger string, duration time.Duration, err error) {
+	successStr := LabelSuccess
+	if err != nil {
+		successStr = LabelFailure
+	}
+
+	WorkflowOperationsTotal.WithLabelValues(operation, origin, trigger, successStr).Inc()
+	WorkflowOperationDuration.WithLabelValues(operation, origin, trigger).Observe(duration.Seconds())
+}
+
+// RecordWorkflowEmitError records a workflow emit error by topic and origin.
+func RecordWorkflowEmitError(topic, origin string) {
+	WorkflowEmitErrorsTotal.WithLabelValues(topic, origin).Inc()
 }
