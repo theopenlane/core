@@ -1,4 +1,4 @@
-h1:c35/6i0I1uMMV0j7gybH+03NXeQFxXPD+OTA7B7TfpE=
+h1:1fr4bk85VFd36RoEJTKam073QXeH348/TU8dgiHSTvs=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -21,7 +21,5 @@ h1:c35/6i0I1uMMV0j7gybH+03NXeQFxXPD+OTA7B7TfpE=
 20260119215644_trustcenter_nda_requests_history.sql h1:3D/5hJmIaz2SvujdwiXkmHmhv6iw6nlJQoiKi9kMrbQ=
 20260120175351_trustcenter_settings_company_name.sql h1:815+tQAjSA446JuG7FNJUuazG2iAnGaD/ygBqGcOi4M=
 20260120175358_trustcenter_settings_company_name_history.sql h1:8ChwH3zipHVE3MDS2jrSYf7yoD4+SwKVH5ueHhw5E+A=
-20260123142015_customenumandcampaigns.sql h1:+3Vo29IaaKw8reELfm1IgfSQws/zRTXSQ8i1B1wQFZs=
-20260123142018_customenumandcampaigns_history.sql h1:RNLs91sP8SW8liFgQEF30Uq/EPP8g1fq1trMdoG1H/4=
-20260123220756_customenumsandcampaigns.sql h1:eeYeo1d/9T1ipGz2d364DPtrXcyIYZbz9FSuW8U5h4A=
-20260123220759_customenumsandcampaigns_history.sql h1:duGB9BRNXLXDfBM7rpYQ6eGR32JHR1ZSDaKqzsP+onA=
+20260123223458_customenumsandcampaigns.sql h1:TwoJxjjunZgFg5rVNku3/cyYYWA1SYx53ps8Ku3uTYI=
+20260123223501_customenumsandcampaigns_history.sql h1:zLntaGM3Zv3vM+s0pIjW5v/6DGGoDm49scdvf6wGhbA=
