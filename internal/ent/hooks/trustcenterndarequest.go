@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/domain"
@@ -116,7 +117,9 @@ func createNDARequestNotification(ctx context.Context, m *generated.TrustCenterN
 		},
 	}
 
-	_, err := m.Client().Notification.Create().SetInput(input).Save(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	_, err := m.Client().Notification.Create().SetInput(input).Save(allowCtx)
 	return err
 }
 
