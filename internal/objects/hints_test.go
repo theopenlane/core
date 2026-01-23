@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
@@ -40,7 +41,8 @@ func TestApplyProviderHints(t *testing.T) {
 		PreferredProvider: storagetypes.ProviderType("s3"),
 		KnownProvider:     storagetypes.ProviderType("disk"),
 		Metadata: map[string]string{
-			"size_bytes": "2048",
+			"size_bytes":            "2048",
+			TemplateKindMetadataKey: enums.TemplateKindTrustCenterNda.String(),
 		},
 	}
 
@@ -64,4 +66,8 @@ func TestApplyProviderHints(t *testing.T) {
 	size, ok := contextx.From[SizeBytesHint](ctx)
 	require.True(t, ok)
 	assert.Equal(t, int64(size), int64(2048))
+
+	kind, ok := contextx.From[TemplateKindHint](ctx)
+	require.True(t, ok)
+	assert.Equal(t, enums.TemplateKindTrustCenterNda, enums.TemplateKind(kind))
 }

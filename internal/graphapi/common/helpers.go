@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
@@ -92,7 +93,7 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 				}
 
 				// Add object details using existing logic
-				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
+				enhanced, err := retrieveObjectDetails(rctx, op.Variables, inputKey, k, &fileUpload)
 				if err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to retrieve object details for upload")
 
@@ -263,7 +264,7 @@ type enumInfo struct {
 }
 
 // dateTimeType caches the DateTime reflect type for pointer checks
-var dateTimeType = reflect.TypeOf(models.DateTime{})
+var dateTimeType = reflect.TypeFor[models.DateTime]()
 
 // normalizeCSVEnumInputs walks decoded CSV rows and normalizes enum values
 func normalizeCSVEnumInputs(data any) {
@@ -532,6 +533,12 @@ type inputWithOwnerID struct {
 	OwnerID *string `json:"ownerID"`
 }
 
+// inputWithTemplateKind is a struct that contains the template kind
+// this is used to unmarshal the template kind from the input
+type inputWithTemplateKind struct {
+	Kind *enums.TemplateKind `json:"kind"`
+}
+
 // GetOrgOwnerFromInput retrieves the owner id from the input
 // input can be of any type, but must contain an owner id field
 // if the owner id is not found, it returns nil
@@ -551,6 +558,34 @@ func GetOrgOwnerFromInput[T any](input *T) (*string, error) {
 	}
 
 	return ownerInput.OwnerID, nil
+}
+
+// templateKindFromVariables extracts the TemplateKind from the input variables
+func templateKindFromVariables(variables map[string]any, inputKey string) *enums.TemplateKind {
+	if inputKey == "" {
+		return nil
+	}
+
+	rawInput, ok := variables[inputKey]
+	if !ok || rawInput == nil {
+		return nil
+	}
+
+	inputBytes, err := json.Marshal(rawInput)
+	if err != nil {
+		return nil
+	}
+
+	var input inputWithTemplateKind
+	if err := json.Unmarshal(inputBytes, &input); err != nil {
+		return nil
+	}
+
+	if input.Kind == nil || *input.Kind == enums.TemplateKindInvalid {
+		return nil
+	}
+
+	return input.Kind
 }
 
 // GetBulkUploadOwnerInput retrieves the owner id from the bulk upload input
@@ -693,7 +728,7 @@ func CheckAllowedAuthType(ctx context.Context) error {
 }
 
 // retrieveObjectDetails retrieves the object details from the field context
-func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *pkgobjects.File) (*pkgobjects.File, error) {
+func retrieveObjectDetails(rctx *graphql.FieldContext, variables map[string]any, inputKey, key string, upload *pkgobjects.File) (*pkgobjects.File, error) {
 	// loop through the arguments in the request
 	for _, arg := range rctx.Field.Arguments {
 		// check if the argument is an upload
@@ -712,6 +747,14 @@ func retrieveObjectDetails(rctx *graphql.FieldContext, key string, upload *pkgob
 				upload.Parent.Type = lo.SnakeCase(objectType)
 				upload.FieldName = arg.Name
 				upload.Key = arg.Name // Also set Key in FileMetadata for backwards compatibility
+
+				if key == "templateFiles" {
+					if kind := templateKindFromVariables(variables, inputKey); kind != nil {
+						objects.SetTemplateKindHint(upload, *kind)
+					} else if rctx.Field.Name == "createTrustCenterNDA" || rctx.Field.Name == "updateTrustCenterNDA" {
+						objects.SetTemplateKindHint(upload, enums.TemplateKindTrustCenterNda)
+					}
+				}
 
 				return upload, nil
 			}

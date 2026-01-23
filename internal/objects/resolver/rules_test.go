@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -141,6 +142,40 @@ func TestModuleRules(t *testing.T) {
 	result := option.MustGet()
 	assert.Equal(t, r2Builder, result.Builder)
 	assert.Equal(t, "tc-bucket", result.Config.Bucket)
+}
+
+func TestTemplateKindRule(t *testing.T) {
+	ctx := contextx.With(context.Background(), objects.TemplateKindHint(enums.TemplateKindTrustCenterNda))
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+
+	r2Builder := &stubBuilder{providerType: "r2"}
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			R2: storage.ProviderConfigs{
+				Enabled: true,
+				Bucket:  "nda-bucket",
+			},
+		},
+	}
+
+	configureProviderRules(
+		resolver,
+		WithProviderConfig(config),
+		WithProviderBuilders(providerBuilders{
+			s3:   &stubBuilder{providerType: "s3"},
+			r2:   r2Builder,
+			disk: &stubBuilder{providerType: "disk"},
+			db:   &stubBuilder{providerType: "db"},
+		}),
+		WithRuntimeOptions(serviceOptions{}),
+	)
+
+	option := resolver.Resolve(ctx)
+	assert.True(t, option.IsPresent(), "expected template kind rule to resolve")
+
+	result := option.MustGet()
+	assert.Equal(t, r2Builder, result.Builder)
+	assert.Equal(t, "nda-bucket", result.Config.Bucket)
 }
 
 func TestDefaultRuleSelectsFirstEnabledProvider(t *testing.T) {
