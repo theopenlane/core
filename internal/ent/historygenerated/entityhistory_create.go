@@ -961,6 +961,10 @@ func (_c *EntityHistoryCreate) defaults() error {
 		v := entityhistory.DefaultLinks
 		_c.mutation.SetLinks(v)
 	}
+	if _, ok := _c.mutation.ReviewFrequency(); !ok {
+		v := entityhistory.DefaultReviewFrequency
+		_c.mutation.SetReviewFrequency(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if entityhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized entityhistory.DefaultID (forgotten import historygenerated/runtime?)")

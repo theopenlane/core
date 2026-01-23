@@ -237,6 +237,7 @@ func (Entity) Fields() []ent.Field {
 		field.Enum("review_frequency").
 			Comment("the cadence for reviewing the entity").
 			GoType(enums.Frequency("")).
+			Default(enums.FrequencyYearly.String()).
 			Optional().
 			Annotations(
 				entgql.OrderField("REVIEW_FREQUENCY"),

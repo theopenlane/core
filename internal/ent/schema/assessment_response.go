@@ -183,7 +183,7 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 			field:      "assessment_id",
 			required:   true,
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Assessment{}.Name()),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
@@ -217,7 +217,7 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 			name:       "document_data",
 			required:   false,
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(DocumentData{}.Name()),
+				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
 	}

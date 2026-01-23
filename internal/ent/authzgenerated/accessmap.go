@@ -137,7 +137,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "assessment": {
 	ObjectType:      "assessment",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 }, "campaign": {
 	ObjectType:      "campaign",
 	SkipEditCheck:   true,
@@ -153,7 +153,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "document": {
 	ObjectType:      "document",
 	SkipEditCheck:   true,
-	CheckViewAccess: true,
+	CheckViewAccess: false,
 },
 }, "asset": {"owner": {
 	ObjectType:      "owner",

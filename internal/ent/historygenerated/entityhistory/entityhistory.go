@@ -282,6 +282,8 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
 // ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
 func ReviewFrequencyValidator(rf enums.Frequency) error {
 	switch rf.String() {

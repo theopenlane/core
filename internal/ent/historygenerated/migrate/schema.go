@@ -829,7 +829,7 @@ var (
 		{Name: "risk_rating", Type: field.TypeString, Nullable: true},
 		{Name: "risk_score", Type: field.TypeInt, Nullable: true},
 		{Name: "tier", Type: field.TypeString, Nullable: true},
-		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}},
+		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY"}, Default: "YEARLY"},
 		{Name: "next_review_at", Type: field.TypeTime, Nullable: true},
 		{Name: "contract_renewal_at", Type: field.TypeTime, Nullable: true},
 		{Name: "vendor_metadata", Type: field.TypeJSON, Nullable: true},
