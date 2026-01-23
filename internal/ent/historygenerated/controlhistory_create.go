@@ -501,6 +501,62 @@ func (_c *ControlHistoryCreate) SetNillableControlKindID(v *string) *ControlHist
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *ControlHistoryCreate) SetEnvironmentName(v string) *ControlHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableEnvironmentName(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *ControlHistoryCreate) SetEnvironmentID(v string) *ControlHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableEnvironmentID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *ControlHistoryCreate) SetScopeName(v string) *ControlHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableScopeName(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *ControlHistoryCreate) SetScopeID(v string) *ControlHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *ControlHistoryCreate) SetNillableScopeID(v *string) *ControlHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *ControlHistoryCreate) SetWorkflowEligibleMarker(v bool) *ControlHistoryCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -869,6 +925,22 @@ func (_c *ControlHistoryCreate) createSpec() (*ControlHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.ControlKindID(); ok {
 		_spec.SetField(controlhistory.FieldControlKindID, field.TypeString, value)
 		_node.ControlKindID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(controlhistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(controlhistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(controlhistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(controlhistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(controlhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

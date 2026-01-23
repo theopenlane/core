@@ -13,9 +13,12 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Campaign holds the schema definition for the Campaign entity
@@ -234,11 +237,11 @@ func (c Campaign) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "CMP",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[Campaign](c,
+			newObjectOwnedMixin[generated.Campaign](c,
 				withParents(Organization{}),
 				withOrganizationOwner(true),
 			),
-			//			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(),
 			newResponsibilityMixin(c, withInternalOwner()),
 			WorkflowApprovalMixin{},
 		},
@@ -304,18 +307,18 @@ func (Campaign) Modules() []models.OrgModule {
 }
 
 // Annotations of the Campaign
-//func (Campaign) Annotations() []schema.Annotation {
-//	return []schema.Annotation{
-//		entfga.SelfAccessChecks(),
-//	}
-//}
-//
-//// Policy of the Campaign
-//func (Campaign) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckCreateAccess(),
-//			entfga.CheckEditAccess[*generated.CampaignMutation](),
-//		),
-//	)
-//}
+func (Campaign) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
+// Policy of the Campaign
+func (Campaign) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			//			entfga.CheckEditAccess[*generated.CampaignMutation](),
+		),
+	)
+}

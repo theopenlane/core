@@ -12,9 +12,11 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/utils/rout"
 )
@@ -269,21 +271,21 @@ func (IdentityHolder) Modules() []models.OrgModule {
 }
 
 // Annotations of the IdentityHolder
-//func (IdentityHolder) Annotations() []schema.Annotation {
-//	return []schema.Annotation{
-//		entfga.SelfAccessChecks(),
-//	}
-//}
-//
-//// Policy of the IdentityHolder
-//func (IdentityHolder) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckCreateAccess(),
-//			policy.CanCreateObjectsUnderParents([]string{
-//				Platform{}.PluralName(),
-//			}),
-//			entfga.CheckEditAccess[*generated.IdentityHolderMutation](),
-//		),
-//	)
-//}
+func (IdentityHolder) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
+// Policy of the IdentityHolder
+func (IdentityHolder) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			policy.CanCreateObjectsUnderParents([]string{
+				Platform{}.PluralName(),
+			}),
+			//			entfga.CheckEditAccess[*generated.IdentityHolderMutation](),
+		),
+	)
+}

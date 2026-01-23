@@ -72,6 +72,14 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 				return ec.fieldContext_Review_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Review_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Review_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Review_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Review_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Review_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Review_externalID(ctx, field)
 			case "externalOwnerID":
@@ -116,6 +124,10 @@ func (ec *executionContext) fieldContext_ReviewBulkCreatePayload_reviews(_ conte
 				return ec.fieldContext_Review_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Review_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Review_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Review_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Review_integrations(ctx, field)
 			case "findings":
@@ -197,6 +209,14 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 				return ec.fieldContext_Review_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Review_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Review_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Review_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Review_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Review_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Review_externalID(ctx, field)
 			case "externalOwnerID":
@@ -241,6 +261,10 @@ func (ec *executionContext) fieldContext_ReviewCreatePayload_review(_ context.Co
 				return ec.fieldContext_Review_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Review_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Review_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Review_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Review_integrations(ctx, field)
 			case "findings":
@@ -351,6 +375,14 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 				return ec.fieldContext_Review_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Review_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Review_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Review_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Review_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Review_scopeID(ctx, field)
 			case "externalID":
 				return ec.fieldContext_Review_externalID(ctx, field)
 			case "externalOwnerID":
@@ -395,6 +427,10 @@ func (ec *executionContext) fieldContext_ReviewUpdatePayload_review(_ context.Co
 				return ec.fieldContext_Review_editors(ctx, field)
 			case "viewers":
 				return ec.fieldContext_Review_viewers(ctx, field)
+			case "environment":
+				return ec.fieldContext_Review_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Review_scope(ctx, field)
 			case "integrations":
 				return ec.fieldContext_Review_integrations(ctx, field)
 			case "findings":

@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 
@@ -145,6 +146,206 @@ func (_u *ScanHistoryUpdate) ClearOwnerID() *ScanHistoryUpdate {
 	return _u
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *ScanHistoryUpdate) SetReviewedBy(v string) *ScanHistoryUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableReviewedBy(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *ScanHistoryUpdate) ClearReviewedBy() *ScanHistoryUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *ScanHistoryUpdate) SetReviewedByUserID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableReviewedByUserID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *ScanHistoryUpdate) ClearReviewedByUserID() *ScanHistoryUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *ScanHistoryUpdate) SetReviewedByGroupID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableReviewedByGroupID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *ScanHistoryUpdate) ClearReviewedByGroupID() *ScanHistoryUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *ScanHistoryUpdate) SetAssignedTo(v string) *ScanHistoryUpdate {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableAssignedTo(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *ScanHistoryUpdate) ClearAssignedTo() *ScanHistoryUpdate {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *ScanHistoryUpdate) SetAssignedToUserID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableAssignedToUserID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *ScanHistoryUpdate) ClearAssignedToUserID() *ScanHistoryUpdate {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *ScanHistoryUpdate) SetAssignedToGroupID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableAssignedToGroupID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *ScanHistoryUpdate) ClearAssignedToGroupID() *ScanHistoryUpdate {
+	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ScanHistoryUpdate) SetEnvironmentName(v string) *ScanHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableEnvironmentName(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ScanHistoryUpdate) ClearEnvironmentName() *ScanHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ScanHistoryUpdate) SetEnvironmentID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableEnvironmentID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ScanHistoryUpdate) ClearEnvironmentID() *ScanHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ScanHistoryUpdate) SetScopeName(v string) *ScanHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableScopeName(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ScanHistoryUpdate) ClearScopeName() *ScanHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ScanHistoryUpdate) SetScopeID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableScopeID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ScanHistoryUpdate) ClearScopeID() *ScanHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTarget sets the "target" field.
 func (_u *ScanHistoryUpdate) SetTarget(v string) *ScanHistoryUpdate {
 	_u.mutation.SetTarget(v)
@@ -182,6 +383,164 @@ func (_u *ScanHistoryUpdate) SetMetadata(v map[string]interface{}) *ScanHistoryU
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *ScanHistoryUpdate) ClearMetadata() *ScanHistoryUpdate {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetScanDate sets the "scan_date" field.
+func (_u *ScanHistoryUpdate) SetScanDate(v models.DateTime) *ScanHistoryUpdate {
+	_u.mutation.SetScanDate(v)
+	return _u
+}
+
+// SetNillableScanDate sets the "scan_date" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableScanDate(v *models.DateTime) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetScanDate(*v)
+	}
+	return _u
+}
+
+// ClearScanDate clears the value of the "scan_date" field.
+func (_u *ScanHistoryUpdate) ClearScanDate() *ScanHistoryUpdate {
+	_u.mutation.ClearScanDate()
+	return _u
+}
+
+// SetScanSchedule sets the "scan_schedule" field.
+func (_u *ScanHistoryUpdate) SetScanSchedule(v models.Cron) *ScanHistoryUpdate {
+	_u.mutation.SetScanSchedule(v)
+	return _u
+}
+
+// SetNillableScanSchedule sets the "scan_schedule" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableScanSchedule(v *models.Cron) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetScanSchedule(*v)
+	}
+	return _u
+}
+
+// ClearScanSchedule clears the value of the "scan_schedule" field.
+func (_u *ScanHistoryUpdate) ClearScanSchedule() *ScanHistoryUpdate {
+	_u.mutation.ClearScanSchedule()
+	return _u
+}
+
+// SetNextScanRunAt sets the "next_scan_run_at" field.
+func (_u *ScanHistoryUpdate) SetNextScanRunAt(v models.DateTime) *ScanHistoryUpdate {
+	_u.mutation.SetNextScanRunAt(v)
+	return _u
+}
+
+// SetNillableNextScanRunAt sets the "next_scan_run_at" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableNextScanRunAt(v *models.DateTime) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetNextScanRunAt(*v)
+	}
+	return _u
+}
+
+// ClearNextScanRunAt clears the value of the "next_scan_run_at" field.
+func (_u *ScanHistoryUpdate) ClearNextScanRunAt() *ScanHistoryUpdate {
+	_u.mutation.ClearNextScanRunAt()
+	return _u
+}
+
+// SetPerformedBy sets the "performed_by" field.
+func (_u *ScanHistoryUpdate) SetPerformedBy(v string) *ScanHistoryUpdate {
+	_u.mutation.SetPerformedBy(v)
+	return _u
+}
+
+// SetNillablePerformedBy sets the "performed_by" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillablePerformedBy(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetPerformedBy(*v)
+	}
+	return _u
+}
+
+// ClearPerformedBy clears the value of the "performed_by" field.
+func (_u *ScanHistoryUpdate) ClearPerformedBy() *ScanHistoryUpdate {
+	_u.mutation.ClearPerformedBy()
+	return _u
+}
+
+// SetPerformedByUserID sets the "performed_by_user_id" field.
+func (_u *ScanHistoryUpdate) SetPerformedByUserID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetPerformedByUserID(v)
+	return _u
+}
+
+// SetNillablePerformedByUserID sets the "performed_by_user_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillablePerformedByUserID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetPerformedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByUserID clears the value of the "performed_by_user_id" field.
+func (_u *ScanHistoryUpdate) ClearPerformedByUserID() *ScanHistoryUpdate {
+	_u.mutation.ClearPerformedByUserID()
+	return _u
+}
+
+// SetPerformedByGroupID sets the "performed_by_group_id" field.
+func (_u *ScanHistoryUpdate) SetPerformedByGroupID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetPerformedByGroupID(v)
+	return _u
+}
+
+// SetNillablePerformedByGroupID sets the "performed_by_group_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillablePerformedByGroupID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetPerformedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByGroupID clears the value of the "performed_by_group_id" field.
+func (_u *ScanHistoryUpdate) ClearPerformedByGroupID() *ScanHistoryUpdate {
+	_u.mutation.ClearPerformedByGroupID()
+	return _u
+}
+
+// SetGeneratedByPlatformID sets the "generated_by_platform_id" field.
+func (_u *ScanHistoryUpdate) SetGeneratedByPlatformID(v string) *ScanHistoryUpdate {
+	_u.mutation.SetGeneratedByPlatformID(v)
+	return _u
+}
+
+// SetNillableGeneratedByPlatformID sets the "generated_by_platform_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdate) SetNillableGeneratedByPlatformID(v *string) *ScanHistoryUpdate {
+	if v != nil {
+		_u.SetGeneratedByPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearGeneratedByPlatformID clears the value of the "generated_by_platform_id" field.
+func (_u *ScanHistoryUpdate) ClearGeneratedByPlatformID() *ScanHistoryUpdate {
+	_u.mutation.ClearGeneratedByPlatformID()
+	return _u
+}
+
+// SetVulnerabilityIds sets the "vulnerability_ids" field.
+func (_u *ScanHistoryUpdate) SetVulnerabilityIds(v []string) *ScanHistoryUpdate {
+	_u.mutation.SetVulnerabilityIds(v)
+	return _u
+}
+
+// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
+func (_u *ScanHistoryUpdate) AppendVulnerabilityIds(v []string) *ScanHistoryUpdate {
+	_u.mutation.AppendVulnerabilityIds(v)
+	return _u
+}
+
+// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
+func (_u *ScanHistoryUpdate) ClearVulnerabilityIds() *ScanHistoryUpdate {
+	_u.mutation.ClearVulnerabilityIds()
 	return _u
 }
 
@@ -251,6 +610,11 @@ func (_u *ScanHistoryUpdate) check() error {
 	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scanhistory.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`historygenerated: validator failed for field "ScanHistory.scan_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ScanSchedule(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "scan_schedule", err: fmt.Errorf(`historygenerated: validator failed for field "ScanHistory.scan_schedule": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Status(); ok {
@@ -329,6 +693,66 @@ func (_u *ScanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scanhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(scanhistory.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(scanhistory.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(scanhistory.FieldReviewedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(scanhistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(scanhistory.FieldReviewedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(scanhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(scanhistory.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(scanhistory.FieldAssignedTo, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToUserID(); ok {
+		_spec.SetField(scanhistory.FieldAssignedToUserID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToUserIDCleared() {
+		_spec.ClearField(scanhistory.FieldAssignedToUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToGroupID(); ok {
+		_spec.SetField(scanhistory.FieldAssignedToGroupID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToGroupIDCleared() {
+		_spec.ClearField(scanhistory.FieldAssignedToGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(scanhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(scanhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(scanhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(scanhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(scanhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(scanhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(scanhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(scanhistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scanhistory.FieldTarget, field.TypeString, value)
 	}
@@ -340,6 +764,59 @@ func (_u *ScanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scanhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ScanDate(); ok {
+		_spec.SetField(scanhistory.FieldScanDate, field.TypeTime, value)
+	}
+	if _u.mutation.ScanDateCleared() {
+		_spec.ClearField(scanhistory.FieldScanDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ScanSchedule(); ok {
+		_spec.SetField(scanhistory.FieldScanSchedule, field.TypeString, value)
+	}
+	if _u.mutation.ScanScheduleCleared() {
+		_spec.ClearField(scanhistory.FieldScanSchedule, field.TypeString)
+	}
+	if value, ok := _u.mutation.NextScanRunAt(); ok {
+		_spec.SetField(scanhistory.FieldNextScanRunAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextScanRunAtCleared() {
+		_spec.ClearField(scanhistory.FieldNextScanRunAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PerformedBy(); ok {
+		_spec.SetField(scanhistory.FieldPerformedBy, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByCleared() {
+		_spec.ClearField(scanhistory.FieldPerformedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.PerformedByUserID(); ok {
+		_spec.SetField(scanhistory.FieldPerformedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByUserIDCleared() {
+		_spec.ClearField(scanhistory.FieldPerformedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PerformedByGroupID(); ok {
+		_spec.SetField(scanhistory.FieldPerformedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByGroupIDCleared() {
+		_spec.ClearField(scanhistory.FieldPerformedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.GeneratedByPlatformID(); ok {
+		_spec.SetField(scanhistory.FieldGeneratedByPlatformID, field.TypeString, value)
+	}
+	if _u.mutation.GeneratedByPlatformIDCleared() {
+		_spec.ClearField(scanhistory.FieldGeneratedByPlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.VulnerabilityIds(); ok {
+		_spec.SetField(scanhistory.FieldVulnerabilityIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scanhistory.FieldVulnerabilityIds, value)
+		})
+	}
+	if _u.mutation.VulnerabilityIdsCleared() {
+		_spec.ClearField(scanhistory.FieldVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scanhistory.FieldStatus, field.TypeEnum, value)
@@ -478,6 +955,206 @@ func (_u *ScanHistoryUpdateOne) ClearOwnerID() *ScanHistoryUpdateOne {
 	return _u
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *ScanHistoryUpdateOne) SetReviewedBy(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableReviewedBy(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *ScanHistoryUpdateOne) ClearReviewedBy() *ScanHistoryUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *ScanHistoryUpdateOne) SetReviewedByUserID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableReviewedByUserID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *ScanHistoryUpdateOne) ClearReviewedByUserID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *ScanHistoryUpdateOne) SetReviewedByGroupID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableReviewedByGroupID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *ScanHistoryUpdateOne) ClearReviewedByGroupID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_u *ScanHistoryUpdateOne) SetAssignedTo(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetAssignedTo(v)
+	return _u
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableAssignedTo(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignedTo(*v)
+	}
+	return _u
+}
+
+// ClearAssignedTo clears the value of the "assigned_to" field.
+func (_u *ScanHistoryUpdateOne) ClearAssignedTo() *ScanHistoryUpdateOne {
+	_u.mutation.ClearAssignedTo()
+	return _u
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_u *ScanHistoryUpdateOne) SetAssignedToUserID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetAssignedToUserID(v)
+	return _u
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableAssignedToUserID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignedToUserID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToUserID clears the value of the "assigned_to_user_id" field.
+func (_u *ScanHistoryUpdateOne) ClearAssignedToUserID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearAssignedToUserID()
+	return _u
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_u *ScanHistoryUpdateOne) SetAssignedToGroupID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetAssignedToGroupID(v)
+	return _u
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableAssignedToGroupID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssignedToGroupID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
+func (_u *ScanHistoryUpdateOne) ClearAssignedToGroupID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ScanHistoryUpdateOne) SetEnvironmentName(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableEnvironmentName(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ScanHistoryUpdateOne) ClearEnvironmentName() *ScanHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ScanHistoryUpdateOne) SetEnvironmentID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableEnvironmentID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ScanHistoryUpdateOne) ClearEnvironmentID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ScanHistoryUpdateOne) SetScopeName(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableScopeName(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ScanHistoryUpdateOne) ClearScopeName() *ScanHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ScanHistoryUpdateOne) SetScopeID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableScopeID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ScanHistoryUpdateOne) ClearScopeID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTarget sets the "target" field.
 func (_u *ScanHistoryUpdateOne) SetTarget(v string) *ScanHistoryUpdateOne {
 	_u.mutation.SetTarget(v)
@@ -515,6 +1192,164 @@ func (_u *ScanHistoryUpdateOne) SetMetadata(v map[string]interface{}) *ScanHisto
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *ScanHistoryUpdateOne) ClearMetadata() *ScanHistoryUpdateOne {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetScanDate sets the "scan_date" field.
+func (_u *ScanHistoryUpdateOne) SetScanDate(v models.DateTime) *ScanHistoryUpdateOne {
+	_u.mutation.SetScanDate(v)
+	return _u
+}
+
+// SetNillableScanDate sets the "scan_date" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableScanDate(v *models.DateTime) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetScanDate(*v)
+	}
+	return _u
+}
+
+// ClearScanDate clears the value of the "scan_date" field.
+func (_u *ScanHistoryUpdateOne) ClearScanDate() *ScanHistoryUpdateOne {
+	_u.mutation.ClearScanDate()
+	return _u
+}
+
+// SetScanSchedule sets the "scan_schedule" field.
+func (_u *ScanHistoryUpdateOne) SetScanSchedule(v models.Cron) *ScanHistoryUpdateOne {
+	_u.mutation.SetScanSchedule(v)
+	return _u
+}
+
+// SetNillableScanSchedule sets the "scan_schedule" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableScanSchedule(v *models.Cron) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetScanSchedule(*v)
+	}
+	return _u
+}
+
+// ClearScanSchedule clears the value of the "scan_schedule" field.
+func (_u *ScanHistoryUpdateOne) ClearScanSchedule() *ScanHistoryUpdateOne {
+	_u.mutation.ClearScanSchedule()
+	return _u
+}
+
+// SetNextScanRunAt sets the "next_scan_run_at" field.
+func (_u *ScanHistoryUpdateOne) SetNextScanRunAt(v models.DateTime) *ScanHistoryUpdateOne {
+	_u.mutation.SetNextScanRunAt(v)
+	return _u
+}
+
+// SetNillableNextScanRunAt sets the "next_scan_run_at" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableNextScanRunAt(v *models.DateTime) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetNextScanRunAt(*v)
+	}
+	return _u
+}
+
+// ClearNextScanRunAt clears the value of the "next_scan_run_at" field.
+func (_u *ScanHistoryUpdateOne) ClearNextScanRunAt() *ScanHistoryUpdateOne {
+	_u.mutation.ClearNextScanRunAt()
+	return _u
+}
+
+// SetPerformedBy sets the "performed_by" field.
+func (_u *ScanHistoryUpdateOne) SetPerformedBy(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetPerformedBy(v)
+	return _u
+}
+
+// SetNillablePerformedBy sets the "performed_by" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillablePerformedBy(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetPerformedBy(*v)
+	}
+	return _u
+}
+
+// ClearPerformedBy clears the value of the "performed_by" field.
+func (_u *ScanHistoryUpdateOne) ClearPerformedBy() *ScanHistoryUpdateOne {
+	_u.mutation.ClearPerformedBy()
+	return _u
+}
+
+// SetPerformedByUserID sets the "performed_by_user_id" field.
+func (_u *ScanHistoryUpdateOne) SetPerformedByUserID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetPerformedByUserID(v)
+	return _u
+}
+
+// SetNillablePerformedByUserID sets the "performed_by_user_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillablePerformedByUserID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetPerformedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByUserID clears the value of the "performed_by_user_id" field.
+func (_u *ScanHistoryUpdateOne) ClearPerformedByUserID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearPerformedByUserID()
+	return _u
+}
+
+// SetPerformedByGroupID sets the "performed_by_group_id" field.
+func (_u *ScanHistoryUpdateOne) SetPerformedByGroupID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetPerformedByGroupID(v)
+	return _u
+}
+
+// SetNillablePerformedByGroupID sets the "performed_by_group_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillablePerformedByGroupID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetPerformedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearPerformedByGroupID clears the value of the "performed_by_group_id" field.
+func (_u *ScanHistoryUpdateOne) ClearPerformedByGroupID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearPerformedByGroupID()
+	return _u
+}
+
+// SetGeneratedByPlatformID sets the "generated_by_platform_id" field.
+func (_u *ScanHistoryUpdateOne) SetGeneratedByPlatformID(v string) *ScanHistoryUpdateOne {
+	_u.mutation.SetGeneratedByPlatformID(v)
+	return _u
+}
+
+// SetNillableGeneratedByPlatformID sets the "generated_by_platform_id" field if the given value is not nil.
+func (_u *ScanHistoryUpdateOne) SetNillableGeneratedByPlatformID(v *string) *ScanHistoryUpdateOne {
+	if v != nil {
+		_u.SetGeneratedByPlatformID(*v)
+	}
+	return _u
+}
+
+// ClearGeneratedByPlatformID clears the value of the "generated_by_platform_id" field.
+func (_u *ScanHistoryUpdateOne) ClearGeneratedByPlatformID() *ScanHistoryUpdateOne {
+	_u.mutation.ClearGeneratedByPlatformID()
+	return _u
+}
+
+// SetVulnerabilityIds sets the "vulnerability_ids" field.
+func (_u *ScanHistoryUpdateOne) SetVulnerabilityIds(v []string) *ScanHistoryUpdateOne {
+	_u.mutation.SetVulnerabilityIds(v)
+	return _u
+}
+
+// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
+func (_u *ScanHistoryUpdateOne) AppendVulnerabilityIds(v []string) *ScanHistoryUpdateOne {
+	_u.mutation.AppendVulnerabilityIds(v)
+	return _u
+}
+
+// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
+func (_u *ScanHistoryUpdateOne) ClearVulnerabilityIds() *ScanHistoryUpdateOne {
+	_u.mutation.ClearVulnerabilityIds()
 	return _u
 }
 
@@ -597,6 +1432,11 @@ func (_u *ScanHistoryUpdateOne) check() error {
 	if v, ok := _u.mutation.ScanType(); ok {
 		if err := scanhistory.ScanTypeValidator(v); err != nil {
 			return &ValidationError{Name: "scan_type", err: fmt.Errorf(`historygenerated: validator failed for field "ScanHistory.scan_type": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.ScanSchedule(); ok {
+		if err := v.Validate(); err != nil {
+			return &ValidationError{Name: "scan_schedule", err: fmt.Errorf(`historygenerated: validator failed for field "ScanHistory.scan_schedule": %w`, err)}
 		}
 	}
 	if v, ok := _u.mutation.Status(); ok {
@@ -692,6 +1532,66 @@ func (_u *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHistory
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(scanhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(scanhistory.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(scanhistory.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(scanhistory.FieldReviewedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(scanhistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(scanhistory.FieldReviewedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(scanhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedTo(); ok {
+		_spec.SetField(scanhistory.FieldAssignedTo, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToCleared() {
+		_spec.ClearField(scanhistory.FieldAssignedTo, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToUserID(); ok {
+		_spec.SetField(scanhistory.FieldAssignedToUserID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToUserIDCleared() {
+		_spec.ClearField(scanhistory.FieldAssignedToUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssignedToGroupID(); ok {
+		_spec.SetField(scanhistory.FieldAssignedToGroupID, field.TypeString, value)
+	}
+	if _u.mutation.AssignedToGroupIDCleared() {
+		_spec.ClearField(scanhistory.FieldAssignedToGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(scanhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(scanhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(scanhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(scanhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(scanhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(scanhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(scanhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(scanhistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Target(); ok {
 		_spec.SetField(scanhistory.FieldTarget, field.TypeString, value)
 	}
@@ -703,6 +1603,59 @@ func (_u *ScanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ScanHistory
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(scanhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.ScanDate(); ok {
+		_spec.SetField(scanhistory.FieldScanDate, field.TypeTime, value)
+	}
+	if _u.mutation.ScanDateCleared() {
+		_spec.ClearField(scanhistory.FieldScanDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ScanSchedule(); ok {
+		_spec.SetField(scanhistory.FieldScanSchedule, field.TypeString, value)
+	}
+	if _u.mutation.ScanScheduleCleared() {
+		_spec.ClearField(scanhistory.FieldScanSchedule, field.TypeString)
+	}
+	if value, ok := _u.mutation.NextScanRunAt(); ok {
+		_spec.SetField(scanhistory.FieldNextScanRunAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextScanRunAtCleared() {
+		_spec.ClearField(scanhistory.FieldNextScanRunAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.PerformedBy(); ok {
+		_spec.SetField(scanhistory.FieldPerformedBy, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByCleared() {
+		_spec.ClearField(scanhistory.FieldPerformedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.PerformedByUserID(); ok {
+		_spec.SetField(scanhistory.FieldPerformedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByUserIDCleared() {
+		_spec.ClearField(scanhistory.FieldPerformedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PerformedByGroupID(); ok {
+		_spec.SetField(scanhistory.FieldPerformedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.PerformedByGroupIDCleared() {
+		_spec.ClearField(scanhistory.FieldPerformedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.GeneratedByPlatformID(); ok {
+		_spec.SetField(scanhistory.FieldGeneratedByPlatformID, field.TypeString, value)
+	}
+	if _u.mutation.GeneratedByPlatformIDCleared() {
+		_spec.ClearField(scanhistory.FieldGeneratedByPlatformID, field.TypeString)
+	}
+	if value, ok := _u.mutation.VulnerabilityIds(); ok {
+		_spec.SetField(scanhistory.FieldVulnerabilityIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, scanhistory.FieldVulnerabilityIds, value)
+		})
+	}
+	if _u.mutation.VulnerabilityIdsCleared() {
+		_spec.ClearField(scanhistory.FieldVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scanhistory.FieldStatus, field.TypeEnum, value)

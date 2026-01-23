@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
@@ -44,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
@@ -63,6 +66,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
@@ -1869,6 +1873,90 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseOrderFieldEmailDeliveredAt orders AssessmentResponse by email_delivered_at.
+	AssessmentResponseOrderFieldEmailDeliveredAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.EmailDeliveredAt, nil
+		},
+		column: assessmentresponse.FieldEmailDeliveredAt,
+		toTerm: assessmentresponse.ByEmailDeliveredAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailDeliveredAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldEmailOpenedAt orders AssessmentResponse by email_opened_at.
+	AssessmentResponseOrderFieldEmailOpenedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.EmailOpenedAt, nil
+		},
+		column: assessmentresponse.FieldEmailOpenedAt,
+		toTerm: assessmentresponse.ByEmailOpenedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailOpenedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldEmailClickedAt orders AssessmentResponse by email_clicked_at.
+	AssessmentResponseOrderFieldEmailClickedAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.EmailClickedAt, nil
+		},
+		column: assessmentresponse.FieldEmailClickedAt,
+		toTerm: assessmentresponse.ByEmailClickedAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailClickedAt,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldEmailOpenCount orders AssessmentResponse by email_open_count.
+	AssessmentResponseOrderFieldEmailOpenCount = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.EmailOpenCount, nil
+		},
+		column: assessmentresponse.FieldEmailOpenCount,
+		toTerm: assessmentresponse.ByEmailOpenCount,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailOpenCount,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldEmailClickCount orders AssessmentResponse by email_click_count.
+	AssessmentResponseOrderFieldEmailClickCount = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.EmailClickCount, nil
+		},
+		column: assessmentresponse.FieldEmailClickCount,
+		toTerm: assessmentresponse.ByEmailClickCount,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailClickCount,
+			}
+		},
+	}
+	// AssessmentResponseOrderFieldLastEmailEventAt orders AssessmentResponse by last_email_event_at.
+	AssessmentResponseOrderFieldLastEmailEventAt = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.LastEmailEventAt, nil
+		},
+		column: assessmentresponse.FieldLastEmailEventAt,
+		toTerm: assessmentresponse.ByLastEmailEventAt,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastEmailEventAt,
+			}
+		},
+	}
 	// AssessmentResponseOrderFieldStatus orders AssessmentResponse by status.
 	AssessmentResponseOrderFieldStatus = &AssessmentResponseOrderField{
 		Value: func(_m *AssessmentResponse) (ent.Value, error) {
@@ -1953,6 +2041,18 @@ func (f AssessmentResponseOrderField) String() string {
 		str = "email"
 	case AssessmentResponseOrderFieldSendAttempts.column:
 		str = "send_attempts"
+	case AssessmentResponseOrderFieldEmailDeliveredAt.column:
+		str = "email_delivered_at"
+	case AssessmentResponseOrderFieldEmailOpenedAt.column:
+		str = "email_opened_at"
+	case AssessmentResponseOrderFieldEmailClickedAt.column:
+		str = "email_clicked_at"
+	case AssessmentResponseOrderFieldEmailOpenCount.column:
+		str = "email_open_count"
+	case AssessmentResponseOrderFieldEmailClickCount.column:
+		str = "email_click_count"
+	case AssessmentResponseOrderFieldLastEmailEventAt.column:
+		str = "last_email_event_at"
 	case AssessmentResponseOrderFieldStatus.column:
 		str = "status"
 	case AssessmentResponseOrderFieldAssignedAt.column:
@@ -1987,6 +2087,18 @@ func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentResponseOrderFieldEmail
 	case "send_attempts":
 		*f = *AssessmentResponseOrderFieldSendAttempts
+	case "email_delivered_at":
+		*f = *AssessmentResponseOrderFieldEmailDeliveredAt
+	case "email_opened_at":
+		*f = *AssessmentResponseOrderFieldEmailOpenedAt
+	case "email_clicked_at":
+		*f = *AssessmentResponseOrderFieldEmailClickedAt
+	case "email_open_count":
+		*f = *AssessmentResponseOrderFieldEmailOpenCount
+	case "email_click_count":
+		*f = *AssessmentResponseOrderFieldEmailClickCount
+	case "last_email_event_at":
+		*f = *AssessmentResponseOrderFieldLastEmailEventAt
 	case "status":
 		*f = *AssessmentResponseOrderFieldStatus
 	case "assigned_at":
@@ -2322,6 +2434,20 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldInternalOwner orders Asset by internal_owner.
+	AssetOrderFieldInternalOwner = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: asset.FieldInternalOwner,
+		toTerm: asset.ByInternalOwner,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// AssetOrderFieldAssetType orders Asset by asset_type.
 	AssetOrderFieldAssetType = &AssetOrderField{
 		Value: func(_m *Asset) (ent.Value, error) {
@@ -2350,6 +2476,131 @@ var (
 			}
 		},
 	}
+	// AssetOrderFieldPhysicalLocation orders Asset by physical_location.
+	AssetOrderFieldPhysicalLocation = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.PhysicalLocation, nil
+		},
+		column: asset.FieldPhysicalLocation,
+		toTerm: asset.ByPhysicalLocation,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PhysicalLocation,
+			}
+		},
+	}
+	// AssetOrderFieldRegion orders Asset by region.
+	AssetOrderFieldRegion = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.Region, nil
+		},
+		column: asset.FieldRegion,
+		toTerm: asset.ByRegion,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Region,
+			}
+		},
+	}
+	// AssetOrderFieldContainsPii orders Asset by contains_pii.
+	AssetOrderFieldContainsPii = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.ContainsPii, nil
+		},
+		column: asset.FieldContainsPii,
+		toTerm: asset.ByContainsPii,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContainsPii,
+			}
+		},
+	}
+	// AssetOrderFieldSourceType orders Asset by source_type.
+	AssetOrderFieldSourceType = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.SourceType, nil
+		},
+		column: asset.FieldSourceType,
+		toTerm: asset.BySourceType,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceType,
+			}
+		},
+	}
+	// AssetOrderFieldSourceIdentifier orders Asset by source_identifier.
+	AssetOrderFieldSourceIdentifier = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.SourceIdentifier, nil
+		},
+		column: asset.FieldSourceIdentifier,
+		toTerm: asset.BySourceIdentifier,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceIdentifier,
+			}
+		},
+	}
+	// AssetOrderFieldCostCenter orders Asset by cost_center.
+	AssetOrderFieldCostCenter = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.CostCenter, nil
+		},
+		column: asset.FieldCostCenter,
+		toTerm: asset.ByCostCenter,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CostCenter,
+			}
+		},
+	}
+	// AssetOrderFieldEstimatedMonthlyCost orders Asset by estimated_monthly_cost.
+	AssetOrderFieldEstimatedMonthlyCost = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			return _m.EstimatedMonthlyCost, nil
+		},
+		column: asset.FieldEstimatedMonthlyCost,
+		toTerm: asset.ByEstimatedMonthlyCost,
+		toCursor: func(_m *Asset) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EstimatedMonthlyCost,
+			}
+		},
+	}
+	// AssetOrderFieldPurchaseDate orders Asset by purchase_date.
+	AssetOrderFieldPurchaseDate = &AssetOrderField{
+		Value: func(_m *Asset) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.PurchaseDate == nil {
+				return nil, nil
+			}
+			return _m.PurchaseDate, nil
+		},
+		column: asset.FieldPurchaseDate,
+		toTerm: func(opts ...sql.OrderTermOption) asset.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return asset.ByPurchaseDate(opts...)
+		},
+		toCursor: func(_m *Asset) Cursor {
+			if _m.PurchaseDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PurchaseDate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2360,10 +2611,28 @@ func (f AssetOrderField) String() string {
 		str = "created_at"
 	case AssetOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssetOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case AssetOrderFieldAssetType.column:
 		str = "ASSET_TYPE"
 	case AssetOrderFieldName.column:
 		str = "name"
+	case AssetOrderFieldPhysicalLocation.column:
+		str = "physical_location"
+	case AssetOrderFieldRegion.column:
+		str = "region"
+	case AssetOrderFieldContainsPii.column:
+		str = "contains_pii"
+	case AssetOrderFieldSourceType.column:
+		str = "SOURCE_TYPE"
+	case AssetOrderFieldSourceIdentifier.column:
+		str = "source_identifier"
+	case AssetOrderFieldCostCenter.column:
+		str = "cost_center"
+	case AssetOrderFieldEstimatedMonthlyCost.column:
+		str = "estimated_monthly_cost"
+	case AssetOrderFieldPurchaseDate.column:
+		str = "purchase_date"
 	}
 	return str
 }
@@ -2384,10 +2653,28 @@ func (f *AssetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssetOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *AssetOrderFieldInternalOwner
 	case "ASSET_TYPE":
 		*f = *AssetOrderFieldAssetType
 	case "name":
 		*f = *AssetOrderFieldName
+	case "physical_location":
+		*f = *AssetOrderFieldPhysicalLocation
+	case "region":
+		*f = *AssetOrderFieldRegion
+	case "contains_pii":
+		*f = *AssetOrderFieldContainsPii
+	case "SOURCE_TYPE":
+		*f = *AssetOrderFieldSourceType
+	case "source_identifier":
+		*f = *AssetOrderFieldSourceIdentifier
+	case "cost_center":
+		*f = *AssetOrderFieldCostCenter
+	case "estimated_monthly_cost":
+		*f = *AssetOrderFieldEstimatedMonthlyCost
+	case "purchase_date":
+		*f = *AssetOrderFieldPurchaseDate
 	default:
 		return fmt.Errorf("%s is not a valid AssetOrderField", str)
 	}
@@ -2430,6 +2717,1278 @@ func (_m *Asset) ToEdge(order *AssetOrder) *AssetEdge {
 		order = DefaultAssetOrder
 	}
 	return &AssetEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// CampaignEdge is the edge representation of Campaign.
+type CampaignEdge struct {
+	Node   *Campaign `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// CampaignConnection is the connection containing edges to Campaign.
+type CampaignConnection struct {
+	Edges      []*CampaignEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *CampaignConnection) build(nodes []*Campaign, pager *campaignPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Campaign
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Campaign {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Campaign {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CampaignEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CampaignEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CampaignPaginateOption enables pagination customization.
+type CampaignPaginateOption func(*campaignPager) error
+
+// WithCampaignOrder configures pagination ordering.
+func WithCampaignOrder(order []*CampaignOrder) CampaignPaginateOption {
+	return func(pager *campaignPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithCampaignFilter configures pagination filter.
+func WithCampaignFilter(filter func(*CampaignQuery) (*CampaignQuery, error)) CampaignPaginateOption {
+	return func(pager *campaignPager) error {
+		if filter == nil {
+			return errors.New("CampaignQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type campaignPager struct {
+	reverse bool
+	order   []*CampaignOrder
+	filter  func(*CampaignQuery) (*CampaignQuery, error)
+}
+
+func newCampaignPager(opts []CampaignPaginateOption, reverse bool) (*campaignPager, error) {
+	pager := &campaignPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *campaignPager) applyFilter(query *CampaignQuery) (*CampaignQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *campaignPager) toCursor(_m *Campaign) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *campaignPager) applyCursors(query *CampaignQuery, after, before *Cursor) (*CampaignQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultCampaignOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *campaignPager) applyOrder(query *CampaignQuery) *CampaignQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultCampaignOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultCampaignOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *campaignPager) orderExpr(query *CampaignQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultCampaignOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Campaign.
+func (_m *CampaignQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CampaignPaginateOption,
+) (*CampaignConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCampaignPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &CampaignConnection{Edges: []*CampaignEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CampaignOrderFieldCreatedAt orders Campaign by created_at.
+	CampaignOrderFieldCreatedAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: campaign.FieldCreatedAt,
+		toTerm: campaign.ByCreatedAt,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// CampaignOrderFieldUpdatedAt orders Campaign by updated_at.
+	CampaignOrderFieldUpdatedAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: campaign.FieldUpdatedAt,
+		toTerm: campaign.ByUpdatedAt,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CampaignOrderFieldInternalOwner orders Campaign by internal_owner.
+	CampaignOrderFieldInternalOwner = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: campaign.FieldInternalOwner,
+		toTerm: campaign.ByInternalOwner,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// CampaignOrderFieldName orders Campaign by name.
+	CampaignOrderFieldName = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: campaign.FieldName,
+		toTerm: campaign.ByName,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// CampaignOrderFieldCampaignType orders Campaign by campaign_type.
+	CampaignOrderFieldCampaignType = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.CampaignType, nil
+		},
+		column: campaign.FieldCampaignType,
+		toTerm: campaign.ByCampaignType,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CampaignType,
+			}
+		},
+	}
+	// CampaignOrderFieldStatus orders Campaign by status.
+	CampaignOrderFieldStatus = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: campaign.FieldStatus,
+		toTerm: campaign.ByStatus,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// CampaignOrderFieldIsActive orders Campaign by is_active.
+	CampaignOrderFieldIsActive = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.IsActive, nil
+		},
+		column: campaign.FieldIsActive,
+		toTerm: campaign.ByIsActive,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsActive,
+			}
+		},
+	}
+	// CampaignOrderFieldScheduledAt orders Campaign by scheduled_at.
+	CampaignOrderFieldScheduledAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ScheduledAt == nil {
+				return nil, nil
+			}
+			return _m.ScheduledAt, nil
+		},
+		column: campaign.FieldScheduledAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByScheduledAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.ScheduledAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ScheduledAt,
+			}
+		},
+	}
+	// CampaignOrderFieldLaunchedAt orders Campaign by launched_at.
+	CampaignOrderFieldLaunchedAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LaunchedAt == nil {
+				return nil, nil
+			}
+			return _m.LaunchedAt, nil
+		},
+		column: campaign.FieldLaunchedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByLaunchedAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.LaunchedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LaunchedAt,
+			}
+		},
+	}
+	// CampaignOrderFieldCompletedAt orders Campaign by completed_at.
+	CampaignOrderFieldCompletedAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CompletedAt == nil {
+				return nil, nil
+			}
+			return _m.CompletedAt, nil
+		},
+		column: campaign.FieldCompletedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByCompletedAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.CompletedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CompletedAt,
+			}
+		},
+	}
+	// CampaignOrderFieldDueDate orders Campaign by due_date.
+	CampaignOrderFieldDueDate = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DueDate == nil {
+				return nil, nil
+			}
+			return _m.DueDate, nil
+		},
+		column: campaign.FieldDueDate,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByDueDate(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.DueDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DueDate,
+			}
+		},
+	}
+	// CampaignOrderFieldIsRecurring orders Campaign by is_recurring.
+	CampaignOrderFieldIsRecurring = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.IsRecurring, nil
+		},
+		column: campaign.FieldIsRecurring,
+		toTerm: campaign.ByIsRecurring,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsRecurring,
+			}
+		},
+	}
+	// CampaignOrderFieldRecurrenceFrequency orders Campaign by recurrence_frequency.
+	CampaignOrderFieldRecurrenceFrequency = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.RecurrenceFrequency, nil
+		},
+		column: campaign.FieldRecurrenceFrequency,
+		toTerm: campaign.ByRecurrenceFrequency,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceFrequency,
+			}
+		},
+	}
+	// CampaignOrderFieldRecurrenceInterval orders Campaign by recurrence_interval.
+	CampaignOrderFieldRecurrenceInterval = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.RecurrenceInterval, nil
+		},
+		column: campaign.FieldRecurrenceInterval,
+		toTerm: campaign.ByRecurrenceInterval,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceInterval,
+			}
+		},
+	}
+	// CampaignOrderFieldRecurrenceTimezone orders Campaign by recurrence_timezone.
+	CampaignOrderFieldRecurrenceTimezone = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.RecurrenceTimezone, nil
+		},
+		column: campaign.FieldRecurrenceTimezone,
+		toTerm: campaign.ByRecurrenceTimezone,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceTimezone,
+			}
+		},
+	}
+	// CampaignOrderFieldLastRunAt orders Campaign by last_run_at.
+	CampaignOrderFieldLastRunAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastRunAt == nil {
+				return nil, nil
+			}
+			return _m.LastRunAt, nil
+		},
+		column: campaign.FieldLastRunAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByLastRunAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.LastRunAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastRunAt,
+			}
+		},
+	}
+	// CampaignOrderFieldNextRunAt orders Campaign by next_run_at.
+	CampaignOrderFieldNextRunAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextRunAt == nil {
+				return nil, nil
+			}
+			return _m.NextRunAt, nil
+		},
+		column: campaign.FieldNextRunAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByNextRunAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.NextRunAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextRunAt,
+			}
+		},
+	}
+	// CampaignOrderFieldRecurrenceEndAt orders Campaign by recurrence_end_at.
+	CampaignOrderFieldRecurrenceEndAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.RecurrenceEndAt == nil {
+				return nil, nil
+			}
+			return _m.RecurrenceEndAt, nil
+		},
+		column: campaign.FieldRecurrenceEndAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByRecurrenceEndAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.RecurrenceEndAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceEndAt,
+			}
+		},
+	}
+	// CampaignOrderFieldRecipientCount orders Campaign by recipient_count.
+	CampaignOrderFieldRecipientCount = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.RecipientCount, nil
+		},
+		column: campaign.FieldRecipientCount,
+		toTerm: campaign.ByRecipientCount,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecipientCount,
+			}
+		},
+	}
+	// CampaignOrderFieldResendCount orders Campaign by resend_count.
+	CampaignOrderFieldResendCount = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.ResendCount, nil
+		},
+		column: campaign.FieldResendCount,
+		toTerm: campaign.ByResendCount,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResendCount,
+			}
+		},
+	}
+	// CampaignOrderFieldLastResentAt orders Campaign by last_resent_at.
+	CampaignOrderFieldLastResentAt = &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastResentAt == nil {
+				return nil, nil
+			}
+			return _m.LastResentAt, nil
+		},
+		column: campaign.FieldLastResentAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaign.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaign.ByLastResentAt(opts...)
+		},
+		toCursor: func(_m *Campaign) Cursor {
+			if _m.LastResentAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastResentAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CampaignOrderField) String() string {
+	var str string
+	switch f.column {
+	case CampaignOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CampaignOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CampaignOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case CampaignOrderFieldName.column:
+		str = "name"
+	case CampaignOrderFieldCampaignType.column:
+		str = "CAMPAIGN_TYPE"
+	case CampaignOrderFieldStatus.column:
+		str = "STATUS"
+	case CampaignOrderFieldIsActive.column:
+		str = "is_active"
+	case CampaignOrderFieldScheduledAt.column:
+		str = "scheduled_at"
+	case CampaignOrderFieldLaunchedAt.column:
+		str = "launched_at"
+	case CampaignOrderFieldCompletedAt.column:
+		str = "completed_at"
+	case CampaignOrderFieldDueDate.column:
+		str = "due_date"
+	case CampaignOrderFieldIsRecurring.column:
+		str = "is_recurring"
+	case CampaignOrderFieldRecurrenceFrequency.column:
+		str = "recurrence_frequency"
+	case CampaignOrderFieldRecurrenceInterval.column:
+		str = "recurrence_interval"
+	case CampaignOrderFieldRecurrenceTimezone.column:
+		str = "recurrence_timezone"
+	case CampaignOrderFieldLastRunAt.column:
+		str = "last_run_at"
+	case CampaignOrderFieldNextRunAt.column:
+		str = "next_run_at"
+	case CampaignOrderFieldRecurrenceEndAt.column:
+		str = "recurrence_end_at"
+	case CampaignOrderFieldRecipientCount.column:
+		str = "recipient_count"
+	case CampaignOrderFieldResendCount.column:
+		str = "resend_count"
+	case CampaignOrderFieldLastResentAt.column:
+		str = "last_resent_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CampaignOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CampaignOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CampaignOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *CampaignOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CampaignOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *CampaignOrderFieldInternalOwner
+	case "name":
+		*f = *CampaignOrderFieldName
+	case "CAMPAIGN_TYPE":
+		*f = *CampaignOrderFieldCampaignType
+	case "STATUS":
+		*f = *CampaignOrderFieldStatus
+	case "is_active":
+		*f = *CampaignOrderFieldIsActive
+	case "scheduled_at":
+		*f = *CampaignOrderFieldScheduledAt
+	case "launched_at":
+		*f = *CampaignOrderFieldLaunchedAt
+	case "completed_at":
+		*f = *CampaignOrderFieldCompletedAt
+	case "due_date":
+		*f = *CampaignOrderFieldDueDate
+	case "is_recurring":
+		*f = *CampaignOrderFieldIsRecurring
+	case "recurrence_frequency":
+		*f = *CampaignOrderFieldRecurrenceFrequency
+	case "recurrence_interval":
+		*f = *CampaignOrderFieldRecurrenceInterval
+	case "recurrence_timezone":
+		*f = *CampaignOrderFieldRecurrenceTimezone
+	case "last_run_at":
+		*f = *CampaignOrderFieldLastRunAt
+	case "next_run_at":
+		*f = *CampaignOrderFieldNextRunAt
+	case "recurrence_end_at":
+		*f = *CampaignOrderFieldRecurrenceEndAt
+	case "recipient_count":
+		*f = *CampaignOrderFieldRecipientCount
+	case "resend_count":
+		*f = *CampaignOrderFieldResendCount
+	case "last_resent_at":
+		*f = *CampaignOrderFieldLastResentAt
+	default:
+		return fmt.Errorf("%s is not a valid CampaignOrderField", str)
+	}
+	return nil
+}
+
+// CampaignOrderField defines the ordering field of Campaign.
+type CampaignOrderField struct {
+	// Value extracts the ordering value from the given Campaign.
+	Value    func(*Campaign) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) campaign.OrderOption
+	toCursor func(*Campaign) Cursor
+}
+
+// CampaignOrder defines the ordering of Campaign.
+type CampaignOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *CampaignOrderField `json:"field"`
+}
+
+// DefaultCampaignOrder is the default ordering of Campaign.
+var DefaultCampaignOrder = &CampaignOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CampaignOrderField{
+		Value: func(_m *Campaign) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: campaign.FieldID,
+		toTerm: campaign.ByID,
+		toCursor: func(_m *Campaign) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts Campaign into CampaignEdge.
+func (_m *Campaign) ToEdge(order *CampaignOrder) *CampaignEdge {
+	if order == nil {
+		order = DefaultCampaignOrder
+	}
+	return &CampaignEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// CampaignTargetEdge is the edge representation of CampaignTarget.
+type CampaignTargetEdge struct {
+	Node   *CampaignTarget `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// CampaignTargetConnection is the connection containing edges to CampaignTarget.
+type CampaignTargetConnection struct {
+	Edges      []*CampaignTargetEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *CampaignTargetConnection) build(nodes []*CampaignTarget, pager *campaigntargetPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CampaignTarget
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CampaignTarget {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CampaignTarget {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CampaignTargetEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CampaignTargetEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CampaignTargetPaginateOption enables pagination customization.
+type CampaignTargetPaginateOption func(*campaigntargetPager) error
+
+// WithCampaignTargetOrder configures pagination ordering.
+func WithCampaignTargetOrder(order []*CampaignTargetOrder) CampaignTargetPaginateOption {
+	return func(pager *campaigntargetPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithCampaignTargetFilter configures pagination filter.
+func WithCampaignTargetFilter(filter func(*CampaignTargetQuery) (*CampaignTargetQuery, error)) CampaignTargetPaginateOption {
+	return func(pager *campaigntargetPager) error {
+		if filter == nil {
+			return errors.New("CampaignTargetQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type campaigntargetPager struct {
+	reverse bool
+	order   []*CampaignTargetOrder
+	filter  func(*CampaignTargetQuery) (*CampaignTargetQuery, error)
+}
+
+func newCampaignTargetPager(opts []CampaignTargetPaginateOption, reverse bool) (*campaigntargetPager, error) {
+	pager := &campaigntargetPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *campaigntargetPager) applyFilter(query *CampaignTargetQuery) (*CampaignTargetQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *campaigntargetPager) toCursor(_m *CampaignTarget) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *campaigntargetPager) applyCursors(query *CampaignTargetQuery, after, before *Cursor) (*CampaignTargetQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultCampaignTargetOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *campaigntargetPager) applyOrder(query *CampaignTargetQuery) *CampaignTargetQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultCampaignTargetOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultCampaignTargetOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *campaigntargetPager) orderExpr(query *CampaignTargetQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultCampaignTargetOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CampaignTarget.
+func (_m *CampaignTargetQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CampaignTargetPaginateOption,
+) (*CampaignTargetConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCampaignTargetPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &CampaignTargetConnection{Edges: []*CampaignTargetEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CampaignTargetOrderFieldCreatedAt orders CampaignTarget by created_at.
+	CampaignTargetOrderFieldCreatedAt = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: campaigntarget.FieldCreatedAt,
+		toTerm: campaigntarget.ByCreatedAt,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldUpdatedAt orders CampaignTarget by updated_at.
+	CampaignTargetOrderFieldUpdatedAt = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: campaigntarget.FieldUpdatedAt,
+		toTerm: campaigntarget.ByUpdatedAt,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldEmail orders CampaignTarget by email.
+	CampaignTargetOrderFieldEmail = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: campaigntarget.FieldEmail,
+		toTerm: campaigntarget.ByEmail,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldFullName orders CampaignTarget by full_name.
+	CampaignTargetOrderFieldFullName = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.FullName, nil
+		},
+		column: campaigntarget.FieldFullName,
+		toTerm: campaigntarget.ByFullName,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FullName,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldStatus orders CampaignTarget by status.
+	CampaignTargetOrderFieldStatus = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: campaigntarget.FieldStatus,
+		toTerm: campaigntarget.ByStatus,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldSentAt orders CampaignTarget by sent_at.
+	CampaignTargetOrderFieldSentAt = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.SentAt == nil {
+				return nil, nil
+			}
+			return _m.SentAt, nil
+		},
+		column: campaigntarget.FieldSentAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaigntarget.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaigntarget.BySentAt(opts...)
+		},
+		toCursor: func(_m *CampaignTarget) Cursor {
+			if _m.SentAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SentAt,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldCompletedAt orders CampaignTarget by completed_at.
+	CampaignTargetOrderFieldCompletedAt = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CompletedAt == nil {
+				return nil, nil
+			}
+			return _m.CompletedAt, nil
+		},
+		column: campaigntarget.FieldCompletedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaigntarget.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaigntarget.ByCompletedAt(opts...)
+		},
+		toCursor: func(_m *CampaignTarget) Cursor {
+			if _m.CompletedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CompletedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CampaignTargetOrderField) String() string {
+	var str string
+	switch f.column {
+	case CampaignTargetOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CampaignTargetOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CampaignTargetOrderFieldEmail.column:
+		str = "email"
+	case CampaignTargetOrderFieldFullName.column:
+		str = "full_name"
+	case CampaignTargetOrderFieldStatus.column:
+		str = "STATUS"
+	case CampaignTargetOrderFieldSentAt.column:
+		str = "sent_at"
+	case CampaignTargetOrderFieldCompletedAt.column:
+		str = "completed_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CampaignTargetOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CampaignTargetOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CampaignTargetOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *CampaignTargetOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CampaignTargetOrderFieldUpdatedAt
+	case "email":
+		*f = *CampaignTargetOrderFieldEmail
+	case "full_name":
+		*f = *CampaignTargetOrderFieldFullName
+	case "STATUS":
+		*f = *CampaignTargetOrderFieldStatus
+	case "sent_at":
+		*f = *CampaignTargetOrderFieldSentAt
+	case "completed_at":
+		*f = *CampaignTargetOrderFieldCompletedAt
+	default:
+		return fmt.Errorf("%s is not a valid CampaignTargetOrderField", str)
+	}
+	return nil
+}
+
+// CampaignTargetOrderField defines the ordering field of CampaignTarget.
+type CampaignTargetOrderField struct {
+	// Value extracts the ordering value from the given CampaignTarget.
+	Value    func(*CampaignTarget) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) campaigntarget.OrderOption
+	toCursor func(*CampaignTarget) Cursor
+}
+
+// CampaignTargetOrder defines the ordering of CampaignTarget.
+type CampaignTargetOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *CampaignTargetOrderField `json:"field"`
+}
+
+// DefaultCampaignTargetOrder is the default ordering of CampaignTarget.
+var DefaultCampaignTargetOrder = &CampaignTargetOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: campaigntarget.FieldID,
+		toTerm: campaigntarget.ByID,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts CampaignTarget into CampaignTargetEdge.
+func (_m *CampaignTarget) ToEdge(order *CampaignTargetOrder) *CampaignTargetEdge {
+	if order == nil {
+		order = DefaultCampaignTargetOrder
+	}
+	return &CampaignTargetEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -8064,6 +9623,61 @@ var (
 			}
 		},
 	}
+	// EntityOrderFieldInternalOwner orders Entity by internal_owner.
+	EntityOrderFieldInternalOwner = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: entity.FieldInternalOwner,
+		toTerm: entity.ByInternalOwner,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// EntityOrderFieldReviewedBy orders Entity by reviewed_by.
+	EntityOrderFieldReviewedBy = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.ReviewedBy, nil
+		},
+		column: entity.FieldReviewedBy,
+		toTerm: entity.ByReviewedBy,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewedBy,
+			}
+		},
+	}
+	// EntityOrderFieldLastReviewedAt orders Entity by last_reviewed_at.
+	EntityOrderFieldLastReviewedAt = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastReviewedAt == nil {
+				return nil, nil
+			}
+			return _m.LastReviewedAt, nil
+		},
+		column: entity.FieldLastReviewedAt,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByLastReviewedAt(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.LastReviewedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastReviewedAt,
+			}
+		},
+	}
 	// EntityOrderFieldName orders Entity by name.
 	EntityOrderFieldName = &EntityOrderField{
 		Value: func(_m *Entity) (ent.Value, error) {
@@ -8106,6 +9720,365 @@ var (
 			}
 		},
 	}
+	// EntityOrderFieldApprovedForUse orders Entity by approved_for_use.
+	EntityOrderFieldApprovedForUse = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.ApprovedForUse, nil
+		},
+		column: entity.FieldApprovedForUse,
+		toTerm: entity.ByApprovedForUse,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ApprovedForUse,
+			}
+		},
+	}
+	// EntityOrderFieldHasSoc2 orders Entity by has_soc2.
+	EntityOrderFieldHasSoc2 = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.HasSoc2, nil
+		},
+		column: entity.FieldHasSoc2,
+		toTerm: entity.ByHasSoc2,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HasSoc2,
+			}
+		},
+	}
+	// EntityOrderFieldSoc2PeriodEnd orders Entity by soc2_period_end.
+	EntityOrderFieldSoc2PeriodEnd = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.Soc2PeriodEnd == nil {
+				return nil, nil
+			}
+			return _m.Soc2PeriodEnd, nil
+		},
+		column: entity.FieldSoc2PeriodEnd,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.BySoc2PeriodEnd(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.Soc2PeriodEnd == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Soc2PeriodEnd,
+			}
+		},
+	}
+	// EntityOrderFieldContractStartDate orders Entity by contract_start_date.
+	EntityOrderFieldContractStartDate = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ContractStartDate == nil {
+				return nil, nil
+			}
+			return _m.ContractStartDate, nil
+		},
+		column: entity.FieldContractStartDate,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByContractStartDate(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.ContractStartDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContractStartDate,
+			}
+		},
+	}
+	// EntityOrderFieldContractEndDate orders Entity by contract_end_date.
+	EntityOrderFieldContractEndDate = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ContractEndDate == nil {
+				return nil, nil
+			}
+			return _m.ContractEndDate, nil
+		},
+		column: entity.FieldContractEndDate,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByContractEndDate(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.ContractEndDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContractEndDate,
+			}
+		},
+	}
+	// EntityOrderFieldAutoRenews orders Entity by auto_renews.
+	EntityOrderFieldAutoRenews = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.AutoRenews, nil
+		},
+		column: entity.FieldAutoRenews,
+		toTerm: entity.ByAutoRenews,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AutoRenews,
+			}
+		},
+	}
+	// EntityOrderFieldTerminationNoticeDays orders Entity by termination_notice_days.
+	EntityOrderFieldTerminationNoticeDays = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.TerminationNoticeDays, nil
+		},
+		column: entity.FieldTerminationNoticeDays,
+		toTerm: entity.ByTerminationNoticeDays,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TerminationNoticeDays,
+			}
+		},
+	}
+	// EntityOrderFieldAnnualSpend orders Entity by annual_spend.
+	EntityOrderFieldAnnualSpend = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.AnnualSpend, nil
+		},
+		column: entity.FieldAnnualSpend,
+		toTerm: entity.ByAnnualSpend,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AnnualSpend,
+			}
+		},
+	}
+	// EntityOrderFieldSpendCurrency orders Entity by spend_currency.
+	EntityOrderFieldSpendCurrency = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.SpendCurrency, nil
+		},
+		column: entity.FieldSpendCurrency,
+		toTerm: entity.BySpendCurrency,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SpendCurrency,
+			}
+		},
+	}
+	// EntityOrderFieldBillingModel orders Entity by billing_model.
+	EntityOrderFieldBillingModel = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.BillingModel, nil
+		},
+		column: entity.FieldBillingModel,
+		toTerm: entity.ByBillingModel,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.BillingModel,
+			}
+		},
+	}
+	// EntityOrderFieldRenewalRisk orders Entity by renewal_risk.
+	EntityOrderFieldRenewalRisk = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.RenewalRisk, nil
+		},
+		column: entity.FieldRenewalRisk,
+		toTerm: entity.ByRenewalRisk,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RenewalRisk,
+			}
+		},
+	}
+	// EntityOrderFieldSSOEnforced orders Entity by sso_enforced.
+	EntityOrderFieldSSOEnforced = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.SSOEnforced, nil
+		},
+		column: entity.FieldSSOEnforced,
+		toTerm: entity.BySSOEnforced,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SSOEnforced,
+			}
+		},
+	}
+	// EntityOrderFieldMfaSupported orders Entity by mfa_supported.
+	EntityOrderFieldMfaSupported = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.MfaSupported, nil
+		},
+		column: entity.FieldMfaSupported,
+		toTerm: entity.ByMfaSupported,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.MfaSupported,
+			}
+		},
+	}
+	// EntityOrderFieldMfaEnforced orders Entity by mfa_enforced.
+	EntityOrderFieldMfaEnforced = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.MfaEnforced, nil
+		},
+		column: entity.FieldMfaEnforced,
+		toTerm: entity.ByMfaEnforced,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.MfaEnforced,
+			}
+		},
+	}
+	// EntityOrderFieldStatusPageURL orders Entity by status_page_url.
+	EntityOrderFieldStatusPageURL = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.StatusPageURL, nil
+		},
+		column: entity.FieldStatusPageURL,
+		toTerm: entity.ByStatusPageURL,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StatusPageURL,
+			}
+		},
+	}
+	// EntityOrderFieldRiskRating orders Entity by risk_rating.
+	EntityOrderFieldRiskRating = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.RiskRating, nil
+		},
+		column: entity.FieldRiskRating,
+		toTerm: entity.ByRiskRating,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskRating,
+			}
+		},
+	}
+	// EntityOrderFieldRiskScore orders Entity by risk_score.
+	EntityOrderFieldRiskScore = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.RiskScore, nil
+		},
+		column: entity.FieldRiskScore,
+		toTerm: entity.ByRiskScore,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskScore,
+			}
+		},
+	}
+	// EntityOrderFieldTier orders Entity by tier.
+	EntityOrderFieldTier = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.Tier, nil
+		},
+		column: entity.FieldTier,
+		toTerm: entity.ByTier,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Tier,
+			}
+		},
+	}
+	// EntityOrderFieldReviewFrequency orders Entity by review_frequency.
+	EntityOrderFieldReviewFrequency = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: entity.FieldReviewFrequency,
+		toTerm: entity.ByReviewFrequency,
+		toCursor: func(_m *Entity) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
+	// EntityOrderFieldNextReviewAt orders Entity by next_review_at.
+	EntityOrderFieldNextReviewAt = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextReviewAt == nil {
+				return nil, nil
+			}
+			return _m.NextReviewAt, nil
+		},
+		column: entity.FieldNextReviewAt,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByNextReviewAt(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.NextReviewAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextReviewAt,
+			}
+		},
+	}
+	// EntityOrderFieldContractRenewalAt orders Entity by contract_renewal_at.
+	EntityOrderFieldContractRenewalAt = &EntityOrderField{
+		Value: func(_m *Entity) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ContractRenewalAt == nil {
+				return nil, nil
+			}
+			return _m.ContractRenewalAt, nil
+		},
+		column: entity.FieldContractRenewalAt,
+		toTerm: func(opts ...sql.OrderTermOption) entity.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entity.ByContractRenewalAt(opts...)
+		},
+		toCursor: func(_m *Entity) Cursor {
+			if _m.ContractRenewalAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContractRenewalAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -8116,12 +10089,60 @@ func (f EntityOrderField) String() string {
 		str = "created_at"
 	case EntityOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EntityOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case EntityOrderFieldReviewedBy.column:
+		str = "reviewed_by"
+	case EntityOrderFieldLastReviewedAt.column:
+		str = "last_reviewed_at"
 	case EntityOrderFieldName.column:
 		str = "name"
 	case EntityOrderFieldDisplayName.column:
 		str = "display_name"
 	case EntityOrderFieldStatus.column:
 		str = "status"
+	case EntityOrderFieldApprovedForUse.column:
+		str = "approved_for_use"
+	case EntityOrderFieldHasSoc2.column:
+		str = "has_soc2"
+	case EntityOrderFieldSoc2PeriodEnd.column:
+		str = "soc2_period_end"
+	case EntityOrderFieldContractStartDate.column:
+		str = "contract_start_date"
+	case EntityOrderFieldContractEndDate.column:
+		str = "contract_end_date"
+	case EntityOrderFieldAutoRenews.column:
+		str = "auto_renews"
+	case EntityOrderFieldTerminationNoticeDays.column:
+		str = "termination_notice_days"
+	case EntityOrderFieldAnnualSpend.column:
+		str = "annual_spend"
+	case EntityOrderFieldSpendCurrency.column:
+		str = "spend_currency"
+	case EntityOrderFieldBillingModel.column:
+		str = "billing_model"
+	case EntityOrderFieldRenewalRisk.column:
+		str = "renewal_risk"
+	case EntityOrderFieldSSOEnforced.column:
+		str = "sso_enforced"
+	case EntityOrderFieldMfaSupported.column:
+		str = "mfa_supported"
+	case EntityOrderFieldMfaEnforced.column:
+		str = "mfa_enforced"
+	case EntityOrderFieldStatusPageURL.column:
+		str = "status_page_url"
+	case EntityOrderFieldRiskRating.column:
+		str = "risk_rating"
+	case EntityOrderFieldRiskScore.column:
+		str = "risk_score"
+	case EntityOrderFieldTier.column:
+		str = "tier"
+	case EntityOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
+	case EntityOrderFieldNextReviewAt.column:
+		str = "next_review_at"
+	case EntityOrderFieldContractRenewalAt.column:
+		str = "contract_renewal_at"
 	}
 	return str
 }
@@ -8142,12 +10163,60 @@ func (f *EntityOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EntityOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *EntityOrderFieldInternalOwner
+	case "reviewed_by":
+		*f = *EntityOrderFieldReviewedBy
+	case "last_reviewed_at":
+		*f = *EntityOrderFieldLastReviewedAt
 	case "name":
 		*f = *EntityOrderFieldName
 	case "display_name":
 		*f = *EntityOrderFieldDisplayName
 	case "status":
 		*f = *EntityOrderFieldStatus
+	case "approved_for_use":
+		*f = *EntityOrderFieldApprovedForUse
+	case "has_soc2":
+		*f = *EntityOrderFieldHasSoc2
+	case "soc2_period_end":
+		*f = *EntityOrderFieldSoc2PeriodEnd
+	case "contract_start_date":
+		*f = *EntityOrderFieldContractStartDate
+	case "contract_end_date":
+		*f = *EntityOrderFieldContractEndDate
+	case "auto_renews":
+		*f = *EntityOrderFieldAutoRenews
+	case "termination_notice_days":
+		*f = *EntityOrderFieldTerminationNoticeDays
+	case "annual_spend":
+		*f = *EntityOrderFieldAnnualSpend
+	case "spend_currency":
+		*f = *EntityOrderFieldSpendCurrency
+	case "billing_model":
+		*f = *EntityOrderFieldBillingModel
+	case "renewal_risk":
+		*f = *EntityOrderFieldRenewalRisk
+	case "sso_enforced":
+		*f = *EntityOrderFieldSSOEnforced
+	case "mfa_supported":
+		*f = *EntityOrderFieldMfaSupported
+	case "mfa_enforced":
+		*f = *EntityOrderFieldMfaEnforced
+	case "status_page_url":
+		*f = *EntityOrderFieldStatusPageURL
+	case "risk_rating":
+		*f = *EntityOrderFieldRiskRating
+	case "risk_score":
+		*f = *EntityOrderFieldRiskScore
+	case "tier":
+		*f = *EntityOrderFieldTier
+	case "REVIEW_FREQUENCY":
+		*f = *EntityOrderFieldReviewFrequency
+	case "next_review_at":
+		*f = *EntityOrderFieldNextReviewAt
+	case "contract_renewal_at":
+		*f = *EntityOrderFieldContractRenewalAt
 	default:
 		return fmt.Errorf("%s is not a valid EntityOrderField", str)
 	}
@@ -12494,6 +14563,675 @@ func (_m *Hush) ToEdge(order *HushOrder) *HushEdge {
 		order = DefaultHushOrder
 	}
 	return &HushEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// IdentityHolderEdge is the edge representation of IdentityHolder.
+type IdentityHolderEdge struct {
+	Node   *IdentityHolder `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// IdentityHolderConnection is the connection containing edges to IdentityHolder.
+type IdentityHolderConnection struct {
+	Edges      []*IdentityHolderEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *IdentityHolderConnection) build(nodes []*IdentityHolder, pager *identityholderPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *IdentityHolder
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *IdentityHolder {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *IdentityHolder {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*IdentityHolderEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &IdentityHolderEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// IdentityHolderPaginateOption enables pagination customization.
+type IdentityHolderPaginateOption func(*identityholderPager) error
+
+// WithIdentityHolderOrder configures pagination ordering.
+func WithIdentityHolderOrder(order []*IdentityHolderOrder) IdentityHolderPaginateOption {
+	return func(pager *identityholderPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithIdentityHolderFilter configures pagination filter.
+func WithIdentityHolderFilter(filter func(*IdentityHolderQuery) (*IdentityHolderQuery, error)) IdentityHolderPaginateOption {
+	return func(pager *identityholderPager) error {
+		if filter == nil {
+			return errors.New("IdentityHolderQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type identityholderPager struct {
+	reverse bool
+	order   []*IdentityHolderOrder
+	filter  func(*IdentityHolderQuery) (*IdentityHolderQuery, error)
+}
+
+func newIdentityHolderPager(opts []IdentityHolderPaginateOption, reverse bool) (*identityholderPager, error) {
+	pager := &identityholderPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *identityholderPager) applyFilter(query *IdentityHolderQuery) (*IdentityHolderQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *identityholderPager) toCursor(_m *IdentityHolder) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *identityholderPager) applyCursors(query *IdentityHolderQuery, after, before *Cursor) (*IdentityHolderQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultIdentityHolderOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *identityholderPager) applyOrder(query *IdentityHolderQuery) *IdentityHolderQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultIdentityHolderOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultIdentityHolderOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *identityholderPager) orderExpr(query *IdentityHolderQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultIdentityHolderOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to IdentityHolder.
+func (_m *IdentityHolderQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...IdentityHolderPaginateOption,
+) (*IdentityHolderConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newIdentityHolderPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &IdentityHolderConnection{Edges: []*IdentityHolderEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// IdentityHolderOrderFieldCreatedAt orders IdentityHolder by created_at.
+	IdentityHolderOrderFieldCreatedAt = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: identityholder.FieldCreatedAt,
+		toTerm: identityholder.ByCreatedAt,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldUpdatedAt orders IdentityHolder by updated_at.
+	IdentityHolderOrderFieldUpdatedAt = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: identityholder.FieldUpdatedAt,
+		toTerm: identityholder.ByUpdatedAt,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldInternalOwner orders IdentityHolder by internal_owner.
+	IdentityHolderOrderFieldInternalOwner = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: identityholder.FieldInternalOwner,
+		toTerm: identityholder.ByInternalOwner,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldFullName orders IdentityHolder by full_name.
+	IdentityHolderOrderFieldFullName = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.FullName, nil
+		},
+		column: identityholder.FieldFullName,
+		toTerm: identityholder.ByFullName,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FullName,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldEmail orders IdentityHolder by email.
+	IdentityHolderOrderFieldEmail = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: identityholder.FieldEmail,
+		toTerm: identityholder.ByEmail,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldAlternateEmail orders IdentityHolder by alternate_email.
+	IdentityHolderOrderFieldAlternateEmail = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.AlternateEmail, nil
+		},
+		column: identityholder.FieldAlternateEmail,
+		toTerm: identityholder.ByAlternateEmail,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AlternateEmail,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldIsOpenlaneUser orders IdentityHolder by is_openlane_user.
+	IdentityHolderOrderFieldIsOpenlaneUser = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.IsOpenlaneUser, nil
+		},
+		column: identityholder.FieldIsOpenlaneUser,
+		toTerm: identityholder.ByIsOpenlaneUser,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsOpenlaneUser,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldIdentityHolderType orders IdentityHolder by identity_holder_type.
+	IdentityHolderOrderFieldIdentityHolderType = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.IdentityHolderType, nil
+		},
+		column: identityholder.FieldIdentityHolderType,
+		toTerm: identityholder.ByIdentityHolderType,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IdentityHolderType,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldStatus orders IdentityHolder by status.
+	IdentityHolderOrderFieldStatus = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: identityholder.FieldStatus,
+		toTerm: identityholder.ByStatus,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldIsActive orders IdentityHolder by is_active.
+	IdentityHolderOrderFieldIsActive = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.IsActive, nil
+		},
+		column: identityholder.FieldIsActive,
+		toTerm: identityholder.ByIsActive,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsActive,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldTitle orders IdentityHolder by title.
+	IdentityHolderOrderFieldTitle = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.Title, nil
+		},
+		column: identityholder.FieldTitle,
+		toTerm: identityholder.ByTitle,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Title,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldDepartment orders IdentityHolder by department.
+	IdentityHolderOrderFieldDepartment = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.Department, nil
+		},
+		column: identityholder.FieldDepartment,
+		toTerm: identityholder.ByDepartment,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Department,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldTeam orders IdentityHolder by team.
+	IdentityHolderOrderFieldTeam = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.Team, nil
+		},
+		column: identityholder.FieldTeam,
+		toTerm: identityholder.ByTeam,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Team,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldLocation orders IdentityHolder by location.
+	IdentityHolderOrderFieldLocation = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.Location, nil
+		},
+		column: identityholder.FieldLocation,
+		toTerm: identityholder.ByLocation,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Location,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldStartDate orders IdentityHolder by start_date.
+	IdentityHolderOrderFieldStartDate = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.StartDate == nil {
+				return nil, nil
+			}
+			return _m.StartDate, nil
+		},
+		column: identityholder.FieldStartDate,
+		toTerm: func(opts ...sql.OrderTermOption) identityholder.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return identityholder.ByStartDate(opts...)
+		},
+		toCursor: func(_m *IdentityHolder) Cursor {
+			if _m.StartDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StartDate,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldEndDate orders IdentityHolder by end_date.
+	IdentityHolderOrderFieldEndDate = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.EndDate == nil {
+				return nil, nil
+			}
+			return _m.EndDate, nil
+		},
+		column: identityholder.FieldEndDate,
+		toTerm: func(opts ...sql.OrderTermOption) identityholder.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return identityholder.ByEndDate(opts...)
+		},
+		toCursor: func(_m *IdentityHolder) Cursor {
+			if _m.EndDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EndDate,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldExternalUserID orders IdentityHolder by external_user_id.
+	IdentityHolderOrderFieldExternalUserID = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.ExternalUserID, nil
+		},
+		column: identityholder.FieldExternalUserID,
+		toTerm: identityholder.ByExternalUserID,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalUserID,
+			}
+		},
+	}
+	// IdentityHolderOrderFieldExternalReferenceID orders IdentityHolder by external_reference_id.
+	IdentityHolderOrderFieldExternalReferenceID = &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.ExternalReferenceID, nil
+		},
+		column: identityholder.FieldExternalReferenceID,
+		toTerm: identityholder.ByExternalReferenceID,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalReferenceID,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f IdentityHolderOrderField) String() string {
+	var str string
+	switch f.column {
+	case IdentityHolderOrderFieldCreatedAt.column:
+		str = "created_at"
+	case IdentityHolderOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case IdentityHolderOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case IdentityHolderOrderFieldFullName.column:
+		str = "full_name"
+	case IdentityHolderOrderFieldEmail.column:
+		str = "email"
+	case IdentityHolderOrderFieldAlternateEmail.column:
+		str = "alternate_email"
+	case IdentityHolderOrderFieldIsOpenlaneUser.column:
+		str = "is_openlane_user"
+	case IdentityHolderOrderFieldIdentityHolderType.column:
+		str = "IDENTITY_HOLDER_TYPE"
+	case IdentityHolderOrderFieldStatus.column:
+		str = "STATUS"
+	case IdentityHolderOrderFieldIsActive.column:
+		str = "is_active"
+	case IdentityHolderOrderFieldTitle.column:
+		str = "title"
+	case IdentityHolderOrderFieldDepartment.column:
+		str = "department"
+	case IdentityHolderOrderFieldTeam.column:
+		str = "team"
+	case IdentityHolderOrderFieldLocation.column:
+		str = "location"
+	case IdentityHolderOrderFieldStartDate.column:
+		str = "start_date"
+	case IdentityHolderOrderFieldEndDate.column:
+		str = "end_date"
+	case IdentityHolderOrderFieldExternalUserID.column:
+		str = "external_user_id"
+	case IdentityHolderOrderFieldExternalReferenceID.column:
+		str = "external_reference_id"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f IdentityHolderOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *IdentityHolderOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("IdentityHolderOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *IdentityHolderOrderFieldCreatedAt
+	case "updated_at":
+		*f = *IdentityHolderOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *IdentityHolderOrderFieldInternalOwner
+	case "full_name":
+		*f = *IdentityHolderOrderFieldFullName
+	case "email":
+		*f = *IdentityHolderOrderFieldEmail
+	case "alternate_email":
+		*f = *IdentityHolderOrderFieldAlternateEmail
+	case "is_openlane_user":
+		*f = *IdentityHolderOrderFieldIsOpenlaneUser
+	case "IDENTITY_HOLDER_TYPE":
+		*f = *IdentityHolderOrderFieldIdentityHolderType
+	case "STATUS":
+		*f = *IdentityHolderOrderFieldStatus
+	case "is_active":
+		*f = *IdentityHolderOrderFieldIsActive
+	case "title":
+		*f = *IdentityHolderOrderFieldTitle
+	case "department":
+		*f = *IdentityHolderOrderFieldDepartment
+	case "team":
+		*f = *IdentityHolderOrderFieldTeam
+	case "location":
+		*f = *IdentityHolderOrderFieldLocation
+	case "start_date":
+		*f = *IdentityHolderOrderFieldStartDate
+	case "end_date":
+		*f = *IdentityHolderOrderFieldEndDate
+	case "external_user_id":
+		*f = *IdentityHolderOrderFieldExternalUserID
+	case "external_reference_id":
+		*f = *IdentityHolderOrderFieldExternalReferenceID
+	default:
+		return fmt.Errorf("%s is not a valid IdentityHolderOrderField", str)
+	}
+	return nil
+}
+
+// IdentityHolderOrderField defines the ordering field of IdentityHolder.
+type IdentityHolderOrderField struct {
+	// Value extracts the ordering value from the given IdentityHolder.
+	Value    func(*IdentityHolder) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) identityholder.OrderOption
+	toCursor func(*IdentityHolder) Cursor
+}
+
+// IdentityHolderOrder defines the ordering of IdentityHolder.
+type IdentityHolderOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *IdentityHolderOrderField `json:"field"`
+}
+
+// DefaultIdentityHolderOrder is the default ordering of IdentityHolder.
+var DefaultIdentityHolderOrder = &IdentityHolderOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &IdentityHolderOrderField{
+		Value: func(_m *IdentityHolder) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: identityholder.FieldID,
+		toTerm: identityholder.ByID,
+		toCursor: func(_m *IdentityHolder) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts IdentityHolder into IdentityHolderEdge.
+func (_m *IdentityHolder) ToEdge(order *IdentityHolderOrder) *IdentityHolderEdge {
+	if order == nil {
+		order = DefaultIdentityHolderOrder
+	}
+	return &IdentityHolderEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -19839,6 +22577,662 @@ func (_m *PersonalAccessToken) ToEdge(order *PersonalAccessTokenOrder) *Personal
 	}
 }
 
+// PlatformEdge is the edge representation of Platform.
+type PlatformEdge struct {
+	Node   *Platform `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// PlatformConnection is the connection containing edges to Platform.
+type PlatformConnection struct {
+	Edges      []*PlatformEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *PlatformConnection) build(nodes []*Platform, pager *platformPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Platform
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Platform {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Platform {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PlatformEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PlatformEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PlatformPaginateOption enables pagination customization.
+type PlatformPaginateOption func(*platformPager) error
+
+// WithPlatformOrder configures pagination ordering.
+func WithPlatformOrder(order []*PlatformOrder) PlatformPaginateOption {
+	return func(pager *platformPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithPlatformFilter configures pagination filter.
+func WithPlatformFilter(filter func(*PlatformQuery) (*PlatformQuery, error)) PlatformPaginateOption {
+	return func(pager *platformPager) error {
+		if filter == nil {
+			return errors.New("PlatformQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type platformPager struct {
+	reverse bool
+	order   []*PlatformOrder
+	filter  func(*PlatformQuery) (*PlatformQuery, error)
+}
+
+func newPlatformPager(opts []PlatformPaginateOption, reverse bool) (*platformPager, error) {
+	pager := &platformPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *platformPager) applyFilter(query *PlatformQuery) (*PlatformQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *platformPager) toCursor(_m *Platform) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *platformPager) applyCursors(query *PlatformQuery, after, before *Cursor) (*PlatformQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultPlatformOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *platformPager) applyOrder(query *PlatformQuery) *PlatformQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultPlatformOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultPlatformOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *platformPager) orderExpr(query *PlatformQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultPlatformOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Platform.
+func (_m *PlatformQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PlatformPaginateOption,
+) (*PlatformConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPlatformPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &PlatformConnection{Edges: []*PlatformEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PlatformOrderFieldCreatedAt orders Platform by created_at.
+	PlatformOrderFieldCreatedAt = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: platform.FieldCreatedAt,
+		toTerm: platform.ByCreatedAt,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// PlatformOrderFieldUpdatedAt orders Platform by updated_at.
+	PlatformOrderFieldUpdatedAt = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: platform.FieldUpdatedAt,
+		toTerm: platform.ByUpdatedAt,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// PlatformOrderFieldInternalOwner orders Platform by internal_owner.
+	PlatformOrderFieldInternalOwner = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: platform.FieldInternalOwner,
+		toTerm: platform.ByInternalOwner,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// PlatformOrderFieldBusinessOwner orders Platform by business_owner.
+	PlatformOrderFieldBusinessOwner = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.BusinessOwner, nil
+		},
+		column: platform.FieldBusinessOwner,
+		toTerm: platform.ByBusinessOwner,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.BusinessOwner,
+			}
+		},
+	}
+	// PlatformOrderFieldTechnicalOwner orders Platform by technical_owner.
+	PlatformOrderFieldTechnicalOwner = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.TechnicalOwner, nil
+		},
+		column: platform.FieldTechnicalOwner,
+		toTerm: platform.ByTechnicalOwner,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TechnicalOwner,
+			}
+		},
+	}
+	// PlatformOrderFieldSecurityOwner orders Platform by security_owner.
+	PlatformOrderFieldSecurityOwner = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.SecurityOwner, nil
+		},
+		column: platform.FieldSecurityOwner,
+		toTerm: platform.BySecurityOwner,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityOwner,
+			}
+		},
+	}
+	// PlatformOrderFieldName orders Platform by name.
+	PlatformOrderFieldName = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: platform.FieldName,
+		toTerm: platform.ByName,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// PlatformOrderFieldBusinessPurpose orders Platform by business_purpose.
+	PlatformOrderFieldBusinessPurpose = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.BusinessPurpose, nil
+		},
+		column: platform.FieldBusinessPurpose,
+		toTerm: platform.ByBusinessPurpose,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.BusinessPurpose,
+			}
+		},
+	}
+	// PlatformOrderFieldStatus orders Platform by status.
+	PlatformOrderFieldStatus = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: platform.FieldStatus,
+		toTerm: platform.ByStatus,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// PlatformOrderFieldPhysicalLocation orders Platform by physical_location.
+	PlatformOrderFieldPhysicalLocation = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.PhysicalLocation, nil
+		},
+		column: platform.FieldPhysicalLocation,
+		toTerm: platform.ByPhysicalLocation,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PhysicalLocation,
+			}
+		},
+	}
+	// PlatformOrderFieldRegion orders Platform by region.
+	PlatformOrderFieldRegion = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.Region, nil
+		},
+		column: platform.FieldRegion,
+		toTerm: platform.ByRegion,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Region,
+			}
+		},
+	}
+	// PlatformOrderFieldContainsPii orders Platform by contains_pii.
+	PlatformOrderFieldContainsPii = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.ContainsPii, nil
+		},
+		column: platform.FieldContainsPii,
+		toTerm: platform.ByContainsPii,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContainsPii,
+			}
+		},
+	}
+	// PlatformOrderFieldSourceType orders Platform by source_type.
+	PlatformOrderFieldSourceType = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.SourceType, nil
+		},
+		column: platform.FieldSourceType,
+		toTerm: platform.BySourceType,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceType,
+			}
+		},
+	}
+	// PlatformOrderFieldSourceIdentifier orders Platform by source_identifier.
+	PlatformOrderFieldSourceIdentifier = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.SourceIdentifier, nil
+		},
+		column: platform.FieldSourceIdentifier,
+		toTerm: platform.BySourceIdentifier,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceIdentifier,
+			}
+		},
+	}
+	// PlatformOrderFieldCostCenter orders Platform by cost_center.
+	PlatformOrderFieldCostCenter = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.CostCenter, nil
+		},
+		column: platform.FieldCostCenter,
+		toTerm: platform.ByCostCenter,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CostCenter,
+			}
+		},
+	}
+	// PlatformOrderFieldEstimatedMonthlyCost orders Platform by estimated_monthly_cost.
+	PlatformOrderFieldEstimatedMonthlyCost = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.EstimatedMonthlyCost, nil
+		},
+		column: platform.FieldEstimatedMonthlyCost,
+		toTerm: platform.ByEstimatedMonthlyCost,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EstimatedMonthlyCost,
+			}
+		},
+	}
+	// PlatformOrderFieldPurchaseDate orders Platform by purchase_date.
+	PlatformOrderFieldPurchaseDate = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.PurchaseDate == nil {
+				return nil, nil
+			}
+			return _m.PurchaseDate, nil
+		},
+		column: platform.FieldPurchaseDate,
+		toTerm: func(opts ...sql.OrderTermOption) platform.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return platform.ByPurchaseDate(opts...)
+		},
+		toCursor: func(_m *Platform) Cursor {
+			if _m.PurchaseDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PurchaseDate,
+			}
+		},
+	}
+	// PlatformOrderFieldExternalReferenceID orders Platform by external_reference_id.
+	PlatformOrderFieldExternalReferenceID = &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.ExternalReferenceID, nil
+		},
+		column: platform.FieldExternalReferenceID,
+		toTerm: platform.ByExternalReferenceID,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalReferenceID,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PlatformOrderField) String() string {
+	var str string
+	switch f.column {
+	case PlatformOrderFieldCreatedAt.column:
+		str = "created_at"
+	case PlatformOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case PlatformOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case PlatformOrderFieldBusinessOwner.column:
+		str = "business_owner"
+	case PlatformOrderFieldTechnicalOwner.column:
+		str = "technical_owner"
+	case PlatformOrderFieldSecurityOwner.column:
+		str = "security_owner"
+	case PlatformOrderFieldName.column:
+		str = "name"
+	case PlatformOrderFieldBusinessPurpose.column:
+		str = "business_purpose"
+	case PlatformOrderFieldStatus.column:
+		str = "STATUS"
+	case PlatformOrderFieldPhysicalLocation.column:
+		str = "physical_location"
+	case PlatformOrderFieldRegion.column:
+		str = "region"
+	case PlatformOrderFieldContainsPii.column:
+		str = "contains_pii"
+	case PlatformOrderFieldSourceType.column:
+		str = "SOURCE_TYPE"
+	case PlatformOrderFieldSourceIdentifier.column:
+		str = "source_identifier"
+	case PlatformOrderFieldCostCenter.column:
+		str = "cost_center"
+	case PlatformOrderFieldEstimatedMonthlyCost.column:
+		str = "estimated_monthly_cost"
+	case PlatformOrderFieldPurchaseDate.column:
+		str = "purchase_date"
+	case PlatformOrderFieldExternalReferenceID.column:
+		str = "external_reference_id"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PlatformOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PlatformOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PlatformOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *PlatformOrderFieldCreatedAt
+	case "updated_at":
+		*f = *PlatformOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *PlatformOrderFieldInternalOwner
+	case "business_owner":
+		*f = *PlatformOrderFieldBusinessOwner
+	case "technical_owner":
+		*f = *PlatformOrderFieldTechnicalOwner
+	case "security_owner":
+		*f = *PlatformOrderFieldSecurityOwner
+	case "name":
+		*f = *PlatformOrderFieldName
+	case "business_purpose":
+		*f = *PlatformOrderFieldBusinessPurpose
+	case "STATUS":
+		*f = *PlatformOrderFieldStatus
+	case "physical_location":
+		*f = *PlatformOrderFieldPhysicalLocation
+	case "region":
+		*f = *PlatformOrderFieldRegion
+	case "contains_pii":
+		*f = *PlatformOrderFieldContainsPii
+	case "SOURCE_TYPE":
+		*f = *PlatformOrderFieldSourceType
+	case "source_identifier":
+		*f = *PlatformOrderFieldSourceIdentifier
+	case "cost_center":
+		*f = *PlatformOrderFieldCostCenter
+	case "estimated_monthly_cost":
+		*f = *PlatformOrderFieldEstimatedMonthlyCost
+	case "purchase_date":
+		*f = *PlatformOrderFieldPurchaseDate
+	case "external_reference_id":
+		*f = *PlatformOrderFieldExternalReferenceID
+	default:
+		return fmt.Errorf("%s is not a valid PlatformOrderField", str)
+	}
+	return nil
+}
+
+// PlatformOrderField defines the ordering field of Platform.
+type PlatformOrderField struct {
+	// Value extracts the ordering value from the given Platform.
+	Value    func(*Platform) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) platform.OrderOption
+	toCursor func(*Platform) Cursor
+}
+
+// PlatformOrder defines the ordering of Platform.
+type PlatformOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *PlatformOrderField `json:"field"`
+}
+
+// DefaultPlatformOrder is the default ordering of Platform.
+var DefaultPlatformOrder = &PlatformOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PlatformOrderField{
+		Value: func(_m *Platform) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: platform.FieldID,
+		toTerm: platform.ByID,
+		toCursor: func(_m *Platform) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts Platform into PlatformEdge.
+func (_m *Platform) ToEdge(order *PlatformOrder) *PlatformEdge {
+	if order == nil {
+		order = DefaultPlatformOrder
+	}
+	return &PlatformEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // ProcedureEdge is the edge representation of Procedure.
 type ProcedureEdge struct {
 	Node   *Procedure `json:"node"`
@@ -22711,6 +26105,60 @@ var (
 			}
 		},
 	}
+	// ScanOrderFieldScanDate orders Scan by scan_date.
+	ScanOrderFieldScanDate = &ScanOrderField{
+		Value: func(_m *Scan) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ScanDate == nil {
+				return nil, nil
+			}
+			return _m.ScanDate, nil
+		},
+		column: scan.FieldScanDate,
+		toTerm: func(opts ...sql.OrderTermOption) scan.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return scan.ByScanDate(opts...)
+		},
+		toCursor: func(_m *Scan) Cursor {
+			if _m.ScanDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ScanDate,
+			}
+		},
+	}
+	// ScanOrderFieldNextScanRunAt orders Scan by next_scan_run_at.
+	ScanOrderFieldNextScanRunAt = &ScanOrderField{
+		Value: func(_m *Scan) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextScanRunAt == nil {
+				return nil, nil
+			}
+			return _m.NextScanRunAt, nil
+		},
+		column: scan.FieldNextScanRunAt,
+		toTerm: func(opts ...sql.OrderTermOption) scan.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return scan.ByNextScanRunAt(opts...)
+		},
+		toCursor: func(_m *Scan) Cursor {
+			if _m.NextScanRunAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextScanRunAt,
+			}
+		},
+	}
 	// ScanOrderFieldStatus orders Scan by status.
 	ScanOrderFieldStatus = &ScanOrderField{
 		Value: func(_m *Scan) (ent.Value, error) {
@@ -22737,6 +26185,10 @@ func (f ScanOrderField) String() string {
 		str = "updated_at"
 	case ScanOrderFieldScanType.column:
 		str = "SCAN_TYPE"
+	case ScanOrderFieldScanDate.column:
+		str = "scan_date"
+	case ScanOrderFieldNextScanRunAt.column:
+		str = "next_scan_run_at"
 	case ScanOrderFieldStatus.column:
 		str = "STATUS"
 	}
@@ -22761,6 +26213,10 @@ func (f *ScanOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScanOrderFieldUpdatedAt
 	case "SCAN_TYPE":
 		*f = *ScanOrderFieldScanType
+	case "scan_date":
+		*f = *ScanOrderFieldScanDate
+	case "next_scan_run_at":
+		*f = *ScanOrderFieldNextScanRunAt
 	case "STATUS":
 		*f = *ScanOrderFieldStatus
 	default:

@@ -11,14 +11,18 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -270,6 +274,62 @@ func (_c *WorkflowObjectRefCreate) SetNillableProcedureID(v *string) *WorkflowOb
 	return _c
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_c *WorkflowObjectRefCreate) SetCampaignID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetCampaignID(v)
+	return _c
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableCampaignID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetCampaignID(*v)
+	}
+	return _c
+}
+
+// SetCampaignTargetID sets the "campaign_target_id" field.
+func (_c *WorkflowObjectRefCreate) SetCampaignTargetID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetCampaignTargetID(v)
+	return _c
+}
+
+// SetNillableCampaignTargetID sets the "campaign_target_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableCampaignTargetID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetCampaignTargetID(*v)
+	}
+	return _c
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *WorkflowObjectRefCreate) SetIdentityHolderID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillableIdentityHolderID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetPlatformID sets the "platform_id" field.
+func (_c *WorkflowObjectRefCreate) SetPlatformID(v string) *WorkflowObjectRefCreate {
+	_c.mutation.SetPlatformID(v)
+	return _c
+}
+
+// SetNillablePlatformID sets the "platform_id" field if the given value is not nil.
+func (_c *WorkflowObjectRefCreate) SetNillablePlatformID(v *string) *WorkflowObjectRefCreate {
+	if v != nil {
+		_c.SetPlatformID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *WorkflowObjectRefCreate) SetID(v string) *WorkflowObjectRefCreate {
 	_c.mutation.SetID(v)
@@ -362,6 +422,26 @@ func (_c *WorkflowObjectRefCreate) SetActionPlan(v *ActionPlan) *WorkflowObjectR
 // SetProcedure sets the "procedure" edge to the Procedure entity.
 func (_c *WorkflowObjectRefCreate) SetProcedure(v *Procedure) *WorkflowObjectRefCreate {
 	return _c.SetProcedureID(v.ID)
+}
+
+// SetCampaign sets the "campaign" edge to the Campaign entity.
+func (_c *WorkflowObjectRefCreate) SetCampaign(v *Campaign) *WorkflowObjectRefCreate {
+	return _c.SetCampaignID(v.ID)
+}
+
+// SetCampaignTarget sets the "campaign_target" edge to the CampaignTarget entity.
+func (_c *WorkflowObjectRefCreate) SetCampaignTarget(v *CampaignTarget) *WorkflowObjectRefCreate {
+	return _c.SetCampaignTargetID(v.ID)
+}
+
+// SetIdentityHolder sets the "identity_holder" edge to the IdentityHolder entity.
+func (_c *WorkflowObjectRefCreate) SetIdentityHolder(v *IdentityHolder) *WorkflowObjectRefCreate {
+	return _c.SetIdentityHolderID(v.ID)
+}
+
+// SetPlatform sets the "platform" edge to the Platform entity.
+func (_c *WorkflowObjectRefCreate) SetPlatform(v *Platform) *WorkflowObjectRefCreate {
+	return _c.SetPlatformID(v.ID)
 }
 
 // Mutation returns the WorkflowObjectRefMutation object of the builder.
@@ -756,6 +836,78 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ProcedureID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.CampaignTable,
+			Columns: []string{workflowobjectref.CampaignColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CampaignID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignTargetIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.CampaignTargetTable,
+			Columns: []string{workflowobjectref.CampaignTargetColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CampaignTargetID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.IdentityHolderTable,
+			Columns: []string{workflowobjectref.IdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.IdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   workflowobjectref.PlatformTable,
+			Columns: []string{workflowobjectref.PlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PlatformID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

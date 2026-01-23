@@ -134,6 +134,62 @@ func (_c *DirectoryMembershipHistoryCreate) SetNillableOwnerID(v *string) *Direc
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *DirectoryMembershipHistoryCreate) SetEnvironmentName(v string) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableEnvironmentName(v *string) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *DirectoryMembershipHistoryCreate) SetEnvironmentID(v string) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableEnvironmentID(v *string) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *DirectoryMembershipHistoryCreate) SetScopeName(v string) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableScopeName(v *string) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *DirectoryMembershipHistoryCreate) SetScopeID(v string) *DirectoryMembershipHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *DirectoryMembershipHistoryCreate) SetNillableScopeID(v *string) *DirectoryMembershipHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetIntegrationID sets the "integration_id" field.
 func (_c *DirectoryMembershipHistoryCreate) SetIntegrationID(v string) *DirectoryMembershipHistoryCreate {
 	_c.mutation.SetIntegrationID(v)
@@ -448,6 +504,22 @@ func (_c *DirectoryMembershipHistoryCreate) createSpec() (*DirectoryMembershipHi
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorymembershiphistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(directorymembershiphistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(directorymembershiphistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(directorymembershiphistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(directorymembershiphistory.FieldIntegrationID, field.TypeString, value)

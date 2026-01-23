@@ -102,6 +102,8 @@ func (ec *executionContext) fieldContext_CustomTypeEnumBulkCreatePayload_customT
 				return ec.fieldContext_CustomTypeEnum_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_CustomTypeEnum_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_CustomTypeEnum_platforms(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnum", field.Name)
 		},
@@ -183,6 +185,8 @@ func (ec *executionContext) fieldContext_CustomTypeEnumCreatePayload_customTypeE
 				return ec.fieldContext_CustomTypeEnum_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_CustomTypeEnum_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_CustomTypeEnum_platforms(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnum", field.Name)
 		},
@@ -293,6 +297,8 @@ func (ec *executionContext) fieldContext_CustomTypeEnumUpdatePayload_customTypeE
 				return ec.fieldContext_CustomTypeEnum_actionPlans(ctx, field)
 			case "programs":
 				return ec.fieldContext_CustomTypeEnum_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_CustomTypeEnum_platforms(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type CustomTypeEnum", field.Name)
 		},

@@ -224,6 +224,62 @@ func (_c *RiskHistoryCreate) SetNillableRiskCategoryID(v *string) *RiskHistoryCr
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *RiskHistoryCreate) SetEnvironmentName(v string) *RiskHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableEnvironmentName(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *RiskHistoryCreate) SetEnvironmentID(v string) *RiskHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableEnvironmentID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *RiskHistoryCreate) SetScopeName(v string) *RiskHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableScopeName(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *RiskHistoryCreate) SetScopeID(v string) *RiskHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *RiskHistoryCreate) SetNillableScopeID(v *string) *RiskHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *RiskHistoryCreate) SetName(v string) *RiskHistoryCreate {
 	_c.mutation.SetName(v)
@@ -605,6 +661,22 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.RiskCategoryID(); ok {
 		_spec.SetField(riskhistory.FieldRiskCategoryID, field.TypeString, value)
 		_node.RiskCategoryID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(riskhistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(riskhistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(riskhistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(riskhistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(riskhistory.FieldName, field.TypeString, value)

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 )
 
@@ -38,6 +39,14 @@ type File struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the file
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the file
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the file
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the file
+	ScopeID string `json:"scope_id,omitempty"`
 	// the name of the file provided in the payload key without the extension
 	ProvidedFileName string `json:"provided_file_name,omitempty"`
 	// the extension of the file provided
@@ -94,6 +103,10 @@ type File struct {
 
 // FileEdges holds the relations/edges for other nodes in the graph.
 type FileEdges struct {
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// Organization holds the value of the organization edge.
 	Organization []*Organization `json:"organization,omitempty"`
 	// Groups holds the value of the groups edge.
@@ -110,8 +123,12 @@ type FileEdges struct {
 	Document []*DocumentData `json:"document,omitempty"`
 	// Program holds the value of the program edge.
 	Program []*Program `json:"program,omitempty"`
+	// Platform holds the value of the platform edge.
+	Platform []*Platform `json:"platform,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// Scan holds the value of the scan edge.
+	Scan []*Scan `json:"scan,omitempty"`
 	// Events holds the value of the events edge.
 	Events []*Event `json:"events,omitempty"`
 	// Integrations holds the value of the integrations edge.
@@ -126,9 +143,9 @@ type FileEdges struct {
 	OriginalTrustCenterDoc []*TrustCenterDoc `json:"original_trust_center_doc,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [19]map[string]int
 
 	namedOrganization           map[string][]*Organization
 	namedGroups                 map[string][]*Group
@@ -138,7 +155,9 @@ type FileEdges struct {
 	namedTemplate               map[string][]*Template
 	namedDocument               map[string][]*DocumentData
 	namedProgram                map[string][]*Program
+	namedPlatform               map[string][]*Platform
 	namedEvidence               map[string][]*Evidence
+	namedScan                   map[string][]*Scan
 	namedEvents                 map[string][]*Event
 	namedIntegrations           map[string][]*Integration
 	namedSecrets                map[string][]*Hush
@@ -147,10 +166,32 @@ type FileEdges struct {
 	namedOriginalTrustCenterDoc map[string][]*TrustCenterDoc
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FileEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FileEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // OrganizationOrErr returns the Organization value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[2] {
 		return e.Organization, nil
 	}
 	return nil, &NotLoadedError{edge: "organization"}
@@ -159,7 +200,7 @@ func (e FileEdges) OrganizationOrErr() ([]*Organization, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -168,7 +209,7 @@ func (e FileEdges) GroupsOrErr() ([]*Group, error) {
 // ContactOrErr returns the Contact value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ContactOrErr() ([]*Contact, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Contact, nil
 	}
 	return nil, &NotLoadedError{edge: "contact"}
@@ -177,7 +218,7 @@ func (e FileEdges) ContactOrErr() ([]*Contact, error) {
 // EntityOrErr returns the Entity value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EntityOrErr() ([]*Entity, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Entity, nil
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -186,7 +227,7 @@ func (e FileEdges) EntityOrErr() ([]*Entity, error) {
 // OrganizationSettingOrErr returns the OrganizationSetting value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.OrganizationSetting, nil
 	}
 	return nil, &NotLoadedError{edge: "organization_setting"}
@@ -195,7 +236,7 @@ func (e FileEdges) OrganizationSettingOrErr() ([]*OrganizationSetting, error) {
 // TemplateOrErr returns the Template value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TemplateOrErr() ([]*Template, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Template, nil
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -204,7 +245,7 @@ func (e FileEdges) TemplateOrErr() ([]*Template, error) {
 // DocumentOrErr returns the Document value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Document, nil
 	}
 	return nil, &NotLoadedError{edge: "document"}
@@ -213,25 +254,43 @@ func (e FileEdges) DocumentOrErr() ([]*DocumentData, error) {
 // ProgramOrErr returns the Program value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) ProgramOrErr() ([]*Program, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Program, nil
 	}
 	return nil, &NotLoadedError{edge: "program"}
 }
 
+// PlatformOrErr returns the Platform value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) PlatformOrErr() ([]*Platform, error) {
+	if e.loadedTypes[10] {
+		return e.Platform, nil
+	}
+	return nil, &NotLoadedError{edge: "platform"}
+}
+
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[11] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
 }
 
+// ScanOrErr returns the Scan value or an error if the edge
+// was not loaded in eager-loading.
+func (e FileEdges) ScanOrErr() ([]*Scan, error) {
+	if e.loadedTypes[12] {
+		return e.Scan, nil
+	}
+	return nil, &NotLoadedError{edge: "scan"}
+}
+
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[13] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -240,7 +299,7 @@ func (e FileEdges) EventsOrErr() ([]*Event, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[14] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -249,7 +308,7 @@ func (e FileEdges) IntegrationsOrErr() ([]*Integration, error) {
 // SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[15] {
 		return e.Secrets, nil
 	}
 	return nil, &NotLoadedError{edge: "secrets"}
@@ -258,7 +317,7 @@ func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
 // TrustCenterEntitiesOrErr returns the TrustCenterEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[16] {
 		return e.TrustCenterEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_entities"}
@@ -267,7 +326,7 @@ func (e FileEdges) TrustCenterEntitiesOrErr() ([]*TrustCenterEntity, error) {
 // TrustCenterDocOrErr returns the TrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[17] {
 		return e.TrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_doc"}
@@ -276,7 +335,7 @@ func (e FileEdges) TrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
 // OriginalTrustCenterDocOrErr returns the OriginalTrustCenterDoc value or an error if the edge
 // was not loaded in eager-loading.
 func (e FileEdges) OriginalTrustCenterDocOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[18] {
 		return e.OriginalTrustCenterDoc, nil
 	}
 	return nil, &NotLoadedError{edge: "original_trust_center_doc"}
@@ -293,7 +352,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -395,6 +454,30 @@ func (_m *File) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
+			}
+		case file.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case file.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case file.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case file.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case file.FieldProvidedFileName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -569,6 +652,16 @@ func (_m *File) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryEnvironment queries the "environment" edge of the File entity.
+func (_m *File) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewFileClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the File entity.
+func (_m *File) QueryScope() *CustomTypeEnumQuery {
+	return NewFileClient(_m.config).QueryScope(_m)
+}
+
 // QueryOrganization queries the "organization" edge of the File entity.
 func (_m *File) QueryOrganization() *OrganizationQuery {
 	return NewFileClient(_m.config).QueryOrganization(_m)
@@ -609,9 +702,19 @@ func (_m *File) QueryProgram() *ProgramQuery {
 	return NewFileClient(_m.config).QueryProgram(_m)
 }
 
+// QueryPlatform queries the "platform" edge of the File entity.
+func (_m *File) QueryPlatform() *PlatformQuery {
+	return NewFileClient(_m.config).QueryPlatform(_m)
+}
+
 // QueryEvidence queries the "evidence" edge of the File entity.
 func (_m *File) QueryEvidence() *EvidenceQuery {
 	return NewFileClient(_m.config).QueryEvidence(_m)
+}
+
+// QueryScan queries the "scan" edge of the File entity.
+func (_m *File) QueryScan() *ScanQuery {
+	return NewFileClient(_m.config).QueryScan(_m)
 }
 
 // QueryEvents queries the "events" edge of the File entity.
@@ -700,6 +803,18 @@ func (_m *File) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("provided_file_name=")
 	builder.WriteString(_m.ProvidedFileName)
@@ -952,6 +1067,30 @@ func (_m *File) appendNamedProgram(name string, edges ...*Program) {
 	}
 }
 
+// NamedPlatform returns the Platform named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedPlatform(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatform == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatform[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedPlatform(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatform == nil {
+		_m.Edges.namedPlatform = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatform[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatform[name] = append(_m.Edges.namedPlatform[name], edges...)
+	}
+}
+
 // NamedEvidence returns the Evidence named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *File) NamedEvidence(name string) ([]*Evidence, error) {
@@ -973,6 +1112,30 @@ func (_m *File) appendNamedEvidence(name string, edges ...*Evidence) {
 		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
 		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedScan returns the Scan named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *File) NamedScan(name string) ([]*Scan, error) {
+	if _m.Edges.namedScan == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedScan[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *File) appendNamedScan(name string, edges ...*Scan) {
+	if _m.Edges.namedScan == nil {
+		_m.Edges.namedScan = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedScan[name] = []*Scan{}
+	} else {
+		_m.Edges.namedScan[name] = append(_m.Edges.namedScan[name], edges...)
 	}
 }
 

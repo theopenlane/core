@@ -64,6 +64,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "vulnerability",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "scans": {
+	ObjectType:      "scan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "reviews": {
 	ObjectType:      "review",
 	SkipEditCheck:   false,
@@ -109,8 +113,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "template",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "assessment_responses": {
 	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -121,11 +137,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "assessment": {
 	ObjectType:      "assessment",
 	SkipEditCheck:   true,
-	CheckViewAccess: false,
+	CheckViewAccess: true,
+}, "campaign": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "identity_holder": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "entity": {
+	ObjectType:      "entity",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "document": {
 	ObjectType:      "document",
 	SkipEditCheck:   true,
-	CheckViewAccess: false,
+	CheckViewAccess: true,
 },
 }, "asset": {"owner": {
 	ObjectType:      "owner",
@@ -143,6 +171,46 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "internal_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "asset_subtype": {
+	ObjectType:      "asset_subtype",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "asset_data_classification": {
+	ObjectType:      "asset_data_classification",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "access_model": {
+	ObjectType:      "access_model",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "encryption_status": {
+	ObjectType:      "encryption_status",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "security_tier": {
+	ObjectType:      "security_tier",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "criticality": {
+	ObjectType:      "criticality",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "scans": {
 	ObjectType:      "scan",
 	SkipEditCheck:   false,
@@ -151,8 +219,110 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "entity",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "out_of_scope_platforms": {
+	ObjectType:      "out_of_scope_platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "controls": {
 	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "source_platform": {
+	ObjectType:      "platform",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "connected_assets": {
+	ObjectType:      "connected_asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "connected_from": {
+	ObjectType:      "connected_from",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "campaign": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "internal_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "assessment": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "template": {
+	ObjectType:      "template",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "entity": {
+	ObjectType:      "entity",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "campaign_targets": {
+	ObjectType:      "campaign_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessment_responses": {
+	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "contacts": {
+	ObjectType:      "contact",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "users": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "campaign_target": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "campaign": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "contact": {
+	ObjectType:      "contact",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -162,6 +332,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "entities": {
 	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_targets": {
+	ObjectType:      "campaign_target",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "files": {
@@ -237,12 +415,24 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "control_kind",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "standard": {
 	ObjectType:      "organization",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "programs": {
 	ObjectType:      "program",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "assets": {
@@ -421,6 +611,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "program",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "dns_verification": {"owner": {
 	ObjectType:      "owner",
@@ -433,6 +627,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 },
 }, "directory_account": {"owner": {
 	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "integration": {
@@ -460,6 +662,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "integration": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
@@ -483,6 +693,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 },
 }, "directory_membership": {"owner": {
 	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "integration": {
@@ -512,6 +730,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 },
 }, "directory_sync_run": {"owner": {
 	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "integration": {
@@ -564,6 +790,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "template": {
 	ObjectType:      "template",
 	SkipEditCheck:   false,
@@ -598,6 +832,42 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "internal_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "reviewed_by_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "reviewed_by_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "entity_relationship_state": {
+	ObjectType:      "entity_relationship_state",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "entity_security_questionnaire_status": {
+	ObjectType:      "entity_security_questionnaire_status",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "entity_source_type": {
+	ObjectType:      "entity_source_type",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "contacts": {
 	ObjectType:      "contact",
 	SkipEditCheck:   false,
@@ -622,6 +892,46 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "scan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessment_responses": {
+	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "integrations": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "subprocessors": {
+	ObjectType:      "subprocessor",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "auth_methods": {
+	ObjectType:      "auth_method",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "employer_identity_holders": {
+	ObjectType:      "employer_identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "out_of_scope_platforms": {
+	ObjectType:      "out_of_scope_platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "source_platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "entity_type": {
 	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
@@ -689,6 +999,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "controls": {
 	ObjectType:      "control",
 	SkipEditCheck:   true,
@@ -717,6 +1035,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "scans": {
+	ObjectType:      "scan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "comments": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
@@ -739,7 +1065,15 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "file": {"organization": {
+}, "file": {"environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "organization": {
 	ObjectType:      "organization",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -771,8 +1105,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "program",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "platform": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "evidence": {
 	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "scan": {
+	ObjectType:      "scan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "events": {
@@ -821,6 +1163,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
@@ -1059,6 +1409,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_targets": {
+	ObjectType:      "campaign_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "invites": {
 	ObjectType:      "invite",
 	SkipEditCheck:   false,
@@ -1107,6 +1465,75 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "identity_holder": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "internal_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "employer": {
+	ObjectType:      "entity",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "assessment_responses": {
+	ObjectType:      "assessment_response",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessments": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "templates": {
+	ObjectType:      "template",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assets": {
+	ObjectType:      "asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "access_platforms": {
+	ObjectType:      "access_platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+},
 }, "impersonation_event": {"user": {
 	ObjectType:      "user",
 	SkipEditCheck:   false,
@@ -1122,6 +1549,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 },
 }, "integration": {"owner": {
 	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "secrets": {
@@ -1176,6 +1611,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "internal_policy": {"owner": {
 	ObjectType:      "owner",
@@ -1199,6 +1638,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "internal_policy_kind": {
 	ObjectType:      "internal_policy_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "control_objectives": {
@@ -1695,6 +2142,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "entity",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_targets": {
+	ObjectType:      "campaign_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "entity_types": {
 	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
@@ -1943,6 +2406,147 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "platform": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "internal_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "internal_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "business_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "business_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "technical_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "technical_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "security_owner_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "security_owner_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "platform_kind": {
+	ObjectType:      "platform_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "platform_data_classification": {
+	ObjectType:      "platform_data_classification",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "access_model": {
+	ObjectType:      "access_model",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "encryption_status": {
+	ObjectType:      "encryption_status",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "security_tier": {
+	ObjectType:      "security_tier",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "criticality": {
+	ObjectType:      "criticality",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "assets": {
+	ObjectType:      "asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "files": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risks": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assessments": {
+	ObjectType:      "assessment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "scans": {
+	ObjectType:      "scan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "source_assets": {
+	ObjectType:      "asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "source_entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "out_of_scope_assets": {
+	ObjectType:      "out_of_scope_asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "out_of_scope_vendors": {
+	ObjectType:      "out_of_scope_vendor",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "applicable_frameworks": {
+	ObjectType:      "applicable_framework",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "generated_scans": {
+	ObjectType:      "generated_scan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platform_owner": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
 }, "procedure": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
@@ -1965,6 +2569,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "procedure_kind": {
 	ObjectType:      "procedure_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "controls": {
@@ -2122,8 +2734,20 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "integrations": {
 	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "scans": {
+	ObjectType:      "scan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "findings": {
@@ -2195,6 +2819,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
@@ -2280,6 +2912,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "risk_category",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "controls": {
 	ObjectType:      "control",
 	SkipEditCheck:   false,
@@ -2298,6 +2938,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "programs": {
 	ObjectType:      "program",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "action_plans": {
@@ -2353,6 +2997,30 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "reviewed_by_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "reviewed_by_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "assigned_to_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "assigned_to_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "assets": {
 	ObjectType:      "asset",
 	SkipEditCheck:   false,
@@ -2361,6 +3029,50 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "entity",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "files": {
+	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "remediations": {
+	ObjectType:      "remediation",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "action_plans": {
+	ObjectType:      "action_plan",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vulnerabilities": {
+	ObjectType:      "vulnerability",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "generated_by_platform": {
+	ObjectType:      "platform",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "performed_by_user": {
+	ObjectType:      "user",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "performed_by_group": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 },
 }, "scheduled_job": {"owner": {
 	ObjectType:      "owner",
@@ -2410,6 +3122,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "trust_center_docs": {
 	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "applicable_platforms": {
+	ObjectType:      "applicable_platform",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "logo_file": {
@@ -2514,6 +3230,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_subprocessor",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "subscriber": {"owner": {
 	ObjectType:      "owner",
@@ -2540,6 +3260,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "task_kind": {
 	ObjectType:      "task_kind",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "assigner": {
@@ -2586,6 +3314,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "risk",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "platforms": {
+	ObjectType:      "platform",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "scans": {
+	ObjectType:      "scan",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "control_implementations": {
 	ObjectType:      "control_implementation",
 	SkipEditCheck:   true,
@@ -2615,6 +3355,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "documents": {
 	ObjectType:      "document",
 	SkipEditCheck:   false,
@@ -2629,6 +3377,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "assessments": {
 	ObjectType:      "assessment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holders": {
+	ObjectType:      "identity_holder",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -2880,6 +3636,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "action_plan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "campaigns": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_targets": {
+	ObjectType:      "campaign_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "subcontrols": {
 	ObjectType:      "subcontrol",
 	SkipEditCheck:   false,
@@ -2898,6 +3662,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "programs_owned": {
 	ObjectType:      "programs_owned",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platforms_owned": {
+	ObjectType:      "platforms_owned",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holder_profiles": {
+	ObjectType:      "identity_holder_profile",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "impersonation_events": {
@@ -2950,6 +3722,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "environment": {
+	ObjectType:      "environment",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "scope": {
+	ObjectType:      "scope",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
 }, "integrations": {
 	ObjectType:      "integration",
 	SkipEditCheck:   false,
@@ -3108,6 +3888,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "procedure",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "campaign": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_target": {
+	ObjectType:      "campaign_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holder": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platform": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "workflow_proposal": {
 	ObjectType:      "workflow_proposal",
 	SkipEditCheck:   false,
@@ -3179,6 +3975,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "procedure": {
 	ObjectType:      "procedure",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_target": {
+	ObjectType:      "campaign_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "identity_holder": {
+	ObjectType:      "identity_holder",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platform": {
+	ObjectType:      "platform",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },

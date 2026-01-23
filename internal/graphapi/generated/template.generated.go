@@ -72,6 +72,14 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Template_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Template_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Template_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Template_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Template_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -88,6 +96,10 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Template_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Template_scope(ctx, field)
 			case "documents":
 				return ec.fieldContext_Template_documents(ctx, field)
 			case "files":
@@ -96,6 +108,10 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_trustCenter(ctx, field)
 			case "assessments":
 				return ec.fieldContext_Template_assessments(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Template_campaigns(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Template_identityHolders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -176,6 +192,14 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Template_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Template_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Template_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Template_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Template_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -192,6 +216,10 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Template_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Template_scope(ctx, field)
 			case "documents":
 				return ec.fieldContext_Template_documents(ctx, field)
 			case "files":
@@ -200,6 +228,10 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_trustCenter(ctx, field)
 			case "assessments":
 				return ec.fieldContext_Template_assessments(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Template_campaigns(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Template_identityHolders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -280,6 +312,14 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_internalNotes(ctx, field)
 			case "systemInternalID":
 				return ec.fieldContext_Template_systemInternalID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Template_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Template_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Template_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Template_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Template_name(ctx, field)
 			case "templateType":
@@ -296,6 +336,10 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_trustCenterID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Template_owner(ctx, field)
+			case "environment":
+				return ec.fieldContext_Template_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Template_scope(ctx, field)
 			case "documents":
 				return ec.fieldContext_Template_documents(ctx, field)
 			case "files":
@@ -304,6 +348,10 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_trustCenter(ctx, field)
 			case "assessments":
 				return ec.fieldContext_Template_assessments(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Template_campaigns(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Template_identityHolders(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},

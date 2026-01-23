@@ -20,6 +20,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -41,6 +43,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
@@ -52,6 +55,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgsubscriptionhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
@@ -1327,6 +1331,90 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseHistoryOrderFieldEmailDeliveredAt orders AssessmentResponseHistory by email_delivered_at.
+	AssessmentResponseHistoryOrderFieldEmailDeliveredAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.EmailDeliveredAt, nil
+		},
+		column: assessmentresponsehistory.FieldEmailDeliveredAt,
+		toTerm: assessmentresponsehistory.ByEmailDeliveredAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailDeliveredAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldEmailOpenedAt orders AssessmentResponseHistory by email_opened_at.
+	AssessmentResponseHistoryOrderFieldEmailOpenedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.EmailOpenedAt, nil
+		},
+		column: assessmentresponsehistory.FieldEmailOpenedAt,
+		toTerm: assessmentresponsehistory.ByEmailOpenedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailOpenedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldEmailClickedAt orders AssessmentResponseHistory by email_clicked_at.
+	AssessmentResponseHistoryOrderFieldEmailClickedAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.EmailClickedAt, nil
+		},
+		column: assessmentresponsehistory.FieldEmailClickedAt,
+		toTerm: assessmentresponsehistory.ByEmailClickedAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailClickedAt,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldEmailOpenCount orders AssessmentResponseHistory by email_open_count.
+	AssessmentResponseHistoryOrderFieldEmailOpenCount = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.EmailOpenCount, nil
+		},
+		column: assessmentresponsehistory.FieldEmailOpenCount,
+		toTerm: assessmentresponsehistory.ByEmailOpenCount,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailOpenCount,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldEmailClickCount orders AssessmentResponseHistory by email_click_count.
+	AssessmentResponseHistoryOrderFieldEmailClickCount = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.EmailClickCount, nil
+		},
+		column: assessmentresponsehistory.FieldEmailClickCount,
+		toTerm: assessmentresponsehistory.ByEmailClickCount,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailClickCount,
+			}
+		},
+	}
+	// AssessmentResponseHistoryOrderFieldLastEmailEventAt orders AssessmentResponseHistory by last_email_event_at.
+	AssessmentResponseHistoryOrderFieldLastEmailEventAt = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.LastEmailEventAt, nil
+		},
+		column: assessmentresponsehistory.FieldLastEmailEventAt,
+		toTerm: assessmentresponsehistory.ByLastEmailEventAt,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastEmailEventAt,
+			}
+		},
+	}
 	// AssessmentResponseHistoryOrderFieldStatus orders AssessmentResponseHistory by status.
 	AssessmentResponseHistoryOrderFieldStatus = &AssessmentResponseHistoryOrderField{
 		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
@@ -1413,6 +1501,18 @@ func (f AssessmentResponseHistoryOrderField) String() string {
 		str = "email"
 	case AssessmentResponseHistoryOrderFieldSendAttempts.column:
 		str = "send_attempts"
+	case AssessmentResponseHistoryOrderFieldEmailDeliveredAt.column:
+		str = "email_delivered_at"
+	case AssessmentResponseHistoryOrderFieldEmailOpenedAt.column:
+		str = "email_opened_at"
+	case AssessmentResponseHistoryOrderFieldEmailClickedAt.column:
+		str = "email_clicked_at"
+	case AssessmentResponseHistoryOrderFieldEmailOpenCount.column:
+		str = "email_open_count"
+	case AssessmentResponseHistoryOrderFieldEmailClickCount.column:
+		str = "email_click_count"
+	case AssessmentResponseHistoryOrderFieldLastEmailEventAt.column:
+		str = "last_email_event_at"
 	case AssessmentResponseHistoryOrderFieldStatus.column:
 		str = "status"
 	case AssessmentResponseHistoryOrderFieldAssignedAt.column:
@@ -1449,6 +1549,18 @@ func (f *AssessmentResponseHistoryOrderField) UnmarshalGQL(v interface{}) error 
 		*f = *AssessmentResponseHistoryOrderFieldEmail
 	case "send_attempts":
 		*f = *AssessmentResponseHistoryOrderFieldSendAttempts
+	case "email_delivered_at":
+		*f = *AssessmentResponseHistoryOrderFieldEmailDeliveredAt
+	case "email_opened_at":
+		*f = *AssessmentResponseHistoryOrderFieldEmailOpenedAt
+	case "email_clicked_at":
+		*f = *AssessmentResponseHistoryOrderFieldEmailClickedAt
+	case "email_open_count":
+		*f = *AssessmentResponseHistoryOrderFieldEmailOpenCount
+	case "email_click_count":
+		*f = *AssessmentResponseHistoryOrderFieldEmailClickCount
+	case "last_email_event_at":
+		*f = *AssessmentResponseHistoryOrderFieldLastEmailEventAt
 	case "status":
 		*f = *AssessmentResponseHistoryOrderFieldStatus
 	case "assigned_at":
@@ -1757,6 +1869,20 @@ var (
 			}
 		},
 	}
+	// AssetHistoryOrderFieldInternalOwner orders AssetHistory by internal_owner.
+	AssetHistoryOrderFieldInternalOwner = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: assethistory.FieldInternalOwner,
+		toTerm: assethistory.ByInternalOwner,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
 	// AssetHistoryOrderFieldAssetType orders AssetHistory by asset_type.
 	AssetHistoryOrderFieldAssetType = &AssetHistoryOrderField{
 		Value: func(_m *AssetHistory) (ent.Value, error) {
@@ -1785,6 +1911,131 @@ var (
 			}
 		},
 	}
+	// AssetHistoryOrderFieldPhysicalLocation orders AssetHistory by physical_location.
+	AssetHistoryOrderFieldPhysicalLocation = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.PhysicalLocation, nil
+		},
+		column: assethistory.FieldPhysicalLocation,
+		toTerm: assethistory.ByPhysicalLocation,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PhysicalLocation,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldRegion orders AssetHistory by region.
+	AssetHistoryOrderFieldRegion = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.Region, nil
+		},
+		column: assethistory.FieldRegion,
+		toTerm: assethistory.ByRegion,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Region,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldContainsPii orders AssetHistory by contains_pii.
+	AssetHistoryOrderFieldContainsPii = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.ContainsPii, nil
+		},
+		column: assethistory.FieldContainsPii,
+		toTerm: assethistory.ByContainsPii,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContainsPii,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldSourceType orders AssetHistory by source_type.
+	AssetHistoryOrderFieldSourceType = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.SourceType, nil
+		},
+		column: assethistory.FieldSourceType,
+		toTerm: assethistory.BySourceType,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceType,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldSourceIdentifier orders AssetHistory by source_identifier.
+	AssetHistoryOrderFieldSourceIdentifier = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.SourceIdentifier, nil
+		},
+		column: assethistory.FieldSourceIdentifier,
+		toTerm: assethistory.BySourceIdentifier,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceIdentifier,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldCostCenter orders AssetHistory by cost_center.
+	AssetHistoryOrderFieldCostCenter = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.CostCenter, nil
+		},
+		column: assethistory.FieldCostCenter,
+		toTerm: assethistory.ByCostCenter,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CostCenter,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldEstimatedMonthlyCost orders AssetHistory by estimated_monthly_cost.
+	AssetHistoryOrderFieldEstimatedMonthlyCost = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			return _m.EstimatedMonthlyCost, nil
+		},
+		column: assethistory.FieldEstimatedMonthlyCost,
+		toTerm: assethistory.ByEstimatedMonthlyCost,
+		toCursor: func(_m *AssetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EstimatedMonthlyCost,
+			}
+		},
+	}
+	// AssetHistoryOrderFieldPurchaseDate orders AssetHistory by purchase_date.
+	AssetHistoryOrderFieldPurchaseDate = &AssetHistoryOrderField{
+		Value: func(_m *AssetHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.PurchaseDate == nil {
+				return nil, nil
+			}
+			return _m.PurchaseDate, nil
+		},
+		column: assethistory.FieldPurchaseDate,
+		toTerm: func(opts ...sql.OrderTermOption) assethistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return assethistory.ByPurchaseDate(opts...)
+		},
+		toCursor: func(_m *AssetHistory) Cursor {
+			if _m.PurchaseDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PurchaseDate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -1797,10 +2048,28 @@ func (f AssetHistoryOrderField) String() string {
 		str = "created_at"
 	case AssetHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssetHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
 	case AssetHistoryOrderFieldAssetType.column:
 		str = "ASSET_TYPE"
 	case AssetHistoryOrderFieldName.column:
 		str = "name"
+	case AssetHistoryOrderFieldPhysicalLocation.column:
+		str = "physical_location"
+	case AssetHistoryOrderFieldRegion.column:
+		str = "region"
+	case AssetHistoryOrderFieldContainsPii.column:
+		str = "contains_pii"
+	case AssetHistoryOrderFieldSourceType.column:
+		str = "SOURCE_TYPE"
+	case AssetHistoryOrderFieldSourceIdentifier.column:
+		str = "source_identifier"
+	case AssetHistoryOrderFieldCostCenter.column:
+		str = "cost_center"
+	case AssetHistoryOrderFieldEstimatedMonthlyCost.column:
+		str = "estimated_monthly_cost"
+	case AssetHistoryOrderFieldPurchaseDate.column:
+		str = "purchase_date"
 	}
 	return str
 }
@@ -1823,10 +2092,28 @@ func (f *AssetHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssetHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssetHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *AssetHistoryOrderFieldInternalOwner
 	case "ASSET_TYPE":
 		*f = *AssetHistoryOrderFieldAssetType
 	case "name":
 		*f = *AssetHistoryOrderFieldName
+	case "physical_location":
+		*f = *AssetHistoryOrderFieldPhysicalLocation
+	case "region":
+		*f = *AssetHistoryOrderFieldRegion
+	case "contains_pii":
+		*f = *AssetHistoryOrderFieldContainsPii
+	case "SOURCE_TYPE":
+		*f = *AssetHistoryOrderFieldSourceType
+	case "source_identifier":
+		*f = *AssetHistoryOrderFieldSourceIdentifier
+	case "cost_center":
+		*f = *AssetHistoryOrderFieldCostCenter
+	case "estimated_monthly_cost":
+		*f = *AssetHistoryOrderFieldEstimatedMonthlyCost
+	case "purchase_date":
+		*f = *AssetHistoryOrderFieldPurchaseDate
 	default:
 		return fmt.Errorf("%s is not a valid AssetHistoryOrderField", str)
 	}
@@ -1869,6 +2156,1232 @@ func (_m *AssetHistory) ToEdge(order *AssetHistoryOrder) *AssetHistoryEdge {
 		order = DefaultAssetHistoryOrder
 	}
 	return &AssetHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// CampaignHistoryEdge is the edge representation of CampaignHistory.
+type CampaignHistoryEdge struct {
+	Node   *CampaignHistory `json:"node"`
+	Cursor Cursor           `json:"cursor"`
+}
+
+// CampaignHistoryConnection is the connection containing edges to CampaignHistory.
+type CampaignHistoryConnection struct {
+	Edges      []*CampaignHistoryEdge `json:"edges"`
+	PageInfo   PageInfo               `json:"pageInfo"`
+	TotalCount int                    `json:"totalCount"`
+}
+
+func (c *CampaignHistoryConnection) build(nodes []*CampaignHistory, pager *campaignhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CampaignHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CampaignHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CampaignHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CampaignHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CampaignHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CampaignHistoryPaginateOption enables pagination customization.
+type CampaignHistoryPaginateOption func(*campaignhistoryPager) error
+
+// WithCampaignHistoryOrder configures pagination ordering.
+func WithCampaignHistoryOrder(order *CampaignHistoryOrder) CampaignHistoryPaginateOption {
+	if order == nil {
+		order = DefaultCampaignHistoryOrder
+	}
+	o := *order
+	return func(pager *campaignhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultCampaignHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithCampaignHistoryFilter configures pagination filter.
+func WithCampaignHistoryFilter(filter func(*CampaignHistoryQuery) (*CampaignHistoryQuery, error)) CampaignHistoryPaginateOption {
+	return func(pager *campaignhistoryPager) error {
+		if filter == nil {
+			return errors.New("CampaignHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type campaignhistoryPager struct {
+	reverse bool
+	order   *CampaignHistoryOrder
+	filter  func(*CampaignHistoryQuery) (*CampaignHistoryQuery, error)
+}
+
+func newCampaignHistoryPager(opts []CampaignHistoryPaginateOption, reverse bool) (*campaignhistoryPager, error) {
+	pager := &campaignhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultCampaignHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *campaignhistoryPager) applyFilter(query *CampaignHistoryQuery) (*CampaignHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *campaignhistoryPager) toCursor(_m *CampaignHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *campaignhistoryPager) applyCursors(query *CampaignHistoryQuery, after, before *Cursor) (*CampaignHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultCampaignHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *campaignhistoryPager) applyOrder(query *CampaignHistoryQuery) *CampaignHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultCampaignHistoryOrder.Field {
+		query = query.Order(DefaultCampaignHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *campaignhistoryPager) orderExpr(query *CampaignHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultCampaignHistoryOrder.Field {
+			b.Comma().Ident(DefaultCampaignHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CampaignHistory.
+func (_m *CampaignHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CampaignHistoryPaginateOption,
+) (*CampaignHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCampaignHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &CampaignHistoryConnection{Edges: []*CampaignHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CampaignHistoryOrderFieldHistoryTime orders CampaignHistory by history_time.
+	CampaignHistoryOrderFieldHistoryTime = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: campaignhistory.FieldHistoryTime,
+		toTerm: campaignhistory.ByHistoryTime,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldCreatedAt orders CampaignHistory by created_at.
+	CampaignHistoryOrderFieldCreatedAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: campaignhistory.FieldCreatedAt,
+		toTerm: campaignhistory.ByCreatedAt,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldUpdatedAt orders CampaignHistory by updated_at.
+	CampaignHistoryOrderFieldUpdatedAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: campaignhistory.FieldUpdatedAt,
+		toTerm: campaignhistory.ByUpdatedAt,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldInternalOwner orders CampaignHistory by internal_owner.
+	CampaignHistoryOrderFieldInternalOwner = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: campaignhistory.FieldInternalOwner,
+		toTerm: campaignhistory.ByInternalOwner,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldName orders CampaignHistory by name.
+	CampaignHistoryOrderFieldName = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: campaignhistory.FieldName,
+		toTerm: campaignhistory.ByName,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldCampaignType orders CampaignHistory by campaign_type.
+	CampaignHistoryOrderFieldCampaignType = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.CampaignType, nil
+		},
+		column: campaignhistory.FieldCampaignType,
+		toTerm: campaignhistory.ByCampaignType,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CampaignType,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldStatus orders CampaignHistory by status.
+	CampaignHistoryOrderFieldStatus = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: campaignhistory.FieldStatus,
+		toTerm: campaignhistory.ByStatus,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldIsActive orders CampaignHistory by is_active.
+	CampaignHistoryOrderFieldIsActive = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.IsActive, nil
+		},
+		column: campaignhistory.FieldIsActive,
+		toTerm: campaignhistory.ByIsActive,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsActive,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldScheduledAt orders CampaignHistory by scheduled_at.
+	CampaignHistoryOrderFieldScheduledAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ScheduledAt == nil {
+				return nil, nil
+			}
+			return _m.ScheduledAt, nil
+		},
+		column: campaignhistory.FieldScheduledAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByScheduledAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.ScheduledAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ScheduledAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldLaunchedAt orders CampaignHistory by launched_at.
+	CampaignHistoryOrderFieldLaunchedAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LaunchedAt == nil {
+				return nil, nil
+			}
+			return _m.LaunchedAt, nil
+		},
+		column: campaignhistory.FieldLaunchedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByLaunchedAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.LaunchedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LaunchedAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldCompletedAt orders CampaignHistory by completed_at.
+	CampaignHistoryOrderFieldCompletedAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CompletedAt == nil {
+				return nil, nil
+			}
+			return _m.CompletedAt, nil
+		},
+		column: campaignhistory.FieldCompletedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByCompletedAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.CompletedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CompletedAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldDueDate orders CampaignHistory by due_date.
+	CampaignHistoryOrderFieldDueDate = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.DueDate == nil {
+				return nil, nil
+			}
+			return _m.DueDate, nil
+		},
+		column: campaignhistory.FieldDueDate,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByDueDate(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.DueDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DueDate,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldIsRecurring orders CampaignHistory by is_recurring.
+	CampaignHistoryOrderFieldIsRecurring = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.IsRecurring, nil
+		},
+		column: campaignhistory.FieldIsRecurring,
+		toTerm: campaignhistory.ByIsRecurring,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsRecurring,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldRecurrenceFrequency orders CampaignHistory by recurrence_frequency.
+	CampaignHistoryOrderFieldRecurrenceFrequency = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.RecurrenceFrequency, nil
+		},
+		column: campaignhistory.FieldRecurrenceFrequency,
+		toTerm: campaignhistory.ByRecurrenceFrequency,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceFrequency,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldRecurrenceInterval orders CampaignHistory by recurrence_interval.
+	CampaignHistoryOrderFieldRecurrenceInterval = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.RecurrenceInterval, nil
+		},
+		column: campaignhistory.FieldRecurrenceInterval,
+		toTerm: campaignhistory.ByRecurrenceInterval,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceInterval,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldRecurrenceTimezone orders CampaignHistory by recurrence_timezone.
+	CampaignHistoryOrderFieldRecurrenceTimezone = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.RecurrenceTimezone, nil
+		},
+		column: campaignhistory.FieldRecurrenceTimezone,
+		toTerm: campaignhistory.ByRecurrenceTimezone,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceTimezone,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldLastRunAt orders CampaignHistory by last_run_at.
+	CampaignHistoryOrderFieldLastRunAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastRunAt == nil {
+				return nil, nil
+			}
+			return _m.LastRunAt, nil
+		},
+		column: campaignhistory.FieldLastRunAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByLastRunAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.LastRunAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastRunAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldNextRunAt orders CampaignHistory by next_run_at.
+	CampaignHistoryOrderFieldNextRunAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextRunAt == nil {
+				return nil, nil
+			}
+			return _m.NextRunAt, nil
+		},
+		column: campaignhistory.FieldNextRunAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByNextRunAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.NextRunAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextRunAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldRecurrenceEndAt orders CampaignHistory by recurrence_end_at.
+	CampaignHistoryOrderFieldRecurrenceEndAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.RecurrenceEndAt == nil {
+				return nil, nil
+			}
+			return _m.RecurrenceEndAt, nil
+		},
+		column: campaignhistory.FieldRecurrenceEndAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByRecurrenceEndAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.RecurrenceEndAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecurrenceEndAt,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldRecipientCount orders CampaignHistory by recipient_count.
+	CampaignHistoryOrderFieldRecipientCount = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.RecipientCount, nil
+		},
+		column: campaignhistory.FieldRecipientCount,
+		toTerm: campaignhistory.ByRecipientCount,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RecipientCount,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldResendCount orders CampaignHistory by resend_count.
+	CampaignHistoryOrderFieldResendCount = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.ResendCount, nil
+		},
+		column: campaignhistory.FieldResendCount,
+		toTerm: campaignhistory.ByResendCount,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResendCount,
+			}
+		},
+	}
+	// CampaignHistoryOrderFieldLastResentAt orders CampaignHistory by last_resent_at.
+	CampaignHistoryOrderFieldLastResentAt = &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastResentAt == nil {
+				return nil, nil
+			}
+			return _m.LastResentAt, nil
+		},
+		column: campaignhistory.FieldLastResentAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaignhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaignhistory.ByLastResentAt(opts...)
+		},
+		toCursor: func(_m *CampaignHistory) Cursor {
+			if _m.LastResentAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastResentAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CampaignHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case CampaignHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case CampaignHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CampaignHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CampaignHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case CampaignHistoryOrderFieldName.column:
+		str = "name"
+	case CampaignHistoryOrderFieldCampaignType.column:
+		str = "CAMPAIGN_TYPE"
+	case CampaignHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case CampaignHistoryOrderFieldIsActive.column:
+		str = "is_active"
+	case CampaignHistoryOrderFieldScheduledAt.column:
+		str = "scheduled_at"
+	case CampaignHistoryOrderFieldLaunchedAt.column:
+		str = "launched_at"
+	case CampaignHistoryOrderFieldCompletedAt.column:
+		str = "completed_at"
+	case CampaignHistoryOrderFieldDueDate.column:
+		str = "due_date"
+	case CampaignHistoryOrderFieldIsRecurring.column:
+		str = "is_recurring"
+	case CampaignHistoryOrderFieldRecurrenceFrequency.column:
+		str = "recurrence_frequency"
+	case CampaignHistoryOrderFieldRecurrenceInterval.column:
+		str = "recurrence_interval"
+	case CampaignHistoryOrderFieldRecurrenceTimezone.column:
+		str = "recurrence_timezone"
+	case CampaignHistoryOrderFieldLastRunAt.column:
+		str = "last_run_at"
+	case CampaignHistoryOrderFieldNextRunAt.column:
+		str = "next_run_at"
+	case CampaignHistoryOrderFieldRecurrenceEndAt.column:
+		str = "recurrence_end_at"
+	case CampaignHistoryOrderFieldRecipientCount.column:
+		str = "recipient_count"
+	case CampaignHistoryOrderFieldResendCount.column:
+		str = "resend_count"
+	case CampaignHistoryOrderFieldLastResentAt.column:
+		str = "last_resent_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CampaignHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CampaignHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CampaignHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *CampaignHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *CampaignHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CampaignHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *CampaignHistoryOrderFieldInternalOwner
+	case "name":
+		*f = *CampaignHistoryOrderFieldName
+	case "CAMPAIGN_TYPE":
+		*f = *CampaignHistoryOrderFieldCampaignType
+	case "STATUS":
+		*f = *CampaignHistoryOrderFieldStatus
+	case "is_active":
+		*f = *CampaignHistoryOrderFieldIsActive
+	case "scheduled_at":
+		*f = *CampaignHistoryOrderFieldScheduledAt
+	case "launched_at":
+		*f = *CampaignHistoryOrderFieldLaunchedAt
+	case "completed_at":
+		*f = *CampaignHistoryOrderFieldCompletedAt
+	case "due_date":
+		*f = *CampaignHistoryOrderFieldDueDate
+	case "is_recurring":
+		*f = *CampaignHistoryOrderFieldIsRecurring
+	case "recurrence_frequency":
+		*f = *CampaignHistoryOrderFieldRecurrenceFrequency
+	case "recurrence_interval":
+		*f = *CampaignHistoryOrderFieldRecurrenceInterval
+	case "recurrence_timezone":
+		*f = *CampaignHistoryOrderFieldRecurrenceTimezone
+	case "last_run_at":
+		*f = *CampaignHistoryOrderFieldLastRunAt
+	case "next_run_at":
+		*f = *CampaignHistoryOrderFieldNextRunAt
+	case "recurrence_end_at":
+		*f = *CampaignHistoryOrderFieldRecurrenceEndAt
+	case "recipient_count":
+		*f = *CampaignHistoryOrderFieldRecipientCount
+	case "resend_count":
+		*f = *CampaignHistoryOrderFieldResendCount
+	case "last_resent_at":
+		*f = *CampaignHistoryOrderFieldLastResentAt
+	default:
+		return fmt.Errorf("%s is not a valid CampaignHistoryOrderField", str)
+	}
+	return nil
+}
+
+// CampaignHistoryOrderField defines the ordering field of CampaignHistory.
+type CampaignHistoryOrderField struct {
+	// Value extracts the ordering value from the given CampaignHistory.
+	Value    func(*CampaignHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) campaignhistory.OrderOption
+	toCursor func(*CampaignHistory) Cursor
+}
+
+// CampaignHistoryOrder defines the ordering of CampaignHistory.
+type CampaignHistoryOrder struct {
+	Direction OrderDirection             `json:"direction"`
+	Field     *CampaignHistoryOrderField `json:"field"`
+}
+
+// DefaultCampaignHistoryOrder is the default ordering of CampaignHistory.
+var DefaultCampaignHistoryOrder = &CampaignHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CampaignHistoryOrderField{
+		Value: func(_m *CampaignHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: campaignhistory.FieldID,
+		toTerm: campaignhistory.ByID,
+		toCursor: func(_m *CampaignHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts CampaignHistory into CampaignHistoryEdge.
+func (_m *CampaignHistory) ToEdge(order *CampaignHistoryOrder) *CampaignHistoryEdge {
+	if order == nil {
+		order = DefaultCampaignHistoryOrder
+	}
+	return &CampaignHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// CampaignTargetHistoryEdge is the edge representation of CampaignTargetHistory.
+type CampaignTargetHistoryEdge struct {
+	Node   *CampaignTargetHistory `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// CampaignTargetHistoryConnection is the connection containing edges to CampaignTargetHistory.
+type CampaignTargetHistoryConnection struct {
+	Edges      []*CampaignTargetHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *CampaignTargetHistoryConnection) build(nodes []*CampaignTargetHistory, pager *campaigntargethistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *CampaignTargetHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *CampaignTargetHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *CampaignTargetHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*CampaignTargetHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &CampaignTargetHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// CampaignTargetHistoryPaginateOption enables pagination customization.
+type CampaignTargetHistoryPaginateOption func(*campaigntargethistoryPager) error
+
+// WithCampaignTargetHistoryOrder configures pagination ordering.
+func WithCampaignTargetHistoryOrder(order *CampaignTargetHistoryOrder) CampaignTargetHistoryPaginateOption {
+	if order == nil {
+		order = DefaultCampaignTargetHistoryOrder
+	}
+	o := *order
+	return func(pager *campaigntargethistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultCampaignTargetHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithCampaignTargetHistoryFilter configures pagination filter.
+func WithCampaignTargetHistoryFilter(filter func(*CampaignTargetHistoryQuery) (*CampaignTargetHistoryQuery, error)) CampaignTargetHistoryPaginateOption {
+	return func(pager *campaigntargethistoryPager) error {
+		if filter == nil {
+			return errors.New("CampaignTargetHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type campaigntargethistoryPager struct {
+	reverse bool
+	order   *CampaignTargetHistoryOrder
+	filter  func(*CampaignTargetHistoryQuery) (*CampaignTargetHistoryQuery, error)
+}
+
+func newCampaignTargetHistoryPager(opts []CampaignTargetHistoryPaginateOption, reverse bool) (*campaigntargethistoryPager, error) {
+	pager := &campaigntargethistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultCampaignTargetHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *campaigntargethistoryPager) applyFilter(query *CampaignTargetHistoryQuery) (*CampaignTargetHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *campaigntargethistoryPager) toCursor(_m *CampaignTargetHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *campaigntargethistoryPager) applyCursors(query *CampaignTargetHistoryQuery, after, before *Cursor) (*CampaignTargetHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultCampaignTargetHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *campaigntargethistoryPager) applyOrder(query *CampaignTargetHistoryQuery) *CampaignTargetHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultCampaignTargetHistoryOrder.Field {
+		query = query.Order(DefaultCampaignTargetHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *campaigntargethistoryPager) orderExpr(query *CampaignTargetHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultCampaignTargetHistoryOrder.Field {
+			b.Comma().Ident(DefaultCampaignTargetHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to CampaignTargetHistory.
+func (_m *CampaignTargetHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...CampaignTargetHistoryPaginateOption,
+) (*CampaignTargetHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newCampaignTargetHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &CampaignTargetHistoryConnection{Edges: []*CampaignTargetHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// CampaignTargetHistoryOrderFieldHistoryTime orders CampaignTargetHistory by history_time.
+	CampaignTargetHistoryOrderFieldHistoryTime = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: campaigntargethistory.FieldHistoryTime,
+		toTerm: campaigntargethistory.ByHistoryTime,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldCreatedAt orders CampaignTargetHistory by created_at.
+	CampaignTargetHistoryOrderFieldCreatedAt = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: campaigntargethistory.FieldCreatedAt,
+		toTerm: campaigntargethistory.ByCreatedAt,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldUpdatedAt orders CampaignTargetHistory by updated_at.
+	CampaignTargetHistoryOrderFieldUpdatedAt = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: campaigntargethistory.FieldUpdatedAt,
+		toTerm: campaigntargethistory.ByUpdatedAt,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldEmail orders CampaignTargetHistory by email.
+	CampaignTargetHistoryOrderFieldEmail = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: campaigntargethistory.FieldEmail,
+		toTerm: campaigntargethistory.ByEmail,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldFullName orders CampaignTargetHistory by full_name.
+	CampaignTargetHistoryOrderFieldFullName = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.FullName, nil
+		},
+		column: campaigntargethistory.FieldFullName,
+		toTerm: campaigntargethistory.ByFullName,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FullName,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldStatus orders CampaignTargetHistory by status.
+	CampaignTargetHistoryOrderFieldStatus = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: campaigntargethistory.FieldStatus,
+		toTerm: campaigntargethistory.ByStatus,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldSentAt orders CampaignTargetHistory by sent_at.
+	CampaignTargetHistoryOrderFieldSentAt = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.SentAt == nil {
+				return nil, nil
+			}
+			return _m.SentAt, nil
+		},
+		column: campaigntargethistory.FieldSentAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaigntargethistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaigntargethistory.BySentAt(opts...)
+		},
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			if _m.SentAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SentAt,
+			}
+		},
+	}
+	// CampaignTargetHistoryOrderFieldCompletedAt orders CampaignTargetHistory by completed_at.
+	CampaignTargetHistoryOrderFieldCompletedAt = &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CompletedAt == nil {
+				return nil, nil
+			}
+			return _m.CompletedAt, nil
+		},
+		column: campaigntargethistory.FieldCompletedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaigntargethistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaigntargethistory.ByCompletedAt(opts...)
+		},
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			if _m.CompletedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CompletedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f CampaignTargetHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case CampaignTargetHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case CampaignTargetHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case CampaignTargetHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case CampaignTargetHistoryOrderFieldEmail.column:
+		str = "email"
+	case CampaignTargetHistoryOrderFieldFullName.column:
+		str = "full_name"
+	case CampaignTargetHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case CampaignTargetHistoryOrderFieldSentAt.column:
+		str = "sent_at"
+	case CampaignTargetHistoryOrderFieldCompletedAt.column:
+		str = "completed_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f CampaignTargetHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *CampaignTargetHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("CampaignTargetHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *CampaignTargetHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *CampaignTargetHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *CampaignTargetHistoryOrderFieldUpdatedAt
+	case "email":
+		*f = *CampaignTargetHistoryOrderFieldEmail
+	case "full_name":
+		*f = *CampaignTargetHistoryOrderFieldFullName
+	case "STATUS":
+		*f = *CampaignTargetHistoryOrderFieldStatus
+	case "sent_at":
+		*f = *CampaignTargetHistoryOrderFieldSentAt
+	case "completed_at":
+		*f = *CampaignTargetHistoryOrderFieldCompletedAt
+	default:
+		return fmt.Errorf("%s is not a valid CampaignTargetHistoryOrderField", str)
+	}
+	return nil
+}
+
+// CampaignTargetHistoryOrderField defines the ordering field of CampaignTargetHistory.
+type CampaignTargetHistoryOrderField struct {
+	// Value extracts the ordering value from the given CampaignTargetHistory.
+	Value    func(*CampaignTargetHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) campaigntargethistory.OrderOption
+	toCursor func(*CampaignTargetHistory) Cursor
+}
+
+// CampaignTargetHistoryOrder defines the ordering of CampaignTargetHistory.
+type CampaignTargetHistoryOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *CampaignTargetHistoryOrderField `json:"field"`
+}
+
+// DefaultCampaignTargetHistoryOrder is the default ordering of CampaignTargetHistory.
+var DefaultCampaignTargetHistoryOrder = &CampaignTargetHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &CampaignTargetHistoryOrderField{
+		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: campaigntargethistory.FieldID,
+		toTerm: campaigntargethistory.ByID,
+		toCursor: func(_m *CampaignTargetHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts CampaignTargetHistory into CampaignTargetHistoryEdge.
+func (_m *CampaignTargetHistory) ToEdge(order *CampaignTargetHistoryOrder) *CampaignTargetHistoryEdge {
+	if order == nil {
+		order = DefaultCampaignTargetHistoryOrder
+	}
+	return &CampaignTargetHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -6356,6 +7869,61 @@ var (
 			}
 		},
 	}
+	// EntityHistoryOrderFieldInternalOwner orders EntityHistory by internal_owner.
+	EntityHistoryOrderFieldInternalOwner = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: entityhistory.FieldInternalOwner,
+		toTerm: entityhistory.ByInternalOwner,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldReviewedBy orders EntityHistory by reviewed_by.
+	EntityHistoryOrderFieldReviewedBy = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.ReviewedBy, nil
+		},
+		column: entityhistory.FieldReviewedBy,
+		toTerm: entityhistory.ByReviewedBy,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewedBy,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldLastReviewedAt orders EntityHistory by last_reviewed_at.
+	EntityHistoryOrderFieldLastReviewedAt = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.LastReviewedAt == nil {
+				return nil, nil
+			}
+			return _m.LastReviewedAt, nil
+		},
+		column: entityhistory.FieldLastReviewedAt,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.ByLastReviewedAt(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.LastReviewedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.LastReviewedAt,
+			}
+		},
+	}
 	// EntityHistoryOrderFieldName orders EntityHistory by name.
 	EntityHistoryOrderFieldName = &EntityHistoryOrderField{
 		Value: func(_m *EntityHistory) (ent.Value, error) {
@@ -6398,6 +7966,365 @@ var (
 			}
 		},
 	}
+	// EntityHistoryOrderFieldApprovedForUse orders EntityHistory by approved_for_use.
+	EntityHistoryOrderFieldApprovedForUse = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.ApprovedForUse, nil
+		},
+		column: entityhistory.FieldApprovedForUse,
+		toTerm: entityhistory.ByApprovedForUse,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ApprovedForUse,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldHasSoc2 orders EntityHistory by has_soc2.
+	EntityHistoryOrderFieldHasSoc2 = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.HasSoc2, nil
+		},
+		column: entityhistory.FieldHasSoc2,
+		toTerm: entityhistory.ByHasSoc2,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HasSoc2,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldSoc2PeriodEnd orders EntityHistory by soc2_period_end.
+	EntityHistoryOrderFieldSoc2PeriodEnd = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.Soc2PeriodEnd == nil {
+				return nil, nil
+			}
+			return _m.Soc2PeriodEnd, nil
+		},
+		column: entityhistory.FieldSoc2PeriodEnd,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.BySoc2PeriodEnd(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.Soc2PeriodEnd == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Soc2PeriodEnd,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldContractStartDate orders EntityHistory by contract_start_date.
+	EntityHistoryOrderFieldContractStartDate = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ContractStartDate == nil {
+				return nil, nil
+			}
+			return _m.ContractStartDate, nil
+		},
+		column: entityhistory.FieldContractStartDate,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.ByContractStartDate(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.ContractStartDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContractStartDate,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldContractEndDate orders EntityHistory by contract_end_date.
+	EntityHistoryOrderFieldContractEndDate = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ContractEndDate == nil {
+				return nil, nil
+			}
+			return _m.ContractEndDate, nil
+		},
+		column: entityhistory.FieldContractEndDate,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.ByContractEndDate(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.ContractEndDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContractEndDate,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldAutoRenews orders EntityHistory by auto_renews.
+	EntityHistoryOrderFieldAutoRenews = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.AutoRenews, nil
+		},
+		column: entityhistory.FieldAutoRenews,
+		toTerm: entityhistory.ByAutoRenews,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AutoRenews,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldTerminationNoticeDays orders EntityHistory by termination_notice_days.
+	EntityHistoryOrderFieldTerminationNoticeDays = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.TerminationNoticeDays, nil
+		},
+		column: entityhistory.FieldTerminationNoticeDays,
+		toTerm: entityhistory.ByTerminationNoticeDays,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TerminationNoticeDays,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldAnnualSpend orders EntityHistory by annual_spend.
+	EntityHistoryOrderFieldAnnualSpend = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.AnnualSpend, nil
+		},
+		column: entityhistory.FieldAnnualSpend,
+		toTerm: entityhistory.ByAnnualSpend,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AnnualSpend,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldSpendCurrency orders EntityHistory by spend_currency.
+	EntityHistoryOrderFieldSpendCurrency = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.SpendCurrency, nil
+		},
+		column: entityhistory.FieldSpendCurrency,
+		toTerm: entityhistory.BySpendCurrency,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SpendCurrency,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldBillingModel orders EntityHistory by billing_model.
+	EntityHistoryOrderFieldBillingModel = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.BillingModel, nil
+		},
+		column: entityhistory.FieldBillingModel,
+		toTerm: entityhistory.ByBillingModel,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.BillingModel,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldRenewalRisk orders EntityHistory by renewal_risk.
+	EntityHistoryOrderFieldRenewalRisk = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.RenewalRisk, nil
+		},
+		column: entityhistory.FieldRenewalRisk,
+		toTerm: entityhistory.ByRenewalRisk,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RenewalRisk,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldSSOEnforced orders EntityHistory by sso_enforced.
+	EntityHistoryOrderFieldSSOEnforced = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.SSOEnforced, nil
+		},
+		column: entityhistory.FieldSSOEnforced,
+		toTerm: entityhistory.BySSOEnforced,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SSOEnforced,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldMfaSupported orders EntityHistory by mfa_supported.
+	EntityHistoryOrderFieldMfaSupported = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.MfaSupported, nil
+		},
+		column: entityhistory.FieldMfaSupported,
+		toTerm: entityhistory.ByMfaSupported,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.MfaSupported,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldMfaEnforced orders EntityHistory by mfa_enforced.
+	EntityHistoryOrderFieldMfaEnforced = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.MfaEnforced, nil
+		},
+		column: entityhistory.FieldMfaEnforced,
+		toTerm: entityhistory.ByMfaEnforced,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.MfaEnforced,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldStatusPageURL orders EntityHistory by status_page_url.
+	EntityHistoryOrderFieldStatusPageURL = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.StatusPageURL, nil
+		},
+		column: entityhistory.FieldStatusPageURL,
+		toTerm: entityhistory.ByStatusPageURL,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StatusPageURL,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldRiskRating orders EntityHistory by risk_rating.
+	EntityHistoryOrderFieldRiskRating = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.RiskRating, nil
+		},
+		column: entityhistory.FieldRiskRating,
+		toTerm: entityhistory.ByRiskRating,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskRating,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldRiskScore orders EntityHistory by risk_score.
+	EntityHistoryOrderFieldRiskScore = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.RiskScore, nil
+		},
+		column: entityhistory.FieldRiskScore,
+		toTerm: entityhistory.ByRiskScore,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.RiskScore,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldTier orders EntityHistory by tier.
+	EntityHistoryOrderFieldTier = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.Tier, nil
+		},
+		column: entityhistory.FieldTier,
+		toTerm: entityhistory.ByTier,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Tier,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldReviewFrequency orders EntityHistory by review_frequency.
+	EntityHistoryOrderFieldReviewFrequency = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			return _m.ReviewFrequency, nil
+		},
+		column: entityhistory.FieldReviewFrequency,
+		toTerm: entityhistory.ByReviewFrequency,
+		toCursor: func(_m *EntityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ReviewFrequency,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldNextReviewAt orders EntityHistory by next_review_at.
+	EntityHistoryOrderFieldNextReviewAt = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextReviewAt == nil {
+				return nil, nil
+			}
+			return _m.NextReviewAt, nil
+		},
+		column: entityhistory.FieldNextReviewAt,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.ByNextReviewAt(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.NextReviewAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextReviewAt,
+			}
+		},
+	}
+	// EntityHistoryOrderFieldContractRenewalAt orders EntityHistory by contract_renewal_at.
+	EntityHistoryOrderFieldContractRenewalAt = &EntityHistoryOrderField{
+		Value: func(_m *EntityHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ContractRenewalAt == nil {
+				return nil, nil
+			}
+			return _m.ContractRenewalAt, nil
+		},
+		column: entityhistory.FieldContractRenewalAt,
+		toTerm: func(opts ...sql.OrderTermOption) entityhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return entityhistory.ByContractRenewalAt(opts...)
+		},
+		toCursor: func(_m *EntityHistory) Cursor {
+			if _m.ContractRenewalAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContractRenewalAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -6410,12 +8337,60 @@ func (f EntityHistoryOrderField) String() string {
 		str = "created_at"
 	case EntityHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case EntityHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case EntityHistoryOrderFieldReviewedBy.column:
+		str = "reviewed_by"
+	case EntityHistoryOrderFieldLastReviewedAt.column:
+		str = "last_reviewed_at"
 	case EntityHistoryOrderFieldName.column:
 		str = "name"
 	case EntityHistoryOrderFieldDisplayName.column:
 		str = "display_name"
 	case EntityHistoryOrderFieldStatus.column:
 		str = "status"
+	case EntityHistoryOrderFieldApprovedForUse.column:
+		str = "approved_for_use"
+	case EntityHistoryOrderFieldHasSoc2.column:
+		str = "has_soc2"
+	case EntityHistoryOrderFieldSoc2PeriodEnd.column:
+		str = "soc2_period_end"
+	case EntityHistoryOrderFieldContractStartDate.column:
+		str = "contract_start_date"
+	case EntityHistoryOrderFieldContractEndDate.column:
+		str = "contract_end_date"
+	case EntityHistoryOrderFieldAutoRenews.column:
+		str = "auto_renews"
+	case EntityHistoryOrderFieldTerminationNoticeDays.column:
+		str = "termination_notice_days"
+	case EntityHistoryOrderFieldAnnualSpend.column:
+		str = "annual_spend"
+	case EntityHistoryOrderFieldSpendCurrency.column:
+		str = "spend_currency"
+	case EntityHistoryOrderFieldBillingModel.column:
+		str = "billing_model"
+	case EntityHistoryOrderFieldRenewalRisk.column:
+		str = "renewal_risk"
+	case EntityHistoryOrderFieldSSOEnforced.column:
+		str = "sso_enforced"
+	case EntityHistoryOrderFieldMfaSupported.column:
+		str = "mfa_supported"
+	case EntityHistoryOrderFieldMfaEnforced.column:
+		str = "mfa_enforced"
+	case EntityHistoryOrderFieldStatusPageURL.column:
+		str = "status_page_url"
+	case EntityHistoryOrderFieldRiskRating.column:
+		str = "risk_rating"
+	case EntityHistoryOrderFieldRiskScore.column:
+		str = "risk_score"
+	case EntityHistoryOrderFieldTier.column:
+		str = "tier"
+	case EntityHistoryOrderFieldReviewFrequency.column:
+		str = "REVIEW_FREQUENCY"
+	case EntityHistoryOrderFieldNextReviewAt.column:
+		str = "next_review_at"
+	case EntityHistoryOrderFieldContractRenewalAt.column:
+		str = "contract_renewal_at"
 	}
 	return str
 }
@@ -6438,12 +8413,60 @@ func (f *EntityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *EntityHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *EntityHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *EntityHistoryOrderFieldInternalOwner
+	case "reviewed_by":
+		*f = *EntityHistoryOrderFieldReviewedBy
+	case "last_reviewed_at":
+		*f = *EntityHistoryOrderFieldLastReviewedAt
 	case "name":
 		*f = *EntityHistoryOrderFieldName
 	case "display_name":
 		*f = *EntityHistoryOrderFieldDisplayName
 	case "status":
 		*f = *EntityHistoryOrderFieldStatus
+	case "approved_for_use":
+		*f = *EntityHistoryOrderFieldApprovedForUse
+	case "has_soc2":
+		*f = *EntityHistoryOrderFieldHasSoc2
+	case "soc2_period_end":
+		*f = *EntityHistoryOrderFieldSoc2PeriodEnd
+	case "contract_start_date":
+		*f = *EntityHistoryOrderFieldContractStartDate
+	case "contract_end_date":
+		*f = *EntityHistoryOrderFieldContractEndDate
+	case "auto_renews":
+		*f = *EntityHistoryOrderFieldAutoRenews
+	case "termination_notice_days":
+		*f = *EntityHistoryOrderFieldTerminationNoticeDays
+	case "annual_spend":
+		*f = *EntityHistoryOrderFieldAnnualSpend
+	case "spend_currency":
+		*f = *EntityHistoryOrderFieldSpendCurrency
+	case "billing_model":
+		*f = *EntityHistoryOrderFieldBillingModel
+	case "renewal_risk":
+		*f = *EntityHistoryOrderFieldRenewalRisk
+	case "sso_enforced":
+		*f = *EntityHistoryOrderFieldSSOEnforced
+	case "mfa_supported":
+		*f = *EntityHistoryOrderFieldMfaSupported
+	case "mfa_enforced":
+		*f = *EntityHistoryOrderFieldMfaEnforced
+	case "status_page_url":
+		*f = *EntityHistoryOrderFieldStatusPageURL
+	case "risk_rating":
+		*f = *EntityHistoryOrderFieldRiskRating
+	case "risk_score":
+		*f = *EntityHistoryOrderFieldRiskScore
+	case "tier":
+		*f = *EntityHistoryOrderFieldTier
+	case "REVIEW_FREQUENCY":
+		*f = *EntityHistoryOrderFieldReviewFrequency
+	case "next_review_at":
+		*f = *EntityHistoryOrderFieldNextReviewAt
+	case "contract_renewal_at":
+		*f = *EntityHistoryOrderFieldContractRenewalAt
 	default:
 		return fmt.Errorf("%s is not a valid EntityHistoryOrderField", str)
 	}
@@ -9819,6 +11842,652 @@ func (_m *HushHistory) ToEdge(order *HushHistoryOrder) *HushHistoryEdge {
 		order = DefaultHushHistoryOrder
 	}
 	return &HushHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// IdentityHolderHistoryEdge is the edge representation of IdentityHolderHistory.
+type IdentityHolderHistoryEdge struct {
+	Node   *IdentityHolderHistory `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// IdentityHolderHistoryConnection is the connection containing edges to IdentityHolderHistory.
+type IdentityHolderHistoryConnection struct {
+	Edges      []*IdentityHolderHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *IdentityHolderHistoryConnection) build(nodes []*IdentityHolderHistory, pager *identityholderhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *IdentityHolderHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *IdentityHolderHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *IdentityHolderHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*IdentityHolderHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &IdentityHolderHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// IdentityHolderHistoryPaginateOption enables pagination customization.
+type IdentityHolderHistoryPaginateOption func(*identityholderhistoryPager) error
+
+// WithIdentityHolderHistoryOrder configures pagination ordering.
+func WithIdentityHolderHistoryOrder(order *IdentityHolderHistoryOrder) IdentityHolderHistoryPaginateOption {
+	if order == nil {
+		order = DefaultIdentityHolderHistoryOrder
+	}
+	o := *order
+	return func(pager *identityholderhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultIdentityHolderHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithIdentityHolderHistoryFilter configures pagination filter.
+func WithIdentityHolderHistoryFilter(filter func(*IdentityHolderHistoryQuery) (*IdentityHolderHistoryQuery, error)) IdentityHolderHistoryPaginateOption {
+	return func(pager *identityholderhistoryPager) error {
+		if filter == nil {
+			return errors.New("IdentityHolderHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type identityholderhistoryPager struct {
+	reverse bool
+	order   *IdentityHolderHistoryOrder
+	filter  func(*IdentityHolderHistoryQuery) (*IdentityHolderHistoryQuery, error)
+}
+
+func newIdentityHolderHistoryPager(opts []IdentityHolderHistoryPaginateOption, reverse bool) (*identityholderhistoryPager, error) {
+	pager := &identityholderhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultIdentityHolderHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *identityholderhistoryPager) applyFilter(query *IdentityHolderHistoryQuery) (*IdentityHolderHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *identityholderhistoryPager) toCursor(_m *IdentityHolderHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *identityholderhistoryPager) applyCursors(query *IdentityHolderHistoryQuery, after, before *Cursor) (*IdentityHolderHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultIdentityHolderHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *identityholderhistoryPager) applyOrder(query *IdentityHolderHistoryQuery) *IdentityHolderHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultIdentityHolderHistoryOrder.Field {
+		query = query.Order(DefaultIdentityHolderHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *identityholderhistoryPager) orderExpr(query *IdentityHolderHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultIdentityHolderHistoryOrder.Field {
+			b.Comma().Ident(DefaultIdentityHolderHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to IdentityHolderHistory.
+func (_m *IdentityHolderHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...IdentityHolderHistoryPaginateOption,
+) (*IdentityHolderHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newIdentityHolderHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &IdentityHolderHistoryConnection{Edges: []*IdentityHolderHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// IdentityHolderHistoryOrderFieldHistoryTime orders IdentityHolderHistory by history_time.
+	IdentityHolderHistoryOrderFieldHistoryTime = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: identityholderhistory.FieldHistoryTime,
+		toTerm: identityholderhistory.ByHistoryTime,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldCreatedAt orders IdentityHolderHistory by created_at.
+	IdentityHolderHistoryOrderFieldCreatedAt = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: identityholderhistory.FieldCreatedAt,
+		toTerm: identityholderhistory.ByCreatedAt,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldUpdatedAt orders IdentityHolderHistory by updated_at.
+	IdentityHolderHistoryOrderFieldUpdatedAt = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: identityholderhistory.FieldUpdatedAt,
+		toTerm: identityholderhistory.ByUpdatedAt,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldInternalOwner orders IdentityHolderHistory by internal_owner.
+	IdentityHolderHistoryOrderFieldInternalOwner = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: identityholderhistory.FieldInternalOwner,
+		toTerm: identityholderhistory.ByInternalOwner,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldFullName orders IdentityHolderHistory by full_name.
+	IdentityHolderHistoryOrderFieldFullName = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.FullName, nil
+		},
+		column: identityholderhistory.FieldFullName,
+		toTerm: identityholderhistory.ByFullName,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FullName,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldEmail orders IdentityHolderHistory by email.
+	IdentityHolderHistoryOrderFieldEmail = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: identityholderhistory.FieldEmail,
+		toTerm: identityholderhistory.ByEmail,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldAlternateEmail orders IdentityHolderHistory by alternate_email.
+	IdentityHolderHistoryOrderFieldAlternateEmail = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.AlternateEmail, nil
+		},
+		column: identityholderhistory.FieldAlternateEmail,
+		toTerm: identityholderhistory.ByAlternateEmail,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AlternateEmail,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldIsOpenlaneUser orders IdentityHolderHistory by is_openlane_user.
+	IdentityHolderHistoryOrderFieldIsOpenlaneUser = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.IsOpenlaneUser, nil
+		},
+		column: identityholderhistory.FieldIsOpenlaneUser,
+		toTerm: identityholderhistory.ByIsOpenlaneUser,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsOpenlaneUser,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldIdentityHolderType orders IdentityHolderHistory by identity_holder_type.
+	IdentityHolderHistoryOrderFieldIdentityHolderType = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.IdentityHolderType, nil
+		},
+		column: identityholderhistory.FieldIdentityHolderType,
+		toTerm: identityholderhistory.ByIdentityHolderType,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IdentityHolderType,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldStatus orders IdentityHolderHistory by status.
+	IdentityHolderHistoryOrderFieldStatus = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: identityholderhistory.FieldStatus,
+		toTerm: identityholderhistory.ByStatus,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldIsActive orders IdentityHolderHistory by is_active.
+	IdentityHolderHistoryOrderFieldIsActive = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.IsActive, nil
+		},
+		column: identityholderhistory.FieldIsActive,
+		toTerm: identityholderhistory.ByIsActive,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsActive,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldTitle orders IdentityHolderHistory by title.
+	IdentityHolderHistoryOrderFieldTitle = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.Title, nil
+		},
+		column: identityholderhistory.FieldTitle,
+		toTerm: identityholderhistory.ByTitle,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Title,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldDepartment orders IdentityHolderHistory by department.
+	IdentityHolderHistoryOrderFieldDepartment = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.Department, nil
+		},
+		column: identityholderhistory.FieldDepartment,
+		toTerm: identityholderhistory.ByDepartment,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Department,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldTeam orders IdentityHolderHistory by team.
+	IdentityHolderHistoryOrderFieldTeam = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.Team, nil
+		},
+		column: identityholderhistory.FieldTeam,
+		toTerm: identityholderhistory.ByTeam,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Team,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldLocation orders IdentityHolderHistory by location.
+	IdentityHolderHistoryOrderFieldLocation = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.Location, nil
+		},
+		column: identityholderhistory.FieldLocation,
+		toTerm: identityholderhistory.ByLocation,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Location,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldStartDate orders IdentityHolderHistory by start_date.
+	IdentityHolderHistoryOrderFieldStartDate = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.StartDate == nil {
+				return nil, nil
+			}
+			return _m.StartDate, nil
+		},
+		column: identityholderhistory.FieldStartDate,
+		toTerm: func(opts ...sql.OrderTermOption) identityholderhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return identityholderhistory.ByStartDate(opts...)
+		},
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			if _m.StartDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StartDate,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldEndDate orders IdentityHolderHistory by end_date.
+	IdentityHolderHistoryOrderFieldEndDate = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.EndDate == nil {
+				return nil, nil
+			}
+			return _m.EndDate, nil
+		},
+		column: identityholderhistory.FieldEndDate,
+		toTerm: func(opts ...sql.OrderTermOption) identityholderhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return identityholderhistory.ByEndDate(opts...)
+		},
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			if _m.EndDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EndDate,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldExternalUserID orders IdentityHolderHistory by external_user_id.
+	IdentityHolderHistoryOrderFieldExternalUserID = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.ExternalUserID, nil
+		},
+		column: identityholderhistory.FieldExternalUserID,
+		toTerm: identityholderhistory.ByExternalUserID,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalUserID,
+			}
+		},
+	}
+	// IdentityHolderHistoryOrderFieldExternalReferenceID orders IdentityHolderHistory by external_reference_id.
+	IdentityHolderHistoryOrderFieldExternalReferenceID = &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.ExternalReferenceID, nil
+		},
+		column: identityholderhistory.FieldExternalReferenceID,
+		toTerm: identityholderhistory.ByExternalReferenceID,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalReferenceID,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f IdentityHolderHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case IdentityHolderHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case IdentityHolderHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case IdentityHolderHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case IdentityHolderHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case IdentityHolderHistoryOrderFieldFullName.column:
+		str = "full_name"
+	case IdentityHolderHistoryOrderFieldEmail.column:
+		str = "email"
+	case IdentityHolderHistoryOrderFieldAlternateEmail.column:
+		str = "alternate_email"
+	case IdentityHolderHistoryOrderFieldIsOpenlaneUser.column:
+		str = "is_openlane_user"
+	case IdentityHolderHistoryOrderFieldIdentityHolderType.column:
+		str = "IDENTITY_HOLDER_TYPE"
+	case IdentityHolderHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case IdentityHolderHistoryOrderFieldIsActive.column:
+		str = "is_active"
+	case IdentityHolderHistoryOrderFieldTitle.column:
+		str = "title"
+	case IdentityHolderHistoryOrderFieldDepartment.column:
+		str = "department"
+	case IdentityHolderHistoryOrderFieldTeam.column:
+		str = "team"
+	case IdentityHolderHistoryOrderFieldLocation.column:
+		str = "location"
+	case IdentityHolderHistoryOrderFieldStartDate.column:
+		str = "start_date"
+	case IdentityHolderHistoryOrderFieldEndDate.column:
+		str = "end_date"
+	case IdentityHolderHistoryOrderFieldExternalUserID.column:
+		str = "external_user_id"
+	case IdentityHolderHistoryOrderFieldExternalReferenceID.column:
+		str = "external_reference_id"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f IdentityHolderHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *IdentityHolderHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("IdentityHolderHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *IdentityHolderHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *IdentityHolderHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *IdentityHolderHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *IdentityHolderHistoryOrderFieldInternalOwner
+	case "full_name":
+		*f = *IdentityHolderHistoryOrderFieldFullName
+	case "email":
+		*f = *IdentityHolderHistoryOrderFieldEmail
+	case "alternate_email":
+		*f = *IdentityHolderHistoryOrderFieldAlternateEmail
+	case "is_openlane_user":
+		*f = *IdentityHolderHistoryOrderFieldIsOpenlaneUser
+	case "IDENTITY_HOLDER_TYPE":
+		*f = *IdentityHolderHistoryOrderFieldIdentityHolderType
+	case "STATUS":
+		*f = *IdentityHolderHistoryOrderFieldStatus
+	case "is_active":
+		*f = *IdentityHolderHistoryOrderFieldIsActive
+	case "title":
+		*f = *IdentityHolderHistoryOrderFieldTitle
+	case "department":
+		*f = *IdentityHolderHistoryOrderFieldDepartment
+	case "team":
+		*f = *IdentityHolderHistoryOrderFieldTeam
+	case "location":
+		*f = *IdentityHolderHistoryOrderFieldLocation
+	case "start_date":
+		*f = *IdentityHolderHistoryOrderFieldStartDate
+	case "end_date":
+		*f = *IdentityHolderHistoryOrderFieldEndDate
+	case "external_user_id":
+		*f = *IdentityHolderHistoryOrderFieldExternalUserID
+	case "external_reference_id":
+		*f = *IdentityHolderHistoryOrderFieldExternalReferenceID
+	default:
+		return fmt.Errorf("%s is not a valid IdentityHolderHistoryOrderField", str)
+	}
+	return nil
+}
+
+// IdentityHolderHistoryOrderField defines the ordering field of IdentityHolderHistory.
+type IdentityHolderHistoryOrderField struct {
+	// Value extracts the ordering value from the given IdentityHolderHistory.
+	Value    func(*IdentityHolderHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) identityholderhistory.OrderOption
+	toCursor func(*IdentityHolderHistory) Cursor
+}
+
+// IdentityHolderHistoryOrder defines the ordering of IdentityHolderHistory.
+type IdentityHolderHistoryOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *IdentityHolderHistoryOrderField `json:"field"`
+}
+
+// DefaultIdentityHolderHistoryOrder is the default ordering of IdentityHolderHistory.
+var DefaultIdentityHolderHistoryOrder = &IdentityHolderHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &IdentityHolderHistoryOrderField{
+		Value: func(_m *IdentityHolderHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: identityholderhistory.FieldID,
+		toTerm: identityholderhistory.ByID,
+		toCursor: func(_m *IdentityHolderHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts IdentityHolderHistory into IdentityHolderHistoryEdge.
+func (_m *IdentityHolderHistory) ToEdge(order *IdentityHolderHistoryOrder) *IdentityHolderHistoryEdge {
+	if order == nil {
+		order = DefaultIdentityHolderHistoryOrder
+	}
+	return &IdentityHolderHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -13911,6 +16580,639 @@ func (_m *OrganizationSettingHistory) ToEdge(order *OrganizationSettingHistoryOr
 	}
 }
 
+// PlatformHistoryEdge is the edge representation of PlatformHistory.
+type PlatformHistoryEdge struct {
+	Node   *PlatformHistory `json:"node"`
+	Cursor Cursor           `json:"cursor"`
+}
+
+// PlatformHistoryConnection is the connection containing edges to PlatformHistory.
+type PlatformHistoryConnection struct {
+	Edges      []*PlatformHistoryEdge `json:"edges"`
+	PageInfo   PageInfo               `json:"pageInfo"`
+	TotalCount int                    `json:"totalCount"`
+}
+
+func (c *PlatformHistoryConnection) build(nodes []*PlatformHistory, pager *platformhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *PlatformHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *PlatformHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *PlatformHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*PlatformHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &PlatformHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// PlatformHistoryPaginateOption enables pagination customization.
+type PlatformHistoryPaginateOption func(*platformhistoryPager) error
+
+// WithPlatformHistoryOrder configures pagination ordering.
+func WithPlatformHistoryOrder(order *PlatformHistoryOrder) PlatformHistoryPaginateOption {
+	if order == nil {
+		order = DefaultPlatformHistoryOrder
+	}
+	o := *order
+	return func(pager *platformhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultPlatformHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithPlatformHistoryFilter configures pagination filter.
+func WithPlatformHistoryFilter(filter func(*PlatformHistoryQuery) (*PlatformHistoryQuery, error)) PlatformHistoryPaginateOption {
+	return func(pager *platformhistoryPager) error {
+		if filter == nil {
+			return errors.New("PlatformHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type platformhistoryPager struct {
+	reverse bool
+	order   *PlatformHistoryOrder
+	filter  func(*PlatformHistoryQuery) (*PlatformHistoryQuery, error)
+}
+
+func newPlatformHistoryPager(opts []PlatformHistoryPaginateOption, reverse bool) (*platformhistoryPager, error) {
+	pager := &platformhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultPlatformHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *platformhistoryPager) applyFilter(query *PlatformHistoryQuery) (*PlatformHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *platformhistoryPager) toCursor(_m *PlatformHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *platformhistoryPager) applyCursors(query *PlatformHistoryQuery, after, before *Cursor) (*PlatformHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultPlatformHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *platformhistoryPager) applyOrder(query *PlatformHistoryQuery) *PlatformHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultPlatformHistoryOrder.Field {
+		query = query.Order(DefaultPlatformHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *platformhistoryPager) orderExpr(query *PlatformHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultPlatformHistoryOrder.Field {
+			b.Comma().Ident(DefaultPlatformHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to PlatformHistory.
+func (_m *PlatformHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...PlatformHistoryPaginateOption,
+) (*PlatformHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newPlatformHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &PlatformHistoryConnection{Edges: []*PlatformHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// PlatformHistoryOrderFieldHistoryTime orders PlatformHistory by history_time.
+	PlatformHistoryOrderFieldHistoryTime = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: platformhistory.FieldHistoryTime,
+		toTerm: platformhistory.ByHistoryTime,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldCreatedAt orders PlatformHistory by created_at.
+	PlatformHistoryOrderFieldCreatedAt = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: platformhistory.FieldCreatedAt,
+		toTerm: platformhistory.ByCreatedAt,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldUpdatedAt orders PlatformHistory by updated_at.
+	PlatformHistoryOrderFieldUpdatedAt = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: platformhistory.FieldUpdatedAt,
+		toTerm: platformhistory.ByUpdatedAt,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldInternalOwner orders PlatformHistory by internal_owner.
+	PlatformHistoryOrderFieldInternalOwner = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.InternalOwner, nil
+		},
+		column: platformhistory.FieldInternalOwner,
+		toTerm: platformhistory.ByInternalOwner,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.InternalOwner,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldBusinessOwner orders PlatformHistory by business_owner.
+	PlatformHistoryOrderFieldBusinessOwner = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.BusinessOwner, nil
+		},
+		column: platformhistory.FieldBusinessOwner,
+		toTerm: platformhistory.ByBusinessOwner,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.BusinessOwner,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldTechnicalOwner orders PlatformHistory by technical_owner.
+	PlatformHistoryOrderFieldTechnicalOwner = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.TechnicalOwner, nil
+		},
+		column: platformhistory.FieldTechnicalOwner,
+		toTerm: platformhistory.ByTechnicalOwner,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.TechnicalOwner,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldSecurityOwner orders PlatformHistory by security_owner.
+	PlatformHistoryOrderFieldSecurityOwner = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.SecurityOwner, nil
+		},
+		column: platformhistory.FieldSecurityOwner,
+		toTerm: platformhistory.BySecurityOwner,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SecurityOwner,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldName orders PlatformHistory by name.
+	PlatformHistoryOrderFieldName = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: platformhistory.FieldName,
+		toTerm: platformhistory.ByName,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldBusinessPurpose orders PlatformHistory by business_purpose.
+	PlatformHistoryOrderFieldBusinessPurpose = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.BusinessPurpose, nil
+		},
+		column: platformhistory.FieldBusinessPurpose,
+		toTerm: platformhistory.ByBusinessPurpose,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.BusinessPurpose,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldStatus orders PlatformHistory by status.
+	PlatformHistoryOrderFieldStatus = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.Status, nil
+		},
+		column: platformhistory.FieldStatus,
+		toTerm: platformhistory.ByStatus,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Status,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldPhysicalLocation orders PlatformHistory by physical_location.
+	PlatformHistoryOrderFieldPhysicalLocation = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.PhysicalLocation, nil
+		},
+		column: platformhistory.FieldPhysicalLocation,
+		toTerm: platformhistory.ByPhysicalLocation,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PhysicalLocation,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldRegion orders PlatformHistory by region.
+	PlatformHistoryOrderFieldRegion = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.Region, nil
+		},
+		column: platformhistory.FieldRegion,
+		toTerm: platformhistory.ByRegion,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Region,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldContainsPii orders PlatformHistory by contains_pii.
+	PlatformHistoryOrderFieldContainsPii = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.ContainsPii, nil
+		},
+		column: platformhistory.FieldContainsPii,
+		toTerm: platformhistory.ByContainsPii,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ContainsPii,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldSourceType orders PlatformHistory by source_type.
+	PlatformHistoryOrderFieldSourceType = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.SourceType, nil
+		},
+		column: platformhistory.FieldSourceType,
+		toTerm: platformhistory.BySourceType,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceType,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldSourceIdentifier orders PlatformHistory by source_identifier.
+	PlatformHistoryOrderFieldSourceIdentifier = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.SourceIdentifier, nil
+		},
+		column: platformhistory.FieldSourceIdentifier,
+		toTerm: platformhistory.BySourceIdentifier,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.SourceIdentifier,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldCostCenter orders PlatformHistory by cost_center.
+	PlatformHistoryOrderFieldCostCenter = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.CostCenter, nil
+		},
+		column: platformhistory.FieldCostCenter,
+		toTerm: platformhistory.ByCostCenter,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CostCenter,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldEstimatedMonthlyCost orders PlatformHistory by estimated_monthly_cost.
+	PlatformHistoryOrderFieldEstimatedMonthlyCost = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.EstimatedMonthlyCost, nil
+		},
+		column: platformhistory.FieldEstimatedMonthlyCost,
+		toTerm: platformhistory.ByEstimatedMonthlyCost,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EstimatedMonthlyCost,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldPurchaseDate orders PlatformHistory by purchase_date.
+	PlatformHistoryOrderFieldPurchaseDate = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.PurchaseDate == nil {
+				return nil, nil
+			}
+			return _m.PurchaseDate, nil
+		},
+		column: platformhistory.FieldPurchaseDate,
+		toTerm: func(opts ...sql.OrderTermOption) platformhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return platformhistory.ByPurchaseDate(opts...)
+		},
+		toCursor: func(_m *PlatformHistory) Cursor {
+			if _m.PurchaseDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.PurchaseDate,
+			}
+		},
+	}
+	// PlatformHistoryOrderFieldExternalReferenceID orders PlatformHistory by external_reference_id.
+	PlatformHistoryOrderFieldExternalReferenceID = &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.ExternalReferenceID, nil
+		},
+		column: platformhistory.FieldExternalReferenceID,
+		toTerm: platformhistory.ByExternalReferenceID,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalReferenceID,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f PlatformHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case PlatformHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case PlatformHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case PlatformHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case PlatformHistoryOrderFieldInternalOwner.column:
+		str = "internal_owner"
+	case PlatformHistoryOrderFieldBusinessOwner.column:
+		str = "business_owner"
+	case PlatformHistoryOrderFieldTechnicalOwner.column:
+		str = "technical_owner"
+	case PlatformHistoryOrderFieldSecurityOwner.column:
+		str = "security_owner"
+	case PlatformHistoryOrderFieldName.column:
+		str = "name"
+	case PlatformHistoryOrderFieldBusinessPurpose.column:
+		str = "business_purpose"
+	case PlatformHistoryOrderFieldStatus.column:
+		str = "STATUS"
+	case PlatformHistoryOrderFieldPhysicalLocation.column:
+		str = "physical_location"
+	case PlatformHistoryOrderFieldRegion.column:
+		str = "region"
+	case PlatformHistoryOrderFieldContainsPii.column:
+		str = "contains_pii"
+	case PlatformHistoryOrderFieldSourceType.column:
+		str = "SOURCE_TYPE"
+	case PlatformHistoryOrderFieldSourceIdentifier.column:
+		str = "source_identifier"
+	case PlatformHistoryOrderFieldCostCenter.column:
+		str = "cost_center"
+	case PlatformHistoryOrderFieldEstimatedMonthlyCost.column:
+		str = "estimated_monthly_cost"
+	case PlatformHistoryOrderFieldPurchaseDate.column:
+		str = "purchase_date"
+	case PlatformHistoryOrderFieldExternalReferenceID.column:
+		str = "external_reference_id"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f PlatformHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *PlatformHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("PlatformHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *PlatformHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *PlatformHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *PlatformHistoryOrderFieldUpdatedAt
+	case "internal_owner":
+		*f = *PlatformHistoryOrderFieldInternalOwner
+	case "business_owner":
+		*f = *PlatformHistoryOrderFieldBusinessOwner
+	case "technical_owner":
+		*f = *PlatformHistoryOrderFieldTechnicalOwner
+	case "security_owner":
+		*f = *PlatformHistoryOrderFieldSecurityOwner
+	case "name":
+		*f = *PlatformHistoryOrderFieldName
+	case "business_purpose":
+		*f = *PlatformHistoryOrderFieldBusinessPurpose
+	case "STATUS":
+		*f = *PlatformHistoryOrderFieldStatus
+	case "physical_location":
+		*f = *PlatformHistoryOrderFieldPhysicalLocation
+	case "region":
+		*f = *PlatformHistoryOrderFieldRegion
+	case "contains_pii":
+		*f = *PlatformHistoryOrderFieldContainsPii
+	case "SOURCE_TYPE":
+		*f = *PlatformHistoryOrderFieldSourceType
+	case "source_identifier":
+		*f = *PlatformHistoryOrderFieldSourceIdentifier
+	case "cost_center":
+		*f = *PlatformHistoryOrderFieldCostCenter
+	case "estimated_monthly_cost":
+		*f = *PlatformHistoryOrderFieldEstimatedMonthlyCost
+	case "purchase_date":
+		*f = *PlatformHistoryOrderFieldPurchaseDate
+	case "external_reference_id":
+		*f = *PlatformHistoryOrderFieldExternalReferenceID
+	default:
+		return fmt.Errorf("%s is not a valid PlatformHistoryOrderField", str)
+	}
+	return nil
+}
+
+// PlatformHistoryOrderField defines the ordering field of PlatformHistory.
+type PlatformHistoryOrderField struct {
+	// Value extracts the ordering value from the given PlatformHistory.
+	Value    func(*PlatformHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) platformhistory.OrderOption
+	toCursor func(*PlatformHistory) Cursor
+}
+
+// PlatformHistoryOrder defines the ordering of PlatformHistory.
+type PlatformHistoryOrder struct {
+	Direction OrderDirection             `json:"direction"`
+	Field     *PlatformHistoryOrderField `json:"field"`
+}
+
+// DefaultPlatformHistoryOrder is the default ordering of PlatformHistory.
+var DefaultPlatformHistoryOrder = &PlatformHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &PlatformHistoryOrderField{
+		Value: func(_m *PlatformHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: platformhistory.FieldID,
+		toTerm: platformhistory.ByID,
+		toCursor: func(_m *PlatformHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts PlatformHistory into PlatformHistoryEdge.
+func (_m *PlatformHistory) ToEdge(order *PlatformHistoryOrder) *PlatformHistoryEdge {
+	if order == nil {
+		order = DefaultPlatformHistoryOrder
+	}
+	return &PlatformHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
 // ProcedureHistoryEdge is the edge representation of ProcedureHistory.
 type ProcedureHistoryEdge struct {
 	Node   *ProcedureHistory `json:"node"`
@@ -16618,6 +19920,60 @@ var (
 			}
 		},
 	}
+	// ScanHistoryOrderFieldScanDate orders ScanHistory by scan_date.
+	ScanHistoryOrderFieldScanDate = &ScanHistoryOrderField{
+		Value: func(_m *ScanHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ScanDate == nil {
+				return nil, nil
+			}
+			return _m.ScanDate, nil
+		},
+		column: scanhistory.FieldScanDate,
+		toTerm: func(opts ...sql.OrderTermOption) scanhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return scanhistory.ByScanDate(opts...)
+		},
+		toCursor: func(_m *ScanHistory) Cursor {
+			if _m.ScanDate == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ScanDate,
+			}
+		},
+	}
+	// ScanHistoryOrderFieldNextScanRunAt orders ScanHistory by next_scan_run_at.
+	ScanHistoryOrderFieldNextScanRunAt = &ScanHistoryOrderField{
+		Value: func(_m *ScanHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.NextScanRunAt == nil {
+				return nil, nil
+			}
+			return _m.NextScanRunAt, nil
+		},
+		column: scanhistory.FieldNextScanRunAt,
+		toTerm: func(opts ...sql.OrderTermOption) scanhistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return scanhistory.ByNextScanRunAt(opts...)
+		},
+		toCursor: func(_m *ScanHistory) Cursor {
+			if _m.NextScanRunAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.NextScanRunAt,
+			}
+		},
+	}
 	// ScanHistoryOrderFieldStatus orders ScanHistory by status.
 	ScanHistoryOrderFieldStatus = &ScanHistoryOrderField{
 		Value: func(_m *ScanHistory) (ent.Value, error) {
@@ -16646,6 +20002,10 @@ func (f ScanHistoryOrderField) String() string {
 		str = "updated_at"
 	case ScanHistoryOrderFieldScanType.column:
 		str = "SCAN_TYPE"
+	case ScanHistoryOrderFieldScanDate.column:
+		str = "scan_date"
+	case ScanHistoryOrderFieldNextScanRunAt.column:
+		str = "next_scan_run_at"
 	case ScanHistoryOrderFieldStatus.column:
 		str = "STATUS"
 	}
@@ -16672,6 +20032,10 @@ func (f *ScanHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ScanHistoryOrderFieldUpdatedAt
 	case "SCAN_TYPE":
 		*f = *ScanHistoryOrderFieldScanType
+	case "scan_date":
+		*f = *ScanHistoryOrderFieldScanDate
+	case "next_scan_run_at":
+		*f = *ScanHistoryOrderFieldNextScanRunAt
 	case "STATUS":
 		*f = *ScanHistoryOrderFieldStatus
 	default:

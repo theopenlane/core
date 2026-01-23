@@ -94,6 +94,10 @@ const (
 	EdgeEvents = "events"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
+	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
+	EdgeCampaignTargets = "campaign_targets"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
 	// EdgeAssignerTasks holds the string denoting the assigner_tasks edge name in mutations.
@@ -104,6 +108,10 @@ const (
 	EdgePrograms = "programs"
 	// EdgeProgramsOwned holds the string denoting the programs_owned edge name in mutations.
 	EdgeProgramsOwned = "programs_owned"
+	// EdgePlatformsOwned holds the string denoting the platforms_owned edge name in mutations.
+	EdgePlatformsOwned = "platforms_owned"
+	// EdgeIdentityHolderProfiles holds the string denoting the identity_holder_profiles edge name in mutations.
+	EdgeIdentityHolderProfiles = "identity_holder_profiles"
 	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
 	EdgeImpersonationEvents = "impersonation_events"
 	// EdgeTargetedImpersonations holds the string denoting the targeted_impersonations edge name in mutations.
@@ -196,6 +204,18 @@ const (
 	ActionPlansInverseTable = "action_plans"
 	// ActionPlansColumn is the table column denoting the action_plans relation/edge.
 	ActionPlansColumn = "user_action_plans"
+	// CampaignsTable is the table that holds the campaigns relation/edge. The primary key declared below.
+	CampaignsTable = "campaign_users"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignTargetsTable is the table that holds the campaign_targets relation/edge.
+	CampaignTargetsTable = "campaign_targets"
+	// CampaignTargetsInverseTable is the table name for the CampaignTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "campaigntarget" package.
+	CampaignTargetsInverseTable = "campaign_targets"
+	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
+	CampaignTargetsColumn = "user_id"
 	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
 	SubcontrolsTable = "subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
@@ -229,6 +249,20 @@ const (
 	ProgramsOwnedInverseTable = "programs"
 	// ProgramsOwnedColumn is the table column denoting the programs_owned relation/edge.
 	ProgramsOwnedColumn = "program_owner_id"
+	// PlatformsOwnedTable is the table that holds the platforms_owned relation/edge.
+	PlatformsOwnedTable = "platforms"
+	// PlatformsOwnedInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsOwnedInverseTable = "platforms"
+	// PlatformsOwnedColumn is the table column denoting the platforms_owned relation/edge.
+	PlatformsOwnedColumn = "platform_owner_id"
+	// IdentityHolderProfilesTable is the table that holds the identity_holder_profiles relation/edge.
+	IdentityHolderProfilesTable = "identity_holders"
+	// IdentityHolderProfilesInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHolderProfilesInverseTable = "identity_holders"
+	// IdentityHolderProfilesColumn is the table column denoting the identity_holder_profiles relation/edge.
+	IdentityHolderProfilesColumn = "user_id"
 	// ImpersonationEventsTable is the table that holds the impersonation_events relation/edge.
 	ImpersonationEventsTable = "impersonation_events"
 	// ImpersonationEventsInverseTable is the table name for the ImpersonationEvent entity.
@@ -314,6 +348,9 @@ var (
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"user_id", "event_id"}
+	// CampaignsPrimaryKey and CampaignsColumn2 are the table columns denoting the
+	// primary key for the campaigns relation (M2M).
+	CampaignsPrimaryKey = []string{"campaign_id", "user_id"}
 	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
 	// primary key for the programs relation (M2M).
 	ProgramsPrimaryKey = []string{"user_id", "program_id"}
@@ -691,6 +728,34 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignTargetsCount orders the results by campaign_targets count.
+func ByCampaignTargetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignTargetsStep(), opts...)
+	}
+}
+
+// ByCampaignTargets orders the results by campaign_targets terms.
+func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignTargetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // BySubcontrolsCount orders the results by subcontrols count.
 func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -758,6 +823,34 @@ func ByProgramsOwnedCount(opts ...sql.OrderTermOption) OrderOption {
 func ByProgramsOwned(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsOwnedStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformsOwnedCount orders the results by platforms_owned count.
+func ByPlatformsOwnedCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsOwnedStep(), opts...)
+	}
+}
+
+// ByPlatformsOwned orders the results by platforms_owned terms.
+func ByPlatformsOwned(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsOwnedStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHolderProfilesCount orders the results by identity_holder_profiles count.
+func ByIdentityHolderProfilesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHolderProfilesStep(), opts...)
+	}
+}
+
+// ByIdentityHolderProfiles orders the results by identity_holder_profiles terms.
+func ByIdentityHolderProfiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHolderProfilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -928,6 +1021,20 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
 	)
 }
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CampaignsTable, CampaignsPrimaryKey...),
+	)
+}
+func newCampaignTargetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+	)
+}
 func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -961,6 +1068,20 @@ func newProgramsOwnedStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsOwnedInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsOwnedTable, ProgramsOwnedColumn),
+	)
+}
+func newPlatformsOwnedStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsOwnedInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PlatformsOwnedTable, PlatformsOwnedColumn),
+	)
+}
+func newIdentityHolderProfilesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHolderProfilesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IdentityHolderProfilesTable, IdentityHolderProfilesColumn),
 	)
 }
 func newImpersonationEventsStep() *sqlgraph.Step {

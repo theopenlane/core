@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -12,7 +13,10 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
 
@@ -37,10 +41,30 @@ type AssessmentResponse struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// the assessment this response is for
 	AssessmentID string `json:"assessment_id,omitempty"`
+	// the campaign this response is associated with
+	CampaignID string `json:"campaign_id,omitempty"`
+	// the identity holder record for the recipient
+	IdentityHolderID string `json:"identity_holder_id,omitempty"`
+	// the entity associated with this assessment response
+	EntityID string `json:"entity_id,omitempty"`
 	// the email address of the recipient
 	Email string `json:"email,omitempty"`
 	// the number of attempts made to perform email send to the recipient about this assessment, maximum of 5
 	SendAttempts int `json:"send_attempts,omitempty"`
+	// when the assessment email was delivered to the recipient
+	EmailDeliveredAt time.Time `json:"email_delivered_at,omitempty"`
+	// when the assessment email was opened by the recipient
+	EmailOpenedAt time.Time `json:"email_opened_at,omitempty"`
+	// when a link in the assessment email was clicked by the recipient
+	EmailClickedAt time.Time `json:"email_clicked_at,omitempty"`
+	// the number of times the assessment email was opened
+	EmailOpenCount int `json:"email_open_count,omitempty"`
+	// the number of link clicks for the assessment email
+	EmailClickCount int `json:"email_click_count,omitempty"`
+	// the most recent email event timestamp for this assessment response
+	LastEmailEventAt time.Time `json:"last_email_event_at,omitempty"`
+	// additional metadata about email delivery events
+	EmailMetadata map[string]interface{} `json:"email_metadata,omitempty"`
 	// the current status of the assessment for this user
 	Status enums.AssessmentResponseStatus `json:"status,omitempty"`
 	// when the assessment was assigned to the user
@@ -65,13 +89,19 @@ type AssessmentResponseEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Assessment holds the value of the assessment edge.
 	Assessment *Assessment `json:"assessment,omitempty"`
+	// Campaign holds the value of the campaign edge.
+	Campaign *Campaign `json:"campaign,omitempty"`
+	// IdentityHolder holds the value of the identity_holder edge.
+	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
+	// Entity holds the value of the entity edge.
+	Entity *Entity `json:"entity,omitempty"`
 	// Document holds the value of the document edge.
 	Document *DocumentData `json:"document,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [6]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [6]map[string]int
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -96,12 +126,45 @@ func (e AssessmentResponseEdges) AssessmentOrErr() (*Assessment, error) {
 	return nil, &NotLoadedError{edge: "assessment"}
 }
 
+// CampaignOrErr returns the Campaign value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentResponseEdges) CampaignOrErr() (*Campaign, error) {
+	if e.Campaign != nil {
+		return e.Campaign, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: campaign.Label}
+	}
+	return nil, &NotLoadedError{edge: "campaign"}
+}
+
+// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentResponseEdges) IdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.IdentityHolder != nil {
+		return e.IdentityHolder, nil
+	} else if e.loadedTypes[3] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "identity_holder"}
+}
+
+// EntityOrErr returns the Entity value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentResponseEdges) EntityOrErr() (*Entity, error) {
+	if e.Entity != nil {
+		return e.Entity, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: entity.Label}
+	}
+	return nil, &NotLoadedError{edge: "entity"}
+}
+
 // DocumentOrErr returns the Document value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AssessmentResponseEdges) DocumentOrErr() (*DocumentData, error) {
 	if e.Document != nil {
 		return e.Document, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: documentdata.Label}
 	}
 	return nil, &NotLoadedError{edge: "document"}
@@ -112,11 +175,13 @@ func (*AssessmentResponse) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case assessmentresponse.FieldSendAttempts:
+		case assessmentresponse.FieldEmailMetadata:
+			values[i] = new([]byte)
+		case assessmentresponse.FieldSendAttempts, assessmentresponse.FieldEmailOpenCount, assessmentresponse.FieldEmailClickCount:
 			values[i] = new(sql.NullInt64)
-		case assessmentresponse.FieldID, assessmentresponse.FieldCreatedBy, assessmentresponse.FieldUpdatedBy, assessmentresponse.FieldDeletedBy, assessmentresponse.FieldOwnerID, assessmentresponse.FieldAssessmentID, assessmentresponse.FieldEmail, assessmentresponse.FieldStatus, assessmentresponse.FieldDocumentDataID:
+		case assessmentresponse.FieldID, assessmentresponse.FieldCreatedBy, assessmentresponse.FieldUpdatedBy, assessmentresponse.FieldDeletedBy, assessmentresponse.FieldOwnerID, assessmentresponse.FieldAssessmentID, assessmentresponse.FieldCampaignID, assessmentresponse.FieldIdentityHolderID, assessmentresponse.FieldEntityID, assessmentresponse.FieldEmail, assessmentresponse.FieldStatus, assessmentresponse.FieldDocumentDataID:
 			values[i] = new(sql.NullString)
-		case assessmentresponse.FieldCreatedAt, assessmentresponse.FieldUpdatedAt, assessmentresponse.FieldDeletedAt, assessmentresponse.FieldAssignedAt, assessmentresponse.FieldStartedAt, assessmentresponse.FieldCompletedAt, assessmentresponse.FieldDueDate:
+		case assessmentresponse.FieldCreatedAt, assessmentresponse.FieldUpdatedAt, assessmentresponse.FieldDeletedAt, assessmentresponse.FieldEmailDeliveredAt, assessmentresponse.FieldEmailOpenedAt, assessmentresponse.FieldEmailClickedAt, assessmentresponse.FieldLastEmailEventAt, assessmentresponse.FieldAssignedAt, assessmentresponse.FieldStartedAt, assessmentresponse.FieldCompletedAt, assessmentresponse.FieldDueDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -187,6 +252,24 @@ func (_m *AssessmentResponse) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.AssessmentID = value.String
 			}
+		case assessmentresponse.FieldCampaignID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_id", values[i])
+			} else if value.Valid {
+				_m.CampaignID = value.String
+			}
+		case assessmentresponse.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = value.String
+			}
+		case assessmentresponse.FieldEntityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_id", values[i])
+			} else if value.Valid {
+				_m.EntityID = value.String
+			}
 		case assessmentresponse.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field email", values[i])
@@ -198,6 +281,50 @@ func (_m *AssessmentResponse) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field send_attempts", values[i])
 			} else if value.Valid {
 				_m.SendAttempts = int(value.Int64)
+			}
+		case assessmentresponse.FieldEmailDeliveredAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_delivered_at", values[i])
+			} else if value.Valid {
+				_m.EmailDeliveredAt = value.Time
+			}
+		case assessmentresponse.FieldEmailOpenedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_opened_at", values[i])
+			} else if value.Valid {
+				_m.EmailOpenedAt = value.Time
+			}
+		case assessmentresponse.FieldEmailClickedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_clicked_at", values[i])
+			} else if value.Valid {
+				_m.EmailClickedAt = value.Time
+			}
+		case assessmentresponse.FieldEmailOpenCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field email_open_count", values[i])
+			} else if value.Valid {
+				_m.EmailOpenCount = int(value.Int64)
+			}
+		case assessmentresponse.FieldEmailClickCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field email_click_count", values[i])
+			} else if value.Valid {
+				_m.EmailClickCount = int(value.Int64)
+			}
+		case assessmentresponse.FieldLastEmailEventAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field last_email_event_at", values[i])
+			} else if value.Valid {
+				_m.LastEmailEventAt = value.Time
+			}
+		case assessmentresponse.FieldEmailMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field email_metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.EmailMetadata); err != nil {
+					return fmt.Errorf("unmarshal field email_metadata: %w", err)
+				}
 			}
 		case assessmentresponse.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -258,6 +385,21 @@ func (_m *AssessmentResponse) QueryAssessment() *AssessmentQuery {
 	return NewAssessmentResponseClient(_m.config).QueryAssessment(_m)
 }
 
+// QueryCampaign queries the "campaign" edge of the AssessmentResponse entity.
+func (_m *AssessmentResponse) QueryCampaign() *CampaignQuery {
+	return NewAssessmentResponseClient(_m.config).QueryCampaign(_m)
+}
+
+// QueryIdentityHolder queries the "identity_holder" edge of the AssessmentResponse entity.
+func (_m *AssessmentResponse) QueryIdentityHolder() *IdentityHolderQuery {
+	return NewAssessmentResponseClient(_m.config).QueryIdentityHolder(_m)
+}
+
+// QueryEntity queries the "entity" edge of the AssessmentResponse entity.
+func (_m *AssessmentResponse) QueryEntity() *EntityQuery {
+	return NewAssessmentResponseClient(_m.config).QueryEntity(_m)
+}
+
 // QueryDocument queries the "document" edge of the AssessmentResponse entity.
 func (_m *AssessmentResponse) QueryDocument() *DocumentDataQuery {
 	return NewAssessmentResponseClient(_m.config).QueryDocument(_m)
@@ -310,11 +452,41 @@ func (_m *AssessmentResponse) String() string {
 	builder.WriteString("assessment_id=")
 	builder.WriteString(_m.AssessmentID)
 	builder.WriteString(", ")
+	builder.WriteString("campaign_id=")
+	builder.WriteString(_m.CampaignID)
+	builder.WriteString(", ")
+	builder.WriteString("identity_holder_id=")
+	builder.WriteString(_m.IdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("entity_id=")
+	builder.WriteString(_m.EntityID)
+	builder.WriteString(", ")
 	builder.WriteString("email=")
 	builder.WriteString(_m.Email)
 	builder.WriteString(", ")
 	builder.WriteString("send_attempts=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SendAttempts))
+	builder.WriteString(", ")
+	builder.WriteString("email_delivered_at=")
+	builder.WriteString(_m.EmailDeliveredAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_opened_at=")
+	builder.WriteString(_m.EmailOpenedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_clicked_at=")
+	builder.WriteString(_m.EmailClickedAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_open_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailOpenCount))
+	builder.WriteString(", ")
+	builder.WriteString("email_click_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailClickCount))
+	builder.WriteString(", ")
+	builder.WriteString("last_email_event_at=")
+	builder.WriteString(_m.LastEmailEventAt.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("email_metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailMetadata))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

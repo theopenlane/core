@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -87,6 +89,8 @@ type GroupQuery struct {
 	withIntegrations                            *IntegrationQuery
 	withFiles                                   *FileQuery
 	withTasks                                   *TaskQuery
+	withCampaigns                               *CampaignQuery
+	withCampaignTargets                         *CampaignTargetQuery
 	withInvites                                 *InviteQuery
 	withMembers                                 *GroupMembershipQuery
 	withFKs                                     bool
@@ -129,6 +133,8 @@ type GroupQuery struct {
 	withNamedIntegrations                       map[string]*IntegrationQuery
 	withNamedFiles                              map[string]*FileQuery
 	withNamedTasks                              map[string]*TaskQuery
+	withNamedCampaigns                          map[string]*CampaignQuery
+	withNamedCampaignTargets                    map[string]*CampaignTargetQuery
 	withNamedInvites                            map[string]*InviteQuery
 	withNamedMembers                            map[string]*GroupMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -1142,6 +1148,56 @@ func (_q *GroupQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryCampaigns chains the current query on the "campaigns" edge.
+func (_q *GroupQuery) QueryCampaigns() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignsTable, group.CampaignsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignGroups
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignTargets chains the current query on the "campaign_targets" edge.
+func (_q *GroupQuery) QueryCampaignTargets() *CampaignTargetQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, group.CampaignTargetsTable, group.CampaignTargetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CampaignTarget
+		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryInvites chains the current query on the "invites" edge.
 func (_q *GroupQuery) QueryInvites() *InviteQuery {
 	query := (&InviteClient{config: _q.config}).Query()
@@ -1423,6 +1479,8 @@ func (_q *GroupQuery) Clone() *GroupQuery {
 		withIntegrations:                       _q.withIntegrations.Clone(),
 		withFiles:                              _q.withFiles.Clone(),
 		withTasks:                              _q.withTasks.Clone(),
+		withCampaigns:                          _q.withCampaigns.Clone(),
+		withCampaignTargets:                    _q.withCampaignTargets.Clone(),
 		withInvites:                            _q.withInvites.Clone(),
 		withMembers:                            _q.withMembers.Clone(),
 		// clone intermediate query.
@@ -1861,6 +1919,28 @@ func (_q *GroupQuery) WithTasks(opts ...func(*TaskQuery)) *GroupQuery {
 	return _q
 }
 
+// WithCampaigns tells the query-builder to eager-load the nodes that are connected to
+// the "campaigns" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithCampaigns(opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaigns = query
+	return _q
+}
+
+// WithCampaignTargets tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_targets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) *GroupQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignTargets = query
+	return _q
+}
+
 // WithInvites tells the query-builder to eager-load the nodes that are connected to
 // the "invites" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *GroupQuery) WithInvites(opts ...func(*InviteQuery)) *GroupQuery {
@@ -1968,7 +2048,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [41]bool{
+		loadedTypes = [43]bool{
 			_q.withOwner != nil,
 			_q.withProgramEditors != nil,
 			_q.withProgramBlockedGroups != nil,
@@ -2008,6 +2088,8 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			_q.withIntegrations != nil,
 			_q.withFiles != nil,
 			_q.withTasks != nil,
+			_q.withCampaigns != nil,
+			_q.withCampaignTargets != nil,
 			_q.withInvites != nil,
 			_q.withMembers != nil,
 		}
@@ -2335,6 +2417,20 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := _q.withCampaigns; query != nil {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Group) { n.Edges.Campaigns = []*Campaign{} },
+			func(n *Group, e *Campaign) { n.Edges.Campaigns = append(n.Edges.Campaigns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignTargets; query != nil {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Group) { n.Edges.CampaignTargets = []*CampaignTarget{} },
+			func(n *Group, e *CampaignTarget) { n.Edges.CampaignTargets = append(n.Edges.CampaignTargets, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withInvites; query != nil {
 		if err := _q.loadInvites(ctx, query, nodes,
 			func(n *Group) { n.Edges.Invites = []*Invite{} },
@@ -2605,6 +2701,20 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Group) { n.appendNamedTasks(name) },
 			func(n *Group, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaigns {
+		if err := _q.loadCampaigns(ctx, query, nodes,
+			func(n *Group) { n.appendNamedCampaigns(name) },
+			func(n *Group, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignTargets {
+		if err := _q.loadCampaignTargets(ctx, query, nodes,
+			func(n *Group) { n.appendNamedCampaignTargets(name) },
+			func(n *Group, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4949,6 +5059,98 @@ func (_q *GroupQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*
 	}
 	return nil
 }
+func (_q *GroupQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, nodes []*Group, init func(*Group), assign func(*Group, *Campaign)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.CampaignsTable)
+		joinT.Schema(_q.schemaConfig.CampaignGroups)
+		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.CampaignsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.CampaignsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Campaign](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "campaigns" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadCampaignTargets(ctx context.Context, query *CampaignTargetQuery, nodes []*Group, init func(*Group), assign func(*Group, *CampaignTarget)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Group)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(campaigntarget.FieldGroupID)
+	}
+	query.Where(predicate.CampaignTarget(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(group.CampaignTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.GroupID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "group_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *GroupQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Group, init func(*Group), assign func(*Group, *Invite)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
@@ -5659,6 +5861,34 @@ func (_q *GroupQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *Gro
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedCampaigns tells the query-builder to eager-load the nodes that are connected to the "campaigns"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedCampaigns(name string, opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaigns == nil {
+		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedCampaignTargets tells the query-builder to eager-load the nodes that are connected to the "campaign_targets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedCampaignTargets(name string, opts ...func(*CampaignTargetQuery)) *GroupQuery {
+	query := (&CampaignTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignTargets == nil {
+		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
+	}
+	_q.withNamedCampaignTargets[name] = query
 	return _q
 }
 

@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -530,6 +531,21 @@ func (_u *StandardUpdate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpda
 	return _u.AddTrustCenterDocIDs(ids...)
 }
 
+// AddApplicablePlatformIDs adds the "applicable_platforms" edge to the Platform entity by IDs.
+func (_u *StandardUpdate) AddApplicablePlatformIDs(ids ...string) *StandardUpdate {
+	_u.mutation.AddApplicablePlatformIDs(ids...)
+	return _u
+}
+
+// AddApplicablePlatforms adds the "applicable_platforms" edges to the Platform entity.
+func (_u *StandardUpdate) AddApplicablePlatforms(v ...*Platform) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddApplicablePlatformIDs(ids...)
+}
+
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_u *StandardUpdate) SetLogoFile(v *File) *StandardUpdate {
 	return _u.SetLogoFileID(v.ID)
@@ -607,6 +623,27 @@ func (_u *StandardUpdate) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *StandardU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearApplicablePlatforms clears all "applicable_platforms" edges to the Platform entity.
+func (_u *StandardUpdate) ClearApplicablePlatforms() *StandardUpdate {
+	_u.mutation.ClearApplicablePlatforms()
+	return _u
+}
+
+// RemoveApplicablePlatformIDs removes the "applicable_platforms" edge to Platform entities by IDs.
+func (_u *StandardUpdate) RemoveApplicablePlatformIDs(ids ...string) *StandardUpdate {
+	_u.mutation.RemoveApplicablePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveApplicablePlatforms removes "applicable_platforms" edges to Platform entities.
+func (_u *StandardUpdate) RemoveApplicablePlatforms(v ...*Platform) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveApplicablePlatformIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -1017,6 +1054,54 @@ func (_u *StandardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ApplicablePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformApplicableFrameworks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedApplicablePlatformsIDs(); len(nodes) > 0 && !_u.mutation.ApplicablePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformApplicableFrameworks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ApplicablePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformApplicableFrameworks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1569,6 +1654,21 @@ func (_u *StandardUpdateOne) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardU
 	return _u.AddTrustCenterDocIDs(ids...)
 }
 
+// AddApplicablePlatformIDs adds the "applicable_platforms" edge to the Platform entity by IDs.
+func (_u *StandardUpdateOne) AddApplicablePlatformIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.AddApplicablePlatformIDs(ids...)
+	return _u
+}
+
+// AddApplicablePlatforms adds the "applicable_platforms" edges to the Platform entity.
+func (_u *StandardUpdateOne) AddApplicablePlatforms(v ...*Platform) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddApplicablePlatformIDs(ids...)
+}
+
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_u *StandardUpdateOne) SetLogoFile(v *File) *StandardUpdateOne {
 	return _u.SetLogoFileID(v.ID)
@@ -1646,6 +1746,27 @@ func (_u *StandardUpdateOne) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *Standa
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearApplicablePlatforms clears all "applicable_platforms" edges to the Platform entity.
+func (_u *StandardUpdateOne) ClearApplicablePlatforms() *StandardUpdateOne {
+	_u.mutation.ClearApplicablePlatforms()
+	return _u
+}
+
+// RemoveApplicablePlatformIDs removes the "applicable_platforms" edge to Platform entities by IDs.
+func (_u *StandardUpdateOne) RemoveApplicablePlatformIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.RemoveApplicablePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveApplicablePlatforms removes "applicable_platforms" edges to Platform entities.
+func (_u *StandardUpdateOne) RemoveApplicablePlatforms(v ...*Platform) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveApplicablePlatformIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -2086,6 +2207,54 @@ func (_u *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ApplicablePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformApplicableFrameworks
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedApplicablePlatformsIDs(); len(nodes) > 0 && !_u.mutation.ApplicablePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformApplicableFrameworks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ApplicablePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   standard.ApplicablePlatformsTable,
+			Columns: standard.ApplicablePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformApplicableFrameworks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

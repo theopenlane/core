@@ -1834,6 +1834,35 @@ func HasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) predicate.Standar
 	})
 }
 
+// HasApplicablePlatforms applies the HasEdge predicate on the "applicable_platforms" edge.
+func HasApplicablePlatforms() predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ApplicablePlatformsTable, ApplicablePlatformsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasApplicablePlatformsWith applies the HasEdge predicate on the "applicable_platforms" edge with a given conditions (other predicates).
+func HasApplicablePlatformsWith(preds ...predicate.Platform) predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := newApplicablePlatformsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
 func HasLogoFile() predicate.Standard {
 	return predicate.Standard(func(s *sql.Selector) {

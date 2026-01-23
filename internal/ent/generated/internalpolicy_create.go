@@ -419,6 +419,62 @@ func (_c *InternalPolicyCreate) SetNillableInternalPolicyKindID(v *string) *Inte
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *InternalPolicyCreate) SetEnvironmentName(v string) *InternalPolicyCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableEnvironmentName(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *InternalPolicyCreate) SetEnvironmentID(v string) *InternalPolicyCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableEnvironmentID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *InternalPolicyCreate) SetScopeName(v string) *InternalPolicyCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableScopeName(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *InternalPolicyCreate) SetScopeID(v string) *InternalPolicyCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *InternalPolicyCreate) SetNillableScopeID(v *string) *InternalPolicyCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *InternalPolicyCreate) SetWorkflowEligibleMarker(v bool) *InternalPolicyCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -495,6 +551,16 @@ func (_c *InternalPolicyCreate) SetDelegate(v *Group) *InternalPolicyCreate {
 // SetInternalPolicyKind sets the "internal_policy_kind" edge to the CustomTypeEnum entity.
 func (_c *InternalPolicyCreate) SetInternalPolicyKind(v *CustomTypeEnum) *InternalPolicyCreate {
 	return _c.SetInternalPolicyKindID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *InternalPolicyCreate) SetEnvironment(v *CustomTypeEnum) *InternalPolicyCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *InternalPolicyCreate) SetScope(v *CustomTypeEnum) *InternalPolicyCreate {
+	return _c.SetScopeID(v.ID)
 }
 
 // AddControlObjectiveIDs adds the "control_objectives" edge to the ControlObjective entity by IDs.
@@ -980,6 +1046,14 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 		_spec.SetField(internalpolicy.FieldInternalPolicyKindName, field.TypeString, value)
 		_node.InternalPolicyKindName = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(internalpolicy.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(internalpolicy.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(internalpolicy.FieldWorkflowEligibleMarker, field.TypeBool, value)
 		_node.WorkflowEligibleMarker = value
@@ -1088,6 +1162,42 @@ func (_c *InternalPolicyCreate) createSpec() (*InternalPolicy, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.InternalPolicyKindID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.EnvironmentTable,
+			Columns: []string{internalpolicy.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   internalpolicy.ScopeTable,
+			Columns: []string{internalpolicy.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.InternalPolicy
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.ControlObjectivesIDs(); len(nodes) > 0 {

@@ -90,6 +90,14 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefBulkCreatePayload_work
 				return ec.fieldContext_WorkflowObjectRef_actionPlanID(ctx, field)
 			case "procedureID":
 				return ec.fieldContext_WorkflowObjectRef_procedureID(ctx, field)
+			case "campaignID":
+				return ec.fieldContext_WorkflowObjectRef_campaignID(ctx, field)
+			case "campaignTargetID":
+				return ec.fieldContext_WorkflowObjectRef_campaignTargetID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_WorkflowObjectRef_identityHolderID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_WorkflowObjectRef_platformID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
 			case "workflowInstance":
@@ -116,6 +124,14 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefBulkCreatePayload_work
 				return ec.fieldContext_WorkflowObjectRef_actionPlan(ctx, field)
 			case "procedure":
 				return ec.fieldContext_WorkflowObjectRef_procedure(ctx, field)
+			case "campaign":
+				return ec.fieldContext_WorkflowObjectRef_campaign(ctx, field)
+			case "campaignTarget":
+				return ec.fieldContext_WorkflowObjectRef_campaignTarget(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_WorkflowObjectRef_identityHolder(ctx, field)
+			case "platform":
+				return ec.fieldContext_WorkflowObjectRef_platform(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},
@@ -185,6 +201,14 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefCreatePayload_workflow
 				return ec.fieldContext_WorkflowObjectRef_actionPlanID(ctx, field)
 			case "procedureID":
 				return ec.fieldContext_WorkflowObjectRef_procedureID(ctx, field)
+			case "campaignID":
+				return ec.fieldContext_WorkflowObjectRef_campaignID(ctx, field)
+			case "campaignTargetID":
+				return ec.fieldContext_WorkflowObjectRef_campaignTargetID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_WorkflowObjectRef_identityHolderID(ctx, field)
+			case "platformID":
+				return ec.fieldContext_WorkflowObjectRef_platformID(ctx, field)
 			case "owner":
 				return ec.fieldContext_WorkflowObjectRef_owner(ctx, field)
 			case "workflowInstance":
@@ -211,6 +235,14 @@ func (ec *executionContext) fieldContext_WorkflowObjectRefCreatePayload_workflow
 				return ec.fieldContext_WorkflowObjectRef_actionPlan(ctx, field)
 			case "procedure":
 				return ec.fieldContext_WorkflowObjectRef_procedure(ctx, field)
+			case "campaign":
+				return ec.fieldContext_WorkflowObjectRef_campaign(ctx, field)
+			case "campaignTarget":
+				return ec.fieldContext_WorkflowObjectRef_campaignTarget(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_WorkflowObjectRef_identityHolder(ctx, field)
+			case "platform":
+				return ec.fieldContext_WorkflowObjectRef_platform(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type WorkflowObjectRef", field.Name)
 		},

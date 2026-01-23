@@ -51,6 +51,14 @@ type TaskHistory struct {
 	TaskKindName string `json:"task_kind_name,omitempty"`
 	// the kind of the task
 	TaskKindID string `json:"task_kind_id,omitempty"`
+	// the environment of the task
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the task
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the task
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the task
+	ScopeID string `json:"scope_id,omitempty"`
 	// the title of the task
 	Title string `json:"title,omitempty"`
 	// the details of the task
@@ -91,7 +99,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case taskhistory.FieldSystemGenerated:
 			values[i] = new(sql.NullBool)
-		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
+		case taskhistory.FieldID, taskhistory.FieldRef, taskhistory.FieldCreatedBy, taskhistory.FieldUpdatedBy, taskhistory.FieldDeletedBy, taskhistory.FieldDisplayID, taskhistory.FieldOwnerID, taskhistory.FieldTaskKindName, taskhistory.FieldTaskKindID, taskhistory.FieldEnvironmentName, taskhistory.FieldEnvironmentID, taskhistory.FieldScopeName, taskhistory.FieldScopeID, taskhistory.FieldTitle, taskhistory.FieldDetails, taskhistory.FieldStatus, taskhistory.FieldAssigneeID, taskhistory.FieldAssignerID, taskhistory.FieldIdempotencyKey, taskhistory.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case taskhistory.FieldHistoryTime, taskhistory.FieldCreatedAt, taskhistory.FieldUpdatedAt, taskhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -201,6 +209,30 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field task_kind_id", values[i])
 			} else if value.Valid {
 				_m.TaskKindID = value.String
+			}
+		case taskhistory.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case taskhistory.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case taskhistory.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case taskhistory.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
 			}
 		case taskhistory.FieldTitle:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -358,6 +390,18 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("task_kind_id=")
 	builder.WriteString(_m.TaskKindID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("title=")
 	builder.WriteString(_m.Title)

@@ -13,12 +13,17 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -124,6 +129,386 @@ func (_u *AssetUpdate) AppendTags(v []string) *AssetUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssetUpdate) ClearTags() *AssetUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *AssetUpdate) SetInternalOwner(v string) *AssetUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableInternalOwner(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *AssetUpdate) ClearInternalOwner() *AssetUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *AssetUpdate) SetInternalOwnerUserID(v string) *AssetUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableInternalOwnerUserID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *AssetUpdate) ClearInternalOwnerUserID() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *AssetUpdate) SetInternalOwnerGroupID(v string) *AssetUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableInternalOwnerGroupID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *AssetUpdate) ClearInternalOwnerGroupID() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetAssetSubtypeName sets the "asset_subtype_name" field.
+func (_u *AssetUpdate) SetAssetSubtypeName(v string) *AssetUpdate {
+	_u.mutation.SetAssetSubtypeName(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeName sets the "asset_subtype_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableAssetSubtypeName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetAssetSubtypeName(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeName clears the value of the "asset_subtype_name" field.
+func (_u *AssetUpdate) ClearAssetSubtypeName() *AssetUpdate {
+	_u.mutation.ClearAssetSubtypeName()
+	return _u
+}
+
+// SetAssetSubtypeID sets the "asset_subtype_id" field.
+func (_u *AssetUpdate) SetAssetSubtypeID(v string) *AssetUpdate {
+	_u.mutation.SetAssetSubtypeID(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeID sets the "asset_subtype_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableAssetSubtypeID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetAssetSubtypeID(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeID clears the value of the "asset_subtype_id" field.
+func (_u *AssetUpdate) ClearAssetSubtypeID() *AssetUpdate {
+	_u.mutation.ClearAssetSubtypeID()
+	return _u
+}
+
+// SetAssetDataClassificationName sets the "asset_data_classification_name" field.
+func (_u *AssetUpdate) SetAssetDataClassificationName(v string) *AssetUpdate {
+	_u.mutation.SetAssetDataClassificationName(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationName sets the "asset_data_classification_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableAssetDataClassificationName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetAssetDataClassificationName(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationName clears the value of the "asset_data_classification_name" field.
+func (_u *AssetUpdate) ClearAssetDataClassificationName() *AssetUpdate {
+	_u.mutation.ClearAssetDataClassificationName()
+	return _u
+}
+
+// SetAssetDataClassificationID sets the "asset_data_classification_id" field.
+func (_u *AssetUpdate) SetAssetDataClassificationID(v string) *AssetUpdate {
+	_u.mutation.SetAssetDataClassificationID(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationID sets the "asset_data_classification_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableAssetDataClassificationID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetAssetDataClassificationID(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationID clears the value of the "asset_data_classification_id" field.
+func (_u *AssetUpdate) ClearAssetDataClassificationID() *AssetUpdate {
+	_u.mutation.ClearAssetDataClassificationID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *AssetUpdate) SetEnvironmentName(v string) *AssetUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableEnvironmentName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *AssetUpdate) ClearEnvironmentName() *AssetUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *AssetUpdate) SetEnvironmentID(v string) *AssetUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableEnvironmentID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *AssetUpdate) ClearEnvironmentID() *AssetUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *AssetUpdate) SetScopeName(v string) *AssetUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableScopeName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *AssetUpdate) ClearScopeName() *AssetUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *AssetUpdate) SetScopeID(v string) *AssetUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableScopeID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *AssetUpdate) ClearScopeID() *AssetUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetAccessModelName sets the "access_model_name" field.
+func (_u *AssetUpdate) SetAccessModelName(v string) *AssetUpdate {
+	_u.mutation.SetAccessModelName(v)
+	return _u
+}
+
+// SetNillableAccessModelName sets the "access_model_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableAccessModelName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetAccessModelName(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelName clears the value of the "access_model_name" field.
+func (_u *AssetUpdate) ClearAccessModelName() *AssetUpdate {
+	_u.mutation.ClearAccessModelName()
+	return _u
+}
+
+// SetAccessModelID sets the "access_model_id" field.
+func (_u *AssetUpdate) SetAccessModelID(v string) *AssetUpdate {
+	_u.mutation.SetAccessModelID(v)
+	return _u
+}
+
+// SetNillableAccessModelID sets the "access_model_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableAccessModelID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetAccessModelID(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelID clears the value of the "access_model_id" field.
+func (_u *AssetUpdate) ClearAccessModelID() *AssetUpdate {
+	_u.mutation.ClearAccessModelID()
+	return _u
+}
+
+// SetEncryptionStatusName sets the "encryption_status_name" field.
+func (_u *AssetUpdate) SetEncryptionStatusName(v string) *AssetUpdate {
+	_u.mutation.SetEncryptionStatusName(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusName sets the "encryption_status_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableEncryptionStatusName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetEncryptionStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusName clears the value of the "encryption_status_name" field.
+func (_u *AssetUpdate) ClearEncryptionStatusName() *AssetUpdate {
+	_u.mutation.ClearEncryptionStatusName()
+	return _u
+}
+
+// SetEncryptionStatusID sets the "encryption_status_id" field.
+func (_u *AssetUpdate) SetEncryptionStatusID(v string) *AssetUpdate {
+	_u.mutation.SetEncryptionStatusID(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusID sets the "encryption_status_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableEncryptionStatusID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetEncryptionStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusID clears the value of the "encryption_status_id" field.
+func (_u *AssetUpdate) ClearEncryptionStatusID() *AssetUpdate {
+	_u.mutation.ClearEncryptionStatusID()
+	return _u
+}
+
+// SetSecurityTierName sets the "security_tier_name" field.
+func (_u *AssetUpdate) SetSecurityTierName(v string) *AssetUpdate {
+	_u.mutation.SetSecurityTierName(v)
+	return _u
+}
+
+// SetNillableSecurityTierName sets the "security_tier_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSecurityTierName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSecurityTierName(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierName clears the value of the "security_tier_name" field.
+func (_u *AssetUpdate) ClearSecurityTierName() *AssetUpdate {
+	_u.mutation.ClearSecurityTierName()
+	return _u
+}
+
+// SetSecurityTierID sets the "security_tier_id" field.
+func (_u *AssetUpdate) SetSecurityTierID(v string) *AssetUpdate {
+	_u.mutation.SetSecurityTierID(v)
+	return _u
+}
+
+// SetNillableSecurityTierID sets the "security_tier_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSecurityTierID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSecurityTierID(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierID clears the value of the "security_tier_id" field.
+func (_u *AssetUpdate) ClearSecurityTierID() *AssetUpdate {
+	_u.mutation.ClearSecurityTierID()
+	return _u
+}
+
+// SetCriticalityName sets the "criticality_name" field.
+func (_u *AssetUpdate) SetCriticalityName(v string) *AssetUpdate {
+	_u.mutation.SetCriticalityName(v)
+	return _u
+}
+
+// SetNillableCriticalityName sets the "criticality_name" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableCriticalityName(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetCriticalityName(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityName clears the value of the "criticality_name" field.
+func (_u *AssetUpdate) ClearCriticalityName() *AssetUpdate {
+	_u.mutation.ClearCriticalityName()
+	return _u
+}
+
+// SetCriticalityID sets the "criticality_id" field.
+func (_u *AssetUpdate) SetCriticalityID(v string) *AssetUpdate {
+	_u.mutation.SetCriticalityID(v)
+	return _u
+}
+
+// SetNillableCriticalityID sets the "criticality_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableCriticalityID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetCriticalityID(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityID clears the value of the "criticality_id" field.
+func (_u *AssetUpdate) ClearCriticalityID() *AssetUpdate {
+	_u.mutation.ClearCriticalityID()
 	return _u
 }
 
@@ -255,6 +640,187 @@ func (_u *AssetUpdate) ClearWebsite() *AssetUpdate {
 	return _u
 }
 
+// SetPhysicalLocation sets the "physical_location" field.
+func (_u *AssetUpdate) SetPhysicalLocation(v string) *AssetUpdate {
+	_u.mutation.SetPhysicalLocation(v)
+	return _u
+}
+
+// SetNillablePhysicalLocation sets the "physical_location" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillablePhysicalLocation(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetPhysicalLocation(*v)
+	}
+	return _u
+}
+
+// ClearPhysicalLocation clears the value of the "physical_location" field.
+func (_u *AssetUpdate) ClearPhysicalLocation() *AssetUpdate {
+	_u.mutation.ClearPhysicalLocation()
+	return _u
+}
+
+// SetRegion sets the "region" field.
+func (_u *AssetUpdate) SetRegion(v string) *AssetUpdate {
+	_u.mutation.SetRegion(v)
+	return _u
+}
+
+// SetNillableRegion sets the "region" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableRegion(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetRegion(*v)
+	}
+	return _u
+}
+
+// ClearRegion clears the value of the "region" field.
+func (_u *AssetUpdate) ClearRegion() *AssetUpdate {
+	_u.mutation.ClearRegion()
+	return _u
+}
+
+// SetContainsPii sets the "contains_pii" field.
+func (_u *AssetUpdate) SetContainsPii(v bool) *AssetUpdate {
+	_u.mutation.SetContainsPii(v)
+	return _u
+}
+
+// SetNillableContainsPii sets the "contains_pii" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableContainsPii(v *bool) *AssetUpdate {
+	if v != nil {
+		_u.SetContainsPii(*v)
+	}
+	return _u
+}
+
+// ClearContainsPii clears the value of the "contains_pii" field.
+func (_u *AssetUpdate) ClearContainsPii() *AssetUpdate {
+	_u.mutation.ClearContainsPii()
+	return _u
+}
+
+// SetSourceType sets the "source_type" field.
+func (_u *AssetUpdate) SetSourceType(v enums.SourceType) *AssetUpdate {
+	_u.mutation.SetSourceType(v)
+	return _u
+}
+
+// SetNillableSourceType sets the "source_type" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSourceType(v *enums.SourceType) *AssetUpdate {
+	if v != nil {
+		_u.SetSourceType(*v)
+	}
+	return _u
+}
+
+// SetSourcePlatformID sets the "source_platform_id" field.
+func (_u *AssetUpdate) SetSourcePlatformID(v string) *AssetUpdate {
+	_u.mutation.SetSourcePlatformID(v)
+	return _u
+}
+
+// SetNillableSourcePlatformID sets the "source_platform_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSourcePlatformID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSourcePlatformID(*v)
+	}
+	return _u
+}
+
+// ClearSourcePlatformID clears the value of the "source_platform_id" field.
+func (_u *AssetUpdate) ClearSourcePlatformID() *AssetUpdate {
+	_u.mutation.ClearSourcePlatformID()
+	return _u
+}
+
+// SetSourceIdentifier sets the "source_identifier" field.
+func (_u *AssetUpdate) SetSourceIdentifier(v string) *AssetUpdate {
+	_u.mutation.SetSourceIdentifier(v)
+	return _u
+}
+
+// SetNillableSourceIdentifier sets the "source_identifier" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableSourceIdentifier(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetSourceIdentifier(*v)
+	}
+	return _u
+}
+
+// ClearSourceIdentifier clears the value of the "source_identifier" field.
+func (_u *AssetUpdate) ClearSourceIdentifier() *AssetUpdate {
+	_u.mutation.ClearSourceIdentifier()
+	return _u
+}
+
+// SetCostCenter sets the "cost_center" field.
+func (_u *AssetUpdate) SetCostCenter(v string) *AssetUpdate {
+	_u.mutation.SetCostCenter(v)
+	return _u
+}
+
+// SetNillableCostCenter sets the "cost_center" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableCostCenter(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetCostCenter(*v)
+	}
+	return _u
+}
+
+// ClearCostCenter clears the value of the "cost_center" field.
+func (_u *AssetUpdate) ClearCostCenter() *AssetUpdate {
+	_u.mutation.ClearCostCenter()
+	return _u
+}
+
+// SetEstimatedMonthlyCost sets the "estimated_monthly_cost" field.
+func (_u *AssetUpdate) SetEstimatedMonthlyCost(v float64) *AssetUpdate {
+	_u.mutation.ResetEstimatedMonthlyCost()
+	_u.mutation.SetEstimatedMonthlyCost(v)
+	return _u
+}
+
+// SetNillableEstimatedMonthlyCost sets the "estimated_monthly_cost" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableEstimatedMonthlyCost(v *float64) *AssetUpdate {
+	if v != nil {
+		_u.SetEstimatedMonthlyCost(*v)
+	}
+	return _u
+}
+
+// AddEstimatedMonthlyCost adds value to the "estimated_monthly_cost" field.
+func (_u *AssetUpdate) AddEstimatedMonthlyCost(v float64) *AssetUpdate {
+	_u.mutation.AddEstimatedMonthlyCost(v)
+	return _u
+}
+
+// ClearEstimatedMonthlyCost clears the value of the "estimated_monthly_cost" field.
+func (_u *AssetUpdate) ClearEstimatedMonthlyCost() *AssetUpdate {
+	_u.mutation.ClearEstimatedMonthlyCost()
+	return _u
+}
+
+// SetPurchaseDate sets the "purchase_date" field.
+func (_u *AssetUpdate) SetPurchaseDate(v models.DateTime) *AssetUpdate {
+	_u.mutation.SetPurchaseDate(v)
+	return _u
+}
+
+// SetNillablePurchaseDate sets the "purchase_date" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillablePurchaseDate(v *models.DateTime) *AssetUpdate {
+	if v != nil {
+		_u.SetPurchaseDate(*v)
+	}
+	return _u
+}
+
+// ClearPurchaseDate clears the value of the "purchase_date" field.
+func (_u *AssetUpdate) ClearPurchaseDate() *AssetUpdate {
+	_u.mutation.ClearPurchaseDate()
+	return _u
+}
+
 // SetCpe sets the "cpe" field.
 func (_u *AssetUpdate) SetCpe(v string) *AssetUpdate {
 	_u.mutation.SetCpe(v)
@@ -338,6 +904,56 @@ func (_u *AssetUpdate) AddViewers(v ...*Group) *AssetUpdate {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *AssetUpdate) SetInternalOwnerUser(v *User) *AssetUpdate {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *AssetUpdate) SetInternalOwnerGroup(v *Group) *AssetUpdate {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetAssetSubtype(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetAssetSubtypeID(v.ID)
+}
+
+// SetAssetDataClassification sets the "asset_data_classification" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetAssetDataClassification(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetAssetDataClassificationID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetEnvironment(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetScope(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetScopeID(v.ID)
+}
+
+// SetAccessModel sets the "access_model" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetAccessModel(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetAccessModelID(v.ID)
+}
+
+// SetEncryptionStatus sets the "encryption_status" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetEncryptionStatus(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetEncryptionStatusID(v.ID)
+}
+
+// SetSecurityTier sets the "security_tier" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetSecurityTier(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetSecurityTierID(v.ID)
+}
+
+// SetCriticality sets the "criticality" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) SetCriticality(v *CustomTypeEnum) *AssetUpdate {
+	return _u.SetCriticalityID(v.ID)
+}
+
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_u *AssetUpdate) AddScanIDs(ids ...string) *AssetUpdate {
 	_u.mutation.AddScanIDs(ids...)
@@ -368,6 +984,51 @@ func (_u *AssetUpdate) AddEntities(v ...*Entity) *AssetUpdate {
 	return _u.AddEntityIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *AssetUpdate) AddPlatformIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *AssetUpdate) AddPlatforms(v ...*Platform) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
+func (_u *AssetUpdate) AddOutOfScopePlatformIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// AddOutOfScopePlatforms adds the "out_of_scope_platforms" edges to the Platform entity.
+func (_u *AssetUpdate) AddOutOfScopePlatforms(v ...*Platform) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOutOfScopePlatformIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *AssetUpdate) AddIdentityHolderIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssetUpdate) AddIdentityHolders(v ...*IdentityHolder) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *AssetUpdate) AddControlIDs(ids ...string) *AssetUpdate {
 	_u.mutation.AddControlIDs(ids...)
@@ -381,6 +1042,41 @@ func (_u *AssetUpdate) AddControls(v ...*Control) *AssetUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddControlIDs(ids...)
+}
+
+// SetSourcePlatform sets the "source_platform" edge to the Platform entity.
+func (_u *AssetUpdate) SetSourcePlatform(v *Platform) *AssetUpdate {
+	return _u.SetSourcePlatformID(v.ID)
+}
+
+// AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
+func (_u *AssetUpdate) AddConnectedAssetIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddConnectedAssetIDs(ids...)
+	return _u
+}
+
+// AddConnectedAssets adds the "connected_assets" edges to the Asset entity.
+func (_u *AssetUpdate) AddConnectedAssets(v ...*Asset) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddConnectedAssetIDs(ids...)
+}
+
+// AddConnectedFromIDs adds the "connected_from" edge to the Asset entity by IDs.
+func (_u *AssetUpdate) AddConnectedFromIDs(ids ...string) *AssetUpdate {
+	_u.mutation.AddConnectedFromIDs(ids...)
+	return _u
+}
+
+// AddConnectedFrom adds the "connected_from" edges to the Asset entity.
+func (_u *AssetUpdate) AddConnectedFrom(v ...*Asset) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddConnectedFromIDs(ids...)
 }
 
 // Mutation returns the AssetMutation object of the builder.
@@ -451,6 +1147,66 @@ func (_u *AssetUpdate) RemoveViewers(v ...*Group) *AssetUpdate {
 	return _u.RemoveViewerIDs(ids...)
 }
 
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *AssetUpdate) ClearInternalOwnerUser() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *AssetUpdate) ClearInternalOwnerGroup() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearAssetSubtype clears the "asset_subtype" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearAssetSubtype() *AssetUpdate {
+	_u.mutation.ClearAssetSubtype()
+	return _u
+}
+
+// ClearAssetDataClassification clears the "asset_data_classification" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearAssetDataClassification() *AssetUpdate {
+	_u.mutation.ClearAssetDataClassification()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearEnvironment() *AssetUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearScope() *AssetUpdate {
+	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearAccessModel clears the "access_model" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearAccessModel() *AssetUpdate {
+	_u.mutation.ClearAccessModel()
+	return _u
+}
+
+// ClearEncryptionStatus clears the "encryption_status" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearEncryptionStatus() *AssetUpdate {
+	_u.mutation.ClearEncryptionStatus()
+	return _u
+}
+
+// ClearSecurityTier clears the "security_tier" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearSecurityTier() *AssetUpdate {
+	_u.mutation.ClearSecurityTier()
+	return _u
+}
+
+// ClearCriticality clears the "criticality" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdate) ClearCriticality() *AssetUpdate {
+	_u.mutation.ClearCriticality()
+	return _u
+}
+
 // ClearScans clears all "scans" edges to the Scan entity.
 func (_u *AssetUpdate) ClearScans() *AssetUpdate {
 	_u.mutation.ClearScans()
@@ -493,6 +1249,69 @@ func (_u *AssetUpdate) RemoveEntities(v ...*Entity) *AssetUpdate {
 	return _u.RemoveEntityIDs(ids...)
 }
 
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *AssetUpdate) ClearPlatforms() *AssetUpdate {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *AssetUpdate) RemovePlatformIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *AssetUpdate) RemovePlatforms(v ...*Platform) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearOutOfScopePlatforms clears all "out_of_scope_platforms" edges to the Platform entity.
+func (_u *AssetUpdate) ClearOutOfScopePlatforms() *AssetUpdate {
+	_u.mutation.ClearOutOfScopePlatforms()
+	return _u
+}
+
+// RemoveOutOfScopePlatformIDs removes the "out_of_scope_platforms" edge to Platform entities by IDs.
+func (_u *AssetUpdate) RemoveOutOfScopePlatformIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveOutOfScopePlatforms removes "out_of_scope_platforms" edges to Platform entities.
+func (_u *AssetUpdate) RemoveOutOfScopePlatforms(v ...*Platform) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOutOfScopePlatformIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssetUpdate) ClearIdentityHolders() *AssetUpdate {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *AssetUpdate) RemoveIdentityHolderIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *AssetUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
 // ClearControls clears all "controls" edges to the Control entity.
 func (_u *AssetUpdate) ClearControls() *AssetUpdate {
 	_u.mutation.ClearControls()
@@ -512,6 +1331,54 @@ func (_u *AssetUpdate) RemoveControls(v ...*Control) *AssetUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearSourcePlatform clears the "source_platform" edge to the Platform entity.
+func (_u *AssetUpdate) ClearSourcePlatform() *AssetUpdate {
+	_u.mutation.ClearSourcePlatform()
+	return _u
+}
+
+// ClearConnectedAssets clears all "connected_assets" edges to the Asset entity.
+func (_u *AssetUpdate) ClearConnectedAssets() *AssetUpdate {
+	_u.mutation.ClearConnectedAssets()
+	return _u
+}
+
+// RemoveConnectedAssetIDs removes the "connected_assets" edge to Asset entities by IDs.
+func (_u *AssetUpdate) RemoveConnectedAssetIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveConnectedAssetIDs(ids...)
+	return _u
+}
+
+// RemoveConnectedAssets removes "connected_assets" edges to Asset entities.
+func (_u *AssetUpdate) RemoveConnectedAssets(v ...*Asset) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveConnectedAssetIDs(ids...)
+}
+
+// ClearConnectedFrom clears all "connected_from" edges to the Asset entity.
+func (_u *AssetUpdate) ClearConnectedFrom() *AssetUpdate {
+	_u.mutation.ClearConnectedFrom()
+	return _u
+}
+
+// RemoveConnectedFromIDs removes the "connected_from" edge to Asset entities by IDs.
+func (_u *AssetUpdate) RemoveConnectedFromIDs(ids ...string) *AssetUpdate {
+	_u.mutation.RemoveConnectedFromIDs(ids...)
+	return _u
+}
+
+// RemoveConnectedFrom removes "connected_from" edges to Asset entities.
+func (_u *AssetUpdate) RemoveConnectedFrom(v ...*Asset) *AssetUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveConnectedFromIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -566,6 +1433,11 @@ func (_u *AssetUpdate) check() error {
 	if v, ok := _u.mutation.Name(); ok {
 		if err := asset.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SourceType(); ok {
+		if err := asset.SourceTypeValidator(v); err != nil {
+			return &ValidationError{Name: "source_type", err: fmt.Errorf(`generated: validator failed for field "Asset.source_type": %w`, err)}
 		}
 	}
 	return nil
@@ -630,6 +1502,60 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(asset.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetSubtypeName(); ok {
+		_spec.SetField(asset.FieldAssetSubtypeName, field.TypeString, value)
+	}
+	if _u.mutation.AssetSubtypeNameCleared() {
+		_spec.ClearField(asset.FieldAssetSubtypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetDataClassificationName(); ok {
+		_spec.SetField(asset.FieldAssetDataClassificationName, field.TypeString, value)
+	}
+	if _u.mutation.AssetDataClassificationNameCleared() {
+		_spec.ClearField(asset.FieldAssetDataClassificationName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(asset.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(asset.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(asset.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(asset.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AccessModelName(); ok {
+		_spec.SetField(asset.FieldAccessModelName, field.TypeString, value)
+	}
+	if _u.mutation.AccessModelNameCleared() {
+		_spec.ClearField(asset.FieldAccessModelName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EncryptionStatusName(); ok {
+		_spec.SetField(asset.FieldEncryptionStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EncryptionStatusNameCleared() {
+		_spec.ClearField(asset.FieldEncryptionStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityTierName(); ok {
+		_spec.SetField(asset.FieldSecurityTierName, field.TypeString, value)
+	}
+	if _u.mutation.SecurityTierNameCleared() {
+		_spec.ClearField(asset.FieldSecurityTierName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CriticalityName(); ok {
+		_spec.SetField(asset.FieldCriticalityName, field.TypeString, value)
+	}
+	if _u.mutation.CriticalityNameCleared() {
+		_spec.ClearField(asset.FieldCriticalityName, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(asset.FieldSystemOwned, field.TypeBool)
 	}
@@ -668,6 +1594,54 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(asset.FieldWebsite, field.TypeString)
+	}
+	if value, ok := _u.mutation.PhysicalLocation(); ok {
+		_spec.SetField(asset.FieldPhysicalLocation, field.TypeString, value)
+	}
+	if _u.mutation.PhysicalLocationCleared() {
+		_spec.ClearField(asset.FieldPhysicalLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.Region(); ok {
+		_spec.SetField(asset.FieldRegion, field.TypeString, value)
+	}
+	if _u.mutation.RegionCleared() {
+		_spec.ClearField(asset.FieldRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.ContainsPii(); ok {
+		_spec.SetField(asset.FieldContainsPii, field.TypeBool, value)
+	}
+	if _u.mutation.ContainsPiiCleared() {
+		_spec.ClearField(asset.FieldContainsPii, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SourceType(); ok {
+		_spec.SetField(asset.FieldSourceType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SourceIdentifier(); ok {
+		_spec.SetField(asset.FieldSourceIdentifier, field.TypeString, value)
+	}
+	if _u.mutation.SourceIdentifierCleared() {
+		_spec.ClearField(asset.FieldSourceIdentifier, field.TypeString)
+	}
+	if value, ok := _u.mutation.CostCenter(); ok {
+		_spec.SetField(asset.FieldCostCenter, field.TypeString, value)
+	}
+	if _u.mutation.CostCenterCleared() {
+		_spec.ClearField(asset.FieldCostCenter, field.TypeString)
+	}
+	if value, ok := _u.mutation.EstimatedMonthlyCost(); ok {
+		_spec.SetField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedEstimatedMonthlyCost(); ok {
+		_spec.AddField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if _u.mutation.EstimatedMonthlyCostCleared() {
+		_spec.ClearField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.PurchaseDate(); ok {
+		_spec.SetField(asset.FieldPurchaseDate, field.TypeTime, value)
+	}
+	if _u.mutation.PurchaseDateCleared() {
+		_spec.ClearField(asset.FieldPurchaseDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(asset.FieldCpe, field.TypeString, value)
@@ -830,6 +1804,316 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerUserTable,
+			Columns: []string{asset.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerUserTable,
+			Columns: []string{asset.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerGroupTable,
+			Columns: []string{asset.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerGroupTable,
+			Columns: []string{asset.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetSubtypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetSubtypeTable,
+			Columns: []string{asset.AssetSubtypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetSubtypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetSubtypeTable,
+			Columns: []string{asset.AssetSubtypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetDataClassificationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetDataClassificationTable,
+			Columns: []string{asset.AssetDataClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetDataClassificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetDataClassificationTable,
+			Columns: []string{asset.AssetDataClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EnvironmentTable,
+			Columns: []string{asset.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EnvironmentTable,
+			Columns: []string{asset.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.ScopeTable,
+			Columns: []string{asset.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.ScopeTable,
+			Columns: []string{asset.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AccessModelCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AccessModelTable,
+			Columns: []string{asset.AccessModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AccessModelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AccessModelTable,
+			Columns: []string{asset.AccessModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EncryptionStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EncryptionStatusTable,
+			Columns: []string{asset.EncryptionStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EncryptionStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EncryptionStatusTable,
+			Columns: []string{asset.EncryptionStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SecurityTierCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.SecurityTierTable,
+			Columns: []string{asset.SecurityTierColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SecurityTierIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.SecurityTierTable,
+			Columns: []string{asset.SecurityTierColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CriticalityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.CriticalityTable,
+			Columns: []string{asset.CriticalityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CriticalityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.CriticalityTable,
+			Columns: []string{asset.CriticalityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -926,6 +2210,150 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOutOfScopePlatformsIDs(); len(nodes) > 0 && !_u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OutOfScopePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -969,6 +2397,133 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SourcePlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.SourcePlatformTable,
+			Columns: []string{asset.SourcePlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SourcePlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.SourcePlatformTable,
+			Columns: []string{asset.SourcePlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ConnectedAssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedConnectedAssetsIDs(); len(nodes) > 0 && !_u.mutation.ConnectedAssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ConnectedAssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ConnectedFromCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedConnectedFromIDs(); len(nodes) > 0 && !_u.mutation.ConnectedFromCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ConnectedFromIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1085,6 +2640,386 @@ func (_u *AssetUpdateOne) AppendTags(v []string) *AssetUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *AssetUpdateOne) ClearTags() *AssetUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *AssetUpdateOne) SetInternalOwner(v string) *AssetUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableInternalOwner(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *AssetUpdateOne) ClearInternalOwner() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *AssetUpdateOne) SetInternalOwnerUserID(v string) *AssetUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableInternalOwnerUserID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *AssetUpdateOne) ClearInternalOwnerUserID() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *AssetUpdateOne) SetInternalOwnerGroupID(v string) *AssetUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableInternalOwnerGroupID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *AssetUpdateOne) ClearInternalOwnerGroupID() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetAssetSubtypeName sets the "asset_subtype_name" field.
+func (_u *AssetUpdateOne) SetAssetSubtypeName(v string) *AssetUpdateOne {
+	_u.mutation.SetAssetSubtypeName(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeName sets the "asset_subtype_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableAssetSubtypeName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAssetSubtypeName(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeName clears the value of the "asset_subtype_name" field.
+func (_u *AssetUpdateOne) ClearAssetSubtypeName() *AssetUpdateOne {
+	_u.mutation.ClearAssetSubtypeName()
+	return _u
+}
+
+// SetAssetSubtypeID sets the "asset_subtype_id" field.
+func (_u *AssetUpdateOne) SetAssetSubtypeID(v string) *AssetUpdateOne {
+	_u.mutation.SetAssetSubtypeID(v)
+	return _u
+}
+
+// SetNillableAssetSubtypeID sets the "asset_subtype_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableAssetSubtypeID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAssetSubtypeID(*v)
+	}
+	return _u
+}
+
+// ClearAssetSubtypeID clears the value of the "asset_subtype_id" field.
+func (_u *AssetUpdateOne) ClearAssetSubtypeID() *AssetUpdateOne {
+	_u.mutation.ClearAssetSubtypeID()
+	return _u
+}
+
+// SetAssetDataClassificationName sets the "asset_data_classification_name" field.
+func (_u *AssetUpdateOne) SetAssetDataClassificationName(v string) *AssetUpdateOne {
+	_u.mutation.SetAssetDataClassificationName(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationName sets the "asset_data_classification_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableAssetDataClassificationName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAssetDataClassificationName(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationName clears the value of the "asset_data_classification_name" field.
+func (_u *AssetUpdateOne) ClearAssetDataClassificationName() *AssetUpdateOne {
+	_u.mutation.ClearAssetDataClassificationName()
+	return _u
+}
+
+// SetAssetDataClassificationID sets the "asset_data_classification_id" field.
+func (_u *AssetUpdateOne) SetAssetDataClassificationID(v string) *AssetUpdateOne {
+	_u.mutation.SetAssetDataClassificationID(v)
+	return _u
+}
+
+// SetNillableAssetDataClassificationID sets the "asset_data_classification_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableAssetDataClassificationID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAssetDataClassificationID(*v)
+	}
+	return _u
+}
+
+// ClearAssetDataClassificationID clears the value of the "asset_data_classification_id" field.
+func (_u *AssetUpdateOne) ClearAssetDataClassificationID() *AssetUpdateOne {
+	_u.mutation.ClearAssetDataClassificationID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *AssetUpdateOne) SetEnvironmentName(v string) *AssetUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableEnvironmentName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *AssetUpdateOne) ClearEnvironmentName() *AssetUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *AssetUpdateOne) SetEnvironmentID(v string) *AssetUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableEnvironmentID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *AssetUpdateOne) ClearEnvironmentID() *AssetUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *AssetUpdateOne) SetScopeName(v string) *AssetUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableScopeName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *AssetUpdateOne) ClearScopeName() *AssetUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *AssetUpdateOne) SetScopeID(v string) *AssetUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableScopeID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *AssetUpdateOne) ClearScopeID() *AssetUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetAccessModelName sets the "access_model_name" field.
+func (_u *AssetUpdateOne) SetAccessModelName(v string) *AssetUpdateOne {
+	_u.mutation.SetAccessModelName(v)
+	return _u
+}
+
+// SetNillableAccessModelName sets the "access_model_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableAccessModelName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAccessModelName(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelName clears the value of the "access_model_name" field.
+func (_u *AssetUpdateOne) ClearAccessModelName() *AssetUpdateOne {
+	_u.mutation.ClearAccessModelName()
+	return _u
+}
+
+// SetAccessModelID sets the "access_model_id" field.
+func (_u *AssetUpdateOne) SetAccessModelID(v string) *AssetUpdateOne {
+	_u.mutation.SetAccessModelID(v)
+	return _u
+}
+
+// SetNillableAccessModelID sets the "access_model_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableAccessModelID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetAccessModelID(*v)
+	}
+	return _u
+}
+
+// ClearAccessModelID clears the value of the "access_model_id" field.
+func (_u *AssetUpdateOne) ClearAccessModelID() *AssetUpdateOne {
+	_u.mutation.ClearAccessModelID()
+	return _u
+}
+
+// SetEncryptionStatusName sets the "encryption_status_name" field.
+func (_u *AssetUpdateOne) SetEncryptionStatusName(v string) *AssetUpdateOne {
+	_u.mutation.SetEncryptionStatusName(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusName sets the "encryption_status_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableEncryptionStatusName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetEncryptionStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusName clears the value of the "encryption_status_name" field.
+func (_u *AssetUpdateOne) ClearEncryptionStatusName() *AssetUpdateOne {
+	_u.mutation.ClearEncryptionStatusName()
+	return _u
+}
+
+// SetEncryptionStatusID sets the "encryption_status_id" field.
+func (_u *AssetUpdateOne) SetEncryptionStatusID(v string) *AssetUpdateOne {
+	_u.mutation.SetEncryptionStatusID(v)
+	return _u
+}
+
+// SetNillableEncryptionStatusID sets the "encryption_status_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableEncryptionStatusID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetEncryptionStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEncryptionStatusID clears the value of the "encryption_status_id" field.
+func (_u *AssetUpdateOne) ClearEncryptionStatusID() *AssetUpdateOne {
+	_u.mutation.ClearEncryptionStatusID()
+	return _u
+}
+
+// SetSecurityTierName sets the "security_tier_name" field.
+func (_u *AssetUpdateOne) SetSecurityTierName(v string) *AssetUpdateOne {
+	_u.mutation.SetSecurityTierName(v)
+	return _u
+}
+
+// SetNillableSecurityTierName sets the "security_tier_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSecurityTierName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSecurityTierName(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierName clears the value of the "security_tier_name" field.
+func (_u *AssetUpdateOne) ClearSecurityTierName() *AssetUpdateOne {
+	_u.mutation.ClearSecurityTierName()
+	return _u
+}
+
+// SetSecurityTierID sets the "security_tier_id" field.
+func (_u *AssetUpdateOne) SetSecurityTierID(v string) *AssetUpdateOne {
+	_u.mutation.SetSecurityTierID(v)
+	return _u
+}
+
+// SetNillableSecurityTierID sets the "security_tier_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSecurityTierID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSecurityTierID(*v)
+	}
+	return _u
+}
+
+// ClearSecurityTierID clears the value of the "security_tier_id" field.
+func (_u *AssetUpdateOne) ClearSecurityTierID() *AssetUpdateOne {
+	_u.mutation.ClearSecurityTierID()
+	return _u
+}
+
+// SetCriticalityName sets the "criticality_name" field.
+func (_u *AssetUpdateOne) SetCriticalityName(v string) *AssetUpdateOne {
+	_u.mutation.SetCriticalityName(v)
+	return _u
+}
+
+// SetNillableCriticalityName sets the "criticality_name" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableCriticalityName(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetCriticalityName(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityName clears the value of the "criticality_name" field.
+func (_u *AssetUpdateOne) ClearCriticalityName() *AssetUpdateOne {
+	_u.mutation.ClearCriticalityName()
+	return _u
+}
+
+// SetCriticalityID sets the "criticality_id" field.
+func (_u *AssetUpdateOne) SetCriticalityID(v string) *AssetUpdateOne {
+	_u.mutation.SetCriticalityID(v)
+	return _u
+}
+
+// SetNillableCriticalityID sets the "criticality_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableCriticalityID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetCriticalityID(*v)
+	}
+	return _u
+}
+
+// ClearCriticalityID clears the value of the "criticality_id" field.
+func (_u *AssetUpdateOne) ClearCriticalityID() *AssetUpdateOne {
+	_u.mutation.ClearCriticalityID()
 	return _u
 }
 
@@ -1216,6 +3151,187 @@ func (_u *AssetUpdateOne) ClearWebsite() *AssetUpdateOne {
 	return _u
 }
 
+// SetPhysicalLocation sets the "physical_location" field.
+func (_u *AssetUpdateOne) SetPhysicalLocation(v string) *AssetUpdateOne {
+	_u.mutation.SetPhysicalLocation(v)
+	return _u
+}
+
+// SetNillablePhysicalLocation sets the "physical_location" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillablePhysicalLocation(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetPhysicalLocation(*v)
+	}
+	return _u
+}
+
+// ClearPhysicalLocation clears the value of the "physical_location" field.
+func (_u *AssetUpdateOne) ClearPhysicalLocation() *AssetUpdateOne {
+	_u.mutation.ClearPhysicalLocation()
+	return _u
+}
+
+// SetRegion sets the "region" field.
+func (_u *AssetUpdateOne) SetRegion(v string) *AssetUpdateOne {
+	_u.mutation.SetRegion(v)
+	return _u
+}
+
+// SetNillableRegion sets the "region" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableRegion(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetRegion(*v)
+	}
+	return _u
+}
+
+// ClearRegion clears the value of the "region" field.
+func (_u *AssetUpdateOne) ClearRegion() *AssetUpdateOne {
+	_u.mutation.ClearRegion()
+	return _u
+}
+
+// SetContainsPii sets the "contains_pii" field.
+func (_u *AssetUpdateOne) SetContainsPii(v bool) *AssetUpdateOne {
+	_u.mutation.SetContainsPii(v)
+	return _u
+}
+
+// SetNillableContainsPii sets the "contains_pii" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableContainsPii(v *bool) *AssetUpdateOne {
+	if v != nil {
+		_u.SetContainsPii(*v)
+	}
+	return _u
+}
+
+// ClearContainsPii clears the value of the "contains_pii" field.
+func (_u *AssetUpdateOne) ClearContainsPii() *AssetUpdateOne {
+	_u.mutation.ClearContainsPii()
+	return _u
+}
+
+// SetSourceType sets the "source_type" field.
+func (_u *AssetUpdateOne) SetSourceType(v enums.SourceType) *AssetUpdateOne {
+	_u.mutation.SetSourceType(v)
+	return _u
+}
+
+// SetNillableSourceType sets the "source_type" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSourceType(v *enums.SourceType) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSourceType(*v)
+	}
+	return _u
+}
+
+// SetSourcePlatformID sets the "source_platform_id" field.
+func (_u *AssetUpdateOne) SetSourcePlatformID(v string) *AssetUpdateOne {
+	_u.mutation.SetSourcePlatformID(v)
+	return _u
+}
+
+// SetNillableSourcePlatformID sets the "source_platform_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSourcePlatformID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSourcePlatformID(*v)
+	}
+	return _u
+}
+
+// ClearSourcePlatformID clears the value of the "source_platform_id" field.
+func (_u *AssetUpdateOne) ClearSourcePlatformID() *AssetUpdateOne {
+	_u.mutation.ClearSourcePlatformID()
+	return _u
+}
+
+// SetSourceIdentifier sets the "source_identifier" field.
+func (_u *AssetUpdateOne) SetSourceIdentifier(v string) *AssetUpdateOne {
+	_u.mutation.SetSourceIdentifier(v)
+	return _u
+}
+
+// SetNillableSourceIdentifier sets the "source_identifier" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableSourceIdentifier(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetSourceIdentifier(*v)
+	}
+	return _u
+}
+
+// ClearSourceIdentifier clears the value of the "source_identifier" field.
+func (_u *AssetUpdateOne) ClearSourceIdentifier() *AssetUpdateOne {
+	_u.mutation.ClearSourceIdentifier()
+	return _u
+}
+
+// SetCostCenter sets the "cost_center" field.
+func (_u *AssetUpdateOne) SetCostCenter(v string) *AssetUpdateOne {
+	_u.mutation.SetCostCenter(v)
+	return _u
+}
+
+// SetNillableCostCenter sets the "cost_center" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableCostCenter(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetCostCenter(*v)
+	}
+	return _u
+}
+
+// ClearCostCenter clears the value of the "cost_center" field.
+func (_u *AssetUpdateOne) ClearCostCenter() *AssetUpdateOne {
+	_u.mutation.ClearCostCenter()
+	return _u
+}
+
+// SetEstimatedMonthlyCost sets the "estimated_monthly_cost" field.
+func (_u *AssetUpdateOne) SetEstimatedMonthlyCost(v float64) *AssetUpdateOne {
+	_u.mutation.ResetEstimatedMonthlyCost()
+	_u.mutation.SetEstimatedMonthlyCost(v)
+	return _u
+}
+
+// SetNillableEstimatedMonthlyCost sets the "estimated_monthly_cost" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableEstimatedMonthlyCost(v *float64) *AssetUpdateOne {
+	if v != nil {
+		_u.SetEstimatedMonthlyCost(*v)
+	}
+	return _u
+}
+
+// AddEstimatedMonthlyCost adds value to the "estimated_monthly_cost" field.
+func (_u *AssetUpdateOne) AddEstimatedMonthlyCost(v float64) *AssetUpdateOne {
+	_u.mutation.AddEstimatedMonthlyCost(v)
+	return _u
+}
+
+// ClearEstimatedMonthlyCost clears the value of the "estimated_monthly_cost" field.
+func (_u *AssetUpdateOne) ClearEstimatedMonthlyCost() *AssetUpdateOne {
+	_u.mutation.ClearEstimatedMonthlyCost()
+	return _u
+}
+
+// SetPurchaseDate sets the "purchase_date" field.
+func (_u *AssetUpdateOne) SetPurchaseDate(v models.DateTime) *AssetUpdateOne {
+	_u.mutation.SetPurchaseDate(v)
+	return _u
+}
+
+// SetNillablePurchaseDate sets the "purchase_date" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillablePurchaseDate(v *models.DateTime) *AssetUpdateOne {
+	if v != nil {
+		_u.SetPurchaseDate(*v)
+	}
+	return _u
+}
+
+// ClearPurchaseDate clears the value of the "purchase_date" field.
+func (_u *AssetUpdateOne) ClearPurchaseDate() *AssetUpdateOne {
+	_u.mutation.ClearPurchaseDate()
+	return _u
+}
+
 // SetCpe sets the "cpe" field.
 func (_u *AssetUpdateOne) SetCpe(v string) *AssetUpdateOne {
 	_u.mutation.SetCpe(v)
@@ -1299,6 +3415,56 @@ func (_u *AssetUpdateOne) AddViewers(v ...*Group) *AssetUpdateOne {
 	return _u.AddViewerIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_u *AssetUpdateOne) SetInternalOwnerUser(v *User) *AssetUpdateOne {
+	return _u.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_u *AssetUpdateOne) SetInternalOwnerGroup(v *Group) *AssetUpdateOne {
+	return _u.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetAssetSubtype(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetAssetSubtypeID(v.ID)
+}
+
+// SetAssetDataClassification sets the "asset_data_classification" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetAssetDataClassification(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetAssetDataClassificationID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetEnvironment(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetScope(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetScopeID(v.ID)
+}
+
+// SetAccessModel sets the "access_model" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetAccessModel(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetAccessModelID(v.ID)
+}
+
+// SetEncryptionStatus sets the "encryption_status" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetEncryptionStatus(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetEncryptionStatusID(v.ID)
+}
+
+// SetSecurityTier sets the "security_tier" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetSecurityTier(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetSecurityTierID(v.ID)
+}
+
+// SetCriticality sets the "criticality" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) SetCriticality(v *CustomTypeEnum) *AssetUpdateOne {
+	return _u.SetCriticalityID(v.ID)
+}
+
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_u *AssetUpdateOne) AddScanIDs(ids ...string) *AssetUpdateOne {
 	_u.mutation.AddScanIDs(ids...)
@@ -1329,6 +3495,51 @@ func (_u *AssetUpdateOne) AddEntities(v ...*Entity) *AssetUpdateOne {
 	return _u.AddEntityIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_u *AssetUpdateOne) AddPlatformIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddPlatformIDs(ids...)
+	return _u
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_u *AssetUpdateOne) AddPlatforms(v ...*Platform) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddPlatformIDs(ids...)
+}
+
+// AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
+func (_u *AssetUpdateOne) AddOutOfScopePlatformIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// AddOutOfScopePlatforms adds the "out_of_scope_platforms" edges to the Platform entity.
+func (_u *AssetUpdateOne) AddOutOfScopePlatforms(v ...*Platform) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddOutOfScopePlatformIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_u *AssetUpdateOne) AddIdentityHolderIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddIdentityHolderIDs(ids...)
+	return _u
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssetUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIdentityHolderIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_u *AssetUpdateOne) AddControlIDs(ids ...string) *AssetUpdateOne {
 	_u.mutation.AddControlIDs(ids...)
@@ -1342,6 +3553,41 @@ func (_u *AssetUpdateOne) AddControls(v ...*Control) *AssetUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddControlIDs(ids...)
+}
+
+// SetSourcePlatform sets the "source_platform" edge to the Platform entity.
+func (_u *AssetUpdateOne) SetSourcePlatform(v *Platform) *AssetUpdateOne {
+	return _u.SetSourcePlatformID(v.ID)
+}
+
+// AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
+func (_u *AssetUpdateOne) AddConnectedAssetIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddConnectedAssetIDs(ids...)
+	return _u
+}
+
+// AddConnectedAssets adds the "connected_assets" edges to the Asset entity.
+func (_u *AssetUpdateOne) AddConnectedAssets(v ...*Asset) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddConnectedAssetIDs(ids...)
+}
+
+// AddConnectedFromIDs adds the "connected_from" edge to the Asset entity by IDs.
+func (_u *AssetUpdateOne) AddConnectedFromIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.AddConnectedFromIDs(ids...)
+	return _u
+}
+
+// AddConnectedFrom adds the "connected_from" edges to the Asset entity.
+func (_u *AssetUpdateOne) AddConnectedFrom(v ...*Asset) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddConnectedFromIDs(ids...)
 }
 
 // Mutation returns the AssetMutation object of the builder.
@@ -1412,6 +3658,66 @@ func (_u *AssetUpdateOne) RemoveViewers(v ...*Group) *AssetUpdateOne {
 	return _u.RemoveViewerIDs(ids...)
 }
 
+// ClearInternalOwnerUser clears the "internal_owner_user" edge to the User entity.
+func (_u *AssetUpdateOne) ClearInternalOwnerUser() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerUser()
+	return _u
+}
+
+// ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
+func (_u *AssetUpdateOne) ClearInternalOwnerGroup() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearAssetSubtype clears the "asset_subtype" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearAssetSubtype() *AssetUpdateOne {
+	_u.mutation.ClearAssetSubtype()
+	return _u
+}
+
+// ClearAssetDataClassification clears the "asset_data_classification" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearAssetDataClassification() *AssetUpdateOne {
+	_u.mutation.ClearAssetDataClassification()
+	return _u
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearEnvironment() *AssetUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearScope() *AssetUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearAccessModel clears the "access_model" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearAccessModel() *AssetUpdateOne {
+	_u.mutation.ClearAccessModel()
+	return _u
+}
+
+// ClearEncryptionStatus clears the "encryption_status" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearEncryptionStatus() *AssetUpdateOne {
+	_u.mutation.ClearEncryptionStatus()
+	return _u
+}
+
+// ClearSecurityTier clears the "security_tier" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearSecurityTier() *AssetUpdateOne {
+	_u.mutation.ClearSecurityTier()
+	return _u
+}
+
+// ClearCriticality clears the "criticality" edge to the CustomTypeEnum entity.
+func (_u *AssetUpdateOne) ClearCriticality() *AssetUpdateOne {
+	_u.mutation.ClearCriticality()
+	return _u
+}
+
 // ClearScans clears all "scans" edges to the Scan entity.
 func (_u *AssetUpdateOne) ClearScans() *AssetUpdateOne {
 	_u.mutation.ClearScans()
@@ -1454,6 +3760,69 @@ func (_u *AssetUpdateOne) RemoveEntities(v ...*Entity) *AssetUpdateOne {
 	return _u.RemoveEntityIDs(ids...)
 }
 
+// ClearPlatforms clears all "platforms" edges to the Platform entity.
+func (_u *AssetUpdateOne) ClearPlatforms() *AssetUpdateOne {
+	_u.mutation.ClearPlatforms()
+	return _u
+}
+
+// RemovePlatformIDs removes the "platforms" edge to Platform entities by IDs.
+func (_u *AssetUpdateOne) RemovePlatformIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemovePlatformIDs(ids...)
+	return _u
+}
+
+// RemovePlatforms removes "platforms" edges to Platform entities.
+func (_u *AssetUpdateOne) RemovePlatforms(v ...*Platform) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemovePlatformIDs(ids...)
+}
+
+// ClearOutOfScopePlatforms clears all "out_of_scope_platforms" edges to the Platform entity.
+func (_u *AssetUpdateOne) ClearOutOfScopePlatforms() *AssetUpdateOne {
+	_u.mutation.ClearOutOfScopePlatforms()
+	return _u
+}
+
+// RemoveOutOfScopePlatformIDs removes the "out_of_scope_platforms" edge to Platform entities by IDs.
+func (_u *AssetUpdateOne) RemoveOutOfScopePlatformIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveOutOfScopePlatformIDs(ids...)
+	return _u
+}
+
+// RemoveOutOfScopePlatforms removes "out_of_scope_platforms" edges to Platform entities.
+func (_u *AssetUpdateOne) RemoveOutOfScopePlatforms(v ...*Platform) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveOutOfScopePlatformIDs(ids...)
+}
+
+// ClearIdentityHolders clears all "identity_holders" edges to the IdentityHolder entity.
+func (_u *AssetUpdateOne) ClearIdentityHolders() *AssetUpdateOne {
+	_u.mutation.ClearIdentityHolders()
+	return _u
+}
+
+// RemoveIdentityHolderIDs removes the "identity_holders" edge to IdentityHolder entities by IDs.
+func (_u *AssetUpdateOne) RemoveIdentityHolderIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveIdentityHolderIDs(ids...)
+	return _u
+}
+
+// RemoveIdentityHolders removes "identity_holders" edges to IdentityHolder entities.
+func (_u *AssetUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
 // ClearControls clears all "controls" edges to the Control entity.
 func (_u *AssetUpdateOne) ClearControls() *AssetUpdateOne {
 	_u.mutation.ClearControls()
@@ -1473,6 +3842,54 @@ func (_u *AssetUpdateOne) RemoveControls(v ...*Control) *AssetUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlIDs(ids...)
+}
+
+// ClearSourcePlatform clears the "source_platform" edge to the Platform entity.
+func (_u *AssetUpdateOne) ClearSourcePlatform() *AssetUpdateOne {
+	_u.mutation.ClearSourcePlatform()
+	return _u
+}
+
+// ClearConnectedAssets clears all "connected_assets" edges to the Asset entity.
+func (_u *AssetUpdateOne) ClearConnectedAssets() *AssetUpdateOne {
+	_u.mutation.ClearConnectedAssets()
+	return _u
+}
+
+// RemoveConnectedAssetIDs removes the "connected_assets" edge to Asset entities by IDs.
+func (_u *AssetUpdateOne) RemoveConnectedAssetIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveConnectedAssetIDs(ids...)
+	return _u
+}
+
+// RemoveConnectedAssets removes "connected_assets" edges to Asset entities.
+func (_u *AssetUpdateOne) RemoveConnectedAssets(v ...*Asset) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveConnectedAssetIDs(ids...)
+}
+
+// ClearConnectedFrom clears all "connected_from" edges to the Asset entity.
+func (_u *AssetUpdateOne) ClearConnectedFrom() *AssetUpdateOne {
+	_u.mutation.ClearConnectedFrom()
+	return _u
+}
+
+// RemoveConnectedFromIDs removes the "connected_from" edge to Asset entities by IDs.
+func (_u *AssetUpdateOne) RemoveConnectedFromIDs(ids ...string) *AssetUpdateOne {
+	_u.mutation.RemoveConnectedFromIDs(ids...)
+	return _u
+}
+
+// RemoveConnectedFrom removes "connected_from" edges to Asset entities.
+func (_u *AssetUpdateOne) RemoveConnectedFrom(v ...*Asset) *AssetUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveConnectedFromIDs(ids...)
 }
 
 // Where appends a list predicates to the AssetUpdate builder.
@@ -1540,6 +3957,11 @@ func (_u *AssetUpdateOne) check() error {
 	if v, ok := _u.mutation.Name(); ok {
 		if err := asset.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.SourceType(); ok {
+		if err := asset.SourceTypeValidator(v); err != nil {
+			return &ValidationError{Name: "source_type", err: fmt.Errorf(`generated: validator failed for field "Asset.source_type": %w`, err)}
 		}
 	}
 	return nil
@@ -1621,6 +4043,60 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(asset.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(asset.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetSubtypeName(); ok {
+		_spec.SetField(asset.FieldAssetSubtypeName, field.TypeString, value)
+	}
+	if _u.mutation.AssetSubtypeNameCleared() {
+		_spec.ClearField(asset.FieldAssetSubtypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AssetDataClassificationName(); ok {
+		_spec.SetField(asset.FieldAssetDataClassificationName, field.TypeString, value)
+	}
+	if _u.mutation.AssetDataClassificationNameCleared() {
+		_spec.ClearField(asset.FieldAssetDataClassificationName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(asset.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(asset.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(asset.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(asset.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.AccessModelName(); ok {
+		_spec.SetField(asset.FieldAccessModelName, field.TypeString, value)
+	}
+	if _u.mutation.AccessModelNameCleared() {
+		_spec.ClearField(asset.FieldAccessModelName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EncryptionStatusName(); ok {
+		_spec.SetField(asset.FieldEncryptionStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EncryptionStatusNameCleared() {
+		_spec.ClearField(asset.FieldEncryptionStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.SecurityTierName(); ok {
+		_spec.SetField(asset.FieldSecurityTierName, field.TypeString, value)
+	}
+	if _u.mutation.SecurityTierNameCleared() {
+		_spec.ClearField(asset.FieldSecurityTierName, field.TypeString)
+	}
+	if value, ok := _u.mutation.CriticalityName(); ok {
+		_spec.SetField(asset.FieldCriticalityName, field.TypeString, value)
+	}
+	if _u.mutation.CriticalityNameCleared() {
+		_spec.ClearField(asset.FieldCriticalityName, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(asset.FieldSystemOwned, field.TypeBool)
 	}
@@ -1659,6 +4135,54 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 	}
 	if _u.mutation.WebsiteCleared() {
 		_spec.ClearField(asset.FieldWebsite, field.TypeString)
+	}
+	if value, ok := _u.mutation.PhysicalLocation(); ok {
+		_spec.SetField(asset.FieldPhysicalLocation, field.TypeString, value)
+	}
+	if _u.mutation.PhysicalLocationCleared() {
+		_spec.ClearField(asset.FieldPhysicalLocation, field.TypeString)
+	}
+	if value, ok := _u.mutation.Region(); ok {
+		_spec.SetField(asset.FieldRegion, field.TypeString, value)
+	}
+	if _u.mutation.RegionCleared() {
+		_spec.ClearField(asset.FieldRegion, field.TypeString)
+	}
+	if value, ok := _u.mutation.ContainsPii(); ok {
+		_spec.SetField(asset.FieldContainsPii, field.TypeBool, value)
+	}
+	if _u.mutation.ContainsPiiCleared() {
+		_spec.ClearField(asset.FieldContainsPii, field.TypeBool)
+	}
+	if value, ok := _u.mutation.SourceType(); ok {
+		_spec.SetField(asset.FieldSourceType, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.SourceIdentifier(); ok {
+		_spec.SetField(asset.FieldSourceIdentifier, field.TypeString, value)
+	}
+	if _u.mutation.SourceIdentifierCleared() {
+		_spec.ClearField(asset.FieldSourceIdentifier, field.TypeString)
+	}
+	if value, ok := _u.mutation.CostCenter(); ok {
+		_spec.SetField(asset.FieldCostCenter, field.TypeString, value)
+	}
+	if _u.mutation.CostCenterCleared() {
+		_spec.ClearField(asset.FieldCostCenter, field.TypeString)
+	}
+	if value, ok := _u.mutation.EstimatedMonthlyCost(); ok {
+		_spec.SetField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedEstimatedMonthlyCost(); ok {
+		_spec.AddField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+	}
+	if _u.mutation.EstimatedMonthlyCostCleared() {
+		_spec.ClearField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.PurchaseDate(); ok {
+		_spec.SetField(asset.FieldPurchaseDate, field.TypeTime, value)
+	}
+	if _u.mutation.PurchaseDateCleared() {
+		_spec.ClearField(asset.FieldPurchaseDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Cpe(); ok {
 		_spec.SetField(asset.FieldCpe, field.TypeString, value)
@@ -1821,6 +4345,316 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerUserTable,
+			Columns: []string{asset.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerUserTable,
+			Columns: []string{asset.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerGroupCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerGroupTable,
+			Columns: []string{asset.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerGroupTable,
+			Columns: []string{asset.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetSubtypeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetSubtypeTable,
+			Columns: []string{asset.AssetSubtypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetSubtypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetSubtypeTable,
+			Columns: []string{asset.AssetSubtypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetDataClassificationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetDataClassificationTable,
+			Columns: []string{asset.AssetDataClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetDataClassificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetDataClassificationTable,
+			Columns: []string{asset.AssetDataClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EnvironmentTable,
+			Columns: []string{asset.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EnvironmentTable,
+			Columns: []string{asset.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.ScopeTable,
+			Columns: []string{asset.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.ScopeTable,
+			Columns: []string{asset.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AccessModelCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AccessModelTable,
+			Columns: []string{asset.AccessModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AccessModelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AccessModelTable,
+			Columns: []string{asset.AccessModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EncryptionStatusCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EncryptionStatusTable,
+			Columns: []string{asset.EncryptionStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EncryptionStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EncryptionStatusTable,
+			Columns: []string{asset.EncryptionStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SecurityTierCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.SecurityTierTable,
+			Columns: []string{asset.SecurityTierColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SecurityTierIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.SecurityTierTable,
+			Columns: []string{asset.SecurityTierColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.CriticalityCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.CriticalityTable,
+			Columns: []string{asset.CriticalityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.CriticalityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.CriticalityTable,
+			Columns: []string{asset.CriticalityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ScansCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1917,6 +4751,150 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedOutOfScopePlatformsIDs(); len(nodes) > 0 && !_u.mutation.OutOfScopePlatformsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OutOfScopePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.PlatformOutOfScopeAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IdentityHolderAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1960,6 +4938,133 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SourcePlatformCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.SourcePlatformTable,
+			Columns: []string{asset.SourcePlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SourcePlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.SourcePlatformTable,
+			Columns: []string{asset.SourcePlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ConnectedAssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedConnectedAssetsIDs(); len(nodes) > 0 && !_u.mutation.ConnectedAssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ConnectedAssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ConnectedFromCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedConnectedFromIDs(); len(nodes) > 0 && !_u.mutation.ConnectedFromCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ConnectedFromIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssetConnectedAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

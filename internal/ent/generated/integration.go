@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 )
@@ -41,6 +42,14 @@ type Integration struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
+	// the environment of the integration
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the integration
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the integration
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the integration
+	ScopeID string `json:"scope_id,omitempty"`
 	// the name of the integration
 	Name string `json:"name,omitempty"`
 	// a description of the integration
@@ -63,6 +72,10 @@ type Integration struct {
 type IntegrationEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
 	// the secrets associated with the integration
 	Secrets []*Hush `json:"secrets,omitempty"`
 	// files associated with the integration
@@ -89,11 +102,13 @@ type IntegrationEdges struct {
 	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
 	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
 	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [17]map[string]int
 
 	namedSecrets              map[string][]*Hush
 	namedFiles                map[string][]*File
@@ -108,6 +123,7 @@ type IntegrationEdges struct {
 	namedDirectoryGroups      map[string][]*DirectoryGroup
 	namedDirectoryMemberships map[string][]*DirectoryMembership
 	namedDirectorySyncRuns    map[string][]*DirectorySyncRun
+	namedEntities             map[string][]*Entity
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -121,10 +137,32 @@ func (e IntegrationEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IntegrationEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e IntegrationEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
 // SecretsOrErr returns the Secrets value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) SecretsOrErr() ([]*Hush, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[3] {
 		return e.Secrets, nil
 	}
 	return nil, &NotLoadedError{edge: "secrets"}
@@ -133,7 +171,7 @@ func (e IntegrationEdges) SecretsOrErr() ([]*Hush, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -142,7 +180,7 @@ func (e IntegrationEdges) FilesOrErr() ([]*File, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[5] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -151,7 +189,7 @@ func (e IntegrationEdges) EventsOrErr() ([]*Event, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -160,7 +198,7 @@ func (e IntegrationEdges) FindingsOrErr() ([]*Finding, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -169,7 +207,7 @@ func (e IntegrationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -178,7 +216,7 @@ func (e IntegrationEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -187,7 +225,7 @@ func (e IntegrationEdges) RemediationsOrErr() ([]*Remediation, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -196,7 +234,7 @@ func (e IntegrationEdges) TasksOrErr() ([]*Task, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -205,7 +243,7 @@ func (e IntegrationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.DirectoryAccounts, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_accounts"}
@@ -214,7 +252,7 @@ func (e IntegrationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) 
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.DirectoryGroups, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_groups"}
@@ -223,7 +261,7 @@ func (e IntegrationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.DirectoryMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_memberships"}
@@ -232,10 +270,19 @@ func (e IntegrationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, e
 // DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.DirectorySyncRuns, nil
 	}
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[16] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -247,7 +294,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType:
+		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType:
 			values[i] = new(sql.NullString)
 		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -346,6 +393,30 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 				_m.SystemInternalID = new(string)
 				*_m.SystemInternalID = value.String
 			}
+		case integration.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case integration.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case integration.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case integration.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
 		case integration.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field name", values[i])
@@ -408,6 +479,16 @@ func (_m *Integration) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the Integration entity.
 func (_m *Integration) QueryOwner() *OrganizationQuery {
 	return NewIntegrationClient(_m.config).QueryOwner(_m)
+}
+
+// QueryEnvironment queries the "environment" edge of the Integration entity.
+func (_m *Integration) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewIntegrationClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Integration entity.
+func (_m *Integration) QueryScope() *CustomTypeEnumQuery {
+	return NewIntegrationClient(_m.config).QueryScope(_m)
 }
 
 // QuerySecrets queries the "secrets" edge of the Integration entity.
@@ -475,6 +556,11 @@ func (_m *Integration) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 	return NewIntegrationClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
+// QueryEntities queries the "entities" edge of the Integration entity.
+func (_m *Integration) QueryEntities() *EntityQuery {
+	return NewIntegrationClient(_m.config).QueryEntities(_m)
+}
+
 // Update returns a builder for updating this Integration.
 // Note that you need to call Integration.Unwrap() before calling this method if this Integration
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -534,6 +620,18 @@ func (_m *Integration) String() string {
 		builder.WriteString("system_internal_id=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
@@ -862,6 +960,30 @@ func (_m *Integration) appendNamedDirectorySyncRuns(name string, edges ...*Direc
 		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
 	} else {
 		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
 	}
 }
 

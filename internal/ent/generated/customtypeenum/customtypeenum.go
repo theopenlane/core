@@ -67,6 +67,8 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
 	// Table holds the table name of the customtypeenum in the database.
 	Table = "custom_type_enums"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -139,6 +141,13 @@ const (
 	ProgramsInverseTable = "programs"
 	// ProgramsColumn is the table column denoting the programs relation/edge.
 	ProgramsColumn = "custom_type_enum_programs"
+	// PlatformsTable is the table that holds the platforms relation/edge.
+	PlatformsTable = "platforms"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// PlatformsColumn is the table column denoting the platforms relation/edge.
+	PlatformsColumn = "custom_type_enum_platforms"
 )
 
 // Columns holds all SQL columns for customtypeenum fields.
@@ -162,10 +171,21 @@ var Columns = []string{
 	FieldIcon,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "custom_type_enums"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"entity_auth_methods",
+}
+
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}
@@ -423,6 +443,20 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newProgramsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -491,5 +525,12 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PlatformsTable, PlatformsColumn),
 	)
 }

@@ -13,9 +13,11 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // CampaignTarget holds the schema definition for the CampaignTarget entity
@@ -183,21 +185,21 @@ func (CampaignTarget) Modules() []models.OrgModule {
 }
 
 // Annotations of the CampaignTarget
-//func (CampaignTarget) Annotations() []schema.Annotation {
-//	return []schema.Annotation{
-//		entfga.SelfAccessChecks(),
-//	}
-//}
-//
-//// Policy of the CampaignTarget
-//func (CampaignTarget) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckCreateAccess(),
-//			policy.CanCreateObjectsUnderParents([]string{
-//				Campaign{}.PluralName(),
-//			}),
-//			entfga.CheckEditAccess[*generated.CampaignTargetMutation](),
-//		),
-//	)
-//}
+func (CampaignTarget) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
+// Policy of the CampaignTarget
+func (CampaignTarget) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			policy.CanCreateObjectsUnderParents([]string{
+				Campaign{}.PluralName(),
+			}),
+			//			entfga.CheckEditAccess[*generated.CampaignTargetMutation](),
+		),
+	)
+}

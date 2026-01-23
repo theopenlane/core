@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -391,6 +392,21 @@ func (_c *CustomTypeEnumCreate) AddPrograms(v ...*Program) *CustomTypeEnumCreate
 	return _c.AddProgramIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *CustomTypeEnumCreate) AddPlatformIDs(ids ...string) *CustomTypeEnumCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *CustomTypeEnumCreate) AddPlatforms(v ...*Platform) *CustomTypeEnumCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
 // Mutation returns the CustomTypeEnumMutation object of the builder.
 func (_c *CustomTypeEnumCreate) Mutation() *CustomTypeEnumMutation {
 	return _c.mutation
@@ -755,6 +771,23 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 			},
 		}
 		edge.Schema = _c.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   customtypeenum.PlatformsTable,
+			Columns: []string{customtypeenum.PlatformsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

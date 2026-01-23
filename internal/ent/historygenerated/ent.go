@@ -18,6 +18,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
@@ -39,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
@@ -50,6 +53,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgsubscriptionhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
@@ -144,6 +148,8 @@ func checkColumn(t, c string) error {
 			assessmenthistory.Table:                 assessmenthistory.ValidColumn,
 			assessmentresponsehistory.Table:         assessmentresponsehistory.ValidColumn,
 			assethistory.Table:                      assethistory.ValidColumn,
+			campaignhistory.Table:                   campaignhistory.ValidColumn,
+			campaigntargethistory.Table:             campaigntargethistory.ValidColumn,
 			contacthistory.Table:                    contacthistory.ValidColumn,
 			controlhistory.Table:                    controlhistory.ValidColumn,
 			controlimplementationhistory.Table:      controlimplementationhistory.ValidColumn,
@@ -165,6 +171,7 @@ func checkColumn(t, c string) error {
 			groupmembershiphistory.Table:            groupmembershiphistory.ValidColumn,
 			groupsettinghistory.Table:               groupsettinghistory.ValidColumn,
 			hushhistory.Table:                       hushhistory.ValidColumn,
+			identityholderhistory.Table:             identityholderhistory.ValidColumn,
 			integrationhistory.Table:                integrationhistory.ValidColumn,
 			internalpolicyhistory.Table:             internalpolicyhistory.ValidColumn,
 			jobtemplatehistory.Table:                jobtemplatehistory.ValidColumn,
@@ -176,6 +183,7 @@ func checkColumn(t, c string) error {
 			orgsubscriptionhistory.Table:            orgsubscriptionhistory.ValidColumn,
 			organizationhistory.Table:               organizationhistory.ValidColumn,
 			organizationsettinghistory.Table:        organizationsettinghistory.ValidColumn,
+			platformhistory.Table:                   platformhistory.ValidColumn,
 			procedurehistory.Table:                  procedurehistory.ValidColumn,
 			programhistory.Table:                    programhistory.ValidColumn,
 			programmembershiphistory.Table:          programmembershiphistory.ValidColumn,

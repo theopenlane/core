@@ -21,6 +21,12 @@ type AssessmentResponse func(*sql.Selector)
 // Asset is the predicate function for asset builders.
 type Asset func(*sql.Selector)
 
+// Campaign is the predicate function for campaign builders.
+type Campaign func(*sql.Selector)
+
+// CampaignTarget is the predicate function for campaigntarget builders.
+type CampaignTarget func(*sql.Selector)
+
 // Contact is the predicate function for contact builders.
 type Contact func(*sql.Selector)
 
@@ -102,6 +108,9 @@ type GroupSetting func(*sql.Selector)
 // Hush is the predicate function for hush builders.
 type Hush func(*sql.Selector)
 
+// IdentityHolder is the predicate function for identityholder builders.
+type IdentityHolder func(*sql.Selector)
+
 // ImpersonationEvent is the predicate function for impersonationevent builders.
 type ImpersonationEvent func(*sql.Selector)
 
@@ -173,6 +182,9 @@ type PasswordResetToken func(*sql.Selector)
 
 // PersonalAccessToken is the predicate function for personalaccesstoken builders.
 type PersonalAccessToken func(*sql.Selector)
+
+// Platform is the predicate function for platform builders.
+type Platform func(*sql.Selector)
 
 // Procedure is the predicate function for procedure builders.
 type Procedure func(*sql.Selector)

@@ -1,0 +1,334 @@
+
+mutation CreateBulkCSVCampaign($input: Upload!) {
+  createBulkCSVCampaign(input: $input) {
+    campaigns {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreateBulkCampaign($input: [CreateCampaignInput!]) {
+  createBulkCampaign(input: $input) {
+    campaigns {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation CreateCampaign($input: CreateCampaignInput!) {
+  createCampaign(input: $input) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}
+
+mutation DeleteCampaign($deleteCampaignId: ID!) {
+  deleteCampaign(id: $deleteCampaignId) {
+    deletedID
+  }
+}
+
+query GetAllCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CampaignOrder!]){
+  campaigns(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        campaignType
+        completedAt
+        createdAt
+        createdBy
+        description
+        displayID
+        dueDate
+        entityID
+        id
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        isActive
+        isRecurring
+        lastResentAt
+        lastRunAt
+        launchedAt
+        metadata
+        name
+        nextRunAt
+        ownerID
+        recipientCount
+        recurrenceCron
+        recurrenceEndAt
+        recurrenceFrequency
+        recurrenceInterval
+        recurrenceTimezone
+        resendCount
+        scheduledAt
+        status
+        tags
+        templateID
+        updatedAt
+        updatedBy
+        workflowEligibleMarker
+      }
+    }
+  }
+}
+query GetCampaignByID($campaignId: ID!) {
+  campaign(id: $campaignId) {
+    assessmentID
+    campaignType
+    completedAt
+    createdAt
+    createdBy
+    description
+    displayID
+    dueDate
+    entityID
+    id
+    internalOwner
+    internalOwnerGroupID
+    internalOwnerUserID
+    isActive
+    isRecurring
+    lastResentAt
+    lastRunAt
+    launchedAt
+    metadata
+    name
+    nextRunAt
+    ownerID
+    recipientCount
+    recurrenceCron
+    recurrenceEndAt
+    recurrenceFrequency
+    recurrenceInterval
+    recurrenceTimezone
+    resendCount
+    scheduledAt
+    status
+    tags
+    templateID
+    updatedAt
+    updatedBy
+    workflowEligibleMarker
+  }
+}
+
+query GetCampaigns($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [CampaignOrder!], $where: CampaignWhereInput) {
+  campaigns(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        campaignType
+        completedAt
+        createdAt
+        createdBy
+        description
+        displayID
+        dueDate
+        entityID
+        id
+        internalOwner
+        internalOwnerGroupID
+        internalOwnerUserID
+        isActive
+        isRecurring
+        lastResentAt
+        lastRunAt
+        launchedAt
+        metadata
+        name
+        nextRunAt
+        ownerID
+        recipientCount
+        recurrenceCron
+        recurrenceEndAt
+        recurrenceFrequency
+        recurrenceInterval
+        recurrenceTimezone
+        resendCount
+        scheduledAt
+        status
+        tags
+        templateID
+        updatedAt
+        updatedBy
+        workflowEligibleMarker
+      }
+    }
+  }
+}
+mutation UpdateCampaign($updateCampaignId: ID!, $input: UpdateCampaignInput!) {
+  updateCampaign(id: $updateCampaignId, input: $input) {
+    campaign {
+      assessmentID
+      campaignType
+      completedAt
+      createdAt
+      createdBy
+      description
+      displayID
+      dueDate
+      entityID
+      id
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      isActive
+      isRecurring
+      lastResentAt
+      lastRunAt
+      launchedAt
+      metadata
+      name
+      nextRunAt
+      ownerID
+      recipientCount
+      recurrenceCron
+      recurrenceEndAt
+      recurrenceFrequency
+      recurrenceInterval
+      recurrenceTimezone
+      resendCount
+      scheduledAt
+      status
+      tags
+      templateID
+      updatedAt
+      updatedBy
+      workflowEligibleMarker
+    }
+  }
+}

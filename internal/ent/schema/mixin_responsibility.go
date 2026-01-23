@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 )
 
-// ResponsibilityMixin provides ownership, assignment, review, and delegation fields for schemas.
+// ResponsibilityMixin provides ownership, assignment, review, and delegation fields for schemas
 type ResponsibilityMixin struct {
 	mixin.Schema
 
@@ -35,10 +35,10 @@ type ResponsibilityMixin struct {
 	accessCheckAnnotation func(string) schema.Annotation
 }
 
-// responsibilityOption configures ResponsibilityMixin behavior.
+// responsibilityOption configures ResponsibilityMixin behavior
 type responsibilityOption func(*ResponsibilityMixin)
 
-// newResponsibilityMixin creates a ResponsibilityMixin for a schema.
+// newResponsibilityMixin creates a ResponsibilityMixin for a schema
 func newResponsibilityMixin(schemaType any, opts ...responsibilityOption) ResponsibilityMixin {
 	r := ResponsibilityMixin{
 		schemaType: schemaType,
@@ -96,29 +96,9 @@ func withLastReviewedAt() responsibilityOption {
 	}
 }
 
-func withDelegate() responsibilityOption {
-	return func(r *ResponsibilityMixin) {
-		r.includeDelegate = true
-	}
-}
-
 func withReviewedByOrderField() responsibilityOption {
 	return func(r *ResponsibilityMixin) {
 		r.reviewedByOrderField = true
-	}
-}
-
-func withAssignedToOrderField() responsibilityOption {
-	return func(r *ResponsibilityMixin) {
-		r.assignedToOrderField = true
-	}
-}
-
-func withResponsibilityAccessCheck(accessCheck func(string) schema.Annotation) responsibilityOption {
-	return func(r *ResponsibilityMixin) {
-		if accessCheck != nil {
-			r.accessCheckAnnotation = accessCheck
-		}
 	}
 }
 
