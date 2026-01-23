@@ -52,7 +52,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			}
 
 			if existingRequest != nil {
-				return handleExistingNDARequest(ctx, m, existingRequest, queryCtx)
+				return handleExistingNDARequest(ctx, queryCtx, m, existingRequest)
 			}
 
 			tc, err := m.Client().TrustCenter.Query().
@@ -92,7 +92,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 	}, ent.OpCreate)
 }
 
-func handleExistingNDARequest(ctx context.Context, m *generated.TrustCenterNDARequestMutation, existing *generated.TrustCenterNDARequest, queryCtx context.Context) (*generated.TrustCenterNDARequest, error) {
+func handleExistingNDARequest(ctx, queryCtx context.Context, m *generated.TrustCenterNDARequestMutation, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
 	if existing.Status == enums.TrustCenterNDARequestStatusApproved {
 		sendTrustCenterAuthEmail(ctx, m, existing)
 		return existing, nil

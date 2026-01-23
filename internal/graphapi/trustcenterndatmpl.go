@@ -26,10 +26,7 @@ import (
 //go:embed trustcenternda.json.tpl
 var trustCenterNDATemplate string
 
-var (
-	errTrustCenterOwnerNotFound = errors.New("trust center owner not found")
-	errOneNDAOnly               = errors.New("one NDA file is required")
-)
+var errOneNDAOnly = errors.New("one NDA file is required")
 
 func createTrustCenterNDA(ctx context.Context, input model.CreateTrustCenterNDAInput) (*model.TrustCenterNDACreatePayload, error) {
 	txnCtx := withTransactionalMutation(ctx)
