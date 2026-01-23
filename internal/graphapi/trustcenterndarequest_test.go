@@ -364,6 +364,156 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
+func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	otherTrustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, trustCenter.OwnerID)
+	wrongTrustCenterAnonCtx := createAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
+
+	testCases := []struct {
+		name           string
+		input          testclient.CreateTrustCenterNDARequestInput
+		client         *testclient.TestClient
+		ctx            context.Context
+		expectedErr    string
+		expectedStatus enums.TrustCenterNDARequestStatus
+	}{
+		{
+			name: "happy path - anonymous user can create NDA request",
+			input: testclient.CreateTrustCenterNDARequestInput{
+				FirstName:     gofakeit.FirstName(),
+				LastName:      gofakeit.LastName(),
+				Email:         gofakeit.Email(),
+				TrustCenterID: &trustCenter.ID,
+			},
+			client:         suite.client.api,
+			ctx:            anonCtx,
+			expectedStatus: enums.TrustCenterNDARequestStatusRequested,
+		},
+		{
+			name: "anonymous user cannot create NDA request for different trust center",
+			input: testclient.CreateTrustCenterNDARequestInput{
+				FirstName:     gofakeit.FirstName(),
+				LastName:      gofakeit.LastName(),
+				Email:         gofakeit.Email(),
+				TrustCenterID: &otherTrustCenter.ID,
+			},
+			client:      suite.client.api,
+			ctx:         anonCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "anonymous user with wrong trust center context cannot create",
+			input: testclient.CreateTrustCenterNDARequestInput{
+				FirstName:     gofakeit.FirstName(),
+				LastName:      gofakeit.LastName(),
+				Email:         gofakeit.Email(),
+				TrustCenterID: &trustCenter.ID,
+			},
+			client:      suite.client.api,
+			ctx:         wrongTrustCenterAnonCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Equal(t, tc.input.FirstName, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.FirstName)
+			assert.Equal(t, tc.input.LastName, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.LastName)
+			assert.Equal(t, tc.input.Email, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Email)
+			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
+
+			(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+		})
+	}
+
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: otherTrustCenter.ID}).MustDelete(testUser2.UserCtx, t)
+}
+
+func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	email := gofakeit.Email()
+
+	originalRequest, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		FirstName:     gofakeit.FirstName(),
+		LastName:      gofakeit.LastName(),
+		Email:         email,
+		TrustCenterID: &trustCenter.ID,
+	})
+	assert.NilError(t, err)
+
+	t.Run("duplicate email returns existing request with REQUESTED status", func(t *testing.T) {
+		resp, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         email,
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	})
+
+	t.Run("duplicate email returns existing request with NEEDS_APPROVAL status", func(t *testing.T) {
+		_, err := suite.client.api.UpdateTrustCenterNDARequest(testUser1.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+			Status: lo.ToPtr(enums.TrustCenterNDARequestStatusNeedsApproval),
+		})
+		assert.NilError(t, err)
+
+		resp, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         email,
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	})
+
+	t.Run("duplicate email returns existing request with APPROVED status", func(t *testing.T) {
+		_, err := suite.client.api.UpdateTrustCenterNDARequest(testUser1.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+			Status: lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
+		})
+		assert.NilError(t, err)
+
+		resp, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         email,
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Equal(t, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+	})
+
+	t.Run("different email creates new request", func(t *testing.T) {
+		resp, err := suite.client.api.CreateTrustCenterNDARequest(testUser1.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+			FirstName:     gofakeit.FirstName(),
+			LastName:      gofakeit.LastName(),
+			Email:         gofakeit.Email(),
+			TrustCenterID: &trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID != resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+
+		(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	(&Cleanup[*generated.TrustCenterNDARequestDeleteOne]{client: suite.client.db.TrustCenterNDARequest, ID: originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
 func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 

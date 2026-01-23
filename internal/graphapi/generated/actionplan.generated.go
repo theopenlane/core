@@ -389,7 +389,6 @@ type MutationResolver interface {
 	DeleteTrustCenterEntity(ctx context.Context, id string) (*model.TrustCenterEntityDeletePayload, error)
 	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error)
 	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error)
-	SendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDAInput) (*model.SendTrustCenterNDAEmailPayload, error)
 	SubmitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error)
 	CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error)
 	CreateBulkTrustCenterNDARequest(ctx context.Context, input []*generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestBulkCreatePayload, error)
@@ -4134,17 +4133,6 @@ func (ec *executionContext) field_Mutation_rejectWorkflowAssignment_args(ctx con
 		return nil, err
 	}
 	args["reason"] = arg1
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_sendTrustCenterNDAEmail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNSendTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAInput)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
 	return args, nil
 }
 
@@ -23272,51 +23260,6 @@ func (ec *executionContext) fieldContext_Mutation_updateTrustCenterNDA(ctx conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_sendTrustCenterNDAEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_Mutation_sendTrustCenterNDAEmail,
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().SendTrustCenterNDAEmail(ctx, fc.Args["input"].(model.SendTrustCenterNDAInput))
-		},
-		nil,
-		ec.marshalNSendTrustCenterNDAEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSendTrustCenterNDAEmailPayload,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_Mutation_sendTrustCenterNDAEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "success":
-				return ec.fieldContext_SendTrustCenterNDAEmailPayload_success(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type SendTrustCenterNDAEmailPayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_sendTrustCenterNDAEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Mutation_submitTrustCenterNDAResponse(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -28501,13 +28444,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateTrustCenterNDA":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateTrustCenterNDA(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "sendTrustCenterNDAEmail":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_sendTrustCenterNDAEmail(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
