@@ -11,9 +11,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
+	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // CampaignHistory holds the schema definition for the CampaignHistory entity.
@@ -34,6 +37,11 @@ func (CampaignHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		entfga.Annotations{
+			ObjectType:   "campaign",
+			IDField:      "Ref",
+			IncludeHooks: false,
+		},
 	}
 }
 
@@ -90,5 +98,22 @@ func (CampaignHistory) Fields() []ent.Field {
 func (CampaignHistory) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("history_time"),
+	}
+}
+
+// Policy of the CampaignHistory.
+// ensure history.AllowIfHistoryRequest() is already added to the base policy
+func (CampaignHistory) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			history.AllowIfHistoryRequest(),
+		),
+	)
+}
+
+// Interceptors of the CampaignHistory
+func (CampaignHistory) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.FilterListQuery(),
 	}
 }

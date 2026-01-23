@@ -164,6 +164,12 @@ func (ec *executionContext) fieldContext_PlatformBulkCreatePayload_platforms(_ c
 				return ec.fieldContext_Platform_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Platform_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Platform_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Platform_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Platform_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_Platform_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":
@@ -379,6 +385,12 @@ func (ec *executionContext) fieldContext_PlatformCreatePayload_platform(_ contex
 				return ec.fieldContext_Platform_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Platform_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Platform_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Platform_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Platform_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_Platform_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":
@@ -623,6 +635,12 @@ func (ec *executionContext) fieldContext_PlatformUpdatePayload_platform(_ contex
 				return ec.fieldContext_Platform_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Platform_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Platform_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Platform_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Platform_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_Platform_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":

@@ -252,6 +252,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "internal_owner_user": {
 	ObjectType:      "user",
 	SkipEditCheck:   true,
@@ -1353,6 +1365,30 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "action_plan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "platform_editors": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platform_blocked_groups": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "platform_viewers": {
+	ObjectType:      "platform",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_editors": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_blocked_groups": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "campaign_viewers": {
+	ObjectType:      "campaign",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "procedure_editors": {
 	ObjectType:      "procedure",
 	SkipEditCheck:   false,
@@ -1469,6 +1505,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "internal_owner_user": {
 	ObjectType:      "user",
 	SkipEditCheck:   true,
@@ -2410,6 +2458,18 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
+}, "blocked_groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "editors": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "viewers": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "internal_owner_user": {
 	ObjectType:      "user",
 	SkipEditCheck:   true,

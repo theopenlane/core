@@ -4398,6 +4398,99 @@ type Campaign implements Node {
 	"""
 	metadata: Map
 	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
 	assessment: Assessment
@@ -5703,6 +5796,21 @@ input CampaignWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	internal_owner_user edge predicates
 	"""
@@ -10173,6 +10281,9 @@ input CreateCampaignInput {
 	"""
 	metadata: Map
 	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
 	assessmentID: ID
@@ -11745,6 +11856,12 @@ input CreateGroupInput {
 	actionPlanEditorIDs: [ID!]
 	actionPlanBlockedGroupIDs: [ID!]
 	actionPlanViewerIDs: [ID!]
+	platformEditorIDs: [ID!]
+	platformBlockedGroupIDs: [ID!]
+	platformViewerIDs: [ID!]
+	campaignEditorIDs: [ID!]
+	campaignBlockedGroupIDs: [ID!]
+	campaignViewerIDs: [ID!]
 	procedureEditorIDs: [ID!]
 	procedureBlockedGroupIDs: [ID!]
 	internalPolicyEditorIDs: [ID!]
@@ -11940,6 +12057,9 @@ input CreateIdentityHolderInput {
 	"""
 	metadata: Map
 	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
 	environmentID: ID
@@ -12882,6 +13002,9 @@ input CreatePlatformInput {
 	"""
 	metadata: Map
 	ownerID: ID
+	blockedGroupIDs: [ID!]
+	editorIDs: [ID!]
+	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
 	businessOwnerUserID: ID
@@ -27740,6 +27863,192 @@ type Group implements Node {
 		"""
 		where: ActionPlanWhereInput
 	): ActionPlanConnection!
+	platformEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Platforms returned from the connection.
+		"""
+		orderBy: [PlatformOrder!]
+
+		"""
+		Filtering options for Platforms returned from the connection.
+		"""
+		where: PlatformWhereInput
+	): PlatformConnection!
+	platformBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Platforms returned from the connection.
+		"""
+		orderBy: [PlatformOrder!]
+
+		"""
+		Filtering options for Platforms returned from the connection.
+		"""
+		where: PlatformWhereInput
+	): PlatformConnection!
+	platformViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Platforms returned from the connection.
+		"""
+		orderBy: [PlatformOrder!]
+
+		"""
+		Filtering options for Platforms returned from the connection.
+		"""
+		where: PlatformWhereInput
+	): PlatformConnection!
+	campaignEditors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Campaigns returned from the connection.
+		"""
+		orderBy: [CampaignOrder!]
+
+		"""
+		Filtering options for Campaigns returned from the connection.
+		"""
+		where: CampaignWhereInput
+	): CampaignConnection!
+	campaignBlockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Campaigns returned from the connection.
+		"""
+		orderBy: [CampaignOrder!]
+
+		"""
+		Filtering options for Campaigns returned from the connection.
+		"""
+		where: CampaignWhereInput
+	): CampaignConnection!
+	campaignViewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Campaigns returned from the connection.
+		"""
+		orderBy: [CampaignOrder!]
+
+		"""
+		Filtering options for Campaigns returned from the connection.
+		"""
+		where: CampaignWhereInput
+	): CampaignConnection!
 	procedureEditors(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -29361,6 +29670,36 @@ input GroupWhereInput {
 	hasActionPlanViewers: Boolean
 	hasActionPlanViewersWith: [ActionPlanWhereInput!]
 	"""
+	platform_editors edge predicates
+	"""
+	hasPlatformEditors: Boolean
+	hasPlatformEditorsWith: [PlatformWhereInput!]
+	"""
+	platform_blocked_groups edge predicates
+	"""
+	hasPlatformBlockedGroups: Boolean
+	hasPlatformBlockedGroupsWith: [PlatformWhereInput!]
+	"""
+	platform_viewers edge predicates
+	"""
+	hasPlatformViewers: Boolean
+	hasPlatformViewersWith: [PlatformWhereInput!]
+	"""
+	campaign_editors edge predicates
+	"""
+	hasCampaignEditors: Boolean
+	hasCampaignEditorsWith: [CampaignWhereInput!]
+	"""
+	campaign_blocked_groups edge predicates
+	"""
+	hasCampaignBlockedGroups: Boolean
+	hasCampaignBlockedGroupsWith: [CampaignWhereInput!]
+	"""
+	campaign_viewers edge predicates
+	"""
+	hasCampaignViewers: Boolean
+	hasCampaignViewersWith: [CampaignWhereInput!]
+	"""
 	procedure_editors edge predicates
 	"""
 	hasProcedureEditors: Boolean
@@ -30074,6 +30413,99 @@ type IdentityHolder implements Node {
 	"""
 	metadata: Map
 	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
 	environment: CustomTypeEnum
@@ -31037,6 +31469,21 @@ input IdentityHolderWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	internal_owner_user edge predicates
 	"""
@@ -47636,6 +48083,99 @@ type Platform implements Node {
 	"""
 	metadata: Map
 	owner: Organization
+	blockedGroups(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	editors(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	viewers(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
 	businessOwnerUser: User
@@ -49148,6 +49688,21 @@ input PlatformWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
+	"""
+	blocked_groups edge predicates
+	"""
+	hasBlockedGroups: Boolean
+	hasBlockedGroupsWith: [GroupWhereInput!]
+	"""
+	editors edge predicates
+	"""
+	hasEditors: Boolean
+	hasEditorsWith: [GroupWhereInput!]
+	"""
+	viewers edge predicates
+	"""
+	hasViewers: Boolean
+	hasViewersWith: [GroupWhereInput!]
 	"""
 	internal_owner_user edge predicates
 	"""
@@ -72273,6 +72828,15 @@ input UpdateCampaignInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	internalOwnerUserID: ID
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
@@ -74479,6 +75043,24 @@ input UpdateGroupInput {
 	addActionPlanViewerIDs: [ID!]
 	removeActionPlanViewerIDs: [ID!]
 	clearActionPlanViewers: Boolean
+	addPlatformEditorIDs: [ID!]
+	removePlatformEditorIDs: [ID!]
+	clearPlatformEditors: Boolean
+	addPlatformBlockedGroupIDs: [ID!]
+	removePlatformBlockedGroupIDs: [ID!]
+	clearPlatformBlockedGroups: Boolean
+	addPlatformViewerIDs: [ID!]
+	removePlatformViewerIDs: [ID!]
+	clearPlatformViewers: Boolean
+	addCampaignEditorIDs: [ID!]
+	removeCampaignEditorIDs: [ID!]
+	clearCampaignEditors: Boolean
+	addCampaignBlockedGroupIDs: [ID!]
+	removeCampaignBlockedGroupIDs: [ID!]
+	clearCampaignBlockedGroups: Boolean
+	addCampaignViewerIDs: [ID!]
+	removeCampaignViewerIDs: [ID!]
+	clearCampaignViewers: Boolean
 	addProcedureEditorIDs: [ID!]
 	removeProcedureEditorIDs: [ID!]
 	clearProcedureEditors: Boolean
@@ -74737,6 +75319,15 @@ input UpdateIdentityHolderInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	internalOwnerUserID: ID
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
@@ -76025,6 +76616,15 @@ input UpdatePlatformInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
+	addBlockedGroupIDs: [ID!]
+	removeBlockedGroupIDs: [ID!]
+	clearBlockedGroups: Boolean
+	addEditorIDs: [ID!]
+	removeEditorIDs: [ID!]
+	clearEditors: Boolean
+	addViewerIDs: [ID!]
+	removeViewerIDs: [ID!]
+	clearViewers: Boolean
 	internalOwnerUserID: ID
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID

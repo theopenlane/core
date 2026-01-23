@@ -126,6 +126,12 @@ func (ec *executionContext) fieldContext_CampaignBulkCreatePayload_campaigns(_ c
 				return ec.fieldContext_Campaign_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Campaign_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Campaign_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Campaign_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_Campaign_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":
@@ -259,6 +265,12 @@ func (ec *executionContext) fieldContext_CampaignCreatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Campaign_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Campaign_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Campaign_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_Campaign_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":
@@ -421,6 +433,12 @@ func (ec *executionContext) fieldContext_CampaignUpdatePayload_campaign(_ contex
 				return ec.fieldContext_Campaign_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_Campaign_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Campaign_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Campaign_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Campaign_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_Campaign_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":

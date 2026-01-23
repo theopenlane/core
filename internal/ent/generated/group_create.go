@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
@@ -662,6 +663,96 @@ func (_c *GroupCreate) AddActionPlanViewers(v ...*ActionPlan) *GroupCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddActionPlanViewerIDs(ids...)
+}
+
+// AddPlatformEditorIDs adds the "platform_editors" edge to the Platform entity by IDs.
+func (_c *GroupCreate) AddPlatformEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddPlatformEditorIDs(ids...)
+	return _c
+}
+
+// AddPlatformEditors adds the "platform_editors" edges to the Platform entity.
+func (_c *GroupCreate) AddPlatformEditors(v ...*Platform) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformEditorIDs(ids...)
+}
+
+// AddPlatformBlockedGroupIDs adds the "platform_blocked_groups" edge to the Platform entity by IDs.
+func (_c *GroupCreate) AddPlatformBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddPlatformBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddPlatformBlockedGroups adds the "platform_blocked_groups" edges to the Platform entity.
+func (_c *GroupCreate) AddPlatformBlockedGroups(v ...*Platform) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformBlockedGroupIDs(ids...)
+}
+
+// AddPlatformViewerIDs adds the "platform_viewers" edge to the Platform entity by IDs.
+func (_c *GroupCreate) AddPlatformViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddPlatformViewerIDs(ids...)
+	return _c
+}
+
+// AddPlatformViewers adds the "platform_viewers" edges to the Platform entity.
+func (_c *GroupCreate) AddPlatformViewers(v ...*Platform) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformViewerIDs(ids...)
+}
+
+// AddCampaignEditorIDs adds the "campaign_editors" edge to the Campaign entity by IDs.
+func (_c *GroupCreate) AddCampaignEditorIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddCampaignEditorIDs(ids...)
+	return _c
+}
+
+// AddCampaignEditors adds the "campaign_editors" edges to the Campaign entity.
+func (_c *GroupCreate) AddCampaignEditors(v ...*Campaign) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignEditorIDs(ids...)
+}
+
+// AddCampaignBlockedGroupIDs adds the "campaign_blocked_groups" edge to the Campaign entity by IDs.
+func (_c *GroupCreate) AddCampaignBlockedGroupIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddCampaignBlockedGroupIDs(ids...)
+	return _c
+}
+
+// AddCampaignBlockedGroups adds the "campaign_blocked_groups" edges to the Campaign entity.
+func (_c *GroupCreate) AddCampaignBlockedGroups(v ...*Campaign) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignBlockedGroupIDs(ids...)
+}
+
+// AddCampaignViewerIDs adds the "campaign_viewers" edge to the Campaign entity by IDs.
+func (_c *GroupCreate) AddCampaignViewerIDs(ids ...string) *GroupCreate {
+	_c.mutation.AddCampaignViewerIDs(ids...)
+	return _c
+}
+
+// AddCampaignViewers adds the "campaign_viewers" edges to the Campaign entity.
+func (_c *GroupCreate) AddCampaignViewers(v ...*Campaign) *GroupCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddCampaignViewerIDs(ids...)
 }
 
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by IDs.
@@ -1585,6 +1676,108 @@ func (_c *GroupCreate) createSpec() (*Group, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ActionPlanViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.PlatformEditorsTable,
+			Columns: group.PlatformEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.PlatformBlockedGroupsTable,
+			Columns: group.PlatformBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PlatformViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.PlatformViewersTable,
+			Columns: group.PlatformViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformViewers
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignEditorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.CampaignEditorsTable,
+			Columns: group.CampaignEditorsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignEditors
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignBlockedGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.CampaignBlockedGroupsTable,
+			Columns: group.CampaignBlockedGroupsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignBlockedGroups
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CampaignViewersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   group.CampaignViewersTable,
+			Columns: group.CampaignViewersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.CampaignViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx/accessmap"
@@ -41,9 +40,12 @@ func newCustomEnumMixin(schemaType any, opts ...customEnumOptions) CustomEnumMix
 		opt(&c)
 	}
 
+	sch := toSchemaFuncs(schemaType)
+
 	if c.GlobalEnum {
-		sch := toSchemaFuncs(schemaType)
-		hooks.RegisterGlobalEnum(c.fieldName, pluralize.NewClient().Plural(sch.Name()))
+		hooks.RegisterGlobalEnum(c.fieldName, sch.PluralName())
+	} else {
+		hooks.RegisterEnumSchema(sch.Name(), sch.PluralName())
 	}
 
 	return c
@@ -161,25 +163,9 @@ func (c CustomEnumMixin) getEnumReverseRefName() string {
 	return fmt.Sprintf("%s_%s", sch.Name(), c.fieldName)
 }
 
-// validObjectTypes is a set of valid object types for CustomTypeEnum
-var validObjectTypes = map[string]struct{}{
-	Task{}.Name():           {},
-	Control{}.Name():        {},
-	Subcontrol{}.Name():     {},
-	Risk{}.Name():           {},
-	InternalPolicy{}.Name(): {},
-	Procedure{}.Name():      {},
-	ActionPlan{}.Name():     {},
-	Program{}.Name():        {},
-	TrustCenterDoc{}.Name(): {},
-	Platform{}.Name():       {},
-	Asset{}.Name():          {},
-	Entity{}.Name():         {},
-}
-
 // validateObjectType validates the object type field
 func validateObjectType(t string) error {
-	// check for empty value
+	// empty value is valid for global enums
 	if t == "" {
 		return nil
 	}
@@ -187,7 +173,7 @@ func validateObjectType(t string) error {
 	// normalize to snake case for comparison
 	t = strcase.SnakeCase(t)
 
-	if _, ok := validObjectTypes[t]; ok {
+	if hooks.IsValidObjectType(t) {
 		return nil
 	}
 

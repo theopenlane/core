@@ -1542,12 +1542,14 @@ func (c *CampaignHistoryClient) GetX(ctx context.Context, id string) *CampaignHi
 
 // Hooks returns the client hooks.
 func (c *CampaignHistoryClient) Hooks() []Hook {
-	return c.hooks.CampaignHistory
+	hooks := c.hooks.CampaignHistory
+	return append(hooks[:len(hooks):len(hooks)], campaignhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *CampaignHistoryClient) Interceptors() []Interceptor {
-	return c.inters.CampaignHistory
+	inters := c.inters.CampaignHistory
+	return append(inters[:len(inters):len(inters)], campaignhistory.Interceptors[:]...)
 }
 
 func (c *CampaignHistoryClient) mutate(ctx context.Context, m *CampaignHistoryMutation) (Value, error) {
@@ -1675,12 +1677,14 @@ func (c *CampaignTargetHistoryClient) GetX(ctx context.Context, id string) *Camp
 
 // Hooks returns the client hooks.
 func (c *CampaignTargetHistoryClient) Hooks() []Hook {
-	return c.hooks.CampaignTargetHistory
+	hooks := c.hooks.CampaignTargetHistory
+	return append(hooks[:len(hooks):len(hooks)], campaigntargethistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *CampaignTargetHistoryClient) Interceptors() []Interceptor {
-	return c.inters.CampaignTargetHistory
+	inters := c.inters.CampaignTargetHistory
+	return append(inters[:len(inters):len(inters)], campaigntargethistory.Interceptors[:]...)
 }
 
 func (c *CampaignTargetHistoryClient) mutate(ctx context.Context, m *CampaignTargetHistoryMutation) (Value, error) {
@@ -4643,12 +4647,14 @@ func (c *IdentityHolderHistoryClient) GetX(ctx context.Context, id string) *Iden
 
 // Hooks returns the client hooks.
 func (c *IdentityHolderHistoryClient) Hooks() []Hook {
-	return c.hooks.IdentityHolderHistory
+	hooks := c.hooks.IdentityHolderHistory
+	return append(hooks[:len(hooks):len(hooks)], identityholderhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *IdentityHolderHistoryClient) Interceptors() []Interceptor {
-	return c.inters.IdentityHolderHistory
+	inters := c.inters.IdentityHolderHistory
+	return append(inters[:len(inters):len(inters)], identityholderhistory.Interceptors[:]...)
 }
 
 func (c *IdentityHolderHistoryClient) mutate(ctx context.Context, m *IdentityHolderHistoryMutation) (Value, error) {
@@ -6259,12 +6265,14 @@ func (c *PlatformHistoryClient) GetX(ctx context.Context, id string) *PlatformHi
 
 // Hooks returns the client hooks.
 func (c *PlatformHistoryClient) Hooks() []Hook {
-	return c.hooks.PlatformHistory
+	hooks := c.hooks.PlatformHistory
+	return append(hooks[:len(hooks):len(hooks)], platformhistory.Hooks[:]...)
 }
 
 // Interceptors returns the client interceptors.
 func (c *PlatformHistoryClient) Interceptors() []Interceptor {
-	return c.inters.PlatformHistory
+	inters := c.inters.PlatformHistory
+	return append(inters[:len(inters):len(inters)], platformhistory.Interceptors[:]...)
 }
 
 func (c *PlatformHistoryClient) mutate(ctx context.Context, m *PlatformHistoryMutation) (Value, error) {

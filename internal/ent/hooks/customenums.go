@@ -31,32 +31,68 @@ var (
 )
 
 var (
-	// globalEnumRegistry maps global enum field names to the tables that use them
-	globalEnumRegistry = make(map[string][]string)
-	// globalEnumRegistryMu protects concurrent access to the registry
-	globalEnumRegistryMu sync.RWMutex
+	// enumRegistry holds schema registration info for custom enums
+	enumRegistry = &schemaEnumRegistry{
+		objectTypes:  make(map[string]string),
+		globalEnums:  make(map[string][]string),
+	}
 )
+
+// schemaEnumRegistry tracks which schemas use custom enums
+type schemaEnumRegistry struct {
+	mu           sync.RWMutex
+	// objectTypes maps schema name -> table name for non-global enum validation
+	objectTypes  map[string]string
+	// globalEnums maps field name -> table names for global enum deletion checks
+	globalEnums  map[string][]string
+}
+
+// RegisterEnumSchema registers a schema as using custom enums
+// schemaName is used for object_type validation, tableName for deletion checks
+func RegisterEnumSchema(schemaName, tableName string) {
+	enumRegistry.mu.Lock()
+	defer enumRegistry.mu.Unlock()
+
+	enumRegistry.objectTypes[schemaName] = tableName
+}
 
 // RegisterGlobalEnum registers a table as using a global enum field
 func RegisterGlobalEnum(fieldName, tableName string) {
-	globalEnumRegistryMu.Lock()
-	defer globalEnumRegistryMu.Unlock()
+	enumRegistry.mu.Lock()
+	defer enumRegistry.mu.Unlock()
 
-	for _, t := range globalEnumRegistry[fieldName] {
+	for _, t := range enumRegistry.globalEnums[fieldName] {
 		if t == tableName {
 			return
 		}
 	}
 
-	globalEnumRegistry[fieldName] = append(globalEnumRegistry[fieldName], tableName)
+	enumRegistry.globalEnums[fieldName] = append(enumRegistry.globalEnums[fieldName], tableName)
 }
 
 // GetGlobalEnumTables returns all tables that use a global enum field
 func GetGlobalEnumTables(fieldName string) []string {
-	globalEnumRegistryMu.RLock()
-	defer globalEnumRegistryMu.RUnlock()
+	enumRegistry.mu.RLock()
+	defer enumRegistry.mu.RUnlock()
 
-	return globalEnumRegistry[fieldName]
+	return enumRegistry.globalEnums[fieldName]
+}
+
+// GetTableForObjectType returns the table name for a given object type, or empty if not registered
+func GetTableForObjectType(objectType string) string {
+	enumRegistry.mu.RLock()
+	defer enumRegistry.mu.RUnlock()
+
+	return enumRegistry.objectTypes[objectType]
+}
+
+// IsValidObjectType returns true if the object type is registered for custom enums
+func IsValidObjectType(objectType string) bool {
+	enumRegistry.mu.RLock()
+	defer enumRegistry.mu.RUnlock()
+
+	_, ok := enumRegistry.objectTypes[objectType]
+	return ok
 }
 
 // CustomEnumFilter is used to filter custom enums based on object type and field

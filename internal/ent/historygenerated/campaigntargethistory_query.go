@@ -6,6 +6,7 @@ package historygenerated
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 
@@ -334,6 +335,12 @@ func (_q *CampaignTargetHistoryQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if campaigntargethistory.Policy == nil {
+		return errors.New("historygenerated: uninitialized campaigntargethistory.Policy (forgotten import historygenerated/runtime?)")
+	}
+	if err := campaigntargethistory.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

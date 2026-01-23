@@ -107,6 +107,12 @@ type IdentityHolder struct {
 type IdentityHolderEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// InternalOwnerUser holds the value of the internal_owner_user edge.
 	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
 	// InternalOwnerGroup holds the value of the internal_owner_group edge.
@@ -141,10 +147,13 @@ type IdentityHolderEdges struct {
 	User *User `json:"user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [20]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [20]map[string]int
 
+	namedBlockedGroups       map[string][]*Group
+	namedEditors             map[string][]*Group
+	namedViewers             map[string][]*Group
 	namedAssessmentResponses map[string][]*AssessmentResponse
 	namedAssessments         map[string][]*Assessment
 	namedTemplates           map[string][]*Template
@@ -168,12 +177,39 @@ func (e IdentityHolderEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // InternalOwnerUserOrErr returns the InternalOwnerUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e IdentityHolderEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -184,7 +220,7 @@ func (e IdentityHolderEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e IdentityHolderEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
@@ -195,7 +231,7 @@ func (e IdentityHolderEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e IdentityHolderEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -206,7 +242,7 @@ func (e IdentityHolderEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e IdentityHolderEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -217,7 +253,7 @@ func (e IdentityHolderEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e IdentityHolderEdges) EmployerOrErr() (*Entity, error) {
 	if e.Employer != nil {
 		return e.Employer, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "employer"}
@@ -226,7 +262,7 @@ func (e IdentityHolderEdges) EmployerOrErr() (*Entity, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[9] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -235,7 +271,7 @@ func (e IdentityHolderEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, 
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[10] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -244,7 +280,7 @@ func (e IdentityHolderEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // TemplatesOrErr returns the Templates value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TemplatesOrErr() ([]*Template, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[11] {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
@@ -253,7 +289,7 @@ func (e IdentityHolderEdges) TemplatesOrErr() ([]*Template, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[12] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -262,7 +298,7 @@ func (e IdentityHolderEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[13] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -271,7 +307,7 @@ func (e IdentityHolderEdges) EntitiesOrErr() ([]*Entity, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[14] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -280,7 +316,7 @@ func (e IdentityHolderEdges) PlatformsOrErr() ([]*Platform, error) {
 // CampaignsOrErr returns the Campaigns value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[15] {
 		return e.Campaigns, nil
 	}
 	return nil, &NotLoadedError{edge: "campaigns"}
@@ -289,7 +325,7 @@ func (e IdentityHolderEdges) CampaignsOrErr() ([]*Campaign, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[16] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -298,7 +334,7 @@ func (e IdentityHolderEdges) TasksOrErr() ([]*Task, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[17] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -307,7 +343,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[18] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -318,7 +354,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[16] {
+	} else if e.loadedTypes[19] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -600,6 +636,21 @@ func (_m *IdentityHolder) QueryOwner() *OrganizationQuery {
 	return NewIdentityHolderClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryBlockedGroups() *GroupQuery {
+	return NewIdentityHolderClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryEditors() *GroupQuery {
+	return NewIdentityHolderClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryViewers() *GroupQuery {
+	return NewIdentityHolderClient(_m.config).QueryViewers(_m)
+}
+
 // QueryInternalOwnerUser queries the "internal_owner_user" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryInternalOwnerUser() *UserQuery {
 	return NewIdentityHolderClient(_m.config).QueryInternalOwnerUser(_m)
@@ -816,6 +867,78 @@ func (_m *IdentityHolder) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedAssessmentResponses returns the AssessmentResponses named value or an error if the edge was not

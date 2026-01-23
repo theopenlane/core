@@ -124,6 +124,12 @@ func (ec *executionContext) fieldContext_IdentityHolderBulkCreatePayload_identit
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_IdentityHolder_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":
@@ -263,6 +269,12 @@ func (ec *executionContext) fieldContext_IdentityHolderCreatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_IdentityHolder_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":
@@ -431,6 +443,12 @@ func (ec *executionContext) fieldContext_IdentityHolderUpdatePayload_identityHol
 				return ec.fieldContext_IdentityHolder_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_IdentityHolder_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_IdentityHolder_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_IdentityHolder_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_IdentityHolder_viewers(ctx, field)
 			case "internalOwnerUser":
 				return ec.fieldContext_IdentityHolder_internalOwnerUser(ctx, field)
 			case "internalOwnerGroup":

@@ -148,6 +148,12 @@ type Platform struct {
 type PlatformEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// InternalOwnerUser holds the value of the internal_owner_user edge.
 	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
 	// InternalOwnerGroup holds the value of the internal_owner_group edge.
@@ -218,10 +224,13 @@ type PlatformEdges struct {
 	PlatformOwner *User `json:"platform_owner,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [35]bool
+	loadedTypes [38]bool
 	// totalCount holds the count of the edges above.
-	totalCount [35]map[string]int
+	totalCount [38]map[string]int
 
+	namedBlockedGroups        map[string][]*Group
+	namedEditors              map[string][]*Group
+	namedViewers              map[string][]*Group
 	namedAssets               map[string][]*Asset
 	namedEntities             map[string][]*Entity
 	namedEvidence             map[string][]*Evidence
@@ -252,12 +261,39 @@ func (e PlatformEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e PlatformEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // InternalOwnerUserOrErr returns the InternalOwnerUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e PlatformEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -268,7 +304,7 @@ func (e PlatformEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e PlatformEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
@@ -279,7 +315,7 @@ func (e PlatformEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e PlatformEdges) BusinessOwnerUserOrErr() (*User, error) {
 	if e.BusinessOwnerUser != nil {
 		return e.BusinessOwnerUser, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "business_owner_user"}
@@ -290,7 +326,7 @@ func (e PlatformEdges) BusinessOwnerUserOrErr() (*User, error) {
 func (e PlatformEdges) BusinessOwnerGroupOrErr() (*Group, error) {
 	if e.BusinessOwnerGroup != nil {
 		return e.BusinessOwnerGroup, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "business_owner_group"}
@@ -301,7 +337,7 @@ func (e PlatformEdges) BusinessOwnerGroupOrErr() (*Group, error) {
 func (e PlatformEdges) TechnicalOwnerUserOrErr() (*User, error) {
 	if e.TechnicalOwnerUser != nil {
 		return e.TechnicalOwnerUser, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "technical_owner_user"}
@@ -312,7 +348,7 @@ func (e PlatformEdges) TechnicalOwnerUserOrErr() (*User, error) {
 func (e PlatformEdges) TechnicalOwnerGroupOrErr() (*Group, error) {
 	if e.TechnicalOwnerGroup != nil {
 		return e.TechnicalOwnerGroup, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "technical_owner_group"}
@@ -323,7 +359,7 @@ func (e PlatformEdges) TechnicalOwnerGroupOrErr() (*Group, error) {
 func (e PlatformEdges) SecurityOwnerUserOrErr() (*User, error) {
 	if e.SecurityOwnerUser != nil {
 		return e.SecurityOwnerUser, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "security_owner_user"}
@@ -334,7 +370,7 @@ func (e PlatformEdges) SecurityOwnerUserOrErr() (*User, error) {
 func (e PlatformEdges) SecurityOwnerGroupOrErr() (*Group, error) {
 	if e.SecurityOwnerGroup != nil {
 		return e.SecurityOwnerGroup, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "security_owner_group"}
@@ -345,7 +381,7 @@ func (e PlatformEdges) SecurityOwnerGroupOrErr() (*Group, error) {
 func (e PlatformEdges) PlatformKindOrErr() (*CustomTypeEnum, error) {
 	if e.PlatformKind != nil {
 		return e.PlatformKind, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_kind"}
@@ -356,7 +392,7 @@ func (e PlatformEdges) PlatformKindOrErr() (*CustomTypeEnum, error) {
 func (e PlatformEdges) PlatformDataClassificationOrErr() (*CustomTypeEnum, error) {
 	if e.PlatformDataClassification != nil {
 		return e.PlatformDataClassification, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[13] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_data_classification"}
@@ -367,7 +403,7 @@ func (e PlatformEdges) PlatformDataClassificationOrErr() (*CustomTypeEnum, error
 func (e PlatformEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[14] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -378,7 +414,7 @@ func (e PlatformEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e PlatformEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[15] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -389,7 +425,7 @@ func (e PlatformEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 func (e PlatformEdges) AccessModelOrErr() (*CustomTypeEnum, error) {
 	if e.AccessModel != nil {
 		return e.AccessModel, nil
-	} else if e.loadedTypes[13] {
+	} else if e.loadedTypes[16] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "access_model"}
@@ -400,7 +436,7 @@ func (e PlatformEdges) AccessModelOrErr() (*CustomTypeEnum, error) {
 func (e PlatformEdges) EncryptionStatusOrErr() (*CustomTypeEnum, error) {
 	if e.EncryptionStatus != nil {
 		return e.EncryptionStatus, nil
-	} else if e.loadedTypes[14] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "encryption_status"}
@@ -411,7 +447,7 @@ func (e PlatformEdges) EncryptionStatusOrErr() (*CustomTypeEnum, error) {
 func (e PlatformEdges) SecurityTierOrErr() (*CustomTypeEnum, error) {
 	if e.SecurityTier != nil {
 		return e.SecurityTier, nil
-	} else if e.loadedTypes[15] {
+	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "security_tier"}
@@ -422,7 +458,7 @@ func (e PlatformEdges) SecurityTierOrErr() (*CustomTypeEnum, error) {
 func (e PlatformEdges) CriticalityOrErr() (*CustomTypeEnum, error) {
 	if e.Criticality != nil {
 		return e.Criticality, nil
-	} else if e.loadedTypes[16] {
+	} else if e.loadedTypes[19] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "criticality"}
@@ -431,7 +467,7 @@ func (e PlatformEdges) CriticalityOrErr() (*CustomTypeEnum, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[20] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -440,7 +476,7 @@ func (e PlatformEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[21] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -449,7 +485,7 @@ func (e PlatformEdges) EntitiesOrErr() ([]*Entity, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[22] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -458,7 +494,7 @@ func (e PlatformEdges) EvidenceOrErr() ([]*Evidence, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[23] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -467,7 +503,7 @@ func (e PlatformEdges) FilesOrErr() ([]*File, error) {
 // RisksOrErr returns the Risks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) RisksOrErr() ([]*Risk, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[24] {
 		return e.Risks, nil
 	}
 	return nil, &NotLoadedError{edge: "risks"}
@@ -476,7 +512,7 @@ func (e PlatformEdges) RisksOrErr() ([]*Risk, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[25] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -485,7 +521,7 @@ func (e PlatformEdges) ControlsOrErr() ([]*Control, error) {
 // AssessmentsOrErr returns the Assessments value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) AssessmentsOrErr() ([]*Assessment, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[26] {
 		return e.Assessments, nil
 	}
 	return nil, &NotLoadedError{edge: "assessments"}
@@ -494,7 +530,7 @@ func (e PlatformEdges) AssessmentsOrErr() ([]*Assessment, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[27] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -503,7 +539,7 @@ func (e PlatformEdges) ScansOrErr() ([]*Scan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[28] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -512,7 +548,7 @@ func (e PlatformEdges) TasksOrErr() ([]*Task, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[29] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -521,7 +557,7 @@ func (e PlatformEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[30] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -530,7 +566,7 @@ func (e PlatformEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // SourceAssetsOrErr returns the SourceAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[31] {
 		return e.SourceAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "source_assets"}
@@ -539,7 +575,7 @@ func (e PlatformEdges) SourceAssetsOrErr() ([]*Asset, error) {
 // SourceEntitiesOrErr returns the SourceEntities value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[29] {
+	if e.loadedTypes[32] {
 		return e.SourceEntities, nil
 	}
 	return nil, &NotLoadedError{edge: "source_entities"}
@@ -548,7 +584,7 @@ func (e PlatformEdges) SourceEntitiesOrErr() ([]*Entity, error) {
 // OutOfScopeAssetsOrErr returns the OutOfScopeAssets value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[30] {
+	if e.loadedTypes[33] {
 		return e.OutOfScopeAssets, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_assets"}
@@ -557,7 +593,7 @@ func (e PlatformEdges) OutOfScopeAssetsOrErr() ([]*Asset, error) {
 // OutOfScopeVendorsOrErr returns the OutOfScopeVendors value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
-	if e.loadedTypes[31] {
+	if e.loadedTypes[34] {
 		return e.OutOfScopeVendors, nil
 	}
 	return nil, &NotLoadedError{edge: "out_of_scope_vendors"}
@@ -566,7 +602,7 @@ func (e PlatformEdges) OutOfScopeVendorsOrErr() ([]*Entity, error) {
 // ApplicableFrameworksOrErr returns the ApplicableFrameworks value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
-	if e.loadedTypes[32] {
+	if e.loadedTypes[35] {
 		return e.ApplicableFrameworks, nil
 	}
 	return nil, &NotLoadedError{edge: "applicable_frameworks"}
@@ -575,7 +611,7 @@ func (e PlatformEdges) ApplicableFrameworksOrErr() ([]*Standard, error) {
 // GeneratedScansOrErr returns the GeneratedScans value or an error if the edge
 // was not loaded in eager-loading.
 func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[33] {
+	if e.loadedTypes[36] {
 		return e.GeneratedScans, nil
 	}
 	return nil, &NotLoadedError{edge: "generated_scans"}
@@ -586,7 +622,7 @@ func (e PlatformEdges) GeneratedScansOrErr() ([]*Scan, error) {
 func (e PlatformEdges) PlatformOwnerOrErr() (*User, error) {
 	if e.PlatformOwner != nil {
 		return e.PlatformOwner, nil
-	} else if e.loadedTypes[34] {
+	} else if e.loadedTypes[37] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "platform_owner"}
@@ -1007,6 +1043,21 @@ func (_m *Platform) QueryOwner() *OrganizationQuery {
 	return NewPlatformClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the Platform entity.
+func (_m *Platform) QueryBlockedGroups() *GroupQuery {
+	return NewPlatformClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the Platform entity.
+func (_m *Platform) QueryEditors() *GroupQuery {
+	return NewPlatformClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the Platform entity.
+func (_m *Platform) QueryViewers() *GroupQuery {
+	return NewPlatformClient(_m.config).QueryViewers(_m)
+}
+
 // QueryInternalOwnerUser queries the "internal_owner_user" edge of the Platform entity.
 func (_m *Platform) QueryInternalOwnerUser() *UserQuery {
 	return NewPlatformClient(_m.config).QueryInternalOwnerUser(_m)
@@ -1371,6 +1422,78 @@ func (_m *Platform) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Platform) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Platform) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedAssets returns the Assets named value or an error if the edge was not

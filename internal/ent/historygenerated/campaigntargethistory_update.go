@@ -308,7 +308,9 @@ func (_u *CampaignTargetHistoryUpdate) Mutation() *CampaignTargetHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *CampaignTargetHistoryUpdate) Save(ctx context.Context) (int, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -335,11 +337,15 @@ func (_u *CampaignTargetHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *CampaignTargetHistoryUpdate) defaults() {
+func (_u *CampaignTargetHistoryUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if campaigntargethistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaigntargethistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := campaigntargethistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -773,7 +779,9 @@ func (_u *CampaignTargetHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated CampaignTargetHistory entity.
 func (_u *CampaignTargetHistoryUpdateOne) Save(ctx context.Context) (*CampaignTargetHistory, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -800,11 +808,15 @@ func (_u *CampaignTargetHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *CampaignTargetHistoryUpdateOne) defaults() {
+func (_u *CampaignTargetHistoryUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if campaigntargethistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaigntargethistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := campaigntargethistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

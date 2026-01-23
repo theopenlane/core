@@ -5,6 +5,7 @@ package generated
 import (
 	"context"
 	"database/sql/driver"
+	"errors"
 	"fmt"
 	"math"
 
@@ -568,6 +569,12 @@ func (_q *CampaignTargetQuery) prepareQuery(ctx context.Context) error {
 			return err
 		}
 		_q.sql = prev
+	}
+	if campaigntarget.Policy == nil {
+		return errors.New("generated: uninitialized campaigntarget.Policy (forgotten import generated/runtime?)")
+	}
+	if err := campaigntarget.Policy.EvalQuery(ctx, _q); err != nil {
+		return err
 	}
 	return nil
 }

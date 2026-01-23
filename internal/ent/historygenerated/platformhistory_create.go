@@ -832,7 +832,9 @@ func (_c *PlatformHistoryCreate) Mutation() *PlatformHistoryMutation {
 
 // Save creates the PlatformHistory in the database.
 func (_c *PlatformHistoryCreate) Save(ctx context.Context) (*PlatformHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -859,16 +861,25 @@ func (_c *PlatformHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *PlatformHistoryCreate) defaults() {
+func (_c *PlatformHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if platformhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("historygenerated: uninitialized platformhistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
+		}
 		v := platformhistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if platformhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized platformhistory.DefaultCreatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := platformhistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if platformhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized platformhistory.DefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := platformhistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -893,9 +904,13 @@ func (_c *PlatformHistoryCreate) defaults() {
 		_c.mutation.SetSourceType(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if platformhistory.DefaultID == nil {
+			return fmt.Errorf("historygenerated: uninitialized platformhistory.DefaultID (forgotten import historygenerated/runtime?)")
+		}
 		v := platformhistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

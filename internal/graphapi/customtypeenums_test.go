@@ -456,3 +456,191 @@ func TestMutationDeleteCustomTypeEnumInUse(t *testing.T) {
 
 	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: taskEnum.ID}).MustDelete(testUser1.UserCtx, t)
 }
+
+func TestMutationCreateGlobalCustomTypeEnum(t *testing.T) {
+	testCases := []struct {
+		name        string
+		request     testclient.CreateCustomTypeEnumInput
+		client      *testclient.TestClient
+		ctx         context.Context
+		expectedErr string
+	}{
+		{
+			name: "happy path, global enum with empty object type",
+			request: testclient.CreateCustomTypeEnumInput{
+				Name:       "Production",
+				ObjectType: "",
+				Field:      lo.ToPtr("environment"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, global scope enum",
+			request: testclient.CreateCustomTypeEnumInput{
+				Name:        "PCI-DSS",
+				ObjectType:  "",
+				Field:       lo.ToPtr("scope"),
+				Description: lo.ToPtr("Payment Card Industry Data Security Standard scope"),
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateCustomTypeEnum(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, resp.CreateCustomTypeEnum.CustomTypeEnum.Name == tc.request.Name)
+			assert.Check(t, resp.CreateCustomTypeEnum.CustomTypeEnum.ObjectType == tc.request.ObjectType)
+
+			if tc.request.Field != nil {
+				assert.Check(t, resp.CreateCustomTypeEnum.CustomTypeEnum.Field == *tc.request.Field)
+			}
+
+			(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: resp.CreateCustomTypeEnum.CustomTypeEnum.ID}).MustDelete(testUser1.UserCtx, t)
+		})
+	}
+}
+
+func TestMutationDeleteGlobalCustomTypeEnumInUse(t *testing.T) {
+	// create a global environment enum
+	globalEnvEnum := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "Staging",
+		ObjectType: "",
+		Field:      "environment",
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create a task using the global environment enum
+	taskResp, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+		Title:           "Test Task with Global Env",
+		EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+	})
+	assert.NilError(t, err)
+	taskID := taskResp.CreateTask.Task.ID
+
+	t.Run("delete global enum in use by task", func(t *testing.T) {
+		_, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, globalEnvEnum.ID)
+		assert.ErrorContains(t, err, "enum is in use")
+	})
+
+	// cleanup task
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskID}).MustDelete(testUser1.UserCtx, t)
+
+	t.Run("global enum deletion works after removing references", func(t *testing.T) {
+		resp, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, globalEnvEnum.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal(globalEnvEnum.ID, resp.DeleteCustomTypeEnum.DeletedID))
+	})
+}
+
+func TestMutationDeleteGlobalEnumInUseByMultipleTables(t *testing.T) {
+	// create a global scope enum
+	globalScopeEnum := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "SOC2-Type2",
+		ObjectType: "",
+		Field:      "scope",
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create a task using the global scope enum
+	taskResp, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+		Title:     "Task with Scope",
+		ScopeName: lo.ToPtr(globalScopeEnum.Name),
+	})
+	assert.NilError(t, err)
+	taskID := taskResp.CreateTask.Task.ID
+
+	// create a control using the same global scope enum
+	controlResp, err := suite.client.api.CreateControl(testUser1.UserCtx, testclient.CreateControlInput{
+		RefCode:   "SCOPE-TEST-1",
+		ScopeName: lo.ToPtr(globalScopeEnum.Name),
+	})
+	assert.NilError(t, err)
+	controlID := controlResp.CreateControl.Control.ID
+
+	t.Run("delete global enum in use by multiple tables fails", func(t *testing.T) {
+		_, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, globalScopeEnum.ID)
+		assert.ErrorContains(t, err, "enum is in use")
+	})
+
+	// remove task reference
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskID}).MustDelete(testUser1.UserCtx, t)
+
+	t.Run("delete global enum still fails with one reference remaining", func(t *testing.T) {
+		_, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, globalScopeEnum.ID)
+		assert.ErrorContains(t, err, "enum is in use")
+	})
+
+	// remove control reference
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlID}).MustDelete(testUser1.UserCtx, t)
+
+	t.Run("global enum deletion works after all references removed", func(t *testing.T) {
+		resp, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, globalScopeEnum.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal(globalScopeEnum.ID, resp.DeleteCustomTypeEnum.DeletedID))
+	})
+}
+
+func TestGlobalEnumLookupFallback(t *testing.T) {
+	// create a global environment enum
+	globalEnvEnum := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "GlobalDev",
+		ObjectType: "",
+		Field:      "environment",
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create a task-specific environment enum with same name (should not be used when global exists)
+	taskSpecificEnum := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "TaskSpecificEnv",
+		ObjectType: "task",
+		Field:      "environment",
+	}).MustNew(testUser1.UserCtx, t)
+
+	t.Run("task uses global enum when available", func(t *testing.T) {
+		taskResp, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+			Title:           "Task Using Global Env",
+			EnvironmentName: lo.ToPtr(globalEnvEnum.Name),
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, taskResp != nil)
+
+		(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskResp.CreateTask.Task.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	t.Run("task can use task-specific enum", func(t *testing.T) {
+		taskResp, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+			Title:           "Task Using Specific Env",
+			EnvironmentName: lo.ToPtr(taskSpecificEnum.Name),
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, taskResp != nil)
+
+		(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskResp.CreateTask.Task.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	t.Run("invalid enum name fails", func(t *testing.T) {
+		_, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+			Title:           "Task With Invalid Env",
+			EnvironmentName: lo.ToPtr("NonExistentEnvironment"),
+		})
+		assert.ErrorContains(t, err, "does not exist")
+	})
+
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: globalEnvEnum.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: taskSpecificEnum.ID}).MustDelete(testUser1.UserCtx, t)
+}

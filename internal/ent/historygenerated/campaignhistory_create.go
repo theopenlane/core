@@ -566,7 +566,9 @@ func (_c *CampaignHistoryCreate) Mutation() *CampaignHistoryMutation {
 
 // Save creates the CampaignHistory in the database.
 func (_c *CampaignHistoryCreate) Save(ctx context.Context) (*CampaignHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -593,16 +595,25 @@ func (_c *CampaignHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *CampaignHistoryCreate) defaults() {
+func (_c *CampaignHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if campaignhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaignhistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
+		}
 		v := campaignhistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if campaignhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaignhistory.DefaultCreatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := campaignhistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if campaignhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaignhistory.DefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := campaignhistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -643,9 +654,13 @@ func (_c *CampaignHistoryCreate) defaults() {
 		_c.mutation.SetResendCount(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if campaignhistory.DefaultID == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaignhistory.DefaultID (forgotten import historygenerated/runtime?)")
+		}
 		v := campaignhistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

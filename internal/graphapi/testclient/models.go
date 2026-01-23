@@ -2474,6 +2474,9 @@ type Campaign struct {
 	// additional metadata about the campaign
 	Metadata            map[string]any                `json:"metadata,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
+	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
+	Editors             *GroupConnection              `json:"editors"`
+	Viewers             *GroupConnection              `json:"viewers"`
 	InternalOwnerUser   *User                         `json:"internalOwnerUser,omitempty"`
 	InternalOwnerGroup  *Group                        `json:"internalOwnerGroup,omitempty"`
 	Assessment          *Assessment                   `json:"assessment,omitempty"`
@@ -3264,6 +3267,15 @@ type CampaignWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// internal_owner_user edge predicates
 	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
 	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
@@ -5441,6 +5453,9 @@ type CreateCampaignInput struct {
 	// additional metadata about the campaign
 	Metadata              map[string]any `json:"metadata,omitempty"`
 	OwnerID               *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string       `json:"editorIDs,omitempty"`
+	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
 	InternalOwnerUserID   *string        `json:"internalOwnerUserID,omitempty"`
 	InternalOwnerGroupID  *string        `json:"internalOwnerGroupID,omitempty"`
 	AssessmentID          *string        `json:"assessmentID,omitempty"`
@@ -6414,6 +6429,12 @@ type CreateGroupInput struct {
 	ActionPlanEditorIDs                  []string                 `json:"actionPlanEditorIDs,omitempty"`
 	ActionPlanBlockedGroupIDs            []string                 `json:"actionPlanBlockedGroupIDs,omitempty"`
 	ActionPlanViewerIDs                  []string                 `json:"actionPlanViewerIDs,omitempty"`
+	PlatformEditorIDs                    []string                 `json:"platformEditorIDs,omitempty"`
+	PlatformBlockedGroupIDs              []string                 `json:"platformBlockedGroupIDs,omitempty"`
+	PlatformViewerIDs                    []string                 `json:"platformViewerIDs,omitempty"`
+	CampaignEditorIDs                    []string                 `json:"campaignEditorIDs,omitempty"`
+	CampaignBlockedGroupIDs              []string                 `json:"campaignBlockedGroupIDs,omitempty"`
+	CampaignViewerIDs                    []string                 `json:"campaignViewerIDs,omitempty"`
 	ProcedureEditorIDs                   []string                 `json:"procedureEditorIDs,omitempty"`
 	ProcedureBlockedGroupIDs             []string                 `json:"procedureBlockedGroupIDs,omitempty"`
 	InternalPolicyEditorIDs              []string                 `json:"internalPolicyEditorIDs,omitempty"`
@@ -6533,6 +6554,9 @@ type CreateIdentityHolderInput struct {
 	// additional metadata about the identity holder
 	Metadata              map[string]any `json:"metadata,omitempty"`
 	OwnerID               *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string       `json:"editorIDs,omitempty"`
+	ViewerIDs             []string       `json:"viewerIDs,omitempty"`
 	InternalOwnerUserID   *string        `json:"internalOwnerUserID,omitempty"`
 	InternalOwnerGroupID  *string        `json:"internalOwnerGroupID,omitempty"`
 	EnvironmentID         *string        `json:"environmentID,omitempty"`
@@ -7136,6 +7160,9 @@ type CreatePlatformInput struct {
 	// additional metadata about the platform
 	Metadata                     map[string]any `json:"metadata,omitempty"`
 	OwnerID                      *string        `json:"ownerID,omitempty"`
+	BlockedGroupIDs              []string       `json:"blockedGroupIDs,omitempty"`
+	EditorIDs                    []string       `json:"editorIDs,omitempty"`
+	ViewerIDs                    []string       `json:"viewerIDs,omitempty"`
 	InternalOwnerUserID          *string        `json:"internalOwnerUserID,omitempty"`
 	InternalOwnerGroupID         *string        `json:"internalOwnerGroupID,omitempty"`
 	BusinessOwnerUserID          *string        `json:"businessOwnerUserID,omitempty"`
@@ -15272,6 +15299,12 @@ type Group struct {
 	ActionPlanEditors                  *ActionPlanConnection            `json:"actionPlanEditors"`
 	ActionPlanBlockedGroups            *ActionPlanConnection            `json:"actionPlanBlockedGroups"`
 	ActionPlanViewers                  *ActionPlanConnection            `json:"actionPlanViewers"`
+	PlatformEditors                    *PlatformConnection              `json:"platformEditors"`
+	PlatformBlockedGroups              *PlatformConnection              `json:"platformBlockedGroups"`
+	PlatformViewers                    *PlatformConnection              `json:"platformViewers"`
+	CampaignEditors                    *CampaignConnection              `json:"campaignEditors"`
+	CampaignBlockedGroups              *CampaignConnection              `json:"campaignBlockedGroups"`
+	CampaignViewers                    *CampaignConnection              `json:"campaignViewers"`
 	ProcedureEditors                   *ProcedureConnection             `json:"procedureEditors"`
 	ProcedureBlockedGroups             *ProcedureConnection             `json:"procedureBlockedGroups"`
 	InternalPolicyEditors              *InternalPolicyConnection        `json:"internalPolicyEditors"`
@@ -16058,6 +16091,24 @@ type GroupWhereInput struct {
 	// action_plan_viewers edge predicates
 	HasActionPlanViewers     *bool                   `json:"hasActionPlanViewers,omitempty"`
 	HasActionPlanViewersWith []*ActionPlanWhereInput `json:"hasActionPlanViewersWith,omitempty"`
+	// platform_editors edge predicates
+	HasPlatformEditors     *bool                 `json:"hasPlatformEditors,omitempty"`
+	HasPlatformEditorsWith []*PlatformWhereInput `json:"hasPlatformEditorsWith,omitempty"`
+	// platform_blocked_groups edge predicates
+	HasPlatformBlockedGroups     *bool                 `json:"hasPlatformBlockedGroups,omitempty"`
+	HasPlatformBlockedGroupsWith []*PlatformWhereInput `json:"hasPlatformBlockedGroupsWith,omitempty"`
+	// platform_viewers edge predicates
+	HasPlatformViewers     *bool                 `json:"hasPlatformViewers,omitempty"`
+	HasPlatformViewersWith []*PlatformWhereInput `json:"hasPlatformViewersWith,omitempty"`
+	// campaign_editors edge predicates
+	HasCampaignEditors     *bool                 `json:"hasCampaignEditors,omitempty"`
+	HasCampaignEditorsWith []*CampaignWhereInput `json:"hasCampaignEditorsWith,omitempty"`
+	// campaign_blocked_groups edge predicates
+	HasCampaignBlockedGroups     *bool                 `json:"hasCampaignBlockedGroups,omitempty"`
+	HasCampaignBlockedGroupsWith []*CampaignWhereInput `json:"hasCampaignBlockedGroupsWith,omitempty"`
+	// campaign_viewers edge predicates
+	HasCampaignViewers     *bool                 `json:"hasCampaignViewers,omitempty"`
+	HasCampaignViewersWith []*CampaignWhereInput `json:"hasCampaignViewersWith,omitempty"`
 	// procedure_editors edge predicates
 	HasProcedureEditors     *bool                  `json:"hasProcedureEditors,omitempty"`
 	HasProcedureEditorsWith []*ProcedureWhereInput `json:"hasProcedureEditorsWith,omitempty"`
@@ -16485,6 +16536,9 @@ type IdentityHolder struct {
 	// additional metadata about the identity holder
 	Metadata            map[string]any                `json:"metadata,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
+	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
+	Editors             *GroupConnection              `json:"editors"`
+	Viewers             *GroupConnection              `json:"viewers"`
 	InternalOwnerUser   *User                         `json:"internalOwnerUser,omitempty"`
 	InternalOwnerGroup  *Group                        `json:"internalOwnerGroup,omitempty"`
 	Environment         *CustomTypeEnum               `json:"environment,omitempty"`
@@ -17008,6 +17062,15 @@ type IdentityHolderWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// internal_owner_user edge predicates
 	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
 	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
@@ -22525,6 +22588,9 @@ type Platform struct {
 	// additional metadata about the platform
 	Metadata                   map[string]any               `json:"metadata,omitempty"`
 	Owner                      *Organization                `json:"owner,omitempty"`
+	BlockedGroups              *GroupConnection             `json:"blockedGroups"`
+	Editors                    *GroupConnection             `json:"editors"`
+	Viewers                    *GroupConnection             `json:"viewers"`
 	InternalOwnerUser          *User                        `json:"internalOwnerUser,omitempty"`
 	InternalOwnerGroup         *Group                       `json:"internalOwnerGroup,omitempty"`
 	BusinessOwnerUser          *User                        `json:"businessOwnerUser,omitempty"`
@@ -23353,6 +23419,15 @@ type PlatformWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// internal_owner_user edge predicates
 	HasInternalOwnerUser     *bool             `json:"hasInternalOwnerUser,omitempty"`
 	HasInternalOwnerUserWith []*UserWhereInput `json:"hasInternalOwnerUserWith,omitempty"`
@@ -33394,6 +33469,15 @@ type UpdateCampaignInput struct {
 	// additional metadata about the campaign
 	Metadata                    map[string]any `json:"metadata,omitempty"`
 	ClearMetadata               *bool          `json:"clearMetadata,omitempty"`
+	AddBlockedGroupIDs          []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs                []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs             []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers                *bool          `json:"clearViewers,omitempty"`
 	InternalOwnerUserID         *string        `json:"internalOwnerUserID,omitempty"`
 	ClearInternalOwnerUser      *bool          `json:"clearInternalOwnerUser,omitempty"`
 	InternalOwnerGroupID        *string        `json:"internalOwnerGroupID,omitempty"`
@@ -35020,6 +35104,24 @@ type UpdateGroupInput struct {
 	AddActionPlanViewerIDs                     []string                      `json:"addActionPlanViewerIDs,omitempty"`
 	RemoveActionPlanViewerIDs                  []string                      `json:"removeActionPlanViewerIDs,omitempty"`
 	ClearActionPlanViewers                     *bool                         `json:"clearActionPlanViewers,omitempty"`
+	AddPlatformEditorIDs                       []string                      `json:"addPlatformEditorIDs,omitempty"`
+	RemovePlatformEditorIDs                    []string                      `json:"removePlatformEditorIDs,omitempty"`
+	ClearPlatformEditors                       *bool                         `json:"clearPlatformEditors,omitempty"`
+	AddPlatformBlockedGroupIDs                 []string                      `json:"addPlatformBlockedGroupIDs,omitempty"`
+	RemovePlatformBlockedGroupIDs              []string                      `json:"removePlatformBlockedGroupIDs,omitempty"`
+	ClearPlatformBlockedGroups                 *bool                         `json:"clearPlatformBlockedGroups,omitempty"`
+	AddPlatformViewerIDs                       []string                      `json:"addPlatformViewerIDs,omitempty"`
+	RemovePlatformViewerIDs                    []string                      `json:"removePlatformViewerIDs,omitempty"`
+	ClearPlatformViewers                       *bool                         `json:"clearPlatformViewers,omitempty"`
+	AddCampaignEditorIDs                       []string                      `json:"addCampaignEditorIDs,omitempty"`
+	RemoveCampaignEditorIDs                    []string                      `json:"removeCampaignEditorIDs,omitempty"`
+	ClearCampaignEditors                       *bool                         `json:"clearCampaignEditors,omitempty"`
+	AddCampaignBlockedGroupIDs                 []string                      `json:"addCampaignBlockedGroupIDs,omitempty"`
+	RemoveCampaignBlockedGroupIDs              []string                      `json:"removeCampaignBlockedGroupIDs,omitempty"`
+	ClearCampaignBlockedGroups                 *bool                         `json:"clearCampaignBlockedGroups,omitempty"`
+	AddCampaignViewerIDs                       []string                      `json:"addCampaignViewerIDs,omitempty"`
+	RemoveCampaignViewerIDs                    []string                      `json:"removeCampaignViewerIDs,omitempty"`
+	ClearCampaignViewers                       *bool                         `json:"clearCampaignViewers,omitempty"`
 	AddProcedureEditorIDs                      []string                      `json:"addProcedureEditorIDs,omitempty"`
 	RemoveProcedureEditorIDs                   []string                      `json:"removeProcedureEditorIDs,omitempty"`
 	ClearProcedureEditors                      *bool                         `json:"clearProcedureEditors,omitempty"`
@@ -35204,6 +35306,15 @@ type UpdateIdentityHolderInput struct {
 	// additional metadata about the identity holder
 	Metadata                    map[string]any `json:"metadata,omitempty"`
 	ClearMetadata               *bool          `json:"clearMetadata,omitempty"`
+	AddBlockedGroupIDs          []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs                []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs             []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers                *bool          `json:"clearViewers,omitempty"`
 	InternalOwnerUserID         *string        `json:"internalOwnerUserID,omitempty"`
 	ClearInternalOwnerUser      *bool          `json:"clearInternalOwnerUser,omitempty"`
 	InternalOwnerGroupID        *string        `json:"internalOwnerGroupID,omitempty"`
@@ -36203,6 +36314,15 @@ type UpdatePlatformInput struct {
 	// additional metadata about the platform
 	Metadata                        map[string]any `json:"metadata,omitempty"`
 	ClearMetadata                   *bool          `json:"clearMetadata,omitempty"`
+	AddBlockedGroupIDs              []string       `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs           []string       `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups              *bool          `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                    []string       `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs                 []string       `json:"removeEditorIDs,omitempty"`
+	ClearEditors                    *bool          `json:"clearEditors,omitempty"`
+	AddViewerIDs                    []string       `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs                 []string       `json:"removeViewerIDs,omitempty"`
+	ClearViewers                    *bool          `json:"clearViewers,omitempty"`
 	InternalOwnerUserID             *string        `json:"internalOwnerUserID,omitempty"`
 	ClearInternalOwnerUser          *bool          `json:"clearInternalOwnerUser,omitempty"`
 	InternalOwnerGroupID            *string        `json:"internalOwnerGroupID,omitempty"`

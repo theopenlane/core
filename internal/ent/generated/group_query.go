@@ -31,6 +31,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -75,6 +76,12 @@ type GroupQuery struct {
 	withActionPlanEditors                       *ActionPlanQuery
 	withActionPlanBlockedGroups                 *ActionPlanQuery
 	withActionPlanViewers                       *ActionPlanQuery
+	withPlatformEditors                         *PlatformQuery
+	withPlatformBlockedGroups                   *PlatformQuery
+	withPlatformViewers                         *PlatformQuery
+	withCampaignEditors                         *CampaignQuery
+	withCampaignBlockedGroups                   *CampaignQuery
+	withCampaignViewers                         *CampaignQuery
 	withProcedureEditors                        *ProcedureQuery
 	withProcedureBlockedGroups                  *ProcedureQuery
 	withInternalPolicyEditors                   *InternalPolicyQuery
@@ -120,6 +127,12 @@ type GroupQuery struct {
 	withNamedActionPlanEditors                  map[string]*ActionPlanQuery
 	withNamedActionPlanBlockedGroups            map[string]*ActionPlanQuery
 	withNamedActionPlanViewers                  map[string]*ActionPlanQuery
+	withNamedPlatformEditors                    map[string]*PlatformQuery
+	withNamedPlatformBlockedGroups              map[string]*PlatformQuery
+	withNamedPlatformViewers                    map[string]*PlatformQuery
+	withNamedCampaignEditors                    map[string]*CampaignQuery
+	withNamedCampaignBlockedGroups              map[string]*CampaignQuery
+	withNamedCampaignViewers                    map[string]*CampaignQuery
 	withNamedProcedureEditors                   map[string]*ProcedureQuery
 	withNamedProcedureBlockedGroups             map[string]*ProcedureQuery
 	withNamedInternalPolicyEditors              map[string]*InternalPolicyQuery
@@ -798,6 +811,156 @@ func (_q *GroupQuery) QueryActionPlanViewers() *ActionPlanQuery {
 	return query
 }
 
+// QueryPlatformEditors chains the current query on the "platform_editors" edge.
+func (_q *GroupQuery) QueryPlatformEditors() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformEditorsTable, group.PlatformEditorsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformEditors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatformBlockedGroups chains the current query on the "platform_blocked_groups" edge.
+func (_q *GroupQuery) QueryPlatformBlockedGroups() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformBlockedGroupsTable, group.PlatformBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPlatformViewers chains the current query on the "platform_viewers" edge.
+func (_q *GroupQuery) QueryPlatformViewers() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformViewersTable, group.PlatformViewersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.PlatformViewers
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignEditors chains the current query on the "campaign_editors" edge.
+func (_q *GroupQuery) QueryCampaignEditors() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignEditorsTable, group.CampaignEditorsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignEditors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignBlockedGroups chains the current query on the "campaign_blocked_groups" edge.
+func (_q *GroupQuery) QueryCampaignBlockedGroups() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignBlockedGroupsTable, group.CampaignBlockedGroupsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryCampaignViewers chains the current query on the "campaign_viewers" edge.
+func (_q *GroupQuery) QueryCampaignViewers() *CampaignQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignViewersTable, group.CampaignViewersPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Campaign
+		step.Edge.Schema = schemaConfig.CampaignViewers
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryProcedureEditors chains the current query on the "procedure_editors" edge.
 func (_q *GroupQuery) QueryProcedureEditors() *ProcedureQuery {
 	query := (&ProcedureClient{config: _q.config}).Query()
@@ -1465,6 +1628,12 @@ func (_q *GroupQuery) Clone() *GroupQuery {
 		withActionPlanEditors:                  _q.withActionPlanEditors.Clone(),
 		withActionPlanBlockedGroups:            _q.withActionPlanBlockedGroups.Clone(),
 		withActionPlanViewers:                  _q.withActionPlanViewers.Clone(),
+		withPlatformEditors:                    _q.withPlatformEditors.Clone(),
+		withPlatformBlockedGroups:              _q.withPlatformBlockedGroups.Clone(),
+		withPlatformViewers:                    _q.withPlatformViewers.Clone(),
+		withCampaignEditors:                    _q.withCampaignEditors.Clone(),
+		withCampaignBlockedGroups:              _q.withCampaignBlockedGroups.Clone(),
+		withCampaignViewers:                    _q.withCampaignViewers.Clone(),
 		withProcedureEditors:                   _q.withProcedureEditors.Clone(),
 		withProcedureBlockedGroups:             _q.withProcedureBlockedGroups.Clone(),
 		withInternalPolicyEditors:              _q.withInternalPolicyEditors.Clone(),
@@ -1765,6 +1934,72 @@ func (_q *GroupQuery) WithActionPlanViewers(opts ...func(*ActionPlanQuery)) *Gro
 	return _q
 }
 
+// WithPlatformEditors tells the query-builder to eager-load the nodes that are connected to
+// the "platform_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithPlatformEditors(opts ...func(*PlatformQuery)) *GroupQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatformEditors = query
+	return _q
+}
+
+// WithPlatformBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "platform_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithPlatformBlockedGroups(opts ...func(*PlatformQuery)) *GroupQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatformBlockedGroups = query
+	return _q
+}
+
+// WithPlatformViewers tells the query-builder to eager-load the nodes that are connected to
+// the "platform_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithPlatformViewers(opts ...func(*PlatformQuery)) *GroupQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatformViewers = query
+	return _q
+}
+
+// WithCampaignEditors tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithCampaignEditors(opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignEditors = query
+	return _q
+}
+
+// WithCampaignBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithCampaignBlockedGroups(opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignBlockedGroups = query
+	return _q
+}
+
+// WithCampaignViewers tells the query-builder to eager-load the nodes that are connected to
+// the "campaign_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithCampaignViewers(opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withCampaignViewers = query
+	return _q
+}
+
 // WithProcedureEditors tells the query-builder to eager-load the nodes that are connected to
 // the "procedure_editors" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *GroupQuery) WithProcedureEditors(opts ...func(*ProcedureQuery)) *GroupQuery {
@@ -2048,7 +2283,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [43]bool{
+		loadedTypes = [49]bool{
 			_q.withOwner != nil,
 			_q.withProgramEditors != nil,
 			_q.withProgramBlockedGroups != nil,
@@ -2074,6 +2309,12 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			_q.withActionPlanEditors != nil,
 			_q.withActionPlanBlockedGroups != nil,
 			_q.withActionPlanViewers != nil,
+			_q.withPlatformEditors != nil,
+			_q.withPlatformBlockedGroups != nil,
+			_q.withPlatformViewers != nil,
+			_q.withCampaignEditors != nil,
+			_q.withCampaignBlockedGroups != nil,
+			_q.withCampaignViewers != nil,
 			_q.withProcedureEditors != nil,
 			_q.withProcedureBlockedGroups != nil,
 			_q.withInternalPolicyEditors != nil,
@@ -2307,6 +2548,48 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadActionPlanViewers(ctx, query, nodes,
 			func(n *Group) { n.Edges.ActionPlanViewers = []*ActionPlan{} },
 			func(n *Group, e *ActionPlan) { n.Edges.ActionPlanViewers = append(n.Edges.ActionPlanViewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatformEditors; query != nil {
+		if err := _q.loadPlatformEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.PlatformEditors = []*Platform{} },
+			func(n *Group, e *Platform) { n.Edges.PlatformEditors = append(n.Edges.PlatformEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatformBlockedGroups; query != nil {
+		if err := _q.loadPlatformBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.PlatformBlockedGroups = []*Platform{} },
+			func(n *Group, e *Platform) { n.Edges.PlatformBlockedGroups = append(n.Edges.PlatformBlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPlatformViewers; query != nil {
+		if err := _q.loadPlatformViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.PlatformViewers = []*Platform{} },
+			func(n *Group, e *Platform) { n.Edges.PlatformViewers = append(n.Edges.PlatformViewers, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignEditors; query != nil {
+		if err := _q.loadCampaignEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.CampaignEditors = []*Campaign{} },
+			func(n *Group, e *Campaign) { n.Edges.CampaignEditors = append(n.Edges.CampaignEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignBlockedGroups; query != nil {
+		if err := _q.loadCampaignBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.CampaignBlockedGroups = []*Campaign{} },
+			func(n *Group, e *Campaign) { n.Edges.CampaignBlockedGroups = append(n.Edges.CampaignBlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withCampaignViewers; query != nil {
+		if err := _q.loadCampaignViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.CampaignViewers = []*Campaign{} },
+			func(n *Group, e *Campaign) { n.Edges.CampaignViewers = append(n.Edges.CampaignViewers, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2610,6 +2893,48 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadActionPlanViewers(ctx, query, nodes,
 			func(n *Group) { n.appendNamedActionPlanViewers(name) },
 			func(n *Group, e *ActionPlan) { n.appendNamedActionPlanViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatformEditors {
+		if err := _q.loadPlatformEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedPlatformEditors(name) },
+			func(n *Group, e *Platform) { n.appendNamedPlatformEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatformBlockedGroups {
+		if err := _q.loadPlatformBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedPlatformBlockedGroups(name) },
+			func(n *Group, e *Platform) { n.appendNamedPlatformBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatformViewers {
+		if err := _q.loadPlatformViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedPlatformViewers(name) },
+			func(n *Group, e *Platform) { n.appendNamedPlatformViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignEditors {
+		if err := _q.loadCampaignEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedCampaignEditors(name) },
+			func(n *Group, e *Campaign) { n.appendNamedCampaignEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignBlockedGroups {
+		if err := _q.loadCampaignBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedCampaignBlockedGroups(name) },
+			func(n *Group, e *Campaign) { n.appendNamedCampaignBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedCampaignViewers {
+		if err := _q.loadCampaignViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedCampaignViewers(name) },
+			func(n *Group, e *Campaign) { n.appendNamedCampaignViewers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4257,6 +4582,378 @@ func (_q *GroupQuery) loadActionPlanViewers(ctx context.Context, query *ActionPl
 	}
 	return nil
 }
+func (_q *GroupQuery) loadPlatformEditors(ctx context.Context, query *PlatformQuery, nodes []*Group, init func(*Group), assign func(*Group, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.PlatformEditorsTable)
+		joinT.Schema(_q.schemaConfig.PlatformEditors)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(group.PlatformEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.PlatformEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.PlatformEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platform_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadPlatformBlockedGroups(ctx context.Context, query *PlatformQuery, nodes []*Group, init func(*Group), assign func(*Group, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.PlatformBlockedGroupsTable)
+		joinT.Schema(_q.schemaConfig.PlatformBlockedGroups)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(group.PlatformBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.PlatformBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.PlatformBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platform_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadPlatformViewers(ctx context.Context, query *PlatformQuery, nodes []*Group, init func(*Group), assign func(*Group, *Platform)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.PlatformViewersTable)
+		joinT.Schema(_q.schemaConfig.PlatformViewers)
+		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(group.PlatformViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.PlatformViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.PlatformViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Platform](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "platform_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadCampaignEditors(ctx context.Context, query *CampaignQuery, nodes []*Group, init func(*Group), assign func(*Group, *Campaign)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.CampaignEditorsTable)
+		joinT.Schema(_q.schemaConfig.CampaignEditors)
+		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.CampaignEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.CampaignEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Campaign](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "campaign_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadCampaignBlockedGroups(ctx context.Context, query *CampaignQuery, nodes []*Group, init func(*Group), assign func(*Group, *Campaign)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.CampaignBlockedGroupsTable)
+		joinT.Schema(_q.schemaConfig.CampaignBlockedGroups)
+		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.CampaignBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.CampaignBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Campaign](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "campaign_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadCampaignViewers(ctx context.Context, query *CampaignQuery, nodes []*Group, init func(*Group), assign func(*Group, *Campaign)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.CampaignViewersTable)
+		joinT.Schema(_q.schemaConfig.CampaignViewers)
+		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.CampaignViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.CampaignViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Campaign](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "campaign_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *GroupQuery) loadProcedureEditors(ctx context.Context, query *ProcedureQuery, nodes []*Group, init func(*Group), assign func(*Group, *Procedure)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
@@ -5679,6 +6376,90 @@ func (_q *GroupQuery) WithNamedActionPlanViewers(name string, opts ...func(*Acti
 		_q.withNamedActionPlanViewers = make(map[string]*ActionPlanQuery)
 	}
 	_q.withNamedActionPlanViewers[name] = query
+	return _q
+}
+
+// WithNamedPlatformEditors tells the query-builder to eager-load the nodes that are connected to the "platform_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedPlatformEditors(name string, opts ...func(*PlatformQuery)) *GroupQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatformEditors == nil {
+		_q.withNamedPlatformEditors = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatformEditors[name] = query
+	return _q
+}
+
+// WithNamedPlatformBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "platform_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedPlatformBlockedGroups(name string, opts ...func(*PlatformQuery)) *GroupQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatformBlockedGroups == nil {
+		_q.withNamedPlatformBlockedGroups = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatformBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedPlatformViewers tells the query-builder to eager-load the nodes that are connected to the "platform_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedPlatformViewers(name string, opts ...func(*PlatformQuery)) *GroupQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatformViewers == nil {
+		_q.withNamedPlatformViewers = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatformViewers[name] = query
+	return _q
+}
+
+// WithNamedCampaignEditors tells the query-builder to eager-load the nodes that are connected to the "campaign_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedCampaignEditors(name string, opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignEditors == nil {
+		_q.withNamedCampaignEditors = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaignEditors[name] = query
+	return _q
+}
+
+// WithNamedCampaignBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "campaign_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedCampaignBlockedGroups(name string, opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignBlockedGroups == nil {
+		_q.withNamedCampaignBlockedGroups = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaignBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedCampaignViewers tells the query-builder to eager-load the nodes that are connected to the "campaign_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedCampaignViewers(name string, opts ...func(*CampaignQuery)) *GroupQuery {
+	query := (&CampaignClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedCampaignViewers == nil {
+		_q.withNamedCampaignViewers = make(map[string]*CampaignQuery)
+	}
+	_q.withNamedCampaignViewers[name] = query
 	return _q
 }
 

@@ -618,17 +618,39 @@ func init() {
 	// asset.DefaultID holds the default value on creation for the id field.
 	asset.DefaultID = assetDescID.Default.(func() string)
 	campaignMixin := schema.Campaign{}.Mixin()
+	campaign.Policy = privacy.NewPolicies(schema.Campaign{})
+	campaign.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := campaign.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	campaignMixinHooks0 := campaignMixin[0].Hooks()
 	campaignMixinHooks1 := campaignMixin[1].Hooks()
 	campaignMixinHooks2 := campaignMixin[2].Hooks()
 	campaignMixinHooks3 := campaignMixin[3].Hooks()
 	campaignMixinHooks5 := campaignMixin[5].Hooks()
-	campaign.Hooks[0] = campaignMixinHooks0[0]
-	campaign.Hooks[1] = campaignMixinHooks1[0]
-	campaign.Hooks[2] = campaignMixinHooks2[0]
-	campaign.Hooks[3] = campaignMixinHooks3[0]
-	campaign.Hooks[4] = campaignMixinHooks5[0]
-	campaign.Hooks[5] = campaignMixinHooks5[1]
+	campaignMixinHooks6 := campaignMixin[6].Hooks()
+
+	campaign.Hooks[1] = campaignMixinHooks0[0]
+
+	campaign.Hooks[2] = campaignMixinHooks1[0]
+
+	campaign.Hooks[3] = campaignMixinHooks2[0]
+
+	campaign.Hooks[4] = campaignMixinHooks3[0]
+
+	campaign.Hooks[5] = campaignMixinHooks5[0]
+
+	campaign.Hooks[6] = campaignMixinHooks5[1]
+
+	campaign.Hooks[7] = campaignMixinHooks6[0]
+
+	campaign.Hooks[8] = campaignMixinHooks6[1]
+
+	campaign.Hooks[9] = campaignMixinHooks6[2]
 	campaignMixinInters1 := campaignMixin[1].Interceptors()
 	campaignMixinInters5 := campaignMixin[5].Interceptors()
 	campaign.Interceptors[0] = campaignMixinInters1[0]
@@ -642,8 +664,8 @@ func init() {
 	_ = campaignMixinFields3
 	campaignMixinFields5 := campaignMixin[5].Fields()
 	_ = campaignMixinFields5
-	campaignMixinFields7 := campaignMixin[7].Fields()
-	_ = campaignMixinFields7
+	campaignMixinFields8 := campaignMixin[8].Fields()
+	_ = campaignMixinFields8
 	campaignFields := schema.Campaign{}.Fields()
 	_ = campaignFields
 	// campaignDescCreatedAt is the schema descriptor for created_at field.
@@ -669,7 +691,7 @@ func init() {
 	// campaign.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	campaign.OwnerIDValidator = campaignDescOwnerID.Validators[0].(func(string) error)
 	// campaignDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	campaignDescWorkflowEligibleMarker := campaignMixinFields7[0].Descriptor()
+	campaignDescWorkflowEligibleMarker := campaignMixinFields8[0].Descriptor()
 	// campaign.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	campaign.DefaultWorkflowEligibleMarker = campaignDescWorkflowEligibleMarker.Default.(bool)
 	// campaignDescName is the schema descriptor for name field.
@@ -709,13 +731,26 @@ func init() {
 	// campaign.DefaultID holds the default value on creation for the id field.
 	campaign.DefaultID = campaignDescID.Default.(func() string)
 	campaigntargetMixin := schema.CampaignTarget{}.Mixin()
+	campaigntarget.Policy = privacy.NewPolicies(schema.CampaignTarget{})
+	campaigntarget.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := campaigntarget.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	campaigntargetMixinHooks0 := campaigntargetMixin[0].Hooks()
 	campaigntargetMixinHooks1 := campaigntargetMixin[1].Hooks()
 	campaigntargetMixinHooks4 := campaigntargetMixin[4].Hooks()
-	campaigntarget.Hooks[0] = campaigntargetMixinHooks0[0]
-	campaigntarget.Hooks[1] = campaigntargetMixinHooks1[0]
-	campaigntarget.Hooks[2] = campaigntargetMixinHooks4[0]
-	campaigntarget.Hooks[3] = campaigntargetMixinHooks4[1]
+
+	campaigntarget.Hooks[1] = campaigntargetMixinHooks0[0]
+
+	campaigntarget.Hooks[2] = campaigntargetMixinHooks1[0]
+
+	campaigntarget.Hooks[3] = campaigntargetMixinHooks4[0]
+
+	campaigntarget.Hooks[4] = campaigntargetMixinHooks4[1]
 	campaigntargetMixinInters1 := campaigntargetMixin[1].Interceptors()
 	campaigntargetMixinInters4 := campaigntargetMixin[4].Interceptors()
 	campaigntarget.Interceptors[0] = campaigntargetMixinInters1[0]
@@ -2952,21 +2987,45 @@ func init() {
 	// hush.DefaultID holds the default value on creation for the id field.
 	hush.DefaultID = hushDescID.Default.(func() string)
 	identityholderMixin := schema.IdentityHolder{}.Mixin()
+	identityholder.Policy = privacy.NewPolicies(schema.IdentityHolder{})
+	identityholder.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := identityholder.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	identityholderMixinHooks0 := identityholderMixin[0].Hooks()
 	identityholderMixinHooks1 := identityholderMixin[1].Hooks()
 	identityholderMixinHooks2 := identityholderMixin[2].Hooks()
 	identityholderMixinHooks3 := identityholderMixin[3].Hooks()
 	identityholderMixinHooks5 := identityholderMixin[5].Hooks()
-	identityholderMixinHooks7 := identityholderMixin[7].Hooks()
+	identityholderMixinHooks6 := identityholderMixin[6].Hooks()
 	identityholderMixinHooks8 := identityholderMixin[8].Hooks()
-	identityholder.Hooks[0] = identityholderMixinHooks0[0]
-	identityholder.Hooks[1] = identityholderMixinHooks1[0]
-	identityholder.Hooks[2] = identityholderMixinHooks2[0]
-	identityholder.Hooks[3] = identityholderMixinHooks3[0]
-	identityholder.Hooks[4] = identityholderMixinHooks5[0]
-	identityholder.Hooks[5] = identityholderMixinHooks5[1]
-	identityholder.Hooks[6] = identityholderMixinHooks7[0]
-	identityholder.Hooks[7] = identityholderMixinHooks8[0]
+	identityholderMixinHooks9 := identityholderMixin[9].Hooks()
+
+	identityholder.Hooks[1] = identityholderMixinHooks0[0]
+
+	identityholder.Hooks[2] = identityholderMixinHooks1[0]
+
+	identityholder.Hooks[3] = identityholderMixinHooks2[0]
+
+	identityholder.Hooks[4] = identityholderMixinHooks3[0]
+
+	identityholder.Hooks[5] = identityholderMixinHooks5[0]
+
+	identityholder.Hooks[6] = identityholderMixinHooks5[1]
+
+	identityholder.Hooks[7] = identityholderMixinHooks6[0]
+
+	identityholder.Hooks[8] = identityholderMixinHooks6[1]
+
+	identityholder.Hooks[9] = identityholderMixinHooks6[2]
+
+	identityholder.Hooks[10] = identityholderMixinHooks8[0]
+
+	identityholder.Hooks[11] = identityholderMixinHooks9[0]
 	identityholderMixinInters1 := identityholderMixin[1].Interceptors()
 	identityholderMixinInters5 := identityholderMixin[5].Interceptors()
 	identityholder.Interceptors[0] = identityholderMixinInters1[0]
@@ -2980,8 +3039,8 @@ func init() {
 	_ = identityholderMixinFields3
 	identityholderMixinFields5 := identityholderMixin[5].Fields()
 	_ = identityholderMixinFields5
-	identityholderMixinFields9 := identityholderMixin[9].Fields()
-	_ = identityholderMixinFields9
+	identityholderMixinFields10 := identityholderMixin[10].Fields()
+	_ = identityholderMixinFields10
 	identityholderFields := schema.IdentityHolder{}.Fields()
 	_ = identityholderFields
 	// identityholderDescCreatedAt is the schema descriptor for created_at field.
@@ -3007,7 +3066,7 @@ func init() {
 	// identityholder.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	identityholder.OwnerIDValidator = identityholderDescOwnerID.Validators[0].(func(string) error)
 	// identityholderDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	identityholderDescWorkflowEligibleMarker := identityholderMixinFields9[0].Descriptor()
+	identityholderDescWorkflowEligibleMarker := identityholderMixinFields10[0].Descriptor()
 	// identityholder.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	identityholder.DefaultWorkflowEligibleMarker = identityholderDescWorkflowEligibleMarker.Default.(bool)
 	// identityholderDescFullName is the schema descriptor for full_name field.
@@ -4864,12 +4923,21 @@ func init() {
 	// personalaccesstoken.DefaultID holds the default value on creation for the id field.
 	personalaccesstoken.DefaultID = personalaccesstokenDescID.Default.(func() string)
 	platformMixin := schema.Platform{}.Mixin()
+	platform.Policy = privacy.NewPolicies(schema.Platform{})
+	platform.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := platform.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
 	platformMixinHooks0 := platformMixin[0].Hooks()
 	platformMixinHooks1 := platformMixin[1].Hooks()
 	platformMixinHooks2 := platformMixin[2].Hooks()
 	platformMixinHooks3 := platformMixin[3].Hooks()
 	platformMixinHooks5 := platformMixin[5].Hooks()
-	platformMixinHooks7 := platformMixin[7].Hooks()
+	platformMixinHooks6 := platformMixin[6].Hooks()
 	platformMixinHooks8 := platformMixin[8].Hooks()
 	platformMixinHooks9 := platformMixin[9].Hooks()
 	platformMixinHooks10 := platformMixin[10].Hooks()
@@ -4877,20 +4945,41 @@ func init() {
 	platformMixinHooks12 := platformMixin[12].Hooks()
 	platformMixinHooks13 := platformMixin[13].Hooks()
 	platformMixinHooks14 := platformMixin[14].Hooks()
-	platform.Hooks[0] = platformMixinHooks0[0]
-	platform.Hooks[1] = platformMixinHooks1[0]
-	platform.Hooks[2] = platformMixinHooks2[0]
-	platform.Hooks[3] = platformMixinHooks3[0]
-	platform.Hooks[4] = platformMixinHooks5[0]
-	platform.Hooks[5] = platformMixinHooks5[1]
-	platform.Hooks[6] = platformMixinHooks7[0]
-	platform.Hooks[7] = platformMixinHooks8[0]
-	platform.Hooks[8] = platformMixinHooks9[0]
-	platform.Hooks[9] = platformMixinHooks10[0]
-	platform.Hooks[10] = platformMixinHooks11[0]
-	platform.Hooks[11] = platformMixinHooks12[0]
-	platform.Hooks[12] = platformMixinHooks13[0]
-	platform.Hooks[13] = platformMixinHooks14[0]
+	platformMixinHooks15 := platformMixin[15].Hooks()
+
+	platform.Hooks[1] = platformMixinHooks0[0]
+
+	platform.Hooks[2] = platformMixinHooks1[0]
+
+	platform.Hooks[3] = platformMixinHooks2[0]
+
+	platform.Hooks[4] = platformMixinHooks3[0]
+
+	platform.Hooks[5] = platformMixinHooks5[0]
+
+	platform.Hooks[6] = platformMixinHooks5[1]
+
+	platform.Hooks[7] = platformMixinHooks6[0]
+
+	platform.Hooks[8] = platformMixinHooks6[1]
+
+	platform.Hooks[9] = platformMixinHooks6[2]
+
+	platform.Hooks[10] = platformMixinHooks8[0]
+
+	platform.Hooks[11] = platformMixinHooks9[0]
+
+	platform.Hooks[12] = platformMixinHooks10[0]
+
+	platform.Hooks[13] = platformMixinHooks11[0]
+
+	platform.Hooks[14] = platformMixinHooks12[0]
+
+	platform.Hooks[15] = platformMixinHooks13[0]
+
+	platform.Hooks[16] = platformMixinHooks14[0]
+
+	platform.Hooks[17] = platformMixinHooks15[0]
 	platformMixinInters1 := platformMixin[1].Interceptors()
 	platformMixinInters5 := platformMixin[5].Interceptors()
 	platform.Interceptors[0] = platformMixinInters1[0]
@@ -4904,8 +4993,8 @@ func init() {
 	_ = platformMixinFields3
 	platformMixinFields5 := platformMixin[5].Fields()
 	_ = platformMixinFields5
-	platformMixinFields15 := platformMixin[15].Fields()
-	_ = platformMixinFields15
+	platformMixinFields16 := platformMixin[16].Fields()
+	_ = platformMixinFields16
 	platformFields := schema.Platform{}.Fields()
 	_ = platformFields
 	// platformDescCreatedAt is the schema descriptor for created_at field.
@@ -4931,7 +5020,7 @@ func init() {
 	// platform.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	platform.OwnerIDValidator = platformDescOwnerID.Validators[0].(func(string) error)
 	// platformDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
-	platformDescWorkflowEligibleMarker := platformMixinFields15[0].Descriptor()
+	platformDescWorkflowEligibleMarker := platformMixinFields16[0].Descriptor()
 	// platform.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	platform.DefaultWorkflowEligibleMarker = platformDescWorkflowEligibleMarker.Default.(bool)
 	// platformDescName is the schema descriptor for name field.

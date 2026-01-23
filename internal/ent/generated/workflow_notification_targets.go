@@ -162,6 +162,24 @@ func (c *Client) resolveCampaignNotificationTargets(ctx context.Context, objectI
 	case NotificationTargetInitiator:
 		// Initiator is resolved from workflow instance context, not from the object
 		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
 	case NotificationTargetType("INTERNAL_OWNER_USER"):
 		if obj.InternalOwnerUserID != "" {
 			return []string{obj.InternalOwnerUserID}, nil
@@ -294,6 +312,24 @@ func (c *Client) resolveIdentityHolderNotificationTargets(ctx context.Context, o
 	case NotificationTargetInitiator:
 		// Initiator is resolved from workflow instance context, not from the object
 		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
 	case NotificationTargetType("INTERNAL_OWNER_USER"):
 		if obj.InternalOwnerUserID != "" {
 			return []string{obj.InternalOwnerUserID}, nil
@@ -373,6 +409,24 @@ func (c *Client) resolvePlatformNotificationTargets(ctx context.Context, objectI
 	case NotificationTargetInitiator:
 		// Initiator is resolved from workflow instance context, not from the object
 		return nil, nil
+	case NotificationTargetType("BLOCKED_GROUPS"):
+		groups, err := obj.QueryBlockedGroups().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("EDITORS"):
+		groups, err := obj.QueryEditors().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
+	case NotificationTargetType("VIEWERS"):
+		groups, err := obj.QueryViewers().IDs(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return c.resolveGroupsMemberIDs(ctx, groups)
 	case NotificationTargetType("INTERNAL_OWNER_USER"):
 		if obj.InternalOwnerUserID != "" {
 			return []string{obj.InternalOwnerUserID}, nil

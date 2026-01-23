@@ -676,7 +676,9 @@ func (_u *CampaignHistoryUpdate) Mutation() *CampaignHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *CampaignHistoryUpdate) Save(ctx context.Context) (int, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return 0, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -703,11 +705,15 @@ func (_u *CampaignHistoryUpdate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *CampaignHistoryUpdate) defaults() {
+func (_u *CampaignHistoryUpdate) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if campaignhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaignhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := campaignhistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -1639,7 +1645,9 @@ func (_u *CampaignHistoryUpdateOne) Select(field string, fields ...string) *Camp
 
 // Save executes the query and returns the updated CampaignHistory entity.
 func (_u *CampaignHistoryUpdateOne) Save(ctx context.Context) (*CampaignHistory, error) {
-	_u.defaults()
+	if err := _u.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1666,11 +1674,15 @@ func (_u *CampaignHistoryUpdateOne) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_u *CampaignHistoryUpdateOne) defaults() {
+func (_u *CampaignHistoryUpdateOne) defaults() error {
 	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
+		if campaignhistory.UpdateDefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized campaignhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := campaignhistory.UpdateDefaultUpdatedAt()
 		_u.mutation.SetUpdatedAt(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

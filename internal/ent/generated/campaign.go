@@ -110,6 +110,12 @@ type Campaign struct {
 type CampaignEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
+	// groups that are blocked from viewing or editing the risk
+	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
+	// provides edit access to the risk to members of the group
+	Editors []*Group `json:"editors,omitempty"`
+	// provides view access to the risk to members of the group
+	Viewers []*Group `json:"viewers,omitempty"`
 	// InternalOwnerUser holds the value of the internal_owner_user edge.
 	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
 	// InternalOwnerGroup holds the value of the internal_owner_group edge.
@@ -136,10 +142,13 @@ type CampaignEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [13]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [16]map[string]int
 
+	namedBlockedGroups       map[string][]*Group
+	namedEditors             map[string][]*Group
+	namedViewers             map[string][]*Group
 	namedCampaignTargets     map[string][]*CampaignTarget
 	namedAssessmentResponses map[string][]*AssessmentResponse
 	namedContacts            map[string][]*Contact
@@ -160,12 +169,39 @@ func (e CampaignEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
+// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) BlockedGroupsOrErr() ([]*Group, error) {
+	if e.loadedTypes[1] {
+		return e.BlockedGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "blocked_groups"}
+}
+
+// EditorsOrErr returns the Editors value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) EditorsOrErr() ([]*Group, error) {
+	if e.loadedTypes[2] {
+		return e.Editors, nil
+	}
+	return nil, &NotLoadedError{edge: "editors"}
+}
+
+// ViewersOrErr returns the Viewers value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) ViewersOrErr() ([]*Group, error) {
+	if e.loadedTypes[3] {
+		return e.Viewers, nil
+	}
+	return nil, &NotLoadedError{edge: "viewers"}
+}
+
 // InternalOwnerUserOrErr returns the InternalOwnerUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CampaignEdges) InternalOwnerUserOrErr() (*User, error) {
 	if e.InternalOwnerUser != nil {
 		return e.InternalOwnerUser, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[4] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_user"}
@@ -176,7 +212,7 @@ func (e CampaignEdges) InternalOwnerUserOrErr() (*User, error) {
 func (e CampaignEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	if e.InternalOwnerGroup != nil {
 		return e.InternalOwnerGroup, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
@@ -187,7 +223,7 @@ func (e CampaignEdges) InternalOwnerGroupOrErr() (*Group, error) {
 func (e CampaignEdges) AssessmentOrErr() (*Assessment, error) {
 	if e.Assessment != nil {
 		return e.Assessment, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: assessment.Label}
 	}
 	return nil, &NotLoadedError{edge: "assessment"}
@@ -198,7 +234,7 @@ func (e CampaignEdges) AssessmentOrErr() (*Assessment, error) {
 func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -209,7 +245,7 @@ func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -218,7 +254,7 @@ func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[9] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -227,7 +263,7 @@ func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[10] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -236,7 +272,7 @@ func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error)
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[11] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -245,7 +281,7 @@ func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[12] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -254,7 +290,7 @@ func (e CampaignEdges) UsersOrErr() ([]*User, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[13] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -263,7 +299,7 @@ func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[14] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -272,7 +308,7 @@ func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[15] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -571,6 +607,21 @@ func (_m *Campaign) QueryOwner() *OrganizationQuery {
 	return NewCampaignClient(_m.config).QueryOwner(_m)
 }
 
+// QueryBlockedGroups queries the "blocked_groups" edge of the Campaign entity.
+func (_m *Campaign) QueryBlockedGroups() *GroupQuery {
+	return NewCampaignClient(_m.config).QueryBlockedGroups(_m)
+}
+
+// QueryEditors queries the "editors" edge of the Campaign entity.
+func (_m *Campaign) QueryEditors() *GroupQuery {
+	return NewCampaignClient(_m.config).QueryEditors(_m)
+}
+
+// QueryViewers queries the "viewers" edge of the Campaign entity.
+func (_m *Campaign) QueryViewers() *GroupQuery {
+	return NewCampaignClient(_m.config).QueryViewers(_m)
+}
+
 // QueryInternalOwnerUser queries the "internal_owner_user" edge of the Campaign entity.
 func (_m *Campaign) QueryInternalOwnerUser() *UserQuery {
 	return NewCampaignClient(_m.config).QueryInternalOwnerUser(_m)
@@ -784,6 +835,78 @@ func (_m *Campaign) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedBlockedGroups(name string) ([]*Group, error) {
+	if _m.Edges.namedBlockedGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedBlockedGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedBlockedGroups(name string, edges ...*Group) {
+	if _m.Edges.namedBlockedGroups == nil {
+		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedBlockedGroups[name] = []*Group{}
+	} else {
+		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
+	}
+}
+
+// NamedEditors returns the Editors named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedEditors(name string) ([]*Group, error) {
+	if _m.Edges.namedEditors == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEditors[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedEditors(name string, edges ...*Group) {
+	if _m.Edges.namedEditors == nil {
+		_m.Edges.namedEditors = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEditors[name] = []*Group{}
+	} else {
+		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
+	}
+}
+
+// NamedViewers returns the Viewers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedViewers(name string) ([]*Group, error) {
+	if _m.Edges.namedViewers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedViewers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedViewers(name string, edges ...*Group) {
+	if _m.Edges.namedViewers == nil {
+		_m.Edges.namedViewers = make(map[string][]*Group)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedViewers[name] = []*Group{}
+	} else {
+		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
+	}
 }
 
 // NamedCampaignTargets returns the CampaignTargets named value or an error if the edge was not

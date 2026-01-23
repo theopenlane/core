@@ -304,6 +304,17 @@ func init() {
 	assethistoryDescID := assethistoryFields[9].Descriptor()
 	// assethistory.DefaultID holds the default value on creation for the id field.
 	assethistory.DefaultID = assethistoryDescID.Default.(func() string)
+	campaignhistory.Policy = privacy.NewPolicies(historyschema.CampaignHistory{})
+	campaignhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := campaignhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	campaignhistoryInters := historyschema.CampaignHistory{}.Interceptors()
+	campaignhistory.Interceptors[0] = campaignhistoryInters[0]
 	campaignhistoryFields := historyschema.CampaignHistory{}.Fields()
 	_ = campaignhistoryFields
 	// campaignhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -352,6 +363,17 @@ func init() {
 	campaignhistoryDescID := campaignhistoryFields[9].Descriptor()
 	// campaignhistory.DefaultID holds the default value on creation for the id field.
 	campaignhistory.DefaultID = campaignhistoryDescID.Default.(func() string)
+	campaigntargethistory.Policy = privacy.NewPolicies(historyschema.CampaignTargetHistory{})
+	campaigntargethistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := campaigntargethistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	campaigntargethistoryInters := historyschema.CampaignTargetHistory{}.Interceptors()
+	campaigntargethistory.Interceptors[0] = campaigntargethistoryInters[0]
 	campaigntargethistoryFields := historyschema.CampaignTargetHistory{}.Fields()
 	_ = campaigntargethistoryFields
 	// campaigntargethistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -1259,6 +1281,17 @@ func init() {
 	hushhistoryDescID := hushhistoryFields[9].Descriptor()
 	// hushhistory.DefaultID holds the default value on creation for the id field.
 	hushhistory.DefaultID = hushhistoryDescID.Default.(func() string)
+	identityholderhistory.Policy = privacy.NewPolicies(historyschema.IdentityHolderHistory{})
+	identityholderhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := identityholderhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	identityholderhistoryInters := historyschema.IdentityHolderHistory{}.Interceptors()
+	identityholderhistory.Interceptors[0] = identityholderhistoryInters[0]
 	identityholderhistoryFields := historyschema.IdentityHolderHistory{}.Fields()
 	_ = identityholderhistoryFields
 	// identityholderhistoryDescHistoryTime is the schema descriptor for history_time field.
@@ -1775,6 +1808,17 @@ func init() {
 	organizationsettinghistoryDescID := organizationsettinghistoryFields[9].Descriptor()
 	// organizationsettinghistory.DefaultID holds the default value on creation for the id field.
 	organizationsettinghistory.DefaultID = organizationsettinghistoryDescID.Default.(func() string)
+	platformhistory.Policy = privacy.NewPolicies(historyschema.PlatformHistory{})
+	platformhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := platformhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	platformhistoryInters := historyschema.PlatformHistory{}.Interceptors()
+	platformhistory.Interceptors[0] = platformhistoryInters[0]
 	platformhistoryFields := historyschema.PlatformHistory{}.Fields()
 	_ = platformhistoryFields
 	// platformhistoryDescHistoryTime is the schema descriptor for history_time field.

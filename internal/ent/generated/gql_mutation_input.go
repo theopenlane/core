@@ -1864,6 +1864,9 @@ type CreateCampaignInput struct {
 	LastResentAt           *models.DateTime
 	Metadata               map[string]interface{}
 	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
 	InternalOwnerUserID    *string
 	InternalOwnerGroupID   *string
 	AssessmentID           *string
@@ -1952,6 +1955,15 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.InternalOwnerUserID; v != nil {
 		m.SetInternalOwnerUserID(*v)
@@ -2043,6 +2055,15 @@ type UpdateCampaignInput struct {
 	LastResentAt                *models.DateTime
 	ClearMetadata               bool
 	Metadata                    map[string]interface{}
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearViewers                bool
+	AddViewerIDs                []string
+	RemoveViewerIDs             []string
 	ClearInternalOwnerUser      bool
 	InternalOwnerUserID         *string
 	ClearInternalOwnerGroup     bool
@@ -2209,6 +2230,33 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearInternalOwnerUser {
 		m.ClearInternalOwnerUser()
@@ -9439,6 +9487,12 @@ type CreateGroupInput struct {
 	ActionPlanEditorIDs                  []string
 	ActionPlanBlockedGroupIDs            []string
 	ActionPlanViewerIDs                  []string
+	PlatformEditorIDs                    []string
+	PlatformBlockedGroupIDs              []string
+	PlatformViewerIDs                    []string
+	CampaignEditorIDs                    []string
+	CampaignBlockedGroupIDs              []string
+	CampaignViewerIDs                    []string
 	ProcedureEditorIDs                   []string
 	ProcedureBlockedGroupIDs             []string
 	InternalPolicyEditorIDs              []string
@@ -9557,6 +9611,24 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.ActionPlanViewerIDs; len(v) > 0 {
 		m.AddActionPlanViewerIDs(v...)
+	}
+	if v := i.PlatformEditorIDs; len(v) > 0 {
+		m.AddPlatformEditorIDs(v...)
+	}
+	if v := i.PlatformBlockedGroupIDs; len(v) > 0 {
+		m.AddPlatformBlockedGroupIDs(v...)
+	}
+	if v := i.PlatformViewerIDs; len(v) > 0 {
+		m.AddPlatformViewerIDs(v...)
+	}
+	if v := i.CampaignEditorIDs; len(v) > 0 {
+		m.AddCampaignEditorIDs(v...)
+	}
+	if v := i.CampaignBlockedGroupIDs; len(v) > 0 {
+		m.AddCampaignBlockedGroupIDs(v...)
+	}
+	if v := i.CampaignViewerIDs; len(v) > 0 {
+		m.AddCampaignViewerIDs(v...)
 	}
 	if v := i.ProcedureEditorIDs; len(v) > 0 {
 		m.AddProcedureEditorIDs(v...)
@@ -9704,6 +9776,24 @@ type UpdateGroupInput struct {
 	ClearActionPlanViewers                     bool
 	AddActionPlanViewerIDs                     []string
 	RemoveActionPlanViewerIDs                  []string
+	ClearPlatformEditors                       bool
+	AddPlatformEditorIDs                       []string
+	RemovePlatformEditorIDs                    []string
+	ClearPlatformBlockedGroups                 bool
+	AddPlatformBlockedGroupIDs                 []string
+	RemovePlatformBlockedGroupIDs              []string
+	ClearPlatformViewers                       bool
+	AddPlatformViewerIDs                       []string
+	RemovePlatformViewerIDs                    []string
+	ClearCampaignEditors                       bool
+	AddCampaignEditorIDs                       []string
+	RemoveCampaignEditorIDs                    []string
+	ClearCampaignBlockedGroups                 bool
+	AddCampaignBlockedGroupIDs                 []string
+	RemoveCampaignBlockedGroupIDs              []string
+	ClearCampaignViewers                       bool
+	AddCampaignViewerIDs                       []string
+	RemoveCampaignViewerIDs                    []string
 	ClearProcedureEditors                      bool
 	AddProcedureEditorIDs                      []string
 	RemoveProcedureEditorIDs                   []string
@@ -10024,6 +10114,60 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	}
 	if v := i.RemoveActionPlanViewerIDs; len(v) > 0 {
 		m.RemoveActionPlanViewerIDs(v...)
+	}
+	if i.ClearPlatformEditors {
+		m.ClearPlatformEditors()
+	}
+	if v := i.AddPlatformEditorIDs; len(v) > 0 {
+		m.AddPlatformEditorIDs(v...)
+	}
+	if v := i.RemovePlatformEditorIDs; len(v) > 0 {
+		m.RemovePlatformEditorIDs(v...)
+	}
+	if i.ClearPlatformBlockedGroups {
+		m.ClearPlatformBlockedGroups()
+	}
+	if v := i.AddPlatformBlockedGroupIDs; len(v) > 0 {
+		m.AddPlatformBlockedGroupIDs(v...)
+	}
+	if v := i.RemovePlatformBlockedGroupIDs; len(v) > 0 {
+		m.RemovePlatformBlockedGroupIDs(v...)
+	}
+	if i.ClearPlatformViewers {
+		m.ClearPlatformViewers()
+	}
+	if v := i.AddPlatformViewerIDs; len(v) > 0 {
+		m.AddPlatformViewerIDs(v...)
+	}
+	if v := i.RemovePlatformViewerIDs; len(v) > 0 {
+		m.RemovePlatformViewerIDs(v...)
+	}
+	if i.ClearCampaignEditors {
+		m.ClearCampaignEditors()
+	}
+	if v := i.AddCampaignEditorIDs; len(v) > 0 {
+		m.AddCampaignEditorIDs(v...)
+	}
+	if v := i.RemoveCampaignEditorIDs; len(v) > 0 {
+		m.RemoveCampaignEditorIDs(v...)
+	}
+	if i.ClearCampaignBlockedGroups {
+		m.ClearCampaignBlockedGroups()
+	}
+	if v := i.AddCampaignBlockedGroupIDs; len(v) > 0 {
+		m.AddCampaignBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveCampaignBlockedGroupIDs; len(v) > 0 {
+		m.RemoveCampaignBlockedGroupIDs(v...)
+	}
+	if i.ClearCampaignViewers {
+		m.ClearCampaignViewers()
+	}
+	if v := i.AddCampaignViewerIDs; len(v) > 0 {
+		m.AddCampaignViewerIDs(v...)
+	}
+	if v := i.RemoveCampaignViewerIDs; len(v) > 0 {
+		m.RemoveCampaignViewerIDs(v...)
 	}
 	if i.ClearProcedureEditors {
 		m.ClearProcedureEditors()
@@ -10548,6 +10692,9 @@ type CreateIdentityHolderInput struct {
 	ExternalReferenceID    *string
 	Metadata               map[string]interface{}
 	OwnerID                *string
+	BlockedGroupIDs        []string
+	EditorIDs              []string
+	ViewerIDs              []string
 	InternalOwnerUserID    *string
 	InternalOwnerGroupID   *string
 	EnvironmentID          *string
@@ -10632,6 +10779,15 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.InternalOwnerUserID; v != nil {
 		m.SetInternalOwnerUserID(*v)
@@ -10731,6 +10887,15 @@ type UpdateIdentityHolderInput struct {
 	ExternalReferenceID         *string
 	ClearMetadata               bool
 	Metadata                    map[string]interface{}
+	ClearBlockedGroups          bool
+	AddBlockedGroupIDs          []string
+	RemoveBlockedGroupIDs       []string
+	ClearEditors                bool
+	AddEditorIDs                []string
+	RemoveEditorIDs             []string
+	ClearViewers                bool
+	AddViewerIDs                []string
+	RemoveViewerIDs             []string
 	ClearInternalOwnerUser      bool
 	InternalOwnerUserID         *string
 	ClearInternalOwnerGroup     bool
@@ -10896,6 +11061,33 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearInternalOwnerUser {
 		m.ClearInternalOwnerUser()
@@ -15427,6 +15619,9 @@ type CreatePlatformInput struct {
 	ExternalReferenceID            *string
 	Metadata                       map[string]interface{}
 	OwnerID                        *string
+	BlockedGroupIDs                []string
+	EditorIDs                      []string
+	ViewerIDs                      []string
 	InternalOwnerUserID            *string
 	InternalOwnerGroupID           *string
 	BusinessOwnerUserID            *string
@@ -15558,6 +15753,15 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.BlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.EditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.ViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
 	}
 	if v := i.InternalOwnerUserID; v != nil {
 		m.SetInternalOwnerUserID(*v)
@@ -15731,6 +15935,15 @@ type UpdatePlatformInput struct {
 	ExternalReferenceID                 *string
 	ClearMetadata                       bool
 	Metadata                            map[string]interface{}
+	ClearBlockedGroups                  bool
+	AddBlockedGroupIDs                  []string
+	RemoveBlockedGroupIDs               []string
+	ClearEditors                        bool
+	AddEditorIDs                        []string
+	RemoveEditorIDs                     []string
+	ClearViewers                        bool
+	AddViewerIDs                        []string
+	RemoveViewerIDs                     []string
 	ClearInternalOwnerUser              bool
 	InternalOwnerUserID                 *string
 	ClearInternalOwnerGroup             bool
@@ -15999,6 +16212,33 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.Metadata; v != nil {
 		m.SetMetadata(v)
+	}
+	if i.ClearBlockedGroups {
+		m.ClearBlockedGroups()
+	}
+	if v := i.AddBlockedGroupIDs; len(v) > 0 {
+		m.AddBlockedGroupIDs(v...)
+	}
+	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
+		m.RemoveBlockedGroupIDs(v...)
+	}
+	if i.ClearEditors {
+		m.ClearEditors()
+	}
+	if v := i.AddEditorIDs; len(v) > 0 {
+		m.AddEditorIDs(v...)
+	}
+	if v := i.RemoveEditorIDs; len(v) > 0 {
+		m.RemoveEditorIDs(v...)
+	}
+	if i.ClearViewers {
+		m.ClearViewers()
+	}
+	if v := i.AddViewerIDs; len(v) > 0 {
+		m.AddViewerIDs(v...)
+	}
+	if v := i.RemoveViewerIDs; len(v) > 0 {
+		m.RemoveViewerIDs(v...)
 	}
 	if i.ClearInternalOwnerUser {
 		m.ClearInternalOwnerUser()

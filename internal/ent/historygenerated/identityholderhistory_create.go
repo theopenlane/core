@@ -544,7 +544,9 @@ func (_c *IdentityHolderHistoryCreate) Mutation() *IdentityHolderHistoryMutation
 
 // Save creates the IdentityHolderHistory in the database.
 func (_c *IdentityHolderHistoryCreate) Save(ctx context.Context) (*IdentityHolderHistory, error) {
-	_c.defaults()
+	if err := _c.defaults(); err != nil {
+		return nil, err
+	}
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -571,16 +573,25 @@ func (_c *IdentityHolderHistoryCreate) ExecX(ctx context.Context) {
 }
 
 // defaults sets the default values of the builder before save.
-func (_c *IdentityHolderHistoryCreate) defaults() {
+func (_c *IdentityHolderHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.HistoryTime(); !ok {
+		if identityholderhistory.DefaultHistoryTime == nil {
+			return fmt.Errorf("historygenerated: uninitialized identityholderhistory.DefaultHistoryTime (forgotten import historygenerated/runtime?)")
+		}
 		v := identityholderhistory.DefaultHistoryTime()
 		_c.mutation.SetHistoryTime(v)
 	}
 	if _, ok := _c.mutation.CreatedAt(); !ok {
+		if identityholderhistory.DefaultCreatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized identityholderhistory.DefaultCreatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := identityholderhistory.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
 	if _, ok := _c.mutation.UpdatedAt(); !ok {
+		if identityholderhistory.DefaultUpdatedAt == nil {
+			return fmt.Errorf("historygenerated: uninitialized identityholderhistory.DefaultUpdatedAt (forgotten import historygenerated/runtime?)")
+		}
 		v := identityholderhistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
@@ -609,9 +620,13 @@ func (_c *IdentityHolderHistoryCreate) defaults() {
 		_c.mutation.SetIsActive(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
+		if identityholderhistory.DefaultID == nil {
+			return fmt.Errorf("historygenerated: uninitialized identityholderhistory.DefaultID (forgotten import historygenerated/runtime?)")
+		}
 		v := identityholderhistory.DefaultID()
 		_c.mutation.SetID(v)
 	}
+	return nil
 }
 
 // check runs all checks and user-defined validators on the builder.

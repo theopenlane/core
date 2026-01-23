@@ -318,7 +318,7 @@ func (Campaign) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			//			entfga.CheckEditAccess[*generated.CampaignMutation](),
+			entfga.CheckEditAccess[*generated.CampaignMutation](),
 		),
 	)
 }

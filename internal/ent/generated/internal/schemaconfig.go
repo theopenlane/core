@@ -18,6 +18,9 @@ type SchemaConfig struct {
 	Asset                              string // Asset table.
 	AssetConnectedAssets               string // Asset-connected_assets->Asset table.
 	Campaign                           string // Campaign table.
+	CampaignBlockedGroups              string // Campaign-blocked_groups->Group table.
+	CampaignEditors                    string // Campaign-editors->Group table.
+	CampaignViewers                    string // Campaign-viewers->Group table.
 	CampaignContacts                   string // Campaign-contacts->Contact table.
 	CampaignUsers                      string // Campaign-users->User table.
 	CampaignGroups                     string // Campaign-groups->Group table.
@@ -162,6 +165,9 @@ type SchemaConfig struct {
 	PersonalAccessToken                string // PersonalAccessToken table.
 	PersonalAccessTokenEvents          string // PersonalAccessToken-events->Event table.
 	Platform                           string // Platform table.
+	PlatformBlockedGroups              string // Platform-blocked_groups->Group table.
+	PlatformEditors                    string // Platform-editors->Group table.
+	PlatformViewers                    string // Platform-viewers->Group table.
 	PlatformAssets                     string // Platform-assets->Asset table.
 	PlatformEntities                   string // Platform-entities->Entity table.
 	PlatformEvidence                   string // Platform-evidence->Evidence table.
