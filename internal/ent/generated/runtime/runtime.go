@@ -6259,6 +6259,7 @@ func init() {
 	trustcenterndarequestMixinHooks3 := trustcenterndarequestMixin[3].Hooks()
 	trustcenterndarequestMixinHooks5 := trustcenterndarequestMixin[5].Hooks()
 	trustcenterndarequestMixinHooks6 := trustcenterndarequestMixin[6].Hooks()
+	trustcenterndarequestHooks := schema.TrustCenterNDARequest{}.Hooks()
 
 	trustcenterndarequest.Hooks[1] = trustcenterndarequestMixinHooks0[0]
 
@@ -6271,6 +6272,10 @@ func init() {
 	trustcenterndarequest.Hooks[5] = trustcenterndarequestMixinHooks6[0]
 
 	trustcenterndarequest.Hooks[6] = trustcenterndarequestMixinHooks6[1]
+
+	trustcenterndarequest.Hooks[7] = trustcenterndarequestHooks[0]
+
+	trustcenterndarequest.Hooks[8] = trustcenterndarequestHooks[1]
 	trustcenterndarequestMixinInters1 := trustcenterndarequestMixin[1].Interceptors()
 	trustcenterndarequestMixinInters5 := trustcenterndarequestMixin[5].Interceptors()
 	trustcenterndarequestInters := schema.TrustCenterNDARequest{}.Interceptors()
