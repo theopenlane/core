@@ -16,6 +16,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/utils/rout"
@@ -195,11 +196,11 @@ func (p IdentityHolder) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "IDH",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[IdentityHolder](p,
+			newObjectOwnedMixin[generated.IdentityHolder](p,
 				withParents(Organization{}, Platform{}),
 				withOrganizationOwner(true),
 			),
-			//			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(),
 			newResponsibilityMixin(p, withInternalOwner()),
 			newCustomEnumMixin(p, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(p, withEnumFieldName("scope"), withGlobalEnum()),

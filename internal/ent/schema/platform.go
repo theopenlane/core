@@ -11,9 +11,12 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
 
 // Platform holds the schema definition for the Platform entity
@@ -161,11 +164,11 @@ func (s Platform) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "PLT",
 		additionalMixins: []ent.Mixin{
-			newObjectOwnedMixin[Platform](s,
+			newObjectOwnedMixin[generated.Platform](s,
 				withParents(Organization{}, Entity{}),
 				withOrganizationOwner(true),
 			),
-			//			newGroupPermissionsMixin(),
+			newGroupPermissionsMixin(),
 			newResponsibilityMixin(
 				s,
 				withInternalOwner(),
@@ -272,18 +275,18 @@ func (Platform) Modules() []models.OrgModule {
 }
 
 // Annotations of the Platform
-//func (Platform) Annotations() []schema.Annotation {
-//	return []schema.Annotation{
-//		entfga.SelfAccessChecks(),
-//	}
-//}
-//
-//// Policy of the Platform
-//func (Platform) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckCreateAccess(),
-//			entfga.CheckEditAccess[*generated.PlatformMutation](),
-//		),
-//	)
-//}
+func (Platform) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+	}
+}
+
+// Policy of the Platform
+func (Platform) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
+			//			entfga.CheckEditAccess[*generated.PlatformMutation](),
+		),
+	)
+}

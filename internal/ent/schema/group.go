@@ -162,7 +162,7 @@ func (g Group) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(g),
 			// Add the reverse edges for m:m relationships permissions based on the groups
 			newGroupPermissionsEdgesMixin(
-				withEdges(Program{}, Risk{}, ControlObjective{}, Narrative{}, ControlImplementation{}, Scan{}, Entity{}, ActionPlan{}),
+				withEdges(Program{}, Risk{}, ControlObjective{}, Narrative{}, ControlImplementation{}, Scan{}, Entity{}, ActionPlan{}, Platform{}, Campaign{}),
 				withEdgesNoView(Procedure{}, InternalPolicy{}, Control{}, MappedControl{}),
 			),
 		},
