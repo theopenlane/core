@@ -193,6 +193,8 @@ func (r Review) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(r)
 }

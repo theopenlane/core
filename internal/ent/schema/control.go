@@ -81,6 +81,7 @@ func (c Control) Edges() []ent.Edge {
 			},
 		}),
 		defaultEdgeFromWithPagination(c, Program{}),
+		defaultEdgeFromWithPagination(c, Platform{}),
 		defaultEdgeToWithPagination(c, Asset{}),
 		defaultEdgeToWithPagination(c, Scan{}),
 		edge.From("findings", Finding.Type).
@@ -183,6 +184,8 @@ func (c Control) Mixin() []ent.Mixin {
 			// skip view because controls are automatically viewable by all users in the organization
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor(), withWorkflowGroupEdges()),
 			newCustomEnumMixin(c, withWorkflowEnumEdges()),
+			newCustomEnumMixin(c, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(c, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(c)

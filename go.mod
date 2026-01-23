@@ -10,6 +10,8 @@ tool (
 	gotest.tools/gotestsum
 )
 
+replace github.com/theopenlane/core/common => ./common
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0

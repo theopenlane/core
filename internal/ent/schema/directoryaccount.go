@@ -150,6 +150,8 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(d),
+			newCustomEnumMixin(d, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(d, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(d)
 }

@@ -255,6 +255,8 @@ func (u User) Edges() []ent.Edge {
 
 		defaultEdgeToWithPagination(u, Event{}),
 		defaultEdgeToWithPagination(u, ActionPlan{}),
+		defaultEdgeFromWithPagination(u, Campaign{}),
+		defaultEdgeToWithPagination(u, CampaignTarget{}),
 		defaultEdgeToWithPagination(u, Subcontrol{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: u,
@@ -278,6 +280,16 @@ func (u User) Edges() []ent.Edge {
 			fromSchema: u,
 			name:       "programs_owned",
 			t:          Program.Type,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
+			name:       "platforms_owned",
+			t:          Platform.Type,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
+			name:       "identity_holder_profiles",
+			t:          IdentityHolder.Type,
 		}),
 		defaultEdgeToWithPagination(u, ImpersonationEvent{}),
 		edgeToWithPagination(&edgeDefinition{

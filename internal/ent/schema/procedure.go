@@ -153,6 +153,8 @@ func (p Procedure) Mixin() []ent.Mixin {
 			NewDocumentMixin(p),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newCustomEnumMixin(p, withWorkflowEnumEdges()),
+			newCustomEnumMixin(p, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(p, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(p)

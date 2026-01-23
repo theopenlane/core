@@ -263,6 +263,8 @@ func (f Finding) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
+			newCustomEnumMixin(f, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(f, withEnumFieldName("scope"), withGlobalEnum()),
 		},
 	}.getMixins(f)
 }

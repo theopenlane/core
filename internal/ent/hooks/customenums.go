@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -29,6 +30,35 @@ var (
 	ErrCustomEnumInUse = errors.New("enum is in use")
 )
 
+var (
+	// globalEnumRegistry maps global enum field names to the tables that use them
+	globalEnumRegistry = make(map[string][]string)
+	// globalEnumRegistryMu protects concurrent access to the registry
+	globalEnumRegistryMu sync.RWMutex
+)
+
+// RegisterGlobalEnum registers a table as using a global enum field
+func RegisterGlobalEnum(fieldName, tableName string) {
+	globalEnumRegistryMu.Lock()
+	defer globalEnumRegistryMu.Unlock()
+
+	for _, t := range globalEnumRegistry[fieldName] {
+		if t == tableName {
+			return
+		}
+	}
+
+	globalEnumRegistry[fieldName] = append(globalEnumRegistry[fieldName], tableName)
+}
+
+// GetGlobalEnumTables returns all tables that use a global enum field
+func GetGlobalEnumTables(fieldName string) []string {
+	globalEnumRegistryMu.RLock()
+	defer globalEnumRegistryMu.RUnlock()
+
+	return globalEnumRegistry[fieldName]
+}
+
 // CustomEnumFilter is used to filter custom enums based on object type and field
 type CustomEnumFilter struct {
 	// ObjectType is the object type the enum applies to, e.g. "risk", "control", "risk_category"
@@ -39,6 +69,8 @@ type CustomEnumFilter struct {
 	EdgeFieldName string
 	// SchemaFieldName is the schema field name the enum applies to, e.g. "control_kind_name
 	SchemaFieldName string
+	// AllowGlobal indicates the enum lookup should use global enums with an empty object type
+	AllowGlobal bool
 }
 
 // HookCustomEnums ensures that a custom enum value exists for the given object type and field
@@ -64,14 +96,30 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 
 			// look up the enum by name, object type, and field
 			// and ensure it exists
-			enum, err := client.CustomTypeEnum.Query().
-				Where(
-					customtypeenum.ObjectTypeEqualFold(in.ObjectType),
-					customtypeenum.NameEqualFold(enumValue),
-					customtypeenum.FieldEqualFold(in.Field),
-					customtypeenum.DeletedAtIsNil(),
-				).
-				Only(ctx)
+			enumPredicates := []predicate.CustomTypeEnum{
+				customtypeenum.NameEqualFold(enumValue),
+				customtypeenum.FieldEqualFold(in.Field),
+				customtypeenum.DeletedAtIsNil(),
+			}
+
+			// lookupEnum fetches a custom enum by object type
+			lookupEnum := func(objectType string) (*generated.CustomTypeEnum, error) {
+				return client.CustomTypeEnum.Query().
+					Where(append(enumPredicates, customtypeenum.ObjectTypeEqualFold(objectType))...).
+					Only(ctx)
+			}
+
+			var enum *generated.CustomTypeEnum
+			var err error
+
+			if in.AllowGlobal {
+				enum, err = lookupEnum("")
+				if err != nil && generated.IsNotFound(err) {
+					enum, err = lookupEnum(in.ObjectType)
+				}
+			} else {
+				enum, err = lookupEnum(in.ObjectType)
+			}
 			if err != nil {
 				// if the enum does not exist, return a custom error
 				if generated.IsNotFound(err) {
@@ -111,6 +159,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 				Select(
 					customtypeenum.FieldID,
 					customtypeenum.FieldObjectType,
+					customtypeenum.FieldField,
 					customtypeenum.FieldName,
 				).
 				All(ctx)
@@ -123,7 +172,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 			funcs := make([]func(), 0)
 			for _, enum := range enums {
-				funcs = append(funcs, isEnumInUse(ctx, client, enum.ID, strings.ToLower(enum.ObjectType), enum.ObjectType, enum.Name, &errs, &mu))
+				funcs = append(funcs, isEnumInUse(ctx, client, enum.ID, enum.ObjectType, enum.Field, enum.Name, &errs, &mu))
 			}
 
 			if len(funcs) == 0 {
@@ -147,42 +196,46 @@ func HookCustomTypeEnumDelete() ent.Hook {
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName, objectType, name string, allErrors *[]string, mu *sync.Mutex) func() {
-
+// isEnumInUse returns a closure that checks whether a custom enum is referenced by any records
+func isEnumInUse(ctx context.Context, client *generated.Client, enumID, objectType, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
 	ctrlCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	type tableConfig struct {
-		table string
-		field string
-		label string
+	if enumField == "" {
+		enumField = "kind"
 	}
 
-	table := pluralize.NewClient().Plural(edgeName)
-
-	field := fmt.Sprintf("%s_kind_id", strcase.SnakeCase(edgeName))
-
-	config := tableConfig{
-		table: table,
-		field: field,
-		label: strings.ReplaceAll(edgeName, "_", " "),
+	// handle global enums (empty object type)
+	if objectType == "" {
+		return isGlobalEnumInUse(ctrlCtx, ctx, client, enumID, enumField, name, allErrors, mu)
 	}
+
+	return isNonGlobalEnumInUse(ctrlCtx, ctx, client, enumID, objectType, enumField, name, allErrors, mu)
+}
+
+// isGlobalEnumInUse checks if a global enum is in use across all registered tables
+func isGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Client, enumID, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
+	tables := GetGlobalEnumTables(enumField)
+	if len(tables) == 0 {
+		return func() {}
+	}
+
+	columnName := fmt.Sprintf("%s_id", strcase.SnakeCase(enumField))
 
 	return func() {
-		query := fmt.Sprintf("SELECT count(id) FROM %s WHERE %s = $1 AND deleted_at IS NULL", config.table, config.field)
+		var unionParts []string
+		for _, table := range tables {
+			unionParts = append(unionParts, fmt.Sprintf("SELECT count(id) as cnt FROM %s WHERE %s = $1 AND deleted_at IS NULL", table, columnName))
+		}
+
+		query := fmt.Sprintf("SELECT SUM(cnt) FROM (%s) combined", strings.Join(unionParts, " UNION ALL "))
 
 		var rows sql.Rows
-		err := client.Driver().
-			Query(ctrlCtx,
-				query, lo.ToAnySlice([]string{enumID}), &rows)
-		if err != nil {
+		if err := client.Driver().Query(ctrlCtx, query, lo.ToAnySlice([]string{enumID}), &rows); err != nil {
 			mu.Lock()
-			logx.FromContext(ctx).Error().Err(err).
-				Str("table", config.table).
-				Str("field", config.field).
-				Str("enum_id", enumID).
-				Msg("failed to query enum edges")
-			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+			logx.FromContext(logCtx).Error().Err(err).Str("enum_field", enumField).Str("enum_id", enumID).Strs("tables", tables).Msg("failed to query global enum usage")
+			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if global %s enum %s is in use: %v", enumField, name, err))
 			mu.Unlock()
+
 			return
 		}
 		defer rows.Close()
@@ -191,13 +244,10 @@ func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName
 		if rows.Next() {
 			if err := rows.Scan(&count); err != nil {
 				mu.Lock()
-				logx.FromContext(ctx).Error().Err(err).
-					Str("table", config.table).
-					Str("field", config.field).
-					Str("enum_id", enumID).
-					Msg("failed to scan enum edge count")
-				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+				logx.FromContext(logCtx).Error().Err(err).Str("enum_field", enumField).Str("enum_id", enumID).Msg("failed to scan global enum count")
+				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if global %s enum %s is in use: %v", enumField, name, err))
 				mu.Unlock()
+
 				return
 			}
 		}
@@ -205,13 +255,59 @@ func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName
 		if count > 0 {
 			mu.Lock()
 
-			label := config.label
+			label := "record"
 			if count != 1 {
-				label = pluralize.NewClient().Plural(config.label)
+				label = "records"
 			}
 
-			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated",
-				objectType, name, count, label))
+			*allErrors = append(*allErrors, fmt.Sprintf("the global %s value of %s is in use by %d %s and cannot be deleted until those are updated", enumField, name, count, label))
+			mu.Unlock()
+		}
+	}
+}
+
+// isNonGlobalEnumInUse checks if a non-global enum is in use in its specific table
+func isNonGlobalEnumInUse(ctrlCtx, logCtx context.Context, client *generated.Client, enumID, objectType, enumField, name string, allErrors *[]string, mu *sync.Mutex) func() {
+	edgeName := strings.ToLower(objectType)
+	table := pluralize.NewClient().Plural(edgeName)
+	columnName := fmt.Sprintf("%s_%s_id", strcase.SnakeCase(edgeName), strcase.SnakeCase(enumField))
+	label := strings.ReplaceAll(edgeName, "_", " ")
+
+	return func() {
+		query := fmt.Sprintf("SELECT count(id) FROM %s WHERE %s = $1 AND deleted_at IS NULL", table, columnName)
+
+		var rows sql.Rows
+		if err := client.Driver().Query(ctrlCtx, query, lo.ToAnySlice([]string{enumID}), &rows); err != nil {
+			mu.Lock()
+			logx.FromContext(logCtx).Error().Err(err).Str("table", table).Str("field", columnName).Str("enum_id", enumID).Msg("failed to query enum edges")
+			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+			mu.Unlock()
+
+			return
+		}
+		defer rows.Close()
+
+		var count int
+		if rows.Next() {
+			if err := rows.Scan(&count); err != nil {
+				mu.Lock()
+				logx.FromContext(logCtx).Error().Err(err).Str("table", table).Str("field", columnName).Str("enum_id", enumID).Msg("failed to scan enum edge count")
+				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+				mu.Unlock()
+
+				return
+			}
+		}
+
+		if count > 0 {
+			mu.Lock()
+
+			displayLabel := label
+			if count != 1 {
+				displayLabel = pluralize.NewClient().Plural(label)
+			}
+
+			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated", objectType, name, count, displayLabel))
 			mu.Unlock()
 		}
 	}

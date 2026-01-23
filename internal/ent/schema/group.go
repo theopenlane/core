@@ -142,6 +142,8 @@ func (g Group) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(g, Integration{}),
 		defaultEdgeToWithPagination(g, File{}),
 		defaultEdgeToWithPagination(g, Task{}),
+		defaultEdgeFromWithPagination(g, Campaign{}),
+		defaultEdgeToWithPagination(g, CampaignTarget{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: g,
 			edgeSchema: Invite{},
