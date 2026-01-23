@@ -1299,6 +1299,8 @@ func init() {
 	customtypeenum.Hooks[4] = customtypeenumMixinHooks5[0]
 
 	customtypeenum.Hooks[5] = customtypeenumHooks[0]
+
+	customtypeenum.Hooks[6] = customtypeenumHooks[1]
 	customtypeenumMixinInters1 := customtypeenumMixin[1].Interceptors()
 	customtypeenumMixinInters4 := customtypeenumMixin[4].Interceptors()
 	customtypeenum.Interceptors[0] = customtypeenumMixinInters1[0]

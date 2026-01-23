@@ -173,6 +173,7 @@ func (CustomTypeEnum) Annotations() []schema.Annotation {
 // Hooks of the CustomTypeEnum
 func (CustomTypeEnum) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookCustomTypeEnumCreate(),
 		hooks.HookCustomTypeEnumDelete(),
 	}
 }

@@ -40,14 +40,6 @@ func newCustomEnumMixin(schemaType any, opts ...customEnumOptions) CustomEnumMix
 		opt(&c)
 	}
 
-	sch := toSchemaFuncs(schemaType)
-
-	if c.GlobalEnum {
-		hooks.RegisterGlobalEnum(c.fieldName, sch.PluralName())
-	} else {
-		hooks.RegisterEnumSchema(sch.Name(), sch.PluralName())
-	}
-
 	return c
 }
 
