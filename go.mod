@@ -91,7 +91,7 @@ require (
 	github.com/theopenlane/emailtemplates v0.3.1
 	github.com/theopenlane/entx v0.20.5
 	github.com/theopenlane/go-client v0.6.0
-	github.com/theopenlane/gqlgen-plugins v0.13.2
+	github.com/theopenlane/gqlgen-plugins v0.13.3
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.23.4
 	github.com/theopenlane/newman v0.2.1
