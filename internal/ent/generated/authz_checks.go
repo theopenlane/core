@@ -7809,6 +7809,152 @@ func (m *WorkflowDefinitionMutation) CheckAccessForDelete(ctx context.Context) e
 	return ErrPermissionDenied
 }
 
+func (q *WorkflowEventQuery) CheckAccess(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user id from context")
+
+		return err
+	}
+
+	var objectID string
+
+	// check id from graphql arg context
+	// when all objects are requested, the interceptor will check object access
+	// check the where input first
+	whereArg := gCtx.Args["where"]
+	if whereArg != nil {
+		where, ok := whereArg.(*WorkflowEventWhereInput)
+		if ok && where != nil && where.ID != nil {
+			objectID = *where.ID
+		}
+	}
+
+	// if that doesn't work, check for the id in the request args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	// check if the user has access to the object requested
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanView,
+		ObjectType:  "workflow_event",
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   subjectID,
+		ObjectID:    objectID,
+	}
+
+	access, err := q.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	// Skip to the next privacy rule (equivalent to return nil)
+	return privacy.Skip
+}
+
+func (m *WorkflowEventMutation) CheckAccessForEdit(ctx context.Context) error {
+	var objectID string
+
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	// check the id from the args
+	if objectID == "" {
+		objectID, _ = gCtx.Args["id"].(string)
+	}
+
+	// request is for a list objects, will get filtered in interceptors
+	if objectID == "" {
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		return err
+	}
+
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanEdit,
+		ObjectType:  "workflow_event",
+		ObjectID:    objectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   subjectID,
+	}
+
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
+
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
+}
+
+func (m *WorkflowEventMutation) CheckAccessForDelete(ctx context.Context) error {
+	gCtx := graphql.GetFieldContext(ctx)
+	if gCtx == nil {
+		// Skip to the next privacy rule (equivalent to return nil)
+		// if this is not a graphql request
+		return privacy.Skipf("not a graphql request, no context to check")
+	}
+
+	objectID, ok := gCtx.Args["id"].(string)
+	if !ok {
+		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
+
+		return privacy.Allowf("nil request, bypassing auth check")
+	}
+
+	subjectID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get user id from context")
+
+		return err
+	}
+
+	ac := fgax.AccessCheck{
+		Relation:    fgax.CanDelete,
+		ObjectType:  "workflow_event",
+		ObjectID:    objectID,
+		SubjectType: auth.GetAuthzSubjectType(ctx),
+		SubjectID:   subjectID,
+	}
+
+	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
+
+	access, err := m.Authz.CheckAccess(ctx, ac)
+	if err == nil && access {
+		return privacy.Allow
+	}
+
+	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
+
+	// return error if the action is not allowed
+	return ErrPermissionDenied
+}
+
 func (q *WorkflowInstanceQuery) CheckAccess(ctx context.Context) error {
 	gCtx := graphql.GetFieldContext(ctx)
 

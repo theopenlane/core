@@ -1,63 +1,3 @@
-mutation CreateBulkCSVWorkflowEvent($input: Upload!) {
-  createBulkCSVWorkflowEvent(input: $input) {
-    workflowEvents {
-      createdAt
-      createdBy
-      displayID
-      eventType
-      id
-      ownerID
-      payload
-      tags
-      updatedAt
-      updatedBy
-      workflowInstanceID
-    }
-  }
-}
-
-mutation CreateBulkWorkflowEvent($input: [CreateWorkflowEventInput!]) {
-  createBulkWorkflowEvent(input: $input) {
-    workflowEvents {
-      createdAt
-      createdBy
-      displayID
-      eventType
-      id
-      ownerID
-      payload
-      tags
-      updatedAt
-      updatedBy
-      workflowInstanceID
-    }
-  }
-}
-
-mutation CreateWorkflowEvent($input: CreateWorkflowEventInput!) {
-  createWorkflowEvent(input: $input) {
-    workflowEvent {
-      createdAt
-      createdBy
-      displayID
-      eventType
-      id
-      ownerID
-      payload
-      tags
-      updatedAt
-      updatedBy
-      workflowInstanceID
-    }
-  }
-}
-
-mutation DeleteWorkflowEvent($deleteWorkflowEventId: ID!) {
-  deleteWorkflowEvent(id: $deleteWorkflowEventId) {
-    deletedID
-  }
-}
-
 query GetAllWorkflowEvents {
   workflowEvents {
     totalCount
@@ -124,24 +64,6 @@ query GetWorkflowEvents($first: Int, $last: Int, $where: WorkflowEventWhereInput
         updatedBy
         workflowInstanceID
       }
-    }
-  }
-}
-
-mutation UpdateWorkflowEvent($updateWorkflowEventId: ID!, $input: UpdateWorkflowEventInput!) {
-  updateWorkflowEvent(id: $updateWorkflowEventId, input: $input) {
-    workflowEvent {
-      createdAt
-      createdBy
-      displayID
-      eventType
-      id
-      ownerID
-      payload
-      tags
-      updatedAt
-      updatedBy
-      workflowInstanceID
     }
   }
 }

@@ -2953,8 +2953,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVWorkflowDefinition      func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVWorkflowEvent           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVWorkflowObjectRef       func(childComplexity int, input graphql.Upload) int
 		CreateBulkCampaign                   func(childComplexity int, input []*generated.CreateCampaignInput) int
 		CreateBulkCampaignTarget             func(childComplexity int, input []*generated.CreateCampaignTargetInput) int
 		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
@@ -3012,8 +3010,6 @@ type ComplexityRoot struct {
 		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
 		CreateBulkVulnerability              func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
 		CreateBulkWorkflowDefinition         func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
-		CreateBulkWorkflowEvent              func(childComplexity int, input []*generated.CreateWorkflowEventInput) int
-		CreateBulkWorkflowObjectRef          func(childComplexity int, input []*generated.CreateWorkflowObjectRefInput) int
 		CreateCampaign                       func(childComplexity int, input generated.CreateCampaignInput) int
 		CreateCampaignTarget                 func(childComplexity int, input generated.CreateCampaignTargetInput) int
 		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
@@ -3098,8 +3094,6 @@ type ComplexityRoot struct {
 		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
 		CreateVulnerability                  func(childComplexity int, input generated.CreateVulnerabilityInput) int
 		CreateWorkflowDefinition             func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
-		CreateWorkflowEvent                  func(childComplexity int, input generated.CreateWorkflowEventInput) int
-		CreateWorkflowObjectRef              func(childComplexity int, input generated.CreateWorkflowObjectRefInput) int
 		DeleteAPIToken                       func(childComplexity int, id string) int
 		DeleteActionPlan                     func(childComplexity int, id string) int
 		DeleteAssessment                     func(childComplexity int, id string) int
@@ -3220,8 +3214,6 @@ type ComplexityRoot struct {
 		DeleteVulnerability                  func(childComplexity int, id string) int
 		DeleteWebauthn                       func(childComplexity int, id string) int
 		DeleteWorkflowDefinition             func(childComplexity int, id string) int
-		DeleteWorkflowEvent                  func(childComplexity int, id string) int
-		DeleteWorkflowObjectRef              func(childComplexity int, id string) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
 		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
@@ -3325,7 +3317,6 @@ type ComplexityRoot struct {
 		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
 		UpdateWorkflowDefinition             func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
-		UpdateWorkflowEvent                  func(childComplexity int, id string, input generated.UpdateWorkflowEventInput) int
 		ValidateCustomDomain                 func(childComplexity int, id string) int
 	}
 
@@ -6207,31 +6198,15 @@ type ComplexityRoot struct {
 		WorkflowInstanceID func(childComplexity int) int
 	}
 
-	WorkflowEventBulkCreatePayload struct {
-		WorkflowEvents func(childComplexity int) int
-	}
-
 	WorkflowEventConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
 
-	WorkflowEventCreatePayload struct {
-		WorkflowEvent func(childComplexity int) int
-	}
-
-	WorkflowEventDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
 	WorkflowEventEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	WorkflowEventUpdatePayload struct {
-		WorkflowEvent func(childComplexity int) int
 	}
 
 	WorkflowFieldMetadata struct {
@@ -6341,22 +6316,10 @@ type ComplexityRoot struct {
 		WorkflowInstanceID    func(childComplexity int) int
 	}
 
-	WorkflowObjectRefBulkCreatePayload struct {
-		WorkflowObjectRefs func(childComplexity int) int
-	}
-
 	WorkflowObjectRefConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
-	}
-
-	WorkflowObjectRefCreatePayload struct {
-		WorkflowObjectRef func(childComplexity int) int
-	}
-
-	WorkflowObjectRefDeletePayload struct {
-		DeletedID func(childComplexity int) int
 	}
 
 	WorkflowObjectRefEdge struct {
@@ -21325,30 +21288,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVWorkflowDefinition(childComplexity, args["input"].(graphql.Upload)), true
 
-	case "Mutation.createBulkCSVWorkflowEvent":
-		if e.complexity.Mutation.CreateBulkCSVWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVWorkflowEvent(childComplexity, args["input"].(graphql.Upload)), true
-
-	case "Mutation.createBulkCSVWorkflowObjectRef":
-		if e.complexity.Mutation.CreateBulkCSVWorkflowObjectRef == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVWorkflowObjectRef_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkCSVWorkflowObjectRef(childComplexity, args["input"].(graphql.Upload)), true
-
 	case "Mutation.createBulkCampaign":
 		if e.complexity.Mutation.CreateBulkCampaign == nil {
 			break
@@ -22032,30 +21971,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkWorkflowDefinition(childComplexity, args["input"].([]*generated.CreateWorkflowDefinitionInput)), true
-
-	case "Mutation.createBulkWorkflowEvent":
-		if e.complexity.Mutation.CreateBulkWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkWorkflowEvent(childComplexity, args["input"].([]*generated.CreateWorkflowEventInput)), true
-
-	case "Mutation.createBulkWorkflowObjectRef":
-		if e.complexity.Mutation.CreateBulkWorkflowObjectRef == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkWorkflowObjectRef_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateBulkWorkflowObjectRef(childComplexity, args["input"].([]*generated.CreateWorkflowObjectRefInput)), true
 
 	case "Mutation.createCampaign":
 		if e.complexity.Mutation.CreateCampaign == nil {
@@ -23064,30 +22979,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateWorkflowDefinition(childComplexity, args["input"].(generated.CreateWorkflowDefinitionInput)), true
-
-	case "Mutation.createWorkflowEvent":
-		if e.complexity.Mutation.CreateWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateWorkflowEvent(childComplexity, args["input"].(generated.CreateWorkflowEventInput)), true
-
-	case "Mutation.createWorkflowObjectRef":
-		if e.complexity.Mutation.CreateWorkflowObjectRef == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createWorkflowObjectRef_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateWorkflowObjectRef(childComplexity, args["input"].(generated.CreateWorkflowObjectRefInput)), true
 
 	case "Mutation.deleteAPIToken":
 		if e.complexity.Mutation.DeleteAPIToken == nil {
@@ -24529,30 +24420,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteWorkflowEvent":
-		if e.complexity.Mutation.DeleteWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteWorkflowEvent(childComplexity, args["id"].(string)), true
-
-	case "Mutation.deleteWorkflowObjectRef":
-		if e.complexity.Mutation.DeleteWorkflowObjectRef == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteWorkflowObjectRef_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.DeleteWorkflowObjectRef(childComplexity, args["id"].(string)), true
-
 	case "Mutation.publishTrustCenterSetting":
 		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
 			break
@@ -25783,18 +25650,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateWorkflowDefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowDefinitionInput)), true
-
-	case "Mutation.updateWorkflowEvent":
-		if e.complexity.Mutation.UpdateWorkflowEvent == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateWorkflowEvent_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateWorkflowEvent(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowEventInput)), true
 
 	case "Mutation.validateCustomDomain":
 		if e.complexity.Mutation.ValidateCustomDomain == nil {
@@ -42328,13 +42183,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEvent.WorkflowInstanceID(childComplexity), true
 
-	case "WorkflowEventBulkCreatePayload.workflowEvents":
-		if e.complexity.WorkflowEventBulkCreatePayload.WorkflowEvents == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventBulkCreatePayload.WorkflowEvents(childComplexity), true
-
 	case "WorkflowEventConnection.edges":
 		if e.complexity.WorkflowEventConnection.Edges == nil {
 			break
@@ -42356,20 +42204,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowEventConnection.TotalCount(childComplexity), true
 
-	case "WorkflowEventCreatePayload.workflowEvent":
-		if e.complexity.WorkflowEventCreatePayload.WorkflowEvent == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventCreatePayload.WorkflowEvent(childComplexity), true
-
-	case "WorkflowEventDeletePayload.deletedID":
-		if e.complexity.WorkflowEventDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventDeletePayload.DeletedID(childComplexity), true
-
 	case "WorkflowEventEdge.cursor":
 		if e.complexity.WorkflowEventEdge.Cursor == nil {
 			break
@@ -42383,13 +42217,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowEventEdge.Node(childComplexity), true
-
-	case "WorkflowEventUpdatePayload.workflowEvent":
-		if e.complexity.WorkflowEventUpdatePayload.WorkflowEvent == nil {
-			break
-		}
-
-		return e.complexity.WorkflowEventUpdatePayload.WorkflowEvent(childComplexity), true
 
 	case "WorkflowFieldMetadata.label":
 		if e.complexity.WorkflowFieldMetadata.Label == nil {
@@ -43029,13 +42856,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WorkflowObjectRef.WorkflowInstanceID(childComplexity), true
 
-	case "WorkflowObjectRefBulkCreatePayload.workflowObjectRefs":
-		if e.complexity.WorkflowObjectRefBulkCreatePayload.WorkflowObjectRefs == nil {
-			break
-		}
-
-		return e.complexity.WorkflowObjectRefBulkCreatePayload.WorkflowObjectRefs(childComplexity), true
-
 	case "WorkflowObjectRefConnection.edges":
 		if e.complexity.WorkflowObjectRefConnection.Edges == nil {
 			break
@@ -43056,20 +42876,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.WorkflowObjectRefConnection.TotalCount(childComplexity), true
-
-	case "WorkflowObjectRefCreatePayload.workflowObjectRef":
-		if e.complexity.WorkflowObjectRefCreatePayload.WorkflowObjectRef == nil {
-			break
-		}
-
-		return e.complexity.WorkflowObjectRefCreatePayload.WorkflowObjectRef(childComplexity), true
-
-	case "WorkflowObjectRefDeletePayload.deletedID":
-		if e.complexity.WorkflowObjectRefDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.complexity.WorkflowObjectRefDeletePayload.DeletedID(childComplexity), true
 
 	case "WorkflowObjectRefEdge.cursor":
 		if e.complexity.WorkflowObjectRefEdge.Cursor == nil {
@@ -43241,8 +43047,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateUserSettingInput,
 		ec.unmarshalInputCreateVulnerabilityInput,
 		ec.unmarshalInputCreateWorkflowDefinitionInput,
-		ec.unmarshalInputCreateWorkflowEventInput,
-		ec.unmarshalInputCreateWorkflowObjectRefInput,
 		ec.unmarshalInputCustomDomainOrder,
 		ec.unmarshalInputCustomDomainWhereInput,
 		ec.unmarshalInputCustomTypeEnumOrder,
@@ -43459,7 +43263,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUpdateVulnerabilityInput,
 		ec.unmarshalInputUpdateWorkflowDefinitionInput,
-		ec.unmarshalInputUpdateWorkflowEventInput,
 		ec.unmarshalInputUserOrder,
 		ec.unmarshalInputUserSettingOrder,
 		ec.unmarshalInputUserSettingWhereInput,
@@ -60385,48 +60188,6 @@ input CreateWorkflowDefinitionInput {
   ownerID: ID
   tagDefinitionIDs: [ID!]
   groupIDs: [ID!]
-}
-"""
-CreateWorkflowEventInput is used for create WorkflowEvent object.
-Input was generated by ent.
-"""
-input CreateWorkflowEventInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  Type of event, typically the action kind
-  """
-  eventType: WorkflowEventWorkflowEventType!
-  """
-  Payload for the event; stored raw
-  """
-  payload: WorkflowEventPayload
-  ownerID: ID
-  workflowInstanceID: ID!
-}
-"""
-CreateWorkflowObjectRefInput is used for create WorkflowObjectRef object.
-Input was generated by ent.
-"""
-input CreateWorkflowObjectRefInput {
-  ownerID: ID
-  workflowInstanceID: ID!
-  controlID: ID
-  taskID: ID
-  internalPolicyID: ID
-  findingID: ID
-  directoryAccountID: ID
-  directoryGroupID: ID
-  evidenceID: ID
-  subcontrolID: ID
-  actionPlanID: ID
-  procedureID: ID
-  campaignID: ID
-  campaignTargetID: ID
-  identityHolderID: ID
-  platformID: ID
 }
 """
 Define a Relay Cursor type:
@@ -115028,28 +114789,6 @@ input UpdateWorkflowDefinitionInput {
   removeGroupIDs: [ID!]
   clearGroups: Boolean
 }
-"""
-UpdateWorkflowEventInput is used for update WorkflowEvent object.
-Input was generated by ent.
-"""
-input UpdateWorkflowEventInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  Type of event, typically the action kind
-  """
-  eventType: WorkflowEventWorkflowEventType
-  """
-  Payload for the event; stored raw
-  """
-  payload: WorkflowEventPayload
-  clearPayload: Boolean
-  workflowInstanceID: ID
-}
 type User implements Node {
   id: ID!
   createdAt: Time
@@ -119663,18 +119402,21 @@ enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core
   ACTION
   TRIGGER
   DECISION
-  INSTANCE_TRIGGERED
+  WORKFLOW_TRIGGERED
   ACTION_STARTED
   ACTION_COMPLETED
   ACTION_FAILED
   ACTION_SKIPPED
   CONDITION_EVALUATED
   ASSIGNMENT_CREATED
-  ASSIGNMENT_RESOLVED
+  ASSIGNMENT_COMPLETED
   ASSIGNMENT_INVALIDATED
   INSTANCE_PAUSED
   INSTANCE_RESUMED
-  INSTANCE_COMPLETED
+  WORKFLOW_COMPLETED
+  EMIT_FAILED
+  EMIT_RECOVERED
+  EMIT_FAILED_TERMINAL
 }
 type WorkflowInstance implements Node {
   id: ID!
@@ -129842,98 +129584,7 @@ type WorkflowFieldMetadata {
         id: ID!
     ):  WorkflowEvent!
 }
-
-extend type Mutation{
-    """
-    Create a new workflowEvent
-    """
-    createWorkflowEvent(
-        """
-        values of the workflowEvent
-        """
-        input: CreateWorkflowEventInput!
-    ): WorkflowEventCreatePayload!
-    """
-    Create multiple new workflowEvents
-    """
-    createBulkWorkflowEvent(
-        """
-        values of the workflowEvent
-        """
-        input: [CreateWorkflowEventInput!]
-    ): WorkflowEventBulkCreatePayload!
-    """
-    Create multiple new workflowEvents via file upload
-    """
-    createBulkCSVWorkflowEvent(
-        """
-        csv file containing values of the workflowEvent
-        """
-        input: Upload!
-    ): WorkflowEventBulkCreatePayload!
-    """
-    Update an existing workflowEvent
-    """
-    updateWorkflowEvent(
-        """
-        ID of the workflowEvent
-        """
-        id: ID!
-        """
-        New values for the workflowEvent
-        """
-        input: UpdateWorkflowEventInput!
-    ): WorkflowEventUpdatePayload!
-    """
-    Delete an existing workflowEvent
-    """
-    deleteWorkflowEvent(
-        """
-        ID of the workflowEvent
-        """
-        id: ID!
-    ): WorkflowEventDeletePayload!
-}
-
-"""
-Return response for createWorkflowEvent mutation
-"""
-type WorkflowEventCreatePayload {
-    """
-    Created workflowEvent
-    """
-    workflowEvent: WorkflowEvent!
-}
-
-"""
-Return response for updateWorkflowEvent mutation
-"""
-type WorkflowEventUpdatePayload {
-    """
-    Updated workflowEvent
-    """
-    workflowEvent: WorkflowEvent!
-}
-
-"""
-Return response for deleteWorkflowEvent mutation
-"""
-type WorkflowEventDeletePayload {
-    """
-    Deleted workflowEvent ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkWorkflowEvent mutation
-"""
-type WorkflowEventBulkCreatePayload {
-    """
-    Created workflowEvents
-    """
-    workflowEvents: [WorkflowEvent!]
-}`, BuiltIn: false},
+`, BuiltIn: false},
 	{Name: "../schema/workflowinstance.graphql", Input: `extend type Query {
     """
     Look up workflowInstance by ID
@@ -129956,75 +129607,6 @@ type WorkflowEventBulkCreatePayload {
         """
         id: ID!
     ):  WorkflowObjectRef!
-}
-
-extend type Mutation{
-    """
-    Create a new workflowObjectRef
-    """
-    createWorkflowObjectRef(
-        """
-        values of the workflowObjectRef
-        """
-        input: CreateWorkflowObjectRefInput!
-    ): WorkflowObjectRefCreatePayload!
-    """
-    Create multiple new workflowObjectRefs
-    """
-    createBulkWorkflowObjectRef(
-        """
-        values of the workflowObjectRef
-        """
-        input: [CreateWorkflowObjectRefInput!]
-    ): WorkflowObjectRefBulkCreatePayload!
-    """
-    Create multiple new workflowObjectRefs via file upload
-    """
-    createBulkCSVWorkflowObjectRef(
-        """
-        csv file containing values of the workflowObjectRef
-        """
-        input: Upload!
-    ): WorkflowObjectRefBulkCreatePayload!
-    """
-    Delete an existing workflowObjectRef
-    """
-    deleteWorkflowObjectRef(
-        """
-        ID of the workflowObjectRef
-        """
-        id: ID!
-    ): WorkflowObjectRefDeletePayload!
-}
-
-"""
-Return response for createWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefCreatePayload {
-    """
-    Created workflowObjectRef
-    """
-    workflowObjectRef: WorkflowObjectRef!
-}
-
-"""
-Return response for deleteWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefDeletePayload {
-    """
-    Deleted workflowObjectRef ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkWorkflowObjectRef mutation
-"""
-type WorkflowObjectRefBulkCreatePayload {
-    """
-    Created workflowObjectRefs
-    """
-    workflowObjectRefs: [WorkflowObjectRef!]
 }
 `, BuiltIn: false},
 }

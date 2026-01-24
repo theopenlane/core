@@ -479,6 +479,9 @@ type (
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 
+		// WorkflowEngine configures the workflow orchestration engine.
+		WorkflowEngine any
+
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
 	}
@@ -33063,6 +33066,13 @@ func Job(ctx context.Context, opts ...riverqueue.Option) Option {
 		if err != nil {
 			panic(err)
 		}
+	}
+}
+
+// WorkflowEngine configures the workflow orchestration engine.
+func WorkflowEngine(v any) Option {
+	return func(c *config) {
+		c.WorkflowEngine = v
 	}
 }
 

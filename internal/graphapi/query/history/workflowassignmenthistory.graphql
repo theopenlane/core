@@ -1,5 +1,3 @@
-
-
 query GetAllWorkflowAssignmentHistories {
   workflowAssignmentHistories {
     totalCount

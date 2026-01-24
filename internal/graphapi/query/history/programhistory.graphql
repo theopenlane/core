@@ -1,5 +1,3 @@
-
-
 query GetAllProgramHistories {
   programHistories {
     totalCount
