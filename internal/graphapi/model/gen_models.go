@@ -2574,30 +2574,6 @@ type WorkflowDefinitionUpdatePayload struct {
 	WorkflowDefinition *generated.WorkflowDefinition `json:"workflowDefinition"`
 }
 
-// Return response for createBulkWorkflowEvent mutation
-type WorkflowEventBulkCreatePayload struct {
-	// Created workflowEvents
-	WorkflowEvents []*generated.WorkflowEvent `json:"workflowEvents,omitempty"`
-}
-
-// Return response for createWorkflowEvent mutation
-type WorkflowEventCreatePayload struct {
-	// Created workflowEvent
-	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
-}
-
-// Return response for deleteWorkflowEvent mutation
-type WorkflowEventDeletePayload struct {
-	// Deleted workflowEvent ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateWorkflowEvent mutation
-type WorkflowEventUpdatePayload struct {
-	// Updated workflowEvent
-	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
-}
-
 // Metadata for a workflow-eligible field
 type WorkflowFieldMetadata struct {
 	// The field name (snake_case)
@@ -2612,24 +2588,6 @@ type WorkflowFieldMetadata struct {
 type WorkflowMetadata struct {
 	// Available workflow object types
 	ObjectTypes []*WorkflowObjectTypeMetadata `json:"objectTypes"`
-}
-
-// Return response for createBulkWorkflowObjectRef mutation
-type WorkflowObjectRefBulkCreatePayload struct {
-	// Created workflowObjectRefs
-	WorkflowObjectRefs []*generated.WorkflowObjectRef `json:"workflowObjectRefs,omitempty"`
-}
-
-// Return response for createWorkflowObjectRef mutation
-type WorkflowObjectRefCreatePayload struct {
-	// Created workflowObjectRef
-	WorkflowObjectRef *generated.WorkflowObjectRef `json:"workflowObjectRef"`
-}
-
-// Return response for deleteWorkflowObjectRef mutation
-type WorkflowObjectRefDeletePayload struct {
-	// Deleted workflowObjectRef ID
-	DeletedID string `json:"deletedID"`
 }
 
 // Metadata for a workflow object type

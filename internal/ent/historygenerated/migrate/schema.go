@@ -2940,7 +2940,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "workflow_instance_id", Type: field.TypeString},
-		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION", "INSTANCE_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_RESOLVED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "INSTANCE_COMPLETED"}},
+		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION", "WORKFLOW_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_COMPLETED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "WORKFLOW_COMPLETED", "EMIT_FAILED", "EMIT_RECOVERED", "EMIT_FAILED_TERMINAL"}},
 		{Name: "payload", Type: field.TypeJSON, Nullable: true},
 	}
 	// WorkflowEventHistoryTable holds the schema information for the "workflow_event_history" table.

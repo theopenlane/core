@@ -298,7 +298,7 @@ func (WorkflowObjectRef) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.SchemaSearchable(false),
 		entfga.SelfAccessChecks(),
-		entgql.Skip(entgql.SkipMutationUpdateInput),
+		entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
 	}
 }
 

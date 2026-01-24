@@ -5,6 +5,11 @@
 	Job riverqueue.JobClient
 {{ end }}
 
+{{ define "config/fields/workflowengine" -}}
+	// WorkflowEngine configures the workflow orchestration engine.
+	WorkflowEngine any
+{{ end }}
+
 {{ define "config/options/job" }}
 	// Job option added by the client template to add the job client.
 	func Job(ctx context.Context, opts ...riverqueue.Option) Option {
@@ -15,6 +20,15 @@
 			if err != nil {
 				panic(err)
 			}
+		}
+	}
+{{ end }}
+
+{{ define "config/options/workflowengine" }}
+	// WorkflowEngine configures the workflow orchestration engine.
+	func WorkflowEngine(v any) Option {
+		return func(c *config) {
+			c.WorkflowEngine = v
 		}
 	}
 {{ end }}
