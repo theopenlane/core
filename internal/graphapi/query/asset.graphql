@@ -1,7 +1,6 @@
-
-mutation CreateBulkCSVAsset($input: Upload!) {
-  createBulkCSVAsset(input: $input) {
-    assets {
+mutation CreateAsset($input: CreateAssetInput!) {
+  createAsset(input: $input) {
+    asset {
       assetType
       categories
       cpe
@@ -41,9 +40,9 @@ mutation CreateBulkAsset($input: [CreateAssetInput!]) {
   }
 }
 
-mutation CreateAsset($input: CreateAssetInput!) {
-  createAsset(input: $input) {
-    asset {
+mutation CreateBulkCSVAsset($input: Upload!) {
+  createBulkCSVAsset(input: $input) {
+    assets {
       assetType
       categories
       cpe
@@ -97,6 +96,7 @@ query GetAllAssets {
     }
   }
 }
+
 query GetAssetByID($assetId: ID!) {
   asset(id: $assetId) {
     assetType
@@ -145,6 +145,7 @@ query GetAssets($first: Int, $last: Int, $where: AssetWhereInput) {
     }
   }
 }
+
 mutation UpdateAsset($updateAssetId: ID!, $input: UpdateAssetInput!) {
   updateAsset(id: $updateAssetId, input: $input) {
     asset {
