@@ -28,7 +28,7 @@ type WorkflowCreationError struct {
 	// Stage is the creation stage that failed
 	Stage WorkflowCreationStage
 	// Err is the underlying error
-	Err   error
+	Err error
 }
 
 // Error formats the workflow creation error
@@ -109,17 +109,17 @@ type WorkflowInstanceBuilderParams struct {
 	// WorkflowDefinitionID is the definition id for the instance
 	WorkflowDefinitionID string
 	// DefinitionSnapshot is the snapshot of the workflow definition
-	DefinitionSnapshot   models.WorkflowDefinitionDocument
+	DefinitionSnapshot models.WorkflowDefinitionDocument
 	// State is the initial workflow instance state
-	State                enums.WorkflowInstanceState
+	State enums.WorkflowInstanceState
 	// Context is the workflow instance context payload
-	Context              models.WorkflowInstanceContext
+	Context models.WorkflowInstanceContext
 	// OwnerID is the organization owner id
-	OwnerID              string
+	OwnerID string
 	// ObjectType is the workflow object type
-	ObjectType           enums.WorkflowObjectType
+	ObjectType enums.WorkflowObjectType
 	// ObjectID is the workflow object id
-	ObjectID             string
+	ObjectID string
 }
 
 // CreateWorkflowInstanceWithObjectRef builds a workflow instance and its object ref in a single helper.

@@ -43,7 +43,7 @@ func TestConfigOptions(t *testing.T) {
 	override := Config{
 		Enabled: false,
 		CEL: CELConfig{
-			Timeout:  time.Second,
+			Timeout:   time.Second,
 			CostLimit: 12,
 		},
 	}
