@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -46,6 +47,8 @@ type CustomTypeEnumQuery struct {
 	withProcedures            *ProcedureQuery
 	withActionPlans           *ActionPlanQuery
 	withPrograms              *ProgramQuery
+	withPlatforms             *PlatformQuery
+	withFKs                   bool
 	loadTotal                 []func(context.Context, []*CustomTypeEnum) error
 	modifiers                 []func(*sql.Selector)
 	withNamedTasks            map[string]*TaskQuery
@@ -57,6 +60,7 @@ type CustomTypeEnumQuery struct {
 	withNamedProcedures       map[string]*ProcedureQuery
 	withNamedActionPlans      map[string]*ActionPlanQuery
 	withNamedPrograms         map[string]*ProgramQuery
+	withNamedPlatforms        map[string]*PlatformQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -343,6 +347,31 @@ func (_q *CustomTypeEnumQuery) QueryPrograms() *ProgramQuery {
 	return query
 }
 
+// QueryPlatforms chains the current query on the "platforms" edge.
+func (_q *CustomTypeEnumQuery) QueryPlatforms() *PlatformQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(customtypeenum.Table, customtypeenum.FieldID, selector),
+			sqlgraph.To(platform.Table, platform.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.PlatformsTable, customtypeenum.PlatformsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Platform
+		step.Edge.Schema = schemaConfig.Platform
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first CustomTypeEnum entity from the query.
 // Returns a *NotFoundError when no CustomTypeEnum was found.
 func (_q *CustomTypeEnumQuery) First(ctx context.Context) (*CustomTypeEnum, error) {
@@ -545,6 +574,7 @@ func (_q *CustomTypeEnumQuery) Clone() *CustomTypeEnumQuery {
 		withProcedures:       _q.withProcedures.Clone(),
 		withActionPlans:      _q.withActionPlans.Clone(),
 		withPrograms:         _q.withPrograms.Clone(),
+		withPlatforms:        _q.withPlatforms.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -662,6 +692,17 @@ func (_q *CustomTypeEnumQuery) WithPrograms(opts ...func(*ProgramQuery)) *Custom
 	return _q
 }
 
+// WithPlatforms tells the query-builder to eager-load the nodes that are connected to
+// the "platforms" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CustomTypeEnumQuery) WithPlatforms(opts ...func(*PlatformQuery)) *CustomTypeEnumQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPlatforms = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -745,8 +786,9 @@ func (_q *CustomTypeEnumQuery) prepareQuery(ctx context.Context) error {
 func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*CustomTypeEnum, error) {
 	var (
 		nodes       = []*CustomTypeEnum{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [10]bool{
+		loadedTypes = [11]bool{
 			_q.withOwner != nil,
 			_q.withTasks != nil,
 			_q.withControls != nil,
@@ -757,8 +799,12 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withProcedures != nil,
 			_q.withActionPlans != nil,
 			_q.withPrograms != nil,
+			_q.withPlatforms != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, customtypeenum.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*CustomTypeEnum).scanValues(nil, columns)
 	}
@@ -853,6 +899,13 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withPlatforms; query != nil {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *CustomTypeEnum) { n.Edges.Platforms = []*Platform{} },
+			func(n *CustomTypeEnum, e *Platform) { n.Edges.Platforms = append(n.Edges.Platforms, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedTasks {
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *CustomTypeEnum) { n.appendNamedTasks(name) },
@@ -913,6 +966,13 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadPrograms(ctx, query, nodes,
 			func(n *CustomTypeEnum) { n.appendNamedPrograms(name) },
 			func(n *CustomTypeEnum, e *Program) { n.appendNamedPrograms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPlatforms {
+		if err := _q.loadPlatforms(ctx, query, nodes,
+			func(n *CustomTypeEnum) { n.appendNamedPlatforms(name) },
+			func(n *CustomTypeEnum, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1232,6 +1292,37 @@ func (_q *CustomTypeEnumQuery) loadPrograms(ctx context.Context, query *ProgramQ
 	}
 	return nil
 }
+func (_q *CustomTypeEnumQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, nodes []*CustomTypeEnum, init func(*CustomTypeEnum), assign func(*CustomTypeEnum, *Platform)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*CustomTypeEnum)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Platform(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(customtypeenum.PlatformsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.custom_type_enum_platforms
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "custom_type_enum_platforms" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "custom_type_enum_platforms" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *CustomTypeEnumQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1457,6 +1548,20 @@ func (_q *CustomTypeEnumQuery) WithNamedPrograms(name string, opts ...func(*Prog
 		_q.withNamedPrograms = make(map[string]*ProgramQuery)
 	}
 	_q.withNamedPrograms[name] = query
+	return _q
+}
+
+// WithNamedPlatforms tells the query-builder to eager-load the nodes that are connected to the "platforms"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *CustomTypeEnumQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQuery)) *CustomTypeEnumQuery {
+	query := (&PlatformClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPlatforms == nil {
+		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
+	}
+	_q.withNamedPlatforms[name] = query
 	return _q
 }
 

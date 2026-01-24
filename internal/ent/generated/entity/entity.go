@@ -3,11 +3,14 @@
 package entity
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/common/enums"
 )
 
 const (
@@ -31,12 +34,46 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
+	FieldLastReviewedAt = "last_reviewed_at"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
 	FieldInternalNotes = "internal_notes"
 	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
 	FieldSystemInternalID = "system_internal_id"
+	// FieldEntityRelationshipStateName holds the string denoting the entity_relationship_state_name field in the database.
+	FieldEntityRelationshipStateName = "entity_relationship_state_name"
+	// FieldEntityRelationshipStateID holds the string denoting the entity_relationship_state_id field in the database.
+	FieldEntityRelationshipStateID = "entity_relationship_state_id"
+	// FieldEntitySecurityQuestionnaireStatusName holds the string denoting the entity_security_questionnaire_status_name field in the database.
+	FieldEntitySecurityQuestionnaireStatusName = "entity_security_questionnaire_status_name"
+	// FieldEntitySecurityQuestionnaireStatusID holds the string denoting the entity_security_questionnaire_status_id field in the database.
+	FieldEntitySecurityQuestionnaireStatusID = "entity_security_questionnaire_status_id"
+	// FieldEntitySourceTypeName holds the string denoting the entity_source_type_name field in the database.
+	FieldEntitySourceTypeName = "entity_source_type_name"
+	// FieldEntitySourceTypeID holds the string denoting the entity_source_type_id field in the database.
+	FieldEntitySourceTypeID = "entity_source_type_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDisplayName holds the string denoting the display_name field in the database.
@@ -49,6 +86,56 @@ const (
 	FieldEntityTypeID = "entity_type_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldApprovedForUse holds the string denoting the approved_for_use field in the database.
+	FieldApprovedForUse = "approved_for_use"
+	// FieldLinkedAssetIds holds the string denoting the linked_asset_ids field in the database.
+	FieldLinkedAssetIds = "linked_asset_ids"
+	// FieldHasSoc2 holds the string denoting the has_soc2 field in the database.
+	FieldHasSoc2 = "has_soc2"
+	// FieldSoc2PeriodEnd holds the string denoting the soc2_period_end field in the database.
+	FieldSoc2PeriodEnd = "soc2_period_end"
+	// FieldContractStartDate holds the string denoting the contract_start_date field in the database.
+	FieldContractStartDate = "contract_start_date"
+	// FieldContractEndDate holds the string denoting the contract_end_date field in the database.
+	FieldContractEndDate = "contract_end_date"
+	// FieldAutoRenews holds the string denoting the auto_renews field in the database.
+	FieldAutoRenews = "auto_renews"
+	// FieldTerminationNoticeDays holds the string denoting the termination_notice_days field in the database.
+	FieldTerminationNoticeDays = "termination_notice_days"
+	// FieldAnnualSpend holds the string denoting the annual_spend field in the database.
+	FieldAnnualSpend = "annual_spend"
+	// FieldSpendCurrency holds the string denoting the spend_currency field in the database.
+	FieldSpendCurrency = "spend_currency"
+	// FieldBillingModel holds the string denoting the billing_model field in the database.
+	FieldBillingModel = "billing_model"
+	// FieldRenewalRisk holds the string denoting the renewal_risk field in the database.
+	FieldRenewalRisk = "renewal_risk"
+	// FieldSSOEnforced holds the string denoting the sso_enforced field in the database.
+	FieldSSOEnforced = "sso_enforced"
+	// FieldMfaSupported holds the string denoting the mfa_supported field in the database.
+	FieldMfaSupported = "mfa_supported"
+	// FieldMfaEnforced holds the string denoting the mfa_enforced field in the database.
+	FieldMfaEnforced = "mfa_enforced"
+	// FieldStatusPageURL holds the string denoting the status_page_url field in the database.
+	FieldStatusPageURL = "status_page_url"
+	// FieldProvidedServices holds the string denoting the provided_services field in the database.
+	FieldProvidedServices = "provided_services"
+	// FieldLinks holds the string denoting the links field in the database.
+	FieldLinks = "links"
+	// FieldRiskRating holds the string denoting the risk_rating field in the database.
+	FieldRiskRating = "risk_rating"
+	// FieldRiskScore holds the string denoting the risk_score field in the database.
+	FieldRiskScore = "risk_score"
+	// FieldTier holds the string denoting the tier field in the database.
+	FieldTier = "tier"
+	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
+	FieldReviewFrequency = "review_frequency"
+	// FieldNextReviewAt holds the string denoting the next_review_at field in the database.
+	FieldNextReviewAt = "next_review_at"
+	// FieldContractRenewalAt holds the string denoting the contract_renewal_at field in the database.
+	FieldContractRenewalAt = "contract_renewal_at"
+	// FieldVendorMetadata holds the string denoting the vendor_metadata field in the database.
+	FieldVendorMetadata = "vendor_metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -57,6 +144,24 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeInternalOwnerUser holds the string denoting the internal_owner_user edge name in mutations.
+	EdgeInternalOwnerUser = "internal_owner_user"
+	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
+	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
+	EdgeReviewedByUser = "reviewed_by_user"
+	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
+	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeEntityRelationshipState holds the string denoting the entity_relationship_state edge name in mutations.
+	EdgeEntityRelationshipState = "entity_relationship_state"
+	// EdgeEntitySecurityQuestionnaireStatus holds the string denoting the entity_security_questionnaire_status edge name in mutations.
+	EdgeEntitySecurityQuestionnaireStatus = "entity_security_questionnaire_status"
+	// EdgeEntitySourceType holds the string denoting the entity_source_type edge name in mutations.
+	EdgeEntitySourceType = "entity_source_type"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
 	// EdgeContacts holds the string denoting the contacts edge name in mutations.
 	EdgeContacts = "contacts"
 	// EdgeDocuments holds the string denoting the documents edge name in mutations.
@@ -69,6 +174,26 @@ const (
 	EdgeAssets = "assets"
 	// EdgeScans holds the string denoting the scans edge name in mutations.
 	EdgeScans = "scans"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
+	// EdgeAssessmentResponses holds the string denoting the assessment_responses edge name in mutations.
+	EdgeAssessmentResponses = "assessment_responses"
+	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
+	EdgeIntegrations = "integrations"
+	// EdgeSubprocessors holds the string denoting the subprocessors edge name in mutations.
+	EdgeSubprocessors = "subprocessors"
+	// EdgeAuthMethods holds the string denoting the auth_methods edge name in mutations.
+	EdgeAuthMethods = "auth_methods"
+	// EdgeEmployerIdentityHolders holds the string denoting the employer_identity_holders edge name in mutations.
+	EdgeEmployerIdentityHolders = "employer_identity_holders"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeOutOfScopePlatforms holds the string denoting the out_of_scope_platforms edge name in mutations.
+	EdgeOutOfScopePlatforms = "out_of_scope_platforms"
+	// EdgeSourcePlatforms holds the string denoting the source_platforms edge name in mutations.
+	EdgeSourcePlatforms = "source_platforms"
 	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
 	EdgeEntityType = "entity_type"
 	// Table holds the table name of the entity in the database.
@@ -95,6 +220,69 @@ const (
 	// ViewersInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	ViewersInverseTable = "groups"
+	// InternalOwnerUserTable is the table that holds the internal_owner_user relation/edge.
+	InternalOwnerUserTable = "entities"
+	// InternalOwnerUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	InternalOwnerUserInverseTable = "users"
+	// InternalOwnerUserColumn is the table column denoting the internal_owner_user relation/edge.
+	InternalOwnerUserColumn = "internal_owner_user_id"
+	// InternalOwnerGroupTable is the table that holds the internal_owner_group relation/edge.
+	InternalOwnerGroupTable = "entities"
+	// InternalOwnerGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	InternalOwnerGroupInverseTable = "groups"
+	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
+	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
+	ReviewedByUserTable = "entities"
+	// ReviewedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	ReviewedByUserInverseTable = "users"
+	// ReviewedByUserColumn is the table column denoting the reviewed_by_user relation/edge.
+	ReviewedByUserColumn = "reviewed_by_user_id"
+	// ReviewedByGroupTable is the table that holds the reviewed_by_group relation/edge.
+	ReviewedByGroupTable = "entities"
+	// ReviewedByGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReviewedByGroupInverseTable = "groups"
+	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
+	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// EntityRelationshipStateTable is the table that holds the entity_relationship_state relation/edge.
+	EntityRelationshipStateTable = "entities"
+	// EntityRelationshipStateInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EntityRelationshipStateInverseTable = "custom_type_enums"
+	// EntityRelationshipStateColumn is the table column denoting the entity_relationship_state relation/edge.
+	EntityRelationshipStateColumn = "entity_relationship_state_id"
+	// EntitySecurityQuestionnaireStatusTable is the table that holds the entity_security_questionnaire_status relation/edge.
+	EntitySecurityQuestionnaireStatusTable = "entities"
+	// EntitySecurityQuestionnaireStatusInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EntitySecurityQuestionnaireStatusInverseTable = "custom_type_enums"
+	// EntitySecurityQuestionnaireStatusColumn is the table column denoting the entity_security_questionnaire_status relation/edge.
+	EntitySecurityQuestionnaireStatusColumn = "entity_security_questionnaire_status_id"
+	// EntitySourceTypeTable is the table that holds the entity_source_type relation/edge.
+	EntitySourceTypeTable = "entities"
+	// EntitySourceTypeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EntitySourceTypeInverseTable = "custom_type_enums"
+	// EntitySourceTypeColumn is the table column denoting the entity_source_type relation/edge.
+	EntitySourceTypeColumn = "entity_source_type_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "entities"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "entities"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
 	// ContactsTable is the table that holds the contacts relation/edge. The primary key declared below.
 	ContactsTable = "entity_contacts"
 	// ContactsInverseTable is the table name for the Contact entity.
@@ -129,6 +317,64 @@ const (
 	ScansInverseTable = "scans"
 	// ScansColumn is the table column denoting the scans relation/edge.
 	ScansColumn = "entity_scans"
+	// CampaignsTable is the table that holds the campaigns relation/edge.
+	CampaignsTable = "campaigns"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignsColumn is the table column denoting the campaigns relation/edge.
+	CampaignsColumn = "entity_id"
+	// AssessmentResponsesTable is the table that holds the assessment_responses relation/edge.
+	AssessmentResponsesTable = "assessment_responses"
+	// AssessmentResponsesInverseTable is the table name for the AssessmentResponse entity.
+	// It exists in this package in order to avoid circular dependency with the "assessmentresponse" package.
+	AssessmentResponsesInverseTable = "assessment_responses"
+	// AssessmentResponsesColumn is the table column denoting the assessment_responses relation/edge.
+	AssessmentResponsesColumn = "entity_id"
+	// IntegrationsTable is the table that holds the integrations relation/edge. The primary key declared below.
+	IntegrationsTable = "entity_integrations"
+	// IntegrationsInverseTable is the table name for the Integration entity.
+	// It exists in this package in order to avoid circular dependency with the "integration" package.
+	IntegrationsInverseTable = "integrations"
+	// SubprocessorsTable is the table that holds the subprocessors relation/edge. The primary key declared below.
+	SubprocessorsTable = "entity_subprocessors"
+	// SubprocessorsInverseTable is the table name for the Subprocessor entity.
+	// It exists in this package in order to avoid circular dependency with the "subprocessor" package.
+	SubprocessorsInverseTable = "subprocessors"
+	// AuthMethodsTable is the table that holds the auth_methods relation/edge.
+	AuthMethodsTable = "custom_type_enums"
+	// AuthMethodsInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	AuthMethodsInverseTable = "custom_type_enums"
+	// AuthMethodsColumn is the table column denoting the auth_methods relation/edge.
+	AuthMethodsColumn = "entity_auth_methods"
+	// EmployerIdentityHoldersTable is the table that holds the employer_identity_holders relation/edge.
+	EmployerIdentityHoldersTable = "identity_holders"
+	// EmployerIdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	EmployerIdentityHoldersInverseTable = "identity_holders"
+	// EmployerIdentityHoldersColumn is the table column denoting the employer_identity_holders relation/edge.
+	EmployerIdentityHoldersColumn = "employer_entity_id"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge. The primary key declared below.
+	IdentityHoldersTable = "identity_holder_entities"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_entities"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// OutOfScopePlatformsTable is the table that holds the out_of_scope_platforms relation/edge. The primary key declared below.
+	OutOfScopePlatformsTable = "platform_out_of_scope_vendors"
+	// OutOfScopePlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	OutOfScopePlatformsInverseTable = "platforms"
+	// SourcePlatformsTable is the table that holds the source_platforms relation/edge. The primary key declared below.
+	SourcePlatformsTable = "platform_source_entities"
+	// SourcePlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	SourcePlatformsInverseTable = "platforms"
 	// EntityTypeTable is the table that holds the entity_type relation/edge.
 	EntityTypeTable = "entities"
 	// EntityTypeInverseTable is the table name for the EntityType entity.
@@ -149,15 +395,57 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldLastReviewedAt,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
+	FieldEntityRelationshipStateName,
+	FieldEntityRelationshipStateID,
+	FieldEntitySecurityQuestionnaireStatusName,
+	FieldEntitySecurityQuestionnaireStatusID,
+	FieldEntitySourceTypeName,
+	FieldEntitySourceTypeID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldName,
 	FieldDisplayName,
 	FieldDescription,
 	FieldDomains,
 	FieldEntityTypeID,
 	FieldStatus,
+	FieldApprovedForUse,
+	FieldLinkedAssetIds,
+	FieldHasSoc2,
+	FieldSoc2PeriodEnd,
+	FieldContractStartDate,
+	FieldContractEndDate,
+	FieldAutoRenews,
+	FieldTerminationNoticeDays,
+	FieldAnnualSpend,
+	FieldSpendCurrency,
+	FieldBillingModel,
+	FieldRenewalRisk,
+	FieldSSOEnforced,
+	FieldMfaSupported,
+	FieldMfaEnforced,
+	FieldStatusPageURL,
+	FieldProvidedServices,
+	FieldLinks,
+	FieldRiskRating,
+	FieldRiskScore,
+	FieldTier,
+	FieldReviewFrequency,
+	FieldNextReviewAt,
+	FieldContractRenewalAt,
+	FieldVendorMetadata,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "entities"
@@ -194,6 +482,24 @@ var (
 	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
 	// primary key for the assets relation (M2M).
 	AssetsPrimaryKey = []string{"entity_id", "asset_id"}
+	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
+	// primary key for the integrations relation (M2M).
+	IntegrationsPrimaryKey = []string{"entity_id", "integration_id"}
+	// SubprocessorsPrimaryKey and SubprocessorsColumn2 are the table columns denoting the
+	// primary key for the subprocessors relation (M2M).
+	SubprocessorsPrimaryKey = []string{"entity_id", "subprocessor_id"}
+	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
+	// primary key for the identity_holders relation (M2M).
+	IdentityHoldersPrimaryKey = []string{"identity_holder_id", "entity_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "entity_id"}
+	// OutOfScopePlatformsPrimaryKey and OutOfScopePlatformsColumn2 are the table columns denoting the
+	// primary key for the out_of_scope_platforms relation (M2M).
+	OutOfScopePlatformsPrimaryKey = []string{"platform_id", "entity_id"}
+	// SourcePlatformsPrimaryKey and SourcePlatformsColumn2 are the table columns denoting the
+	// primary key for the source_platforms relation (M2M).
+	SourcePlatformsPrimaryKey = []string{"platform_id", "entity_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -217,7 +523,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [17]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -240,9 +546,45 @@ var (
 	DomainsValidator func([]string) error
 	// DefaultStatus holds the default value on creation for the "status" field.
 	DefaultStatus string
+	// DefaultApprovedForUse holds the default value on creation for the "approved_for_use" field.
+	DefaultApprovedForUse bool
+	// DefaultLinkedAssetIds holds the default value on creation for the "linked_asset_ids" field.
+	DefaultLinkedAssetIds []string
+	// DefaultHasSoc2 holds the default value on creation for the "has_soc2" field.
+	DefaultHasSoc2 bool
+	// DefaultAutoRenews holds the default value on creation for the "auto_renews" field.
+	DefaultAutoRenews bool
+	// DefaultSpendCurrency holds the default value on creation for the "spend_currency" field.
+	DefaultSpendCurrency string
+	// DefaultSSOEnforced holds the default value on creation for the "sso_enforced" field.
+	DefaultSSOEnforced bool
+	// DefaultMfaSupported holds the default value on creation for the "mfa_supported" field.
+	DefaultMfaSupported bool
+	// DefaultMfaEnforced holds the default value on creation for the "mfa_enforced" field.
+	DefaultMfaEnforced bool
+	// StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
+	StatusPageURLValidator func(string) error
+	// DefaultProvidedServices holds the default value on creation for the "provided_services" field.
+	DefaultProvidedServices []string
+	// DefaultLinks holds the default value on creation for the "links" field.
+	DefaultLinks []string
+	// LinksValidator is a validator for the "links" field. It is called by the builders before save.
+	LinksValidator func([]string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultReviewFrequency enums.Frequency = "YEARLY"
+
+// ReviewFrequencyValidator is a validator for the "review_frequency" field enum values. It is called by the builders before save.
+func ReviewFrequencyValidator(rf enums.Frequency) error {
+	switch rf.String() {
+	case "YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY":
+		return nil
+	default:
+		return fmt.Errorf("entity: invalid enum value for review_frequency field: %q", rf)
+	}
+}
 
 // OrderOption defines the ordering options for the Entity queries.
 type OrderOption func(*sql.Selector)
@@ -287,6 +629,41 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByLastReviewedAt orders the results by the last_reviewed_at field.
+func ByLastReviewedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLastReviewedAt, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -300,6 +677,56 @@ func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
 // BySystemInternalID orders the results by the system_internal_id field.
 func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
+}
+
+// ByEntityRelationshipStateName orders the results by the entity_relationship_state_name field.
+func ByEntityRelationshipStateName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityRelationshipStateName, opts...).ToFunc()
+}
+
+// ByEntityRelationshipStateID orders the results by the entity_relationship_state_id field.
+func ByEntityRelationshipStateID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityRelationshipStateID, opts...).ToFunc()
+}
+
+// ByEntitySecurityQuestionnaireStatusName orders the results by the entity_security_questionnaire_status_name field.
+func ByEntitySecurityQuestionnaireStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySecurityQuestionnaireStatusName, opts...).ToFunc()
+}
+
+// ByEntitySecurityQuestionnaireStatusID orders the results by the entity_security_questionnaire_status_id field.
+func ByEntitySecurityQuestionnaireStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySecurityQuestionnaireStatusID, opts...).ToFunc()
+}
+
+// ByEntitySourceTypeName orders the results by the entity_source_type_name field.
+func ByEntitySourceTypeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySourceTypeName, opts...).ToFunc()
+}
+
+// ByEntitySourceTypeID orders the results by the entity_source_type_id field.
+func ByEntitySourceTypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntitySourceTypeID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.
@@ -325,6 +752,111 @@ func ByEntityTypeID(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByApprovedForUse orders the results by the approved_for_use field.
+func ByApprovedForUse(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldApprovedForUse, opts...).ToFunc()
+}
+
+// ByHasSoc2 orders the results by the has_soc2 field.
+func ByHasSoc2(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldHasSoc2, opts...).ToFunc()
+}
+
+// BySoc2PeriodEnd orders the results by the soc2_period_end field.
+func BySoc2PeriodEnd(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSoc2PeriodEnd, opts...).ToFunc()
+}
+
+// ByContractStartDate orders the results by the contract_start_date field.
+func ByContractStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractStartDate, opts...).ToFunc()
+}
+
+// ByContractEndDate orders the results by the contract_end_date field.
+func ByContractEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractEndDate, opts...).ToFunc()
+}
+
+// ByAutoRenews orders the results by the auto_renews field.
+func ByAutoRenews(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAutoRenews, opts...).ToFunc()
+}
+
+// ByTerminationNoticeDays orders the results by the termination_notice_days field.
+func ByTerminationNoticeDays(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTerminationNoticeDays, opts...).ToFunc()
+}
+
+// ByAnnualSpend orders the results by the annual_spend field.
+func ByAnnualSpend(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAnnualSpend, opts...).ToFunc()
+}
+
+// BySpendCurrency orders the results by the spend_currency field.
+func BySpendCurrency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSpendCurrency, opts...).ToFunc()
+}
+
+// ByBillingModel orders the results by the billing_model field.
+func ByBillingModel(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBillingModel, opts...).ToFunc()
+}
+
+// ByRenewalRisk orders the results by the renewal_risk field.
+func ByRenewalRisk(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRenewalRisk, opts...).ToFunc()
+}
+
+// BySSOEnforced orders the results by the sso_enforced field.
+func BySSOEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSSOEnforced, opts...).ToFunc()
+}
+
+// ByMfaSupported orders the results by the mfa_supported field.
+func ByMfaSupported(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMfaSupported, opts...).ToFunc()
+}
+
+// ByMfaEnforced orders the results by the mfa_enforced field.
+func ByMfaEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMfaEnforced, opts...).ToFunc()
+}
+
+// ByStatusPageURL orders the results by the status_page_url field.
+func ByStatusPageURL(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatusPageURL, opts...).ToFunc()
+}
+
+// ByRiskRating orders the results by the risk_rating field.
+func ByRiskRating(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskRating, opts...).ToFunc()
+}
+
+// ByRiskScore orders the results by the risk_score field.
+func ByRiskScore(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRiskScore, opts...).ToFunc()
+}
+
+// ByTier orders the results by the tier field.
+func ByTier(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTier, opts...).ToFunc()
+}
+
+// ByReviewFrequency orders the results by the review_frequency field.
+func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
+}
+
+// ByNextReviewAt orders the results by the next_review_at field.
+func ByNextReviewAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextReviewAt, opts...).ToFunc()
+}
+
+// ByContractRenewalAt orders the results by the contract_renewal_at field.
+func ByContractRenewalAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContractRenewalAt, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -373,6 +905,69 @@ func ByViewersCount(opts ...sql.OrderTermOption) OrderOption {
 func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalOwnerUserField orders the results by internal_owner_user field.
+func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerGroupField orders the results by internal_owner_group field.
+func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByUserField orders the results by reviewed_by_user field.
+func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByGroupField orders the results by reviewed_by_group field.
+func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEntityRelationshipStateField orders the results by entity_relationship_state field.
+func ByEntityRelationshipStateField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntityRelationshipStateStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEntitySecurityQuestionnaireStatusField orders the results by entity_security_questionnaire_status field.
+func ByEntitySecurityQuestionnaireStatusField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitySecurityQuestionnaireStatusStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEntitySourceTypeField orders the results by entity_source_type field.
+func ByEntitySourceTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitySourceTypeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -460,6 +1055,146 @@ func ByScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssessmentResponsesCount orders the results by assessment_responses count.
+func ByAssessmentResponsesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssessmentResponsesStep(), opts...)
+	}
+}
+
+// ByAssessmentResponses orders the results by assessment_responses terms.
+func ByAssessmentResponses(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssessmentResponsesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIntegrationsCount orders the results by integrations count.
+func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationsStep(), opts...)
+	}
+}
+
+// ByIntegrations orders the results by integrations terms.
+func ByIntegrations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubprocessorsCount orders the results by subprocessors count.
+func BySubprocessorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubprocessorsStep(), opts...)
+	}
+}
+
+// BySubprocessors orders the results by subprocessors terms.
+func BySubprocessors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubprocessorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAuthMethodsCount orders the results by auth_methods count.
+func ByAuthMethodsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAuthMethodsStep(), opts...)
+	}
+}
+
+// ByAuthMethods orders the results by auth_methods terms.
+func ByAuthMethods(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAuthMethodsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEmployerIdentityHoldersCount orders the results by employer_identity_holders count.
+func ByEmployerIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEmployerIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByEmployerIdentityHolders orders the results by employer_identity_holders terms.
+func ByEmployerIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEmployerIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOutOfScopePlatformsCount orders the results by out_of_scope_platforms count.
+func ByOutOfScopePlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOutOfScopePlatformsStep(), opts...)
+	}
+}
+
+// ByOutOfScopePlatforms orders the results by out_of_scope_platforms terms.
+func ByOutOfScopePlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOutOfScopePlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySourcePlatformsCount orders the results by source_platforms count.
+func BySourcePlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSourcePlatformsStep(), opts...)
+	}
+}
+
+// BySourcePlatforms orders the results by source_platforms terms.
+func BySourcePlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSourcePlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByEntityTypeField orders the results by entity_type field.
 func ByEntityTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -492,6 +1227,69 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ViewersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
+	)
+}
+func newInternalOwnerUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+	)
+}
+func newInternalOwnerGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newReviewedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+	)
+}
+func newReviewedByGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newEntityRelationshipStateStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntityRelationshipStateInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EntityRelationshipStateTable, EntityRelationshipStateColumn),
+	)
+}
+func newEntitySecurityQuestionnaireStatusStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitySecurityQuestionnaireStatusInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EntitySecurityQuestionnaireStatusTable, EntitySecurityQuestionnaireStatusColumn),
+	)
+}
+func newEntitySourceTypeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitySourceTypeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EntitySourceTypeTable, EntitySourceTypeColumn),
+	)
+}
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 	)
 }
 func newContactsStep() *sqlgraph.Step {
@@ -536,6 +1334,76 @@ func newScansStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
 	)
 }
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignsTable, CampaignsColumn),
+	)
+}
+func newAssessmentResponsesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssessmentResponsesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
+	)
+}
+func newIntegrationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, IntegrationsTable, IntegrationsPrimaryKey...),
+	)
+}
+func newSubprocessorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubprocessorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubprocessorsTable, SubprocessorsPrimaryKey...),
+	)
+}
+func newAuthMethodsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AuthMethodsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AuthMethodsTable, AuthMethodsColumn),
+	)
+}
+func newEmployerIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EmployerIdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, EmployerIdentityHoldersTable, EmployerIdentityHoldersColumn),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newOutOfScopePlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OutOfScopePlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OutOfScopePlatformsTable, OutOfScopePlatformsPrimaryKey...),
+	)
+}
+func newSourcePlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SourcePlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, SourcePlatformsTable, SourcePlatformsPrimaryKey...),
+	)
+}
 func newEntityTypeStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -543,3 +1411,10 @@ func newEntityTypeStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
 	)
 }
+
+var (
+	// enums.Frequency must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.Frequency)(nil)
+	// enums.Frequency must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.Frequency)(nil)
+)

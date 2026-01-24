@@ -90,6 +90,22 @@ func (WorkflowObjectRef) Fields() []ent.Field {
 			Immutable().
 			Comment("Procedure referenced by this workflow instance").
 			Optional(),
+		field.String("campaign_id").
+			Immutable().
+			Comment("Campaign referenced by this workflow instance").
+			Optional(),
+		field.String("campaign_target_id").
+			Immutable().
+			Comment("Campaign target referenced by this workflow instance").
+			Optional(),
+		field.String("identity_holder_id").
+			Immutable().
+			Comment("Identity holder referenced by this workflow instance").
+			Optional(),
+		field.String("platform_id").
+			Immutable().
+			Comment("Platform referenced by this workflow instance").
+			Optional(),
 	}
 }
 
@@ -190,6 +206,34 @@ func (w WorkflowObjectRef) Edges() []ent.Edge {
 			comment:    "Procedure referenced by this workflow instance",
 			immutable:  true,
 		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Campaign{},
+			field:      "campaign_id",
+			comment:    "Campaign referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: CampaignTarget{},
+			field:      "campaign_target_id",
+			comment:    "Campaign target referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: IdentityHolder{},
+			field:      "identity_holder_id",
+			comment:    "Identity holder referenced by this workflow instance",
+			immutable:  true,
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			comment:    "Platform referenced by this workflow instance",
+			immutable:  true,
+		}),
 	}
 }
 
@@ -218,6 +262,14 @@ func (WorkflowObjectRef) Indexes() []ent.Index {
 			Unique(),
 		index.Fields("workflow_instance_id", "procedure_id").
 			Unique(),
+		index.Fields("workflow_instance_id", "campaign_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "campaign_target_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "identity_holder_id").
+			Unique(),
+		index.Fields("workflow_instance_id", "platform_id").
+			Unique(),
 	}
 }
 
@@ -229,7 +281,7 @@ func (w WorkflowObjectRef) Mixin() []ent.Mixin {
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowObjectRef](w,
-				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}),
+				withParents(WorkflowInstance{}, Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
 				withOrganizationOwner(true),
 			),
 		},

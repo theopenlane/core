@@ -86,6 +86,18 @@ func (WorkflowInstance) Fields() []ent.Field {
 		field.String("procedure_id").
 			Comment("ID of the procedure this workflow instance is associated with").
 			Optional(),
+		field.String("campaign_id").
+			Comment("ID of the campaign this workflow instance is associated with").
+			Optional(),
+		field.String("campaign_target_id").
+			Comment("ID of the campaign target this workflow instance is associated with").
+			Optional(),
+		field.String("identity_holder_id").
+			Comment("ID of the identity holder this workflow instance is associated with").
+			Optional(),
+		field.String("platform_id").
+			Comment("ID of the platform this workflow instance is associated with").
+			Optional(),
 	}
 }
 
@@ -140,6 +152,30 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
+			edgeSchema: Campaign{},
+			field:      "campaign_id",
+			comment:    "Campaign this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: CampaignTarget{},
+			field:      "campaign_target_id",
+			comment:    "Campaign target this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: IdentityHolder{},
+			field:      "identity_holder_id",
+			comment:    "Identity holder this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
+			edgeSchema: Platform{},
+			field:      "platform_id",
+			comment:    "Platform this workflow instance is associated with",
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: w,
 			edgeSchema: WorkflowProposal{},
 			field:      "workflow_proposal_id",
 			comment:    "Proposal this workflow instance is associated with",
@@ -182,7 +218,7 @@ func (WorkflowInstance) Mixin() []ent.Mixin {
 		prefix: "WFI",
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.WorkflowInstance](WorkflowInstance{},
-				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}),
+				withParents(Control{}, InternalPolicy{}, Evidence{}, Subcontrol{}, ActionPlan{}, Procedure{}, Campaign{}, CampaignTarget{}, IdentityHolder{}, Platform{}),
 				withOrganizationOwner(true),
 			),
 		},

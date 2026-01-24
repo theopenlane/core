@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -162,6 +163,272 @@ func (_c *AssetHistoryCreate) SetNillableOwnerID(v *string) *AssetHistoryCreate 
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *AssetHistoryCreate) SetInternalOwner(v string) *AssetHistoryCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableInternalOwner(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *AssetHistoryCreate) SetInternalOwnerUserID(v string) *AssetHistoryCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableInternalOwnerUserID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *AssetHistoryCreate) SetInternalOwnerGroupID(v string) *AssetHistoryCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssetSubtypeName sets the "asset_subtype_name" field.
+func (_c *AssetHistoryCreate) SetAssetSubtypeName(v string) *AssetHistoryCreate {
+	_c.mutation.SetAssetSubtypeName(v)
+	return _c
+}
+
+// SetNillableAssetSubtypeName sets the "asset_subtype_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableAssetSubtypeName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAssetSubtypeName(*v)
+	}
+	return _c
+}
+
+// SetAssetSubtypeID sets the "asset_subtype_id" field.
+func (_c *AssetHistoryCreate) SetAssetSubtypeID(v string) *AssetHistoryCreate {
+	_c.mutation.SetAssetSubtypeID(v)
+	return _c
+}
+
+// SetNillableAssetSubtypeID sets the "asset_subtype_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableAssetSubtypeID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAssetSubtypeID(*v)
+	}
+	return _c
+}
+
+// SetAssetDataClassificationName sets the "asset_data_classification_name" field.
+func (_c *AssetHistoryCreate) SetAssetDataClassificationName(v string) *AssetHistoryCreate {
+	_c.mutation.SetAssetDataClassificationName(v)
+	return _c
+}
+
+// SetNillableAssetDataClassificationName sets the "asset_data_classification_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableAssetDataClassificationName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAssetDataClassificationName(*v)
+	}
+	return _c
+}
+
+// SetAssetDataClassificationID sets the "asset_data_classification_id" field.
+func (_c *AssetHistoryCreate) SetAssetDataClassificationID(v string) *AssetHistoryCreate {
+	_c.mutation.SetAssetDataClassificationID(v)
+	return _c
+}
+
+// SetNillableAssetDataClassificationID sets the "asset_data_classification_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableAssetDataClassificationID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAssetDataClassificationID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *AssetHistoryCreate) SetEnvironmentName(v string) *AssetHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableEnvironmentName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *AssetHistoryCreate) SetEnvironmentID(v string) *AssetHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableEnvironmentID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *AssetHistoryCreate) SetScopeName(v string) *AssetHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableScopeName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *AssetHistoryCreate) SetScopeID(v string) *AssetHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableScopeID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
+// SetAccessModelName sets the "access_model_name" field.
+func (_c *AssetHistoryCreate) SetAccessModelName(v string) *AssetHistoryCreate {
+	_c.mutation.SetAccessModelName(v)
+	return _c
+}
+
+// SetNillableAccessModelName sets the "access_model_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableAccessModelName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAccessModelName(*v)
+	}
+	return _c
+}
+
+// SetAccessModelID sets the "access_model_id" field.
+func (_c *AssetHistoryCreate) SetAccessModelID(v string) *AssetHistoryCreate {
+	_c.mutation.SetAccessModelID(v)
+	return _c
+}
+
+// SetNillableAccessModelID sets the "access_model_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableAccessModelID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetAccessModelID(*v)
+	}
+	return _c
+}
+
+// SetEncryptionStatusName sets the "encryption_status_name" field.
+func (_c *AssetHistoryCreate) SetEncryptionStatusName(v string) *AssetHistoryCreate {
+	_c.mutation.SetEncryptionStatusName(v)
+	return _c
+}
+
+// SetNillableEncryptionStatusName sets the "encryption_status_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableEncryptionStatusName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetEncryptionStatusName(*v)
+	}
+	return _c
+}
+
+// SetEncryptionStatusID sets the "encryption_status_id" field.
+func (_c *AssetHistoryCreate) SetEncryptionStatusID(v string) *AssetHistoryCreate {
+	_c.mutation.SetEncryptionStatusID(v)
+	return _c
+}
+
+// SetNillableEncryptionStatusID sets the "encryption_status_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableEncryptionStatusID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetEncryptionStatusID(*v)
+	}
+	return _c
+}
+
+// SetSecurityTierName sets the "security_tier_name" field.
+func (_c *AssetHistoryCreate) SetSecurityTierName(v string) *AssetHistoryCreate {
+	_c.mutation.SetSecurityTierName(v)
+	return _c
+}
+
+// SetNillableSecurityTierName sets the "security_tier_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSecurityTierName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSecurityTierName(*v)
+	}
+	return _c
+}
+
+// SetSecurityTierID sets the "security_tier_id" field.
+func (_c *AssetHistoryCreate) SetSecurityTierID(v string) *AssetHistoryCreate {
+	_c.mutation.SetSecurityTierID(v)
+	return _c
+}
+
+// SetNillableSecurityTierID sets the "security_tier_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSecurityTierID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSecurityTierID(*v)
+	}
+	return _c
+}
+
+// SetCriticalityName sets the "criticality_name" field.
+func (_c *AssetHistoryCreate) SetCriticalityName(v string) *AssetHistoryCreate {
+	_c.mutation.SetCriticalityName(v)
+	return _c
+}
+
+// SetNillableCriticalityName sets the "criticality_name" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableCriticalityName(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetCriticalityName(*v)
+	}
+	return _c
+}
+
+// SetCriticalityID sets the "criticality_id" field.
+func (_c *AssetHistoryCreate) SetCriticalityID(v string) *AssetHistoryCreate {
+	_c.mutation.SetCriticalityID(v)
+	return _c
+}
+
+// SetNillableCriticalityID sets the "criticality_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableCriticalityID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetCriticalityID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *AssetHistoryCreate) SetSystemOwned(v bool) *AssetHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -262,6 +529,132 @@ func (_c *AssetHistoryCreate) SetWebsite(v string) *AssetHistoryCreate {
 func (_c *AssetHistoryCreate) SetNillableWebsite(v *string) *AssetHistoryCreate {
 	if v != nil {
 		_c.SetWebsite(*v)
+	}
+	return _c
+}
+
+// SetPhysicalLocation sets the "physical_location" field.
+func (_c *AssetHistoryCreate) SetPhysicalLocation(v string) *AssetHistoryCreate {
+	_c.mutation.SetPhysicalLocation(v)
+	return _c
+}
+
+// SetNillablePhysicalLocation sets the "physical_location" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillablePhysicalLocation(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetPhysicalLocation(*v)
+	}
+	return _c
+}
+
+// SetRegion sets the "region" field.
+func (_c *AssetHistoryCreate) SetRegion(v string) *AssetHistoryCreate {
+	_c.mutation.SetRegion(v)
+	return _c
+}
+
+// SetNillableRegion sets the "region" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableRegion(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetRegion(*v)
+	}
+	return _c
+}
+
+// SetContainsPii sets the "contains_pii" field.
+func (_c *AssetHistoryCreate) SetContainsPii(v bool) *AssetHistoryCreate {
+	_c.mutation.SetContainsPii(v)
+	return _c
+}
+
+// SetNillableContainsPii sets the "contains_pii" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableContainsPii(v *bool) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetContainsPii(*v)
+	}
+	return _c
+}
+
+// SetSourceType sets the "source_type" field.
+func (_c *AssetHistoryCreate) SetSourceType(v enums.SourceType) *AssetHistoryCreate {
+	_c.mutation.SetSourceType(v)
+	return _c
+}
+
+// SetNillableSourceType sets the "source_type" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSourceType(v *enums.SourceType) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSourceType(*v)
+	}
+	return _c
+}
+
+// SetSourcePlatformID sets the "source_platform_id" field.
+func (_c *AssetHistoryCreate) SetSourcePlatformID(v string) *AssetHistoryCreate {
+	_c.mutation.SetSourcePlatformID(v)
+	return _c
+}
+
+// SetNillableSourcePlatformID sets the "source_platform_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSourcePlatformID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSourcePlatformID(*v)
+	}
+	return _c
+}
+
+// SetSourceIdentifier sets the "source_identifier" field.
+func (_c *AssetHistoryCreate) SetSourceIdentifier(v string) *AssetHistoryCreate {
+	_c.mutation.SetSourceIdentifier(v)
+	return _c
+}
+
+// SetNillableSourceIdentifier sets the "source_identifier" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableSourceIdentifier(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetSourceIdentifier(*v)
+	}
+	return _c
+}
+
+// SetCostCenter sets the "cost_center" field.
+func (_c *AssetHistoryCreate) SetCostCenter(v string) *AssetHistoryCreate {
+	_c.mutation.SetCostCenter(v)
+	return _c
+}
+
+// SetNillableCostCenter sets the "cost_center" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableCostCenter(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetCostCenter(*v)
+	}
+	return _c
+}
+
+// SetEstimatedMonthlyCost sets the "estimated_monthly_cost" field.
+func (_c *AssetHistoryCreate) SetEstimatedMonthlyCost(v float64) *AssetHistoryCreate {
+	_c.mutation.SetEstimatedMonthlyCost(v)
+	return _c
+}
+
+// SetNillableEstimatedMonthlyCost sets the "estimated_monthly_cost" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableEstimatedMonthlyCost(v *float64) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetEstimatedMonthlyCost(*v)
+	}
+	return _c
+}
+
+// SetPurchaseDate sets the "purchase_date" field.
+func (_c *AssetHistoryCreate) SetPurchaseDate(v models.DateTime) *AssetHistoryCreate {
+	_c.mutation.SetPurchaseDate(v)
+	return _c
+}
+
+// SetNillablePurchaseDate sets the "purchase_date" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillablePurchaseDate(v *models.DateTime) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetPurchaseDate(*v)
 	}
 	return _c
 }
@@ -370,6 +763,14 @@ func (_c *AssetHistoryCreate) defaults() error {
 		v := assethistory.DefaultAssetType
 		_c.mutation.SetAssetType(v)
 	}
+	if _, ok := _c.mutation.ContainsPii(); !ok {
+		v := assethistory.DefaultContainsPii
+		_c.mutation.SetContainsPii(v)
+	}
+	if _, ok := _c.mutation.SourceType(); !ok {
+		v := assethistory.DefaultSourceType
+		_c.mutation.SetSourceType(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if assethistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized assethistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -403,6 +804,14 @@ func (_c *AssetHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`historygenerated: missing required field "AssetHistory.name"`)}
+	}
+	if _, ok := _c.mutation.SourceType(); !ok {
+		return &ValidationError{Name: "source_type", err: errors.New(`historygenerated: missing required field "AssetHistory.source_type"`)}
+	}
+	if v, ok := _c.mutation.SourceType(); ok {
+		if err := assethistory.SourceTypeValidator(v); err != nil {
+			return &ValidationError{Name: "source_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssetHistory.source_type": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -484,6 +893,82 @@ func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec)
 		_spec.SetField(assethistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(assethistory.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerUserID, field.TypeString, value)
+		_node.InternalOwnerUserID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerGroupID, field.TypeString, value)
+		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.AssetSubtypeName(); ok {
+		_spec.SetField(assethistory.FieldAssetSubtypeName, field.TypeString, value)
+		_node.AssetSubtypeName = value
+	}
+	if value, ok := _c.mutation.AssetSubtypeID(); ok {
+		_spec.SetField(assethistory.FieldAssetSubtypeID, field.TypeString, value)
+		_node.AssetSubtypeID = value
+	}
+	if value, ok := _c.mutation.AssetDataClassificationName(); ok {
+		_spec.SetField(assethistory.FieldAssetDataClassificationName, field.TypeString, value)
+		_node.AssetDataClassificationName = value
+	}
+	if value, ok := _c.mutation.AssetDataClassificationID(); ok {
+		_spec.SetField(assethistory.FieldAssetDataClassificationID, field.TypeString, value)
+		_node.AssetDataClassificationID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(assethistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(assethistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(assethistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(assethistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
+	}
+	if value, ok := _c.mutation.AccessModelName(); ok {
+		_spec.SetField(assethistory.FieldAccessModelName, field.TypeString, value)
+		_node.AccessModelName = value
+	}
+	if value, ok := _c.mutation.AccessModelID(); ok {
+		_spec.SetField(assethistory.FieldAccessModelID, field.TypeString, value)
+		_node.AccessModelID = value
+	}
+	if value, ok := _c.mutation.EncryptionStatusName(); ok {
+		_spec.SetField(assethistory.FieldEncryptionStatusName, field.TypeString, value)
+		_node.EncryptionStatusName = value
+	}
+	if value, ok := _c.mutation.EncryptionStatusID(); ok {
+		_spec.SetField(assethistory.FieldEncryptionStatusID, field.TypeString, value)
+		_node.EncryptionStatusID = value
+	}
+	if value, ok := _c.mutation.SecurityTierName(); ok {
+		_spec.SetField(assethistory.FieldSecurityTierName, field.TypeString, value)
+		_node.SecurityTierName = value
+	}
+	if value, ok := _c.mutation.SecurityTierID(); ok {
+		_spec.SetField(assethistory.FieldSecurityTierID, field.TypeString, value)
+		_node.SecurityTierID = value
+	}
+	if value, ok := _c.mutation.CriticalityName(); ok {
+		_spec.SetField(assethistory.FieldCriticalityName, field.TypeString, value)
+		_node.CriticalityName = value
+	}
+	if value, ok := _c.mutation.CriticalityID(); ok {
+		_spec.SetField(assethistory.FieldCriticalityID, field.TypeString, value)
+		_node.CriticalityID = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(assethistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -515,6 +1000,42 @@ func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Website(); ok {
 		_spec.SetField(assethistory.FieldWebsite, field.TypeString, value)
 		_node.Website = value
+	}
+	if value, ok := _c.mutation.PhysicalLocation(); ok {
+		_spec.SetField(assethistory.FieldPhysicalLocation, field.TypeString, value)
+		_node.PhysicalLocation = value
+	}
+	if value, ok := _c.mutation.Region(); ok {
+		_spec.SetField(assethistory.FieldRegion, field.TypeString, value)
+		_node.Region = value
+	}
+	if value, ok := _c.mutation.ContainsPii(); ok {
+		_spec.SetField(assethistory.FieldContainsPii, field.TypeBool, value)
+		_node.ContainsPii = value
+	}
+	if value, ok := _c.mutation.SourceType(); ok {
+		_spec.SetField(assethistory.FieldSourceType, field.TypeEnum, value)
+		_node.SourceType = value
+	}
+	if value, ok := _c.mutation.SourcePlatformID(); ok {
+		_spec.SetField(assethistory.FieldSourcePlatformID, field.TypeString, value)
+		_node.SourcePlatformID = value
+	}
+	if value, ok := _c.mutation.SourceIdentifier(); ok {
+		_spec.SetField(assethistory.FieldSourceIdentifier, field.TypeString, value)
+		_node.SourceIdentifier = value
+	}
+	if value, ok := _c.mutation.CostCenter(); ok {
+		_spec.SetField(assethistory.FieldCostCenter, field.TypeString, value)
+		_node.CostCenter = value
+	}
+	if value, ok := _c.mutation.EstimatedMonthlyCost(); ok {
+		_spec.SetField(assethistory.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+		_node.EstimatedMonthlyCost = value
+	}
+	if value, ok := _c.mutation.PurchaseDate(); ok {
+		_spec.SetField(assethistory.FieldPurchaseDate, field.TypeTime, value)
+		_node.PurchaseDate = &value
 	}
 	if value, ok := _c.mutation.Cpe(); ok {
 		_spec.SetField(assethistory.FieldCpe, field.TypeString, value)

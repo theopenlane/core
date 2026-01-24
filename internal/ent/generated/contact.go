@@ -62,16 +62,22 @@ type ContactEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
+	// Campaigns holds the value of the campaigns edge.
+	Campaigns []*Campaign `json:"campaigns,omitempty"`
+	// CampaignTargets holds the value of the campaign_targets edge.
+	CampaignTargets []*CampaignTarget `json:"campaign_targets,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
 
-	namedEntities map[string][]*Entity
-	namedFiles    map[string][]*File
+	namedEntities        map[string][]*Entity
+	namedCampaigns       map[string][]*Campaign
+	namedCampaignTargets map[string][]*CampaignTarget
+	namedFiles           map[string][]*File
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -94,10 +100,28 @@ func (e ContactEdges) EntitiesOrErr() ([]*Entity, error) {
 	return nil, &NotLoadedError{edge: "entities"}
 }
 
+// CampaignsOrErr returns the Campaigns value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) CampaignsOrErr() ([]*Campaign, error) {
+	if e.loadedTypes[2] {
+		return e.Campaigns, nil
+	}
+	return nil, &NotLoadedError{edge: "campaigns"}
+}
+
+// CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
+// was not loaded in eager-loading.
+func (e ContactEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
+	if e.loadedTypes[3] {
+		return e.CampaignTargets, nil
+	}
+	return nil, &NotLoadedError{edge: "campaign_targets"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ContactEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
+	if e.loadedTypes[4] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -250,6 +274,16 @@ func (_m *Contact) QueryEntities() *EntityQuery {
 	return NewContactClient(_m.config).QueryEntities(_m)
 }
 
+// QueryCampaigns queries the "campaigns" edge of the Contact entity.
+func (_m *Contact) QueryCampaigns() *CampaignQuery {
+	return NewContactClient(_m.config).QueryCampaigns(_m)
+}
+
+// QueryCampaignTargets queries the "campaign_targets" edge of the Contact entity.
+func (_m *Contact) QueryCampaignTargets() *CampaignTargetQuery {
+	return NewContactClient(_m.config).QueryCampaignTargets(_m)
+}
+
 // QueryFiles queries the "files" edge of the Contact entity.
 func (_m *Contact) QueryFiles() *FileQuery {
 	return NewContactClient(_m.config).QueryFiles(_m)
@@ -347,6 +381,54 @@ func (_m *Contact) appendNamedEntities(name string, edges ...*Entity) {
 		_m.Edges.namedEntities[name] = []*Entity{}
 	} else {
 		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedCampaigns returns the Campaigns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Contact) NamedCampaigns(name string) ([]*Campaign, error) {
+	if _m.Edges.namedCampaigns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaigns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Contact) appendNamedCampaigns(name string, edges ...*Campaign) {
+	if _m.Edges.namedCampaigns == nil {
+		_m.Edges.namedCampaigns = make(map[string][]*Campaign)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaigns[name] = []*Campaign{}
+	} else {
+		_m.Edges.namedCampaigns[name] = append(_m.Edges.namedCampaigns[name], edges...)
+	}
+}
+
+// NamedCampaignTargets returns the CampaignTargets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Contact) NamedCampaignTargets(name string) ([]*CampaignTarget, error) {
+	if _m.Edges.namedCampaignTargets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedCampaignTargets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Contact) appendNamedCampaignTargets(name string, edges ...*CampaignTarget) {
+	if _m.Edges.namedCampaignTargets == nil {
+		_m.Edges.namedCampaignTargets = make(map[string][]*CampaignTarget)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedCampaignTargets[name] = []*CampaignTarget{}
+	} else {
+		_m.Edges.namedCampaignTargets[name] = append(_m.Edges.namedCampaignTargets[name], edges...)
 	}
 }
 

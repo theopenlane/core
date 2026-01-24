@@ -184,6 +184,18 @@ func (_u *WorkflowObjectRefHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	if _u.mutation.ProcedureIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldProcedureID, field.TypeString)
 	}
+	if _u.mutation.CampaignIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldCampaignID, field.TypeString)
+	}
+	if _u.mutation.CampaignTargetIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldCampaignTargetID, field.TypeString)
+	}
+	if _u.mutation.IdentityHolderIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldPlatformID, field.TypeString)
+	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRefHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -388,6 +400,18 @@ func (_u *WorkflowObjectRefHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	}
 	if _u.mutation.ProcedureIDCleared() {
 		_spec.ClearField(workflowobjectrefhistory.FieldProcedureID, field.TypeString)
+	}
+	if _u.mutation.CampaignIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldCampaignID, field.TypeString)
+	}
+	if _u.mutation.CampaignTargetIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldCampaignTargetID, field.TypeString)
+	}
+	if _u.mutation.IdentityHolderIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldIdentityHolderID, field.TypeString)
+	}
+	if _u.mutation.PlatformIDCleared() {
+		_spec.ClearField(workflowobjectrefhistory.FieldPlatformID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.WorkflowObjectRefHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -10,14 +10,18 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -66,6 +70,14 @@ type WorkflowObjectRef struct {
 	ActionPlanID string `json:"action_plan_id,omitempty"`
 	// Procedure referenced by this workflow instance
 	ProcedureID string `json:"procedure_id,omitempty"`
+	// Campaign referenced by this workflow instance
+	CampaignID string `json:"campaign_id,omitempty"`
+	// Campaign target referenced by this workflow instance
+	CampaignTargetID string `json:"campaign_target_id,omitempty"`
+	// Identity holder referenced by this workflow instance
+	IdentityHolderID string `json:"identity_holder_id,omitempty"`
+	// Platform referenced by this workflow instance
+	PlatformID string `json:"platform_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowObjectRefQuery when eager-loading is set.
 	Edges                                  WorkflowObjectRefEdges `json:"edges"`
@@ -103,11 +115,19 @@ type WorkflowObjectRefEdges struct {
 	ActionPlan *ActionPlan `json:"action_plan,omitempty"`
 	// Procedure referenced by this workflow instance
 	Procedure *Procedure `json:"procedure,omitempty"`
+	// Campaign referenced by this workflow instance
+	Campaign *Campaign `json:"campaign,omitempty"`
+	// Campaign target referenced by this workflow instance
+	CampaignTarget *CampaignTarget `json:"campaign_target,omitempty"`
+	// Identity holder referenced by this workflow instance
+	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
+	// Platform referenced by this workflow instance
+	Platform *Platform `json:"platform,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [13]map[string]int
+	totalCount [17]map[string]int
 
 	namedWorkflowProposals map[string][]*WorkflowProposal
 }
@@ -264,12 +284,56 @@ func (e WorkflowObjectRefEdges) ProcedureOrErr() (*Procedure, error) {
 	return nil, &NotLoadedError{edge: "procedure"}
 }
 
+// CampaignOrErr returns the Campaign value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) CampaignOrErr() (*Campaign, error) {
+	if e.Campaign != nil {
+		return e.Campaign, nil
+	} else if e.loadedTypes[14] {
+		return nil, &NotFoundError{label: campaign.Label}
+	}
+	return nil, &NotLoadedError{edge: "campaign"}
+}
+
+// CampaignTargetOrErr returns the CampaignTarget value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) CampaignTargetOrErr() (*CampaignTarget, error) {
+	if e.CampaignTarget != nil {
+		return e.CampaignTarget, nil
+	} else if e.loadedTypes[15] {
+		return nil, &NotFoundError{label: campaigntarget.Label}
+	}
+	return nil, &NotLoadedError{edge: "campaign_target"}
+}
+
+// IdentityHolderOrErr returns the IdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) IdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.IdentityHolder != nil {
+		return e.IdentityHolder, nil
+	} else if e.loadedTypes[16] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "identity_holder"}
+}
+
+// PlatformOrErr returns the Platform value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowObjectRefEdges) PlatformOrErr() (*Platform, error) {
+	if e.Platform != nil {
+		return e.Platform, nil
+	} else if e.loadedTypes[17] {
+		return nil, &NotFoundError{label: platform.Label}
+	}
+	return nil, &NotLoadedError{edge: "platform"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*WorkflowObjectRef) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID, workflowobjectref.FieldSubcontrolID, workflowobjectref.FieldActionPlanID, workflowobjectref.FieldProcedureID:
+		case workflowobjectref.FieldID, workflowobjectref.FieldCreatedBy, workflowobjectref.FieldUpdatedBy, workflowobjectref.FieldDisplayID, workflowobjectref.FieldOwnerID, workflowobjectref.FieldWorkflowInstanceID, workflowobjectref.FieldControlID, workflowobjectref.FieldTaskID, workflowobjectref.FieldInternalPolicyID, workflowobjectref.FieldFindingID, workflowobjectref.FieldDirectoryAccountID, workflowobjectref.FieldDirectoryGroupID, workflowobjectref.FieldDirectoryMembershipID, workflowobjectref.FieldEvidenceID, workflowobjectref.FieldSubcontrolID, workflowobjectref.FieldActionPlanID, workflowobjectref.FieldProcedureID, workflowobjectref.FieldCampaignID, workflowobjectref.FieldCampaignTargetID, workflowobjectref.FieldIdentityHolderID, workflowobjectref.FieldPlatformID:
 			values[i] = new(sql.NullString)
 		case workflowobjectref.FieldCreatedAt, workflowobjectref.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -404,6 +468,30 @@ func (_m *WorkflowObjectRef) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.ProcedureID = value.String
 			}
+		case workflowobjectref.FieldCampaignID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_id", values[i])
+			} else if value.Valid {
+				_m.CampaignID = value.String
+			}
+		case workflowobjectref.FieldCampaignTargetID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field campaign_target_id", values[i])
+			} else if value.Valid {
+				_m.CampaignTargetID = value.String
+			}
+		case workflowobjectref.FieldIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.IdentityHolderID = value.String
+			}
+		case workflowobjectref.FieldPlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
+			} else if value.Valid {
+				_m.PlatformID = value.String
+			}
 		case workflowobjectref.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_instance_workflow_object_refs", values[i])
@@ -494,6 +582,26 @@ func (_m *WorkflowObjectRef) QueryProcedure() *ProcedureQuery {
 	return NewWorkflowObjectRefClient(_m.config).QueryProcedure(_m)
 }
 
+// QueryCampaign queries the "campaign" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryCampaign() *CampaignQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryCampaign(_m)
+}
+
+// QueryCampaignTarget queries the "campaign_target" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryCampaignTarget() *CampaignTargetQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryCampaignTarget(_m)
+}
+
+// QueryIdentityHolder queries the "identity_holder" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryIdentityHolder() *IdentityHolderQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryIdentityHolder(_m)
+}
+
+// QueryPlatform queries the "platform" edge of the WorkflowObjectRef entity.
+func (_m *WorkflowObjectRef) QueryPlatform() *PlatformQuery {
+	return NewWorkflowObjectRefClient(_m.config).QueryPlatform(_m)
+}
+
 // Update returns a builder for updating this WorkflowObjectRef.
 // Note that you need to call WorkflowObjectRef.Unwrap() before calling this method if this WorkflowObjectRef
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -570,6 +678,18 @@ func (_m *WorkflowObjectRef) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("procedure_id=")
 	builder.WriteString(_m.ProcedureID)
+	builder.WriteString(", ")
+	builder.WriteString("campaign_id=")
+	builder.WriteString(_m.CampaignID)
+	builder.WriteString(", ")
+	builder.WriteString("campaign_target_id=")
+	builder.WriteString(_m.CampaignTargetID)
+	builder.WriteString(", ")
+	builder.WriteString("identity_holder_id=")
+	builder.WriteString(_m.IdentityHolderID)
+	builder.WriteString(", ")
+	builder.WriteString("platform_id=")
+	builder.WriteString(_m.PlatformID)
 	builder.WriteByte(')')
 	return builder.String()
 }

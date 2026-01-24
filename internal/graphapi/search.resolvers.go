@@ -27,6 +27,8 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		assessmentResults         *generated.AssessmentConnection
 		assessmentresponseResults *generated.AssessmentResponseConnection
 		assetResults              *generated.AssetConnection
+		campaignResults           *generated.CampaignConnection
+		campaigntargetResults     *generated.CampaignTargetConnection
 		contactResults            *generated.ContactConnection
 		controlResults            *generated.ControlConnection
 		controlobjectiveResults   *generated.ControlObjectiveConnection
@@ -35,12 +37,14 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		evidenceResults           *generated.EvidenceConnection
 		findingResults            *generated.FindingConnection
 		groupResults              *generated.GroupConnection
+		identityholderResults     *generated.IdentityHolderConnection
 		internalpolicyResults     *generated.InternalPolicyConnection
 		inviteResults             *generated.InviteConnection
 		jobrunnerResults          *generated.JobRunnerConnection
 		jobtemplateResults        *generated.JobTemplateConnection
 		narrativeResults          *generated.NarrativeConnection
 		organizationResults       *generated.OrganizationConnection
+		platformResults           *generated.PlatformConnection
 		procedureResults          *generated.ProcedureConnection
 		programResults            *generated.ProgramConnection
 		remediationResults        *generated.RemediationConnection
@@ -109,6 +113,30 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, assetResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			campaignResults, err = searchCampaigns(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, campaignResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			campaigntargetResults, err = searchCampaignTargets(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, campaigntargetResults, highlightTracker)
 			}
 		},
 		func() {
@@ -209,6 +237,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			identityholderResults, err = searchIdentityHolders(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, identityholderResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			internalpolicyResults, err = searchInternalPolicies(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -277,6 +317,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, organizationResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			platformResults, err = searchPlatforms(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, platformResults, highlightTracker)
 			}
 		},
 		func() {
@@ -493,6 +545,16 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += assetResults.TotalCount
 	}
+	if campaignResults != nil && len(campaignResults.Edges) > 0 {
+		res.Campaigns = campaignResults
+
+		res.TotalCount += campaignResults.TotalCount
+	}
+	if campaigntargetResults != nil && len(campaigntargetResults.Edges) > 0 {
+		res.CampaignTargets = campaigntargetResults
+
+		res.TotalCount += campaigntargetResults.TotalCount
+	}
 	if contactResults != nil && len(contactResults.Edges) > 0 {
 		res.Contacts = contactResults
 
@@ -533,6 +595,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += groupResults.TotalCount
 	}
+	if identityholderResults != nil && len(identityholderResults.Edges) > 0 {
+		res.IdentityHolders = identityholderResults
+
+		res.TotalCount += identityholderResults.TotalCount
+	}
 	if internalpolicyResults != nil && len(internalpolicyResults.Edges) > 0 {
 		res.InternalPolicies = internalpolicyResults
 
@@ -562,6 +629,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Organizations = organizationResults
 
 		res.TotalCount += organizationResults.TotalCount
+	}
+	if platformResults != nil && len(platformResults.Edges) > 0 {
+		res.Platforms = platformResults
+
+		res.TotalCount += platformResults.TotalCount
 	}
 	if procedureResults != nil && len(procedureResults.Edges) > 0 {
 		res.Procedures = procedureResults
@@ -681,6 +753,26 @@ func (r *queryResolver) AssetSearch(ctx context.Context, query string, after *en
 	// return the results
 	return assetResults, nil
 }
+func (r *queryResolver) CampaignSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignConnection, error) {
+	campaignResults, err := searchCampaigns(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return campaignResults, nil
+}
+func (r *queryResolver) CampaignTargetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignTargetConnection, error) {
+	campaigntargetResults, err := searchCampaignTargets(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return campaigntargetResults, nil
+}
 func (r *queryResolver) ContactSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ContactConnection, error) {
 	contactResults, err := searchContacts(ctx, query, after, first, before, last)
 
@@ -761,6 +853,16 @@ func (r *queryResolver) GroupSearch(ctx context.Context, query string, after *en
 	// return the results
 	return groupResults, nil
 }
+func (r *queryResolver) IdentityHolderSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IdentityHolderConnection, error) {
+	identityholderResults, err := searchIdentityHolders(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return identityholderResults, nil
+}
 func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
 	internalpolicyResults, err := searchInternalPolicies(ctx, query, after, first, before, last)
 
@@ -820,6 +922,16 @@ func (r *queryResolver) OrganizationSearch(ctx context.Context, query string, af
 
 	// return the results
 	return organizationResults, nil
+}
+func (r *queryResolver) PlatformSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PlatformConnection, error) {
+	platformResults, err := searchPlatforms(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return platformResults, nil
 }
 func (r *queryResolver) ProcedureSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
 	procedureResults, err := searchProcedures(ctx, query, after, first, before, last)

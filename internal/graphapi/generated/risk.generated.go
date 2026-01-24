@@ -76,6 +76,14 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
 			case "riskCategoryID":
 				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Risk_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Risk_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Risk_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Risk_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -114,6 +122,10 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_riskKind(ctx, field)
 			case "riskCategory":
 				return ec.fieldContext_Risk_riskCategory(ctx, field)
+			case "environment":
+				return ec.fieldContext_Risk_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Risk_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -124,6 +136,8 @@ func (ec *executionContext) fieldContext_RiskBulkCreatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Risk_platforms(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":
@@ -226,6 +240,14 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
 			case "riskCategoryID":
 				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Risk_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Risk_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Risk_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Risk_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -264,6 +286,10 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_riskKind(ctx, field)
 			case "riskCategory":
 				return ec.fieldContext_Risk_riskCategory(ctx, field)
+			case "environment":
+				return ec.fieldContext_Risk_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Risk_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -274,6 +300,8 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_risks(_ context.C
 				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Risk_platforms(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":
@@ -376,6 +404,14 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
 			case "riskCategoryID":
 				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Risk_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Risk_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Risk_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Risk_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -414,6 +450,10 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_riskKind(ctx, field)
 			case "riskCategory":
 				return ec.fieldContext_Risk_riskCategory(ctx, field)
+			case "environment":
+				return ec.fieldContext_Risk_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Risk_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -424,6 +464,8 @@ func (ec *executionContext) fieldContext_RiskCreatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Risk_platforms(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":
@@ -526,6 +568,14 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_riskCategoryName(ctx, field)
 			case "riskCategoryID":
 				return ec.fieldContext_Risk_riskCategoryID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Risk_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Risk_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Risk_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Risk_scopeID(ctx, field)
 			case "name":
 				return ec.fieldContext_Risk_name(ctx, field)
 			case "status":
@@ -564,6 +614,10 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_riskKind(ctx, field)
 			case "riskCategory":
 				return ec.fieldContext_Risk_riskCategory(ctx, field)
+			case "environment":
+				return ec.fieldContext_Risk_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Risk_scope(ctx, field)
 			case "controls":
 				return ec.fieldContext_Risk_controls(ctx, field)
 			case "subcontrols":
@@ -574,6 +628,8 @@ func (ec *executionContext) fieldContext_RiskUpdatePayload_risk(_ context.Contex
 				return ec.fieldContext_Risk_internalPolicies(ctx, field)
 			case "programs":
 				return ec.fieldContext_Risk_programs(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Risk_platforms(ctx, field)
 			case "actionPlans":
 				return ec.fieldContext_Risk_actionPlans(ctx, field)
 			case "tasks":

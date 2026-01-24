@@ -52,6 +52,10 @@ const (
 	EdgeOwner = "owner"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
+	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
+	EdgeCampaigns = "campaigns"
+	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
+	EdgeCampaignTargets = "campaign_targets"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// Table holds the table name of the contact in the database.
@@ -68,6 +72,18 @@ const (
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
+	// CampaignsTable is the table that holds the campaigns relation/edge. The primary key declared below.
+	CampaignsTable = "campaign_contacts"
+	// CampaignsInverseTable is the table name for the Campaign entity.
+	// It exists in this package in order to avoid circular dependency with the "campaign" package.
+	CampaignsInverseTable = "campaigns"
+	// CampaignTargetsTable is the table that holds the campaign_targets relation/edge.
+	CampaignTargetsTable = "campaign_targets"
+	// CampaignTargetsInverseTable is the table name for the CampaignTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "campaigntarget" package.
+	CampaignTargetsInverseTable = "campaign_targets"
+	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
+	CampaignTargetsColumn = "contact_id"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "contact_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -99,6 +115,9 @@ var (
 	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
 	// primary key for the entities relation (M2M).
 	EntitiesPrimaryKey = []string{"entity_id", "contact_id"}
+	// CampaignsPrimaryKey and CampaignsColumn2 are the table columns denoting the
+	// primary key for the campaigns relation (M2M).
+	CampaignsPrimaryKey = []string{"campaign_id", "contact_id"}
 	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
 	// primary key for the files relation (M2M).
 	FilesPrimaryKey = []string{"contact_id", "file_id"}
@@ -254,6 +273,34 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByCampaignsCount orders the results by campaigns count.
+func ByCampaignsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignsStep(), opts...)
+	}
+}
+
+// ByCampaigns orders the results by campaigns terms.
+func ByCampaigns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByCampaignTargetsCount orders the results by campaign_targets count.
+func ByCampaignTargetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newCampaignTargetsStep(), opts...)
+	}
+}
+
+// ByCampaignTargets orders the results by campaign_targets terms.
+func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCampaignTargetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByFilesCount orders the results by files count.
 func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -279,6 +326,20 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
+	)
+}
+func newCampaignsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, CampaignsTable, CampaignsPrimaryKey...),
+	)
+}
+func newCampaignTargetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

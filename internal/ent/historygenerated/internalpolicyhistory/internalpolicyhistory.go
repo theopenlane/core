@@ -92,6 +92,14 @@ const (
 	FieldInternalPolicyKindName = "internal_policy_kind_name"
 	// FieldInternalPolicyKindID holds the string denoting the internal_policy_kind_id field in the database.
 	FieldInternalPolicyKindID = "internal_policy_kind_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
 	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// Table holds the table name of the internalpolicyhistory in the database.
@@ -137,6 +145,10 @@ var Columns = []string{
 	FieldFileID,
 	FieldInternalPolicyKindName,
 	FieldInternalPolicyKindID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldWorkflowEligibleMarker,
 }
 
@@ -375,6 +387,26 @@ func ByInternalPolicyKindName(opts ...sql.OrderTermOption) OrderOption {
 // ByInternalPolicyKindID orders the results by the internal_policy_kind_id field.
 func ByInternalPolicyKindID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalPolicyKindID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
 }
 
 // ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.

@@ -34,6 +34,44 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldInternalOwner holds the string denoting the internal_owner field in the database.
+	FieldInternalOwner = "internal_owner"
+	// FieldInternalOwnerUserID holds the string denoting the internal_owner_user_id field in the database.
+	FieldInternalOwnerUserID = "internal_owner_user_id"
+	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
+	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldAssetSubtypeName holds the string denoting the asset_subtype_name field in the database.
+	FieldAssetSubtypeName = "asset_subtype_name"
+	// FieldAssetSubtypeID holds the string denoting the asset_subtype_id field in the database.
+	FieldAssetSubtypeID = "asset_subtype_id"
+	// FieldAssetDataClassificationName holds the string denoting the asset_data_classification_name field in the database.
+	FieldAssetDataClassificationName = "asset_data_classification_name"
+	// FieldAssetDataClassificationID holds the string denoting the asset_data_classification_id field in the database.
+	FieldAssetDataClassificationID = "asset_data_classification_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
+	// FieldAccessModelName holds the string denoting the access_model_name field in the database.
+	FieldAccessModelName = "access_model_name"
+	// FieldAccessModelID holds the string denoting the access_model_id field in the database.
+	FieldAccessModelID = "access_model_id"
+	// FieldEncryptionStatusName holds the string denoting the encryption_status_name field in the database.
+	FieldEncryptionStatusName = "encryption_status_name"
+	// FieldEncryptionStatusID holds the string denoting the encryption_status_id field in the database.
+	FieldEncryptionStatusID = "encryption_status_id"
+	// FieldSecurityTierName holds the string denoting the security_tier_name field in the database.
+	FieldSecurityTierName = "security_tier_name"
+	// FieldSecurityTierID holds the string denoting the security_tier_id field in the database.
+	FieldSecurityTierID = "security_tier_id"
+	// FieldCriticalityName holds the string denoting the criticality_name field in the database.
+	FieldCriticalityName = "criticality_name"
+	// FieldCriticalityID holds the string denoting the criticality_id field in the database.
+	FieldCriticalityID = "criticality_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -50,6 +88,24 @@ const (
 	FieldIdentifier = "identifier"
 	// FieldWebsite holds the string denoting the website field in the database.
 	FieldWebsite = "website"
+	// FieldPhysicalLocation holds the string denoting the physical_location field in the database.
+	FieldPhysicalLocation = "physical_location"
+	// FieldRegion holds the string denoting the region field in the database.
+	FieldRegion = "region"
+	// FieldContainsPii holds the string denoting the contains_pii field in the database.
+	FieldContainsPii = "contains_pii"
+	// FieldSourceType holds the string denoting the source_type field in the database.
+	FieldSourceType = "source_type"
+	// FieldSourcePlatformID holds the string denoting the source_platform_id field in the database.
+	FieldSourcePlatformID = "source_platform_id"
+	// FieldSourceIdentifier holds the string denoting the source_identifier field in the database.
+	FieldSourceIdentifier = "source_identifier"
+	// FieldCostCenter holds the string denoting the cost_center field in the database.
+	FieldCostCenter = "cost_center"
+	// FieldEstimatedMonthlyCost holds the string denoting the estimated_monthly_cost field in the database.
+	FieldEstimatedMonthlyCost = "estimated_monthly_cost"
+	// FieldPurchaseDate holds the string denoting the purchase_date field in the database.
+	FieldPurchaseDate = "purchase_date"
 	// FieldCpe holds the string denoting the cpe field in the database.
 	FieldCpe = "cpe"
 	// FieldCategories holds the string denoting the categories field in the database.
@@ -62,12 +118,44 @@ const (
 	EdgeEditors = "editors"
 	// EdgeViewers holds the string denoting the viewers edge name in mutations.
 	EdgeViewers = "viewers"
+	// EdgeInternalOwnerUser holds the string denoting the internal_owner_user edge name in mutations.
+	EdgeInternalOwnerUser = "internal_owner_user"
+	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
+	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeAssetSubtype holds the string denoting the asset_subtype edge name in mutations.
+	EdgeAssetSubtype = "asset_subtype"
+	// EdgeAssetDataClassification holds the string denoting the asset_data_classification edge name in mutations.
+	EdgeAssetDataClassification = "asset_data_classification"
+	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
+	EdgeEnvironment = "environment"
+	// EdgeScope holds the string denoting the scope edge name in mutations.
+	EdgeScope = "scope"
+	// EdgeAccessModel holds the string denoting the access_model edge name in mutations.
+	EdgeAccessModel = "access_model"
+	// EdgeEncryptionStatus holds the string denoting the encryption_status edge name in mutations.
+	EdgeEncryptionStatus = "encryption_status"
+	// EdgeSecurityTier holds the string denoting the security_tier edge name in mutations.
+	EdgeSecurityTier = "security_tier"
+	// EdgeCriticality holds the string denoting the criticality edge name in mutations.
+	EdgeCriticality = "criticality"
 	// EdgeScans holds the string denoting the scans edge name in mutations.
 	EdgeScans = "scans"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
 	EdgeEntities = "entities"
+	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
+	EdgePlatforms = "platforms"
+	// EdgeOutOfScopePlatforms holds the string denoting the out_of_scope_platforms edge name in mutations.
+	EdgeOutOfScopePlatforms = "out_of_scope_platforms"
+	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
+	EdgeIdentityHolders = "identity_holders"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
+	// EdgeSourcePlatform holds the string denoting the source_platform edge name in mutations.
+	EdgeSourcePlatform = "source_platform"
+	// EdgeConnectedAssets holds the string denoting the connected_assets edge name in mutations.
+	EdgeConnectedAssets = "connected_assets"
+	// EdgeConnectedFrom holds the string denoting the connected_from edge name in mutations.
+	EdgeConnectedFrom = "connected_from"
 	// Table holds the table name of the asset in the database.
 	Table = "assets"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -98,6 +186,76 @@ const (
 	ViewersInverseTable = "groups"
 	// ViewersColumn is the table column denoting the viewers relation/edge.
 	ViewersColumn = "asset_viewers"
+	// InternalOwnerUserTable is the table that holds the internal_owner_user relation/edge.
+	InternalOwnerUserTable = "assets"
+	// InternalOwnerUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	InternalOwnerUserInverseTable = "users"
+	// InternalOwnerUserColumn is the table column denoting the internal_owner_user relation/edge.
+	InternalOwnerUserColumn = "internal_owner_user_id"
+	// InternalOwnerGroupTable is the table that holds the internal_owner_group relation/edge.
+	InternalOwnerGroupTable = "assets"
+	// InternalOwnerGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	InternalOwnerGroupInverseTable = "groups"
+	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
+	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// AssetSubtypeTable is the table that holds the asset_subtype relation/edge.
+	AssetSubtypeTable = "assets"
+	// AssetSubtypeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	AssetSubtypeInverseTable = "custom_type_enums"
+	// AssetSubtypeColumn is the table column denoting the asset_subtype relation/edge.
+	AssetSubtypeColumn = "asset_subtype_id"
+	// AssetDataClassificationTable is the table that holds the asset_data_classification relation/edge.
+	AssetDataClassificationTable = "assets"
+	// AssetDataClassificationInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	AssetDataClassificationInverseTable = "custom_type_enums"
+	// AssetDataClassificationColumn is the table column denoting the asset_data_classification relation/edge.
+	AssetDataClassificationColumn = "asset_data_classification_id"
+	// EnvironmentTable is the table that holds the environment relation/edge.
+	EnvironmentTable = "assets"
+	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EnvironmentInverseTable = "custom_type_enums"
+	// EnvironmentColumn is the table column denoting the environment relation/edge.
+	EnvironmentColumn = "environment_id"
+	// ScopeTable is the table that holds the scope relation/edge.
+	ScopeTable = "assets"
+	// ScopeInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	ScopeInverseTable = "custom_type_enums"
+	// ScopeColumn is the table column denoting the scope relation/edge.
+	ScopeColumn = "scope_id"
+	// AccessModelTable is the table that holds the access_model relation/edge.
+	AccessModelTable = "assets"
+	// AccessModelInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	AccessModelInverseTable = "custom_type_enums"
+	// AccessModelColumn is the table column denoting the access_model relation/edge.
+	AccessModelColumn = "access_model_id"
+	// EncryptionStatusTable is the table that holds the encryption_status relation/edge.
+	EncryptionStatusTable = "assets"
+	// EncryptionStatusInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	EncryptionStatusInverseTable = "custom_type_enums"
+	// EncryptionStatusColumn is the table column denoting the encryption_status relation/edge.
+	EncryptionStatusColumn = "encryption_status_id"
+	// SecurityTierTable is the table that holds the security_tier relation/edge.
+	SecurityTierTable = "assets"
+	// SecurityTierInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	SecurityTierInverseTable = "custom_type_enums"
+	// SecurityTierColumn is the table column denoting the security_tier relation/edge.
+	SecurityTierColumn = "security_tier_id"
+	// CriticalityTable is the table that holds the criticality relation/edge.
+	CriticalityTable = "assets"
+	// CriticalityInverseTable is the table name for the CustomTypeEnum entity.
+	// It exists in this package in order to avoid circular dependency with the "customtypeenum" package.
+	CriticalityInverseTable = "custom_type_enums"
+	// CriticalityColumn is the table column denoting the criticality relation/edge.
+	CriticalityColumn = "criticality_id"
 	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
 	ScansTable = "scan_assets"
 	// ScansInverseTable is the table name for the Scan entity.
@@ -108,11 +266,37 @@ const (
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
+	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
+	PlatformsTable = "platform_assets"
+	// PlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	PlatformsInverseTable = "platforms"
+	// OutOfScopePlatformsTable is the table that holds the out_of_scope_platforms relation/edge. The primary key declared below.
+	OutOfScopePlatformsTable = "platform_out_of_scope_assets"
+	// OutOfScopePlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	OutOfScopePlatformsInverseTable = "platforms"
+	// IdentityHoldersTable is the table that holds the identity_holders relation/edge. The primary key declared below.
+	IdentityHoldersTable = "identity_holder_assets"
+	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	IdentityHoldersInverseTable = "identity_holders"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_assets"
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
+	// SourcePlatformTable is the table that holds the source_platform relation/edge.
+	SourcePlatformTable = "assets"
+	// SourcePlatformInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	SourcePlatformInverseTable = "platforms"
+	// SourcePlatformColumn is the table column denoting the source_platform relation/edge.
+	SourcePlatformColumn = "source_platform_id"
+	// ConnectedAssetsTable is the table that holds the connected_assets relation/edge. The primary key declared below.
+	ConnectedAssetsTable = "asset_connected_assets"
+	// ConnectedFromTable is the table that holds the connected_from relation/edge. The primary key declared below.
+	ConnectedFromTable = "asset_connected_assets"
 )
 
 // Columns holds all SQL columns for asset fields.
@@ -126,6 +310,25 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldInternalOwner,
+	FieldInternalOwnerUserID,
+	FieldInternalOwnerGroupID,
+	FieldAssetSubtypeName,
+	FieldAssetSubtypeID,
+	FieldAssetDataClassificationName,
+	FieldAssetDataClassificationID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
+	FieldAccessModelName,
+	FieldAccessModelID,
+	FieldEncryptionStatusName,
+	FieldEncryptionStatusID,
+	FieldSecurityTierName,
+	FieldSecurityTierID,
+	FieldCriticalityName,
+	FieldCriticalityID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -134,6 +337,15 @@ var Columns = []string{
 	FieldDescription,
 	FieldIdentifier,
 	FieldWebsite,
+	FieldPhysicalLocation,
+	FieldRegion,
+	FieldContainsPii,
+	FieldSourceType,
+	FieldSourcePlatformID,
+	FieldSourceIdentifier,
+	FieldCostCenter,
+	FieldEstimatedMonthlyCost,
+	FieldPurchaseDate,
 	FieldCpe,
 	FieldCategories,
 }
@@ -155,9 +367,24 @@ var (
 	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
 	// primary key for the entities relation (M2M).
 	EntitiesPrimaryKey = []string{"entity_id", "asset_id"}
+	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
+	// primary key for the platforms relation (M2M).
+	PlatformsPrimaryKey = []string{"platform_id", "asset_id"}
+	// OutOfScopePlatformsPrimaryKey and OutOfScopePlatformsColumn2 are the table columns denoting the
+	// primary key for the out_of_scope_platforms relation (M2M).
+	OutOfScopePlatformsPrimaryKey = []string{"platform_id", "asset_id"}
+	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
+	// primary key for the identity_holders relation (M2M).
+	IdentityHoldersPrimaryKey = []string{"identity_holder_id", "asset_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "asset_id"}
+	// ConnectedAssetsPrimaryKey and ConnectedAssetsColumn2 are the table columns denoting the
+	// primary key for the connected_assets relation (M2M).
+	ConnectedAssetsPrimaryKey = []string{"asset_id", "connected_from_id"}
+	// ConnectedFromPrimaryKey and ConnectedFromColumn2 are the table columns denoting the
+	// primary key for the connected_from relation (M2M).
+	ConnectedFromPrimaryKey = []string{"asset_id", "connected_from_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -181,7 +408,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [10]ent.Hook
+	Hooks        [18]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -198,6 +425,8 @@ var (
 	DefaultSystemOwned bool
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultContainsPii holds the default value on creation for the "contains_pii" field.
+	DefaultContainsPii bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -211,6 +440,18 @@ func AssetTypeValidator(at enums.AssetType) error {
 		return nil
 	default:
 		return fmt.Errorf("asset: invalid enum value for asset_type field: %q", at)
+	}
+}
+
+const DefaultSourceType enums.SourceType = "MANUAL"
+
+// SourceTypeValidator is a validator for the "source_type" field enum values. It is called by the builders before save.
+func SourceTypeValidator(st enums.SourceType) error {
+	switch st.String() {
+	case "MANUAL", "DISCOVERED", "IMPORTED", "API":
+		return nil
+	default:
+		return fmt.Errorf("asset: invalid enum value for source_type field: %q", st)
 	}
 }
 
@@ -257,6 +498,101 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByInternalOwner orders the results by the internal_owner field.
+func ByInternalOwner(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwner, opts...).ToFunc()
+}
+
+// ByInternalOwnerUserID orders the results by the internal_owner_user_id field.
+func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerUserID, opts...).ToFunc()
+}
+
+// ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
+func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByAssetSubtypeName orders the results by the asset_subtype_name field.
+func ByAssetSubtypeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetSubtypeName, opts...).ToFunc()
+}
+
+// ByAssetSubtypeID orders the results by the asset_subtype_id field.
+func ByAssetSubtypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetSubtypeID, opts...).ToFunc()
+}
+
+// ByAssetDataClassificationName orders the results by the asset_data_classification_name field.
+func ByAssetDataClassificationName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetDataClassificationName, opts...).ToFunc()
+}
+
+// ByAssetDataClassificationID orders the results by the asset_data_classification_id field.
+func ByAssetDataClassificationID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssetDataClassificationID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByAccessModelName orders the results by the access_model_name field.
+func ByAccessModelName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccessModelName, opts...).ToFunc()
+}
+
+// ByAccessModelID orders the results by the access_model_id field.
+func ByAccessModelID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAccessModelID, opts...).ToFunc()
+}
+
+// ByEncryptionStatusName orders the results by the encryption_status_name field.
+func ByEncryptionStatusName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptionStatusName, opts...).ToFunc()
+}
+
+// ByEncryptionStatusID orders the results by the encryption_status_id field.
+func ByEncryptionStatusID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEncryptionStatusID, opts...).ToFunc()
+}
+
+// BySecurityTierName orders the results by the security_tier_name field.
+func BySecurityTierName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityTierName, opts...).ToFunc()
+}
+
+// BySecurityTierID orders the results by the security_tier_id field.
+func BySecurityTierID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityTierID, opts...).ToFunc()
+}
+
+// ByCriticalityName orders the results by the criticality_name field.
+func ByCriticalityName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCriticalityName, opts...).ToFunc()
+}
+
+// ByCriticalityID orders the results by the criticality_id field.
+func ByCriticalityID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCriticalityID, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -295,6 +631,51 @@ func ByIdentifier(opts ...sql.OrderTermOption) OrderOption {
 // ByWebsite orders the results by the website field.
 func ByWebsite(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWebsite, opts...).ToFunc()
+}
+
+// ByPhysicalLocation orders the results by the physical_location field.
+func ByPhysicalLocation(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPhysicalLocation, opts...).ToFunc()
+}
+
+// ByRegion orders the results by the region field.
+func ByRegion(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRegion, opts...).ToFunc()
+}
+
+// ByContainsPii orders the results by the contains_pii field.
+func ByContainsPii(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldContainsPii, opts...).ToFunc()
+}
+
+// BySourceType orders the results by the source_type field.
+func BySourceType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceType, opts...).ToFunc()
+}
+
+// BySourcePlatformID orders the results by the source_platform_id field.
+func BySourcePlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourcePlatformID, opts...).ToFunc()
+}
+
+// BySourceIdentifier orders the results by the source_identifier field.
+func BySourceIdentifier(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceIdentifier, opts...).ToFunc()
+}
+
+// ByCostCenter orders the results by the cost_center field.
+func ByCostCenter(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldCostCenter, opts...).ToFunc()
+}
+
+// ByEstimatedMonthlyCost orders the results by the estimated_monthly_cost field.
+func ByEstimatedMonthlyCost(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEstimatedMonthlyCost, opts...).ToFunc()
+}
+
+// ByPurchaseDate orders the results by the purchase_date field.
+func ByPurchaseDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPurchaseDate, opts...).ToFunc()
 }
 
 // ByCpe orders the results by the cpe field.
@@ -351,6 +732,76 @@ func ByViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByInternalOwnerUserField orders the results by internal_owner_user field.
+func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerGroupField orders the results by internal_owner_group field.
+func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssetSubtypeField orders the results by asset_subtype field.
+func ByAssetSubtypeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetSubtypeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssetDataClassificationField orders the results by asset_data_classification field.
+func ByAssetDataClassificationField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetDataClassificationStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEnvironmentField orders the results by environment field.
+func ByEnvironmentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEnvironmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByScopeField orders the results by scope field.
+func ByScopeField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScopeStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAccessModelField orders the results by access_model field.
+func ByAccessModelField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAccessModelStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByEncryptionStatusField orders the results by encryption_status field.
+func ByEncryptionStatusField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEncryptionStatusStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySecurityTierField orders the results by security_tier field.
+func BySecurityTierField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSecurityTierStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByCriticalityField orders the results by criticality field.
+func ByCriticalityField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newCriticalityStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByScansCount orders the results by scans count.
 func ByScansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -379,6 +830,48 @@ func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByPlatformsCount orders the results by platforms count.
+func ByPlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newPlatformsStep(), opts...)
+	}
+}
+
+// ByPlatforms orders the results by platforms terms.
+func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByOutOfScopePlatformsCount orders the results by out_of_scope_platforms count.
+func ByOutOfScopePlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newOutOfScopePlatformsStep(), opts...)
+	}
+}
+
+// ByOutOfScopePlatforms orders the results by out_of_scope_platforms terms.
+func ByOutOfScopePlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOutOfScopePlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByIdentityHoldersCount orders the results by identity_holders count.
+func ByIdentityHoldersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIdentityHoldersStep(), opts...)
+	}
+}
+
+// ByIdentityHolders orders the results by identity_holders terms.
+func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIdentityHoldersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -390,6 +883,41 @@ func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySourcePlatformField orders the results by source_platform field.
+func BySourcePlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSourcePlatformStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByConnectedAssetsCount orders the results by connected_assets count.
+func ByConnectedAssetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newConnectedAssetsStep(), opts...)
+	}
+}
+
+// ByConnectedAssets orders the results by connected_assets terms.
+func ByConnectedAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newConnectedAssetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByConnectedFromCount orders the results by connected_from count.
+func ByConnectedFromCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newConnectedFromStep(), opts...)
+	}
+}
+
+// ByConnectedFrom orders the results by connected_from terms.
+func ByConnectedFrom(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newConnectedFromStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -420,6 +948,76 @@ func newViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, ViewersTable, ViewersColumn),
 	)
 }
+func newInternalOwnerUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
+	)
+}
+func newInternalOwnerGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newAssetSubtypeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetSubtypeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssetSubtypeTable, AssetSubtypeColumn),
+	)
+}
+func newAssetDataClassificationStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetDataClassificationInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssetDataClassificationTable, AssetDataClassificationColumn),
+	)
+}
+func newEnvironmentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EnvironmentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
+	)
+}
+func newScopeStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScopeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
+	)
+}
+func newAccessModelStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AccessModelInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AccessModelTable, AccessModelColumn),
+	)
+}
+func newEncryptionStatusStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EncryptionStatusInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EncryptionStatusTable, EncryptionStatusColumn),
+	)
+}
+func newSecurityTierStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SecurityTierInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, SecurityTierTable, SecurityTierColumn),
+	)
+}
+func newCriticalityStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(CriticalityInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, CriticalityTable, CriticalityColumn),
+	)
+}
 func newScansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -434,11 +1032,53 @@ func newEntitiesStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
+func newPlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newOutOfScopePlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OutOfScopePlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, OutOfScopePlatformsTable, OutOfScopePlatformsPrimaryKey...),
+	)
+}
+func newIdentityHoldersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
 func newControlsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
+	)
+}
+func newSourcePlatformStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SourcePlatformInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, SourcePlatformTable, SourcePlatformColumn),
+	)
+}
+func newConnectedAssetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, ConnectedAssetsTable, ConnectedAssetsPrimaryKey...),
+	)
+}
+func newConnectedFromStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ConnectedFromTable, ConnectedFromPrimaryKey...),
 	)
 }
 
@@ -447,4 +1087,11 @@ var (
 	_ graphql.Marshaler = (*enums.AssetType)(nil)
 	// enums.AssetType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.AssetType)(nil)
+)
+
+var (
+	// enums.SourceType must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.SourceType)(nil)
+	// enums.SourceType must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.SourceType)(nil)
 )

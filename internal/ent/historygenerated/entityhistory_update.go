@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -124,6 +126,146 @@ func (_u *EntityHistoryUpdate) ClearTags() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *EntityHistoryUpdate) SetInternalOwner(v string) *EntityHistoryUpdate {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableInternalOwner(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *EntityHistoryUpdate) ClearInternalOwner() *EntityHistoryUpdate {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *EntityHistoryUpdate) SetInternalOwnerUserID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableInternalOwnerUserID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *EntityHistoryUpdate) ClearInternalOwnerUserID() *EntityHistoryUpdate {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *EntityHistoryUpdate) SetInternalOwnerGroupID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableInternalOwnerGroupID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *EntityHistoryUpdate) ClearInternalOwnerGroupID() *EntityHistoryUpdate {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *EntityHistoryUpdate) SetReviewedBy(v string) *EntityHistoryUpdate {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableReviewedBy(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *EntityHistoryUpdate) ClearReviewedBy() *EntityHistoryUpdate {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *EntityHistoryUpdate) SetReviewedByUserID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableReviewedByUserID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *EntityHistoryUpdate) ClearReviewedByUserID() *EntityHistoryUpdate {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *EntityHistoryUpdate) SetReviewedByGroupID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableReviewedByGroupID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *EntityHistoryUpdate) ClearReviewedByGroupID() *EntityHistoryUpdate {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_u *EntityHistoryUpdate) SetLastReviewedAt(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetLastReviewedAt(v)
+	return _u
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableLastReviewedAt(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetLastReviewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastReviewedAt clears the value of the "last_reviewed_at" field.
+func (_u *EntityHistoryUpdate) ClearLastReviewedAt() *EntityHistoryUpdate {
+	_u.mutation.ClearLastReviewedAt()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *EntityHistoryUpdate) SetInternalNotes(v string) *EntityHistoryUpdate {
 	_u.mutation.SetInternalNotes(v)
@@ -161,6 +303,206 @@ func (_u *EntityHistoryUpdate) SetNillableSystemInternalID(v *string) *EntityHis
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *EntityHistoryUpdate) ClearSystemInternalID() *EntityHistoryUpdate {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
+func (_u *EntityHistoryUpdate) SetEntityRelationshipStateName(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEntityRelationshipStateName(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateName sets the "entity_relationship_state_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEntityRelationshipStateName(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEntityRelationshipStateName(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateName clears the value of the "entity_relationship_state_name" field.
+func (_u *EntityHistoryUpdate) ClearEntityRelationshipStateName() *EntityHistoryUpdate {
+	_u.mutation.ClearEntityRelationshipStateName()
+	return _u
+}
+
+// SetEntityRelationshipStateID sets the "entity_relationship_state_id" field.
+func (_u *EntityHistoryUpdate) SetEntityRelationshipStateID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEntityRelationshipStateID(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateID sets the "entity_relationship_state_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEntityRelationshipStateID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEntityRelationshipStateID(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateID clears the value of the "entity_relationship_state_id" field.
+func (_u *EntityHistoryUpdate) ClearEntityRelationshipStateID() *EntityHistoryUpdate {
+	_u.mutation.ClearEntityRelationshipStateID()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field.
+func (_u *EntityHistoryUpdate) SetEntitySecurityQuestionnaireStatusName(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusName(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEntitySecurityQuestionnaireStatusName(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusName clears the value of the "entity_security_questionnaire_status_name" field.
+func (_u *EntityHistoryUpdate) ClearEntitySecurityQuestionnaireStatusName() *EntityHistoryUpdate {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusName()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field.
+func (_u *EntityHistoryUpdate) SetEntitySecurityQuestionnaireStatusID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusID(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEntitySecurityQuestionnaireStatusID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusID clears the value of the "entity_security_questionnaire_status_id" field.
+func (_u *EntityHistoryUpdate) ClearEntitySecurityQuestionnaireStatusID() *EntityHistoryUpdate {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusID()
+	return _u
+}
+
+// SetEntitySourceTypeName sets the "entity_source_type_name" field.
+func (_u *EntityHistoryUpdate) SetEntitySourceTypeName(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEntitySourceTypeName(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeName sets the "entity_source_type_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEntitySourceTypeName(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEntitySourceTypeName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeName clears the value of the "entity_source_type_name" field.
+func (_u *EntityHistoryUpdate) ClearEntitySourceTypeName() *EntityHistoryUpdate {
+	_u.mutation.ClearEntitySourceTypeName()
+	return _u
+}
+
+// SetEntitySourceTypeID sets the "entity_source_type_id" field.
+func (_u *EntityHistoryUpdate) SetEntitySourceTypeID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEntitySourceTypeID(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeID sets the "entity_source_type_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEntitySourceTypeID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEntitySourceTypeID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeID clears the value of the "entity_source_type_id" field.
+func (_u *EntityHistoryUpdate) ClearEntitySourceTypeID() *EntityHistoryUpdate {
+	_u.mutation.ClearEntitySourceTypeID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *EntityHistoryUpdate) SetEnvironmentName(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEnvironmentName(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *EntityHistoryUpdate) ClearEnvironmentName() *EntityHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *EntityHistoryUpdate) SetEnvironmentID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableEnvironmentID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *EntityHistoryUpdate) ClearEnvironmentID() *EntityHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *EntityHistoryUpdate) SetScopeName(v string) *EntityHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableScopeName(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *EntityHistoryUpdate) ClearScopeName() *EntityHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *EntityHistoryUpdate) SetScopeID(v string) *EntityHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableScopeID(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *EntityHistoryUpdate) ClearScopeID() *EntityHistoryUpdate {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -282,6 +624,513 @@ func (_u *EntityHistoryUpdate) ClearStatus() *EntityHistoryUpdate {
 	return _u
 }
 
+// SetApprovedForUse sets the "approved_for_use" field.
+func (_u *EntityHistoryUpdate) SetApprovedForUse(v bool) *EntityHistoryUpdate {
+	_u.mutation.SetApprovedForUse(v)
+	return _u
+}
+
+// SetNillableApprovedForUse sets the "approved_for_use" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableApprovedForUse(v *bool) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetApprovedForUse(*v)
+	}
+	return _u
+}
+
+// ClearApprovedForUse clears the value of the "approved_for_use" field.
+func (_u *EntityHistoryUpdate) ClearApprovedForUse() *EntityHistoryUpdate {
+	_u.mutation.ClearApprovedForUse()
+	return _u
+}
+
+// SetLinkedAssetIds sets the "linked_asset_ids" field.
+func (_u *EntityHistoryUpdate) SetLinkedAssetIds(v []string) *EntityHistoryUpdate {
+	_u.mutation.SetLinkedAssetIds(v)
+	return _u
+}
+
+// AppendLinkedAssetIds appends value to the "linked_asset_ids" field.
+func (_u *EntityHistoryUpdate) AppendLinkedAssetIds(v []string) *EntityHistoryUpdate {
+	_u.mutation.AppendLinkedAssetIds(v)
+	return _u
+}
+
+// ClearLinkedAssetIds clears the value of the "linked_asset_ids" field.
+func (_u *EntityHistoryUpdate) ClearLinkedAssetIds() *EntityHistoryUpdate {
+	_u.mutation.ClearLinkedAssetIds()
+	return _u
+}
+
+// SetHasSoc2 sets the "has_soc2" field.
+func (_u *EntityHistoryUpdate) SetHasSoc2(v bool) *EntityHistoryUpdate {
+	_u.mutation.SetHasSoc2(v)
+	return _u
+}
+
+// SetNillableHasSoc2 sets the "has_soc2" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableHasSoc2(v *bool) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetHasSoc2(*v)
+	}
+	return _u
+}
+
+// ClearHasSoc2 clears the value of the "has_soc2" field.
+func (_u *EntityHistoryUpdate) ClearHasSoc2() *EntityHistoryUpdate {
+	_u.mutation.ClearHasSoc2()
+	return _u
+}
+
+// SetSoc2PeriodEnd sets the "soc2_period_end" field.
+func (_u *EntityHistoryUpdate) SetSoc2PeriodEnd(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetSoc2PeriodEnd(v)
+	return _u
+}
+
+// SetNillableSoc2PeriodEnd sets the "soc2_period_end" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableSoc2PeriodEnd(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetSoc2PeriodEnd(*v)
+	}
+	return _u
+}
+
+// ClearSoc2PeriodEnd clears the value of the "soc2_period_end" field.
+func (_u *EntityHistoryUpdate) ClearSoc2PeriodEnd() *EntityHistoryUpdate {
+	_u.mutation.ClearSoc2PeriodEnd()
+	return _u
+}
+
+// SetContractStartDate sets the "contract_start_date" field.
+func (_u *EntityHistoryUpdate) SetContractStartDate(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetContractStartDate(v)
+	return _u
+}
+
+// SetNillableContractStartDate sets the "contract_start_date" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableContractStartDate(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetContractStartDate(*v)
+	}
+	return _u
+}
+
+// ClearContractStartDate clears the value of the "contract_start_date" field.
+func (_u *EntityHistoryUpdate) ClearContractStartDate() *EntityHistoryUpdate {
+	_u.mutation.ClearContractStartDate()
+	return _u
+}
+
+// SetContractEndDate sets the "contract_end_date" field.
+func (_u *EntityHistoryUpdate) SetContractEndDate(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetContractEndDate(v)
+	return _u
+}
+
+// SetNillableContractEndDate sets the "contract_end_date" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableContractEndDate(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetContractEndDate(*v)
+	}
+	return _u
+}
+
+// ClearContractEndDate clears the value of the "contract_end_date" field.
+func (_u *EntityHistoryUpdate) ClearContractEndDate() *EntityHistoryUpdate {
+	_u.mutation.ClearContractEndDate()
+	return _u
+}
+
+// SetAutoRenews sets the "auto_renews" field.
+func (_u *EntityHistoryUpdate) SetAutoRenews(v bool) *EntityHistoryUpdate {
+	_u.mutation.SetAutoRenews(v)
+	return _u
+}
+
+// SetNillableAutoRenews sets the "auto_renews" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableAutoRenews(v *bool) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetAutoRenews(*v)
+	}
+	return _u
+}
+
+// ClearAutoRenews clears the value of the "auto_renews" field.
+func (_u *EntityHistoryUpdate) ClearAutoRenews() *EntityHistoryUpdate {
+	_u.mutation.ClearAutoRenews()
+	return _u
+}
+
+// SetTerminationNoticeDays sets the "termination_notice_days" field.
+func (_u *EntityHistoryUpdate) SetTerminationNoticeDays(v int) *EntityHistoryUpdate {
+	_u.mutation.ResetTerminationNoticeDays()
+	_u.mutation.SetTerminationNoticeDays(v)
+	return _u
+}
+
+// SetNillableTerminationNoticeDays sets the "termination_notice_days" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableTerminationNoticeDays(v *int) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetTerminationNoticeDays(*v)
+	}
+	return _u
+}
+
+// AddTerminationNoticeDays adds value to the "termination_notice_days" field.
+func (_u *EntityHistoryUpdate) AddTerminationNoticeDays(v int) *EntityHistoryUpdate {
+	_u.mutation.AddTerminationNoticeDays(v)
+	return _u
+}
+
+// ClearTerminationNoticeDays clears the value of the "termination_notice_days" field.
+func (_u *EntityHistoryUpdate) ClearTerminationNoticeDays() *EntityHistoryUpdate {
+	_u.mutation.ClearTerminationNoticeDays()
+	return _u
+}
+
+// SetAnnualSpend sets the "annual_spend" field.
+func (_u *EntityHistoryUpdate) SetAnnualSpend(v float64) *EntityHistoryUpdate {
+	_u.mutation.ResetAnnualSpend()
+	_u.mutation.SetAnnualSpend(v)
+	return _u
+}
+
+// SetNillableAnnualSpend sets the "annual_spend" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableAnnualSpend(v *float64) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetAnnualSpend(*v)
+	}
+	return _u
+}
+
+// AddAnnualSpend adds value to the "annual_spend" field.
+func (_u *EntityHistoryUpdate) AddAnnualSpend(v float64) *EntityHistoryUpdate {
+	_u.mutation.AddAnnualSpend(v)
+	return _u
+}
+
+// ClearAnnualSpend clears the value of the "annual_spend" field.
+func (_u *EntityHistoryUpdate) ClearAnnualSpend() *EntityHistoryUpdate {
+	_u.mutation.ClearAnnualSpend()
+	return _u
+}
+
+// SetSpendCurrency sets the "spend_currency" field.
+func (_u *EntityHistoryUpdate) SetSpendCurrency(v string) *EntityHistoryUpdate {
+	_u.mutation.SetSpendCurrency(v)
+	return _u
+}
+
+// SetNillableSpendCurrency sets the "spend_currency" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableSpendCurrency(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetSpendCurrency(*v)
+	}
+	return _u
+}
+
+// ClearSpendCurrency clears the value of the "spend_currency" field.
+func (_u *EntityHistoryUpdate) ClearSpendCurrency() *EntityHistoryUpdate {
+	_u.mutation.ClearSpendCurrency()
+	return _u
+}
+
+// SetBillingModel sets the "billing_model" field.
+func (_u *EntityHistoryUpdate) SetBillingModel(v string) *EntityHistoryUpdate {
+	_u.mutation.SetBillingModel(v)
+	return _u
+}
+
+// SetNillableBillingModel sets the "billing_model" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableBillingModel(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetBillingModel(*v)
+	}
+	return _u
+}
+
+// ClearBillingModel clears the value of the "billing_model" field.
+func (_u *EntityHistoryUpdate) ClearBillingModel() *EntityHistoryUpdate {
+	_u.mutation.ClearBillingModel()
+	return _u
+}
+
+// SetRenewalRisk sets the "renewal_risk" field.
+func (_u *EntityHistoryUpdate) SetRenewalRisk(v string) *EntityHistoryUpdate {
+	_u.mutation.SetRenewalRisk(v)
+	return _u
+}
+
+// SetNillableRenewalRisk sets the "renewal_risk" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableRenewalRisk(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetRenewalRisk(*v)
+	}
+	return _u
+}
+
+// ClearRenewalRisk clears the value of the "renewal_risk" field.
+func (_u *EntityHistoryUpdate) ClearRenewalRisk() *EntityHistoryUpdate {
+	_u.mutation.ClearRenewalRisk()
+	return _u
+}
+
+// SetSSOEnforced sets the "sso_enforced" field.
+func (_u *EntityHistoryUpdate) SetSSOEnforced(v bool) *EntityHistoryUpdate {
+	_u.mutation.SetSSOEnforced(v)
+	return _u
+}
+
+// SetNillableSSOEnforced sets the "sso_enforced" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableSSOEnforced(v *bool) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetSSOEnforced(*v)
+	}
+	return _u
+}
+
+// ClearSSOEnforced clears the value of the "sso_enforced" field.
+func (_u *EntityHistoryUpdate) ClearSSOEnforced() *EntityHistoryUpdate {
+	_u.mutation.ClearSSOEnforced()
+	return _u
+}
+
+// SetMfaSupported sets the "mfa_supported" field.
+func (_u *EntityHistoryUpdate) SetMfaSupported(v bool) *EntityHistoryUpdate {
+	_u.mutation.SetMfaSupported(v)
+	return _u
+}
+
+// SetNillableMfaSupported sets the "mfa_supported" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableMfaSupported(v *bool) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetMfaSupported(*v)
+	}
+	return _u
+}
+
+// ClearMfaSupported clears the value of the "mfa_supported" field.
+func (_u *EntityHistoryUpdate) ClearMfaSupported() *EntityHistoryUpdate {
+	_u.mutation.ClearMfaSupported()
+	return _u
+}
+
+// SetMfaEnforced sets the "mfa_enforced" field.
+func (_u *EntityHistoryUpdate) SetMfaEnforced(v bool) *EntityHistoryUpdate {
+	_u.mutation.SetMfaEnforced(v)
+	return _u
+}
+
+// SetNillableMfaEnforced sets the "mfa_enforced" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableMfaEnforced(v *bool) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetMfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearMfaEnforced clears the value of the "mfa_enforced" field.
+func (_u *EntityHistoryUpdate) ClearMfaEnforced() *EntityHistoryUpdate {
+	_u.mutation.ClearMfaEnforced()
+	return _u
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *EntityHistoryUpdate) SetStatusPageURL(v string) *EntityHistoryUpdate {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableStatusPageURL(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *EntityHistoryUpdate) ClearStatusPageURL() *EntityHistoryUpdate {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
+// SetProvidedServices sets the "provided_services" field.
+func (_u *EntityHistoryUpdate) SetProvidedServices(v []string) *EntityHistoryUpdate {
+	_u.mutation.SetProvidedServices(v)
+	return _u
+}
+
+// AppendProvidedServices appends value to the "provided_services" field.
+func (_u *EntityHistoryUpdate) AppendProvidedServices(v []string) *EntityHistoryUpdate {
+	_u.mutation.AppendProvidedServices(v)
+	return _u
+}
+
+// ClearProvidedServices clears the value of the "provided_services" field.
+func (_u *EntityHistoryUpdate) ClearProvidedServices() *EntityHistoryUpdate {
+	_u.mutation.ClearProvidedServices()
+	return _u
+}
+
+// SetLinks sets the "links" field.
+func (_u *EntityHistoryUpdate) SetLinks(v []string) *EntityHistoryUpdate {
+	_u.mutation.SetLinks(v)
+	return _u
+}
+
+// AppendLinks appends value to the "links" field.
+func (_u *EntityHistoryUpdate) AppendLinks(v []string) *EntityHistoryUpdate {
+	_u.mutation.AppendLinks(v)
+	return _u
+}
+
+// ClearLinks clears the value of the "links" field.
+func (_u *EntityHistoryUpdate) ClearLinks() *EntityHistoryUpdate {
+	_u.mutation.ClearLinks()
+	return _u
+}
+
+// SetRiskRating sets the "risk_rating" field.
+func (_u *EntityHistoryUpdate) SetRiskRating(v string) *EntityHistoryUpdate {
+	_u.mutation.SetRiskRating(v)
+	return _u
+}
+
+// SetNillableRiskRating sets the "risk_rating" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableRiskRating(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetRiskRating(*v)
+	}
+	return _u
+}
+
+// ClearRiskRating clears the value of the "risk_rating" field.
+func (_u *EntityHistoryUpdate) ClearRiskRating() *EntityHistoryUpdate {
+	_u.mutation.ClearRiskRating()
+	return _u
+}
+
+// SetRiskScore sets the "risk_score" field.
+func (_u *EntityHistoryUpdate) SetRiskScore(v int) *EntityHistoryUpdate {
+	_u.mutation.ResetRiskScore()
+	_u.mutation.SetRiskScore(v)
+	return _u
+}
+
+// SetNillableRiskScore sets the "risk_score" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableRiskScore(v *int) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetRiskScore(*v)
+	}
+	return _u
+}
+
+// AddRiskScore adds value to the "risk_score" field.
+func (_u *EntityHistoryUpdate) AddRiskScore(v int) *EntityHistoryUpdate {
+	_u.mutation.AddRiskScore(v)
+	return _u
+}
+
+// ClearRiskScore clears the value of the "risk_score" field.
+func (_u *EntityHistoryUpdate) ClearRiskScore() *EntityHistoryUpdate {
+	_u.mutation.ClearRiskScore()
+	return _u
+}
+
+// SetTier sets the "tier" field.
+func (_u *EntityHistoryUpdate) SetTier(v string) *EntityHistoryUpdate {
+	_u.mutation.SetTier(v)
+	return _u
+}
+
+// SetNillableTier sets the "tier" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableTier(v *string) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetTier(*v)
+	}
+	return _u
+}
+
+// ClearTier clears the value of the "tier" field.
+func (_u *EntityHistoryUpdate) ClearTier() *EntityHistoryUpdate {
+	_u.mutation.ClearTier()
+	return _u
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EntityHistoryUpdate) SetReviewFrequency(v enums.Frequency) *EntityHistoryUpdate {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableReviewFrequency(v *enums.Frequency) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EntityHistoryUpdate) ClearReviewFrequency() *EntityHistoryUpdate {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EntityHistoryUpdate) SetNextReviewAt(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableNextReviewAt(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EntityHistoryUpdate) ClearNextReviewAt() *EntityHistoryUpdate {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
+// SetContractRenewalAt sets the "contract_renewal_at" field.
+func (_u *EntityHistoryUpdate) SetContractRenewalAt(v models.DateTime) *EntityHistoryUpdate {
+	_u.mutation.SetContractRenewalAt(v)
+	return _u
+}
+
+// SetNillableContractRenewalAt sets the "contract_renewal_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdate) SetNillableContractRenewalAt(v *models.DateTime) *EntityHistoryUpdate {
+	if v != nil {
+		_u.SetContractRenewalAt(*v)
+	}
+	return _u
+}
+
+// ClearContractRenewalAt clears the value of the "contract_renewal_at" field.
+func (_u *EntityHistoryUpdate) ClearContractRenewalAt() *EntityHistoryUpdate {
+	_u.mutation.ClearContractRenewalAt()
+	return _u
+}
+
+// SetVendorMetadata sets the "vendor_metadata" field.
+func (_u *EntityHistoryUpdate) SetVendorMetadata(v map[string]interface{}) *EntityHistoryUpdate {
+	_u.mutation.SetVendorMetadata(v)
+	return _u
+}
+
+// ClearVendorMetadata clears the value of the "vendor_metadata" field.
+func (_u *EntityHistoryUpdate) ClearVendorMetadata() *EntityHistoryUpdate {
+	_u.mutation.ClearVendorMetadata()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdate) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -329,6 +1178,16 @@ func (_u *EntityHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *EntityHistoryUpdate) check() error {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := entityhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.review_frequency": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *EntityHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -336,6 +1195,9 @@ func (_u *EntityHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *
 }
 
 func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(entityhistory.Table, entityhistory.Columns, sqlgraph.NewFieldSpec(entityhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -391,6 +1253,48 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entityhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerUserID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerGroupID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(entityhistory.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastReviewedAt(); ok {
+		_spec.SetField(entityhistory.FieldLastReviewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastReviewedAtCleared() {
+		_spec.ClearField(entityhistory.FieldLastReviewedAt, field.TypeTime)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(entityhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -405,6 +1309,66 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
+		_spec.SetField(entityhistory.FieldEntityRelationshipStateName, field.TypeString, value)
+	}
+	if _u.mutation.EntityRelationshipStateNameCleared() {
+		_spec.ClearField(entityhistory.FieldEntityRelationshipStateName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntityRelationshipStateID(); ok {
+		_spec.SetField(entityhistory.FieldEntityRelationshipStateID, field.TypeString, value)
+	}
+	if _u.mutation.EntityRelationshipStateIDCleared() {
+		_spec.ClearField(entityhistory.FieldEntityRelationshipStateID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySecurityQuestionnaireStatusName(); ok {
+		_spec.SetField(entityhistory.FieldEntitySecurityQuestionnaireStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusNameCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySecurityQuestionnaireStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySecurityQuestionnaireStatusID(); ok {
+		_spec.SetField(entityhistory.FieldEntitySecurityQuestionnaireStatusID, field.TypeString, value)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusIDCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySecurityQuestionnaireStatusID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySourceTypeName(); ok {
+		_spec.SetField(entityhistory.FieldEntitySourceTypeName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySourceTypeNameCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySourceTypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySourceTypeID(); ok {
+		_spec.SetField(entityhistory.FieldEntitySourceTypeID, field.TypeString, value)
+	}
+	if _u.mutation.EntitySourceTypeIDCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySourceTypeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(entityhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(entityhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(entityhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(entityhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(entityhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(entityhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(entityhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(entityhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entityhistory.FieldName, field.TypeString, value)
@@ -446,6 +1410,180 @@ func (_u *EntityHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(entityhistory.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.ApprovedForUse(); ok {
+		_spec.SetField(entityhistory.FieldApprovedForUse, field.TypeBool, value)
+	}
+	if _u.mutation.ApprovedForUseCleared() {
+		_spec.ClearField(entityhistory.FieldApprovedForUse, field.TypeBool)
+	}
+	if value, ok := _u.mutation.LinkedAssetIds(); ok {
+		_spec.SetField(entityhistory.FieldLinkedAssetIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinkedAssetIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldLinkedAssetIds, value)
+		})
+	}
+	if _u.mutation.LinkedAssetIdsCleared() {
+		_spec.ClearField(entityhistory.FieldLinkedAssetIds, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.HasSoc2(); ok {
+		_spec.SetField(entityhistory.FieldHasSoc2, field.TypeBool, value)
+	}
+	if _u.mutation.HasSoc2Cleared() {
+		_spec.ClearField(entityhistory.FieldHasSoc2, field.TypeBool)
+	}
+	if value, ok := _u.mutation.Soc2PeriodEnd(); ok {
+		_spec.SetField(entityhistory.FieldSoc2PeriodEnd, field.TypeTime, value)
+	}
+	if _u.mutation.Soc2PeriodEndCleared() {
+		_spec.ClearField(entityhistory.FieldSoc2PeriodEnd, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractStartDate(); ok {
+		_spec.SetField(entityhistory.FieldContractStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractStartDateCleared() {
+		_spec.ClearField(entityhistory.FieldContractStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractEndDate(); ok {
+		_spec.SetField(entityhistory.FieldContractEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractEndDateCleared() {
+		_spec.ClearField(entityhistory.FieldContractEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AutoRenews(); ok {
+		_spec.SetField(entityhistory.FieldAutoRenews, field.TypeBool, value)
+	}
+	if _u.mutation.AutoRenewsCleared() {
+		_spec.ClearField(entityhistory.FieldAutoRenews, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TerminationNoticeDays(); ok {
+		_spec.SetField(entityhistory.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedTerminationNoticeDays(); ok {
+		_spec.AddField(entityhistory.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if _u.mutation.TerminationNoticeDaysCleared() {
+		_spec.ClearField(entityhistory.FieldTerminationNoticeDays, field.TypeInt)
+	}
+	if value, ok := _u.mutation.AnnualSpend(); ok {
+		_spec.SetField(entityhistory.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedAnnualSpend(); ok {
+		_spec.AddField(entityhistory.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if _u.mutation.AnnualSpendCleared() {
+		_spec.ClearField(entityhistory.FieldAnnualSpend, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.SpendCurrency(); ok {
+		_spec.SetField(entityhistory.FieldSpendCurrency, field.TypeString, value)
+	}
+	if _u.mutation.SpendCurrencyCleared() {
+		_spec.ClearField(entityhistory.FieldSpendCurrency, field.TypeString)
+	}
+	if value, ok := _u.mutation.BillingModel(); ok {
+		_spec.SetField(entityhistory.FieldBillingModel, field.TypeString, value)
+	}
+	if _u.mutation.BillingModelCleared() {
+		_spec.ClearField(entityhistory.FieldBillingModel, field.TypeString)
+	}
+	if value, ok := _u.mutation.RenewalRisk(); ok {
+		_spec.SetField(entityhistory.FieldRenewalRisk, field.TypeString, value)
+	}
+	if _u.mutation.RenewalRiskCleared() {
+		_spec.ClearField(entityhistory.FieldRenewalRisk, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOEnforced(); ok {
+		_spec.SetField(entityhistory.FieldSSOEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.SSOEnforcedCleared() {
+		_spec.ClearField(entityhistory.FieldSSOEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaSupported(); ok {
+		_spec.SetField(entityhistory.FieldMfaSupported, field.TypeBool, value)
+	}
+	if _u.mutation.MfaSupportedCleared() {
+		_spec.ClearField(entityhistory.FieldMfaSupported, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaEnforced(); ok {
+		_spec.SetField(entityhistory.FieldMfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.MfaEnforcedCleared() {
+		_spec.ClearField(entityhistory.FieldMfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(entityhistory.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(entityhistory.FieldStatusPageURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProvidedServices(); ok {
+		_spec.SetField(entityhistory.FieldProvidedServices, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedProvidedServices(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldProvidedServices, value)
+		})
+	}
+	if _u.mutation.ProvidedServicesCleared() {
+		_spec.ClearField(entityhistory.FieldProvidedServices, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Links(); ok {
+		_spec.SetField(entityhistory.FieldLinks, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldLinks, value)
+		})
+	}
+	if _u.mutation.LinksCleared() {
+		_spec.ClearField(entityhistory.FieldLinks, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RiskRating(); ok {
+		_spec.SetField(entityhistory.FieldRiskRating, field.TypeString, value)
+	}
+	if _u.mutation.RiskRatingCleared() {
+		_spec.ClearField(entityhistory.FieldRiskRating, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskScore(); ok {
+		_spec.SetField(entityhistory.FieldRiskScore, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScore(); ok {
+		_spec.AddField(entityhistory.FieldRiskScore, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCleared() {
+		_spec.ClearField(entityhistory.FieldRiskScore, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Tier(); ok {
+		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+	}
+	if _u.mutation.TierCleared() {
+		_spec.ClearField(entityhistory.FieldTier, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(entityhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(entityhistory.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(entityhistory.FieldNextReviewAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractRenewalAt(); ok {
+		_spec.SetField(entityhistory.FieldContractRenewalAt, field.TypeTime, value)
+	}
+	if _u.mutation.ContractRenewalAtCleared() {
+		_spec.ClearField(entityhistory.FieldContractRenewalAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.VendorMetadata(); ok {
+		_spec.SetField(entityhistory.FieldVendorMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.VendorMetadataCleared() {
+		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -561,6 +1699,146 @@ func (_u *EntityHistoryUpdateOne) ClearTags() *EntityHistoryUpdateOne {
 	return _u
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_u *EntityHistoryUpdateOne) SetInternalOwner(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetInternalOwner(v)
+	return _u
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableInternalOwner(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalOwner(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwner clears the value of the "internal_owner" field.
+func (_u *EntityHistoryUpdateOne) ClearInternalOwner() *EntityHistoryUpdateOne {
+	_u.mutation.ClearInternalOwner()
+	return _u
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_u *EntityHistoryUpdateOne) SetInternalOwnerUserID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetInternalOwnerUserID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableInternalOwnerUserID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerUserID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerUserID clears the value of the "internal_owner_user_id" field.
+func (_u *EntityHistoryUpdateOne) ClearInternalOwnerUserID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearInternalOwnerUserID()
+	return _u
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_u *EntityHistoryUpdateOne) SetInternalOwnerGroupID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetInternalOwnerGroupID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableInternalOwnerGroupID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerGroupID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerGroupID clears the value of the "internal_owner_group_id" field.
+func (_u *EntityHistoryUpdateOne) ClearInternalOwnerGroupID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearInternalOwnerGroupID()
+	return _u
+}
+
+// SetReviewedBy sets the "reviewed_by" field.
+func (_u *EntityHistoryUpdateOne) SetReviewedBy(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetReviewedBy(v)
+	return _u
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableReviewedBy(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedBy(*v)
+	}
+	return _u
+}
+
+// ClearReviewedBy clears the value of the "reviewed_by" field.
+func (_u *EntityHistoryUpdateOne) ClearReviewedBy() *EntityHistoryUpdateOne {
+	_u.mutation.ClearReviewedBy()
+	return _u
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_u *EntityHistoryUpdateOne) SetReviewedByUserID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetReviewedByUserID(v)
+	return _u
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableReviewedByUserID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedByUserID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByUserID clears the value of the "reviewed_by_user_id" field.
+func (_u *EntityHistoryUpdateOne) ClearReviewedByUserID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearReviewedByUserID()
+	return _u
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_u *EntityHistoryUpdateOne) SetReviewedByGroupID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetReviewedByGroupID(v)
+	return _u
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableReviewedByGroupID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewedByGroupID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
+func (_u *EntityHistoryUpdateOne) ClearReviewedByGroupID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetLastReviewedAt sets the "last_reviewed_at" field.
+func (_u *EntityHistoryUpdateOne) SetLastReviewedAt(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetLastReviewedAt(v)
+	return _u
+}
+
+// SetNillableLastReviewedAt sets the "last_reviewed_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableLastReviewedAt(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetLastReviewedAt(*v)
+	}
+	return _u
+}
+
+// ClearLastReviewedAt clears the value of the "last_reviewed_at" field.
+func (_u *EntityHistoryUpdateOne) ClearLastReviewedAt() *EntityHistoryUpdateOne {
+	_u.mutation.ClearLastReviewedAt()
+	return _u
+}
+
 // SetInternalNotes sets the "internal_notes" field.
 func (_u *EntityHistoryUpdateOne) SetInternalNotes(v string) *EntityHistoryUpdateOne {
 	_u.mutation.SetInternalNotes(v)
@@ -598,6 +1876,206 @@ func (_u *EntityHistoryUpdateOne) SetNillableSystemInternalID(v *string) *Entity
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *EntityHistoryUpdateOne) ClearSystemInternalID() *EntityHistoryUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEntityRelationshipStateName sets the "entity_relationship_state_name" field.
+func (_u *EntityHistoryUpdateOne) SetEntityRelationshipStateName(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEntityRelationshipStateName(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateName sets the "entity_relationship_state_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEntityRelationshipStateName(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEntityRelationshipStateName(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateName clears the value of the "entity_relationship_state_name" field.
+func (_u *EntityHistoryUpdateOne) ClearEntityRelationshipStateName() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEntityRelationshipStateName()
+	return _u
+}
+
+// SetEntityRelationshipStateID sets the "entity_relationship_state_id" field.
+func (_u *EntityHistoryUpdateOne) SetEntityRelationshipStateID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEntityRelationshipStateID(v)
+	return _u
+}
+
+// SetNillableEntityRelationshipStateID sets the "entity_relationship_state_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEntityRelationshipStateID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEntityRelationshipStateID(*v)
+	}
+	return _u
+}
+
+// ClearEntityRelationshipStateID clears the value of the "entity_relationship_state_id" field.
+func (_u *EntityHistoryUpdateOne) ClearEntityRelationshipStateID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEntityRelationshipStateID()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field.
+func (_u *EntityHistoryUpdateOne) SetEntitySecurityQuestionnaireStatusName(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusName(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusName sets the "entity_security_questionnaire_status_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEntitySecurityQuestionnaireStatusName(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusName clears the value of the "entity_security_questionnaire_status_name" field.
+func (_u *EntityHistoryUpdateOne) ClearEntitySecurityQuestionnaireStatusName() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusName()
+	return _u
+}
+
+// SetEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field.
+func (_u *EntityHistoryUpdateOne) SetEntitySecurityQuestionnaireStatusID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEntitySecurityQuestionnaireStatusID(v)
+	return _u
+}
+
+// SetNillableEntitySecurityQuestionnaireStatusID sets the "entity_security_questionnaire_status_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEntitySecurityQuestionnaireStatusID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEntitySecurityQuestionnaireStatusID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySecurityQuestionnaireStatusID clears the value of the "entity_security_questionnaire_status_id" field.
+func (_u *EntityHistoryUpdateOne) ClearEntitySecurityQuestionnaireStatusID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEntitySecurityQuestionnaireStatusID()
+	return _u
+}
+
+// SetEntitySourceTypeName sets the "entity_source_type_name" field.
+func (_u *EntityHistoryUpdateOne) SetEntitySourceTypeName(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEntitySourceTypeName(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeName sets the "entity_source_type_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEntitySourceTypeName(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEntitySourceTypeName(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeName clears the value of the "entity_source_type_name" field.
+func (_u *EntityHistoryUpdateOne) ClearEntitySourceTypeName() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEntitySourceTypeName()
+	return _u
+}
+
+// SetEntitySourceTypeID sets the "entity_source_type_id" field.
+func (_u *EntityHistoryUpdateOne) SetEntitySourceTypeID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEntitySourceTypeID(v)
+	return _u
+}
+
+// SetNillableEntitySourceTypeID sets the "entity_source_type_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEntitySourceTypeID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEntitySourceTypeID(*v)
+	}
+	return _u
+}
+
+// ClearEntitySourceTypeID clears the value of the "entity_source_type_id" field.
+func (_u *EntityHistoryUpdateOne) ClearEntitySourceTypeID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEntitySourceTypeID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *EntityHistoryUpdateOne) SetEnvironmentName(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEnvironmentName(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *EntityHistoryUpdateOne) ClearEnvironmentName() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *EntityHistoryUpdateOne) SetEnvironmentID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableEnvironmentID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *EntityHistoryUpdateOne) ClearEnvironmentID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *EntityHistoryUpdateOne) SetScopeName(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableScopeName(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *EntityHistoryUpdateOne) ClearScopeName() *EntityHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *EntityHistoryUpdateOne) SetScopeID(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableScopeID(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *EntityHistoryUpdateOne) ClearScopeID() *EntityHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -719,6 +2197,513 @@ func (_u *EntityHistoryUpdateOne) ClearStatus() *EntityHistoryUpdateOne {
 	return _u
 }
 
+// SetApprovedForUse sets the "approved_for_use" field.
+func (_u *EntityHistoryUpdateOne) SetApprovedForUse(v bool) *EntityHistoryUpdateOne {
+	_u.mutation.SetApprovedForUse(v)
+	return _u
+}
+
+// SetNillableApprovedForUse sets the "approved_for_use" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableApprovedForUse(v *bool) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetApprovedForUse(*v)
+	}
+	return _u
+}
+
+// ClearApprovedForUse clears the value of the "approved_for_use" field.
+func (_u *EntityHistoryUpdateOne) ClearApprovedForUse() *EntityHistoryUpdateOne {
+	_u.mutation.ClearApprovedForUse()
+	return _u
+}
+
+// SetLinkedAssetIds sets the "linked_asset_ids" field.
+func (_u *EntityHistoryUpdateOne) SetLinkedAssetIds(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.SetLinkedAssetIds(v)
+	return _u
+}
+
+// AppendLinkedAssetIds appends value to the "linked_asset_ids" field.
+func (_u *EntityHistoryUpdateOne) AppendLinkedAssetIds(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.AppendLinkedAssetIds(v)
+	return _u
+}
+
+// ClearLinkedAssetIds clears the value of the "linked_asset_ids" field.
+func (_u *EntityHistoryUpdateOne) ClearLinkedAssetIds() *EntityHistoryUpdateOne {
+	_u.mutation.ClearLinkedAssetIds()
+	return _u
+}
+
+// SetHasSoc2 sets the "has_soc2" field.
+func (_u *EntityHistoryUpdateOne) SetHasSoc2(v bool) *EntityHistoryUpdateOne {
+	_u.mutation.SetHasSoc2(v)
+	return _u
+}
+
+// SetNillableHasSoc2 sets the "has_soc2" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableHasSoc2(v *bool) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetHasSoc2(*v)
+	}
+	return _u
+}
+
+// ClearHasSoc2 clears the value of the "has_soc2" field.
+func (_u *EntityHistoryUpdateOne) ClearHasSoc2() *EntityHistoryUpdateOne {
+	_u.mutation.ClearHasSoc2()
+	return _u
+}
+
+// SetSoc2PeriodEnd sets the "soc2_period_end" field.
+func (_u *EntityHistoryUpdateOne) SetSoc2PeriodEnd(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetSoc2PeriodEnd(v)
+	return _u
+}
+
+// SetNillableSoc2PeriodEnd sets the "soc2_period_end" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableSoc2PeriodEnd(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetSoc2PeriodEnd(*v)
+	}
+	return _u
+}
+
+// ClearSoc2PeriodEnd clears the value of the "soc2_period_end" field.
+func (_u *EntityHistoryUpdateOne) ClearSoc2PeriodEnd() *EntityHistoryUpdateOne {
+	_u.mutation.ClearSoc2PeriodEnd()
+	return _u
+}
+
+// SetContractStartDate sets the "contract_start_date" field.
+func (_u *EntityHistoryUpdateOne) SetContractStartDate(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetContractStartDate(v)
+	return _u
+}
+
+// SetNillableContractStartDate sets the "contract_start_date" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableContractStartDate(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetContractStartDate(*v)
+	}
+	return _u
+}
+
+// ClearContractStartDate clears the value of the "contract_start_date" field.
+func (_u *EntityHistoryUpdateOne) ClearContractStartDate() *EntityHistoryUpdateOne {
+	_u.mutation.ClearContractStartDate()
+	return _u
+}
+
+// SetContractEndDate sets the "contract_end_date" field.
+func (_u *EntityHistoryUpdateOne) SetContractEndDate(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetContractEndDate(v)
+	return _u
+}
+
+// SetNillableContractEndDate sets the "contract_end_date" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableContractEndDate(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetContractEndDate(*v)
+	}
+	return _u
+}
+
+// ClearContractEndDate clears the value of the "contract_end_date" field.
+func (_u *EntityHistoryUpdateOne) ClearContractEndDate() *EntityHistoryUpdateOne {
+	_u.mutation.ClearContractEndDate()
+	return _u
+}
+
+// SetAutoRenews sets the "auto_renews" field.
+func (_u *EntityHistoryUpdateOne) SetAutoRenews(v bool) *EntityHistoryUpdateOne {
+	_u.mutation.SetAutoRenews(v)
+	return _u
+}
+
+// SetNillableAutoRenews sets the "auto_renews" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableAutoRenews(v *bool) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetAutoRenews(*v)
+	}
+	return _u
+}
+
+// ClearAutoRenews clears the value of the "auto_renews" field.
+func (_u *EntityHistoryUpdateOne) ClearAutoRenews() *EntityHistoryUpdateOne {
+	_u.mutation.ClearAutoRenews()
+	return _u
+}
+
+// SetTerminationNoticeDays sets the "termination_notice_days" field.
+func (_u *EntityHistoryUpdateOne) SetTerminationNoticeDays(v int) *EntityHistoryUpdateOne {
+	_u.mutation.ResetTerminationNoticeDays()
+	_u.mutation.SetTerminationNoticeDays(v)
+	return _u
+}
+
+// SetNillableTerminationNoticeDays sets the "termination_notice_days" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableTerminationNoticeDays(v *int) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetTerminationNoticeDays(*v)
+	}
+	return _u
+}
+
+// AddTerminationNoticeDays adds value to the "termination_notice_days" field.
+func (_u *EntityHistoryUpdateOne) AddTerminationNoticeDays(v int) *EntityHistoryUpdateOne {
+	_u.mutation.AddTerminationNoticeDays(v)
+	return _u
+}
+
+// ClearTerminationNoticeDays clears the value of the "termination_notice_days" field.
+func (_u *EntityHistoryUpdateOne) ClearTerminationNoticeDays() *EntityHistoryUpdateOne {
+	_u.mutation.ClearTerminationNoticeDays()
+	return _u
+}
+
+// SetAnnualSpend sets the "annual_spend" field.
+func (_u *EntityHistoryUpdateOne) SetAnnualSpend(v float64) *EntityHistoryUpdateOne {
+	_u.mutation.ResetAnnualSpend()
+	_u.mutation.SetAnnualSpend(v)
+	return _u
+}
+
+// SetNillableAnnualSpend sets the "annual_spend" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableAnnualSpend(v *float64) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetAnnualSpend(*v)
+	}
+	return _u
+}
+
+// AddAnnualSpend adds value to the "annual_spend" field.
+func (_u *EntityHistoryUpdateOne) AddAnnualSpend(v float64) *EntityHistoryUpdateOne {
+	_u.mutation.AddAnnualSpend(v)
+	return _u
+}
+
+// ClearAnnualSpend clears the value of the "annual_spend" field.
+func (_u *EntityHistoryUpdateOne) ClearAnnualSpend() *EntityHistoryUpdateOne {
+	_u.mutation.ClearAnnualSpend()
+	return _u
+}
+
+// SetSpendCurrency sets the "spend_currency" field.
+func (_u *EntityHistoryUpdateOne) SetSpendCurrency(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetSpendCurrency(v)
+	return _u
+}
+
+// SetNillableSpendCurrency sets the "spend_currency" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableSpendCurrency(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetSpendCurrency(*v)
+	}
+	return _u
+}
+
+// ClearSpendCurrency clears the value of the "spend_currency" field.
+func (_u *EntityHistoryUpdateOne) ClearSpendCurrency() *EntityHistoryUpdateOne {
+	_u.mutation.ClearSpendCurrency()
+	return _u
+}
+
+// SetBillingModel sets the "billing_model" field.
+func (_u *EntityHistoryUpdateOne) SetBillingModel(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetBillingModel(v)
+	return _u
+}
+
+// SetNillableBillingModel sets the "billing_model" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableBillingModel(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetBillingModel(*v)
+	}
+	return _u
+}
+
+// ClearBillingModel clears the value of the "billing_model" field.
+func (_u *EntityHistoryUpdateOne) ClearBillingModel() *EntityHistoryUpdateOne {
+	_u.mutation.ClearBillingModel()
+	return _u
+}
+
+// SetRenewalRisk sets the "renewal_risk" field.
+func (_u *EntityHistoryUpdateOne) SetRenewalRisk(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetRenewalRisk(v)
+	return _u
+}
+
+// SetNillableRenewalRisk sets the "renewal_risk" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableRenewalRisk(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetRenewalRisk(*v)
+	}
+	return _u
+}
+
+// ClearRenewalRisk clears the value of the "renewal_risk" field.
+func (_u *EntityHistoryUpdateOne) ClearRenewalRisk() *EntityHistoryUpdateOne {
+	_u.mutation.ClearRenewalRisk()
+	return _u
+}
+
+// SetSSOEnforced sets the "sso_enforced" field.
+func (_u *EntityHistoryUpdateOne) SetSSOEnforced(v bool) *EntityHistoryUpdateOne {
+	_u.mutation.SetSSOEnforced(v)
+	return _u
+}
+
+// SetNillableSSOEnforced sets the "sso_enforced" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableSSOEnforced(v *bool) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetSSOEnforced(*v)
+	}
+	return _u
+}
+
+// ClearSSOEnforced clears the value of the "sso_enforced" field.
+func (_u *EntityHistoryUpdateOne) ClearSSOEnforced() *EntityHistoryUpdateOne {
+	_u.mutation.ClearSSOEnforced()
+	return _u
+}
+
+// SetMfaSupported sets the "mfa_supported" field.
+func (_u *EntityHistoryUpdateOne) SetMfaSupported(v bool) *EntityHistoryUpdateOne {
+	_u.mutation.SetMfaSupported(v)
+	return _u
+}
+
+// SetNillableMfaSupported sets the "mfa_supported" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableMfaSupported(v *bool) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetMfaSupported(*v)
+	}
+	return _u
+}
+
+// ClearMfaSupported clears the value of the "mfa_supported" field.
+func (_u *EntityHistoryUpdateOne) ClearMfaSupported() *EntityHistoryUpdateOne {
+	_u.mutation.ClearMfaSupported()
+	return _u
+}
+
+// SetMfaEnforced sets the "mfa_enforced" field.
+func (_u *EntityHistoryUpdateOne) SetMfaEnforced(v bool) *EntityHistoryUpdateOne {
+	_u.mutation.SetMfaEnforced(v)
+	return _u
+}
+
+// SetNillableMfaEnforced sets the "mfa_enforced" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableMfaEnforced(v *bool) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetMfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearMfaEnforced clears the value of the "mfa_enforced" field.
+func (_u *EntityHistoryUpdateOne) ClearMfaEnforced() *EntityHistoryUpdateOne {
+	_u.mutation.ClearMfaEnforced()
+	return _u
+}
+
+// SetStatusPageURL sets the "status_page_url" field.
+func (_u *EntityHistoryUpdateOne) SetStatusPageURL(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetStatusPageURL(v)
+	return _u
+}
+
+// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableStatusPageURL(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetStatusPageURL(*v)
+	}
+	return _u
+}
+
+// ClearStatusPageURL clears the value of the "status_page_url" field.
+func (_u *EntityHistoryUpdateOne) ClearStatusPageURL() *EntityHistoryUpdateOne {
+	_u.mutation.ClearStatusPageURL()
+	return _u
+}
+
+// SetProvidedServices sets the "provided_services" field.
+func (_u *EntityHistoryUpdateOne) SetProvidedServices(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.SetProvidedServices(v)
+	return _u
+}
+
+// AppendProvidedServices appends value to the "provided_services" field.
+func (_u *EntityHistoryUpdateOne) AppendProvidedServices(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.AppendProvidedServices(v)
+	return _u
+}
+
+// ClearProvidedServices clears the value of the "provided_services" field.
+func (_u *EntityHistoryUpdateOne) ClearProvidedServices() *EntityHistoryUpdateOne {
+	_u.mutation.ClearProvidedServices()
+	return _u
+}
+
+// SetLinks sets the "links" field.
+func (_u *EntityHistoryUpdateOne) SetLinks(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.SetLinks(v)
+	return _u
+}
+
+// AppendLinks appends value to the "links" field.
+func (_u *EntityHistoryUpdateOne) AppendLinks(v []string) *EntityHistoryUpdateOne {
+	_u.mutation.AppendLinks(v)
+	return _u
+}
+
+// ClearLinks clears the value of the "links" field.
+func (_u *EntityHistoryUpdateOne) ClearLinks() *EntityHistoryUpdateOne {
+	_u.mutation.ClearLinks()
+	return _u
+}
+
+// SetRiskRating sets the "risk_rating" field.
+func (_u *EntityHistoryUpdateOne) SetRiskRating(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetRiskRating(v)
+	return _u
+}
+
+// SetNillableRiskRating sets the "risk_rating" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableRiskRating(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskRating(*v)
+	}
+	return _u
+}
+
+// ClearRiskRating clears the value of the "risk_rating" field.
+func (_u *EntityHistoryUpdateOne) ClearRiskRating() *EntityHistoryUpdateOne {
+	_u.mutation.ClearRiskRating()
+	return _u
+}
+
+// SetRiskScore sets the "risk_score" field.
+func (_u *EntityHistoryUpdateOne) SetRiskScore(v int) *EntityHistoryUpdateOne {
+	_u.mutation.ResetRiskScore()
+	_u.mutation.SetRiskScore(v)
+	return _u
+}
+
+// SetNillableRiskScore sets the "risk_score" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableRiskScore(v *int) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetRiskScore(*v)
+	}
+	return _u
+}
+
+// AddRiskScore adds value to the "risk_score" field.
+func (_u *EntityHistoryUpdateOne) AddRiskScore(v int) *EntityHistoryUpdateOne {
+	_u.mutation.AddRiskScore(v)
+	return _u
+}
+
+// ClearRiskScore clears the value of the "risk_score" field.
+func (_u *EntityHistoryUpdateOne) ClearRiskScore() *EntityHistoryUpdateOne {
+	_u.mutation.ClearRiskScore()
+	return _u
+}
+
+// SetTier sets the "tier" field.
+func (_u *EntityHistoryUpdateOne) SetTier(v string) *EntityHistoryUpdateOne {
+	_u.mutation.SetTier(v)
+	return _u
+}
+
+// SetNillableTier sets the "tier" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableTier(v *string) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetTier(*v)
+	}
+	return _u
+}
+
+// ClearTier clears the value of the "tier" field.
+func (_u *EntityHistoryUpdateOne) ClearTier() *EntityHistoryUpdateOne {
+	_u.mutation.ClearTier()
+	return _u
+}
+
+// SetReviewFrequency sets the "review_frequency" field.
+func (_u *EntityHistoryUpdateOne) SetReviewFrequency(v enums.Frequency) *EntityHistoryUpdateOne {
+	_u.mutation.SetReviewFrequency(v)
+	return _u
+}
+
+// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetReviewFrequency(*v)
+	}
+	return _u
+}
+
+// ClearReviewFrequency clears the value of the "review_frequency" field.
+func (_u *EntityHistoryUpdateOne) ClearReviewFrequency() *EntityHistoryUpdateOne {
+	_u.mutation.ClearReviewFrequency()
+	return _u
+}
+
+// SetNextReviewAt sets the "next_review_at" field.
+func (_u *EntityHistoryUpdateOne) SetNextReviewAt(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetNextReviewAt(v)
+	return _u
+}
+
+// SetNillableNextReviewAt sets the "next_review_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableNextReviewAt(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetNextReviewAt(*v)
+	}
+	return _u
+}
+
+// ClearNextReviewAt clears the value of the "next_review_at" field.
+func (_u *EntityHistoryUpdateOne) ClearNextReviewAt() *EntityHistoryUpdateOne {
+	_u.mutation.ClearNextReviewAt()
+	return _u
+}
+
+// SetContractRenewalAt sets the "contract_renewal_at" field.
+func (_u *EntityHistoryUpdateOne) SetContractRenewalAt(v models.DateTime) *EntityHistoryUpdateOne {
+	_u.mutation.SetContractRenewalAt(v)
+	return _u
+}
+
+// SetNillableContractRenewalAt sets the "contract_renewal_at" field if the given value is not nil.
+func (_u *EntityHistoryUpdateOne) SetNillableContractRenewalAt(v *models.DateTime) *EntityHistoryUpdateOne {
+	if v != nil {
+		_u.SetContractRenewalAt(*v)
+	}
+	return _u
+}
+
+// ClearContractRenewalAt clears the value of the "contract_renewal_at" field.
+func (_u *EntityHistoryUpdateOne) ClearContractRenewalAt() *EntityHistoryUpdateOne {
+	_u.mutation.ClearContractRenewalAt()
+	return _u
+}
+
+// SetVendorMetadata sets the "vendor_metadata" field.
+func (_u *EntityHistoryUpdateOne) SetVendorMetadata(v map[string]interface{}) *EntityHistoryUpdateOne {
+	_u.mutation.SetVendorMetadata(v)
+	return _u
+}
+
+// ClearVendorMetadata clears the value of the "vendor_metadata" field.
+func (_u *EntityHistoryUpdateOne) ClearVendorMetadata() *EntityHistoryUpdateOne {
+	_u.mutation.ClearVendorMetadata()
+	return _u
+}
+
 // Mutation returns the EntityHistoryMutation object of the builder.
 func (_u *EntityHistoryUpdateOne) Mutation() *EntityHistoryMutation {
 	return _u.mutation
@@ -779,6 +2764,16 @@ func (_u *EntityHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *EntityHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.ReviewFrequency(); ok {
+		if err := entityhistory.ReviewFrequencyValidator(v); err != nil {
+			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EntityHistory.review_frequency": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *EntityHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EntityHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -786,6 +2781,9 @@ func (_u *EntityHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)
 }
 
 func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(entityhistory.Table, entityhistory.Columns, sqlgraph.NewFieldSpec(entityhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -858,6 +2856,48 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(entityhistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.InternalOwner(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwner, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwner, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerUserID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerUserID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerUserIDCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwnerUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.InternalOwnerGroupID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerGroupID, field.TypeString, value)
+	}
+	if _u.mutation.InternalOwnerGroupIDCleared() {
+		_spec.ClearField(entityhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedBy(); ok {
+		_spec.SetField(entityhistory.FieldReviewedBy, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByUserID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByUserIDCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedByUserID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByGroupID, field.TypeString, value)
+	}
+	if _u.mutation.ReviewedByGroupIDCleared() {
+		_spec.ClearField(entityhistory.FieldReviewedByGroupID, field.TypeString)
+	}
+	if value, ok := _u.mutation.LastReviewedAt(); ok {
+		_spec.SetField(entityhistory.FieldLastReviewedAt, field.TypeTime, value)
+	}
+	if _u.mutation.LastReviewedAtCleared() {
+		_spec.ClearField(entityhistory.FieldLastReviewedAt, field.TypeTime)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(entityhistory.FieldSystemOwned, field.TypeBool)
 	}
@@ -872,6 +2912,66 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(entityhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntityRelationshipStateName(); ok {
+		_spec.SetField(entityhistory.FieldEntityRelationshipStateName, field.TypeString, value)
+	}
+	if _u.mutation.EntityRelationshipStateNameCleared() {
+		_spec.ClearField(entityhistory.FieldEntityRelationshipStateName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntityRelationshipStateID(); ok {
+		_spec.SetField(entityhistory.FieldEntityRelationshipStateID, field.TypeString, value)
+	}
+	if _u.mutation.EntityRelationshipStateIDCleared() {
+		_spec.ClearField(entityhistory.FieldEntityRelationshipStateID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySecurityQuestionnaireStatusName(); ok {
+		_spec.SetField(entityhistory.FieldEntitySecurityQuestionnaireStatusName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusNameCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySecurityQuestionnaireStatusName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySecurityQuestionnaireStatusID(); ok {
+		_spec.SetField(entityhistory.FieldEntitySecurityQuestionnaireStatusID, field.TypeString, value)
+	}
+	if _u.mutation.EntitySecurityQuestionnaireStatusIDCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySecurityQuestionnaireStatusID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySourceTypeName(); ok {
+		_spec.SetField(entityhistory.FieldEntitySourceTypeName, field.TypeString, value)
+	}
+	if _u.mutation.EntitySourceTypeNameCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySourceTypeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EntitySourceTypeID(); ok {
+		_spec.SetField(entityhistory.FieldEntitySourceTypeID, field.TypeString, value)
+	}
+	if _u.mutation.EntitySourceTypeIDCleared() {
+		_spec.ClearField(entityhistory.FieldEntitySourceTypeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(entityhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(entityhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(entityhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(entityhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(entityhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(entityhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(entityhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(entityhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(entityhistory.FieldName, field.TypeString, value)
@@ -913,6 +3013,180 @@ func (_u *EntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EntityHis
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(entityhistory.FieldStatus, field.TypeString)
+	}
+	if value, ok := _u.mutation.ApprovedForUse(); ok {
+		_spec.SetField(entityhistory.FieldApprovedForUse, field.TypeBool, value)
+	}
+	if _u.mutation.ApprovedForUseCleared() {
+		_spec.ClearField(entityhistory.FieldApprovedForUse, field.TypeBool)
+	}
+	if value, ok := _u.mutation.LinkedAssetIds(); ok {
+		_spec.SetField(entityhistory.FieldLinkedAssetIds, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinkedAssetIds(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldLinkedAssetIds, value)
+		})
+	}
+	if _u.mutation.LinkedAssetIdsCleared() {
+		_spec.ClearField(entityhistory.FieldLinkedAssetIds, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.HasSoc2(); ok {
+		_spec.SetField(entityhistory.FieldHasSoc2, field.TypeBool, value)
+	}
+	if _u.mutation.HasSoc2Cleared() {
+		_spec.ClearField(entityhistory.FieldHasSoc2, field.TypeBool)
+	}
+	if value, ok := _u.mutation.Soc2PeriodEnd(); ok {
+		_spec.SetField(entityhistory.FieldSoc2PeriodEnd, field.TypeTime, value)
+	}
+	if _u.mutation.Soc2PeriodEndCleared() {
+		_spec.ClearField(entityhistory.FieldSoc2PeriodEnd, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractStartDate(); ok {
+		_spec.SetField(entityhistory.FieldContractStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractStartDateCleared() {
+		_spec.ClearField(entityhistory.FieldContractStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractEndDate(); ok {
+		_spec.SetField(entityhistory.FieldContractEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.ContractEndDateCleared() {
+		_spec.ClearField(entityhistory.FieldContractEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.AutoRenews(); ok {
+		_spec.SetField(entityhistory.FieldAutoRenews, field.TypeBool, value)
+	}
+	if _u.mutation.AutoRenewsCleared() {
+		_spec.ClearField(entityhistory.FieldAutoRenews, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TerminationNoticeDays(); ok {
+		_spec.SetField(entityhistory.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedTerminationNoticeDays(); ok {
+		_spec.AddField(entityhistory.FieldTerminationNoticeDays, field.TypeInt, value)
+	}
+	if _u.mutation.TerminationNoticeDaysCleared() {
+		_spec.ClearField(entityhistory.FieldTerminationNoticeDays, field.TypeInt)
+	}
+	if value, ok := _u.mutation.AnnualSpend(); ok {
+		_spec.SetField(entityhistory.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if value, ok := _u.mutation.AddedAnnualSpend(); ok {
+		_spec.AddField(entityhistory.FieldAnnualSpend, field.TypeFloat64, value)
+	}
+	if _u.mutation.AnnualSpendCleared() {
+		_spec.ClearField(entityhistory.FieldAnnualSpend, field.TypeFloat64)
+	}
+	if value, ok := _u.mutation.SpendCurrency(); ok {
+		_spec.SetField(entityhistory.FieldSpendCurrency, field.TypeString, value)
+	}
+	if _u.mutation.SpendCurrencyCleared() {
+		_spec.ClearField(entityhistory.FieldSpendCurrency, field.TypeString)
+	}
+	if value, ok := _u.mutation.BillingModel(); ok {
+		_spec.SetField(entityhistory.FieldBillingModel, field.TypeString, value)
+	}
+	if _u.mutation.BillingModelCleared() {
+		_spec.ClearField(entityhistory.FieldBillingModel, field.TypeString)
+	}
+	if value, ok := _u.mutation.RenewalRisk(); ok {
+		_spec.SetField(entityhistory.FieldRenewalRisk, field.TypeString, value)
+	}
+	if _u.mutation.RenewalRiskCleared() {
+		_spec.ClearField(entityhistory.FieldRenewalRisk, field.TypeString)
+	}
+	if value, ok := _u.mutation.SSOEnforced(); ok {
+		_spec.SetField(entityhistory.FieldSSOEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.SSOEnforcedCleared() {
+		_spec.ClearField(entityhistory.FieldSSOEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaSupported(); ok {
+		_spec.SetField(entityhistory.FieldMfaSupported, field.TypeBool, value)
+	}
+	if _u.mutation.MfaSupportedCleared() {
+		_spec.ClearField(entityhistory.FieldMfaSupported, field.TypeBool)
+	}
+	if value, ok := _u.mutation.MfaEnforced(); ok {
+		_spec.SetField(entityhistory.FieldMfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.MfaEnforcedCleared() {
+		_spec.ClearField(entityhistory.FieldMfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.StatusPageURL(); ok {
+		_spec.SetField(entityhistory.FieldStatusPageURL, field.TypeString, value)
+	}
+	if _u.mutation.StatusPageURLCleared() {
+		_spec.ClearField(entityhistory.FieldStatusPageURL, field.TypeString)
+	}
+	if value, ok := _u.mutation.ProvidedServices(); ok {
+		_spec.SetField(entityhistory.FieldProvidedServices, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedProvidedServices(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldProvidedServices, value)
+		})
+	}
+	if _u.mutation.ProvidedServicesCleared() {
+		_spec.ClearField(entityhistory.FieldProvidedServices, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Links(); ok {
+		_spec.SetField(entityhistory.FieldLinks, field.TypeJSON, value)
+	}
+	if value, ok := _u.mutation.AppendedLinks(); ok {
+		_spec.AddModifier(func(u *sql.UpdateBuilder) {
+			sqljson.Append(u, entityhistory.FieldLinks, value)
+		})
+	}
+	if _u.mutation.LinksCleared() {
+		_spec.ClearField(entityhistory.FieldLinks, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RiskRating(); ok {
+		_spec.SetField(entityhistory.FieldRiskRating, field.TypeString, value)
+	}
+	if _u.mutation.RiskRatingCleared() {
+		_spec.ClearField(entityhistory.FieldRiskRating, field.TypeString)
+	}
+	if value, ok := _u.mutation.RiskScore(); ok {
+		_spec.SetField(entityhistory.FieldRiskScore, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedRiskScore(); ok {
+		_spec.AddField(entityhistory.FieldRiskScore, field.TypeInt, value)
+	}
+	if _u.mutation.RiskScoreCleared() {
+		_spec.ClearField(entityhistory.FieldRiskScore, field.TypeInt)
+	}
+	if value, ok := _u.mutation.Tier(); ok {
+		_spec.SetField(entityhistory.FieldTier, field.TypeString, value)
+	}
+	if _u.mutation.TierCleared() {
+		_spec.ClearField(entityhistory.FieldTier, field.TypeString)
+	}
+	if value, ok := _u.mutation.ReviewFrequency(); ok {
+		_spec.SetField(entityhistory.FieldReviewFrequency, field.TypeEnum, value)
+	}
+	if _u.mutation.ReviewFrequencyCleared() {
+		_spec.ClearField(entityhistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.NextReviewAt(); ok {
+		_spec.SetField(entityhistory.FieldNextReviewAt, field.TypeTime, value)
+	}
+	if _u.mutation.NextReviewAtCleared() {
+		_spec.ClearField(entityhistory.FieldNextReviewAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ContractRenewalAt(); ok {
+		_spec.SetField(entityhistory.FieldContractRenewalAt, field.TypeTime, value)
+	}
+	if _u.mutation.ContractRenewalAtCleared() {
+		_spec.ClearField(entityhistory.FieldContractRenewalAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.VendorMetadata(); ok {
+		_spec.SetField(entityhistory.FieldVendorMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.VendorMetadataCleared() {
+		_spec.ClearField(entityhistory.FieldVendorMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.EntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

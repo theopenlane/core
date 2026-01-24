@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -125,6 +126,86 @@ func (_u *DocumentDataUpdate) ClearTags() *DocumentDataUpdate {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DocumentDataUpdate) SetEnvironmentName(v string) *DocumentDataUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DocumentDataUpdate) SetNillableEnvironmentName(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DocumentDataUpdate) ClearEnvironmentName() *DocumentDataUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DocumentDataUpdate) SetEnvironmentID(v string) *DocumentDataUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DocumentDataUpdate) SetNillableEnvironmentID(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DocumentDataUpdate) ClearEnvironmentID() *DocumentDataUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DocumentDataUpdate) SetScopeName(v string) *DocumentDataUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DocumentDataUpdate) SetNillableScopeName(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DocumentDataUpdate) ClearScopeName() *DocumentDataUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DocumentDataUpdate) SetScopeID(v string) *DocumentDataUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DocumentDataUpdate) SetNillableScopeID(v *string) *DocumentDataUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DocumentDataUpdate) ClearScopeID() *DocumentDataUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_u *DocumentDataUpdate) SetTemplateID(v string) *DocumentDataUpdate {
 	_u.mutation.SetTemplateID(v)
@@ -149,6 +230,16 @@ func (_u *DocumentDataUpdate) ClearTemplateID() *DocumentDataUpdate {
 func (_u *DocumentDataUpdate) SetData(v map[string]interface{}) *DocumentDataUpdate {
 	_u.mutation.SetData(v)
 	return _u
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdate) SetEnvironment(v *CustomTypeEnum) *DocumentDataUpdate {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdate) SetScope(v *CustomTypeEnum) *DocumentDataUpdate {
+	return _u.SetScopeID(v.ID)
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
@@ -189,6 +280,18 @@ func (_u *DocumentDataUpdate) AddFiles(v ...*File) *DocumentDataUpdate {
 // Mutation returns the DocumentDataMutation object of the builder.
 func (_u *DocumentDataUpdate) Mutation() *DocumentDataMutation {
 	return _u.mutation
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdate) ClearEnvironment() *DocumentDataUpdate {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdate) ClearScope() *DocumentDataUpdate {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearTemplate clears the "template" edge to the Template entity.
@@ -337,8 +440,82 @@ func (_u *DocumentDataUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(documentdata.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(documentdata.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(documentdata.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(documentdata.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.EnvironmentTable,
+			Columns: []string{documentdata.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.EnvironmentTable,
+			Columns: []string{documentdata.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.ScopeTable,
+			Columns: []string{documentdata.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.ScopeTable,
+			Columns: []string{documentdata.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -581,6 +758,86 @@ func (_u *DocumentDataUpdateOne) ClearTags() *DocumentDataUpdateOne {
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DocumentDataUpdateOne) SetEnvironmentName(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DocumentDataUpdateOne) SetNillableEnvironmentName(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DocumentDataUpdateOne) ClearEnvironmentName() *DocumentDataUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DocumentDataUpdateOne) SetEnvironmentID(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DocumentDataUpdateOne) SetNillableEnvironmentID(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DocumentDataUpdateOne) ClearEnvironmentID() *DocumentDataUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DocumentDataUpdateOne) SetScopeName(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DocumentDataUpdateOne) SetNillableScopeName(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DocumentDataUpdateOne) ClearScopeName() *DocumentDataUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DocumentDataUpdateOne) SetScopeID(v string) *DocumentDataUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DocumentDataUpdateOne) SetNillableScopeID(v *string) *DocumentDataUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DocumentDataUpdateOne) ClearScopeID() *DocumentDataUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_u *DocumentDataUpdateOne) SetTemplateID(v string) *DocumentDataUpdateOne {
 	_u.mutation.SetTemplateID(v)
@@ -605,6 +862,16 @@ func (_u *DocumentDataUpdateOne) ClearTemplateID() *DocumentDataUpdateOne {
 func (_u *DocumentDataUpdateOne) SetData(v map[string]interface{}) *DocumentDataUpdateOne {
 	_u.mutation.SetData(v)
 	return _u
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdateOne) SetEnvironment(v *CustomTypeEnum) *DocumentDataUpdateOne {
+	return _u.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdateOne) SetScope(v *CustomTypeEnum) *DocumentDataUpdateOne {
+	return _u.SetScopeID(v.ID)
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
@@ -645,6 +912,18 @@ func (_u *DocumentDataUpdateOne) AddFiles(v ...*File) *DocumentDataUpdateOne {
 // Mutation returns the DocumentDataMutation object of the builder.
 func (_u *DocumentDataUpdateOne) Mutation() *DocumentDataMutation {
 	return _u.mutation
+}
+
+// ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdateOne) ClearEnvironment() *DocumentDataUpdateOne {
+	_u.mutation.ClearEnvironment()
+	return _u
+}
+
+// ClearScope clears the "scope" edge to the CustomTypeEnum entity.
+func (_u *DocumentDataUpdateOne) ClearScope() *DocumentDataUpdateOne {
+	_u.mutation.ClearScope()
+	return _u
 }
 
 // ClearTemplate clears the "template" edge to the Template entity.
@@ -823,8 +1102,82 @@ func (_u *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *DocumentDa
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(documentdata.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(documentdata.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(documentdata.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(documentdata.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(documentdata.FieldScopeName, field.TypeString)
+	}
 	if value, ok := _u.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.EnvironmentTable,
+			Columns: []string{documentdata.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.EnvironmentTable,
+			Columns: []string{documentdata.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ScopeCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.ScopeTable,
+			Columns: []string{documentdata.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.ScopeTable,
+			Columns: []string{documentdata.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{

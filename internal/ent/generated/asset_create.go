@@ -11,12 +11,17 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // AssetCreate is the builder for creating a Asset entity.
@@ -130,6 +135,272 @@ func (_c *AssetCreate) SetNillableOwnerID(v *string) *AssetCreate {
 	return _c
 }
 
+// SetInternalOwner sets the "internal_owner" field.
+func (_c *AssetCreate) SetInternalOwner(v string) *AssetCreate {
+	_c.mutation.SetInternalOwner(v)
+	return _c
+}
+
+// SetNillableInternalOwner sets the "internal_owner" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableInternalOwner(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetInternalOwner(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerUserID sets the "internal_owner_user_id" field.
+func (_c *AssetCreate) SetInternalOwnerUserID(v string) *AssetCreate {
+	_c.mutation.SetInternalOwnerUserID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerUserID sets the "internal_owner_user_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableInternalOwnerUserID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetInternalOwnerUserID(*v)
+	}
+	return _c
+}
+
+// SetInternalOwnerGroupID sets the "internal_owner_group_id" field.
+func (_c *AssetCreate) SetInternalOwnerGroupID(v string) *AssetCreate {
+	_c.mutation.SetInternalOwnerGroupID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerGroupID sets the "internal_owner_group_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableInternalOwnerGroupID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetInternalOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssetSubtypeName sets the "asset_subtype_name" field.
+func (_c *AssetCreate) SetAssetSubtypeName(v string) *AssetCreate {
+	_c.mutation.SetAssetSubtypeName(v)
+	return _c
+}
+
+// SetNillableAssetSubtypeName sets the "asset_subtype_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableAssetSubtypeName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetAssetSubtypeName(*v)
+	}
+	return _c
+}
+
+// SetAssetSubtypeID sets the "asset_subtype_id" field.
+func (_c *AssetCreate) SetAssetSubtypeID(v string) *AssetCreate {
+	_c.mutation.SetAssetSubtypeID(v)
+	return _c
+}
+
+// SetNillableAssetSubtypeID sets the "asset_subtype_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableAssetSubtypeID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetAssetSubtypeID(*v)
+	}
+	return _c
+}
+
+// SetAssetDataClassificationName sets the "asset_data_classification_name" field.
+func (_c *AssetCreate) SetAssetDataClassificationName(v string) *AssetCreate {
+	_c.mutation.SetAssetDataClassificationName(v)
+	return _c
+}
+
+// SetNillableAssetDataClassificationName sets the "asset_data_classification_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableAssetDataClassificationName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetAssetDataClassificationName(*v)
+	}
+	return _c
+}
+
+// SetAssetDataClassificationID sets the "asset_data_classification_id" field.
+func (_c *AssetCreate) SetAssetDataClassificationID(v string) *AssetCreate {
+	_c.mutation.SetAssetDataClassificationID(v)
+	return _c
+}
+
+// SetNillableAssetDataClassificationID sets the "asset_data_classification_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableAssetDataClassificationID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetAssetDataClassificationID(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *AssetCreate) SetEnvironmentName(v string) *AssetCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableEnvironmentName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *AssetCreate) SetEnvironmentID(v string) *AssetCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableEnvironmentID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *AssetCreate) SetScopeName(v string) *AssetCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableScopeName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *AssetCreate) SetScopeID(v string) *AssetCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableScopeID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
+// SetAccessModelName sets the "access_model_name" field.
+func (_c *AssetCreate) SetAccessModelName(v string) *AssetCreate {
+	_c.mutation.SetAccessModelName(v)
+	return _c
+}
+
+// SetNillableAccessModelName sets the "access_model_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableAccessModelName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetAccessModelName(*v)
+	}
+	return _c
+}
+
+// SetAccessModelID sets the "access_model_id" field.
+func (_c *AssetCreate) SetAccessModelID(v string) *AssetCreate {
+	_c.mutation.SetAccessModelID(v)
+	return _c
+}
+
+// SetNillableAccessModelID sets the "access_model_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableAccessModelID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetAccessModelID(*v)
+	}
+	return _c
+}
+
+// SetEncryptionStatusName sets the "encryption_status_name" field.
+func (_c *AssetCreate) SetEncryptionStatusName(v string) *AssetCreate {
+	_c.mutation.SetEncryptionStatusName(v)
+	return _c
+}
+
+// SetNillableEncryptionStatusName sets the "encryption_status_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableEncryptionStatusName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetEncryptionStatusName(*v)
+	}
+	return _c
+}
+
+// SetEncryptionStatusID sets the "encryption_status_id" field.
+func (_c *AssetCreate) SetEncryptionStatusID(v string) *AssetCreate {
+	_c.mutation.SetEncryptionStatusID(v)
+	return _c
+}
+
+// SetNillableEncryptionStatusID sets the "encryption_status_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableEncryptionStatusID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetEncryptionStatusID(*v)
+	}
+	return _c
+}
+
+// SetSecurityTierName sets the "security_tier_name" field.
+func (_c *AssetCreate) SetSecurityTierName(v string) *AssetCreate {
+	_c.mutation.SetSecurityTierName(v)
+	return _c
+}
+
+// SetNillableSecurityTierName sets the "security_tier_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSecurityTierName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetSecurityTierName(*v)
+	}
+	return _c
+}
+
+// SetSecurityTierID sets the "security_tier_id" field.
+func (_c *AssetCreate) SetSecurityTierID(v string) *AssetCreate {
+	_c.mutation.SetSecurityTierID(v)
+	return _c
+}
+
+// SetNillableSecurityTierID sets the "security_tier_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSecurityTierID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetSecurityTierID(*v)
+	}
+	return _c
+}
+
+// SetCriticalityName sets the "criticality_name" field.
+func (_c *AssetCreate) SetCriticalityName(v string) *AssetCreate {
+	_c.mutation.SetCriticalityName(v)
+	return _c
+}
+
+// SetNillableCriticalityName sets the "criticality_name" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableCriticalityName(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetCriticalityName(*v)
+	}
+	return _c
+}
+
+// SetCriticalityID sets the "criticality_id" field.
+func (_c *AssetCreate) SetCriticalityID(v string) *AssetCreate {
+	_c.mutation.SetCriticalityID(v)
+	return _c
+}
+
+// SetNillableCriticalityID sets the "criticality_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableCriticalityID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetCriticalityID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *AssetCreate) SetSystemOwned(v bool) *AssetCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -234,6 +505,132 @@ func (_c *AssetCreate) SetNillableWebsite(v *string) *AssetCreate {
 	return _c
 }
 
+// SetPhysicalLocation sets the "physical_location" field.
+func (_c *AssetCreate) SetPhysicalLocation(v string) *AssetCreate {
+	_c.mutation.SetPhysicalLocation(v)
+	return _c
+}
+
+// SetNillablePhysicalLocation sets the "physical_location" field if the given value is not nil.
+func (_c *AssetCreate) SetNillablePhysicalLocation(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetPhysicalLocation(*v)
+	}
+	return _c
+}
+
+// SetRegion sets the "region" field.
+func (_c *AssetCreate) SetRegion(v string) *AssetCreate {
+	_c.mutation.SetRegion(v)
+	return _c
+}
+
+// SetNillableRegion sets the "region" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableRegion(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetRegion(*v)
+	}
+	return _c
+}
+
+// SetContainsPii sets the "contains_pii" field.
+func (_c *AssetCreate) SetContainsPii(v bool) *AssetCreate {
+	_c.mutation.SetContainsPii(v)
+	return _c
+}
+
+// SetNillableContainsPii sets the "contains_pii" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableContainsPii(v *bool) *AssetCreate {
+	if v != nil {
+		_c.SetContainsPii(*v)
+	}
+	return _c
+}
+
+// SetSourceType sets the "source_type" field.
+func (_c *AssetCreate) SetSourceType(v enums.SourceType) *AssetCreate {
+	_c.mutation.SetSourceType(v)
+	return _c
+}
+
+// SetNillableSourceType sets the "source_type" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSourceType(v *enums.SourceType) *AssetCreate {
+	if v != nil {
+		_c.SetSourceType(*v)
+	}
+	return _c
+}
+
+// SetSourcePlatformID sets the "source_platform_id" field.
+func (_c *AssetCreate) SetSourcePlatformID(v string) *AssetCreate {
+	_c.mutation.SetSourcePlatformID(v)
+	return _c
+}
+
+// SetNillableSourcePlatformID sets the "source_platform_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSourcePlatformID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetSourcePlatformID(*v)
+	}
+	return _c
+}
+
+// SetSourceIdentifier sets the "source_identifier" field.
+func (_c *AssetCreate) SetSourceIdentifier(v string) *AssetCreate {
+	_c.mutation.SetSourceIdentifier(v)
+	return _c
+}
+
+// SetNillableSourceIdentifier sets the "source_identifier" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableSourceIdentifier(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetSourceIdentifier(*v)
+	}
+	return _c
+}
+
+// SetCostCenter sets the "cost_center" field.
+func (_c *AssetCreate) SetCostCenter(v string) *AssetCreate {
+	_c.mutation.SetCostCenter(v)
+	return _c
+}
+
+// SetNillableCostCenter sets the "cost_center" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableCostCenter(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetCostCenter(*v)
+	}
+	return _c
+}
+
+// SetEstimatedMonthlyCost sets the "estimated_monthly_cost" field.
+func (_c *AssetCreate) SetEstimatedMonthlyCost(v float64) *AssetCreate {
+	_c.mutation.SetEstimatedMonthlyCost(v)
+	return _c
+}
+
+// SetNillableEstimatedMonthlyCost sets the "estimated_monthly_cost" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableEstimatedMonthlyCost(v *float64) *AssetCreate {
+	if v != nil {
+		_c.SetEstimatedMonthlyCost(*v)
+	}
+	return _c
+}
+
+// SetPurchaseDate sets the "purchase_date" field.
+func (_c *AssetCreate) SetPurchaseDate(v models.DateTime) *AssetCreate {
+	_c.mutation.SetPurchaseDate(v)
+	return _c
+}
+
+// SetNillablePurchaseDate sets the "purchase_date" field if the given value is not nil.
+func (_c *AssetCreate) SetNillablePurchaseDate(v *models.DateTime) *AssetCreate {
+	if v != nil {
+		_c.SetPurchaseDate(*v)
+	}
+	return _c
+}
+
 // SetCpe sets the "cpe" field.
 func (_c *AssetCreate) SetCpe(v string) *AssetCreate {
 	_c.mutation.SetCpe(v)
@@ -318,6 +715,56 @@ func (_c *AssetCreate) AddViewers(v ...*Group) *AssetCreate {
 	return _c.AddViewerIDs(ids...)
 }
 
+// SetInternalOwnerUser sets the "internal_owner_user" edge to the User entity.
+func (_c *AssetCreate) SetInternalOwnerUser(v *User) *AssetCreate {
+	return _c.SetInternalOwnerUserID(v.ID)
+}
+
+// SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
+func (_c *AssetCreate) SetInternalOwnerGroup(v *Group) *AssetCreate {
+	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetAssetSubtype(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetAssetSubtypeID(v.ID)
+}
+
+// SetAssetDataClassification sets the "asset_data_classification" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetAssetDataClassification(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetAssetDataClassificationID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetEnvironment(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetScope(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetScopeID(v.ID)
+}
+
+// SetAccessModel sets the "access_model" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetAccessModel(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetAccessModelID(v.ID)
+}
+
+// SetEncryptionStatus sets the "encryption_status" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetEncryptionStatus(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetEncryptionStatusID(v.ID)
+}
+
+// SetSecurityTier sets the "security_tier" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetSecurityTier(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetSecurityTierID(v.ID)
+}
+
+// SetCriticality sets the "criticality" edge to the CustomTypeEnum entity.
+func (_c *AssetCreate) SetCriticality(v *CustomTypeEnum) *AssetCreate {
+	return _c.SetCriticalityID(v.ID)
+}
+
 // AddScanIDs adds the "scans" edge to the Scan entity by IDs.
 func (_c *AssetCreate) AddScanIDs(ids ...string) *AssetCreate {
 	_c.mutation.AddScanIDs(ids...)
@@ -348,6 +795,51 @@ func (_c *AssetCreate) AddEntities(v ...*Entity) *AssetCreate {
 	return _c.AddEntityIDs(ids...)
 }
 
+// AddPlatformIDs adds the "platforms" edge to the Platform entity by IDs.
+func (_c *AssetCreate) AddPlatformIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddPlatformIDs(ids...)
+	return _c
+}
+
+// AddPlatforms adds the "platforms" edges to the Platform entity.
+func (_c *AssetCreate) AddPlatforms(v ...*Platform) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPlatformIDs(ids...)
+}
+
+// AddOutOfScopePlatformIDs adds the "out_of_scope_platforms" edge to the Platform entity by IDs.
+func (_c *AssetCreate) AddOutOfScopePlatformIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddOutOfScopePlatformIDs(ids...)
+	return _c
+}
+
+// AddOutOfScopePlatforms adds the "out_of_scope_platforms" edges to the Platform entity.
+func (_c *AssetCreate) AddOutOfScopePlatforms(v ...*Platform) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddOutOfScopePlatformIDs(ids...)
+}
+
+// AddIdentityHolderIDs adds the "identity_holders" edge to the IdentityHolder entity by IDs.
+func (_c *AssetCreate) AddIdentityHolderIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddIdentityHolderIDs(ids...)
+	return _c
+}
+
+// AddIdentityHolders adds the "identity_holders" edges to the IdentityHolder entity.
+func (_c *AssetCreate) AddIdentityHolders(v ...*IdentityHolder) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIdentityHolderIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_c *AssetCreate) AddControlIDs(ids ...string) *AssetCreate {
 	_c.mutation.AddControlIDs(ids...)
@@ -361,6 +853,41 @@ func (_c *AssetCreate) AddControls(v ...*Control) *AssetCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddControlIDs(ids...)
+}
+
+// SetSourcePlatform sets the "source_platform" edge to the Platform entity.
+func (_c *AssetCreate) SetSourcePlatform(v *Platform) *AssetCreate {
+	return _c.SetSourcePlatformID(v.ID)
+}
+
+// AddConnectedAssetIDs adds the "connected_assets" edge to the Asset entity by IDs.
+func (_c *AssetCreate) AddConnectedAssetIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddConnectedAssetIDs(ids...)
+	return _c
+}
+
+// AddConnectedAssets adds the "connected_assets" edges to the Asset entity.
+func (_c *AssetCreate) AddConnectedAssets(v ...*Asset) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddConnectedAssetIDs(ids...)
+}
+
+// AddConnectedFromIDs adds the "connected_from" edge to the Asset entity by IDs.
+func (_c *AssetCreate) AddConnectedFromIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddConnectedFromIDs(ids...)
+	return _c
+}
+
+// AddConnectedFrom adds the "connected_from" edges to the Asset entity.
+func (_c *AssetCreate) AddConnectedFrom(v ...*Asset) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddConnectedFromIDs(ids...)
 }
 
 // Mutation returns the AssetMutation object of the builder.
@@ -426,6 +953,14 @@ func (_c *AssetCreate) defaults() error {
 		v := asset.DefaultAssetType
 		_c.mutation.SetAssetType(v)
 	}
+	if _, ok := _c.mutation.ContainsPii(); !ok {
+		v := asset.DefaultContainsPii
+		_c.mutation.SetContainsPii(v)
+	}
+	if _, ok := _c.mutation.SourceType(); !ok {
+		v := asset.DefaultSourceType
+		_c.mutation.SetSourceType(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if asset.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized asset.DefaultID (forgotten import generated/runtime?)")
@@ -457,6 +992,14 @@ func (_c *AssetCreate) check() error {
 	if v, ok := _c.mutation.Name(); ok {
 		if err := asset.NameValidator(v); err != nil {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Asset.name": %w`, err)}
+		}
+	}
+	if _, ok := _c.mutation.SourceType(); !ok {
+		return &ValidationError{Name: "source_type", err: errors.New(`generated: missing required field "Asset.source_type"`)}
+	}
+	if v, ok := _c.mutation.SourceType(); ok {
+		if err := asset.SourceTypeValidator(v); err != nil {
+			return &ValidationError{Name: "source_type", err: fmt.Errorf(`generated: validator failed for field "Asset.source_type": %w`, err)}
 		}
 	}
 	return nil
@@ -523,6 +1066,42 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 		_spec.SetField(asset.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.InternalOwner(); ok {
+		_spec.SetField(asset.FieldInternalOwner, field.TypeString, value)
+		_node.InternalOwner = value
+	}
+	if value, ok := _c.mutation.AssetSubtypeName(); ok {
+		_spec.SetField(asset.FieldAssetSubtypeName, field.TypeString, value)
+		_node.AssetSubtypeName = value
+	}
+	if value, ok := _c.mutation.AssetDataClassificationName(); ok {
+		_spec.SetField(asset.FieldAssetDataClassificationName, field.TypeString, value)
+		_node.AssetDataClassificationName = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(asset.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(asset.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.AccessModelName(); ok {
+		_spec.SetField(asset.FieldAccessModelName, field.TypeString, value)
+		_node.AccessModelName = value
+	}
+	if value, ok := _c.mutation.EncryptionStatusName(); ok {
+		_spec.SetField(asset.FieldEncryptionStatusName, field.TypeString, value)
+		_node.EncryptionStatusName = value
+	}
+	if value, ok := _c.mutation.SecurityTierName(); ok {
+		_spec.SetField(asset.FieldSecurityTierName, field.TypeString, value)
+		_node.SecurityTierName = value
+	}
+	if value, ok := _c.mutation.CriticalityName(); ok {
+		_spec.SetField(asset.FieldCriticalityName, field.TypeString, value)
+		_node.CriticalityName = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(asset.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -554,6 +1133,38 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Website(); ok {
 		_spec.SetField(asset.FieldWebsite, field.TypeString, value)
 		_node.Website = value
+	}
+	if value, ok := _c.mutation.PhysicalLocation(); ok {
+		_spec.SetField(asset.FieldPhysicalLocation, field.TypeString, value)
+		_node.PhysicalLocation = value
+	}
+	if value, ok := _c.mutation.Region(); ok {
+		_spec.SetField(asset.FieldRegion, field.TypeString, value)
+		_node.Region = value
+	}
+	if value, ok := _c.mutation.ContainsPii(); ok {
+		_spec.SetField(asset.FieldContainsPii, field.TypeBool, value)
+		_node.ContainsPii = value
+	}
+	if value, ok := _c.mutation.SourceType(); ok {
+		_spec.SetField(asset.FieldSourceType, field.TypeEnum, value)
+		_node.SourceType = value
+	}
+	if value, ok := _c.mutation.SourceIdentifier(); ok {
+		_spec.SetField(asset.FieldSourceIdentifier, field.TypeString, value)
+		_node.SourceIdentifier = value
+	}
+	if value, ok := _c.mutation.CostCenter(); ok {
+		_spec.SetField(asset.FieldCostCenter, field.TypeString, value)
+		_node.CostCenter = value
+	}
+	if value, ok := _c.mutation.EstimatedMonthlyCost(); ok {
+		_spec.SetField(asset.FieldEstimatedMonthlyCost, field.TypeFloat64, value)
+		_node.EstimatedMonthlyCost = value
+	}
+	if value, ok := _c.mutation.PurchaseDate(); ok {
+		_spec.SetField(asset.FieldPurchaseDate, field.TypeTime, value)
+		_node.PurchaseDate = &value
 	}
 	if value, ok := _c.mutation.Cpe(); ok {
 		_spec.SetField(asset.FieldCpe, field.TypeString, value)
@@ -632,6 +1243,186 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerUserTable,
+			Columns: []string{asset.InternalOwnerUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerGroupTable,
+			Columns: []string{asset.InternalOwnerGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssetSubtypeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetSubtypeTable,
+			Columns: []string{asset.AssetSubtypeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssetSubtypeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssetDataClassificationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AssetDataClassificationTable,
+			Columns: []string{asset.AssetDataClassificationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssetDataClassificationID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EnvironmentTable,
+			Columns: []string{asset.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.ScopeTable,
+			Columns: []string{asset.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AccessModelIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.AccessModelTable,
+			Columns: []string{asset.AccessModelColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AccessModelID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EncryptionStatusIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.EncryptionStatusTable,
+			Columns: []string{asset.EncryptionStatusColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EncryptionStatusID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SecurityTierIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.SecurityTierTable,
+			Columns: []string{asset.SecurityTierColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SecurityTierID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.CriticalityIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.CriticalityTable,
+			Columns: []string{asset.CriticalityColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.CriticalityID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -666,6 +1457,57 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.PlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.PlatformsTable,
+			Columns: asset.PlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.OutOfScopePlatformsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.OutOfScopePlatformsTable,
+			Columns: asset.OutOfScopePlatformsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.PlatformOutOfScopeAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IdentityHoldersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.IdentityHoldersTable,
+			Columns: asset.IdentityHoldersPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IdentityHolderAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -678,6 +1520,58 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ControlAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SourcePlatformIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   asset.SourcePlatformTable,
+			Columns: []string{asset.SourcePlatformColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SourcePlatformID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ConnectedAssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   asset.ConnectedAssetsTable,
+			Columns: asset.ConnectedAssetsPrimaryKey,
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssetConnectedAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ConnectedFromIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ConnectedFromTable,
+			Columns: asset.ConnectedFromPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssetConnectedAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

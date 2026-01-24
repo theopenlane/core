@@ -72,6 +72,14 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_taskKindName(ctx, field)
 			case "taskKindID":
 				return ec.fieldContext_Task_taskKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Task_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Task_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Task_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Task_scopeID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -100,6 +108,10 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
 				return ec.fieldContext_Task_taskKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Task_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Task_scope(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -122,6 +134,12 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_Task_risks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Task_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Task_scans(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Task_identityHolders(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
 			case "actionPlans":
@@ -214,6 +232,14 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_taskKindName(ctx, field)
 			case "taskKindID":
 				return ec.fieldContext_Task_taskKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Task_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Task_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Task_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Task_scopeID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -242,6 +268,10 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
 				return ec.fieldContext_Task_taskKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Task_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Task_scope(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -264,6 +294,12 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_Task_risks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Task_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Task_scans(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Task_identityHolders(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
 			case "actionPlans":
@@ -356,6 +392,14 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_taskKindName(ctx, field)
 			case "taskKindID":
 				return ec.fieldContext_Task_taskKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Task_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Task_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Task_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Task_scopeID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -384,6 +428,10 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
 				return ec.fieldContext_Task_taskKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Task_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Task_scope(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -406,6 +454,12 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_Task_risks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Task_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Task_scans(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Task_identityHolders(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
 			case "actionPlans":
@@ -498,6 +552,14 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_taskKindName(ctx, field)
 			case "taskKindID":
 				return ec.fieldContext_Task_taskKindID(ctx, field)
+			case "environmentName":
+				return ec.fieldContext_Task_environmentName(ctx, field)
+			case "environmentID":
+				return ec.fieldContext_Task_environmentID(ctx, field)
+			case "scopeName":
+				return ec.fieldContext_Task_scopeName(ctx, field)
+			case "scopeID":
+				return ec.fieldContext_Task_scopeID(ctx, field)
 			case "title":
 				return ec.fieldContext_Task_title(ctx, field)
 			case "details":
@@ -526,6 +588,10 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_owner(ctx, field)
 			case "taskKind":
 				return ec.fieldContext_Task_taskKind(ctx, field)
+			case "environment":
+				return ec.fieldContext_Task_environment(ctx, field)
+			case "scope":
+				return ec.fieldContext_Task_scope(ctx, field)
 			case "assigner":
 				return ec.fieldContext_Task_assigner(ctx, field)
 			case "assignee":
@@ -548,6 +614,12 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_programs(ctx, field)
 			case "risks":
 				return ec.fieldContext_Task_risks(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Task_platforms(ctx, field)
+			case "scans":
+				return ec.fieldContext_Task_scans(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Task_identityHolders(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
 			case "actionPlans":

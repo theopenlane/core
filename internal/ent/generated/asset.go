@@ -11,8 +11,13 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Asset is the model entity for the Asset schema.
@@ -36,6 +41,44 @@ type Asset struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// the internal owner for the asset when no user or group is linked
+	InternalOwner string `json:"internal_owner,omitempty"`
+	// the internal owner user id for the asset
+	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
+	// the internal owner group id for the asset
+	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the subtype of the asset
+	AssetSubtypeName string `json:"asset_subtype_name,omitempty"`
+	// the subtype of the asset
+	AssetSubtypeID string `json:"asset_subtype_id,omitempty"`
+	// the data_classification of the asset
+	AssetDataClassificationName string `json:"asset_data_classification_name,omitempty"`
+	// the data_classification of the asset
+	AssetDataClassificationID string `json:"asset_data_classification_id,omitempty"`
+	// the environment of the asset
+	EnvironmentName string `json:"environment_name,omitempty"`
+	// the environment of the asset
+	EnvironmentID string `json:"environment_id,omitempty"`
+	// the scope of the asset
+	ScopeName string `json:"scope_name,omitempty"`
+	// the scope of the asset
+	ScopeID string `json:"scope_id,omitempty"`
+	// the access_model of the asset
+	AccessModelName string `json:"access_model_name,omitempty"`
+	// the access_model of the asset
+	AccessModelID string `json:"access_model_id,omitempty"`
+	// the encryption_status of the asset
+	EncryptionStatusName string `json:"encryption_status_name,omitempty"`
+	// the encryption_status of the asset
+	EncryptionStatusID string `json:"encryption_status_id,omitempty"`
+	// the security_tier of the asset
+	SecurityTierName string `json:"security_tier_name,omitempty"`
+	// the security_tier of the asset
+	SecurityTierID string `json:"security_tier_id,omitempty"`
+	// the criticality of the asset
+	CriticalityName string `json:"criticality_name,omitempty"`
+	// the criticality of the asset
+	CriticalityID string `json:"criticality_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -52,6 +95,24 @@ type Asset struct {
 	Identifier string `json:"identifier,omitempty"`
 	// the website of the asset, if applicable
 	Website string `json:"website,omitempty"`
+	// physical location of the asset, if applicable
+	PhysicalLocation string `json:"physical_location,omitempty"`
+	// the region where the asset operates or is hosted
+	Region string `json:"region,omitempty"`
+	// whether the asset stores or processes PII
+	ContainsPii bool `json:"contains_pii,omitempty"`
+	// the source of the asset record, e.g., manual, discovered, imported, api
+	SourceType enums.SourceType `json:"source_type,omitempty"`
+	// the platform that sourced the asset record
+	SourcePlatformID string `json:"source_platform_id,omitempty"`
+	// the identifier used by the source platform for the asset
+	SourceIdentifier string `json:"source_identifier,omitempty"`
+	// cost center associated with the asset
+	CostCenter string `json:"cost_center,omitempty"`
+	// estimated monthly cost for the asset
+	EstimatedMonthlyCost float64 `json:"estimated_monthly_cost,omitempty"`
+	// purchase date for the asset
+	PurchaseDate *models.DateTime `json:"purchase_date,omitempty"`
 	// the CPE (Common Platform Enumeration) of the asset, if applicable
 	Cpe string `json:"cpe,omitempty"`
 	// the categories of the asset, e.g. web server, database, etc
@@ -77,24 +138,61 @@ type AssetEdges struct {
 	Editors []*Group `json:"editors,omitempty"`
 	// provides view access to the risk to members of the group
 	Viewers []*Group `json:"viewers,omitempty"`
+	// InternalOwnerUser holds the value of the internal_owner_user edge.
+	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
+	// InternalOwnerGroup holds the value of the internal_owner_group edge.
+	InternalOwnerGroup *Group `json:"internal_owner_group,omitempty"`
+	// AssetSubtype holds the value of the asset_subtype edge.
+	AssetSubtype *CustomTypeEnum `json:"asset_subtype,omitempty"`
+	// AssetDataClassification holds the value of the asset_data_classification edge.
+	AssetDataClassification *CustomTypeEnum `json:"asset_data_classification,omitempty"`
+	// Environment holds the value of the environment edge.
+	Environment *CustomTypeEnum `json:"environment,omitempty"`
+	// Scope holds the value of the scope edge.
+	Scope *CustomTypeEnum `json:"scope,omitempty"`
+	// AccessModel holds the value of the access_model edge.
+	AccessModel *CustomTypeEnum `json:"access_model,omitempty"`
+	// EncryptionStatus holds the value of the encryption_status edge.
+	EncryptionStatus *CustomTypeEnum `json:"encryption_status,omitempty"`
+	// SecurityTier holds the value of the security_tier edge.
+	SecurityTier *CustomTypeEnum `json:"security_tier,omitempty"`
+	// Criticality holds the value of the criticality edge.
+	Criticality *CustomTypeEnum `json:"criticality,omitempty"`
 	// Scans holds the value of the scans edge.
 	Scans []*Scan `json:"scans,omitempty"`
 	// Entities holds the value of the entities edge.
 	Entities []*Entity `json:"entities,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// OutOfScopePlatforms holds the value of the out_of_scope_platforms edge.
+	OutOfScopePlatforms []*Platform `json:"out_of_scope_platforms,omitempty"`
+	// IdentityHolders holds the value of the identity_holders edge.
+	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
+	// SourcePlatform holds the value of the source_platform edge.
+	SourcePlatform *Platform `json:"source_platform,omitempty"`
+	// assets that this asset connects to
+	ConnectedAssets []*Asset `json:"connected_assets,omitempty"`
+	// assets that connect to this asset
+	ConnectedFrom []*Asset `json:"connected_from,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [7]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [7]map[string]int
+	totalCount [23]map[string]int
 
-	namedBlockedGroups map[string][]*Group
-	namedEditors       map[string][]*Group
-	namedViewers       map[string][]*Group
-	namedScans         map[string][]*Scan
-	namedEntities      map[string][]*Entity
-	namedControls      map[string][]*Control
+	namedBlockedGroups       map[string][]*Group
+	namedEditors             map[string][]*Group
+	namedViewers             map[string][]*Group
+	namedScans               map[string][]*Scan
+	namedEntities            map[string][]*Entity
+	namedPlatforms           map[string][]*Platform
+	namedOutOfScopePlatforms map[string][]*Platform
+	namedIdentityHolders     map[string][]*IdentityHolder
+	namedControls            map[string][]*Control
+	namedConnectedAssets     map[string][]*Asset
+	namedConnectedFrom       map[string][]*Asset
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -135,10 +233,120 @@ func (e AssetEdges) ViewersOrErr() ([]*Group, error) {
 	return nil, &NotLoadedError{edge: "viewers"}
 }
 
+// InternalOwnerUserOrErr returns the InternalOwnerUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) InternalOwnerUserOrErr() (*User, error) {
+	if e.InternalOwnerUser != nil {
+		return e.InternalOwnerUser, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_user"}
+}
+
+// InternalOwnerGroupOrErr returns the InternalOwnerGroup value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) InternalOwnerGroupOrErr() (*Group, error) {
+	if e.InternalOwnerGroup != nil {
+		return e.InternalOwnerGroup, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: group.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_group"}
+}
+
+// AssetSubtypeOrErr returns the AssetSubtype value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) AssetSubtypeOrErr() (*CustomTypeEnum, error) {
+	if e.AssetSubtype != nil {
+		return e.AssetSubtype, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "asset_subtype"}
+}
+
+// AssetDataClassificationOrErr returns the AssetDataClassification value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) AssetDataClassificationOrErr() (*CustomTypeEnum, error) {
+	if e.AssetDataClassification != nil {
+		return e.AssetDataClassification, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "asset_data_classification"}
+}
+
+// EnvironmentOrErr returns the Environment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
+	if e.Environment != nil {
+		return e.Environment, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "environment"}
+}
+
+// ScopeOrErr returns the Scope value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) ScopeOrErr() (*CustomTypeEnum, error) {
+	if e.Scope != nil {
+		return e.Scope, nil
+	} else if e.loadedTypes[9] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "scope"}
+}
+
+// AccessModelOrErr returns the AccessModel value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) AccessModelOrErr() (*CustomTypeEnum, error) {
+	if e.AccessModel != nil {
+		return e.AccessModel, nil
+	} else if e.loadedTypes[10] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "access_model"}
+}
+
+// EncryptionStatusOrErr returns the EncryptionStatus value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) EncryptionStatusOrErr() (*CustomTypeEnum, error) {
+	if e.EncryptionStatus != nil {
+		return e.EncryptionStatus, nil
+	} else if e.loadedTypes[11] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "encryption_status"}
+}
+
+// SecurityTierOrErr returns the SecurityTier value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) SecurityTierOrErr() (*CustomTypeEnum, error) {
+	if e.SecurityTier != nil {
+		return e.SecurityTier, nil
+	} else if e.loadedTypes[12] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "security_tier"}
+}
+
+// CriticalityOrErr returns the Criticality value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) CriticalityOrErr() (*CustomTypeEnum, error) {
+	if e.Criticality != nil {
+		return e.Criticality, nil
+	} else if e.loadedTypes[13] {
+		return nil, &NotFoundError{label: customtypeenum.Label}
+	}
+	return nil, &NotLoadedError{edge: "criticality"}
+}
+
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[14] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -147,19 +355,75 @@ func (e AssetEdges) ScansOrErr() ([]*Scan, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[15] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
 }
 
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[16] {
+		return e.Platforms, nil
+	}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// OutOfScopePlatformsOrErr returns the OutOfScopePlatforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) OutOfScopePlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[17] {
+		return e.OutOfScopePlatforms, nil
+	}
+	return nil, &NotLoadedError{edge: "out_of_scope_platforms"}
+}
+
+// IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
+	if e.loadedTypes[18] {
+		return e.IdentityHolders, nil
+	}
+	return nil, &NotLoadedError{edge: "identity_holders"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssetEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[19] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// SourcePlatformOrErr returns the SourcePlatform value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssetEdges) SourcePlatformOrErr() (*Platform, error) {
+	if e.SourcePlatform != nil {
+		return e.SourcePlatform, nil
+	} else if e.loadedTypes[20] {
+		return nil, &NotFoundError{label: platform.Label}
+	}
+	return nil, &NotLoadedError{edge: "source_platform"}
+}
+
+// ConnectedAssetsOrErr returns the ConnectedAssets value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) ConnectedAssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[21] {
+		return e.ConnectedAssets, nil
+	}
+	return nil, &NotLoadedError{edge: "connected_assets"}
+}
+
+// ConnectedFromOrErr returns the ConnectedFrom value or an error if the edge
+// was not loaded in eager-loading.
+func (e AssetEdges) ConnectedFromOrErr() ([]*Asset, error) {
+	if e.loadedTypes[22] {
+		return e.ConnectedFrom, nil
+	}
+	return nil, &NotLoadedError{edge: "connected_from"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -167,11 +431,15 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case asset.FieldPurchaseDate:
+			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case asset.FieldTags, asset.FieldCategories:
 			values[i] = new([]byte)
-		case asset.FieldSystemOwned:
+		case asset.FieldSystemOwned, asset.FieldContainsPii:
 			values[i] = new(sql.NullBool)
-		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldCpe:
+		case asset.FieldEstimatedMonthlyCost:
+			values[i] = new(sql.NullFloat64)
+		case asset.FieldID, asset.FieldCreatedBy, asset.FieldUpdatedBy, asset.FieldDeletedBy, asset.FieldOwnerID, asset.FieldInternalOwner, asset.FieldInternalOwnerUserID, asset.FieldInternalOwnerGroupID, asset.FieldAssetSubtypeName, asset.FieldAssetSubtypeID, asset.FieldAssetDataClassificationName, asset.FieldAssetDataClassificationID, asset.FieldEnvironmentName, asset.FieldEnvironmentID, asset.FieldScopeName, asset.FieldScopeID, asset.FieldAccessModelName, asset.FieldAccessModelID, asset.FieldEncryptionStatusName, asset.FieldEncryptionStatusID, asset.FieldSecurityTierName, asset.FieldSecurityTierID, asset.FieldCriticalityName, asset.FieldCriticalityID, asset.FieldInternalNotes, asset.FieldSystemInternalID, asset.FieldAssetType, asset.FieldName, asset.FieldDescription, asset.FieldIdentifier, asset.FieldWebsite, asset.FieldPhysicalLocation, asset.FieldRegion, asset.FieldSourceType, asset.FieldSourcePlatformID, asset.FieldSourceIdentifier, asset.FieldCostCenter, asset.FieldCpe:
 			values[i] = new(sql.NullString)
 		case asset.FieldCreatedAt, asset.FieldUpdatedAt, asset.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -256,6 +524,120 @@ func (_m *Asset) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case asset.FieldInternalOwner:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner", values[i])
+			} else if value.Valid {
+				_m.InternalOwner = value.String
+			}
+		case asset.FieldInternalOwnerUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_user_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerUserID = value.String
+			}
+		case asset.FieldInternalOwnerGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerGroupID = value.String
+			}
+		case asset.FieldAssetSubtypeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_subtype_name", values[i])
+			} else if value.Valid {
+				_m.AssetSubtypeName = value.String
+			}
+		case asset.FieldAssetSubtypeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_subtype_id", values[i])
+			} else if value.Valid {
+				_m.AssetSubtypeID = value.String
+			}
+		case asset.FieldAssetDataClassificationName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_data_classification_name", values[i])
+			} else if value.Valid {
+				_m.AssetDataClassificationName = value.String
+			}
+		case asset.FieldAssetDataClassificationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field asset_data_classification_id", values[i])
+			} else if value.Valid {
+				_m.AssetDataClassificationID = value.String
+			}
+		case asset.FieldEnvironmentName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_name", values[i])
+			} else if value.Valid {
+				_m.EnvironmentName = value.String
+			}
+		case asset.FieldEnvironmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment_id", values[i])
+			} else if value.Valid {
+				_m.EnvironmentID = value.String
+			}
+		case asset.FieldScopeName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_name", values[i])
+			} else if value.Valid {
+				_m.ScopeName = value.String
+			}
+		case asset.FieldScopeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
+			} else if value.Valid {
+				_m.ScopeID = value.String
+			}
+		case asset.FieldAccessModelName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field access_model_name", values[i])
+			} else if value.Valid {
+				_m.AccessModelName = value.String
+			}
+		case asset.FieldAccessModelID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field access_model_id", values[i])
+			} else if value.Valid {
+				_m.AccessModelID = value.String
+			}
+		case asset.FieldEncryptionStatusName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field encryption_status_name", values[i])
+			} else if value.Valid {
+				_m.EncryptionStatusName = value.String
+			}
+		case asset.FieldEncryptionStatusID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field encryption_status_id", values[i])
+			} else if value.Valid {
+				_m.EncryptionStatusID = value.String
+			}
+		case asset.FieldSecurityTierName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_tier_name", values[i])
+			} else if value.Valid {
+				_m.SecurityTierName = value.String
+			}
+		case asset.FieldSecurityTierID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_tier_id", values[i])
+			} else if value.Valid {
+				_m.SecurityTierID = value.String
+			}
+		case asset.FieldCriticalityName:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field criticality_name", values[i])
+			} else if value.Valid {
+				_m.CriticalityName = value.String
+			}
+		case asset.FieldCriticalityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field criticality_id", values[i])
+			} else if value.Valid {
+				_m.CriticalityID = value.String
+			}
 		case asset.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -305,6 +687,61 @@ func (_m *Asset) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field website", values[i])
 			} else if value.Valid {
 				_m.Website = value.String
+			}
+		case asset.FieldPhysicalLocation:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field physical_location", values[i])
+			} else if value.Valid {
+				_m.PhysicalLocation = value.String
+			}
+		case asset.FieldRegion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field region", values[i])
+			} else if value.Valid {
+				_m.Region = value.String
+			}
+		case asset.FieldContainsPii:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field contains_pii", values[i])
+			} else if value.Valid {
+				_m.ContainsPii = value.Bool
+			}
+		case asset.FieldSourceType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_type", values[i])
+			} else if value.Valid {
+				_m.SourceType = enums.SourceType(value.String)
+			}
+		case asset.FieldSourcePlatformID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_platform_id", values[i])
+			} else if value.Valid {
+				_m.SourcePlatformID = value.String
+			}
+		case asset.FieldSourceIdentifier:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_identifier", values[i])
+			} else if value.Valid {
+				_m.SourceIdentifier = value.String
+			}
+		case asset.FieldCostCenter:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field cost_center", values[i])
+			} else if value.Valid {
+				_m.CostCenter = value.String
+			}
+		case asset.FieldEstimatedMonthlyCost:
+			if value, ok := values[i].(*sql.NullFloat64); !ok {
+				return fmt.Errorf("unexpected type %T for field estimated_monthly_cost", values[i])
+			} else if value.Valid {
+				_m.EstimatedMonthlyCost = value.Float64
+			}
+		case asset.FieldPurchaseDate:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field purchase_date", values[i])
+			} else if value.Valid {
+				_m.PurchaseDate = new(models.DateTime)
+				*_m.PurchaseDate = *value.S.(*models.DateTime)
 			}
 		case asset.FieldCpe:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -388,6 +825,56 @@ func (_m *Asset) QueryViewers() *GroupQuery {
 	return NewAssetClient(_m.config).QueryViewers(_m)
 }
 
+// QueryInternalOwnerUser queries the "internal_owner_user" edge of the Asset entity.
+func (_m *Asset) QueryInternalOwnerUser() *UserQuery {
+	return NewAssetClient(_m.config).QueryInternalOwnerUser(_m)
+}
+
+// QueryInternalOwnerGroup queries the "internal_owner_group" edge of the Asset entity.
+func (_m *Asset) QueryInternalOwnerGroup() *GroupQuery {
+	return NewAssetClient(_m.config).QueryInternalOwnerGroup(_m)
+}
+
+// QueryAssetSubtype queries the "asset_subtype" edge of the Asset entity.
+func (_m *Asset) QueryAssetSubtype() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryAssetSubtype(_m)
+}
+
+// QueryAssetDataClassification queries the "asset_data_classification" edge of the Asset entity.
+func (_m *Asset) QueryAssetDataClassification() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryAssetDataClassification(_m)
+}
+
+// QueryEnvironment queries the "environment" edge of the Asset entity.
+func (_m *Asset) QueryEnvironment() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryEnvironment(_m)
+}
+
+// QueryScope queries the "scope" edge of the Asset entity.
+func (_m *Asset) QueryScope() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryScope(_m)
+}
+
+// QueryAccessModel queries the "access_model" edge of the Asset entity.
+func (_m *Asset) QueryAccessModel() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryAccessModel(_m)
+}
+
+// QueryEncryptionStatus queries the "encryption_status" edge of the Asset entity.
+func (_m *Asset) QueryEncryptionStatus() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryEncryptionStatus(_m)
+}
+
+// QuerySecurityTier queries the "security_tier" edge of the Asset entity.
+func (_m *Asset) QuerySecurityTier() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QuerySecurityTier(_m)
+}
+
+// QueryCriticality queries the "criticality" edge of the Asset entity.
+func (_m *Asset) QueryCriticality() *CustomTypeEnumQuery {
+	return NewAssetClient(_m.config).QueryCriticality(_m)
+}
+
 // QueryScans queries the "scans" edge of the Asset entity.
 func (_m *Asset) QueryScans() *ScanQuery {
 	return NewAssetClient(_m.config).QueryScans(_m)
@@ -398,9 +885,39 @@ func (_m *Asset) QueryEntities() *EntityQuery {
 	return NewAssetClient(_m.config).QueryEntities(_m)
 }
 
+// QueryPlatforms queries the "platforms" edge of the Asset entity.
+func (_m *Asset) QueryPlatforms() *PlatformQuery {
+	return NewAssetClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryOutOfScopePlatforms queries the "out_of_scope_platforms" edge of the Asset entity.
+func (_m *Asset) QueryOutOfScopePlatforms() *PlatformQuery {
+	return NewAssetClient(_m.config).QueryOutOfScopePlatforms(_m)
+}
+
+// QueryIdentityHolders queries the "identity_holders" edge of the Asset entity.
+func (_m *Asset) QueryIdentityHolders() *IdentityHolderQuery {
+	return NewAssetClient(_m.config).QueryIdentityHolders(_m)
+}
+
 // QueryControls queries the "controls" edge of the Asset entity.
 func (_m *Asset) QueryControls() *ControlQuery {
 	return NewAssetClient(_m.config).QueryControls(_m)
+}
+
+// QuerySourcePlatform queries the "source_platform" edge of the Asset entity.
+func (_m *Asset) QuerySourcePlatform() *PlatformQuery {
+	return NewAssetClient(_m.config).QuerySourcePlatform(_m)
+}
+
+// QueryConnectedAssets queries the "connected_assets" edge of the Asset entity.
+func (_m *Asset) QueryConnectedAssets() *AssetQuery {
+	return NewAssetClient(_m.config).QueryConnectedAssets(_m)
+}
+
+// QueryConnectedFrom queries the "connected_from" edge of the Asset entity.
+func (_m *Asset) QueryConnectedFrom() *AssetQuery {
+	return NewAssetClient(_m.config).QueryConnectedFrom(_m)
 }
 
 // Update returns a builder for updating this Asset.
@@ -450,6 +967,63 @@ func (_m *Asset) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("internal_owner=")
+	builder.WriteString(_m.InternalOwner)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_user_id=")
+	builder.WriteString(_m.InternalOwnerUserID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_group_id=")
+	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("asset_subtype_name=")
+	builder.WriteString(_m.AssetSubtypeName)
+	builder.WriteString(", ")
+	builder.WriteString("asset_subtype_id=")
+	builder.WriteString(_m.AssetSubtypeID)
+	builder.WriteString(", ")
+	builder.WriteString("asset_data_classification_name=")
+	builder.WriteString(_m.AssetDataClassificationName)
+	builder.WriteString(", ")
+	builder.WriteString("asset_data_classification_id=")
+	builder.WriteString(_m.AssetDataClassificationID)
+	builder.WriteString(", ")
+	builder.WriteString("environment_name=")
+	builder.WriteString(_m.EnvironmentName)
+	builder.WriteString(", ")
+	builder.WriteString("environment_id=")
+	builder.WriteString(_m.EnvironmentID)
+	builder.WriteString(", ")
+	builder.WriteString("scope_name=")
+	builder.WriteString(_m.ScopeName)
+	builder.WriteString(", ")
+	builder.WriteString("scope_id=")
+	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("access_model_name=")
+	builder.WriteString(_m.AccessModelName)
+	builder.WriteString(", ")
+	builder.WriteString("access_model_id=")
+	builder.WriteString(_m.AccessModelID)
+	builder.WriteString(", ")
+	builder.WriteString("encryption_status_name=")
+	builder.WriteString(_m.EncryptionStatusName)
+	builder.WriteString(", ")
+	builder.WriteString("encryption_status_id=")
+	builder.WriteString(_m.EncryptionStatusID)
+	builder.WriteString(", ")
+	builder.WriteString("security_tier_name=")
+	builder.WriteString(_m.SecurityTierName)
+	builder.WriteString(", ")
+	builder.WriteString("security_tier_id=")
+	builder.WriteString(_m.SecurityTierID)
+	builder.WriteString(", ")
+	builder.WriteString("criticality_name=")
+	builder.WriteString(_m.CriticalityName)
+	builder.WriteString(", ")
+	builder.WriteString("criticality_id=")
+	builder.WriteString(_m.CriticalityID)
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -477,6 +1051,35 @@ func (_m *Asset) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("website=")
 	builder.WriteString(_m.Website)
+	builder.WriteString(", ")
+	builder.WriteString("physical_location=")
+	builder.WriteString(_m.PhysicalLocation)
+	builder.WriteString(", ")
+	builder.WriteString("region=")
+	builder.WriteString(_m.Region)
+	builder.WriteString(", ")
+	builder.WriteString("contains_pii=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ContainsPii))
+	builder.WriteString(", ")
+	builder.WriteString("source_type=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SourceType))
+	builder.WriteString(", ")
+	builder.WriteString("source_platform_id=")
+	builder.WriteString(_m.SourcePlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("source_identifier=")
+	builder.WriteString(_m.SourceIdentifier)
+	builder.WriteString(", ")
+	builder.WriteString("cost_center=")
+	builder.WriteString(_m.CostCenter)
+	builder.WriteString(", ")
+	builder.WriteString("estimated_monthly_cost=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EstimatedMonthlyCost))
+	builder.WriteString(", ")
+	if v := _m.PurchaseDate; v != nil {
+		builder.WriteString("purchase_date=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("cpe=")
 	builder.WriteString(_m.Cpe)
@@ -607,6 +1210,78 @@ func (_m *Asset) appendNamedEntities(name string, edges ...*Entity) {
 	}
 }
 
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedOutOfScopePlatforms returns the OutOfScopePlatforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedOutOfScopePlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedOutOfScopePlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedOutOfScopePlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedOutOfScopePlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedOutOfScopePlatforms == nil {
+		_m.Edges.namedOutOfScopePlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedOutOfScopePlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedOutOfScopePlatforms[name] = append(_m.Edges.namedOutOfScopePlatforms[name], edges...)
+	}
+}
+
+// NamedIdentityHolders returns the IdentityHolders named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedIdentityHolders(name string) ([]*IdentityHolder, error) {
+	if _m.Edges.namedIdentityHolders == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedIdentityHolders[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedIdentityHolders(name string, edges ...*IdentityHolder) {
+	if _m.Edges.namedIdentityHolders == nil {
+		_m.Edges.namedIdentityHolders = make(map[string][]*IdentityHolder)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
+	} else {
+		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
 // NamedControls returns the Controls named value or an error if the edge was not
 // loaded in eager-loading with this name.
 func (_m *Asset) NamedControls(name string) ([]*Control, error) {
@@ -628,6 +1303,54 @@ func (_m *Asset) appendNamedControls(name string, edges ...*Control) {
 		_m.Edges.namedControls[name] = []*Control{}
 	} else {
 		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedConnectedAssets returns the ConnectedAssets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedConnectedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedConnectedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedConnectedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedConnectedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedConnectedAssets == nil {
+		_m.Edges.namedConnectedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedConnectedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedConnectedAssets[name] = append(_m.Edges.namedConnectedAssets[name], edges...)
+	}
+}
+
+// NamedConnectedFrom returns the ConnectedFrom named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Asset) NamedConnectedFrom(name string) ([]*Asset, error) {
+	if _m.Edges.namedConnectedFrom == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedConnectedFrom[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Asset) appendNamedConnectedFrom(name string, edges ...*Asset) {
+	if _m.Edges.namedConnectedFrom == nil {
+		_m.Edges.namedConnectedFrom = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedConnectedFrom[name] = []*Asset{}
+	} else {
+		_m.Edges.namedConnectedFrom[name] = append(_m.Edges.namedConnectedFrom[name], edges...)
 	}
 }
 

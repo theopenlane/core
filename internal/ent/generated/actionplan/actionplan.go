@@ -130,6 +130,8 @@ const (
 	EdgeFindings = "findings"
 	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
 	EdgeVulnerabilities = "vulnerabilities"
+	// EdgeScans holds the string denoting the scans edge name in mutations.
+	EdgeScans = "scans"
 	// EdgeReviews holds the string denoting the reviews edge name in mutations.
 	EdgeReviews = "reviews"
 	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
@@ -212,6 +214,11 @@ const (
 	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
 	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
 	VulnerabilitiesInverseTable = "vulnerabilities"
+	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
+	ScansTable = "scan_action_plans"
+	// ScansInverseTable is the table name for the Scan entity.
+	// It exists in this package in order to avoid circular dependency with the "scan" package.
+	ScansInverseTable = "scans"
 	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
 	ReviewsTable = "review_action_plans"
 	// ReviewsInverseTable is the table name for the Review entity.
@@ -330,6 +337,9 @@ var (
 	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
 	// primary key for the vulnerabilities relation (M2M).
 	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "action_plan_id"}
+	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
+	// primary key for the scans relation (M2M).
+	ScansPrimaryKey = []string{"scan_id", "action_plan_id"}
 	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
 	// primary key for the reviews relation (M2M).
 	ReviewsPrimaryKey = []string{"review_id", "action_plan_id"}
@@ -766,6 +776,20 @@ func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByScansCount orders the results by scans count.
+func ByScansCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newScansStep(), opts...)
+	}
+}
+
+// ByScans orders the results by scans terms.
+func ByScans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newScansStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByReviewsCount orders the results by reviews count.
 func ByReviewsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -924,6 +948,13 @@ func newVulnerabilitiesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+	)
+}
+func newScansStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ScansInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
 	)
 }
 func newReviewsStep() *sqlgraph.Step {

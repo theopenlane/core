@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
@@ -256,6 +257,21 @@ func (_c *SubprocessorCreate) AddTrustCenterSubprocessors(v ...*TrustCenterSubpr
 	return _c.AddTrustCenterSubprocessorIDs(ids...)
 }
 
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_c *SubprocessorCreate) AddEntityIDs(ids ...string) *SubprocessorCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_c *SubprocessorCreate) AddEntities(v ...*Entity) *SubprocessorCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityIDs(ids...)
+}
+
 // Mutation returns the SubprocessorMutation object of the builder.
 func (_c *SubprocessorCreate) Mutation() *SubprocessorMutation {
 	return _c.mutation
@@ -481,6 +497,23 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subprocessor.EntitiesTable,
+			Columns: subprocessor.EntitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.EntitySubprocessors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

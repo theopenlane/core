@@ -2443,13 +2443,14 @@ func (td *CustomTypeEnumBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 		td.Name = gofakeit.HipsterWord() + "-" + ulids.New().String()
 	}
 
-	if td.ObjectType == "" {
-		td.ObjectType = "task"
-	}
-
 	mutation := td.client.db.CustomTypeEnum.Create().
 		SetName(td.Name).
 		SetObjectType(td.ObjectType)
+
+	// default to "task" only if not explicitly set (including empty for global enums)
+	if td.ObjectType == "" && td.Field == "" {
+		mutation.SetObjectType("task")
+	}
 
 	if td.Field != "" {
 		mutation.SetField(td.Field)

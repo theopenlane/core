@@ -585,6 +585,86 @@ func (_u *ProcedureHistoryUpdate) ClearProcedureKindID() *ProcedureHistoryUpdate
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ProcedureHistoryUpdate) SetEnvironmentName(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableEnvironmentName(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ProcedureHistoryUpdate) ClearEnvironmentName() *ProcedureHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ProcedureHistoryUpdate) SetEnvironmentID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableEnvironmentID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ProcedureHistoryUpdate) ClearEnvironmentID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ProcedureHistoryUpdate) SetScopeName(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableScopeName(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ProcedureHistoryUpdate) ClearScopeName() *ProcedureHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ProcedureHistoryUpdate) SetScopeID(v string) *ProcedureHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdate) SetNillableScopeID(v *string) *ProcedureHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ProcedureHistoryUpdate) ClearScopeID() *ProcedureHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *ProcedureHistoryUpdate) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -907,6 +987,30 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	}
 	if _u.mutation.ProcedureKindIDCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(procedurehistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(procedurehistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(procedurehistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(procedurehistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(procedurehistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(procedurehistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(procedurehistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(procedurehistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
@@ -1488,6 +1592,86 @@ func (_u *ProcedureHistoryUpdateOne) ClearProcedureKindID() *ProcedureHistoryUpd
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *ProcedureHistoryUpdateOne) SetEnvironmentName(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableEnvironmentName(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *ProcedureHistoryUpdateOne) ClearEnvironmentName() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *ProcedureHistoryUpdateOne) SetEnvironmentID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableEnvironmentID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *ProcedureHistoryUpdateOne) ClearEnvironmentID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *ProcedureHistoryUpdateOne) SetScopeName(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableScopeName(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *ProcedureHistoryUpdateOne) ClearScopeName() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *ProcedureHistoryUpdateOne) SetScopeID(v string) *ProcedureHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *ProcedureHistoryUpdateOne) SetNillableScopeID(v *string) *ProcedureHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *ProcedureHistoryUpdateOne) ClearScopeID() *ProcedureHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *ProcedureHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryUpdateOne {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -1840,6 +2024,30 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	}
 	if _u.mutation.ProcedureKindIDCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(procedurehistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(procedurehistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(procedurehistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(procedurehistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(procedurehistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(procedurehistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(procedurehistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(procedurehistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

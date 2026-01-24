@@ -162,6 +162,48 @@ func (_c *AssessmentResponseHistoryCreate) SetAssessmentID(v string) *Assessment
 	return _c
 }
 
+// SetCampaignID sets the "campaign_id" field.
+func (_c *AssessmentResponseHistoryCreate) SetCampaignID(v string) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetCampaignID(v)
+	return _c
+}
+
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableCampaignID(v *string) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetCampaignID(*v)
+	}
+	return _c
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (_c *AssessmentResponseHistoryCreate) SetIdentityHolderID(v string) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableIdentityHolderID(v *string) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetIdentityHolderID(*v)
+	}
+	return _c
+}
+
+// SetEntityID sets the "entity_id" field.
+func (_c *AssessmentResponseHistoryCreate) SetEntityID(v string) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEntityID(v)
+	return _c
+}
+
+// SetNillableEntityID sets the "entity_id" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEntityID(v *string) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEntityID(*v)
+	}
+	return _c
+}
+
 // SetEmail sets the "email" field.
 func (_c *AssessmentResponseHistoryCreate) SetEmail(v string) *AssessmentResponseHistoryCreate {
 	_c.mutation.SetEmail(v)
@@ -179,6 +221,96 @@ func (_c *AssessmentResponseHistoryCreate) SetNillableSendAttempts(v *int) *Asse
 	if v != nil {
 		_c.SetSendAttempts(*v)
 	}
+	return _c
+}
+
+// SetEmailDeliveredAt sets the "email_delivered_at" field.
+func (_c *AssessmentResponseHistoryCreate) SetEmailDeliveredAt(v time.Time) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEmailDeliveredAt(v)
+	return _c
+}
+
+// SetNillableEmailDeliveredAt sets the "email_delivered_at" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEmailDeliveredAt(v *time.Time) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEmailDeliveredAt(*v)
+	}
+	return _c
+}
+
+// SetEmailOpenedAt sets the "email_opened_at" field.
+func (_c *AssessmentResponseHistoryCreate) SetEmailOpenedAt(v time.Time) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEmailOpenedAt(v)
+	return _c
+}
+
+// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEmailOpenedAt(v *time.Time) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEmailOpenedAt(*v)
+	}
+	return _c
+}
+
+// SetEmailClickedAt sets the "email_clicked_at" field.
+func (_c *AssessmentResponseHistoryCreate) SetEmailClickedAt(v time.Time) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEmailClickedAt(v)
+	return _c
+}
+
+// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEmailClickedAt(v *time.Time) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEmailClickedAt(*v)
+	}
+	return _c
+}
+
+// SetEmailOpenCount sets the "email_open_count" field.
+func (_c *AssessmentResponseHistoryCreate) SetEmailOpenCount(v int) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEmailOpenCount(v)
+	return _c
+}
+
+// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEmailOpenCount(v *int) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEmailOpenCount(*v)
+	}
+	return _c
+}
+
+// SetEmailClickCount sets the "email_click_count" field.
+func (_c *AssessmentResponseHistoryCreate) SetEmailClickCount(v int) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEmailClickCount(v)
+	return _c
+}
+
+// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableEmailClickCount(v *int) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetEmailClickCount(*v)
+	}
+	return _c
+}
+
+// SetLastEmailEventAt sets the "last_email_event_at" field.
+func (_c *AssessmentResponseHistoryCreate) SetLastEmailEventAt(v time.Time) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetLastEmailEventAt(v)
+	return _c
+}
+
+// SetNillableLastEmailEventAt sets the "last_email_event_at" field if the given value is not nil.
+func (_c *AssessmentResponseHistoryCreate) SetNillableLastEmailEventAt(v *time.Time) *AssessmentResponseHistoryCreate {
+	if v != nil {
+		_c.SetLastEmailEventAt(*v)
+	}
+	return _c
+}
+
+// SetEmailMetadata sets the "email_metadata" field.
+func (_c *AssessmentResponseHistoryCreate) SetEmailMetadata(v map[string]interface{}) *AssessmentResponseHistoryCreate {
+	_c.mutation.SetEmailMetadata(v)
 	return _c
 }
 
@@ -342,6 +474,14 @@ func (_c *AssessmentResponseHistoryCreate) defaults() error {
 		v := assessmentresponsehistory.DefaultSendAttempts
 		_c.mutation.SetSendAttempts(v)
 	}
+	if _, ok := _c.mutation.EmailOpenCount(); !ok {
+		v := assessmentresponsehistory.DefaultEmailOpenCount
+		_c.mutation.SetEmailOpenCount(v)
+	}
+	if _, ok := _c.mutation.EmailClickCount(); !ok {
+		v := assessmentresponsehistory.DefaultEmailClickCount
+		_c.mutation.SetEmailClickCount(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := assessmentresponsehistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -483,6 +623,18 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
 		_node.AssessmentID = value
 	}
+	if value, ok := _c.mutation.CampaignID(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldCampaignID, field.TypeString, value)
+		_node.CampaignID = value
+	}
+	if value, ok := _c.mutation.IdentityHolderID(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldIdentityHolderID, field.TypeString, value)
+		_node.IdentityHolderID = value
+	}
+	if value, ok := _c.mutation.EntityID(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEntityID, field.TypeString, value)
+		_node.EntityID = value
+	}
 	if value, ok := _c.mutation.Email(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldEmail, field.TypeString, value)
 		_node.Email = value
@@ -490,6 +642,34 @@ func (_c *AssessmentResponseHistoryCreate) createSpec() (*AssessmentResponseHist
 	if value, ok := _c.mutation.SendAttempts(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
 		_node.SendAttempts = value
+	}
+	if value, ok := _c.mutation.EmailDeliveredAt(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEmailDeliveredAt, field.TypeTime, value)
+		_node.EmailDeliveredAt = value
+	}
+	if value, ok := _c.mutation.EmailOpenedAt(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEmailOpenedAt, field.TypeTime, value)
+		_node.EmailOpenedAt = value
+	}
+	if value, ok := _c.mutation.EmailClickedAt(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEmailClickedAt, field.TypeTime, value)
+		_node.EmailClickedAt = value
+	}
+	if value, ok := _c.mutation.EmailOpenCount(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt, value)
+		_node.EmailOpenCount = value
+	}
+	if value, ok := _c.mutation.EmailClickCount(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt, value)
+		_node.EmailClickCount = value
+	}
+	if value, ok := _c.mutation.LastEmailEventAt(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldLastEmailEventAt, field.TypeTime, value)
+		_node.LastEmailEventAt = value
+	}
+	if value, ok := _c.mutation.EmailMetadata(); ok {
+		_spec.SetField(assessmentresponsehistory.FieldEmailMetadata, field.TypeJSON, value)
+		_node.EmailMetadata = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(assessmentresponsehistory.FieldStatus, field.TypeEnum, value)

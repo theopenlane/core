@@ -105,6 +105,86 @@ func (_u *DirectoryAccountHistoryUpdate) ClearOwnerID() *DirectoryAccountHistory
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectoryAccountHistoryUpdate) SetEnvironmentName(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableEnvironmentName(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearEnvironmentName() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectoryAccountHistoryUpdate) SetEnvironmentID(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableEnvironmentID(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearEnvironmentID() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectoryAccountHistoryUpdate) SetScopeName(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableScopeName(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearScopeName() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectoryAccountHistoryUpdate) SetScopeID(v string) *DirectoryAccountHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdate) SetNillableScopeID(v *string) *DirectoryAccountHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectoryAccountHistoryUpdate) ClearScopeID() *DirectoryAccountHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetSecondaryKey sets the "secondary_key" field.
 func (_u *DirectoryAccountHistoryUpdate) SetSecondaryKey(v string) *DirectoryAccountHistoryUpdate {
 	_u.mutation.SetSecondaryKey(v)
@@ -542,6 +622,30 @@ func (_u *DirectoryAccountHistoryUpdate) sqlSave(ctx context.Context) (_node int
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldOwnerID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccounthistory.FieldSecondaryKey, field.TypeString, value)
 	}
@@ -726,6 +830,86 @@ func (_u *DirectoryAccountHistoryUpdateOne) SetNillableOwnerID(v *string) *Direc
 // ClearOwnerID clears the value of the "owner_id" field.
 func (_u *DirectoryAccountHistoryUpdateOne) ClearOwnerID() *DirectoryAccountHistoryUpdateOne {
 	_u.mutation.ClearOwnerID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetEnvironmentName(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableEnvironmentName(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearEnvironmentName() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetEnvironmentID(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableEnvironmentID(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearEnvironmentID() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetScopeName(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableScopeName(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearScopeName() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) SetScopeID(v string) *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *DirectoryAccountHistoryUpdateOne) SetNillableScopeID(v *string) *DirectoryAccountHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *DirectoryAccountHistoryUpdateOne) ClearScopeID() *DirectoryAccountHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -1195,6 +1379,30 @@ func (_u *DirectoryAccountHistoryUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(directoryaccounthistory.FieldOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(directoryaccounthistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.SecondaryKey(); ok {
 		_spec.SetField(directoryaccounthistory.FieldSecondaryKey, field.TypeString, value)

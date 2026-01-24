@@ -140,6 +140,62 @@ func (_c *DirectoryAccountHistoryCreate) SetNillableOwnerID(v *string) *Director
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *DirectoryAccountHistoryCreate) SetEnvironmentName(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableEnvironmentName(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *DirectoryAccountHistoryCreate) SetEnvironmentID(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableEnvironmentID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *DirectoryAccountHistoryCreate) SetScopeName(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableScopeName(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *DirectoryAccountHistoryCreate) SetScopeID(v string) *DirectoryAccountHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *DirectoryAccountHistoryCreate) SetNillableScopeID(v *string) *DirectoryAccountHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetIntegrationID sets the "integration_id" field.
 func (_c *DirectoryAccountHistoryCreate) SetIntegrationID(v string) *DirectoryAccountHistoryCreate {
 	_c.mutation.SetIntegrationID(v)
@@ -638,6 +694,22 @@ func (_c *DirectoryAccountHistoryCreate) createSpec() (*DirectoryAccountHistory,
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(directoryaccounthistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(directoryaccounthistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(directoryaccounthistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(directoryaccounthistory.FieldIntegrationID, field.TypeString, value)

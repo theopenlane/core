@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -128,6 +129,62 @@ func (_c *DocumentDataCreate) SetNillableOwnerID(v *string) *DocumentDataCreate 
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *DocumentDataCreate) SetEnvironmentName(v string) *DocumentDataCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *DocumentDataCreate) SetNillableEnvironmentName(v *string) *DocumentDataCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *DocumentDataCreate) SetEnvironmentID(v string) *DocumentDataCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *DocumentDataCreate) SetNillableEnvironmentID(v *string) *DocumentDataCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *DocumentDataCreate) SetScopeName(v string) *DocumentDataCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *DocumentDataCreate) SetNillableScopeName(v *string) *DocumentDataCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *DocumentDataCreate) SetScopeID(v string) *DocumentDataCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *DocumentDataCreate) SetNillableScopeID(v *string) *DocumentDataCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_c *DocumentDataCreate) SetTemplateID(v string) *DocumentDataCreate {
 	_c.mutation.SetTemplateID(v)
@@ -165,6 +222,16 @@ func (_c *DocumentDataCreate) SetNillableID(v *string) *DocumentDataCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *DocumentDataCreate) SetOwner(v *Organization) *DocumentDataCreate {
 	return _c.SetOwnerID(v.ID)
+}
+
+// SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
+func (_c *DocumentDataCreate) SetEnvironment(v *CustomTypeEnum) *DocumentDataCreate {
+	return _c.SetEnvironmentID(v.ID)
+}
+
+// SetScope sets the "scope" edge to the CustomTypeEnum entity.
+func (_c *DocumentDataCreate) SetScope(v *CustomTypeEnum) *DocumentDataCreate {
+	return _c.SetScopeID(v.ID)
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
@@ -341,6 +408,14 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 		_spec.SetField(documentdata.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(documentdata.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(documentdata.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
 	if value, ok := _c.mutation.Data(); ok {
 		_spec.SetField(documentdata.FieldData, field.TypeJSON, value)
 		_node.Data = value
@@ -361,6 +436,42 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.EnvironmentTable,
+			Columns: []string{documentdata.EnvironmentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.EnvironmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScopeIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   documentdata.ScopeTable,
+			Columns: []string{documentdata.ScopeColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.DocumentData
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ScopeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TemplateIDs(); len(nodes) > 0 {

@@ -1,2 +1,2 @@
-Tags,FullName,Title,Company,Email,PhoneNumber,Address,Status,OwnerId,EntityIDs,FileIDs
-example_tags,example_fullname,example_title,example_company,example_email,example_phonenumber,example_address,example_status,example_ownerid,example_entityids,example_fileids
+Tags,FullName,Title,Company,Email,PhoneNumber,Address,Status,OwnerId,EntityIDs,CampaignIDs,CampaignTargetIDs,FileIDs
+example_tags,example_fullname,example_title,example_company,example_email,example_phonenumber,example_address,example_status,example_ownerid,example_entityids,example_campaignids,example_campaigntargetids,example_fileids

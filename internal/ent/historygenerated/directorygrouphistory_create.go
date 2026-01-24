@@ -140,6 +140,62 @@ func (_c *DirectoryGroupHistoryCreate) SetNillableOwnerID(v *string) *DirectoryG
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *DirectoryGroupHistoryCreate) SetEnvironmentName(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillableEnvironmentName(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *DirectoryGroupHistoryCreate) SetEnvironmentID(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillableEnvironmentID(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *DirectoryGroupHistoryCreate) SetScopeName(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillableScopeName(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *DirectoryGroupHistoryCreate) SetScopeID(v string) *DirectoryGroupHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *DirectoryGroupHistoryCreate) SetNillableScopeID(v *string) *DirectoryGroupHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetIntegrationID sets the "integration_id" field.
 func (_c *DirectoryGroupHistoryCreate) SetIntegrationID(v string) *DirectoryGroupHistoryCreate {
 	_c.mutation.SetIntegrationID(v)
@@ -549,6 +605,22 @@ func (_c *DirectoryGroupHistoryCreate) createSpec() (*DirectoryGroupHistory, *sq
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(directorygrouphistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(directorygrouphistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(directorygrouphistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(directorygrouphistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(directorygrouphistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.IntegrationID(); ok {
 		_spec.SetField(directorygrouphistory.FieldIntegrationID, field.TypeString, value)

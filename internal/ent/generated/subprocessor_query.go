@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -33,9 +34,11 @@ type SubprocessorQuery struct {
 	withOwner                         *OrganizationQuery
 	withLogoFile                      *FileQuery
 	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
+	withEntities                      *EntityQuery
 	loadTotal                         []func(context.Context, []*Subprocessor) error
 	modifiers                         []func(*sql.Selector)
 	withNamedTrustCenterSubprocessors map[string]*TrustCenterSubprocessorQuery
+	withNamedEntities                 map[string]*EntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -141,6 +144,31 @@ func (_q *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubproc
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterSubprocessor
 		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *SubprocessorQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, subprocessor.EntitiesTable, subprocessor.EntitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.EntitySubprocessors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -342,6 +370,7 @@ func (_q *SubprocessorQuery) Clone() *SubprocessorQuery {
 		withOwner:                    _q.withOwner.Clone(),
 		withLogoFile:                 _q.withLogoFile.Clone(),
 		withTrustCenterSubprocessors: _q.withTrustCenterSubprocessors.Clone(),
+		withEntities:                 _q.withEntities.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -379,6 +408,17 @@ func (_q *SubprocessorQuery) WithTrustCenterSubprocessors(opts ...func(*TrustCen
 		opt(query)
 	}
 	_q.withTrustCenterSubprocessors = query
+	return _q
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubprocessorQuery) WithEntities(opts ...func(*EntityQuery)) *SubprocessorQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
 	return _q
 }
 
@@ -466,10 +506,11 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Subprocessor{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withOwner != nil,
 			_q.withLogoFile != nil,
 			_q.withTrustCenterSubprocessors != nil,
+			_q.withEntities != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -516,10 +557,24 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *Subprocessor) { n.Edges.Entities = []*Entity{} },
+			func(n *Subprocessor, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedTrustCenterSubprocessors {
 		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *Subprocessor) { n.appendNamedTrustCenterSubprocessors(name) },
 			func(n *Subprocessor, e *TrustCenterSubprocessor) { n.appendNamedTrustCenterSubprocessors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *Subprocessor) { n.appendNamedEntities(name) },
+			func(n *Subprocessor, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -619,6 +674,68 @@ func (_q *SubprocessorQuery) loadTrustCenterSubprocessors(ctx context.Context, q
 			return fmt.Errorf(`unexpected referenced foreign-key "subprocessor_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
+	}
+	return nil
+}
+func (_q *SubprocessorQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *Entity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Subprocessor)
+	nids := make(map[string]map[*Subprocessor]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(subprocessor.EntitiesTable)
+		joinT.Schema(_q.schemaConfig.EntitySubprocessors)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(subprocessor.EntitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(subprocessor.EntitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(subprocessor.EntitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Subprocessor]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -738,6 +855,20 @@ func (_q *SubprocessorQuery) WithNamedTrustCenterSubprocessors(name string, opts
 		_q.withNamedTrustCenterSubprocessors = make(map[string]*TrustCenterSubprocessorQuery)
 	}
 	_q.withNamedTrustCenterSubprocessors[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubprocessorQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *SubprocessorQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
 	return _q
 }
 

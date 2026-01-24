@@ -69,6 +69,30 @@ func (f AssetFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.AssetMutation", m)
 }
 
+// The CampaignFunc type is an adapter to allow the use of ordinary
+// function as Campaign mutator.
+type CampaignFunc func(context.Context, *generated.CampaignMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CampaignFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.CampaignMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CampaignMutation", m)
+}
+
+// The CampaignTargetFunc type is an adapter to allow the use of ordinary
+// function as CampaignTarget mutator.
+type CampaignTargetFunc func(context.Context, *generated.CampaignTargetMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f CampaignTargetFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.CampaignTargetMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.CampaignTargetMutation", m)
+}
+
 // The ContactFunc type is an adapter to allow the use of ordinary
 // function as Contact mutator.
 type ContactFunc func(context.Context, *generated.ContactMutation) (generated.Value, error)
@@ -393,6 +417,18 @@ func (f HushFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.V
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.HushMutation", m)
 }
 
+// The IdentityHolderFunc type is an adapter to allow the use of ordinary
+// function as IdentityHolder mutator.
+type IdentityHolderFunc func(context.Context, *generated.IdentityHolderMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f IdentityHolderFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.IdentityHolderMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.IdentityHolderMutation", m)
+}
+
 // The ImpersonationEventFunc type is an adapter to allow the use of ordinary
 // function as ImpersonationEvent mutator.
 type ImpersonationEventFunc func(context.Context, *generated.ImpersonationEventMutation) (generated.Value, error)
@@ -679,6 +715,18 @@ func (f PersonalAccessTokenFunc) Mutate(ctx context.Context, m generated.Mutatio
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.PersonalAccessTokenMutation", m)
+}
+
+// The PlatformFunc type is an adapter to allow the use of ordinary
+// function as Platform mutator.
+type PlatformFunc func(context.Context, *generated.PlatformMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f PlatformFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.PlatformMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.PlatformMutation", m)
 }
 
 // The ProcedureFunc type is an adapter to allow the use of ordinary

@@ -2651,6 +2651,35 @@ func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.ActionPl
 	})
 }
 
+// HasScans applies the HasEdge predicate on the "scans" edge.
+func HasScans() predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasScansWith applies the HasEdge predicate on the "scans" edge with a given conditions (other predicates).
+func HasScansWith(preds ...predicate.Scan) predicate.ActionPlan {
+	return predicate.ActionPlan(func(s *sql.Selector) {
+		step := newScansStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.ScanActionPlans
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasReviews applies the HasEdge predicate on the "reviews" edge.
 func HasReviews() predicate.ActionPlan {
 	return predicate.ActionPlan(func(s *sql.Selector) {

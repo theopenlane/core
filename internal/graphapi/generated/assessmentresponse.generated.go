@@ -66,10 +66,30 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_ownerID(ctx, field)
 			case "assessmentID":
 				return ec.fieldContext_AssessmentResponse_assessmentID(ctx, field)
+			case "campaignID":
+				return ec.fieldContext_AssessmentResponse_campaignID(ctx, field)
+			case "identityHolderID":
+				return ec.fieldContext_AssessmentResponse_identityHolderID(ctx, field)
+			case "entityID":
+				return ec.fieldContext_AssessmentResponse_entityID(ctx, field)
 			case "email":
 				return ec.fieldContext_AssessmentResponse_email(ctx, field)
 			case "sendAttempts":
 				return ec.fieldContext_AssessmentResponse_sendAttempts(ctx, field)
+			case "emailDeliveredAt":
+				return ec.fieldContext_AssessmentResponse_emailDeliveredAt(ctx, field)
+			case "emailOpenedAt":
+				return ec.fieldContext_AssessmentResponse_emailOpenedAt(ctx, field)
+			case "emailClickedAt":
+				return ec.fieldContext_AssessmentResponse_emailClickedAt(ctx, field)
+			case "emailOpenCount":
+				return ec.fieldContext_AssessmentResponse_emailOpenCount(ctx, field)
+			case "emailClickCount":
+				return ec.fieldContext_AssessmentResponse_emailClickCount(ctx, field)
+			case "lastEmailEventAt":
+				return ec.fieldContext_AssessmentResponse_lastEmailEventAt(ctx, field)
+			case "emailMetadata":
+				return ec.fieldContext_AssessmentResponse_emailMetadata(ctx, field)
 			case "status":
 				return ec.fieldContext_AssessmentResponse_status(ctx, field)
 			case "assignedAt":
@@ -86,6 +106,12 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
 			case "assessment":
 				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
+			case "campaign":
+				return ec.fieldContext_AssessmentResponse_campaign(ctx, field)
+			case "identityHolder":
+				return ec.fieldContext_AssessmentResponse_identityHolder(ctx, field)
+			case "entity":
+				return ec.fieldContext_AssessmentResponse_entity(ctx, field)
 			case "document":
 				return ec.fieldContext_AssessmentResponse_document(ctx, field)
 			}

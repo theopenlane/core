@@ -1,0 +1,114 @@
+extend type CampaignTarget {
+    """
+    Indicates if this campaignTarget has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Returns the active workflow instance for this campaignTarget if one is running
+    """
+    activeWorkflowInstance: WorkflowInstance
+}
+
+extend type Query {
+    """
+    Look up campaignTarget by ID
+    """
+     campaignTarget(
+        """
+        ID of the campaignTarget
+        """
+        id: ID!
+    ):  CampaignTarget!
+}
+
+extend type Mutation{
+    """
+    Create a new campaignTarget
+    """
+    createCampaignTarget(
+        """
+        values of the campaignTarget
+        """
+        input: CreateCampaignTargetInput!
+    ): CampaignTargetCreatePayload!
+    """
+    Create multiple new campaignTargets
+    """
+    createBulkCampaignTarget(
+        """
+        values of the campaignTarget
+        """
+        input: [CreateCampaignTargetInput!]
+    ): CampaignTargetBulkCreatePayload!
+    """
+    Create multiple new campaignTargets via file upload
+    """
+    createBulkCSVCampaignTarget(
+        """
+        csv file containing values of the campaignTarget
+        """
+        input: Upload!
+    ): CampaignTargetBulkCreatePayload!
+    """
+    Update an existing campaignTarget
+    """
+    updateCampaignTarget(
+        """
+        ID of the campaignTarget
+        """
+        id: ID!
+        """
+        New values for the campaignTarget
+        """
+        input: UpdateCampaignTargetInput!
+    ): CampaignTargetUpdatePayload!
+    """
+    Delete an existing campaignTarget
+    """
+    deleteCampaignTarget(
+        """
+        ID of the campaignTarget
+        """
+        id: ID!
+    ): CampaignTargetDeletePayload!
+}
+
+"""
+Return response for createCampaignTarget mutation
+"""
+type CampaignTargetCreatePayload {
+    """
+    Created campaignTarget
+    """
+    campaignTarget: CampaignTarget!
+}
+
+"""
+Return response for updateCampaignTarget mutation
+"""
+type CampaignTargetUpdatePayload {
+    """
+    Updated campaignTarget
+    """
+    campaignTarget: CampaignTarget!
+}
+
+"""
+Return response for deleteCampaignTarget mutation
+"""
+type CampaignTargetDeletePayload {
+    """
+    Deleted campaignTarget ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkCampaignTarget mutation
+"""
+type CampaignTargetBulkCreatePayload {
+    """
+    Created campaignTargets
+    """
+    campaignTargets: [CampaignTarget!]
+}

@@ -160,6 +160,14 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Organization_platforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Organization_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Organization_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Organization_campaignTargets(ctx, field)
 			case "entityTypes":
 				return ec.fieldContext_Organization_entityTypes(ctx, field)
 			case "contacts":
@@ -403,6 +411,14 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Organization_platforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Organization_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Organization_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Organization_campaignTargets(ctx, field)
 			case "entityTypes":
 				return ec.fieldContext_Organization_entityTypes(ctx, field)
 			case "contacts":
@@ -675,6 +691,14 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_subscribers(ctx, field)
 			case "entities":
 				return ec.fieldContext_Organization_entities(ctx, field)
+			case "platforms":
+				return ec.fieldContext_Organization_platforms(ctx, field)
+			case "identityHolders":
+				return ec.fieldContext_Organization_identityHolders(ctx, field)
+			case "campaigns":
+				return ec.fieldContext_Organization_campaigns(ctx, field)
+			case "campaignTargets":
+				return ec.fieldContext_Organization_campaignTargets(ctx, field)
 			case "entityTypes":
 				return ec.fieldContext_Organization_entityTypes(ctx, field)
 			case "contacts":

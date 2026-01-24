@@ -146,6 +146,8 @@ type ActionPlanEdges struct {
 	Findings []*Finding `json:"findings,omitempty"`
 	// Vulnerabilities holds the value of the vulnerabilities edge.
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Scans holds the value of the scans edge.
+	Scans []*Scan `json:"scans,omitempty"`
 	// Reviews holds the value of the reviews edge.
 	Reviews []*Review `json:"reviews,omitempty"`
 	// Remediations holds the value of the remediations edge.
@@ -160,9 +162,9 @@ type ActionPlanEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [18]bool
+	loadedTypes [19]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [19]map[string]int
 
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
@@ -172,6 +174,7 @@ type ActionPlanEdges struct {
 	namedPrograms           map[string][]*Program
 	namedFindings           map[string][]*Finding
 	namedVulnerabilities    map[string][]*Vulnerability
+	namedScans              map[string][]*Scan
 	namedReviews            map[string][]*Review
 	namedRemediations       map[string][]*Remediation
 	namedTasks              map[string][]*Task
@@ -295,10 +298,19 @@ func (e ActionPlanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
 }
 
+// ScansOrErr returns the Scans value or an error if the edge
+// was not loaded in eager-loading.
+func (e ActionPlanEdges) ScansOrErr() ([]*Scan, error) {
+	if e.loadedTypes[12] {
+		return e.Scans, nil
+	}
+	return nil, &NotLoadedError{edge: "scans"}
+}
+
 // ReviewsOrErr returns the Reviews value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.Reviews, nil
 	}
 	return nil, &NotLoadedError{edge: "reviews"}
@@ -307,7 +319,7 @@ func (e ActionPlanEdges) ReviewsOrErr() ([]*Review, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -316,7 +328,7 @@ func (e ActionPlanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -325,7 +337,7 @@ func (e ActionPlanEdges) TasksOrErr() ([]*Task, error) {
 // IntegrationsOrErr returns the Integrations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Integrations, nil
 	}
 	return nil, &NotLoadedError{edge: "integrations"}
@@ -336,7 +348,7 @@ func (e ActionPlanEdges) IntegrationsOrErr() ([]*Integration, error) {
 func (e ActionPlanEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[16] {
+	} else if e.loadedTypes[17] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -345,7 +357,7 @@ func (e ActionPlanEdges) FileOrErr() (*File, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ActionPlanEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -774,6 +786,11 @@ func (_m *ActionPlan) QueryVulnerabilities() *VulnerabilityQuery {
 	return NewActionPlanClient(_m.config).QueryVulnerabilities(_m)
 }
 
+// QueryScans queries the "scans" edge of the ActionPlan entity.
+func (_m *ActionPlan) QueryScans() *ScanQuery {
+	return NewActionPlanClient(_m.config).QueryScans(_m)
+}
+
 // QueryReviews queries the "reviews" edge of the ActionPlan entity.
 func (_m *ActionPlan) QueryReviews() *ReviewQuery {
 	return NewActionPlanClient(_m.config).QueryReviews(_m)
@@ -1161,6 +1178,30 @@ func (_m *ActionPlan) appendNamedVulnerabilities(name string, edges ...*Vulnerab
 		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
 	} else {
 		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedScans returns the Scans named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *ActionPlan) NamedScans(name string) ([]*Scan, error) {
+	if _m.Edges.namedScans == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedScans[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *ActionPlan) appendNamedScans(name string, edges ...*Scan) {
+	if _m.Edges.namedScans == nil {
+		_m.Edges.namedScans = make(map[string][]*Scan)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedScans[name] = []*Scan{}
+	} else {
+		_m.Edges.namedScans[name] = append(_m.Edges.namedScans[name], edges...)
 	}
 }
 

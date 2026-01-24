@@ -42,12 +42,48 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
+	FieldAssignedTo = "assigned_to"
+	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
+	FieldAssignedToUserID = "assigned_to_user_id"
+	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
+	FieldAssignedToGroupID = "assigned_to_group_id"
+	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
+	FieldEnvironmentName = "environment_name"
+	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
+	FieldEnvironmentID = "environment_id"
+	// FieldScopeName holds the string denoting the scope_name field in the database.
+	FieldScopeName = "scope_name"
+	// FieldScopeID holds the string denoting the scope_id field in the database.
+	FieldScopeID = "scope_id"
 	// FieldTarget holds the string denoting the target field in the database.
 	FieldTarget = "target"
 	// FieldScanType holds the string denoting the scan_type field in the database.
 	FieldScanType = "scan_type"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldScanDate holds the string denoting the scan_date field in the database.
+	FieldScanDate = "scan_date"
+	// FieldScanSchedule holds the string denoting the scan_schedule field in the database.
+	FieldScanSchedule = "scan_schedule"
+	// FieldNextScanRunAt holds the string denoting the next_scan_run_at field in the database.
+	FieldNextScanRunAt = "next_scan_run_at"
+	// FieldPerformedBy holds the string denoting the performed_by field in the database.
+	FieldPerformedBy = "performed_by"
+	// FieldPerformedByUserID holds the string denoting the performed_by_user_id field in the database.
+	FieldPerformedByUserID = "performed_by_user_id"
+	// FieldPerformedByGroupID holds the string denoting the performed_by_group_id field in the database.
+	FieldPerformedByGroupID = "performed_by_group_id"
+	// FieldGeneratedByPlatformID holds the string denoting the generated_by_platform_id field in the database.
+	FieldGeneratedByPlatformID = "generated_by_platform_id"
+	// FieldVulnerabilityIds holds the string denoting the vulnerability_ids field in the database.
+	FieldVulnerabilityIds = "vulnerability_ids"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// Table holds the table name of the scanhistory in the database.
@@ -68,9 +104,27 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldAssignedTo,
+	FieldAssignedToUserID,
+	FieldAssignedToGroupID,
+	FieldEnvironmentName,
+	FieldEnvironmentID,
+	FieldScopeName,
+	FieldScopeID,
 	FieldTarget,
 	FieldScanType,
 	FieldMetadata,
+	FieldScanDate,
+	FieldScanSchedule,
+	FieldNextScanRunAt,
+	FieldPerformedBy,
+	FieldPerformedByUserID,
+	FieldPerformedByGroupID,
+	FieldGeneratedByPlatformID,
+	FieldVulnerabilityIds,
 	FieldStatus,
 }
 
@@ -103,6 +157,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
+	// DefaultVulnerabilityIds holds the default value on creation for the "vulnerability_ids" field.
+	DefaultVulnerabilityIds []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -199,6 +255,56 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByAssignedTo orders the results by the assigned_to field.
+func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
+}
+
+// ByAssignedToUserID orders the results by the assigned_to_user_id field.
+func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToUserID, opts...).ToFunc()
+}
+
+// ByAssignedToGroupID orders the results by the assigned_to_group_id field.
+func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
+}
+
+// ByEnvironmentName orders the results by the environment_name field.
+func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
+}
+
+// ByEnvironmentID orders the results by the environment_id field.
+func ByEnvironmentID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironmentID, opts...).ToFunc()
+}
+
+// ByScopeName orders the results by the scope_name field.
+func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeName, opts...).ToFunc()
+}
+
+// ByScopeID orders the results by the scope_id field.
+func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
 // ByTarget orders the results by the target field.
 func ByTarget(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTarget, opts...).ToFunc()
@@ -207,6 +313,41 @@ func ByTarget(opts ...sql.OrderTermOption) OrderOption {
 // ByScanType orders the results by the scan_type field.
 func ByScanType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScanType, opts...).ToFunc()
+}
+
+// ByScanDate orders the results by the scan_date field.
+func ByScanDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScanDate, opts...).ToFunc()
+}
+
+// ByScanSchedule orders the results by the scan_schedule field.
+func ByScanSchedule(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScanSchedule, opts...).ToFunc()
+}
+
+// ByNextScanRunAt orders the results by the next_scan_run_at field.
+func ByNextScanRunAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNextScanRunAt, opts...).ToFunc()
+}
+
+// ByPerformedBy orders the results by the performed_by field.
+func ByPerformedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPerformedBy, opts...).ToFunc()
+}
+
+// ByPerformedByUserID orders the results by the performed_by_user_id field.
+func ByPerformedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPerformedByUserID, opts...).ToFunc()
+}
+
+// ByPerformedByGroupID orders the results by the performed_by_group_id field.
+func ByPerformedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPerformedByGroupID, opts...).ToFunc()
+}
+
+// ByGeneratedByPlatformID orders the results by the generated_by_platform_id field.
+func ByGeneratedByPlatformID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldGeneratedByPlatformID, opts...).ToFunc()
 }
 
 // ByStatus orders the results by the status field.

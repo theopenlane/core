@@ -100,6 +100,56 @@ extend type Query{
         last: Int
     ): AssetConnection
     """
+    Search across Campaign objects
+    """
+    campaignSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CampaignConnection
+    """
+    Search across CampaignTarget objects
+    """
+    campaignTargetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): CampaignTargetConnection
+    """
     Search across Contact objects
     """
     contactSearch(
@@ -300,6 +350,31 @@ extend type Query{
         last: Int
     ): GroupConnection
     """
+    Search across IdentityHolder objects
+    """
+    identityHolderSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): IdentityHolderConnection
+    """
     Search across InternalPolicy objects
     """
     internalPolicySearch(
@@ -449,6 +524,31 @@ extend type Query{
         """
         last: Int
     ): OrganizationConnection
+    """
+    Search across Platform objects
+    """
+    platformSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): PlatformConnection
     """
     Search across Procedure objects
     """
@@ -838,6 +938,8 @@ type SearchResults{
   assessments: AssessmentConnection
   assessmentResponses: AssessmentResponseConnection
   assets: AssetConnection
+  campaigns: CampaignConnection
+  campaignTargets: CampaignTargetConnection
   contacts: ContactConnection
   controls: ControlConnection
   controlObjectives: ControlObjectiveConnection
@@ -846,12 +948,14 @@ type SearchResults{
   evidences: EvidenceConnection
   findings: FindingConnection
   groups: GroupConnection
+  identityHolders: IdentityHolderConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
   jobRunners: JobRunnerConnection
   jobTemplates: JobTemplateConnection
   narratives: NarrativeConnection
   organizations: OrganizationConnection
+  platforms: PlatformConnection
   procedures: ProcedureConnection
   programs: ProgramConnection
   remediations: RemediationConnection

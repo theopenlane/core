@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
@@ -709,6 +710,21 @@ func (_c *ActionPlanCreate) AddVulnerabilities(v ...*Vulnerability) *ActionPlanC
 	return _c.AddVulnerabilityIDs(ids...)
 }
 
+// AddScanIDs adds the "scans" edge to the Scan entity by IDs.
+func (_c *ActionPlanCreate) AddScanIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddScanIDs(ids...)
+	return _c
+}
+
+// AddScans adds the "scans" edges to the Scan entity.
+func (_c *ActionPlanCreate) AddScans(v ...*Scan) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddScanIDs(ids...)
+}
+
 // AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
 func (_c *ActionPlanCreate) AddReviewIDs(ids ...string) *ActionPlanCreate {
 	_c.mutation.AddReviewIDs(ids...)
@@ -1358,6 +1374,23 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.VulnerabilityActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ScansTable,
+			Columns: actionplan.ScansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ScanActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

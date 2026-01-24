@@ -103,9 +103,11 @@ func (e Evidence) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.Evidence](e,
 				withParents(
 					Control{}, Subcontrol{}, ControlObjective{}, Program{},
-					Task{}, Procedure{}, InternalPolicy{}), // used to create parent tuples for the evidence
+					Task{}, Procedure{}, InternalPolicy{}, Platform{}, Scan{}), // used to create parent tuples for the evidence
 				withOrganizationOwner(true),
 			),
+			newCustomEnumMixin(e, withEnumFieldName("environment"), withGlobalEnum()),
+			newCustomEnumMixin(e, withEnumFieldName("scope"), withGlobalEnum()),
 			WorkflowApprovalMixin{},
 		},
 	}.getMixins(e)
@@ -138,6 +140,8 @@ func (e Evidence) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, File{}),
 		defaultEdgeFromWithPagination(e, Program{}),
 		defaultEdgeFromWithPagination(e, Task{}),
+		defaultEdgeFromWithPagination(e, Platform{}),
+		defaultEdgeFromWithPagination(e, Scan{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: e,
 			name:       "comments",

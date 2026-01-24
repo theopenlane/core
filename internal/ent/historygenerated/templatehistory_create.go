@@ -204,6 +204,62 @@ func (_c *TemplateHistoryCreate) SetNillableSystemInternalID(v *string) *Templat
 	return _c
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_c *TemplateHistoryCreate) SetEnvironmentName(v string) *TemplateHistoryCreate {
+	_c.mutation.SetEnvironmentName(v)
+	return _c
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableEnvironmentName(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentName(*v)
+	}
+	return _c
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_c *TemplateHistoryCreate) SetEnvironmentID(v string) *TemplateHistoryCreate {
+	_c.mutation.SetEnvironmentID(v)
+	return _c
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableEnvironmentID(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetEnvironmentID(*v)
+	}
+	return _c
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_c *TemplateHistoryCreate) SetScopeName(v string) *TemplateHistoryCreate {
+	_c.mutation.SetScopeName(v)
+	return _c
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableScopeName(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetScopeName(*v)
+	}
+	return _c
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_c *TemplateHistoryCreate) SetScopeID(v string) *TemplateHistoryCreate {
+	_c.mutation.SetScopeID(v)
+	return _c
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_c *TemplateHistoryCreate) SetNillableScopeID(v *string) *TemplateHistoryCreate {
+	if v != nil {
+		_c.SetScopeID(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *TemplateHistoryCreate) SetName(v string) *TemplateHistoryCreate {
 	_c.mutation.SetName(v)
@@ -499,6 +555,22 @@ func (_c *TemplateHistoryCreate) createSpec() (*TemplateHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.SystemInternalID(); ok {
 		_spec.SetField(templatehistory.FieldSystemInternalID, field.TypeString, value)
 		_node.SystemInternalID = &value
+	}
+	if value, ok := _c.mutation.EnvironmentName(); ok {
+		_spec.SetField(templatehistory.FieldEnvironmentName, field.TypeString, value)
+		_node.EnvironmentName = value
+	}
+	if value, ok := _c.mutation.EnvironmentID(); ok {
+		_spec.SetField(templatehistory.FieldEnvironmentID, field.TypeString, value)
+		_node.EnvironmentID = value
+	}
+	if value, ok := _c.mutation.ScopeName(); ok {
+		_spec.SetField(templatehistory.FieldScopeName, field.TypeString, value)
+		_node.ScopeName = value
+	}
+	if value, ok := _c.mutation.ScopeID(); ok {
+		_spec.SetField(templatehistory.FieldScopeID, field.TypeString, value)
+		_node.ScopeID = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(templatehistory.FieldName, field.TypeString, value)

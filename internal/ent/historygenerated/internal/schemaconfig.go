@@ -13,6 +13,8 @@ type SchemaConfig struct {
 	AssessmentHistory                 string // AssessmentHistory table.
 	AssessmentResponseHistory         string // AssessmentResponseHistory table.
 	AssetHistory                      string // AssetHistory table.
+	CampaignHistory                   string // CampaignHistory table.
+	CampaignTargetHistory             string // CampaignTargetHistory table.
 	ContactHistory                    string // ContactHistory table.
 	ControlHistory                    string // ControlHistory table.
 	ControlImplementationHistory      string // ControlImplementationHistory table.
@@ -34,6 +36,7 @@ type SchemaConfig struct {
 	GroupMembershipHistory            string // GroupMembershipHistory table.
 	GroupSettingHistory               string // GroupSettingHistory table.
 	HushHistory                       string // HushHistory table.
+	IdentityHolderHistory             string // IdentityHolderHistory table.
 	IntegrationHistory                string // IntegrationHistory table.
 	InternalPolicyHistory             string // InternalPolicyHistory table.
 	JobTemplateHistory                string // JobTemplateHistory table.
@@ -45,6 +48,7 @@ type SchemaConfig struct {
 	OrgSubscriptionHistory            string // OrgSubscriptionHistory table.
 	OrganizationHistory               string // OrganizationHistory table.
 	OrganizationSettingHistory        string // OrganizationSettingHistory table.
+	PlatformHistory                   string // PlatformHistory table.
 	ProcedureHistory                  string // ProcedureHistory table.
 	ProgramHistory                    string // ProgramHistory table.
 	ProgramMembershipHistory          string // ProgramMembershipHistory table.

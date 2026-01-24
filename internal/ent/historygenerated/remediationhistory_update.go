@@ -165,6 +165,86 @@ func (_u *RemediationHistoryUpdate) ClearSystemInternalID() *RemediationHistoryU
 	return _u
 }
 
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *RemediationHistoryUpdate) SetEnvironmentName(v string) *RemediationHistoryUpdate {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableEnvironmentName(v *string) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *RemediationHistoryUpdate) ClearEnvironmentName() *RemediationHistoryUpdate {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *RemediationHistoryUpdate) SetEnvironmentID(v string) *RemediationHistoryUpdate {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableEnvironmentID(v *string) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *RemediationHistoryUpdate) ClearEnvironmentID() *RemediationHistoryUpdate {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *RemediationHistoryUpdate) SetScopeName(v string) *RemediationHistoryUpdate {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableScopeName(v *string) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *RemediationHistoryUpdate) ClearScopeName() *RemediationHistoryUpdate {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *RemediationHistoryUpdate) SetScopeID(v string) *RemediationHistoryUpdate {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *RemediationHistoryUpdate) SetNillableScopeID(v *string) *RemediationHistoryUpdate {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *RemediationHistoryUpdate) ClearScopeID() *RemediationHistoryUpdate {
+	_u.mutation.ClearScopeID()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *RemediationHistoryUpdate) SetExternalID(v string) *RemediationHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -661,6 +741,30 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldSystemInternalID, field.TypeString)
 	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(remediationhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(remediationhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(remediationhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(remediationhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(remediationhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(remediationhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(remediationhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(remediationhistory.FieldScopeID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)
 	}
@@ -926,6 +1030,86 @@ func (_u *RemediationHistoryUpdateOne) SetNillableSystemInternalID(v *string) *R
 // ClearSystemInternalID clears the value of the "system_internal_id" field.
 func (_u *RemediationHistoryUpdateOne) ClearSystemInternalID() *RemediationHistoryUpdateOne {
 	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
+// SetEnvironmentName sets the "environment_name" field.
+func (_u *RemediationHistoryUpdateOne) SetEnvironmentName(v string) *RemediationHistoryUpdateOne {
+	_u.mutation.SetEnvironmentName(v)
+	return _u
+}
+
+// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableEnvironmentName(v *string) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentName(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentName clears the value of the "environment_name" field.
+func (_u *RemediationHistoryUpdateOne) ClearEnvironmentName() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentName()
+	return _u
+}
+
+// SetEnvironmentID sets the "environment_id" field.
+func (_u *RemediationHistoryUpdateOne) SetEnvironmentID(v string) *RemediationHistoryUpdateOne {
+	_u.mutation.SetEnvironmentID(v)
+	return _u
+}
+
+// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableEnvironmentID(v *string) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetEnvironmentID(*v)
+	}
+	return _u
+}
+
+// ClearEnvironmentID clears the value of the "environment_id" field.
+func (_u *RemediationHistoryUpdateOne) ClearEnvironmentID() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearEnvironmentID()
+	return _u
+}
+
+// SetScopeName sets the "scope_name" field.
+func (_u *RemediationHistoryUpdateOne) SetScopeName(v string) *RemediationHistoryUpdateOne {
+	_u.mutation.SetScopeName(v)
+	return _u
+}
+
+// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableScopeName(v *string) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeName(*v)
+	}
+	return _u
+}
+
+// ClearScopeName clears the value of the "scope_name" field.
+func (_u *RemediationHistoryUpdateOne) ClearScopeName() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearScopeName()
+	return _u
+}
+
+// SetScopeID sets the "scope_id" field.
+func (_u *RemediationHistoryUpdateOne) SetScopeID(v string) *RemediationHistoryUpdateOne {
+	_u.mutation.SetScopeID(v)
+	return _u
+}
+
+// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
+func (_u *RemediationHistoryUpdateOne) SetNillableScopeID(v *string) *RemediationHistoryUpdateOne {
+	if v != nil {
+		_u.SetScopeID(*v)
+	}
+	return _u
+}
+
+// ClearScopeID clears the value of the "scope_id" field.
+func (_u *RemediationHistoryUpdateOne) ClearScopeID() *RemediationHistoryUpdateOne {
+	_u.mutation.ClearScopeID()
 	return _u
 }
 
@@ -1454,6 +1638,30 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldSystemInternalID, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentName(); ok {
+		_spec.SetField(remediationhistory.FieldEnvironmentName, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentNameCleared() {
+		_spec.ClearField(remediationhistory.FieldEnvironmentName, field.TypeString)
+	}
+	if value, ok := _u.mutation.EnvironmentID(); ok {
+		_spec.SetField(remediationhistory.FieldEnvironmentID, field.TypeString, value)
+	}
+	if _u.mutation.EnvironmentIDCleared() {
+		_spec.ClearField(remediationhistory.FieldEnvironmentID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeName(); ok {
+		_spec.SetField(remediationhistory.FieldScopeName, field.TypeString, value)
+	}
+	if _u.mutation.ScopeNameCleared() {
+		_spec.ClearField(remediationhistory.FieldScopeName, field.TypeString)
+	}
+	if value, ok := _u.mutation.ScopeID(); ok {
+		_spec.SetField(remediationhistory.FieldScopeID, field.TypeString, value)
+	}
+	if _u.mutation.ScopeIDCleared() {
+		_spec.ClearField(remediationhistory.FieldScopeID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)

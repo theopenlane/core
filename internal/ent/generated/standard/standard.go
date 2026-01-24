@@ -78,6 +78,8 @@ const (
 	EdgeTrustCenterCompliances = "trust_center_compliances"
 	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
 	EdgeTrustCenterDocs = "trust_center_docs"
+	// EdgeApplicablePlatforms holds the string denoting the applicable_platforms edge name in mutations.
+	EdgeApplicablePlatforms = "applicable_platforms"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
 	// Table holds the table name of the standard in the database.
@@ -110,6 +112,11 @@ const (
 	TrustCenterDocsInverseTable = "trust_center_docs"
 	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
 	TrustCenterDocsColumn = "standard_id"
+	// ApplicablePlatformsTable is the table that holds the applicable_platforms relation/edge. The primary key declared below.
+	ApplicablePlatformsTable = "platform_applicable_frameworks"
+	// ApplicablePlatformsInverseTable is the table name for the Platform entity.
+	// It exists in this package in order to avoid circular dependency with the "platform" package.
+	ApplicablePlatformsInverseTable = "platforms"
 	// LogoFileTable is the table that holds the logo_file relation/edge.
 	LogoFileTable = "standards"
 	// LogoFileInverseTable is the table name for the File entity.
@@ -149,6 +156,12 @@ var Columns = []string{
 	FieldVersion,
 	FieldLogoFileID,
 }
+
+var (
+	// ApplicablePlatformsPrimaryKey and ApplicablePlatformsColumn2 are the table columns denoting the
+	// primary key for the applicable_platforms relation (M2M).
+	ApplicablePlatformsPrimaryKey = []string{"platform_id", "standard_id"}
+)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -386,6 +399,20 @@ func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByApplicablePlatformsCount orders the results by applicable_platforms count.
+func ByApplicablePlatformsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newApplicablePlatformsStep(), opts...)
+	}
+}
+
+// ByApplicablePlatforms orders the results by applicable_platforms terms.
+func ByApplicablePlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newApplicablePlatformsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByLogoFileField orders the results by logo_file field.
 func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -418,6 +445,13 @@ func newTrustCenterDocsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
+	)
+}
+func newApplicablePlatformsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ApplicablePlatformsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ApplicablePlatformsTable, ApplicablePlatformsPrimaryKey...),
 	)
 }
 func newLogoFileStep() *sqlgraph.Step {
