@@ -286,7 +286,7 @@ func (Platform) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			//			entfga.CheckEditAccess[*generated.PlatformMutation](),
+			entfga.CheckEditAccess[*generated.PlatformMutation](),
 		),
 	)
 }

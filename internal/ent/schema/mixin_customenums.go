@@ -9,10 +9,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CustomEnumMixin holds the schema definition for the custom enums
@@ -155,19 +153,3 @@ func (c CustomEnumMixin) getEnumReverseRefName() string {
 	return fmt.Sprintf("%s_%s", sch.Name(), c.fieldName)
 }
 
-// validateObjectType validates the object type field
-func validateObjectType(t string) error {
-	// empty value is valid for global enums
-	if t == "" {
-		return nil
-	}
-
-	// normalize to snake case for comparison
-	t = strcase.SnakeCase(t)
-
-	if hooks.IsValidObjectType(t) {
-		return nil
-	}
-
-	return rout.InvalidField("object_type")
-}

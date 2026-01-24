@@ -86,36 +86,43 @@ func findTableWithColumn(columnName string) *tableInfo {
 	return nil
 }
 
-// IsValidObjectType returns true if any table has a column matching the object type enum pattern
-func IsValidObjectType(objectType string) bool {
-	columnName := fmt.Sprintf("%s_kind_id", strcase.SnakeCase(objectType))
+// IsValidEnumField returns true if any table has a column matching the object type and field pattern
+// For global enums (empty objectType), checks for {field}_id columns
+// For object-scoped enums, checks for {objectType}_{field}_id columns
+func IsValidEnumField(objectType, field string) bool {
+	if field == "" {
+		field = "kind"
+	}
+
+	var columnName string
+	if objectType == "" {
+		columnName = fmt.Sprintf("%s_id", strcase.SnakeCase(field))
+		return len(findTablesWithColumn(columnName)) > 0
+	}
+
+	columnName = fmt.Sprintf("%s_%s_id", strcase.SnakeCase(objectType), strcase.SnakeCase(field))
+
 	return findTableWithColumn(columnName) != nil
 }
 
-// IsValidGlobalEnumField returns true if any table has a column matching the global enum field pattern
-func IsValidGlobalEnumField(fieldName string) bool {
-	columnName := fmt.Sprintf("%s_id", strcase.SnakeCase(fieldName))
-	tables := findTablesWithColumn(columnName)
 
-	return len(tables) > 0
-}
-
-// HookCustomTypeEnumCreate validates that global enums have a valid field
+// HookCustomTypeEnumCreate validates that the object_type and field combination is valid
 func HookCustomTypeEnumCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.CustomTypeEnumFunc(func(ctx context.Context, m *generated.CustomTypeEnumMutation) (generated.Value, error) {
 			objectType, _ := m.ObjectType()
-			if objectType != "" {
-				return next.Mutate(ctx, m)
-			}
 
 			fieldName, ok := m.GetField()
 			if !ok || fieldName == "" {
 				fieldName = "kind"
 			}
 
-			if !IsValidGlobalEnumField(fieldName) {
-				return nil, fmt.Errorf("%w: %s is not a valid global enum field", ErrInvalidGlobalEnumField, fieldName)
+			if !IsValidEnumField(objectType, fieldName) {
+				if objectType == "" {
+					return nil, fmt.Errorf("%w: %s is not a valid global enum field", ErrInvalidGlobalEnumField, fieldName)
+				}
+
+				return nil, fmt.Errorf("%w: %s is not a valid field for object type %s", ErrInvalidGlobalEnumField, fieldName, objectType)
 			}
 
 			return next.Mutate(ctx, m)

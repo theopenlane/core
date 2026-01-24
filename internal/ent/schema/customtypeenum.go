@@ -50,7 +50,6 @@ func (CustomTypeEnum) Fields() []ent.Field {
 		field.String("object_type").
 			Comment("the kind of object the type applies to, for example task, leave empty for global enums").
 			Immutable().
-			Validate(validateObjectType).
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("object_type"),

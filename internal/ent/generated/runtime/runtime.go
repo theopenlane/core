@@ -1327,10 +1327,6 @@ func init() {
 	customtypeenumDescSystemOwned := customtypeenumMixinFields5[0].Descriptor()
 	// customtypeenum.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	customtypeenum.DefaultSystemOwned = customtypeenumDescSystemOwned.Default.(bool)
-	// customtypeenumDescObjectType is the schema descriptor for object_type field.
-	customtypeenumDescObjectType := customtypeenumFields[0].Descriptor()
-	// customtypeenum.ObjectTypeValidator is a validator for the "object_type" field. It is called by the builders before save.
-	customtypeenum.ObjectTypeValidator = customtypeenumDescObjectType.Validators[0].(func(string) error)
 	// customtypeenumDescField is the schema descriptor for field field.
 	customtypeenumDescField := customtypeenumFields[1].Descriptor()
 	// customtypeenum.DefaultField holds the default value on creation for the field field.

@@ -488,11 +488,6 @@ func (_c *CustomTypeEnumCreate) check() error {
 	if _, ok := _c.mutation.ObjectType(); !ok {
 		return &ValidationError{Name: "object_type", err: errors.New(`generated: missing required field "CustomTypeEnum.object_type"`)}
 	}
-	if v, ok := _c.mutation.ObjectType(); ok {
-		if err := customtypeenum.ObjectTypeValidator(v); err != nil {
-			return &ValidationError{Name: "object_type", err: fmt.Errorf(`generated: validator failed for field "CustomTypeEnum.object_type": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.GetField(); !ok {
 		return &ValidationError{Name: "field", err: errors.New(`generated: missing required field "CustomTypeEnum.field"`)}
 	}

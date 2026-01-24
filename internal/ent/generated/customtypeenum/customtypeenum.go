@@ -209,8 +209,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
-	// ObjectTypeValidator is a validator for the "object_type" field. It is called by the builders before save.
-	ObjectTypeValidator func(string) error
 	// DefaultField holds the default value on creation for the "field" field.
 	DefaultField string
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.

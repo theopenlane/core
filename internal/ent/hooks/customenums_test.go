@@ -53,27 +53,41 @@ func TestTableHasSoftDelete(t *testing.T) {
 	})
 }
 
-func TestIsValidObjectType(t *testing.T) {
-	t.Run("returns true for known object types with enum columns", func(t *testing.T) {
-		assert.True(t, IsValidObjectType("risk"))
-		assert.True(t, IsValidObjectType("control"))
+func TestIsValidEnumField(t *testing.T) {
+	t.Run("returns true for known object types with kind field", func(t *testing.T) {
+		assert.True(t, IsValidEnumField("risk", "kind"))
+		assert.True(t, IsValidEnumField("risk", "")) // defaults to kind
+		assert.True(t, IsValidEnumField("control", "kind"))
+	})
+
+	t.Run("returns true for object types with custom field", func(t *testing.T) {
+		assert.True(t, IsValidEnumField("entity", "relationship_state"))
+		assert.True(t, IsValidEnumField("entity", "security_questionnaire_status"))
+	})
+
+	t.Run("returns true for global enums", func(t *testing.T) {
+		assert.True(t, IsValidEnumField("", "environment"))
+		assert.True(t, IsValidEnumField("", "scope"))
+	})
+
+	t.Run("handles case variations via snake_case normalization", func(t *testing.T) {
+		assert.True(t, IsValidEnumField("Entity", "RelationshipState"))
+		assert.True(t, IsValidEnumField("RISK", "KIND"))
 	})
 
 	t.Run("returns false for unknown object type", func(t *testing.T) {
-		assert.False(t, IsValidObjectType("nonexistent_object_type_xyz"))
+		assert.False(t, IsValidEnumField("nonexistent_object_type_xyz", "kind"))
+	})
+
+	t.Run("returns false for unknown field on valid object type", func(t *testing.T) {
+		assert.False(t, IsValidEnumField("risk", "nonexistent_field"))
+	})
+
+	t.Run("returns false for unknown global field", func(t *testing.T) {
+		assert.False(t, IsValidEnumField("", "nonexistent_field_xyz"))
 	})
 }
 
-func TestIsValidGlobalEnumField(t *testing.T) {
-	t.Run("returns true for known global enum fields", func(t *testing.T) {
-		assert.True(t, IsValidGlobalEnumField("environment"))
-		assert.True(t, IsValidGlobalEnumField("scope"))
-	})
-
-	t.Run("returns false for unknown global enum field", func(t *testing.T) {
-		assert.False(t, IsValidGlobalEnumField("nonexistent_field_xyz"))
-	})
-}
 
 func TestFindTablesWithColumn(t *testing.T) {
 	t.Run("finds tables with environment_id column", func(t *testing.T) {

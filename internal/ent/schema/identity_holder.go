@@ -286,7 +286,7 @@ func (IdentityHolder) Policy() ent.Policy {
 			policy.CanCreateObjectsUnderParents([]string{
 				Platform{}.PluralName(),
 			}),
-			//			entfga.CheckEditAccess[*generated.IdentityHolderMutation](),
+			entfga.CheckEditAccess[*generated.IdentityHolderMutation](),
 		),
 	)
 }
