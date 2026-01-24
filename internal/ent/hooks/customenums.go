@@ -105,7 +105,6 @@ func IsValidEnumField(objectType, field string) bool {
 	return findTableWithColumn(columnName) != nil
 }
 
-
 // HookCustomTypeEnumCreate validates that the object_type and field combination is valid
 func HookCustomTypeEnumCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {

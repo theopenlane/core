@@ -152,4 +152,3 @@ func (c CustomEnumMixin) getEnumReverseRefName() string {
 
 	return fmt.Sprintf("%s_%s", sch.Name(), c.fieldName)
 }
-

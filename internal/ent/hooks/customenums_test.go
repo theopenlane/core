@@ -88,7 +88,6 @@ func TestIsValidEnumField(t *testing.T) {
 	})
 }
 
-
 func TestFindTablesWithColumn(t *testing.T) {
 	t.Run("finds tables with environment_id column", func(t *testing.T) {
 		tables := findTablesWithColumn("environment_id")
