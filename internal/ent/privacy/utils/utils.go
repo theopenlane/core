@@ -20,6 +20,9 @@ type GenericMutation interface {
 	Type() string
 	Op() ent.Op
 	Client() *generated.Client
+	Field(name string) (ent.Value, bool)
+	Fields() []string
+	ClearedFields() []string
 }
 
 // NewMutationPolicyWithoutNil is creating a new slice of `privacy.MutationPolicy` by

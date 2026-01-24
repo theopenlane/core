@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestCelEnv_ParserRecursionLimit verifies parser recursion limit config
 func TestCelEnv_ParserRecursionLimit(t *testing.T) {
 	env, err := NewCelEnv(WithCELParserRecursionLimit(10))
 	require.NoError(t, err)
@@ -16,6 +17,7 @@ func TestCelEnv_ParserRecursionLimit(t *testing.T) {
 	require.Contains(t, iss.Err().Error(), "max recursion depth exceeded")
 }
 
+// TestCelEnv_ParserExpressionSizeLimit verifies parser expression size limit config
 func TestCelEnv_ParserExpressionSizeLimit(t *testing.T) {
 	env, err := NewCelEnv(WithCELParserExpressionSizeLimit(10))
 	require.NoError(t, err)
@@ -25,6 +27,7 @@ func TestCelEnv_ParserExpressionSizeLimit(t *testing.T) {
 	require.Contains(t, iss.Err().Error(), "size exceeds limit")
 }
 
+// TestCelEnv_ComprehensionNestingLimit verifies comprehension nesting limit config
 func TestCelEnv_ComprehensionNestingLimit(t *testing.T) {
 	env, err := NewCelEnv(WithCELComprehensionNestingLimit(1))
 	require.NoError(t, err)
@@ -34,6 +37,7 @@ func TestCelEnv_ComprehensionNestingLimit(t *testing.T) {
 	require.Contains(t, iss.Err().Error(), "comprehension exceeds nesting limit")
 }
 
+// TestCelEnv_ExtendedValidations verifies extended validations config
 func TestCelEnv_ExtendedValidations(t *testing.T) {
 	expr := `"test".matches("x++")`
 
@@ -51,6 +55,7 @@ func TestCelEnv_ExtendedValidations(t *testing.T) {
 	require.NoError(t, iss.Err())
 }
 
+// TestCelEnv_OptionalTypes verifies optional types config
 func TestCelEnv_OptionalTypes(t *testing.T) {
 	env, err := NewCelEnv(WithCELOptionalTypes(true))
 	require.NoError(t, err)
@@ -63,6 +68,7 @@ func TestCelEnv_OptionalTypes(t *testing.T) {
 	require.False(t, env.HasFunction("optional.of"))
 }
 
+// TestCelEnv_IdentifierEscapeSyntax verifies identifier escape syntax config
 func TestCelEnv_IdentifierEscapeSyntax(t *testing.T) {
 	expr := "{'key-1': 64}.`key-1`"
 
@@ -79,6 +85,7 @@ func TestCelEnv_IdentifierEscapeSyntax(t *testing.T) {
 	require.Error(t, iss.Err())
 }
 
+// TestCelEnv_CrossTypeNumericComparisons verifies cross-type numeric comparisons config
 func TestCelEnv_CrossTypeNumericComparisons(t *testing.T) {
 	expr := "1.0 < 2"
 
@@ -95,6 +102,7 @@ func TestCelEnv_CrossTypeNumericComparisons(t *testing.T) {
 	require.Error(t, iss.Err())
 }
 
+// TestCelEnv_MacroCallTracking verifies macro call tracking config
 func TestCelEnv_MacroCallTracking(t *testing.T) {
 	expr := "[1].exists(i, i > 0)"
 
